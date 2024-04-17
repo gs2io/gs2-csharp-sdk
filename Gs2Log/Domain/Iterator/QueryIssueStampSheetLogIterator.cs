@@ -66,7 +66,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
     #else
     public class QueryIssueStampSheetLogIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.IssueStampSheetLog> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         public string NamespaceName { get; }
         public string Service { get; }
@@ -85,7 +85,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         int? fetchSize;
 
         public QueryIssueStampSheetLogIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2LogRestClient client,
             string namespaceName,
             string service = null,
@@ -97,7 +97,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
             bool? longTerm = null,
             string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.Service = service;
@@ -126,7 +126,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Log.Model.IssueStampSheetLog>
             (
                     (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
@@ -152,6 +152,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 var r = await this._client.QueryIssueStampSheetLogAsync(
                 #endif
                     new Gs2.Gs2Log.Request.QueryIssueStampSheetLogRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithBegin(this.Begin)
                         .WithEnd(this.End)
@@ -180,13 +181,13 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                         (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
                             NamespaceName
                         )

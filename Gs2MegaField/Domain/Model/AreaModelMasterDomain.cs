@@ -84,7 +84,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         )
         {
             return new DescribeLayerModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AreaModelName
@@ -101,7 +101,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         )
         {
             return new DescribeLayerModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AreaModelName
@@ -176,6 +176,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.AreaModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAreaModelName(this.AreaModelName);
                 var future = request.InvokeFuture(
@@ -204,6 +205,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             GetAreaModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAreaModelName(this.AreaModelName);
             var result = await request.InvokeAsync(
@@ -222,6 +224,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAreaModelName(this.AreaModelName);
                 var future = request.InvokeFuture(
@@ -252,6 +255,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             UpdateAreaModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAreaModelName(this.AreaModelName);
             var result = await request.InvokeAsync(
@@ -272,6 +276,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAreaModelName(this.AreaModelName);
                 var future = request.InvokeFuture(
@@ -305,6 +310,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAreaModelName(this.AreaModelName);
                 var result = await request.InvokeAsync(
@@ -326,6 +332,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.LayerModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAreaModelName(this.AreaModelName);
                 var future = request.InvokeFuture(
@@ -361,6 +368,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             CreateLayerModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAreaModelName(this.AreaModelName);
             var result = await request.InvokeAsync(

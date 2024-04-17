@@ -90,6 +90,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.RatingModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRatingName(this.RatingName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             GetRatingModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithRatingName(this.RatingName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRatingName(this.RatingName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             UpdateRatingModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithRatingName(this.RatingName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRatingName(this.RatingName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRatingName(this.RatingName);
                 var result = await request.InvokeAsync(

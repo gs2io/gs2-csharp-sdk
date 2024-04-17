@@ -101,6 +101,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemSet[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName)
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             GetItemSetRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName)
@@ -153,6 +155,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName)
@@ -187,6 +190,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             GetItemWithSignatureRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName)
@@ -211,6 +215,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName)
@@ -228,16 +233,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
-                if (result?.Items.Length > 1) {
-                    domain = new Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain(
-                        this._gs2,
-                        this.NamespaceName,
-                        this.AccessToken,
-                        this.InventoryName,
-                        this.ItemName,
-                        null
-                    );
-                }
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain>(Impl);
@@ -253,6 +248,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             ConsumeItemSetRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName)
@@ -264,16 +260,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 () => this._client.ConsumeItemSetAsync(request)
             );
             var domain = this;
-            if (result?.Items.Length > 1) {
-                domain = new Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.AccessToken,
-                    this.InventoryName,
-                    this.ItemName,
-                    null
-                );
-            }
             return domain;
         }
         #endif
@@ -285,6 +271,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName)
@@ -317,6 +304,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             VerifyItemSetRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName)
@@ -339,6 +327,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName)
@@ -380,6 +369,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             AddReferenceOfRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName)
@@ -408,7 +398,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeReferenceOfIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,
@@ -428,7 +418,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeReferenceOfIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,

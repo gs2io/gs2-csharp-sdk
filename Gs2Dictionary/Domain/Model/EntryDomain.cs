@@ -95,6 +95,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.Entry> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithEntryModelName(this.EntryName);
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             GetEntryByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithEntryModelName(this.EntryName);
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithEntryModelName(this.EntryName);
@@ -176,6 +179,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             GetEntryWithSignatureByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithEntryModelName(this.EntryName);

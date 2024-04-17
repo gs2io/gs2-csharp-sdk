@@ -432,38 +432,34 @@ namespace Gs2.Gs2JobQueue.Domain
         }
         #endif
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.Namespace> Namespaces(
         )
         {
             return new DescribeNamespacesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.Namespace> NamespacesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2JobQueue.Model.Namespace> Namespaces(
-            #endif
-        #else
         public DescribeNamespacesIterator NamespacesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeNamespacesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeNamespaces(
             Action<Gs2.Gs2JobQueue.Model.Namespace[]> callback
@@ -650,10 +646,8 @@ namespace Gs2.Gs2JobQueue.Domain
                     lock (_completedJobs)
                     {
                         var notification = RunNotification.FromJson(JsonMapper.ToObject(payload));
-                        if (_completedJobs.Count(v => v.JobName == notification.JobName) == 0) {
-                            _completedJobs.Add(notification);
-                            onRunNotification.Invoke(notification);
-                        }
+                        _completedJobs.Add(notification);
+                        onRunNotification.Invoke(notification);
                     }
                     break;
                 }

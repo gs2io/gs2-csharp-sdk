@@ -90,6 +90,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.UnleashRateModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             GetUnleashRateModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithRateName(this.RateName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             UpdateUnleashRateModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithRateName(this.RateName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
                 var result = await request.InvokeAsync(

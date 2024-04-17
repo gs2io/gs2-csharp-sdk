@@ -90,6 +90,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.FormModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithFormModelName(this.FormModelName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             GetFormModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithFormModelName(this.FormModelName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithFormModelName(this.FormModelName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             UpdateFormModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithFormModelName(this.FormModelName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithFormModelName(this.FormModelName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithFormModelName(this.FormModelName);
                 var result = await request.InvokeAsync(

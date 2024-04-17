@@ -93,6 +93,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Rating> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRatingName(this.RatingName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             GetRatingByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRatingName(this.RatingName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRatingName(this.RatingName);
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRatingName(this.RatingName);

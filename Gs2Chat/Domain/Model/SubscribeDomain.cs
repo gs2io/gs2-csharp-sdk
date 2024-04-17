@@ -93,6 +93,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRoomName(this.RoomName);
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             SubscribeByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRoomName(this.RoomName);
@@ -145,6 +147,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRoomName(this.RoomName);
@@ -174,6 +177,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             GetSubscribeByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRoomName(this.RoomName);
@@ -193,6 +197,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRoomName(this.RoomName);
@@ -224,6 +229,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             UpdateNotificationTypeByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRoomName(this.RoomName);
@@ -245,6 +251,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRoomName(this.RoomName);
@@ -276,6 +283,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             UnsubscribeByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRoomName(this.RoomName);

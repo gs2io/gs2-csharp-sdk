@@ -94,6 +94,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             SetFirebaseTokenByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -144,6 +146,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Model.FirebaseToken> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -172,6 +175,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             GetFirebaseTokenByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -190,6 +194,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -223,6 +228,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var result = await request.InvokeAsync(
@@ -244,6 +250,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -273,6 +280,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             SendMobileNotificationByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(

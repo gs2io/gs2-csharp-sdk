@@ -82,7 +82,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         )
         {
             return new DescribeIdentifiersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.UserName
             );
@@ -98,7 +98,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         )
         {
             return new DescribeIdentifiersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.UserName
             #if GS2_ENABLE_UNITASK
@@ -162,7 +162,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         )
         {
             return new DescribePasswordsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.UserName
             );
@@ -178,7 +178,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         )
         {
             return new DescribePasswordsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.UserName
             #if GS2_ENABLE_UNITASK
@@ -255,6 +255,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -284,6 +285,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             UpdateUserRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithUserName(this.UserName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -303,6 +305,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.User> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -330,6 +333,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             GetUserRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithUserName(this.UserName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -347,6 +351,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -379,6 +384,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -399,6 +405,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -433,6 +440,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             CreateIdentifierRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithUserName(this.UserName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

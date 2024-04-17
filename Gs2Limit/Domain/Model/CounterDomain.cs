@@ -96,6 +96,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Model.Counter> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithLimitName(this.LimitName)
@@ -126,6 +127,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             GetCounterByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithLimitName(this.LimitName)
@@ -146,6 +148,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithLimitName(this.LimitName)
@@ -178,6 +181,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             CountUpByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithLimitName(this.LimitName)
@@ -200,6 +204,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithLimitName(this.LimitName)
@@ -232,6 +237,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             CountDownByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithLimitName(this.LimitName)
@@ -254,6 +260,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithLimitName(this.LimitName)
@@ -289,6 +296,7 @@ namespace Gs2.Gs2Limit.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithLimitName(this.LimitName)
@@ -312,6 +320,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithLimitName(this.LimitName)
@@ -343,6 +352,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             VerifyCounterByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithLimitName(this.LimitName)

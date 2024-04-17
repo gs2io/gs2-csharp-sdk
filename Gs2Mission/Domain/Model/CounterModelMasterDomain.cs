@@ -90,6 +90,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.CounterModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCounterName(this.CounterName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             GetCounterModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithCounterName(this.CounterName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCounterName(this.CounterName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             UpdateCounterModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithCounterName(this.CounterName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCounterName(this.CounterName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCounterName(this.CounterName);
                 var result = await request.InvokeAsync(

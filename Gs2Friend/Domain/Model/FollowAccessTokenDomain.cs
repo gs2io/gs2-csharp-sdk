@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -41,6 +39,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -64,14 +63,11 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class FollowAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly bool? _withProfile;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public bool? WithProfile { get; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public bool? WithProfile => _withProfile;
 
         public FollowAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -83,9 +79,9 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._client = new Gs2FriendRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._withProfile = withProfile;
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.WithProfile = withProfile;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -95,8 +91,9 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -112,7 +109,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2,
                     this.NamespaceName,
                     this.AccessToken,
-                    true,
+                    this.WithProfile,
                     request.TargetUserId
                 );
 
@@ -131,8 +128,9 @@ namespace Gs2.Gs2Friend.Domain.Model
             FollowRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -142,7 +140,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 this.AccessToken,
-                true,
+                this.WithProfile,
                 request.TargetUserId
             );
 
@@ -150,44 +148,40 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
         )
         {
             return new DescribeFollowsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
                 this.WithProfile
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> FollowsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
-            #endif
-        #else
         public DescribeFollowsIterator FollowsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeFollowsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
                 this.WithProfile
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeFollows(
             Action<Gs2.Gs2Friend.Model.FollowUser[]> callback
@@ -238,7 +232,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             return new Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 this.WithProfile,
                 targetUserId
             );

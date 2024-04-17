@@ -93,6 +93,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.BoxItems> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPrizeTableName(this.PrizeTableName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             GetBoxByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPrizeTableName(this.PrizeTableName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPrizeTableName(this.PrizeTableName);
@@ -178,6 +181,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             ResetBoxByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPrizeTableName(this.PrizeTableName);

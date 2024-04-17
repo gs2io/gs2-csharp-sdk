@@ -84,7 +84,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeBigItemModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName
@@ -101,7 +101,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeBigItemModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName
@@ -176,6 +176,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName);
                 var future = request.InvokeFuture(
@@ -204,6 +205,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             GetBigInventoryModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName);
             var result = await request.InvokeAsync(
@@ -222,6 +224,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName);
                 var future = request.InvokeFuture(
@@ -252,6 +255,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             UpdateBigInventoryModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName);
             var result = await request.InvokeAsync(
@@ -272,6 +276,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName);
                 var future = request.InvokeFuture(
@@ -305,6 +310,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName);
                 var result = await request.InvokeAsync(
@@ -326,6 +332,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName);
                 var future = request.InvokeFuture(
@@ -361,6 +368,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             CreateBigItemModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName);
             var result = await request.InvokeAsync(

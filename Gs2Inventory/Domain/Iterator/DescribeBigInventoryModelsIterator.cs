@@ -66,7 +66,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
     #else
     public class DescribeBigInventoryModelsIterator : IAsyncEnumerable<Gs2.Gs2Inventory.Model.BigInventoryModel> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
         public string NamespaceName { get; }
         private bool _isCacheChecked;
@@ -76,11 +76,11 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         int? fetchSize;
 
         public DescribeBigInventoryModelsIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2InventoryRestClient client,
             string namespaceName
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this._last = false;
@@ -100,7 +100,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Inventory.Model.BigInventoryModel>
             (
                     (null as Gs2.Gs2Inventory.Model.BigInventoryModel).CacheParentKey(
@@ -119,6 +119,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 var r = await this._client.DescribeBigInventoryModelsAsync(
                 #endif
                     new Gs2.Gs2Inventory.Request.DescribeBigInventoryModelsRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -135,14 +136,14 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this._last = true;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         item.Name
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Inventory.Model.BigInventoryModel>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Inventory.Model.BigInventoryModel>(
                         (null as Gs2.Gs2Inventory.Model.BigInventoryModel).CacheParentKey(
                             NamespaceName
                         )

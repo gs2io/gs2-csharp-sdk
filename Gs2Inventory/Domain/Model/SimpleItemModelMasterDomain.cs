@@ -93,6 +93,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             GetSimpleItemModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName)
                 .WithItemName(this.ItemName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);
@@ -172,6 +175,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             UpdateSimpleItemModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName)
                 .WithItemName(this.ItemName);
@@ -193,6 +197,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);
@@ -227,6 +232,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);

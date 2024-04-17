@@ -66,7 +66,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
     #else
     public class DescribeEventsIterator : IAsyncEnumerable<Gs2.Gs2Deploy.Model.Event> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DeployRestClient _client;
         public string StackName { get; }
         private string _pageToken;
@@ -77,11 +77,11 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         int? fetchSize;
 
         public DescribeEventsIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2DeployRestClient client,
             string stackName
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.StackName = stackName;
             this._pageToken = null;
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Deploy.Model.Event>
             (
                     (null as Gs2.Gs2Deploy.Model.Event).CacheParentKey(
@@ -122,6 +122,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
                 var r = await this._client.DescribeEventsAsync(
                 #endif
                     new Gs2.Gs2Deploy.Request.DescribeEventsRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithStackName(this.StackName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
@@ -141,14 +142,14 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         StackName,
                         item.Name
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Deploy.Model.Event>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Deploy.Model.Event>(
                         (null as Gs2.Gs2Deploy.Model.Event).CacheParentKey(
                             StackName
                         )

@@ -86,7 +86,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeWalletsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -103,7 +103,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeWalletsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken

@@ -66,7 +66,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
     #else
     public class DescribeReceiveStatusesIterator : IAsyncEnumerable<Gs2.Gs2LoginReward.Model.ReceiveStatus> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
@@ -79,12 +79,12 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
         int? fetchSize;
 
         public DescribeReceiveStatusesIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2LoginRewardRestClient client,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
@@ -106,7 +106,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2LoginReward.Model.ReceiveStatus>
             (
                     (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
@@ -127,6 +127,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
                 var r = await this._client.DescribeReceiveStatusesAsync(
                 #endif
                     new Gs2.Gs2LoginReward.Request.DescribeReceiveStatusesRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
                         .WithPageToken(this._pageToken)
@@ -147,7 +148,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         AccessToken?.UserId,
                         item.BonusModelName
@@ -155,7 +156,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                         (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId

@@ -66,7 +66,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
     #else
     public class DescribeCountersIterator : IAsyncEnumerable<Gs2.Gs2Limit.Model.Counter> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LimitRestClient _client;
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
@@ -80,13 +80,13 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         int? fetchSize;
 
         public DescribeCountersIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2LimitRestClient client,
             string namespaceName,
             AccessToken accessToken,
             string limitName = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
@@ -109,7 +109,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Limit.Model.Counter>
             (
                     (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
@@ -131,6 +131,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                 var r = await this._client.DescribeCountersAsync(
                 #endif
                     new Gs2.Gs2Limit.Request.DescribeCountersRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
                         .WithPageToken(this._pageToken)
@@ -152,7 +153,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         AccessToken?.UserId,
                         item.LimitName,
@@ -161,7 +162,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Limit.Model.Counter>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Limit.Model.Counter>(
                         (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId

@@ -103,7 +103,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeBlackListByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeBlackListByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -161,7 +161,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeFriendsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -182,7 +182,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeFriendsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -260,7 +260,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -279,7 +279,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -349,7 +349,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -368,7 +368,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -444,6 +444,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -479,6 +480,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             SendRequestByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(

@@ -84,7 +84,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribePrizeLimitsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.PrizeTableName
@@ -101,7 +101,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribePrizeLimitsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.PrizeTableName
@@ -176,6 +176,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.PrizeTable> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithPrizeTableName(this.PrizeTableName);
                 var future = request.InvokeFuture(
@@ -204,6 +205,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             GetPrizeTableRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithPrizeTableName(this.PrizeTableName);
             var result = await request.InvokeAsync(

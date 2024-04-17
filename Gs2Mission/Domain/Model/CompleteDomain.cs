@@ -95,6 +95,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
@@ -141,6 +142,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             CompleteByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
@@ -171,6 +173,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
@@ -202,6 +205,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             ReceiveByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
@@ -223,6 +227,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
@@ -254,6 +259,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             RevertReceiveByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
@@ -275,6 +281,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Complete> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
@@ -304,6 +311,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             GetCompleteByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
@@ -323,6 +331,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
@@ -357,6 +366,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);

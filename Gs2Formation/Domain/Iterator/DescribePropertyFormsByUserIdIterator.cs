@@ -66,7 +66,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
     #else
     public class DescribePropertyFormsByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyForm> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
@@ -80,14 +80,14 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         int? fetchSize;
 
         public DescribePropertyFormsByUserIdIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2FormationRestClient client,
             string namespaceName,
             string userId,
             string propertyFormModelName,
             string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Formation.Model.PropertyForm>
             (
                     (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
@@ -133,6 +133,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 var r = await this._client.DescribePropertyFormsByUserIdAsync(
                 #endif
                     new Gs2.Gs2Formation.Request.DescribePropertyFormsByUserIdRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithUserId(this.UserId)
                         .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -155,7 +156,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         UserId,
                         item.Name,
@@ -164,7 +165,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Formation.Model.PropertyForm>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Formation.Model.PropertyForm>(
                         (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
                             NamespaceName,
                             UserId

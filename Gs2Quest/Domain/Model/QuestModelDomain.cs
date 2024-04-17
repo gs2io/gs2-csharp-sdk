@@ -93,6 +93,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.QuestModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithQuestGroupName(this.QuestGroupName)
                     .WithQuestName(this.QuestName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             GetQuestModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithQuestGroupName(this.QuestGroupName)
                 .WithQuestName(this.QuestName);

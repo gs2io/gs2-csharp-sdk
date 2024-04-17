@@ -66,7 +66,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
     #else
     public class DescribeStatusesByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Grade.Model.Status> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GradeRestClient _client;
         public string NamespaceName { get; }
         public string GradeName { get; }
@@ -80,14 +80,14 @@ namespace Gs2.Gs2Grade.Domain.Iterator
         int? fetchSize;
 
         public DescribeStatusesByUserIdIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2GradeRestClient client,
             string namespaceName,
             string userId,
             string gradeName = null,
             string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.GradeName = gradeName;
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Grade.Model.Status>
             (
                     (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
@@ -133,6 +133,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
                 var r = await this._client.DescribeStatusesByUserIdAsync(
                 #endif
                     new Gs2.Gs2Grade.Request.DescribeStatusesByUserIdRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithUserId(this.UserId)
                         .WithPageToken(this._pageToken)
@@ -154,7 +155,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         UserId,
                         item.GradeName,
@@ -163,7 +164,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Grade.Model.Status>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Grade.Model.Status>(
                         (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
                             NamespaceName,
                             UserId

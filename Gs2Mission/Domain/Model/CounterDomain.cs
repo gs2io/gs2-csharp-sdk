@@ -94,6 +94,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCounterName(this.CounterName);
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IncreaseCounterByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCounterName(this.CounterName);
@@ -146,6 +148,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCounterName(this.CounterName);
@@ -177,6 +180,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             DecreaseCounterByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCounterName(this.CounterName);
@@ -198,6 +202,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Counter> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCounterName(this.CounterName);
@@ -227,6 +232,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             GetCounterByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCounterName(this.CounterName);
@@ -246,6 +252,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCounterName(this.CounterName);
@@ -280,6 +287,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCounterName(this.CounterName);

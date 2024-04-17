@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -97,6 +99,74 @@ namespace Gs2.Gs2Friend.Domain.Model
     }
 
     public partial class FriendDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteFriendFuture(
+            DeleteFriendByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> self)
+            {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteFriendByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Friend.Domain.Model.FriendUserDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.UserId,
+                    this.WithProfile,
+                    request.TargetUserId
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteFriendAsync(
+            #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteFriendAsync(
+            #endif
+            DeleteFriendByUserIdRequest request
+        ) {
+            try {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteFriendByUserIdAsync(request)
+                );
+            }
+            catch (NotFoundException e) {}
+            var domain = new Gs2.Gs2Friend.Domain.Model.FriendUserDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                this.WithProfile,
+                request.TargetUserId
+            );
+            return domain;
+        }
+        #endif
 
     }
 

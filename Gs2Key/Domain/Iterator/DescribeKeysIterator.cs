@@ -66,7 +66,7 @@ namespace Gs2.Gs2Key.Domain.Iterator
     #else
     public class DescribeKeysIterator : IAsyncEnumerable<Gs2.Gs2Key.Model.Key> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2KeyRestClient _client;
         public string NamespaceName { get; }
         private string _pageToken;
@@ -77,11 +77,11 @@ namespace Gs2.Gs2Key.Domain.Iterator
         int? fetchSize;
 
         public DescribeKeysIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2KeyRestClient client,
             string namespaceName
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this._pageToken = null;
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Key.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Key.Model.Key>
             (
                     (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
@@ -122,6 +122,7 @@ namespace Gs2.Gs2Key.Domain.Iterator
                 var r = await this._client.DescribeKeysAsync(
                 #endif
                     new Gs2.Gs2Key.Request.DescribeKeysRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
@@ -141,14 +142,14 @@ namespace Gs2.Gs2Key.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         item.Name
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Key.Model.Key>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Key.Model.Key>(
                         (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
                             NamespaceName
                         )

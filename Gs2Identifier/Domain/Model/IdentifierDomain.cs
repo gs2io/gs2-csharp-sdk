@@ -92,6 +92,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.Identifier> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName)
                     .WithClientId(this.ClientId);
                 var future = request.InvokeFuture(
@@ -120,6 +121,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             GetIdentifierRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithUserName(this.UserName)
                 .WithClientId(this.ClientId);
             var result = await request.InvokeAsync(
@@ -138,6 +140,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName)
                     .WithClientId(this.ClientId);
                 var future = request.InvokeFuture(
@@ -171,6 +174,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithUserName(this.UserName)
                     .WithClientId(this.ClientId);
                 var result = await request.InvokeAsync(

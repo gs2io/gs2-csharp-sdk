@@ -97,6 +97,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Form> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName)
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             GetFormRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithMoldModelName(this.MoldModelName)
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName)
@@ -181,6 +184,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             GetFormWithSignatureRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithMoldModelName(this.MoldModelName)
@@ -205,6 +209,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName)
@@ -237,6 +242,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             SetFormWithSignatureRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithMoldModelName(this.MoldModelName)
@@ -259,6 +265,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName)
@@ -294,6 +301,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName)

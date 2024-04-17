@@ -94,6 +94,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName);
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             UpdateDataObjectRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithDataObjectName(this.DataObjectName);
@@ -146,6 +148,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName);
@@ -178,6 +181,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             PrepareReUploadRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithDataObjectName(this.DataObjectName);
@@ -200,6 +204,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName);
@@ -231,6 +236,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             DoneUploadRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithDataObjectName(this.DataObjectName);
@@ -252,6 +258,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName);
@@ -286,6 +293,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName);
@@ -308,6 +316,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName);
@@ -341,6 +350,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             PrepareDownloadOwnDataRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithDataObjectName(this.DataObjectName);
@@ -364,6 +374,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName);
@@ -397,6 +408,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             PrepareDownloadOwnDataByGenerationRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithDataObjectName(this.DataObjectName);
@@ -417,7 +429,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
         )
         {
             return new DescribeDataObjectHistoriesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
@@ -435,7 +447,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
         )
         {
             return new DescribeDataObjectHistoriesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,

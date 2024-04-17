@@ -92,6 +92,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithLotteryName(this.LotteryName);
@@ -121,6 +122,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             PredictionRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithLotteryName(this.LotteryName);
@@ -137,7 +139,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribeProbabilitiesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.LotteryName,
@@ -155,7 +157,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribeProbabilitiesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.LotteryName,

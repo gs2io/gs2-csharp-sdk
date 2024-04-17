@@ -87,7 +87,7 @@ namespace Gs2.Gs2Version.Domain.Model
         )
         {
             return new DescribeAcceptVersionsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -106,7 +106,7 @@ namespace Gs2.Gs2Version.Domain.Model
         )
         {
             return new DescribeAcceptVersionsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -191,6 +191,7 @@ namespace Gs2.Gs2Version.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.UserDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -221,6 +222,7 @@ namespace Gs2.Gs2Version.Domain.Model
             CalculateSignatureRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

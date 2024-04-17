@@ -90,7 +90,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             return new DescribeFormsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.MoldModelName,
@@ -110,7 +110,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             return new DescribeFormsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.MoldModelName,
@@ -190,6 +190,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Mold> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMoldModelName(this.MoldModelName);
@@ -219,6 +220,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             GetMoldByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMoldModelName(this.MoldModelName);
@@ -238,6 +240,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMoldModelName(this.MoldModelName);
@@ -269,6 +272,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             SetMoldCapacityByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMoldModelName(this.MoldModelName);
@@ -290,6 +294,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMoldModelName(this.MoldModelName);
@@ -321,6 +326,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             AddMoldCapacityByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMoldModelName(this.MoldModelName);
@@ -342,6 +348,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMoldModelName(this.MoldModelName);
@@ -373,6 +380,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             SubMoldCapacityByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMoldModelName(this.MoldModelName);
@@ -394,6 +402,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMoldModelName(this.MoldModelName);
@@ -428,6 +437,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMoldModelName(this.MoldModelName);

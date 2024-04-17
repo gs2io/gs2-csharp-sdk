@@ -90,6 +90,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.GlobalMessageMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGlobalMessageName(this.GlobalMessageName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             GetGlobalMessageMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGlobalMessageName(this.GlobalMessageName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGlobalMessageName(this.GlobalMessageName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             UpdateGlobalMessageMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGlobalMessageName(this.GlobalMessageName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGlobalMessageName(this.GlobalMessageName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGlobalMessageName(this.GlobalMessageName);
                 var result = await request.InvokeAsync(

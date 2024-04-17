@@ -90,6 +90,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.DistributorModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithDistributorName(this.DistributorName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             GetDistributorModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithDistributorName(this.DistributorName);
             var result = await request.InvokeAsync(

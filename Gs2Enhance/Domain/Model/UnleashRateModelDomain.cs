@@ -90,6 +90,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.UnleashRateModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             GetUnleashRateModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithRateName(this.RateName);
             var result = await request.InvokeAsync(

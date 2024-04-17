@@ -66,7 +66,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
     #else
     public class DescribeUsersIterator : IAsyncEnumerable<Gs2.Gs2Identifier.Model.User> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
         private string _pageToken;
         private bool _isCacheChecked;
@@ -76,10 +76,10 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         int? fetchSize;
 
         public DescribeUsersIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2IdentifierRestClient client
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this._pageToken = null;
             this._last = false;
@@ -99,7 +99,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Identifier.Model.User>
             (
                     (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
@@ -118,6 +118,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                 var r = await this._client.DescribeUsersAsync(
                 #endif
                     new Gs2.Gs2Identifier.Request.DescribeUsersRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -136,13 +137,13 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         item.Name
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Identifier.Model.User>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Identifier.Model.User>(
                         (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
                         )
                     );

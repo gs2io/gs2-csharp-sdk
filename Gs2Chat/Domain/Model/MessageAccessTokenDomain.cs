@@ -96,6 +96,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Message> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithRoomName(this.RoomName)
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             GetMessageRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithRoomName(this.RoomName)

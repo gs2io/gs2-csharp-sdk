@@ -115,6 +115,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -144,6 +145,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -163,6 +165,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Model.Namespace> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -190,6 +193,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -207,6 +211,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -236,6 +241,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -255,6 +261,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -287,6 +294,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,

@@ -101,6 +101,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 }
                 var model = future2.Result;
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         ) {
             var model = await ModelAsync();
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(

@@ -101,6 +101,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.PropertyForm> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             GetPropertyFormByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -151,6 +153,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -185,6 +188,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             GetPropertyFormWithSignatureByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -209,6 +213,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -241,6 +246,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             SetPropertyFormByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -263,6 +269,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -310,6 +317,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             AcquireActionsToPropertyFormPropertiesRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -341,6 +349,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
@@ -376,6 +385,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)

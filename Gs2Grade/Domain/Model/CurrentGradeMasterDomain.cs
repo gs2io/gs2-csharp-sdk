@@ -87,6 +87,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -116,6 +117,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             ExportMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -135,6 +137,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.CurrentGradeMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -162,6 +165,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             GetCurrentGradeMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -179,6 +183,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -208,6 +213,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             UpdateCurrentGradeMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -227,6 +233,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -256,6 +263,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             UpdateCurrentGradeMasterFromGitHubRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

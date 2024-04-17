@@ -93,6 +93,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithDeadLetterJobName(this.DeadLetterJobName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             GetDeadLetterJobByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithDeadLetterJobName(this.DeadLetterJobName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithDeadLetterJobName(this.DeadLetterJobName);
@@ -175,6 +178,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithDeadLetterJobName(this.DeadLetterJobName);

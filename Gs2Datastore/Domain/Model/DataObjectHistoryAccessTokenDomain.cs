@@ -93,6 +93,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Model.DataObjectHistory> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithDataObjectName(this.DataObjectName)
@@ -123,6 +124,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             GetDataObjectHistoryRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithDataObjectName(this.DataObjectName)

@@ -101,6 +101,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.Status> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             GetStatusByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -151,6 +153,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -185,6 +188,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             GetStatusWithSignatureByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -209,6 +213,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -241,6 +246,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             AddExperienceByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -263,6 +269,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -295,6 +302,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             SubExperienceByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -317,6 +325,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -349,6 +358,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             SetExperienceByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -371,6 +381,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -403,6 +414,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             AddRankCapByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -425,6 +437,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -457,6 +470,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             SubRankCapByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -479,6 +493,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -511,6 +526,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             SetRankCapByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -533,6 +549,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -568,6 +585,7 @@ namespace Gs2.Gs2Experience.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -591,6 +609,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -622,6 +641,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             VerifyRankByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -643,6 +663,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -674,6 +695,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             VerifyRankCapByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)
@@ -695,6 +717,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithExperienceName(this.ExperienceName)
@@ -742,6 +765,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             MultiplyAcquireActionsByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithExperienceName(this.ExperienceName)

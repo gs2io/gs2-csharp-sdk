@@ -93,6 +93,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.VoteDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSeasonName(this.SeasonName)
                     .WithSessionName(this.SessionName);
@@ -123,6 +124,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             CommitVoteRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithSeasonName(this.SeasonName)
                 .WithSessionName(this.SessionName);

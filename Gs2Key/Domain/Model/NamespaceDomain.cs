@@ -82,7 +82,7 @@ namespace Gs2.Gs2Key.Domain.Model
         )
         {
             return new DescribeKeysIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -98,7 +98,7 @@ namespace Gs2.Gs2Key.Domain.Model
         )
         {
             return new DescribeKeysIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -162,7 +162,7 @@ namespace Gs2.Gs2Key.Domain.Model
         )
         {
             return new DescribeGitHubApiKeysIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -178,7 +178,7 @@ namespace Gs2.Gs2Key.Domain.Model
         )
         {
             return new DescribeGitHubApiKeysIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -249,6 +249,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -278,6 +279,7 @@ namespace Gs2.Gs2Key.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -297,6 +299,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Model.Namespace> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -324,6 +327,7 @@ namespace Gs2.Gs2Key.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -341,6 +345,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -370,6 +375,7 @@ namespace Gs2.Gs2Key.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -389,6 +395,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -421,6 +428,7 @@ namespace Gs2.Gs2Key.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -441,6 +449,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -474,6 +483,7 @@ namespace Gs2.Gs2Key.Domain.Model
             CreateKeyRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -497,6 +507,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -530,6 +541,7 @@ namespace Gs2.Gs2Key.Domain.Model
             CreateGitHubApiKeyRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

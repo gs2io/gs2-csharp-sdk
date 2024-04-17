@@ -93,6 +93,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithRoomName(this.RoomName)
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             UpdateRoomRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithRoomName(this.RoomName)
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithRoomName(this.RoomName);
@@ -181,6 +184,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithRoomName(this.RoomName);
@@ -203,6 +207,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithRoomName(this.RoomName)
@@ -242,6 +247,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             PostRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithRoomName(this.RoomName)
@@ -271,6 +277,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Room> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRoomName(this.RoomName);
                 var future = request.InvokeFuture(
@@ -299,6 +306,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             GetRoomRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithRoomName(this.RoomName);
             var result = await request.InvokeAsync(
@@ -314,7 +322,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         )
         {
             return new DescribeMessagesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.RoomName,
@@ -333,7 +341,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         )
         {
             return new DescribeMessagesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.RoomName,

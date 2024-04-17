@@ -40,6 +40,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Account.Domain.Gs2Account Account;
         public readonly Gs2AdReward.Domain.Gs2AdReward AdReward;
         public readonly Gs2Auth.Domain.Gs2Auth Auth;
+        public readonly Gs2Buff.Domain.Gs2Buff Buff;
         public readonly Gs2Chat.Domain.Gs2Chat Chat;
         public readonly Gs2Datastore.Domain.Gs2Datastore Datastore;
         public readonly Gs2Deploy.Domain.Gs2Deploy Deploy;
@@ -82,6 +83,9 @@ namespace Gs2.Core.Domain
         public readonly Gs2StateMachine.Domain.Gs2StateMachine StateMachine;
         public readonly Gs2Version.Domain.Gs2Version Version;
 
+        public string DistributorNamespaceName => this._sheetConfiguration.NamespaceName;
+        public string DefaultContextStack { get; set; }
+
         public Gs2(
             Gs2RestSession session,
             Gs2WebSocketSession wssession = null,
@@ -101,6 +105,7 @@ namespace Gs2.Core.Domain
             this.Account = new Gs2Account.Domain.Gs2Account(this);
             this.AdReward = new Gs2AdReward.Domain.Gs2AdReward(this);
             this.Auth = new Gs2Auth.Domain.Gs2Auth(this);
+            this.Buff = new Gs2Buff.Domain.Gs2Buff(this);
             this.Chat = new Gs2Chat.Domain.Gs2Chat(this);
             this.Datastore = new Gs2Datastore.Domain.Gs2Datastore(this);
             this.Deploy = new Gs2Deploy.Domain.Gs2Deploy(this);
@@ -161,6 +166,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Auth":
                                 this.Auth.HandleNotification(this._cache, method, message.payload);
+                                break;
+                            case "Gs2Buff":
+                                this.Buff.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Chat":
                                 this.Chat.HandleNotification(this._cache, method, message.payload);
@@ -511,6 +519,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Auth":
                         this.Auth.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
+                    case "Gs2Buff":
+                        this.Buff.UpdateCacheFromStampSheet(transactionId, method, request, result);
+                        break;
                     case "Gs2Chat":
                         this.Chat.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
@@ -660,6 +671,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Auth":
                         this.Auth.UpdateCacheFromStampTask(taskId, method, request, result);
+                        break;
+                    case "Gs2Buff":
+                        this.Buff.UpdateCacheFromStampTask(taskId, method, request, result);
                         break;
                     case "Gs2Chat":
                         this.Chat.UpdateCacheFromStampTask(taskId, method, request, result);
@@ -820,6 +834,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "auth":
                                 this.Auth.UpdateCacheFromJobResult(method, job, result);
+                                break;
+                            case "buff":
+                                this.Buff.UpdateCacheFromJobResult(method, job, result);
                                 break;
                             case "chat":
                                 this.Chat.UpdateCacheFromJobResult(method, job, result);

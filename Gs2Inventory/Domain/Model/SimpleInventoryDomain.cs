@@ -88,7 +88,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeSimpleItemsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,
@@ -108,7 +108,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeSimpleItemsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,
@@ -188,6 +188,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName);
@@ -224,6 +225,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             AcquireSimpleItemsByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName);
@@ -250,6 +252,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName);
@@ -286,6 +289,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             ConsumeSimpleItemsByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName);
@@ -312,6 +316,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName);
@@ -348,6 +353,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             SetSimpleItemsByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName);
@@ -374,6 +380,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName);
@@ -407,6 +414,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName);

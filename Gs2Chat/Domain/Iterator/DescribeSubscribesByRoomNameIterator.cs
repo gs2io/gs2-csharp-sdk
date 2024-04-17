@@ -66,7 +66,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
     #else
     public class DescribeSubscribesByRoomNameIterator : IAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
         public string NamespaceName { get; }
         public string RoomName { get; }
@@ -78,12 +78,12 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         int? fetchSize;
 
         public DescribeSubscribesByRoomNameIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2ChatRestClient client,
             string namespaceName,
             string roomName
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.RoomName = roomName;
@@ -112,6 +112,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             var r = await this._client.DescribeSubscribesByRoomNameAsync(
             #endif
                 new Gs2.Gs2Chat.Request.DescribeSubscribesByRoomNameRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRoomName(this.RoomName)
                     .WithPageToken(this._pageToken)

@@ -85,7 +85,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         )
         {
             return new DescribeStateMachineMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -101,7 +101,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         )
         {
             return new DescribeStateMachineMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -192,6 +192,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -221,6 +222,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -240,6 +242,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Model.Namespace> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -267,6 +270,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -284,6 +288,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -313,6 +318,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -332,6 +338,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -364,6 +371,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -384,6 +392,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StateMachineMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -417,6 +426,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             UpdateStateMachineMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

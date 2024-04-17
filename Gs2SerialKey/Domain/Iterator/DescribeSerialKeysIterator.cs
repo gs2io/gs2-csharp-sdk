@@ -66,7 +66,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
     #else
     public class DescribeSerialKeysIterator : IAsyncEnumerable<Gs2.Gs2SerialKey.Model.SerialKey> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SerialKeyRestClient _client;
         public string NamespaceName { get; }
         public string CampaignModelName { get; }
@@ -79,13 +79,13 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         int? fetchSize;
 
         public DescribeSerialKeysIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2SerialKeyRestClient client,
             string namespaceName,
             string campaignModelName,
             string issueJobName = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.CampaignModelName = campaignModelName;
@@ -108,7 +108,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2SerialKey.Model.SerialKey>
             (
                     (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
@@ -130,6 +130,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 var r = await this._client.DescribeSerialKeysAsync(
                 #endif
                     new Gs2.Gs2SerialKey.Request.DescribeSerialKeysRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithCampaignModelName(this.CampaignModelName)
                         .WithIssueJobName(this.IssueJobName)
@@ -152,7 +153,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         default,
                         item.Code
@@ -160,7 +161,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2SerialKey.Model.SerialKey>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2SerialKey.Model.SerialKey>(
                         (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                             NamespaceName,
                             default

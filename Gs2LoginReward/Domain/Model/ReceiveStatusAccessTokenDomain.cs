@@ -90,6 +90,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Model.ReceiveStatus> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithBonusModelName(this.BonusModelName);
@@ -119,6 +120,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             GetReceiveStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithBonusModelName(this.BonusModelName);
@@ -138,6 +140,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithBonusModelName(this.BonusModelName);
@@ -169,6 +172,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             MarkReceivedRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithBonusModelName(this.BonusModelName);

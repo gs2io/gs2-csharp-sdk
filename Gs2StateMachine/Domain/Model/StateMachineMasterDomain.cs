@@ -90,6 +90,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Model.StateMachineMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithVersion(this.Version);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             GetStateMachineMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithVersion(this.Version);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StateMachineMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithVersion(this.Version);
                 var future = request.InvokeFuture(
@@ -169,6 +172,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithVersion(this.Version);
                 var result = await request.InvokeAsync(

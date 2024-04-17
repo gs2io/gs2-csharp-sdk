@@ -90,6 +90,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.MatchSession> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSessionName(this.SessionName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             GetMatchSessionRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithSessionName(this.SessionName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSessionName(this.SessionName);
                 var future = request.InvokeFuture(
@@ -169,6 +172,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSessionName(this.SessionName);
                 var result = await request.InvokeAsync(

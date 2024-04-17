@@ -90,6 +90,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.ThresholdMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithThresholdName(this.ThresholdName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             GetThresholdMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithThresholdName(this.ThresholdName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithThresholdName(this.ThresholdName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             UpdateThresholdMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithThresholdName(this.ThresholdName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithThresholdName(this.ThresholdName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2Experience.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithThresholdName(this.ThresholdName);
                 var result = await request.InvokeAsync(

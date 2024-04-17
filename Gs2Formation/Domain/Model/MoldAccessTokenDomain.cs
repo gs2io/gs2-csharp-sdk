@@ -93,6 +93,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Mold> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             GetMoldRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithMoldModelName(this.MoldModelName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName);
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithMoldModelName(this.MoldModelName);
@@ -194,7 +198,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             return new DescribeFormsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.MoldModelName,
@@ -212,7 +216,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             return new DescribeFormsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.MoldModelName,

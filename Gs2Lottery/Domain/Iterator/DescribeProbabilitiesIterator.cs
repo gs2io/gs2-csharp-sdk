@@ -68,7 +68,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
     #else
     public class DescribeProbabilitiesIterator : IAsyncEnumerable<Gs2.Gs2Lottery.Model.Probability> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
         public string NamespaceName { get; }
         public string LotteryName { get; }
@@ -81,13 +81,13 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         int? fetchSize;
 
         public DescribeProbabilitiesIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2LotteryRestClient client,
             string namespaceName,
             string lotteryName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.LotteryName = lotteryName;
@@ -109,13 +109,13 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Lottery.Model.Probability>
             (
                     (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        this.LotteryName
+                        LotteryName
                     ),
                     out var list
             )) {
@@ -130,6 +130,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 var r = await this._client.DescribeProbabilitiesAsync(
                 #endif
                     new Gs2.Gs2Lottery.Request.DescribeProbabilitiesRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithLotteryName(this.LotteryName)
                         .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
@@ -148,20 +149,20 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 this._last = true;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         AccessToken?.UserId,
-                        this.LotteryName,
+                        LotteryName,
                         item.Prize.PrizeId
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Lottery.Model.Probability>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Lottery.Model.Probability>(
                         (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            this.LotteryName
+                            LotteryName
                         )
                     );
                 }

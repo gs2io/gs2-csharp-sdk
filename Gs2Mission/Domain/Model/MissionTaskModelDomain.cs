@@ -93,6 +93,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionTaskModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithMissionGroupName(this.MissionGroupName)
                     .WithMissionTaskName(this.MissionTaskName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             GetMissionTaskModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithMissionGroupName(this.MissionGroupName)
                 .WithMissionTaskName(this.MissionTaskName);

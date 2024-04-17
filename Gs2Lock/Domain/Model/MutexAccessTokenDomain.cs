@@ -91,6 +91,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lock.Domain.Model.MutexAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithPropertyId(this.PropertyId);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             LockRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithPropertyId(this.PropertyId);
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lock.Domain.Model.MutexAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithPropertyId(this.PropertyId);
@@ -174,6 +177,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             UnlockRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithPropertyId(this.PropertyId);
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lock.Model.Mutex> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithPropertyId(this.PropertyId);
@@ -224,6 +229,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             GetMutexRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithPropertyId(this.PropertyId);

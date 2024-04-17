@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -41,6 +39,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -64,13 +63,11 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
+        public string NamespaceName { get; }
+        public string UserId { get; }
         public bool? AutoRun { get; set; }
         public bool? IsLastJob { get; set; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -81,46 +78,46 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._client = new Gs2JobQueueRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.Job> Jobs(
+            string timeOffsetToken = null
         )
         {
             return new DescribeJobsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.Job> JobsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2JobQueue.Model.Job> Jobs(
-            #endif
-        #else
         public DescribeJobsByUserIdIterator JobsAsync(
-        #endif
+            #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeJobsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.UserId
-        #if UNITY_2017_1_OR_NEWER
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeJobs(
             Action<Gs2.Gs2JobQueue.Model.Job[]> callback
@@ -174,42 +171,42 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobs(
+            string timeOffsetToken = null
         )
         {
             return new DescribeDeadLetterJobsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2JobQueue.Model.DeadLetterJob> DeadLetterJobs(
-            #endif
-        #else
         public DescribeDeadLetterJobsByUserIdIterator DeadLetterJobsAsync(
-        #endif
+            #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeDeadLetterJobsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.UserId
-        #if UNITY_2017_1_OR_NEWER
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeDeadLetterJobs(
             Action<Gs2.Gs2JobQueue.Model.DeadLetterJob[]> callback
@@ -274,6 +271,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -315,6 +313,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             PushByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -346,6 +345,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -372,7 +372,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     result?.Item?.Name
                 );
                 domain.IsLastJob = result?.IsLastJob;
-                domain.Result = result?.Result;
 
                 self.OnComplete(domain);
             }
@@ -389,6 +388,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             RunByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(

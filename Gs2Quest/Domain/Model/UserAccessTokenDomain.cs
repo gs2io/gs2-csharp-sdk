@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -93,6 +91,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
 
@@ -155,6 +154,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             bool speculativeExecute = true
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
 
@@ -185,52 +185,39 @@ namespace Gs2.Gs2Quest.Domain.Model
             return transaction;
         }
         #endif
-
-        public Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain Progress(
-        ) {
-            return new Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.AccessToken
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
         )
         {
             return new DescribeCompletedQuestListsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestListsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
-            #endif
-        #else
         public DescribeCompletedQuestListsIterator CompletedQuestListsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeCompletedQuestListsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeCompletedQuestLists(
             Action<Gs2.Gs2Quest.Model.CompletedQuestList[]> callback
@@ -281,6 +268,15 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 questGroupName
+            );
+        }
+
+        public Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain Progress(
+        ) {
+            return new Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken
             );
         }
 

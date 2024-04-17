@@ -84,7 +84,7 @@ namespace Gs2.Gs2News.Domain.Model
         )
         {
             return new DescribeOutputsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UploadToken
@@ -101,7 +101,7 @@ namespace Gs2.Gs2News.Domain.Model
         )
         {
             return new DescribeOutputsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UploadToken
@@ -176,6 +176,7 @@ namespace Gs2.Gs2News.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2News.Model.Progress> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUploadToken(this.UploadToken);
                 var future = request.InvokeFuture(
@@ -204,6 +205,7 @@ namespace Gs2.Gs2News.Domain.Model
             GetProgressRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUploadToken(this.UploadToken);
             var result = await request.InvokeAsync(

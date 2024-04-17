@@ -68,7 +68,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
     #else
     public class CountAccessLogIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogCount> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         public string NamespaceName { get; }
         public bool? Service { get; }
@@ -77,6 +77,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         public long? Begin { get; }
         public long? End { get; }
         public bool? LongTerm { get; }
+        public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -85,7 +86,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         int? fetchSize;
 
         public CountAccessLogIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2LogRestClient client,
             string namespaceName,
             bool? service = null,
@@ -93,9 +94,10 @@ namespace Gs2.Gs2Log.Domain.Iterator
             bool? userId = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.Service = service;
@@ -104,6 +106,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
             this.Begin = begin;
             this.End = end;
             this.LongTerm = longTerm;
+            this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Log.Model.AccessLogCount[]{};
@@ -129,6 +132,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
             var r = await this._client.CountAccessLogAsync(
             #endif
                 new Gs2.Gs2Log.Request.CountAccessLogRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithService(this.Service)
                     .WithMethod(this.Method)

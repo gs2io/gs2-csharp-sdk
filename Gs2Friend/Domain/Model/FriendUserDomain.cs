@@ -96,6 +96,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.FriendUser> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithWithProfile(this.WithProfile)
@@ -126,6 +127,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             GetFriendByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithWithProfile(this.WithProfile)
@@ -136,62 +138,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 () => this._client.GetFriendByUserIdAsync(request)
             );
             return result?.Item;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteFuture(
-            DeleteFriendByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithTargetUserId(this.TargetUserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    () => this._client.DeleteFriendByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteAsync(
-            #else
-        public async Task<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteAsync(
-            #endif
-            DeleteFriendByUserIdRequest request
-        ) {
-            try {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithTargetUserId(this.TargetUserId);
-                var result = await request.InvokeAsync(
-                    _gs2.Cache,
-                    this.UserId,
-                    () => this._client.DeleteFriendByUserIdAsync(request)
-                );
-            }
-            catch (NotFoundException e) {}
-            var domain = this;
-            return domain;
         }
         #endif
 

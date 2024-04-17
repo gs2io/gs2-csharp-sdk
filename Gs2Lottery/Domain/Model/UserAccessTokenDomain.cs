@@ -98,7 +98,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribeBoxesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -115,7 +115,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribeBoxesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken

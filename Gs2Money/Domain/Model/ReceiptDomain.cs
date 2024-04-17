@@ -93,6 +93,7 @@ namespace Gs2.Gs2Money.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithTransactionId(this.TransactionId);
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Money.Domain.Model
             GetByUserIdAndTransactionIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithTransactionId(this.TransactionId);

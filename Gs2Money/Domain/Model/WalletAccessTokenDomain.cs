@@ -91,6 +91,7 @@ namespace Gs2.Gs2Money.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Model.Wallet> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithSlot(this.Slot);
@@ -120,6 +121,7 @@ namespace Gs2.Gs2Money.Domain.Model
             GetWalletRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithSlot(this.Slot);
@@ -139,6 +141,7 @@ namespace Gs2.Gs2Money.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithSlot(this.Slot);
@@ -171,6 +174,7 @@ namespace Gs2.Gs2Money.Domain.Model
             WithdrawRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithSlot(this.Slot);

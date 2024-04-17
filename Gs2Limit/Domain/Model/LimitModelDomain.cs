@@ -90,6 +90,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Model.LimitModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithLimitName(this.LimitName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             GetLimitModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithLimitName(this.LimitName);
             var result = await request.InvokeAsync(

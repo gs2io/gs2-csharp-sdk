@@ -94,6 +94,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.RarityParameterStatus> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithParameterName(this.ParameterName)
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             GetRarityParameterStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithParameterName(this.ParameterName)
@@ -144,6 +146,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithParameterName(this.ParameterName)
@@ -176,6 +179,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             VerifyRarityParameterStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithParameterName(this.ParameterName)

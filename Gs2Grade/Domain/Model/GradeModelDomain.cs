@@ -90,6 +90,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.GradeModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGradeName(this.GradeName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             GetGradeModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGradeName(this.GradeName);
             var result = await request.InvokeAsync(

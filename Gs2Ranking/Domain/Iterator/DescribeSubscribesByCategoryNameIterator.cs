@@ -66,7 +66,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
     #else
     public class DescribeSubscribesByCategoryNameIterator : IAsyncEnumerable<Gs2.Gs2Ranking.Model.SubscribeUser> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
         public string NamespaceName { get; }
         public string CategoryName { get; }
@@ -79,13 +79,13 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         int? fetchSize;
 
         public DescribeSubscribesByCategoryNameIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2RankingRestClient client,
             string namespaceName,
             string categoryName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.CategoryName = categoryName;
@@ -107,7 +107,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Ranking.Model.SubscribeUser>
             (
                     (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheParentKey(
@@ -129,6 +129,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 var r = await this._client.DescribeSubscribesByCategoryNameAsync(
                 #endif
                     new Gs2.Gs2Ranking.Request.DescribeSubscribesByCategoryNameRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithCategoryName(this.CategoryName)
                         .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
@@ -147,7 +148,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this._last = true;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         AccessToken?.UserId,
                         CategoryName,
@@ -157,7 +158,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Ranking.Model.SubscribeUser>(
                         (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,

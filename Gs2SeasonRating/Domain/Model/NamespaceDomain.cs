@@ -93,7 +93,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         )
         {
             return new DescribeSeasonModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -109,7 +109,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         )
         {
             return new DescribeSeasonModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -173,7 +173,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         )
         {
             return new DescribeSeasonModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -189,7 +189,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         )
         {
             return new DescribeSeasonModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -273,7 +273,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         )
         {
             return new DescribeMatchSessionsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -289,7 +289,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         )
         {
             return new DescribeMatchSessionsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -372,6 +372,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -401,6 +402,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -420,6 +422,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.Namespace> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -447,6 +450,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -464,6 +468,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -493,6 +498,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -512,6 +518,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -544,6 +551,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -564,6 +572,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.SeasonModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -597,6 +606,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             CreateSeasonModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -620,6 +630,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -653,6 +664,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             CreateMatchSessionRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -676,6 +688,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.BallotDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -713,6 +726,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             VoteRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -740,6 +754,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.BallotDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -777,6 +792,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             VoteMultipleRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

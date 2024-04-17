@@ -83,6 +83,74 @@ namespace Gs2.Gs2Friend.Domain.Model
             this.WithProfile = withProfile;
         }
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain> DeleteFriendFuture(
+            DeleteFriendRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteFriendFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.AccessToken,
+                    this.WithProfile,
+                    request.TargetUserId
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain> DeleteFriendAsync(
+            #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain> DeleteFriendAsync(
+            #endif
+            DeleteFriendRequest request
+        ) {
+            try {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteFriendAsync(request)
+                );
+            }
+            catch (NotFoundException e) {}
+            var domain = new Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                this.WithProfile,
+                request.TargetUserId
+            );
+            return domain;
+        }
+        #endif
+
         public Gs2.Gs2Friend.Domain.Model.FriendUserAccessTokenDomain FriendUser(
             string targetUserId
         ) {

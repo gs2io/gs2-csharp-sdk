@@ -95,6 +95,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.Status> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             GetStatusByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Model.AcquireAction[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -172,6 +175,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             PredictionByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);
@@ -191,6 +195,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -237,6 +242,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             ReceiveByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);
@@ -267,6 +273,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -298,6 +305,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IncreaseMaximumIdleMinutesByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);
@@ -319,6 +327,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -350,6 +359,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             DecreaseMaximumIdleMinutesByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);
@@ -371,6 +381,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -402,6 +413,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             SetMaximumIdleMinutesByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);

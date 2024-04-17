@@ -66,7 +66,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
     #else
     public class DescribeBigItemsByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Inventory.Model.BigItem> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
         public string NamespaceName { get; }
         public string InventoryName { get; }
@@ -80,14 +80,14 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         int? fetchSize;
 
         public DescribeBigItemsByUserIdIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2InventoryRestClient client,
             string namespaceName,
             string inventoryName,
             string userId,
             string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.InventoryName = inventoryName;
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Inventory.Model.BigItem>
             (
                     (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
@@ -133,6 +133,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 var r = await this._client.DescribeBigItemsByUserIdAsync(
                 #endif
                     new Gs2.Gs2Inventory.Request.DescribeBigItemsByUserIdRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithInventoryName(this.InventoryName)
                         .WithUserId(this.UserId)
@@ -154,7 +155,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         UserId,
                         InventoryName,
@@ -163,7 +164,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Inventory.Model.BigItem>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Inventory.Model.BigItem>(
                         (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
                             NamespaceName,
                             UserId,

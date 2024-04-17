@@ -90,6 +90,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.CategoryModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCategoryName(this.CategoryName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             GetCategoryModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithCategoryName(this.CategoryName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CategoryModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCategoryName(this.CategoryName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             UpdateCategoryModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithCategoryName(this.CategoryName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CategoryModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCategoryName(this.CategoryName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2Idle.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCategoryName(this.CategoryName);
                 var result = await request.InvokeAsync(

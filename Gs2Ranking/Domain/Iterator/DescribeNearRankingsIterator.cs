@@ -68,7 +68,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
     #else
     public class DescribeNearRankingsIterator : IAsyncEnumerable<Gs2.Gs2Ranking.Model.Ranking> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
         public string NamespaceName { get; }
         public string CategoryName { get; }
@@ -81,14 +81,14 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         int? fetchSize;
 
         public DescribeNearRankingsIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2RankingRestClient client,
             string namespaceName,
             string categoryName,
             long? score,
             string additionalScopeName = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.CategoryName = categoryName;
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Ranking.Model.Ranking>
             (
                     (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
@@ -134,6 +134,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 var r = await this._client.DescribeNearRankingsAsync(
                 #endif
                     new Gs2.Gs2Ranking.Request.DescribeNearRankingsRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithCategoryName(this.CategoryName)
                         .WithAdditionalScopeName(this.AdditionalScopeName)
@@ -154,7 +155,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this._last = true;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         default,
                         CategoryName + ":NearRanking",
@@ -165,7 +166,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Ranking.Model.Ranking>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Ranking.Model.Ranking>(
                         (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
                             NamespaceName,
                             default,

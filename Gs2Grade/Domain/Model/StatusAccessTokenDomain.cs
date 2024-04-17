@@ -97,6 +97,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.Status> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithGradeName(this.GradeName)
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             GetStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithGradeName(this.GradeName)
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithGradeName(this.GradeName)
@@ -180,6 +183,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             ApplyRankCapRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithGradeName(this.GradeName)
@@ -203,6 +207,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithGradeName(this.GradeName)
@@ -234,6 +239,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             VerifyGradeRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithGradeName(this.GradeName)
@@ -255,6 +261,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithGradeName(this.GradeName)
@@ -286,6 +293,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             VerifyGradeUpMaterialRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithGradeName(this.GradeName)

@@ -93,7 +93,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeBalanceParameterModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -109,7 +109,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeBalanceParameterModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -173,7 +173,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeBalanceParameterModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeBalanceParameterModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -253,7 +253,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeRarityParameterModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -269,7 +269,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeRarityParameterModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -333,7 +333,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeRarityParameterModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -349,7 +349,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeRarityParameterModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -440,6 +440,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -469,6 +470,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -488,6 +490,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.Namespace> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -515,6 +518,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -532,6 +536,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -561,6 +566,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -580,6 +586,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -612,6 +619,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -632,6 +640,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -665,6 +674,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             CreateBalanceParameterModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -688,6 +698,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -721,6 +732,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             CreateRarityParameterModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

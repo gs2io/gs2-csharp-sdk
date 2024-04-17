@@ -87,7 +87,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         )
         {
             return new DescribeRandomDisplayItemsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.ShowcaseName,
@@ -105,7 +105,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         )
         {
             return new DescribeRandomDisplayItemsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.ShowcaseName,

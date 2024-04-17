@@ -90,6 +90,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Resource> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithStackName(this.StackName)
                     .WithResourceName(this.ResourceName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             GetResourceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithStackName(this.StackName)
                 .WithResourceName(this.ResourceName);
             var result = await request.InvokeAsync(

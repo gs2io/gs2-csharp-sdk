@@ -66,7 +66,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
     #else
     public class DescribeFollowsByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
@@ -80,14 +80,14 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         int? fetchSize;
 
         public DescribeFollowsByUserIdIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2FriendRestClient client,
             string namespaceName,
             string userId,
             bool? withProfile = null,
             string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Friend.Model.FollowUser>
             (
                     (null as Gs2.Gs2Friend.Model.FollowUser).CacheParentKey(
@@ -133,6 +133,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 var r = await this._client.DescribeFollowsByUserIdAsync(
                 #endif
                     new Gs2.Gs2Friend.Request.DescribeFollowsByUserIdRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithUserId(this.UserId)
                         .WithWithProfile(this.WithProfile)
@@ -154,7 +155,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         UserId,
                         WithProfile ?? default,
@@ -163,7 +164,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Friend.Model.FollowUser>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.FollowUser>(
                         (null as Gs2.Gs2Friend.Model.FollowUser).CacheParentKey(
                             NamespaceName,
                             UserId,

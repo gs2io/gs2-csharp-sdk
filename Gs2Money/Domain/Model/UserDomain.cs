@@ -86,7 +86,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeWalletsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -105,7 +105,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeWalletsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -178,7 +178,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeReceiptsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -203,7 +203,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeReceiptsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -297,6 +297,7 @@ namespace Gs2.Gs2Money.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -332,6 +333,7 @@ namespace Gs2.Gs2Money.Domain.Model
             RecordReceiptRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -357,6 +359,7 @@ namespace Gs2.Gs2Money.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -392,6 +395,7 @@ namespace Gs2.Gs2Money.Domain.Model
             RevertRecordReceiptRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(

@@ -93,6 +93,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithQuestGroupName(this.QuestGroupName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             GetCompletedQuestListByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithQuestGroupName(this.QuestGroupName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithQuestGroupName(this.QuestGroupName);
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithQuestGroupName(this.QuestGroupName);

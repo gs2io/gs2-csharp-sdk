@@ -132,7 +132,7 @@ namespace Gs2.Gs2Distributor.Domain
         )
         {
             return new DescribeNamespacesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client
             );
         }
@@ -147,7 +147,7 @@ namespace Gs2.Gs2Distributor.Domain
         )
         {
             return new DescribeNamespacesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK

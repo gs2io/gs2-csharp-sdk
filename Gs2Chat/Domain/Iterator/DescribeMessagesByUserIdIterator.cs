@@ -66,7 +66,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
     #else
     public class DescribeMessagesByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Chat.Model.Message> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
         public string NamespaceName { get; }
         public string RoomName { get; }
@@ -81,7 +81,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         int? fetchSize;
 
         public DescribeMessagesByUserIdIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2ChatRestClient client,
             string namespaceName,
             string roomName,
@@ -89,7 +89,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             string userId = null,
             string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.RoomName = roomName;
@@ -114,7 +114,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Chat.Model.Message>
             (
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._startAt = (long)listCacheContext;
                     this._result = list.Where(message => message.CreatedAt < this._startAt).ToArray();
                     this._last = false;
-                    this._cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
+                    this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             UserId ?? default,
@@ -151,6 +151,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 var r = await this._client.DescribeMessagesByUserIdAsync(
                 #endif
                     new Gs2.Gs2Chat.Request.DescribeMessagesByUserIdRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithRoomName(this.RoomName)
                         .WithPassword(this.Password)
@@ -176,7 +177,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 }
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         UserId ?? default,
                         RoomName,
@@ -185,7 +186,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             UserId ?? default,

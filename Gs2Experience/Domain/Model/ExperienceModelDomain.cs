@@ -90,6 +90,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.ExperienceModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithExperienceName(this.ExperienceName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             GetExperienceModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithExperienceName(this.ExperienceName);
             var result = await request.InvokeAsync(

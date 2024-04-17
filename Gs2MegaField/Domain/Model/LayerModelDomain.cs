@@ -93,6 +93,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.LayerModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAreaModelName(this.AreaModelName)
                     .WithLayerModelName(this.LayerModelName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             GetLayerModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAreaModelName(this.AreaModelName)
                 .WithLayerModelName(this.LayerModelName);

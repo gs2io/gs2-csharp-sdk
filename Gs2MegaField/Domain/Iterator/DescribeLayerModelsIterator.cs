@@ -66,7 +66,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
     #else
     public class DescribeLayerModelsIterator : IAsyncEnumerable<Gs2.Gs2MegaField.Model.LayerModel> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MegaFieldRestClient _client;
         public string NamespaceName { get; }
         public string AreaModelName { get; }
@@ -77,12 +77,12 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         int? fetchSize;
 
         public DescribeLayerModelsIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2MegaFieldRestClient client,
             string namespaceName,
             string areaModelName
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.AreaModelName = areaModelName;
@@ -103,7 +103,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2MegaField.Model.LayerModel>
             (
                     (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
@@ -123,6 +123,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 var r = await this._client.DescribeLayerModelsAsync(
                 #endif
                     new Gs2.Gs2MegaField.Request.DescribeLayerModelsRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithAreaModelName(this.AreaModelName)
                 );
@@ -140,7 +141,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 this._last = true;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         AreaModelName,
                         item.Name
@@ -148,7 +149,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2MegaField.Model.LayerModel>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2MegaField.Model.LayerModel>(
                         (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
                             NamespaceName,
                             AreaModelName

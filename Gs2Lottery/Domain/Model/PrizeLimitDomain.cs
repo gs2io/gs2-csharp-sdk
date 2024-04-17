@@ -93,6 +93,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.PrizeLimit> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithPrizeTableName(this.PrizeTableName)
                     .WithPrizeId(this.PrizeId);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             GetPrizeLimitRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithPrizeTableName(this.PrizeTableName)
                 .WithPrizeId(this.PrizeId);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithPrizeTableName(this.PrizeTableName)
                     .WithPrizeId(this.PrizeId);
@@ -171,6 +174,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             ResetPrizeLimitRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithPrizeTableName(this.PrizeTableName)
                 .WithPrizeId(this.PrizeId);

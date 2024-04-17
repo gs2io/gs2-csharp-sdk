@@ -91,6 +91,7 @@ namespace Gs2.Gs2Account.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.DataOwner> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -119,6 +120,7 @@ namespace Gs2.Gs2Account.Domain.Model
             GetDataOwnerByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(

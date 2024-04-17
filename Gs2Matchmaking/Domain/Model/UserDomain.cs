@@ -83,40 +83,36 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this.UserId = userId;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> Gatherings(
         )
         {
             return new DescribeGatheringsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> GatheringsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> Gatherings(
-            #endif
-        #else
         public DescribeGatheringsIterator GatheringsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeGatheringsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeGatherings(
             Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback
@@ -159,44 +155,40 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmakingByPlayer(
             Gs2.Gs2Matchmaking.Model.Player player
         )
         {
             return new DoMatchmakingByPlayerIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 player
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmakingByPlayerAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmakingByPlayer(
-            #endif
-        #else
         public DoMatchmakingByPlayerIterator DoMatchmakingByPlayerAsync(
-        #endif
+            #endif
             Gs2.Gs2Matchmaking.Model.Player player
         )
         {
             return new DoMatchmakingByPlayerIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 player
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeDoMatchmakingByPlayer(
             Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback,
@@ -244,46 +236,46 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmaking(
-            Gs2.Gs2Matchmaking.Model.Player player
+            Gs2.Gs2Matchmaking.Model.Player player,
+            string timeOffsetToken = null
         )
         {
             return new DoMatchmakingByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                player
+                player,
+                timeOffsetToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmakingAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmaking(
-            #endif
-        #else
         public DoMatchmakingByUserIdIterator DoMatchmakingAsync(
-        #endif
-            Gs2.Gs2Matchmaking.Model.Player player
+            #endif
+            Gs2.Gs2Matchmaking.Model.Player player,
+            string timeOffsetToken = null
         )
         {
             return new DoMatchmakingByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                player
-        #if UNITY_2017_1_OR_NEWER
+                player,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeDoMatchmaking(
             Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback,
@@ -359,42 +351,42 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
+            string timeOffsetToken = null
         )
         {
             return new DescribeRatingsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Rating> RatingsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
-            #endif
-        #else
         public DescribeRatingsByUserIdIterator RatingsAsync(
-        #endif
+            #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeRatingsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.UserId
-        #if UNITY_2017_1_OR_NEWER
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeRatings(
             Action<Gs2.Gs2Matchmaking.Model.Rating[]> callback
@@ -459,6 +451,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -494,6 +487,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             CreateGatheringByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -519,6 +513,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -556,6 +551,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -581,6 +577,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain[]> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -614,6 +611,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             PutResultRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

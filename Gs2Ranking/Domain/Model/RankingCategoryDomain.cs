@@ -103,7 +103,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeSubscribesByCategoryNameAndUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -123,7 +123,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeSubscribesByCategoryNameAndUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -200,7 +200,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeRankingsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -221,7 +221,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeRankingsByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -286,7 +286,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeNearRankingsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -306,7 +306,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeNearRankingsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -396,6 +396,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -434,6 +435,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             SubscribeByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);
@@ -462,6 +464,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Domain.Model.ScoreDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName);
@@ -500,6 +503,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             PutScoreByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName);

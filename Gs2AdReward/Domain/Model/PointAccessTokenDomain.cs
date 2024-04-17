@@ -87,6 +87,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2AdReward.Model.Point> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
@@ -115,6 +116,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
             GetPointRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
@@ -133,6 +135,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2AdReward.Domain.Model.PointAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
@@ -163,6 +166,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
             ConsumePointRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(

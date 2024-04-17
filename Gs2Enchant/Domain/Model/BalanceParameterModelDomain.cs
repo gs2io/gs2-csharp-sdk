@@ -90,6 +90,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.BalanceParameterModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithParameterName(this.ParameterName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             GetBalanceParameterModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithParameterName(this.ParameterName);
             var result = await request.InvokeAsync(

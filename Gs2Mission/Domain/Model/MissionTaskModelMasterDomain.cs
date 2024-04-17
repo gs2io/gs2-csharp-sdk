@@ -93,6 +93,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionTaskModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithMissionGroupName(this.MissionGroupName)
                     .WithMissionTaskName(this.MissionTaskName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             GetMissionTaskModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithMissionGroupName(this.MissionGroupName)
                 .WithMissionTaskName(this.MissionTaskName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithMissionGroupName(this.MissionGroupName)
                     .WithMissionTaskName(this.MissionTaskName);
@@ -172,6 +175,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             UpdateMissionTaskModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithMissionGroupName(this.MissionGroupName)
                 .WithMissionTaskName(this.MissionTaskName);
@@ -193,6 +197,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithMissionGroupName(this.MissionGroupName)
                     .WithMissionTaskName(this.MissionTaskName);
@@ -227,6 +232,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithMissionGroupName(this.MissionGroupName)
                     .WithMissionTaskName(this.MissionTaskName);

@@ -92,6 +92,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.Entry> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithEntryModelName(this.EntryName);
@@ -121,6 +122,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             GetEntryRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithEntryModelName(this.EntryName);
@@ -140,6 +142,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithEntryModelName(this.EntryName);
@@ -173,6 +176,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             GetEntryWithSignatureRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithEntryModelName(this.EntryName);

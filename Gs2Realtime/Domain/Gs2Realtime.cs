@@ -128,7 +128,7 @@ namespace Gs2.Gs2Realtime.Domain
         )
         {
             return new DescribeNamespacesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client
             );
         }
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Realtime.Domain
         )
         {
             return new DescribeNamespacesIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();

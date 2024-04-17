@@ -96,6 +96,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyId(this.PropertyId);
@@ -127,6 +128,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             MarkReleaseByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyId(this.PropertyId);
@@ -148,6 +150,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyId(this.PropertyId);
@@ -194,6 +197,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             ReleaseByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyId(this.PropertyId);
@@ -224,6 +228,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Domain.Model.StatusDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyId(this.PropertyId);
@@ -255,6 +260,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             MarkRestrainByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyId(this.PropertyId);
@@ -276,6 +282,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyId(this.PropertyId);
@@ -322,6 +329,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             RestrainByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyId(this.PropertyId);
@@ -352,6 +360,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Model.Status> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyId(this.PropertyId);
@@ -381,6 +390,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             GetStatusByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyId(this.PropertyId);
@@ -400,6 +410,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyId(this.PropertyId);
@@ -446,6 +457,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             ResetByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyId(this.PropertyId);

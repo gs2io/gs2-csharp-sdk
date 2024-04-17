@@ -92,6 +92,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.Await> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAwaitName(this.AwaitName);
@@ -121,6 +122,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             GetAwaitRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithAwaitName(this.AwaitName);
@@ -141,6 +143,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAwaitName(this.AwaitName);
@@ -204,6 +207,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             bool speculativeExecute = true
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithAwaitName(this.AwaitName);
@@ -243,6 +247,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAwaitName(this.AwaitName);
@@ -277,6 +282,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAwaitName(this.AwaitName);

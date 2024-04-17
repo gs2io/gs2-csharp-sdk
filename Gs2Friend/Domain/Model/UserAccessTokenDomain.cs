@@ -88,6 +88,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
@@ -123,6 +124,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             SendRequestRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
@@ -163,7 +165,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeBlackListIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -180,7 +182,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeBlackListIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -217,7 +219,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeFriendsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
@@ -236,7 +238,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeFriendsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
@@ -312,7 +314,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeSendRequestsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -329,7 +331,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeSendRequestsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -397,7 +399,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeReceiveRequestsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -414,7 +416,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeReceiveRequestsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken

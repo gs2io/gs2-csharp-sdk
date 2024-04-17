@@ -91,6 +91,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.Progress> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
@@ -119,6 +120,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             GetProgressRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
@@ -138,6 +140,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
 
@@ -200,6 +203,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             bool speculativeExecute = true
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
 
@@ -239,6 +243,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
 
@@ -301,6 +306,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             bool speculativeExecute = true
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
 
@@ -339,6 +345,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
@@ -372,6 +379,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var result = await request.InvokeAsync(

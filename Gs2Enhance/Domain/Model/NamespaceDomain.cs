@@ -93,7 +93,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeUnleashRateModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -109,7 +109,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeUnleashRateModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -173,7 +173,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeUnleashRateModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeUnleashRateModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -253,7 +253,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeRateModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -269,7 +269,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeRateModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -353,7 +353,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeRateModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -369,7 +369,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         )
         {
             return new DescribeRateModelMastersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -440,6 +440,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -469,6 +470,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -488,6 +490,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.Namespace> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -515,6 +518,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -532,6 +536,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -561,6 +566,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -580,6 +586,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -612,6 +619,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -632,6 +640,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -665,6 +674,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             CreateUnleashRateModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -688,6 +698,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -721,6 +732,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             CreateRateModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

@@ -84,7 +84,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         )
         {
             return new DescribeIssueJobsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CampaignModelName
@@ -101,7 +101,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         )
         {
             return new DescribeIssueJobsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CampaignModelName
@@ -176,6 +176,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.CampaignModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCampaignModelName(this.CampaignModelName);
                 var future = request.InvokeFuture(
@@ -204,6 +205,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             GetCampaignModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithCampaignModelName(this.CampaignModelName);
             var result = await request.InvokeAsync(
@@ -222,6 +224,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.IssueJobDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCampaignModelName(this.CampaignModelName);
                 var future = request.InvokeFuture(
@@ -257,6 +260,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             IssueRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithCampaignModelName(this.CampaignModelName);
             var result = await request.InvokeAsync(

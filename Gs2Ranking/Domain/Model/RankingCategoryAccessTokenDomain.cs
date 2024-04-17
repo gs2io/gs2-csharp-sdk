@@ -95,6 +95,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithCategoryName(this.CategoryName);
@@ -133,6 +134,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             SubscribeRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithCategoryName(this.CategoryName);
@@ -161,6 +163,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithCategoryName(this.CategoryName);
@@ -199,6 +202,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             PutScoreRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithCategoryName(this.CategoryName);
@@ -235,7 +239,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeSubscribesByCategoryNameIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -253,7 +257,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeSubscribesByCategoryNameIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -328,7 +332,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeRankingsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
@@ -347,7 +351,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeRankingsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,

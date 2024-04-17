@@ -100,7 +100,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeScoresByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 categoryName,
@@ -123,7 +123,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeScoresByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 categoryName,

@@ -66,7 +66,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
     #else
     public class DescribeDrawnPrizesIterator : IAsyncEnumerable<Gs2.Gs2Lottery.Model.DrawnPrize> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
         public string NamespaceName { get; }
         private string _pageToken;
@@ -77,11 +77,11 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         int? fetchSize;
 
         public DescribeDrawnPrizesIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2LotteryRestClient client,
             string namespaceName
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this._pageToken = null;
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Lottery.Model.DrawnPrize>
             (
                     (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(

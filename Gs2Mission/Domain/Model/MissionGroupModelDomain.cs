@@ -83,7 +83,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         )
         {
             return new DescribeMissionTaskModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.MissionGroupName
@@ -100,7 +100,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         )
         {
             return new DescribeMissionTaskModelsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.MissionGroupName
@@ -175,6 +175,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionGroupModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithMissionGroupName(this.MissionGroupName);
                 var future = request.InvokeFuture(
@@ -203,6 +204,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             GetMissionGroupModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithMissionGroupName(this.MissionGroupName);
             var result = await request.InvokeAsync(

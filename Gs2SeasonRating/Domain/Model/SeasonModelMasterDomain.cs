@@ -90,6 +90,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.SeasonModelMaster> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSeasonName(this.SeasonName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             GetSeasonModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithSeasonName(this.SeasonName);
             var result = await request.InvokeAsync(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.SeasonModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSeasonName(this.SeasonName);
                 var future = request.InvokeFuture(
@@ -166,6 +169,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             UpdateSeasonModelMasterRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithSeasonName(this.SeasonName);
             var result = await request.InvokeAsync(
@@ -186,6 +190,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.SeasonModelMasterDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSeasonName(this.SeasonName);
                 var future = request.InvokeFuture(
@@ -219,6 +224,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSeasonName(this.SeasonName);
                 var result = await request.InvokeAsync(

@@ -92,6 +92,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.Inventory> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName);
@@ -121,6 +122,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             GetInventoryRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName);
@@ -140,6 +142,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName);
@@ -170,6 +173,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             VerifyInventoryCurrentMaxCapacityRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName);
@@ -187,7 +191,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeItemSetsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,
@@ -205,7 +209,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeItemSetsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,

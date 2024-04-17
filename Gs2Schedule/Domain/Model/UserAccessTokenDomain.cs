@@ -85,7 +85,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
         )
         {
             return new DescribeTriggersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
         )
         {
             return new DescribeTriggersIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -170,7 +170,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
         )
         {
             return new DescribeEventsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -187,7 +187,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
         )
         {
             return new DescribeEventsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken

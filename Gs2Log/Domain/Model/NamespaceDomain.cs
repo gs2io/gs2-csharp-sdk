@@ -88,11 +88,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string userId = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryAccessLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -100,7 +101,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 userId,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -116,11 +118,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string userId = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryAccessLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -128,7 +131,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 userId,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -212,11 +216,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? userId = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountAccessLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -224,7 +229,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 userId,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -240,11 +246,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? userId = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountAccessLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -252,7 +259,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 userId,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -345,11 +353,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryExecuteStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -358,7 +367,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -375,11 +385,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryExecuteStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -388,7 +399,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -478,11 +490,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountExecuteStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -491,7 +504,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -508,11 +522,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountExecuteStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -521,7 +536,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -619,11 +635,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryExecuteStampTaskLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -632,7 +649,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -649,11 +667,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryExecuteStampTaskLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -662,7 +681,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -752,11 +772,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountExecuteStampTaskLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -765,7 +786,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -782,11 +804,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountExecuteStampTaskLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -795,7 +818,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -893,11 +917,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryIssueStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -906,7 +931,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -923,11 +949,12 @@ namespace Gs2.Gs2Log.Domain.Model
             string action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new QueryIssueStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -936,7 +963,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -1026,11 +1054,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountIssueStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -1039,7 +1068,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             );
         }
         #endif
@@ -1056,11 +1086,12 @@ namespace Gs2.Gs2Log.Domain.Model
             bool? action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         )
         {
             return new CountIssueStampSheetLogIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -1069,7 +1100,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 action,
                 begin,
                 end,
-                longTerm
+                longTerm,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -1172,7 +1204,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new DescribeInsightsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             );
@@ -1188,7 +1220,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new DescribeInsightsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName
             #if GS2_ENABLE_UNITASK
@@ -1258,6 +1290,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -1287,6 +1320,7 @@ namespace Gs2.Gs2Log.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -1306,6 +1340,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Namespace> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -1333,6 +1368,7 @@ namespace Gs2.Gs2Log.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -1350,6 +1386,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -1379,6 +1416,7 @@ namespace Gs2.Gs2Log.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -1398,6 +1436,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -1430,6 +1469,7 @@ namespace Gs2.Gs2Log.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -1492,6 +1532,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.InsightDomain> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -1525,6 +1566,7 @@ namespace Gs2.Gs2Log.Domain.Model
             CreateInsightRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

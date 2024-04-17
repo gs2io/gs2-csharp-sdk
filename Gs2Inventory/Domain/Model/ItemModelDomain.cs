@@ -93,6 +93,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);
@@ -122,6 +123,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             GetItemModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName)
                 .WithItemName(this.ItemName);

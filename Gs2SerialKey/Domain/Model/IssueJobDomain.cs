@@ -94,6 +94,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.IssueJob> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithCampaignModelName(this.CampaignModelName)
                     .WithIssueJobName(this.IssueJobName);
@@ -123,6 +124,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             GetIssueJobRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithCampaignModelName(this.CampaignModelName)
                 .WithIssueJobName(this.IssueJobName);

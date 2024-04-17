@@ -90,6 +90,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Model.BonusModel> self)
             {
                 request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithBonusModelName(this.BonusModelName);
                 var future = request.InvokeFuture(
@@ -118,6 +119,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             GetBonusModelRequest request
         ) {
             request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithBonusModelName(this.BonusModelName);
             var result = await request.InvokeAsync(

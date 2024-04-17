@@ -66,7 +66,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
     #else
     public class DescribeQuestModelMastersIterator : IAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModelMaster> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2QuestRestClient _client;
         public string NamespaceName { get; }
         public string QuestGroupName { get; }
@@ -78,12 +78,12 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         int? fetchSize;
 
         public DescribeQuestModelMastersIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2QuestRestClient client,
             string namespaceName,
             string questGroupName
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.QuestGroupName = questGroupName;
@@ -105,7 +105,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._cache.TryGetList
+            if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Quest.Model.QuestModelMaster>
             (
                     (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheParentKey(
@@ -126,6 +126,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 var r = await this._client.DescribeQuestModelMastersAsync(
                 #endif
                     new Gs2.Gs2Quest.Request.DescribeQuestModelMastersRequest()
+                        .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithQuestGroupName(this.QuestGroupName)
                         .WithPageToken(this._pageToken)
@@ -146,7 +147,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
                     item.PutCache(
-                        this._cache,
+                        this._gs2.Cache,
                         NamespaceName,
                         QuestGroupName,
                         item.Name
@@ -154,7 +155,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Quest.Model.QuestModelMaster>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Quest.Model.QuestModelMaster>(
                         (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheParentKey(
                             NamespaceName,
                             QuestGroupName

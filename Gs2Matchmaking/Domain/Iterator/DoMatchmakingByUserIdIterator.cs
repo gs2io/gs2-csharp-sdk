@@ -66,7 +66,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
     #else
     public class DoMatchmakingByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Gathering> {
     #endif
-        private readonly CacheDatabase _cache;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
@@ -80,14 +80,14 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         int? fetchSize;
 
         public DoMatchmakingByUserIdIterator(
-            CacheDatabase cache,
+            Gs2.Core.Domain.Gs2 gs2,
             Gs2MatchmakingRestClient client,
             string namespaceName,
             string userId,
             Gs2.Gs2Matchmaking.Model.Player player,
             string timeOffsetToken = null
         ) {
-            this._cache = cache;
+            this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
@@ -118,6 +118,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             var r = await this._client.DoMatchmakingByUserIdAsync(
             #endif
                 new Gs2.Gs2Matchmaking.Request.DoMatchmakingByUserIdRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPlayer(this.Player)
@@ -137,7 +138,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             };
             this._matchmakingContextToken = r.MatchmakingContextToken;
             this._last = this._matchmakingContextToken == null;
-            this._cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
                     NamespaceName,
                     UserId

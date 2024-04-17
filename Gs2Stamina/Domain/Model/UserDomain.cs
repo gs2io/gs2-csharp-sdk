@@ -86,7 +86,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
         )
         {
             return new DescribeStaminasByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -105,7 +105,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
         )
         {
             return new DescribeStaminasByUserIdIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.UserId,

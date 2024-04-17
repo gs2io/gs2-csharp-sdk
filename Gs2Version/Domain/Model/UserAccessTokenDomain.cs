@@ -87,7 +87,7 @@ namespace Gs2.Gs2Version.Domain.Model
         )
         {
             return new DescribeAcceptVersionsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -104,7 +104,7 @@ namespace Gs2.Gs2Version.Domain.Model
         )
         {
             return new DescribeAcceptVersionsIterator(
-                this._gs2.Cache,
+                this._gs2,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
