@@ -37,6 +37,7 @@ namespace Gs2.Gs2Account.Model
         public int? TimeOffset { set; get; }
         public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; }
         public bool? Banned { set; get; }
+        public long? LastAuthenticatedAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
         public Account WithAccountId(string accountId) {
@@ -61,6 +62,10 @@ namespace Gs2.Gs2Account.Model
         }
         public Account WithBanned(bool? banned) {
             this.Banned = banned;
+            return this;
+        }
+        public Account WithLastAuthenticatedAt(long? lastAuthenticatedAt) {
+            this.LastAuthenticatedAt = lastAuthenticatedAt;
             return this;
         }
         public Account WithCreatedAt(long? createdAt) {
@@ -157,6 +162,7 @@ namespace Gs2.Gs2Account.Model
                     return Gs2.Gs2Account.Model.BanStatus.FromJson(v);
                 }).ToArray())
                 .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : (bool?)bool.Parse(data["banned"].ToString()))
+                .WithLastAuthenticatedAt(!data.Keys.Contains("lastAuthenticatedAt") || data["lastAuthenticatedAt"] == null ? null : (long?)(data["lastAuthenticatedAt"].ToString().Contains(".") ? (long)double.Parse(data["lastAuthenticatedAt"].ToString()) : long.Parse(data["lastAuthenticatedAt"].ToString())))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -179,6 +185,7 @@ namespace Gs2.Gs2Account.Model
                 ["timeOffset"] = TimeOffset,
                 ["banStatuses"] = banStatusesJsonData,
                 ["banned"] = Banned,
+                ["lastAuthenticatedAt"] = LastAuthenticatedAt,
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
@@ -217,6 +224,10 @@ namespace Gs2.Gs2Account.Model
             if (Banned != null) {
                 writer.WritePropertyName("banned");
                 writer.Write(bool.Parse(Banned.ToString()));
+            }
+            if (LastAuthenticatedAt != null) {
+                writer.WritePropertyName("lastAuthenticatedAt");
+                writer.Write((LastAuthenticatedAt.ToString().Contains(".") ? (long)double.Parse(LastAuthenticatedAt.ToString()) : long.Parse(LastAuthenticatedAt.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -285,6 +296,14 @@ namespace Gs2.Gs2Account.Model
             {
                 diff += Banned == other.Banned ? 0 : 1;
             }
+            if (LastAuthenticatedAt == null && LastAuthenticatedAt == other.LastAuthenticatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(LastAuthenticatedAt - other.LastAuthenticatedAt);
+            }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
@@ -348,6 +367,18 @@ namespace Gs2.Gs2Account.Model
             {
             }
             {
+                if (LastAuthenticatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.lastAuthenticatedAt.error.invalid"),
+                    });
+                }
+                if (LastAuthenticatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.lastAuthenticatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("account", "account.account.createdAt.error.invalid"),
@@ -381,6 +412,7 @@ namespace Gs2.Gs2Account.Model
                 TimeOffset = TimeOffset,
                 BanStatuses = BanStatuses.Clone() as Gs2.Gs2Account.Model.BanStatus[],
                 Banned = Banned,
+                LastAuthenticatedAt = LastAuthenticatedAt,
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };
