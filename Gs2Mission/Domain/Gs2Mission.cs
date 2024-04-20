@@ -515,6 +515,12 @@ namespace Gs2.Gs2Mission.Domain
         public static Action<string, IncreaseCounterByUserIdRequest, IncreaseCounterByUserIdResult> IncreaseCounterByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetCounterByUserIdRequest, SetCounterByUserIdResult> SetCounterByUserIdComplete = new UnityEvent<string, SetCounterByUserIdRequest, SetCounterByUserIdResult>();
+    #else
+        public static Action<string, SetCounterByUserIdRequest, SetCounterByUserIdResult> SetCounterByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
@@ -550,6 +556,23 @@ namespace Gs2.Gs2Mission.Domain
                         );
 
                         IncreaseCounterByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "SetCounterByUserId": {
+                        var requestModel = SetCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        SetCounterByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -649,6 +672,23 @@ namespace Gs2.Gs2Mission.Domain
                     );
 
                     IncreaseCounterByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "set_counter_by_user_id": {
+                    var requestModel = SetCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    SetCounterByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

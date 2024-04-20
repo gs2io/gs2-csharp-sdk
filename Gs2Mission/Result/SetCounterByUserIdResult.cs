@@ -31,17 +31,23 @@ namespace Gs2.Gs2Mission.Result
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class DecreaseCounterByUserIdResult : IResult
+	public class SetCounterByUserIdResult : IResult
 	{
         public Gs2.Gs2Mission.Model.Counter Item { set; get; }
+        public Gs2.Gs2Mission.Model.Counter Old { set; get; }
         public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { set; get; }
 
-        public DecreaseCounterByUserIdResult WithItem(Gs2.Gs2Mission.Model.Counter item) {
+        public SetCounterByUserIdResult WithItem(Gs2.Gs2Mission.Model.Counter item) {
             this.Item = item;
             return this;
         }
 
-        public DecreaseCounterByUserIdResult WithChangedCompletes(Gs2.Gs2Mission.Model.Complete[] changedCompletes) {
+        public SetCounterByUserIdResult WithOld(Gs2.Gs2Mission.Model.Counter old) {
+            this.Old = old;
+            return this;
+        }
+
+        public SetCounterByUserIdResult WithChangedCompletes(Gs2.Gs2Mission.Model.Complete[] changedCompletes) {
             this.ChangedCompletes = changedCompletes;
             return this;
         }
@@ -49,13 +55,14 @@ namespace Gs2.Gs2Mission.Result
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static DecreaseCounterByUserIdResult FromJson(JsonData data)
+        public static SetCounterByUserIdResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new DecreaseCounterByUserIdResult()
+            return new SetCounterByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.Counter.FromJson(data["item"]))
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Mission.Model.Counter.FromJson(data["old"]))
                 .WithChangedCompletes(!data.Keys.Contains("changedCompletes") || data["changedCompletes"] == null || !data["changedCompletes"].IsArray ? new Gs2.Gs2Mission.Model.Complete[]{} : data["changedCompletes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.Complete.FromJson(v);
                 }).ToArray());
@@ -74,6 +81,7 @@ namespace Gs2.Gs2Mission.Result
             }
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["old"] = Old?.ToJson(),
                 ["changedCompletes"] = changedCompletesJsonData,
             };
         }
@@ -83,6 +91,9 @@ namespace Gs2.Gs2Mission.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Old != null) {
+                Old.WriteJson(writer);
             }
             if (ChangedCompletes != null) {
                 writer.WritePropertyName("changedCompletes");

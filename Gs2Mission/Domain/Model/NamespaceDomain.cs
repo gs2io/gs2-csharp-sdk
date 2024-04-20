@@ -168,26 +168,6 @@ namespace Gs2.Gs2Mission.Domain.Model
                 missionGroupName
             );
         }
-
-        public Gs2.Gs2Mission.Domain.Model.UserDomain User(
-            string userId
-        ) {
-            return new Gs2.Gs2Mission.Domain.Model.UserDomain(
-                this._gs2,
-                this.NamespaceName,
-                userId
-            );
-        }
-
-        public UserAccessTokenDomain AccessToken(
-            AccessToken accessToken
-        ) {
-            return new UserAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                accessToken
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Mission.Model.CounterModel> CounterModels(
         )
@@ -266,6 +246,26 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 counterName
+            );
+        }
+
+        public Gs2.Gs2Mission.Domain.Model.UserDomain User(
+            string userId
+        ) {
+            return new Gs2.Gs2Mission.Domain.Model.UserDomain(
+                this._gs2,
+                this.NamespaceName,
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                accessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER

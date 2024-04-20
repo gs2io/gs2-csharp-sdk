@@ -44,6 +44,8 @@ namespace Gs2.Gs2Mission.Model
                     return RevertReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Mission:IncreaseCounterByUserId":
                     return IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Mission:SetCounterByUserId":
+                    return SetCounterByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

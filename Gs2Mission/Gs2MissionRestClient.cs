@@ -4593,6 +4593,153 @@ namespace Gs2.Gs2Mission
 #endif
 
 
+        public class SetCounterByUserIdTask : Gs2RestSessionTask<SetCounterByUserIdRequest, SetCounterByUserIdResult>
+        {
+            public SetCounterByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetCounterByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetCounterByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/counter/{counterName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{counterName}", !string.IsNullOrEmpty(request.CounterName) ? request.CounterName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Values != null)
+                {
+                    jsonWriter.WritePropertyName("values");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Values)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "counter.increase.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetCounterByUserId(
+                Request.SetCounterByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SetCounterByUserIdResult>> callback
+        )
+		{
+			var task = new SetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetCounterByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetCounterByUserIdResult> SetCounterByUserIdFuture(
+                Request.SetCounterByUserIdRequest request
+        )
+		{
+			return new SetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetCounterByUserIdResult> SetCounterByUserIdAsync(
+                Request.SetCounterByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SetCounterByUserIdResult> result = null;
+			await SetCounterByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetCounterByUserIdTask SetCounterByUserIdAsync(
+                Request.SetCounterByUserIdRequest request
+        )
+		{
+			return new SetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetCounterByUserIdResult> SetCounterByUserIdAsync(
+                Request.SetCounterByUserIdRequest request
+        )
+		{
+			var task = new SetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DecreaseCounterByUserIdTask : Gs2RestSessionTask<DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult>
         {
             public DecreaseCounterByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DecreaseCounterByUserIdRequest request) : base(session, factory, request)
@@ -5184,6 +5331,131 @@ namespace Gs2.Gs2Mission
         )
 		{
 			var task = new IncreaseByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetByStampSheetTask : Gs2RestSessionTask<SetByStampSheetRequest, SetByStampSheetResult>
+        {
+            public SetByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, SetByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/set";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetByStampSheet(
+                Request.SetByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetByStampSheetResult>> callback
+        )
+		{
+			var task = new SetByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetByStampSheetResult> SetByStampSheetFuture(
+                Request.SetByStampSheetRequest request
+        )
+		{
+			return new SetByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetByStampSheetResult> SetByStampSheetAsync(
+                Request.SetByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.SetByStampSheetResult> result = null;
+			await SetByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetByStampSheetTask SetByStampSheetAsync(
+                Request.SetByStampSheetRequest request
+        )
+		{
+			return new SetByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetByStampSheetResult> SetByStampSheetAsync(
+                Request.SetByStampSheetRequest request
+        )
+		{
+			var task = new SetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

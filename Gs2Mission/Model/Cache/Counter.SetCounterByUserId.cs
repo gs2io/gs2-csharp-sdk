@@ -40,10 +40,10 @@ namespace Gs2.Gs2Mission.Model.Cache
     public static partial class CounterExt
     {
         public static void PutCache(
-            this DecreaseCounterByUserIdResult self,
+            this SetCounterByUserIdResult self,
             CacheDatabase cache,
             string userId,
-            DecreaseCounterByUserIdRequest request
+            SetCounterByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
@@ -63,14 +63,14 @@ namespace Gs2.Gs2Mission.Model.Cache
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<DecreaseCounterByUserIdResult> InvokeFuture(
-            this DecreaseCounterByUserIdRequest request,
+        public static IFuture<SetCounterByUserIdResult> InvokeFuture(
+            this SetCounterByUserIdRequest request,
             CacheDatabase cache,
             string userId,
-            Func<IFuture<DecreaseCounterByUserIdResult>> invokeImpl
+            Func<IFuture<SetCounterByUserIdResult>> invokeImpl
         )
         {
-            IEnumerator Impl(IFuture<DecreaseCounterByUserIdResult> self)
+            IEnumerator Impl(IFuture<SetCounterByUserIdResult> self)
             {
                 var future = invokeImpl();
                 yield return future;
@@ -87,23 +87,23 @@ namespace Gs2.Gs2Mission.Model.Cache
 
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<DecreaseCounterByUserIdResult>(Impl);
+            return new Gs2InlineFuture<SetCounterByUserIdResult>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<DecreaseCounterByUserIdResult> InvokeAsync(
+        public static async UniTask<SetCounterByUserIdResult> InvokeAsync(
     #else
-        public static async Task<DecreaseCounterByUserIdResult> InvokeAsync(
+        public static async Task<SetCounterByUserIdResult> InvokeAsync(
     #endif
-            this DecreaseCounterByUserIdRequest request,
+            this SetCounterByUserIdRequest request,
             CacheDatabase cache,
             string userId,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<DecreaseCounterByUserIdResult>> invokeImpl
+            Func<UniTask<SetCounterByUserIdResult>> invokeImpl
     #else
-            Func<Task<DecreaseCounterByUserIdResult>> invokeImpl
+            Func<Task<SetCounterByUserIdResult>> invokeImpl
     #endif
         )
         {
