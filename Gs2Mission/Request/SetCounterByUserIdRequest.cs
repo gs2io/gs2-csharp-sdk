@@ -141,6 +141,7 @@ namespace Gs2.Gs2Mission.Request
             key += NamespaceName + ":";
             key += CounterName + ":";
             key += UserId + ":";
+            key += Values + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

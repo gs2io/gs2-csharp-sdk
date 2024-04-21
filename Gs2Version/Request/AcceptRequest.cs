@@ -36,6 +36,7 @@ namespace Gs2.Gs2Version.Request
          public string NamespaceName { set; get; }
          public string VersionName { set; get; }
          public string AccessToken { set; get; }
+         public Gs2.Gs2Version.Model.Version_ Version { set; get; }
         public string DuplicationAvoider { set; get; }
         public AcceptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Version.Request
         }
         public AcceptRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
+            return this;
+        }
+        public AcceptRequest WithVersion(Gs2.Gs2Version.Model.Version_ version) {
+            this.Version = version;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Version.Request
             return new AcceptRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString());
+                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]));
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Version.Request
                 ["namespaceName"] = NamespaceName,
                 ["versionName"] = VersionName,
                 ["accessToken"] = AccessToken,
+                ["version"] = Version?.ToJson(),
             };
         }
 
@@ -93,6 +100,9 @@ namespace Gs2.Gs2Version.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
+            if (Version != null) {
+                Version.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +111,7 @@ namespace Gs2.Gs2Version.Request
             key += NamespaceName + ":";
             key += VersionName + ":";
             key += AccessToken + ":";
+            key += Version + ":";
             return key;
         }
     }

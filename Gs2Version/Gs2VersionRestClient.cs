@@ -2746,6 +2746,11 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("versionName");
                     jsonWriter.Write(request.VersionName);
                 }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2779,6 +2784,16 @@ namespace Gs2.Gs2Version
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 
@@ -2877,6 +2892,11 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("versionName");
                     jsonWriter.Write(request.VersionName);
                 }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2910,6 +2930,16 @@ namespace Gs2.Gs2Version
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 

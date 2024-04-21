@@ -1877,6 +1877,11 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
                 }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1909,6 +1914,16 @@ namespace Gs2.Gs2Version
                 jsonWriter.WriteObjectEnd();
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 
@@ -2000,6 +2015,11 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     jsonWriter.WritePropertyName("timeOffsetToken");
@@ -2032,6 +2052,16 @@ namespace Gs2.Gs2Version
                 jsonWriter.WriteObjectEnd();
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
             }
         }
 

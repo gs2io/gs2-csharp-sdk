@@ -46,12 +46,12 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Counter self,
             SetCounterByUserIdRequest request
         ) {
-            if (self.Clone() is not Counter clone)
-            {
-                throw new NullReferenceException();
-            }
-            clone.Values = request.Values;
-            return clone;
+#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Mission:SetCounterByUserId");
+#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Mission:SetCounterByUserId");
+#endif
+            return self.Clone() as Counter;
         }
 
         public static SetCounterByUserIdRequest Rate(
