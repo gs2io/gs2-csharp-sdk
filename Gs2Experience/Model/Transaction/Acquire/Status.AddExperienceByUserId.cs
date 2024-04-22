@@ -56,7 +56,6 @@ namespace Gs2.Gs2Experience.Model.Transaction
                 throw new NullReferenceException();
             }
             clone.ExperienceValue += request.ExperienceValue;
-            clone.ExperienceValue += request.ExperienceValue;
             clone.RankValue = model.Rank(clone);
             clone.NextRankUpExperienceValue = model.NextRankExperienceValue(clone);
             return clone;

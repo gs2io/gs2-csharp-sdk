@@ -119,7 +119,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        this.ScorerUserId
                     ),
                     out var list
             )) {
