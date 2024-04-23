@@ -21,7 +21,6 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using Gs2.Core.Domain;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
@@ -107,21 +106,19 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     self.OnError(future.Error);
                     yield break;
                 }
-                var value = future.Result;
-                if (value != null) {
-                    new ReferenceOf {
-                        Name = value,
-                    }.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        inventoryName,
-                        itemName,
-                        itemSetName,
-                        referenceOf
-                    );
-                }
-                self.OnComplete(value);
+                var item = future.Result;
+                new ReferenceOf {
+                    Name = item,
+                }.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    inventoryName,
+                    itemName,
+                    itemSetName,
+                    referenceOf
+                );
+                self.OnComplete(item);
             }
             return new Gs2InlineFuture<string>(Impl);
         }
@@ -160,25 +157,10 @@ namespace Gs2.Gs2Inventory.Model.Cache
                        )
                    ).LockAsync()) {
                 try {
-                    var result = await fetchImpl();
-                    var value = result;
-                    if (value != null) {
-                        new ReferenceOf {
-                            Name = value,
-                        }.PutCache(
-                            cache,
-                            namespaceName,
-                            userId,
-                            inventoryName,
-                            itemName,
-                            itemSetName,
-                            referenceOf
-                        );
-                    }
-                    var item = new ReferenceOf {
-                        Name = value,
-                    };
-                    item.PutCache(
+                    var item = await fetchImpl();
+                    new ReferenceOf {
+                        Name = item,
+                    }.PutCache(
                         cache,
                         namespaceName,
                         userId,
@@ -187,7 +169,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                         itemSetName,
                         referenceOf
                     );
-                    return value;
+                    return item;
                 }
                 catch (Gs2.Core.Exception.NotFoundException e) {
                     (null as ReferenceOf).PutCache(

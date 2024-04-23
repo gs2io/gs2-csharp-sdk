@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -183,7 +185,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
-                    request.ReferenceOf
+                    result?.Item
                 );
 
                 self.OnComplete(domain);
@@ -220,7 +222,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                request.ReferenceOf
+                result?.Item
             );
 
             return domain;
@@ -261,7 +263,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
-                    request.ReferenceOf
+                    result?.Item
                 );
 
                 self.OnComplete(domain);
@@ -294,16 +296,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 );
             }
             catch (NotFoundException e) {}
-            var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.UserId,
-                this.InventoryName,
-                this.ItemName,
-                this.ItemSetName,
-                request.ReferenceOf
-            );
-            return domain;
+            return this;
         }
         #endif
 
