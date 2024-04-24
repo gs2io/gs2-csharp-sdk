@@ -33,6 +33,7 @@ namespace Gs2.Gs2Auth.Model
 	{
         public string Token { set; get; }
         public string UserId { set; get; }
+        public string FederationFromUserId { set; get; }
         public long? Expire { set; get; }
         public int? TimeOffset { set; get; }
         public AccessToken WithToken(string token) {
@@ -41,6 +42,10 @@ namespace Gs2.Gs2Auth.Model
         }
         public AccessToken WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public AccessToken WithFederationFromUserId(string federationFromUserId) {
+            this.FederationFromUserId = federationFromUserId;
             return this;
         }
         public AccessToken WithExpire(long? expire) {
@@ -63,6 +68,7 @@ namespace Gs2.Gs2Auth.Model
             return new AccessToken()
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithFederationFromUserId(!data.Keys.Contains("federationFromUserId") || data["federationFromUserId"] == null ? null : data["federationFromUserId"].ToString())
                 .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)(data["expire"].ToString().Contains(".") ? (long)double.Parse(data["expire"].ToString()) : long.Parse(data["expire"].ToString())))
                 .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())));
         }
@@ -72,6 +78,7 @@ namespace Gs2.Gs2Auth.Model
             return new JsonData {
                 ["token"] = Token,
                 ["userId"] = UserId,
+                ["federationFromUserId"] = FederationFromUserId,
                 ["expire"] = Expire,
                 ["timeOffset"] = TimeOffset,
             };
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Auth.Model
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (FederationFromUserId != null) {
+                writer.WritePropertyName("federationFromUserId");
+                writer.Write(FederationFromUserId.ToString());
             }
             if (Expire != null) {
                 writer.WritePropertyName("expire");
@@ -118,6 +129,14 @@ namespace Gs2.Gs2Auth.Model
             else
             {
                 diff += UserId.CompareTo(other.UserId);
+            }
+            if (FederationFromUserId == null && FederationFromUserId == other.FederationFromUserId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += FederationFromUserId.CompareTo(other.FederationFromUserId);
             }
             if (Expire == null && Expire == other.Expire)
             {
@@ -154,6 +173,13 @@ namespace Gs2.Gs2Auth.Model
                 }
             }
             {
+                if (FederationFromUserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessToken", "auth.accessToken.federationFromUserId.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (Expire < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("accessToken", "auth.accessToken.expire.error.invalid"),
@@ -183,6 +209,7 @@ namespace Gs2.Gs2Auth.Model
             return new AccessToken {
                 Token = Token,
                 UserId = UserId,
+                FederationFromUserId = FederationFromUserId,
                 Expire = Expire,
                 TimeOffset = TimeOffset,
             };
