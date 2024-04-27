@@ -55,7 +55,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             );
             self.ExperienceStatus?.PutCache(
                 cache,
-                request.NamespaceName,
+                Gs2.Gs2Experience.Model.Status.GetNamespaceNameFromGrn(self.ExperienceStatus?.StatusId),
                 self.Item.UserId,
                 self.ExperienceStatus.ExperienceName,
                 self.Item.PropertyId

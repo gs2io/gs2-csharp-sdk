@@ -56,7 +56,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             );
             self.Status?.PutCache(
                 cache,
-                request.NamespaceName,
+                Gs2.Gs2Grade.Model.Status.GetNamespaceNameFromGrn(self.Status?.StatusId),
                 self.Item.UserId,
                 self.Status.GradeName,
                 self.Status.PropertyId
