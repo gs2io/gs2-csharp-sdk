@@ -616,7 +616,6 @@ namespace Gs2.Gs2AdReward.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "ChangePoint": {
                     var notification = ChangePointNotification.FromJson(JsonMapper.ToObject(payload));
@@ -625,11 +624,12 @@ namespace Gs2.Gs2AdReward.Domain
                         notification.NamespaceName,
                         notification.UserId
                     );
+    #if UNITY_2017_1_OR_NEWER
                     onChangePointNotification.Invoke(notification);
+    #endif
                     break;
                 }
             }
-    #endif
         }
     }
 }

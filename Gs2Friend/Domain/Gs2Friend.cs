@@ -542,22 +542,26 @@ namespace Gs2.Gs2Friend.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Follow": {
+    #if UNITY_2017_1_OR_NEWER
                     onFollowNotification.Invoke(FollowNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
                     break;
                 }
                 case "AcceptRequest": {
+    #if UNITY_2017_1_OR_NEWER
                     onAcceptRequestNotification.Invoke(AcceptRequestNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
                     break;
                 }
                 case "ReceiveRequest": {
+    #if UNITY_2017_1_OR_NEWER
                     onReceiveRequestNotification.Invoke(ReceiveRequestNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
                     break;
                 }
             }
-    #endif
         }
     }
 }

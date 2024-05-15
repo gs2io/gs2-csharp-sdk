@@ -547,7 +547,6 @@ namespace Gs2.Gs2Chat.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Post": {
                     var notification = PostNotification.FromJson(JsonMapper.ToObject(payload));
@@ -558,11 +557,12 @@ namespace Gs2.Gs2Chat.Domain
                             notification.RoomName
                         )
                     );
+    #if UNITY_2017_1_OR_NEWER
                     onPostNotification.Invoke(notification);
+    #endif
                     break;
                 }
             }
-    #endif
         }
     }
 }

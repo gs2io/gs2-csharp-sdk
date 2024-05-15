@@ -531,8 +531,6 @@ namespace Gs2.Gs2Version.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
-    #endif
         }
     }
 }

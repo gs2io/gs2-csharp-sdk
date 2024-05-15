@@ -24,7 +24,7 @@ namespace Gs2.Gs2Version.Exception
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AcceptVersionInvalidException : Gs2.Core.Exception.UnauthorizedException
+	public class AcceptVersionInvalidException : Gs2.Core.Exception.BadRequestException
 	{
 		public AcceptVersionInvalidException(Gs2Exception exception) : base(exception.Errors) {
 

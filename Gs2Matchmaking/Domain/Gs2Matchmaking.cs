@@ -595,18 +595,23 @@ namespace Gs2.Gs2Matchmaking.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Join": {
+    #if UNITY_2017_1_OR_NEWER
                     onJoinNotification.Invoke(JoinNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
                     break;
                 }
                 case "Leave": {
+    #if UNITY_2017_1_OR_NEWER
                     onLeaveNotification.Invoke(LeaveNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
                     break;
                 }
                 case "Complete": {
+    #if UNITY_2017_1_OR_NEWER
                     onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
                     break;
                 }
                 case "ChangeRatingNotification": {
@@ -617,11 +622,12 @@ namespace Gs2.Gs2Matchmaking.Domain
                             notification.UserId
                         )
                     );
+    #if UNITY_2017_1_OR_NEWER
                     onChangeRatingNotification.Invoke(notification);
+    #endif
                     break;
                 }
             }
-    #endif
         }
     }
 }

@@ -639,7 +639,6 @@ namespace Gs2.Gs2Inbox.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "ReceiveNotification": {
                     var notification = ReceiveNotification.FromJson(JsonMapper.ToObject(payload));
@@ -649,11 +648,12 @@ namespace Gs2.Gs2Inbox.Domain
                             notification.UserId
                         )
                     );
+    #if UNITY_2017_1_OR_NEWER
                     onReceiveNotification.Invoke(notification);
+    #endif
                     break;
                 }
             }
-    #endif
         }
     }
 }

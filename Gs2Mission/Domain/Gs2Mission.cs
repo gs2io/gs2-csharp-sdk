@@ -719,7 +719,6 @@ namespace Gs2.Gs2Mission.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Complete": {
                     var notification = CompleteNotification.FromJson(JsonMapper.ToObject(payload));
@@ -732,11 +731,12 @@ namespace Gs2.Gs2Mission.Domain
                             notification.GroupName
                         )
                     );
+    #if UNITY_2017_1_OR_NEWER
                     onCompleteNotification.Invoke(notification);
+    #endif
                     break;
                 }
             }
-    #endif
         }
     }
 }
