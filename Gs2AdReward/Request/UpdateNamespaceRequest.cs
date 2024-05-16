@@ -37,6 +37,7 @@ namespace Gs2.Gs2AdReward.Request
          public string Description { set; get; }
          public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
          public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
+         public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; }
          public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
          public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
@@ -53,6 +54,10 @@ namespace Gs2.Gs2AdReward.Request
         }
         public UpdateNamespaceRequest WithUnityAd(Gs2.Gs2AdReward.Model.UnityAd unityAd) {
             this.UnityAd = unityAd;
+            return this;
+        }
+        public UpdateNamespaceRequest WithAppLovinMaxes(Gs2.Gs2AdReward.Model.AppLovinMax[] appLovinMaxes) {
+            this.AppLovinMaxes = appLovinMaxes;
             return this;
         }
         public UpdateNamespaceRequest WithChangePointNotification(Gs2.Gs2AdReward.Model.NotificationSetting changePointNotification) {
@@ -77,17 +82,30 @@ namespace Gs2.Gs2AdReward.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithAdmob(!data.Keys.Contains("admob") || data["admob"] == null ? null : Gs2.Gs2AdReward.Model.AdMob.FromJson(data["admob"]))
                 .WithUnityAd(!data.Keys.Contains("unityAd") || data["unityAd"] == null ? null : Gs2.Gs2AdReward.Model.UnityAd.FromJson(data["unityAd"]))
+                .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? new Gs2.Gs2AdReward.Model.AppLovinMax[]{} : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2AdReward.Model.AppLovinMax.FromJson(v);
+                }).ToArray())
                 .WithChangePointNotification(!data.Keys.Contains("changePointNotification") || data["changePointNotification"] == null ? null : Gs2.Gs2AdReward.Model.NotificationSetting.FromJson(data["changePointNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2AdReward.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
         public override JsonData ToJson()
         {
+            JsonData appLovinMaxesJsonData = null;
+            if (AppLovinMaxes != null && AppLovinMaxes.Length > 0)
+            {
+                appLovinMaxesJsonData = new JsonData();
+                foreach (var appLovinMax in AppLovinMaxes)
+                {
+                    appLovinMaxesJsonData.Add(appLovinMax.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["admob"] = Admob?.ToJson(),
                 ["unityAd"] = UnityAd?.ToJson(),
+                ["appLovinMaxes"] = appLovinMaxesJsonData,
                 ["changePointNotification"] = ChangePointNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
@@ -110,6 +128,17 @@ namespace Gs2.Gs2AdReward.Request
             if (UnityAd != null) {
                 UnityAd.WriteJson(writer);
             }
+            if (AppLovinMaxes != null) {
+                writer.WritePropertyName("appLovinMaxes");
+                writer.WriteArrayStart();
+                foreach (var appLovinMax in AppLovinMaxes)
+                {
+                    if (appLovinMax != null) {
+                        appLovinMax.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (ChangePointNotification != null) {
                 ChangePointNotification.WriteJson(writer);
             }
@@ -125,6 +154,7 @@ namespace Gs2.Gs2AdReward.Request
             key += Description + ":";
             key += Admob + ":";
             key += UnityAd + ":";
+            key += AppLovinMaxes + ":";
             key += ChangePointNotification + ":";
             key += LogSetting + ":";
             return key;

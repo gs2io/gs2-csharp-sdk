@@ -36,6 +36,7 @@ namespace Gs2.Gs2AdReward.Model
         public string Description { set; get; }
         public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
         public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
+        public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; }
         public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
         public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
@@ -59,6 +60,10 @@ namespace Gs2.Gs2AdReward.Model
         }
         public Namespace WithUnityAd(Gs2.Gs2AdReward.Model.UnityAd unityAd) {
             this.UnityAd = unityAd;
+            return this;
+        }
+        public Namespace WithAppLovinMaxes(Gs2.Gs2AdReward.Model.AppLovinMax[] appLovinMaxes) {
+            this.AppLovinMaxes = appLovinMaxes;
             return this;
         }
         public Namespace WithChangePointNotification(Gs2.Gs2AdReward.Model.NotificationSetting changePointNotification) {
@@ -147,6 +152,9 @@ namespace Gs2.Gs2AdReward.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithAdmob(!data.Keys.Contains("admob") || data["admob"] == null ? null : Gs2.Gs2AdReward.Model.AdMob.FromJson(data["admob"]))
                 .WithUnityAd(!data.Keys.Contains("unityAd") || data["unityAd"] == null ? null : Gs2.Gs2AdReward.Model.UnityAd.FromJson(data["unityAd"]))
+                .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? new Gs2.Gs2AdReward.Model.AppLovinMax[]{} : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2AdReward.Model.AppLovinMax.FromJson(v);
+                }).ToArray())
                 .WithChangePointNotification(!data.Keys.Contains("changePointNotification") || data["changePointNotification"] == null ? null : Gs2.Gs2AdReward.Model.NotificationSetting.FromJson(data["changePointNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2AdReward.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
@@ -156,12 +164,22 @@ namespace Gs2.Gs2AdReward.Model
 
         public JsonData ToJson()
         {
+            JsonData appLovinMaxesJsonData = null;
+            if (AppLovinMaxes != null && AppLovinMaxes.Length > 0)
+            {
+                appLovinMaxesJsonData = new JsonData();
+                foreach (var appLovinMax in AppLovinMaxes)
+                {
+                    appLovinMaxesJsonData.Add(appLovinMax.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["admob"] = Admob?.ToJson(),
                 ["unityAd"] = UnityAd?.ToJson(),
+                ["appLovinMaxes"] = appLovinMaxesJsonData,
                 ["changePointNotification"] = ChangePointNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
@@ -192,6 +210,17 @@ namespace Gs2.Gs2AdReward.Model
             if (UnityAd != null) {
                 writer.WritePropertyName("unityAd");
                 UnityAd.WriteJson(writer);
+            }
+            if (AppLovinMaxes != null) {
+                writer.WritePropertyName("appLovinMaxes");
+                writer.WriteArrayStart();
+                foreach (var appLovinMax in AppLovinMaxes)
+                {
+                    if (appLovinMax != null) {
+                        appLovinMax.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (ChangePointNotification != null) {
                 writer.WritePropertyName("changePointNotification");
@@ -259,6 +288,18 @@ namespace Gs2.Gs2AdReward.Model
             else
             {
                 diff += UnityAd.CompareTo(other.UnityAd);
+            }
+            if (AppLovinMaxes == null && AppLovinMaxes == other.AppLovinMaxes)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AppLovinMaxes.Length - other.AppLovinMaxes.Length;
+                for (var i = 0; i < AppLovinMaxes.Length; i++)
+                {
+                    diff += AppLovinMaxes[i].CompareTo(other.AppLovinMaxes[i]);
+                }
             }
             if (ChangePointNotification == null && ChangePointNotification == other.ChangePointNotification)
             {
@@ -330,6 +371,13 @@ namespace Gs2.Gs2AdReward.Model
             {
             }
             {
+                if (AppLovinMaxes.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "adReward.namespace.appLovinMaxes.error.tooMany"),
+                    });
+                }
+            }
+            {
             }
             {
             }
@@ -378,6 +426,7 @@ namespace Gs2.Gs2AdReward.Model
                 Description = Description,
                 Admob = Admob.Clone() as Gs2.Gs2AdReward.Model.AdMob,
                 UnityAd = UnityAd.Clone() as Gs2.Gs2AdReward.Model.UnityAd,
+                AppLovinMaxes = AppLovinMaxes.Clone() as Gs2.Gs2AdReward.Model.AppLovinMax[],
                 ChangePointNotification = ChangePointNotification.Clone() as Gs2.Gs2AdReward.Model.NotificationSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2AdReward.Model.LogSetting,
                 CreatedAt = CreatedAt,

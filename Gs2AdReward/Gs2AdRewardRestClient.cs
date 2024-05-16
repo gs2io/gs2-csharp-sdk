@@ -203,6 +203,20 @@ namespace Gs2.Gs2AdReward
                     jsonWriter.WritePropertyName("unityAd");
                     request.UnityAd.WriteJson(jsonWriter);
                 }
+                if (request.AppLovinMaxes != null)
+                {
+                    jsonWriter.WritePropertyName("appLovinMaxes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AppLovinMaxes)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.Description != null)
                 {
                     jsonWriter.WritePropertyName("description");
@@ -557,6 +571,20 @@ namespace Gs2.Gs2AdReward
                 {
                     jsonWriter.WritePropertyName("unityAd");
                     request.UnityAd.WriteJson(jsonWriter);
+                }
+                if (request.AppLovinMaxes != null)
+                {
+                    jsonWriter.WritePropertyName("appLovinMaxes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.AppLovinMaxes)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ChangePointNotification != null)
                 {
