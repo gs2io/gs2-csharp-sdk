@@ -36,6 +36,8 @@ namespace Gs2.Gs2Matchmaking.Request
          public string NamespaceName { set; get; }
          public string Description { set; get; }
          public bool? EnableRating { set; get; }
+         public string EnableDisconnectDetection { set; get; }
+         public int? DisconnectDetectionTimeoutSeconds { set; get; }
          public string CreateGatheringTriggerType { set; get; }
          public string CreateGatheringTriggerRealtimeNamespaceId { set; get; }
          public string CreateGatheringTriggerScriptId { set; get; }
@@ -61,6 +63,14 @@ namespace Gs2.Gs2Matchmaking.Request
         }
         public UpdateNamespaceRequest WithEnableRating(bool? enableRating) {
             this.EnableRating = enableRating;
+            return this;
+        }
+        public UpdateNamespaceRequest WithEnableDisconnectDetection(string enableDisconnectDetection) {
+            this.EnableDisconnectDetection = enableDisconnectDetection;
+            return this;
+        }
+        public UpdateNamespaceRequest WithDisconnectDetectionTimeoutSeconds(int? disconnectDetectionTimeoutSeconds) {
+            this.DisconnectDetectionTimeoutSeconds = disconnectDetectionTimeoutSeconds;
             return this;
         }
         public UpdateNamespaceRequest WithCreateGatheringTriggerType(string createGatheringTriggerType) {
@@ -136,6 +146,8 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithEnableRating(!data.Keys.Contains("enableRating") || data["enableRating"] == null ? null : (bool?)bool.Parse(data["enableRating"].ToString()))
+                .WithEnableDisconnectDetection(!data.Keys.Contains("enableDisconnectDetection") || data["enableDisconnectDetection"] == null ? null : data["enableDisconnectDetection"].ToString())
+                .WithDisconnectDetectionTimeoutSeconds(!data.Keys.Contains("disconnectDetectionTimeoutSeconds") || data["disconnectDetectionTimeoutSeconds"] == null ? null : (int?)(data["disconnectDetectionTimeoutSeconds"].ToString().Contains(".") ? (int)double.Parse(data["disconnectDetectionTimeoutSeconds"].ToString()) : int.Parse(data["disconnectDetectionTimeoutSeconds"].ToString())))
                 .WithCreateGatheringTriggerType(!data.Keys.Contains("createGatheringTriggerType") || data["createGatheringTriggerType"] == null ? null : data["createGatheringTriggerType"].ToString())
                 .WithCreateGatheringTriggerRealtimeNamespaceId(!data.Keys.Contains("createGatheringTriggerRealtimeNamespaceId") || data["createGatheringTriggerRealtimeNamespaceId"] == null ? null : data["createGatheringTriggerRealtimeNamespaceId"].ToString())
                 .WithCreateGatheringTriggerScriptId(!data.Keys.Contains("createGatheringTriggerScriptId") || data["createGatheringTriggerScriptId"] == null ? null : data["createGatheringTriggerScriptId"].ToString())
@@ -159,6 +171,8 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["enableRating"] = EnableRating,
+                ["enableDisconnectDetection"] = EnableDisconnectDetection,
+                ["disconnectDetectionTimeoutSeconds"] = DisconnectDetectionTimeoutSeconds,
                 ["createGatheringTriggerType"] = CreateGatheringTriggerType,
                 ["createGatheringTriggerRealtimeNamespaceId"] = CreateGatheringTriggerRealtimeNamespaceId,
                 ["createGatheringTriggerScriptId"] = CreateGatheringTriggerScriptId,
@@ -191,6 +205,14 @@ namespace Gs2.Gs2Matchmaking.Request
             if (EnableRating != null) {
                 writer.WritePropertyName("enableRating");
                 writer.Write(bool.Parse(EnableRating.ToString()));
+            }
+            if (EnableDisconnectDetection != null) {
+                writer.WritePropertyName("enableDisconnectDetection");
+                writer.Write(EnableDisconnectDetection.ToString());
+            }
+            if (DisconnectDetectionTimeoutSeconds != null) {
+                writer.WritePropertyName("disconnectDetectionTimeoutSeconds");
+                writer.Write((DisconnectDetectionTimeoutSeconds.ToString().Contains(".") ? (int)double.Parse(DisconnectDetectionTimeoutSeconds.ToString()) : int.Parse(DisconnectDetectionTimeoutSeconds.ToString())));
             }
             if (CreateGatheringTriggerType != null) {
                 writer.WritePropertyName("createGatheringTriggerType");
@@ -254,6 +276,8 @@ namespace Gs2.Gs2Matchmaking.Request
             key += NamespaceName + ":";
             key += Description + ":";
             key += EnableRating + ":";
+            key += EnableDisconnectDetection + ":";
+            key += DisconnectDetectionTimeoutSeconds + ":";
             key += CreateGatheringTriggerType + ":";
             key += CreateGatheringTriggerRealtimeNamespaceId + ":";
             key += CreateGatheringTriggerScriptId + ":";

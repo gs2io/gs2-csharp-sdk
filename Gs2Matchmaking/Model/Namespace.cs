@@ -35,6 +35,8 @@ namespace Gs2.Gs2Matchmaking.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public bool? EnableRating { set; get; }
+        public string EnableDisconnectDetection { set; get; }
+        public int? DisconnectDetectionTimeoutSeconds { set; get; }
         public string CreateGatheringTriggerType { set; get; }
         public string CreateGatheringTriggerRealtimeNamespaceId { set; get; }
         public string CreateGatheringTriggerScriptId { set; get; }
@@ -67,6 +69,14 @@ namespace Gs2.Gs2Matchmaking.Model
         }
         public Namespace WithEnableRating(bool? enableRating) {
             this.EnableRating = enableRating;
+            return this;
+        }
+        public Namespace WithEnableDisconnectDetection(string enableDisconnectDetection) {
+            this.EnableDisconnectDetection = enableDisconnectDetection;
+            return this;
+        }
+        public Namespace WithDisconnectDetectionTimeoutSeconds(int? disconnectDetectionTimeoutSeconds) {
+            this.DisconnectDetectionTimeoutSeconds = disconnectDetectionTimeoutSeconds;
             return this;
         }
         public Namespace WithCreateGatheringTriggerType(string createGatheringTriggerType) {
@@ -206,6 +216,8 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithEnableRating(!data.Keys.Contains("enableRating") || data["enableRating"] == null ? null : (bool?)bool.Parse(data["enableRating"].ToString()))
+                .WithEnableDisconnectDetection(!data.Keys.Contains("enableDisconnectDetection") || data["enableDisconnectDetection"] == null ? null : data["enableDisconnectDetection"].ToString())
+                .WithDisconnectDetectionTimeoutSeconds(!data.Keys.Contains("disconnectDetectionTimeoutSeconds") || data["disconnectDetectionTimeoutSeconds"] == null ? null : (int?)(data["disconnectDetectionTimeoutSeconds"].ToString().Contains(".") ? (int)double.Parse(data["disconnectDetectionTimeoutSeconds"].ToString()) : int.Parse(data["disconnectDetectionTimeoutSeconds"].ToString())))
                 .WithCreateGatheringTriggerType(!data.Keys.Contains("createGatheringTriggerType") || data["createGatheringTriggerType"] == null ? null : data["createGatheringTriggerType"].ToString())
                 .WithCreateGatheringTriggerRealtimeNamespaceId(!data.Keys.Contains("createGatheringTriggerRealtimeNamespaceId") || data["createGatheringTriggerRealtimeNamespaceId"] == null ? null : data["createGatheringTriggerRealtimeNamespaceId"].ToString())
                 .WithCreateGatheringTriggerScriptId(!data.Keys.Contains("createGatheringTriggerScriptId") || data["createGatheringTriggerScriptId"] == null ? null : data["createGatheringTriggerScriptId"].ToString())
@@ -233,6 +245,8 @@ namespace Gs2.Gs2Matchmaking.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["enableRating"] = EnableRating,
+                ["enableDisconnectDetection"] = EnableDisconnectDetection,
+                ["disconnectDetectionTimeoutSeconds"] = DisconnectDetectionTimeoutSeconds,
                 ["createGatheringTriggerType"] = CreateGatheringTriggerType,
                 ["createGatheringTriggerRealtimeNamespaceId"] = CreateGatheringTriggerRealtimeNamespaceId,
                 ["createGatheringTriggerScriptId"] = CreateGatheringTriggerScriptId,
@@ -272,6 +286,14 @@ namespace Gs2.Gs2Matchmaking.Model
             if (EnableRating != null) {
                 writer.WritePropertyName("enableRating");
                 writer.Write(bool.Parse(EnableRating.ToString()));
+            }
+            if (EnableDisconnectDetection != null) {
+                writer.WritePropertyName("enableDisconnectDetection");
+                writer.Write(EnableDisconnectDetection.ToString());
+            }
+            if (DisconnectDetectionTimeoutSeconds != null) {
+                writer.WritePropertyName("disconnectDetectionTimeoutSeconds");
+                writer.Write((DisconnectDetectionTimeoutSeconds.ToString().Contains(".") ? (int)double.Parse(DisconnectDetectionTimeoutSeconds.ToString()) : int.Parse(DisconnectDetectionTimeoutSeconds.ToString())));
             }
             if (CreateGatheringTriggerType != null) {
                 writer.WritePropertyName("createGatheringTriggerType");
@@ -383,6 +405,22 @@ namespace Gs2.Gs2Matchmaking.Model
             else
             {
                 diff += EnableRating == other.EnableRating ? 0 : 1;
+            }
+            if (EnableDisconnectDetection == null && EnableDisconnectDetection == other.EnableDisconnectDetection)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += EnableDisconnectDetection.CompareTo(other.EnableDisconnectDetection);
+            }
+            if (DisconnectDetectionTimeoutSeconds == null && DisconnectDetectionTimeoutSeconds == other.DisconnectDetectionTimeoutSeconds)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(DisconnectDetectionTimeoutSeconds - other.DisconnectDetectionTimeoutSeconds);
             }
             if (CreateGatheringTriggerType == null && CreateGatheringTriggerType == other.CreateGatheringTriggerType)
             {
@@ -556,6 +594,29 @@ namespace Gs2.Gs2Matchmaking.Model
             {
             }
             {
+                switch (EnableDisconnectDetection) {
+                    case "disable":
+                    case "enable":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("namespace", "matchmaking.namespace.enableDisconnectDetection.error.invalid"),
+                        });
+                }
+            }
+            if (EnableDisconnectDetection == "enable") {
+                if (DisconnectDetectionTimeoutSeconds < 15) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.disconnectDetectionTimeoutSeconds.error.invalid"),
+                    });
+                }
+                if (DisconnectDetectionTimeoutSeconds > 600) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.disconnectDetectionTimeoutSeconds.error.invalid"),
+                    });
+                }
+            }
+            {
                 switch (CreateGatheringTriggerType) {
                     case "none":
                     case "gs2_realtime":
@@ -693,6 +754,8 @@ namespace Gs2.Gs2Matchmaking.Model
                 Name = Name,
                 Description = Description,
                 EnableRating = EnableRating,
+                EnableDisconnectDetection = EnableDisconnectDetection,
+                DisconnectDetectionTimeoutSeconds = DisconnectDetectionTimeoutSeconds,
                 CreateGatheringTriggerType = CreateGatheringTriggerType,
                 CreateGatheringTriggerRealtimeNamespaceId = CreateGatheringTriggerRealtimeNamespaceId,
                 CreateGatheringTriggerScriptId = CreateGatheringTriggerScriptId,

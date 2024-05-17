@@ -203,6 +203,16 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("enableRating");
                     jsonWriter.Write(request.EnableRating.ToString());
                 }
+                if (request.EnableDisconnectDetection != null)
+                {
+                    jsonWriter.WritePropertyName("enableDisconnectDetection");
+                    jsonWriter.Write(request.EnableDisconnectDetection);
+                }
+                if (request.DisconnectDetectionTimeoutSeconds != null)
+                {
+                    jsonWriter.WritePropertyName("disconnectDetectionTimeoutSeconds");
+                    jsonWriter.Write(request.DisconnectDetectionTimeoutSeconds.ToString());
+                }
                 if (request.CreateGatheringTriggerType != null)
                 {
                     jsonWriter.WritePropertyName("createGatheringTriggerType");
@@ -612,6 +622,16 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("enableRating");
                     jsonWriter.Write(request.EnableRating.ToString());
+                }
+                if (request.EnableDisconnectDetection != null)
+                {
+                    jsonWriter.WritePropertyName("enableDisconnectDetection");
+                    jsonWriter.Write(request.EnableDisconnectDetection);
+                }
+                if (request.DisconnectDetectionTimeoutSeconds != null)
+                {
+                    jsonWriter.WritePropertyName("disconnectDetectionTimeoutSeconds");
+                    jsonWriter.Write(request.DisconnectDetectionTimeoutSeconds.ToString());
                 }
                 if (request.CreateGatheringTriggerType != null)
                 {
@@ -2844,6 +2864,259 @@ namespace Gs2.Gs2Matchmaking
         )
 		{
 			var task = new DoMatchmakingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PingTask : Gs2RestSessionTask<PingRequest, PingResult>
+        {
+            public PingTask(IGs2Session session, RestSessionRequestFactory factory, PingRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PingRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/gathering/{gatheringName}/ping";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{gatheringName}", !string.IsNullOrEmpty(request.GatheringName) ? request.GatheringName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Ping(
+                Request.PingRequest request,
+                UnityAction<AsyncResult<Result.PingResult>> callback
+        )
+		{
+			var task = new PingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PingResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PingResult> PingFuture(
+                Request.PingRequest request
+        )
+		{
+			return new PingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PingResult> PingAsync(
+                Request.PingRequest request
+        )
+		{
+            AsyncResult<Result.PingResult> result = null;
+			await Ping(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PingTask PingAsync(
+                Request.PingRequest request
+        )
+		{
+			return new PingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PingResult> PingAsync(
+                Request.PingRequest request
+        )
+		{
+			var task = new PingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PingByUserIdTask : Gs2RestSessionTask<PingByUserIdRequest, PingByUserIdResult>
+        {
+            public PingByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, PingByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PingByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/gathering/{gatheringName}/user/{userId}/ping";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{gatheringName}", !string.IsNullOrEmpty(request.GatheringName) ? request.GatheringName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PingByUserId(
+                Request.PingByUserIdRequest request,
+                UnityAction<AsyncResult<Result.PingByUserIdResult>> callback
+        )
+		{
+			var task = new PingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PingByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PingByUserIdResult> PingByUserIdFuture(
+                Request.PingByUserIdRequest request
+        )
+		{
+			return new PingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PingByUserIdResult> PingByUserIdAsync(
+                Request.PingByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.PingByUserIdResult> result = null;
+			await PingByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PingByUserIdTask PingByUserIdAsync(
+                Request.PingByUserIdRequest request
+        )
+		{
+			return new PingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PingByUserIdResult> PingByUserIdAsync(
+                Request.PingByUserIdRequest request
+        )
+		{
+			var task = new PingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

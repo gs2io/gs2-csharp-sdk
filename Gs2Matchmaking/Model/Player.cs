@@ -35,6 +35,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public Gs2.Gs2Matchmaking.Model.Attribute_[] Attributes { set; get; }
         public string RoleName { set; get; }
         public string[] DenyUserIds { set; get; }
+        public long? CreatedAt { set; get; }
         public Player WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -49,6 +50,10 @@ namespace Gs2.Gs2Matchmaking.Model
         }
         public Player WithDenyUserIds(string[] denyUserIds) {
             this.DenyUserIds = denyUserIds;
+            return this;
+        }
+        public Player WithCreatedAt(long? createdAt) {
+            this.CreatedAt = createdAt;
             return this;
         }
 
@@ -68,7 +73,8 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithRoleName(!data.Keys.Contains("roleName") || data["roleName"] == null ? null : data["roleName"].ToString())
                 .WithDenyUserIds(!data.Keys.Contains("denyUserIds") || data["denyUserIds"] == null || !data["denyUserIds"].IsArray ? new string[]{} : data["denyUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 ["attributes"] = attributesJsonData,
                 ["roleName"] = RoleName,
                 ["denyUserIds"] = denyUserIdsJsonData,
+                ["createdAt"] = CreatedAt,
             };
         }
 
@@ -131,6 +138,10 @@ namespace Gs2.Gs2Matchmaking.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (CreatedAt != null) {
+                writer.WritePropertyName("createdAt");
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -179,6 +190,14 @@ namespace Gs2.Gs2Matchmaking.Model
                     diff += DenyUserIds[i].CompareTo(other.DenyUserIds[i]);
                 }
             }
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(CreatedAt - other.CreatedAt);
+            }
             return diff;
         }
 
@@ -211,6 +230,18 @@ namespace Gs2.Gs2Matchmaking.Model
                     });
                 }
             }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("player", "matchmaking.player.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("player", "matchmaking.player.createdAt.error.invalid"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -219,6 +250,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 Attributes = Attributes.Clone() as Gs2.Gs2Matchmaking.Model.Attribute_[],
                 RoleName = RoleName,
                 DenyUserIds = DenyUserIds.Clone() as string[],
+                CreatedAt = CreatedAt,
             };
         }
     }

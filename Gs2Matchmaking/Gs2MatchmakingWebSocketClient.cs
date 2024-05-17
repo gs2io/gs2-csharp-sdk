@@ -77,6 +77,16 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("enableRating");
                     jsonWriter.Write(request.EnableRating.ToString());
                 }
+                if (request.EnableDisconnectDetection != null)
+                {
+                    jsonWriter.WritePropertyName("enableDisconnectDetection");
+                    jsonWriter.Write(request.EnableDisconnectDetection.ToString());
+                }
+                if (request.DisconnectDetectionTimeoutSeconds != null)
+                {
+                    jsonWriter.WritePropertyName("disconnectDetectionTimeoutSeconds");
+                    jsonWriter.Write(request.DisconnectDetectionTimeoutSeconds.ToString());
+                }
                 if (request.CreateGatheringTriggerType != null)
                 {
                     jsonWriter.WritePropertyName("createGatheringTriggerType");
@@ -367,6 +377,16 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("enableRating");
                     jsonWriter.Write(request.EnableRating.ToString());
+                }
+                if (request.EnableDisconnectDetection != null)
+                {
+                    jsonWriter.WritePropertyName("enableDisconnectDetection");
+                    jsonWriter.Write(request.EnableDisconnectDetection.ToString());
+                }
+                if (request.DisconnectDetectionTimeoutSeconds != null)
+                {
+                    jsonWriter.WritePropertyName("disconnectDetectionTimeoutSeconds");
+                    jsonWriter.Write(request.DisconnectDetectionTimeoutSeconds.ToString());
                 }
                 if (request.CreateGatheringTriggerType != null)
                 {

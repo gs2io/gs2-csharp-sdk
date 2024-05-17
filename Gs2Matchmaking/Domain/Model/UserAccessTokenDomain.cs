@@ -237,23 +237,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 gatheringName
             );
         }
-
-        public Gs2.Gs2Matchmaking.Domain.Model.BallotAccessTokenDomain Ballot(
-            string ratingName,
-            string gatheringName,
-            int? numberOfPlayer,
-            string keyId
-        ) {
-            return new Gs2.Gs2Matchmaking.Domain.Model.BallotAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.AccessToken,
-                ratingName,
-                gatheringName,
-                numberOfPlayer,
-                keyId
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
         )
@@ -337,6 +320,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 ratingName
+            );
+        }
+
+        public Gs2.Gs2Matchmaking.Domain.Model.BallotAccessTokenDomain Ballot(
+            string ratingName,
+            string gatheringName,
+            int? numberOfPlayer,
+            string keyId
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.BallotAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                ratingName,
+                gatheringName,
+                numberOfPlayer,
+                keyId
             );
         }
 

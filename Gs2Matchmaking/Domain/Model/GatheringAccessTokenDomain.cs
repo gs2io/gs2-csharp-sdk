@@ -138,6 +138,60 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> PingFuture(
+            PingRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithGatheringName(this.GatheringName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.PingFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> PingAsync(
+            #else
+        public async Task<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> PingAsync(
+            #endif
+            PingRequest request
+        ) {
+            request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithGatheringName(this.GatheringName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.PingAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> CancelMatchmakingFuture(
             CancelMatchmakingRequest request
         ) {

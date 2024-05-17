@@ -81,6 +81,14 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this.NamespaceName = namespaceName;
         }
 
+        public Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain CurrentRatingModelMaster(
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain(
+                this._gs2,
+                this.NamespaceName
+            );
+        }
+
         public Gs2.Gs2Matchmaking.Domain.Model.UserDomain User(
             string userId
         ) {
@@ -98,14 +106,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 accessToken
-            );
-        }
-
-        public Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain CurrentRatingModelMaster(
-        ) {
-            return new Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain(
-                this._gs2,
-                this.NamespaceName
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -188,18 +188,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 ratingName
             );
         }
-
-        public Gs2.Gs2Matchmaking.Domain.Model.VoteDomain Vote(
-            string ratingName,
-            string gatheringName
-        ) {
-            return new Gs2.Gs2Matchmaking.Domain.Model.VoteDomain(
-                this._gs2,
-                this.NamespaceName,
-                ratingName,
-                gatheringName
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.RatingModelMaster> RatingModelMasters(
         )
@@ -278,6 +266,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 ratingName
+            );
+        }
+
+        public Gs2.Gs2Matchmaking.Domain.Model.VoteDomain Vote(
+            string ratingName,
+            string gatheringName
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.VoteDomain(
+                this._gs2,
+                this.NamespaceName,
+                ratingName,
+                gatheringName
             );
         }
 
@@ -486,6 +486,64 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> CreateRatingModelMasterFuture(
+            CreateRatingModelMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateRatingModelMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> CreateRatingModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> CreateRatingModelMasterAsync(
+            #endif
+            CreateRatingModelMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateRatingModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Matchmaking.Domain.Model.BallotDomain> VoteFuture(
             VoteRequest request
         ) {
@@ -611,64 +669,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 result?.Item?.GatheringName,
                 result?.Item?.NumberOfPlayer,
                 request.KeyId
-            );
-
-            return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> CreateRatingModelMasterFuture(
-            CreateRatingModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    () => this._client.CreateRatingModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> CreateRatingModelMasterAsync(
-            #else
-        public async Task<Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain> CreateRatingModelMasterAsync(
-            #endif
-            CreateRatingModelMasterRequest request
-        ) {
-            request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
-                .WithNamespaceName(this.NamespaceName);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                null,
-                () => this._client.CreateRatingModelMasterAsync(request)
-            );
-            var domain = new Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain(
-                this._gs2,
-                this.NamespaceName,
-                result?.Item?.Name
             );
 
             return domain;
