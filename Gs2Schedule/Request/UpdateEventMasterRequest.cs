@@ -40,14 +40,22 @@ namespace Gs2.Gs2Schedule.Request
          public string ScheduleType { set; get; }
          public long? AbsoluteBegin { set; get; }
          public long? AbsoluteEnd { set; get; }
+        [Obsolete("This method is deprecated")]
          public string RepeatType { set; get; }
+        [Obsolete("This method is deprecated")]
          public int? RepeatBeginDayOfMonth { set; get; }
+        [Obsolete("This method is deprecated")]
          public int? RepeatEndDayOfMonth { set; get; }
+        [Obsolete("This method is deprecated")]
          public string RepeatBeginDayOfWeek { set; get; }
+        [Obsolete("This method is deprecated")]
          public string RepeatEndDayOfWeek { set; get; }
+        [Obsolete("This method is deprecated")]
          public int? RepeatBeginHour { set; get; }
+        [Obsolete("This method is deprecated")]
          public int? RepeatEndHour { set; get; }
          public string RelativeTriggerName { set; get; }
+         public Gs2.Gs2Schedule.Model.RepeatSetting RepeatSetting { set; get; }
         public UpdateEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -76,36 +84,47 @@ namespace Gs2.Gs2Schedule.Request
             this.AbsoluteEnd = absoluteEnd;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateEventMasterRequest WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateEventMasterRequest WithRepeatBeginDayOfMonth(int? repeatBeginDayOfMonth) {
             this.RepeatBeginDayOfMonth = repeatBeginDayOfMonth;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateEventMasterRequest WithRepeatEndDayOfMonth(int? repeatEndDayOfMonth) {
             this.RepeatEndDayOfMonth = repeatEndDayOfMonth;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateEventMasterRequest WithRepeatBeginDayOfWeek(string repeatBeginDayOfWeek) {
             this.RepeatBeginDayOfWeek = repeatBeginDayOfWeek;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateEventMasterRequest WithRepeatEndDayOfWeek(string repeatEndDayOfWeek) {
             this.RepeatEndDayOfWeek = repeatEndDayOfWeek;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateEventMasterRequest WithRepeatBeginHour(int? repeatBeginHour) {
             this.RepeatBeginHour = repeatBeginHour;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateEventMasterRequest WithRepeatEndHour(int? repeatEndHour) {
             this.RepeatEndHour = repeatEndHour;
             return this;
         }
         public UpdateEventMasterRequest WithRelativeTriggerName(string relativeTriggerName) {
             this.RelativeTriggerName = relativeTriggerName;
+            return this;
+        }
+        public UpdateEventMasterRequest WithRepeatSetting(Gs2.Gs2Schedule.Model.RepeatSetting repeatSetting) {
+            this.RepeatSetting = repeatSetting;
             return this;
         }
 
@@ -125,14 +144,8 @@ namespace Gs2.Gs2Schedule.Request
                 .WithScheduleType(!data.Keys.Contains("scheduleType") || data["scheduleType"] == null ? null : data["scheduleType"].ToString())
                 .WithAbsoluteBegin(!data.Keys.Contains("absoluteBegin") || data["absoluteBegin"] == null ? null : (long?)(data["absoluteBegin"].ToString().Contains(".") ? (long)double.Parse(data["absoluteBegin"].ToString()) : long.Parse(data["absoluteBegin"].ToString())))
                 .WithAbsoluteEnd(!data.Keys.Contains("absoluteEnd") || data["absoluteEnd"] == null ? null : (long?)(data["absoluteEnd"].ToString().Contains(".") ? (long)double.Parse(data["absoluteEnd"].ToString()) : long.Parse(data["absoluteEnd"].ToString())))
-                .WithRepeatType(!data.Keys.Contains("repeatType") || data["repeatType"] == null ? null : data["repeatType"].ToString())
-                .WithRepeatBeginDayOfMonth(!data.Keys.Contains("repeatBeginDayOfMonth") || data["repeatBeginDayOfMonth"] == null ? null : (int?)(data["repeatBeginDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["repeatBeginDayOfMonth"].ToString()) : int.Parse(data["repeatBeginDayOfMonth"].ToString())))
-                .WithRepeatEndDayOfMonth(!data.Keys.Contains("repeatEndDayOfMonth") || data["repeatEndDayOfMonth"] == null ? null : (int?)(data["repeatEndDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["repeatEndDayOfMonth"].ToString()) : int.Parse(data["repeatEndDayOfMonth"].ToString())))
-                .WithRepeatBeginDayOfWeek(!data.Keys.Contains("repeatBeginDayOfWeek") || data["repeatBeginDayOfWeek"] == null ? null : data["repeatBeginDayOfWeek"].ToString())
-                .WithRepeatEndDayOfWeek(!data.Keys.Contains("repeatEndDayOfWeek") || data["repeatEndDayOfWeek"] == null ? null : data["repeatEndDayOfWeek"].ToString())
-                .WithRepeatBeginHour(!data.Keys.Contains("repeatBeginHour") || data["repeatBeginHour"] == null ? null : (int?)(data["repeatBeginHour"].ToString().Contains(".") ? (int)double.Parse(data["repeatBeginHour"].ToString()) : int.Parse(data["repeatBeginHour"].ToString())))
-                .WithRepeatEndHour(!data.Keys.Contains("repeatEndHour") || data["repeatEndHour"] == null ? null : (int?)(data["repeatEndHour"].ToString().Contains(".") ? (int)double.Parse(data["repeatEndHour"].ToString()) : int.Parse(data["repeatEndHour"].ToString())))
-                .WithRelativeTriggerName(!data.Keys.Contains("relativeTriggerName") || data["relativeTriggerName"] == null ? null : data["relativeTriggerName"].ToString());
+                .WithRelativeTriggerName(!data.Keys.Contains("relativeTriggerName") || data["relativeTriggerName"] == null ? null : data["relativeTriggerName"].ToString())
+                .WithRepeatSetting(!data.Keys.Contains("repeatSetting") || data["repeatSetting"] == null ? null : Gs2.Gs2Schedule.Model.RepeatSetting.FromJson(data["repeatSetting"]));
         }
 
         public override JsonData ToJson()
@@ -145,14 +158,8 @@ namespace Gs2.Gs2Schedule.Request
                 ["scheduleType"] = ScheduleType,
                 ["absoluteBegin"] = AbsoluteBegin,
                 ["absoluteEnd"] = AbsoluteEnd,
-                ["repeatType"] = RepeatType,
-                ["repeatBeginDayOfMonth"] = RepeatBeginDayOfMonth,
-                ["repeatEndDayOfMonth"] = RepeatEndDayOfMonth,
-                ["repeatBeginDayOfWeek"] = RepeatBeginDayOfWeek,
-                ["repeatEndDayOfWeek"] = RepeatEndDayOfWeek,
-                ["repeatBeginHour"] = RepeatBeginHour,
-                ["repeatEndHour"] = RepeatEndHour,
                 ["relativeTriggerName"] = RelativeTriggerName,
+                ["repeatSetting"] = RepeatSetting?.ToJson(),
             };
         }
 
@@ -219,6 +226,9 @@ namespace Gs2.Gs2Schedule.Request
                 writer.WritePropertyName("relativeTriggerName");
                 writer.Write(RelativeTriggerName.ToString());
             }
+            if (RepeatSetting != null) {
+                RepeatSetting.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
 
@@ -231,14 +241,8 @@ namespace Gs2.Gs2Schedule.Request
             key += ScheduleType + ":";
             key += AbsoluteBegin + ":";
             key += AbsoluteEnd + ":";
-            key += RepeatType + ":";
-            key += RepeatBeginDayOfMonth + ":";
-            key += RepeatEndDayOfMonth + ":";
-            key += RepeatBeginDayOfWeek + ":";
-            key += RepeatEndDayOfWeek + ":";
-            key += RepeatBeginHour + ":";
-            key += RepeatEndHour + ":";
             key += RelativeTriggerName + ":";
+            key += RepeatSetting + ":";
             return key;
         }
     }
