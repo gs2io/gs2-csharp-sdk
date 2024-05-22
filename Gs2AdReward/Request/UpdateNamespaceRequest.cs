@@ -38,6 +38,8 @@ namespace Gs2.Gs2AdReward.Request
          public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
          public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
          public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; }
+         public Gs2.Gs2AdReward.Model.ScriptSetting AcquirePointScript { set; get; }
+         public Gs2.Gs2AdReward.Model.ScriptSetting ConsumePointScript { set; get; }
          public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
          public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
@@ -58,6 +60,14 @@ namespace Gs2.Gs2AdReward.Request
         }
         public UpdateNamespaceRequest WithAppLovinMaxes(Gs2.Gs2AdReward.Model.AppLovinMax[] appLovinMaxes) {
             this.AppLovinMaxes = appLovinMaxes;
+            return this;
+        }
+        public UpdateNamespaceRequest WithAcquirePointScript(Gs2.Gs2AdReward.Model.ScriptSetting acquirePointScript) {
+            this.AcquirePointScript = acquirePointScript;
+            return this;
+        }
+        public UpdateNamespaceRequest WithConsumePointScript(Gs2.Gs2AdReward.Model.ScriptSetting consumePointScript) {
+            this.ConsumePointScript = consumePointScript;
             return this;
         }
         public UpdateNamespaceRequest WithChangePointNotification(Gs2.Gs2AdReward.Model.NotificationSetting changePointNotification) {
@@ -85,6 +95,8 @@ namespace Gs2.Gs2AdReward.Request
                 .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? new Gs2.Gs2AdReward.Model.AppLovinMax[]{} : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2AdReward.Model.AppLovinMax.FromJson(v);
                 }).ToArray())
+                .WithAcquirePointScript(!data.Keys.Contains("acquirePointScript") || data["acquirePointScript"] == null ? null : Gs2.Gs2AdReward.Model.ScriptSetting.FromJson(data["acquirePointScript"]))
+                .WithConsumePointScript(!data.Keys.Contains("consumePointScript") || data["consumePointScript"] == null ? null : Gs2.Gs2AdReward.Model.ScriptSetting.FromJson(data["consumePointScript"]))
                 .WithChangePointNotification(!data.Keys.Contains("changePointNotification") || data["changePointNotification"] == null ? null : Gs2.Gs2AdReward.Model.NotificationSetting.FromJson(data["changePointNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2AdReward.Model.LogSetting.FromJson(data["logSetting"]));
         }
@@ -106,6 +118,8 @@ namespace Gs2.Gs2AdReward.Request
                 ["admob"] = Admob?.ToJson(),
                 ["unityAd"] = UnityAd?.ToJson(),
                 ["appLovinMaxes"] = appLovinMaxesJsonData,
+                ["acquirePointScript"] = AcquirePointScript?.ToJson(),
+                ["consumePointScript"] = ConsumePointScript?.ToJson(),
                 ["changePointNotification"] = ChangePointNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
@@ -139,6 +153,12 @@ namespace Gs2.Gs2AdReward.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (AcquirePointScript != null) {
+                AcquirePointScript.WriteJson(writer);
+            }
+            if (ConsumePointScript != null) {
+                ConsumePointScript.WriteJson(writer);
+            }
             if (ChangePointNotification != null) {
                 ChangePointNotification.WriteJson(writer);
             }
@@ -155,6 +175,8 @@ namespace Gs2.Gs2AdReward.Request
             key += Admob + ":";
             key += UnityAd + ":";
             key += AppLovinMaxes + ":";
+            key += AcquirePointScript + ":";
+            key += ConsumePointScript + ":";
             key += ChangePointNotification + ":";
             key += LogSetting + ":";
             return key;

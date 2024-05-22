@@ -37,6 +37,7 @@ namespace Gs2.Gs2Inbox.Model
         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         public long? ExpiresAt { set; get; }
+        public string MessageReceptionPeriodEventId { set; get; }
         public GlobalMessage WithGlobalMessageId(string globalMessageId) {
             this.GlobalMessageId = globalMessageId;
             return this;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Inbox.Model
         }
         public GlobalMessage WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
+            return this;
+        }
+        public GlobalMessage WithMessageReceptionPeriodEventId(string messageReceptionPeriodEventId) {
+            this.MessageReceptionPeriodEventId = messageReceptionPeriodEventId;
             return this;
         }
 
@@ -146,7 +151,8 @@ namespace Gs2.Gs2Inbox.Model
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())));
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
+                .WithMessageReceptionPeriodEventId(!data.Keys.Contains("messageReceptionPeriodEventId") || data["messageReceptionPeriodEventId"] == null ? null : data["messageReceptionPeriodEventId"].ToString());
         }
 
         public JsonData ToJson()
@@ -167,6 +173,7 @@ namespace Gs2.Gs2Inbox.Model
                 ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
                 ["expiresAt"] = ExpiresAt,
+                ["messageReceptionPeriodEventId"] = MessageReceptionPeriodEventId,
             };
         }
 
@@ -203,6 +210,10 @@ namespace Gs2.Gs2Inbox.Model
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write((ExpiresAt.ToString().Contains(".") ? (long)double.Parse(ExpiresAt.ToString()) : long.Parse(ExpiresAt.ToString())));
+            }
+            if (MessageReceptionPeriodEventId != null) {
+                writer.WritePropertyName("messageReceptionPeriodEventId");
+                writer.Write(MessageReceptionPeriodEventId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -263,6 +274,14 @@ namespace Gs2.Gs2Inbox.Model
             {
                 diff += (int)(ExpiresAt - other.ExpiresAt);
             }
+            if (MessageReceptionPeriodEventId == null && MessageReceptionPeriodEventId == other.MessageReceptionPeriodEventId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += MessageReceptionPeriodEventId.CompareTo(other.MessageReceptionPeriodEventId);
+            }
             return diff;
         }
 
@@ -309,6 +328,13 @@ namespace Gs2.Gs2Inbox.Model
                     });
                 }
             }
+            {
+                if (MessageReceptionPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessage", "inbox.globalMessage.messageReceptionPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -319,6 +345,7 @@ namespace Gs2.Gs2Inbox.Model
                 ReadAcquireActions = ReadAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 ExpiresTimeSpan = ExpiresTimeSpan.Clone() as Gs2.Gs2Inbox.Model.TimeSpan_,
                 ExpiresAt = ExpiresAt,
+                MessageReceptionPeriodEventId = MessageReceptionPeriodEventId,
             };
         }
     }

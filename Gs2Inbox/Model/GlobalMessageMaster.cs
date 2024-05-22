@@ -36,8 +36,9 @@ namespace Gs2.Gs2Inbox.Model
         public string Metadata { set; get; }
         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
-        public long? CreatedAt { set; get; }
         public long? ExpiresAt { set; get; }
+        public string MessageReceptionPeriodEventId { set; get; }
+        public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
         public GlobalMessageMaster WithGlobalMessageId(string globalMessageId) {
             this.GlobalMessageId = globalMessageId;
@@ -59,12 +60,16 @@ namespace Gs2.Gs2Inbox.Model
             this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
-        public GlobalMessageMaster WithCreatedAt(long? createdAt) {
-            this.CreatedAt = createdAt;
-            return this;
-        }
         public GlobalMessageMaster WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
+            return this;
+        }
+        public GlobalMessageMaster WithMessageReceptionPeriodEventId(string messageReceptionPeriodEventId) {
+            this.MessageReceptionPeriodEventId = messageReceptionPeriodEventId;
+            return this;
+        }
+        public GlobalMessageMaster WithCreatedAt(long? createdAt) {
+            this.CreatedAt = createdAt;
             return this;
         }
         public GlobalMessageMaster WithRevision(long? revision) {
@@ -156,8 +161,9 @@ namespace Gs2.Gs2Inbox.Model
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
+                .WithMessageReceptionPeriodEventId(!data.Keys.Contains("messageReceptionPeriodEventId") || data["messageReceptionPeriodEventId"] == null ? null : data["messageReceptionPeriodEventId"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
@@ -178,8 +184,9 @@ namespace Gs2.Gs2Inbox.Model
                 ["metadata"] = Metadata,
                 ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
-                ["createdAt"] = CreatedAt,
                 ["expiresAt"] = ExpiresAt,
+                ["messageReceptionPeriodEventId"] = MessageReceptionPeriodEventId,
+                ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
         }
@@ -214,13 +221,17 @@ namespace Gs2.Gs2Inbox.Model
                 writer.WritePropertyName("expiresTimeSpan");
                 ExpiresTimeSpan.WriteJson(writer);
             }
-            if (CreatedAt != null) {
-                writer.WritePropertyName("createdAt");
-                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
-            }
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write((ExpiresAt.ToString().Contains(".") ? (long)double.Parse(ExpiresAt.ToString()) : long.Parse(ExpiresAt.ToString())));
+            }
+            if (MessageReceptionPeriodEventId != null) {
+                writer.WritePropertyName("messageReceptionPeriodEventId");
+                writer.Write(MessageReceptionPeriodEventId.ToString());
+            }
+            if (CreatedAt != null) {
+                writer.WritePropertyName("createdAt");
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
@@ -277,14 +288,6 @@ namespace Gs2.Gs2Inbox.Model
             {
                 diff += ExpiresTimeSpan.CompareTo(other.ExpiresTimeSpan);
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
             if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
             {
                 // null and null
@@ -292,6 +295,22 @@ namespace Gs2.Gs2Inbox.Model
             else
             {
                 diff += (int)(ExpiresAt - other.ExpiresAt);
+            }
+            if (MessageReceptionPeriodEventId == null && MessageReceptionPeriodEventId == other.MessageReceptionPeriodEventId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += MessageReceptionPeriodEventId.CompareTo(other.MessageReceptionPeriodEventId);
+            }
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             if (Revision == null && Revision == other.Revision)
             {
@@ -336,18 +355,6 @@ namespace Gs2.Gs2Inbox.Model
             {
             }
             {
-                if (CreatedAt < 0) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.createdAt.error.invalid"),
-                    });
-                }
-                if (CreatedAt > 32503680000000) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.createdAt.error.invalid"),
-                    });
-                }
-            }
-            {
                 if (ExpiresAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("globalMessageMaster", "inbox.globalMessageMaster.expiresAt.error.invalid"),
@@ -356,6 +363,25 @@ namespace Gs2.Gs2Inbox.Model
                 if (ExpiresAt > 32503680000000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("globalMessageMaster", "inbox.globalMessageMaster.expiresAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MessageReceptionPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.messageReceptionPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.createdAt.error.invalid"),
                     });
                 }
             }
@@ -380,8 +406,9 @@ namespace Gs2.Gs2Inbox.Model
                 Metadata = Metadata,
                 ReadAcquireActions = ReadAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 ExpiresTimeSpan = ExpiresTimeSpan.Clone() as Gs2.Gs2Inbox.Model.TimeSpan_,
-                CreatedAt = CreatedAt,
                 ExpiresAt = ExpiresAt,
+                MessageReceptionPeriodEventId = MessageReceptionPeriodEventId,
+                CreatedAt = CreatedAt,
                 Revision = Revision,
             };
         }

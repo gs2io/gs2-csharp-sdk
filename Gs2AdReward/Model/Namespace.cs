@@ -37,6 +37,8 @@ namespace Gs2.Gs2AdReward.Model
         public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
         public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
         public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; }
+        public Gs2.Gs2AdReward.Model.ScriptSetting AcquirePointScript { set; get; }
+        public Gs2.Gs2AdReward.Model.ScriptSetting ConsumePointScript { set; get; }
         public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
         public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
@@ -64,6 +66,14 @@ namespace Gs2.Gs2AdReward.Model
         }
         public Namespace WithAppLovinMaxes(Gs2.Gs2AdReward.Model.AppLovinMax[] appLovinMaxes) {
             this.AppLovinMaxes = appLovinMaxes;
+            return this;
+        }
+        public Namespace WithAcquirePointScript(Gs2.Gs2AdReward.Model.ScriptSetting acquirePointScript) {
+            this.AcquirePointScript = acquirePointScript;
+            return this;
+        }
+        public Namespace WithConsumePointScript(Gs2.Gs2AdReward.Model.ScriptSetting consumePointScript) {
+            this.ConsumePointScript = consumePointScript;
             return this;
         }
         public Namespace WithChangePointNotification(Gs2.Gs2AdReward.Model.NotificationSetting changePointNotification) {
@@ -155,6 +165,8 @@ namespace Gs2.Gs2AdReward.Model
                 .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? new Gs2.Gs2AdReward.Model.AppLovinMax[]{} : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2AdReward.Model.AppLovinMax.FromJson(v);
                 }).ToArray())
+                .WithAcquirePointScript(!data.Keys.Contains("acquirePointScript") || data["acquirePointScript"] == null ? null : Gs2.Gs2AdReward.Model.ScriptSetting.FromJson(data["acquirePointScript"]))
+                .WithConsumePointScript(!data.Keys.Contains("consumePointScript") || data["consumePointScript"] == null ? null : Gs2.Gs2AdReward.Model.ScriptSetting.FromJson(data["consumePointScript"]))
                 .WithChangePointNotification(!data.Keys.Contains("changePointNotification") || data["changePointNotification"] == null ? null : Gs2.Gs2AdReward.Model.NotificationSetting.FromJson(data["changePointNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2AdReward.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
@@ -180,6 +192,8 @@ namespace Gs2.Gs2AdReward.Model
                 ["admob"] = Admob?.ToJson(),
                 ["unityAd"] = UnityAd?.ToJson(),
                 ["appLovinMaxes"] = appLovinMaxesJsonData,
+                ["acquirePointScript"] = AcquirePointScript?.ToJson(),
+                ["consumePointScript"] = ConsumePointScript?.ToJson(),
                 ["changePointNotification"] = ChangePointNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
@@ -221,6 +235,14 @@ namespace Gs2.Gs2AdReward.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (AcquirePointScript != null) {
+                writer.WritePropertyName("acquirePointScript");
+                AcquirePointScript.WriteJson(writer);
+            }
+            if (ConsumePointScript != null) {
+                writer.WritePropertyName("consumePointScript");
+                ConsumePointScript.WriteJson(writer);
             }
             if (ChangePointNotification != null) {
                 writer.WritePropertyName("changePointNotification");
@@ -300,6 +322,22 @@ namespace Gs2.Gs2AdReward.Model
                 {
                     diff += AppLovinMaxes[i].CompareTo(other.AppLovinMaxes[i]);
                 }
+            }
+            if (AcquirePointScript == null && AcquirePointScript == other.AcquirePointScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AcquirePointScript.CompareTo(other.AcquirePointScript);
+            }
+            if (ConsumePointScript == null && ConsumePointScript == other.ConsumePointScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ConsumePointScript.CompareTo(other.ConsumePointScript);
             }
             if (ChangePointNotification == null && ChangePointNotification == other.ChangePointNotification)
             {
@@ -382,6 +420,10 @@ namespace Gs2.Gs2AdReward.Model
             {
             }
             {
+            }
+            {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "adReward.namespace.createdAt.error.invalid"),
@@ -427,6 +469,8 @@ namespace Gs2.Gs2AdReward.Model
                 Admob = Admob.Clone() as Gs2.Gs2AdReward.Model.AdMob,
                 UnityAd = UnityAd.Clone() as Gs2.Gs2AdReward.Model.UnityAd,
                 AppLovinMaxes = AppLovinMaxes.Clone() as Gs2.Gs2AdReward.Model.AppLovinMax[],
+                AcquirePointScript = AcquirePointScript.Clone() as Gs2.Gs2AdReward.Model.ScriptSetting,
+                ConsumePointScript = ConsumePointScript.Clone() as Gs2.Gs2AdReward.Model.ScriptSetting,
                 ChangePointNotification = ChangePointNotification.Clone() as Gs2.Gs2AdReward.Model.NotificationSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2AdReward.Model.LogSetting,
                 CreatedAt = CreatedAt,

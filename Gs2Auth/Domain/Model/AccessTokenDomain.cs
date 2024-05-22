@@ -171,6 +171,54 @@ namespace Gs2.Gs2Auth.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> FederationFuture(
+            FederationRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
+            {
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.FederationFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.Token = domain.Token = result?.Token;
+                this.UserId = domain.UserId = result?.UserId;
+                this.Expire = domain.Expire = result?.Expire;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> FederationAsync(
+            #else
+        public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> FederationAsync(
+            #endif
+            FederationRequest request
+        ) {
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.FederationAsync(request)
+            );
+            var domain = this;
+            this.Token = domain.Token = result?.Token;
+            this.UserId = domain.UserId = result?.UserId;
+            this.Expire = domain.Expire = result?.Expire;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> IssueTimeOffsetTokenFuture(
             IssueTimeOffsetTokenByUserIdRequest request
         ) {

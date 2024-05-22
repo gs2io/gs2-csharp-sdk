@@ -222,6 +222,16 @@ namespace Gs2.Gs2AdReward
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.AcquirePointScript != null)
+                {
+                    jsonWriter.WritePropertyName("acquirePointScript");
+                    request.AcquirePointScript.WriteJson(jsonWriter);
+                }
+                if (request.ConsumePointScript != null)
+                {
+                    jsonWriter.WritePropertyName("consumePointScript");
+                    request.ConsumePointScript.WriteJson(jsonWriter);
+                }
                 if (request.ChangePointNotification != null)
                 {
                     jsonWriter.WritePropertyName("changePointNotification");
@@ -585,6 +595,16 @@ namespace Gs2.Gs2AdReward
                         }
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.AcquirePointScript != null)
+                {
+                    jsonWriter.WritePropertyName("acquirePointScript");
+                    request.AcquirePointScript.WriteJson(jsonWriter);
+                }
+                if (request.ConsumePointScript != null)
+                {
+                    jsonWriter.WritePropertyName("consumePointScript");
+                    request.ConsumePointScript.WriteJson(jsonWriter);
                 }
                 if (request.ChangePointNotification != null)
                 {

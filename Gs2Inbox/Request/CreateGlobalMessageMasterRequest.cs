@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inbox.Request
          public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
          public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
          public long? ExpiresAt { set; get; }
+         public string MessageReceptionPeriodEventId { set; get; }
         public CreateGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -63,6 +64,10 @@ namespace Gs2.Gs2Inbox.Request
             this.ExpiresAt = expiresAt;
             return this;
         }
+        public CreateGlobalMessageMasterRequest WithMessageReceptionPeriodEventId(string messageReceptionPeriodEventId) {
+            this.MessageReceptionPeriodEventId = messageReceptionPeriodEventId;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -80,7 +85,8 @@ namespace Gs2.Gs2Inbox.Request
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())));
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
+                .WithMessageReceptionPeriodEventId(!data.Keys.Contains("messageReceptionPeriodEventId") || data["messageReceptionPeriodEventId"] == null ? null : data["messageReceptionPeriodEventId"].ToString());
         }
 
         public override JsonData ToJson()
@@ -101,6 +107,7 @@ namespace Gs2.Gs2Inbox.Request
                 ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
                 ["expiresAt"] = ExpiresAt,
+                ["messageReceptionPeriodEventId"] = MessageReceptionPeriodEventId,
             };
         }
 
@@ -137,6 +144,10 @@ namespace Gs2.Gs2Inbox.Request
                 writer.WritePropertyName("expiresAt");
                 writer.Write((ExpiresAt.ToString().Contains(".") ? (long)double.Parse(ExpiresAt.ToString()) : long.Parse(ExpiresAt.ToString())));
             }
+            if (MessageReceptionPeriodEventId != null) {
+                writer.WritePropertyName("messageReceptionPeriodEventId");
+                writer.Write(MessageReceptionPeriodEventId.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -148,6 +159,7 @@ namespace Gs2.Gs2Inbox.Request
             key += ReadAcquireActions + ":";
             key += ExpiresTimeSpan + ":";
             key += ExpiresAt + ":";
+            key += MessageReceptionPeriodEventId + ":";
             return key;
         }
     }
