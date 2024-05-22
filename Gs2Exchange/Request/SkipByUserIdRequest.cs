@@ -146,7 +146,6 @@ namespace Gs2.Gs2Exchange.Request
             key += UserId + ":";
             key += AwaitName + ":";
             key += SkipType + ":";
-            key += Minutes + ":";
             key += Rate + ":";
             key += TimeOffsetToken + ":";
             return key;

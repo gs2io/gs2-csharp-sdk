@@ -58,7 +58,8 @@ namespace Gs2.Gs2Exchange.Model.Transaction
             this SkipByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Exchange:SkipByUserId");
+            request.Minutes = (int?) (request.Minutes * rate);
+            return request;
         }
     }
 
@@ -68,7 +69,8 @@ namespace Gs2.Gs2Exchange.Model.Transaction
             this SkipByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Exchange:SkipByUserId");
+            request.Minutes = (int?) ((request.Minutes ?? 0) * rate);
+            return request;
         }
     }
 }

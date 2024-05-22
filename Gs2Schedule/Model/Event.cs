@@ -455,7 +455,7 @@ namespace Gs2.Gs2Schedule.Model
                         });
                 }
             }
-            if (ScheduleType == "absolute") {
+            {
                 if (AbsoluteBegin < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("event", "schedule.event.absoluteBegin.error.invalid"),
@@ -467,7 +467,7 @@ namespace Gs2.Gs2Schedule.Model
                     });
                 }
             }
-            if (ScheduleType == "absolute") {
+            {
                 if (AbsoluteEnd < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("event", "schedule.event.absoluteEnd.error.invalid"),
