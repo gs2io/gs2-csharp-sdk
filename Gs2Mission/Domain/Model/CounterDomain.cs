@@ -300,6 +300,58 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> VerifyValueFuture(
+            VerifyCounterValueByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> self)
+            {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithCounterName(this.CounterName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyCounterValueByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Mission.Domain.Model.CounterDomain> VerifyValueAsync(
+            #else
+        public async Task<Gs2.Gs2Mission.Domain.Model.CounterDomain> VerifyValueAsync(
+            #endif
+            VerifyCounterValueByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithCounterName(this.CounterName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyCounterValueByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> DeleteFuture(
             DeleteCounterByUserIdRequest request
         ) {

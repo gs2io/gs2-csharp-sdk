@@ -94,6 +94,24 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (VerifyCounterValueByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifyCounterValueByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -133,6 +151,17 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await DecreaseCounterByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyCounterValueByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyCounterValueByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

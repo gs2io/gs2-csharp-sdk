@@ -2819,6 +2819,16 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
                 }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3178,6 +3188,16 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
                 }
                 if (request.ContextStack != null)
                 {
@@ -5101,6 +5121,291 @@ namespace Gs2.Gs2Mission
 #endif
 
 
+        public class VerifyCounterValueTask : Gs2RestSessionTask<VerifyCounterValueRequest, VerifyCounterValueResult>
+        {
+            public VerifyCounterValueTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCounterValueRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCounterValueRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/counter/{counterName}/verify/counter/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{counterName}", !string.IsNullOrEmpty(request.CounterName) ? request.CounterName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ResetType != null)
+                {
+                    jsonWriter.WritePropertyName("resetType");
+                    jsonWriter.Write(request.ResetType);
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCounterValue(
+                Request.VerifyCounterValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyCounterValueResult>> callback
+        )
+		{
+			var task = new VerifyCounterValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCounterValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCounterValueResult> VerifyCounterValueFuture(
+                Request.VerifyCounterValueRequest request
+        )
+		{
+			return new VerifyCounterValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
+                Request.VerifyCounterValueRequest request
+        )
+		{
+            AsyncResult<Result.VerifyCounterValueResult> result = null;
+			await VerifyCounterValue(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyCounterValueTask VerifyCounterValueAsync(
+                Request.VerifyCounterValueRequest request
+        )
+		{
+			return new VerifyCounterValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
+                Request.VerifyCounterValueRequest request
+        )
+		{
+			var task = new VerifyCounterValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCounterValueByUserIdTask : Gs2RestSessionTask<VerifyCounterValueByUserIdRequest, VerifyCounterValueByUserIdResult>
+        {
+            public VerifyCounterValueByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCounterValueByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCounterValueByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/counter/{counterName}/verify/counter/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{counterName}", !string.IsNullOrEmpty(request.CounterName) ? request.CounterName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ResetType != null)
+                {
+                    jsonWriter.WritePropertyName("resetType");
+                    jsonWriter.Write(request.ResetType);
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCounterValueByUserId(
+                Request.VerifyCounterValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyCounterValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyCounterValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCounterValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdFuture(
+                Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+			return new VerifyCounterValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
+                Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyCounterValueByUserIdResult> result = null;
+			await VerifyCounterValueByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyCounterValueByUserIdTask VerifyCounterValueByUserIdAsync(
+                Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+			return new VerifyCounterValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
+                Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+			var task = new VerifyCounterValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteCounterByUserIdTask : Gs2RestSessionTask<DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult>
         {
             public DeleteCounterByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCounterByUserIdRequest request) : base(session, factory, request)
@@ -5581,6 +5886,131 @@ namespace Gs2.Gs2Mission
         )
 		{
 			var task = new DecreaseByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCounterValueByStampTaskTask : Gs2RestSessionTask<VerifyCounterValueByStampTaskRequest, VerifyCounterValueByStampTaskResult>
+        {
+            public VerifyCounterValueByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCounterValueByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCounterValueByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/counter/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCounterValueByStampTask(
+                Request.VerifyCounterValueByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyCounterValueByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyCounterValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCounterValueByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskFuture(
+                Request.VerifyCounterValueByStampTaskRequest request
+        )
+		{
+			return new VerifyCounterValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskAsync(
+                Request.VerifyCounterValueByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyCounterValueByStampTaskResult> result = null;
+			await VerifyCounterValueByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyCounterValueByStampTaskTask VerifyCounterValueByStampTaskAsync(
+                Request.VerifyCounterValueByStampTaskRequest request
+        )
+		{
+			return new VerifyCounterValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskAsync(
+                Request.VerifyCounterValueByStampTaskRequest request
+        )
+		{
+			var task = new VerifyCounterValueByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -6818,20 +7248,25 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
-                if (request.CounterName != null)
+                if (request.VerifyCompleteType != null)
                 {
-                    jsonWriter.WritePropertyName("counterName");
-                    jsonWriter.Write(request.CounterName);
+                    jsonWriter.WritePropertyName("verifyCompleteType");
+                    jsonWriter.Write(request.VerifyCompleteType);
                 }
-                if (request.TargetResetType != null)
+                if (request.TargetCounter != null)
                 {
-                    jsonWriter.WritePropertyName("targetResetType");
-                    jsonWriter.Write(request.TargetResetType);
+                    jsonWriter.WritePropertyName("targetCounter");
+                    request.TargetCounter.WriteJson(jsonWriter);
                 }
-                if (request.TargetValue != null)
+                if (request.VerifyCompleteConsumeActions != null)
                 {
-                    jsonWriter.WritePropertyName("targetValue");
-                    jsonWriter.Write(request.TargetValue.ToString());
+                    jsonWriter.WritePropertyName("verifyCompleteConsumeActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyCompleteConsumeActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.CompleteAcquireActions != null)
                 {
@@ -6852,6 +7287,21 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("premiseMissionTaskName");
                     jsonWriter.Write(request.PremiseMissionTaskName);
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName);
+                }
+                if (request.TargetResetType != null)
+                {
+                    jsonWriter.WritePropertyName("targetResetType");
+                    jsonWriter.Write(request.TargetResetType);
+                }
+                if (request.TargetValue != null)
+                {
+                    jsonWriter.WritePropertyName("targetValue");
+                    jsonWriter.Write(request.TargetValue.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -7088,20 +7538,25 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
-                if (request.CounterName != null)
+                if (request.VerifyCompleteType != null)
                 {
-                    jsonWriter.WritePropertyName("counterName");
-                    jsonWriter.Write(request.CounterName);
+                    jsonWriter.WritePropertyName("verifyCompleteType");
+                    jsonWriter.Write(request.VerifyCompleteType);
                 }
-                if (request.TargetResetType != null)
+                if (request.TargetCounter != null)
                 {
-                    jsonWriter.WritePropertyName("targetResetType");
-                    jsonWriter.Write(request.TargetResetType);
+                    jsonWriter.WritePropertyName("targetCounter");
+                    request.TargetCounter.WriteJson(jsonWriter);
                 }
-                if (request.TargetValue != null)
+                if (request.VerifyCompleteConsumeActions != null)
                 {
-                    jsonWriter.WritePropertyName("targetValue");
-                    jsonWriter.Write(request.TargetValue.ToString());
+                    jsonWriter.WritePropertyName("verifyCompleteConsumeActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyCompleteConsumeActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.CompleteAcquireActions != null)
                 {
@@ -7122,6 +7577,21 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("premiseMissionTaskName");
                     jsonWriter.Write(request.PremiseMissionTaskName);
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName);
+                }
+                if (request.TargetResetType != null)
+                {
+                    jsonWriter.WritePropertyName("targetResetType");
+                    jsonWriter.Write(request.TargetResetType);
+                }
+                if (request.TargetValue != null)
+                {
+                    jsonWriter.WritePropertyName("targetValue");
+                    jsonWriter.Write(request.TargetValue.ToString());
                 }
                 if (request.ContextStack != null)
                 {

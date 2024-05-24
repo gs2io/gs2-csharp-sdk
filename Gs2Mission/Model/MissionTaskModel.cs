@@ -34,12 +34,18 @@ namespace Gs2.Gs2Mission.Model
         public string MissionTaskId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
-        public string CounterName { set; get; }
-        public string TargetResetType { set; get; }
-        public long? TargetValue { set; get; }
+        public string VerifyCompleteType { set; get; }
+        public Gs2.Gs2Mission.Model.TargetCounterModel TargetCounter { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] VerifyCompleteConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public string ChallengePeriodEventId { set; get; }
         public string PremiseMissionTaskName { set; get; }
+        [Obsolete("This method is deprecated")]
+        public string CounterName { set; get; }
+        [Obsolete("This method is deprecated")]
+        public string TargetResetType { set; get; }
+        [Obsolete("This method is deprecated")]
+        public long? TargetValue { set; get; }
         public MissionTaskModel WithMissionTaskId(string missionTaskId) {
             this.MissionTaskId = missionTaskId;
             return this;
@@ -52,16 +58,16 @@ namespace Gs2.Gs2Mission.Model
             this.Metadata = metadata;
             return this;
         }
-        public MissionTaskModel WithCounterName(string counterName) {
-            this.CounterName = counterName;
+        public MissionTaskModel WithVerifyCompleteType(string verifyCompleteType) {
+            this.VerifyCompleteType = verifyCompleteType;
             return this;
         }
-        public MissionTaskModel WithTargetResetType(string targetResetType) {
-            this.TargetResetType = targetResetType;
+        public MissionTaskModel WithTargetCounter(Gs2.Gs2Mission.Model.TargetCounterModel targetCounter) {
+            this.TargetCounter = targetCounter;
             return this;
         }
-        public MissionTaskModel WithTargetValue(long? targetValue) {
-            this.TargetValue = targetValue;
+        public MissionTaskModel WithVerifyCompleteConsumeActions(Gs2.Core.Model.ConsumeAction[] verifyCompleteConsumeActions) {
+            this.VerifyCompleteConsumeActions = verifyCompleteConsumeActions;
             return this;
         }
         public MissionTaskModel WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
@@ -74,6 +80,21 @@ namespace Gs2.Gs2Mission.Model
         }
         public MissionTaskModel WithPremiseMissionTaskName(string premiseMissionTaskName) {
             this.PremiseMissionTaskName = premiseMissionTaskName;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public MissionTaskModel WithCounterName(string counterName) {
+            this.CounterName = counterName;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public MissionTaskModel WithTargetResetType(string targetResetType) {
+            this.TargetResetType = targetResetType;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public MissionTaskModel WithTargetValue(long? targetValue) {
+            this.TargetValue = targetValue;
             return this;
         }
 
@@ -174,18 +195,32 @@ namespace Gs2.Gs2Mission.Model
                 .WithMissionTaskId(!data.Keys.Contains("missionTaskId") || data["missionTaskId"] == null ? null : data["missionTaskId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
-                .WithTargetResetType(!data.Keys.Contains("targetResetType") || data["targetResetType"] == null ? null : data["targetResetType"].ToString())
-                .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)(data["targetValue"].ToString().Contains(".") ? (long)double.Parse(data["targetValue"].ToString()) : long.Parse(data["targetValue"].ToString())))
+                .WithVerifyCompleteType(!data.Keys.Contains("verifyCompleteType") || data["verifyCompleteType"] == null ? null : data["verifyCompleteType"].ToString())
+                .WithTargetCounter(!data.Keys.Contains("targetCounter") || data["targetCounter"] == null ? null : Gs2.Gs2Mission.Model.TargetCounterModel.FromJson(data["targetCounter"]))
+                .WithVerifyCompleteConsumeActions(!data.Keys.Contains("verifyCompleteConsumeActions") || data["verifyCompleteConsumeActions"] == null || !data["verifyCompleteConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["verifyCompleteConsumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
+                }).ToArray())
                 .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null || !data["completeAcquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
-                .WithPremiseMissionTaskName(!data.Keys.Contains("premiseMissionTaskName") || data["premiseMissionTaskName"] == null ? null : data["premiseMissionTaskName"].ToString());
+                .WithPremiseMissionTaskName(!data.Keys.Contains("premiseMissionTaskName") || data["premiseMissionTaskName"] == null ? null : data["premiseMissionTaskName"].ToString())
+                .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithTargetResetType(!data.Keys.Contains("targetResetType") || data["targetResetType"] == null ? null : data["targetResetType"].ToString())
+                .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)(data["targetValue"].ToString().Contains(".") ? (long)double.Parse(data["targetValue"].ToString()) : long.Parse(data["targetValue"].ToString())));
         }
 
         public JsonData ToJson()
         {
+            JsonData verifyCompleteConsumeActionsJsonData = null;
+            if (VerifyCompleteConsumeActions != null && VerifyCompleteConsumeActions.Length > 0)
+            {
+                verifyCompleteConsumeActionsJsonData = new JsonData();
+                foreach (var verifyCompleteConsumeAction in VerifyCompleteConsumeActions)
+                {
+                    verifyCompleteConsumeActionsJsonData.Add(verifyCompleteConsumeAction.ToJson());
+                }
+            }
             JsonData completeAcquireActionsJsonData = null;
             if (CompleteAcquireActions != null && CompleteAcquireActions.Length > 0)
             {
@@ -199,9 +234,9 @@ namespace Gs2.Gs2Mission.Model
                 ["missionTaskId"] = MissionTaskId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["counterName"] = CounterName,
-                ["targetResetType"] = TargetResetType,
-                ["targetValue"] = TargetValue,
+                ["verifyCompleteType"] = VerifyCompleteType,
+                ["targetCounter"] = TargetCounter?.ToJson(),
+                ["verifyCompleteConsumeActions"] = verifyCompleteConsumeActionsJsonData,
                 ["completeAcquireActions"] = completeAcquireActionsJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
                 ["premiseMissionTaskName"] = PremiseMissionTaskName,
@@ -223,17 +258,24 @@ namespace Gs2.Gs2Mission.Model
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            if (CounterName != null) {
-                writer.WritePropertyName("counterName");
-                writer.Write(CounterName.ToString());
+            if (VerifyCompleteType != null) {
+                writer.WritePropertyName("verifyCompleteType");
+                writer.Write(VerifyCompleteType.ToString());
             }
-            if (TargetResetType != null) {
-                writer.WritePropertyName("targetResetType");
-                writer.Write(TargetResetType.ToString());
+            if (TargetCounter != null) {
+                writer.WritePropertyName("targetCounter");
+                TargetCounter.WriteJson(writer);
             }
-            if (TargetValue != null) {
-                writer.WritePropertyName("targetValue");
-                writer.Write((TargetValue.ToString().Contains(".") ? (long)double.Parse(TargetValue.ToString()) : long.Parse(TargetValue.ToString())));
+            if (VerifyCompleteConsumeActions != null) {
+                writer.WritePropertyName("verifyCompleteConsumeActions");
+                writer.WriteArrayStart();
+                foreach (var verifyCompleteConsumeAction in VerifyCompleteConsumeActions)
+                {
+                    if (verifyCompleteConsumeAction != null) {
+                        verifyCompleteConsumeAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (CompleteAcquireActions != null) {
                 writer.WritePropertyName("completeAcquireActions");
@@ -253,6 +295,18 @@ namespace Gs2.Gs2Mission.Model
             if (PremiseMissionTaskName != null) {
                 writer.WritePropertyName("premiseMissionTaskName");
                 writer.Write(PremiseMissionTaskName.ToString());
+            }
+            if (CounterName != null) {
+                writer.WritePropertyName("counterName");
+                writer.Write(CounterName.ToString());
+            }
+            if (TargetResetType != null) {
+                writer.WritePropertyName("targetResetType");
+                writer.Write(TargetResetType.ToString());
+            }
+            if (TargetValue != null) {
+                writer.WritePropertyName("targetValue");
+                writer.Write((TargetValue.ToString().Contains(".") ? (long)double.Parse(TargetValue.ToString()) : long.Parse(TargetValue.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -285,29 +339,33 @@ namespace Gs2.Gs2Mission.Model
             {
                 diff += Metadata.CompareTo(other.Metadata);
             }
-            if (CounterName == null && CounterName == other.CounterName)
+            if (VerifyCompleteType == null && VerifyCompleteType == other.VerifyCompleteType)
             {
                 // null and null
             }
             else
             {
-                diff += CounterName.CompareTo(other.CounterName);
+                diff += VerifyCompleteType.CompareTo(other.VerifyCompleteType);
             }
-            if (TargetResetType == null && TargetResetType == other.TargetResetType)
+            if (TargetCounter == null && TargetCounter == other.TargetCounter)
             {
                 // null and null
             }
             else
             {
-                diff += TargetResetType.CompareTo(other.TargetResetType);
+                diff += TargetCounter.CompareTo(other.TargetCounter);
             }
-            if (TargetValue == null && TargetValue == other.TargetValue)
+            if (VerifyCompleteConsumeActions == null && VerifyCompleteConsumeActions == other.VerifyCompleteConsumeActions)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(TargetValue - other.TargetValue);
+                diff += VerifyCompleteConsumeActions.Length - other.VerifyCompleteConsumeActions.Length;
+                for (var i = 0; i < VerifyCompleteConsumeActions.Length; i++)
+                {
+                    diff += VerifyCompleteConsumeActions[i].CompareTo(other.VerifyCompleteConsumeActions[i]);
+                }
             }
             if (CompleteAcquireActions == null && CompleteAcquireActions == other.CompleteAcquireActions)
             {
@@ -337,6 +395,30 @@ namespace Gs2.Gs2Mission.Model
             {
                 diff += PremiseMissionTaskName.CompareTo(other.PremiseMissionTaskName);
             }
+            if (CounterName == null && CounterName == other.CounterName)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += CounterName.CompareTo(other.CounterName);
+            }
+            if (TargetResetType == null && TargetResetType == other.TargetResetType)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TargetResetType.CompareTo(other.TargetResetType);
+            }
+            if (TargetValue == null && TargetValue == other.TargetValue)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(TargetValue - other.TargetValue);
+            }
             return diff;
         }
 
@@ -363,34 +445,22 @@ namespace Gs2.Gs2Mission.Model
                 }
             }
             {
-                if (CounterName.Length > 128) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("missionTaskModel", "mission.missionTaskModel.counterName.error.tooLong"),
-                    });
-                }
-            }
-            {
-                switch (TargetResetType) {
-                    case "notReset":
-                    case "daily":
-                    case "weekly":
-                    case "monthly":
+                switch (VerifyCompleteType) {
+                    case "counter":
+                    case "consumeActions":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
-                            new RequestError("missionTaskModel", "mission.missionTaskModel.targetResetType.error.invalid"),
+                            new RequestError("missionTaskModel", "mission.missionTaskModel.verifyCompleteType.error.invalid"),
                         });
                 }
             }
+            if (VerifyCompleteType == "counter") {
+            }
             {
-                if (TargetValue < 1) {
+                if (VerifyCompleteConsumeActions.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("missionTaskModel", "mission.missionTaskModel.targetValue.error.invalid"),
-                    });
-                }
-                if (TargetValue > 9223372036854775805) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("missionTaskModel", "mission.missionTaskModel.targetValue.error.invalid"),
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.verifyCompleteConsumeActions.error.tooMany"),
                     });
                 }
             }
@@ -422,12 +492,15 @@ namespace Gs2.Gs2Mission.Model
                 MissionTaskId = MissionTaskId,
                 Name = Name,
                 Metadata = Metadata,
-                CounterName = CounterName,
-                TargetResetType = TargetResetType,
-                TargetValue = TargetValue,
+                VerifyCompleteType = VerifyCompleteType,
+                TargetCounter = TargetCounter.Clone() as Gs2.Gs2Mission.Model.TargetCounterModel,
+                VerifyCompleteConsumeActions = VerifyCompleteConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
                 CompleteAcquireActions = CompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 ChallengePeriodEventId = ChallengePeriodEventId,
                 PremiseMissionTaskName = PremiseMissionTaskName,
+                CounterName = CounterName,
+                TargetResetType = TargetResetType,
+                TargetValue = TargetValue,
             };
         }
     }

@@ -594,6 +594,12 @@ namespace Gs2.Gs2Mission.Domain
         public static Action<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyCounterValueByUserIdRequest, VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdComplete = new UnityEvent<string, VerifyCounterValueByUserIdRequest, VerifyCounterValueByUserIdResult>();
+    #else
+        public static Action<string, VerifyCounterValueByUserIdRequest, VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
@@ -629,6 +635,23 @@ namespace Gs2.Gs2Mission.Domain
                         );
 
                         DecreaseCounterByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyCounterValueByUserId": {
+                        var requestModel = VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCounterValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        VerifyCounterValueByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

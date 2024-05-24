@@ -1086,6 +1086,16 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
                 }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1326,6 +1336,16 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.QueueNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("queueNamespaceId");
+                    jsonWriter.Write(request.QueueNamespaceId.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2431,6 +2451,292 @@ namespace Gs2.Gs2Mission
         )
 		{
 		    var task = new GetCounterByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCounterValueTask : Gs2WebSocketSessionTask<Request.VerifyCounterValueRequest, Result.VerifyCounterValueResult>
+        {
+	        public VerifyCounterValueTask(IGs2Session session, Request.VerifyCounterValueRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCounterValueRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ResetType != null)
+                {
+                    jsonWriter.WritePropertyName("resetType");
+                    jsonWriter.Write(request.ResetType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "mission",
+                    "counter",
+                    "verifyCounterValue",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCounterValue(
+                Request.VerifyCounterValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyCounterValueResult>> callback
+        )
+		{
+			var task = new VerifyCounterValueTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCounterValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCounterValueResult> VerifyCounterValueFuture(
+                Request.VerifyCounterValueRequest request
+        )
+		{
+			return new VerifyCounterValueTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
+            Request.VerifyCounterValueRequest request
+        )
+		{
+		    var task = new VerifyCounterValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCounterValueTask VerifyCounterValueAsync(
+                Request.VerifyCounterValueRequest request
+        )
+		{
+			return new VerifyCounterValueTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
+            Request.VerifyCounterValueRequest request
+        )
+		{
+		    var task = new VerifyCounterValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCounterValueByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyCounterValueByUserIdRequest, Result.VerifyCounterValueByUserIdResult>
+        {
+	        public VerifyCounterValueByUserIdTask(IGs2Session session, Request.VerifyCounterValueByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCounterValueByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ResetType != null)
+                {
+                    jsonWriter.WritePropertyName("resetType");
+                    jsonWriter.Write(request.ResetType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "mission",
+                    "counter",
+                    "verifyCounterValueByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCounterValueByUserId(
+                Request.VerifyCounterValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyCounterValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyCounterValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCounterValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdFuture(
+                Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+			return new VerifyCounterValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
+            Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyCounterValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCounterValueByUserIdTask VerifyCounterValueByUserIdAsync(
+                Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+			return new VerifyCounterValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
+            Request.VerifyCounterValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyCounterValueByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );

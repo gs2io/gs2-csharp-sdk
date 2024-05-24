@@ -1741,6 +1741,41 @@ namespace Gs2.Gs2Schedule
                     jsonWriter.WritePropertyName("absoluteEnd");
                     jsonWriter.Write(request.AbsoluteEnd.ToString());
                 }
+                if (request.RepeatType != null)
+                {
+                    jsonWriter.WritePropertyName("repeatType");
+                    jsonWriter.Write(request.RepeatType);
+                }
+                if (request.RepeatBeginDayOfMonth != null)
+                {
+                    jsonWriter.WritePropertyName("repeatBeginDayOfMonth");
+                    jsonWriter.Write(request.RepeatBeginDayOfMonth.ToString());
+                }
+                if (request.RepeatEndDayOfMonth != null)
+                {
+                    jsonWriter.WritePropertyName("repeatEndDayOfMonth");
+                    jsonWriter.Write(request.RepeatEndDayOfMonth.ToString());
+                }
+                if (request.RepeatBeginDayOfWeek != null)
+                {
+                    jsonWriter.WritePropertyName("repeatBeginDayOfWeek");
+                    jsonWriter.Write(request.RepeatBeginDayOfWeek);
+                }
+                if (request.RepeatEndDayOfWeek != null)
+                {
+                    jsonWriter.WritePropertyName("repeatEndDayOfWeek");
+                    jsonWriter.Write(request.RepeatEndDayOfWeek);
+                }
+                if (request.RepeatBeginHour != null)
+                {
+                    jsonWriter.WritePropertyName("repeatBeginHour");
+                    jsonWriter.Write(request.RepeatBeginHour.ToString());
+                }
+                if (request.RepeatEndHour != null)
+                {
+                    jsonWriter.WritePropertyName("repeatEndHour");
+                    jsonWriter.Write(request.RepeatEndHour.ToString());
+                }
                 if (request.RelativeTriggerName != null)
                 {
                     jsonWriter.WritePropertyName("relativeTriggerName");
@@ -1998,6 +2033,41 @@ namespace Gs2.Gs2Schedule
                 {
                     jsonWriter.WritePropertyName("absoluteEnd");
                     jsonWriter.Write(request.AbsoluteEnd.ToString());
+                }
+                if (request.RepeatType != null)
+                {
+                    jsonWriter.WritePropertyName("repeatType");
+                    jsonWriter.Write(request.RepeatType);
+                }
+                if (request.RepeatBeginDayOfMonth != null)
+                {
+                    jsonWriter.WritePropertyName("repeatBeginDayOfMonth");
+                    jsonWriter.Write(request.RepeatBeginDayOfMonth.ToString());
+                }
+                if (request.RepeatEndDayOfMonth != null)
+                {
+                    jsonWriter.WritePropertyName("repeatEndDayOfMonth");
+                    jsonWriter.Write(request.RepeatEndDayOfMonth.ToString());
+                }
+                if (request.RepeatBeginDayOfWeek != null)
+                {
+                    jsonWriter.WritePropertyName("repeatBeginDayOfWeek");
+                    jsonWriter.Write(request.RepeatBeginDayOfWeek);
+                }
+                if (request.RepeatEndDayOfWeek != null)
+                {
+                    jsonWriter.WritePropertyName("repeatEndDayOfWeek");
+                    jsonWriter.Write(request.RepeatEndDayOfWeek);
+                }
+                if (request.RepeatBeginHour != null)
+                {
+                    jsonWriter.WritePropertyName("repeatBeginHour");
+                    jsonWriter.Write(request.RepeatBeginHour.ToString());
+                }
+                if (request.RepeatEndHour != null)
+                {
+                    jsonWriter.WritePropertyName("repeatEndHour");
+                    jsonWriter.Write(request.RepeatEndHour.ToString());
                 }
                 if (request.RelativeTriggerName != null)
                 {
