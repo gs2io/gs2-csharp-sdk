@@ -41,15 +41,23 @@ namespace Gs2.Gs2Ranking.Request
          public long? MaximumValue { set; get; }
          public string OrderDirection { set; get; }
          public string Scope { set; get; }
-         public bool? UniqueByUserId { set; get; }
-         public bool? Sum { set; get; }
-         public int? CalculateFixedTimingHour { set; get; }
-         public int? CalculateFixedTimingMinute { set; get; }
-         public int? CalculateIntervalMinutes { set; get; }
-         public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; }
+         public Gs2.Gs2Ranking.Model.GlobalRankingSetting GlobalRankingSetting { set; get; }
          public string EntryPeriodEventId { set; get; }
          public string AccessPeriodEventId { set; get; }
+        [Obsolete("This method is deprecated")]
+         public bool? UniqueByUserId { set; get; }
+         public bool? Sum { set; get; }
+        [Obsolete("This method is deprecated")]
+         public int? CalculateFixedTimingHour { set; get; }
+        [Obsolete("This method is deprecated")]
+         public int? CalculateFixedTimingMinute { set; get; }
+        [Obsolete("This method is deprecated")]
+         public int? CalculateIntervalMinutes { set; get; }
+        [Obsolete("This method is deprecated")]
+         public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; }
+        [Obsolete("This method is deprecated")]
          public string[] IgnoreUserIds { set; get; }
+        [Obsolete("This method is deprecated")]
          public string Generation { set; get; }
         public UpdateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -83,28 +91,8 @@ namespace Gs2.Gs2Ranking.Request
             this.Scope = scope;
             return this;
         }
-        public UpdateCategoryModelMasterRequest WithUniqueByUserId(bool? uniqueByUserId) {
-            this.UniqueByUserId = uniqueByUserId;
-            return this;
-        }
-        public UpdateCategoryModelMasterRequest WithSum(bool? sum) {
-            this.Sum = sum;
-            return this;
-        }
-        public UpdateCategoryModelMasterRequest WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
-            this.CalculateFixedTimingHour = calculateFixedTimingHour;
-            return this;
-        }
-        public UpdateCategoryModelMasterRequest WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
-            this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
-            return this;
-        }
-        public UpdateCategoryModelMasterRequest WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
-            this.CalculateIntervalMinutes = calculateIntervalMinutes;
-            return this;
-        }
-        public UpdateCategoryModelMasterRequest WithAdditionalScopes(Gs2.Gs2Ranking.Model.Scope[] additionalScopes) {
-            this.AdditionalScopes = additionalScopes;
+        public UpdateCategoryModelMasterRequest WithGlobalRankingSetting(Gs2.Gs2Ranking.Model.GlobalRankingSetting globalRankingSetting) {
+            this.GlobalRankingSetting = globalRankingSetting;
             return this;
         }
         public UpdateCategoryModelMasterRequest WithEntryPeriodEventId(string entryPeriodEventId) {
@@ -115,10 +103,41 @@ namespace Gs2.Gs2Ranking.Request
             this.AccessPeriodEventId = accessPeriodEventId;
             return this;
         }
+        [Obsolete("This method is deprecated")]
+        public UpdateCategoryModelMasterRequest WithUniqueByUserId(bool? uniqueByUserId) {
+            this.UniqueByUserId = uniqueByUserId;
+            return this;
+        }
+        public UpdateCategoryModelMasterRequest WithSum(bool? sum) {
+            this.Sum = sum;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public UpdateCategoryModelMasterRequest WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
+            this.CalculateFixedTimingHour = calculateFixedTimingHour;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public UpdateCategoryModelMasterRequest WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
+            this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public UpdateCategoryModelMasterRequest WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
+            this.CalculateIntervalMinutes = calculateIntervalMinutes;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public UpdateCategoryModelMasterRequest WithAdditionalScopes(Gs2.Gs2Ranking.Model.Scope[] additionalScopes) {
+            this.AdditionalScopes = additionalScopes;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
         public UpdateCategoryModelMasterRequest WithIgnoreUserIds(string[] ignoreUserIds) {
             this.IgnoreUserIds = ignoreUserIds;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateCategoryModelMasterRequest WithGeneration(string generation) {
             this.Generation = generation;
             return this;
@@ -141,20 +160,10 @@ namespace Gs2.Gs2Ranking.Request
                 .WithMaximumValue(!data.Keys.Contains("maximumValue") || data["maximumValue"] == null ? null : (long?)(data["maximumValue"].ToString().Contains(".") ? (long)double.Parse(data["maximumValue"].ToString()) : long.Parse(data["maximumValue"].ToString())))
                 .WithOrderDirection(!data.Keys.Contains("orderDirection") || data["orderDirection"] == null ? null : data["orderDirection"].ToString())
                 .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
-                .WithUniqueByUserId(!data.Keys.Contains("uniqueByUserId") || data["uniqueByUserId"] == null ? null : (bool?)bool.Parse(data["uniqueByUserId"].ToString()))
-                .WithSum(!data.Keys.Contains("sum") || data["sum"] == null ? null : (bool?)bool.Parse(data["sum"].ToString()))
-                .WithCalculateFixedTimingHour(!data.Keys.Contains("calculateFixedTimingHour") || data["calculateFixedTimingHour"] == null ? null : (int?)(data["calculateFixedTimingHour"].ToString().Contains(".") ? (int)double.Parse(data["calculateFixedTimingHour"].ToString()) : int.Parse(data["calculateFixedTimingHour"].ToString())))
-                .WithCalculateFixedTimingMinute(!data.Keys.Contains("calculateFixedTimingMinute") || data["calculateFixedTimingMinute"] == null ? null : (int?)(data["calculateFixedTimingMinute"].ToString().Contains(".") ? (int)double.Parse(data["calculateFixedTimingMinute"].ToString()) : int.Parse(data["calculateFixedTimingMinute"].ToString())))
-                .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)(data["calculateIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["calculateIntervalMinutes"].ToString()) : int.Parse(data["calculateIntervalMinutes"].ToString())))
-                .WithAdditionalScopes(!data.Keys.Contains("additionalScopes") || data["additionalScopes"] == null || !data["additionalScopes"].IsArray ? new Gs2.Gs2Ranking.Model.Scope[]{} : data["additionalScopes"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Ranking.Model.Scope.FromJson(v);
-                }).ToArray())
+                .WithGlobalRankingSetting(!data.Keys.Contains("globalRankingSetting") || data["globalRankingSetting"] == null ? null : Gs2.Gs2Ranking.Model.GlobalRankingSetting.FromJson(data["globalRankingSetting"]))
                 .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
                 .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
-                .WithIgnoreUserIds(!data.Keys.Contains("ignoreUserIds") || data["ignoreUserIds"] == null || !data["ignoreUserIds"].IsArray ? new string[]{} : data["ignoreUserIds"].Cast<JsonData>().Select(v => {
-                    return v.ToString();
-                }).ToArray())
-                .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString());
+                .WithSum(!data.Keys.Contains("sum") || data["sum"] == null ? null : (bool?)bool.Parse(data["sum"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -186,16 +195,10 @@ namespace Gs2.Gs2Ranking.Request
                 ["maximumValue"] = MaximumValue,
                 ["orderDirection"] = OrderDirection,
                 ["scope"] = Scope,
-                ["uniqueByUserId"] = UniqueByUserId,
-                ["sum"] = Sum,
-                ["calculateFixedTimingHour"] = CalculateFixedTimingHour,
-                ["calculateFixedTimingMinute"] = CalculateFixedTimingMinute,
-                ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
-                ["additionalScopes"] = additionalScopesJsonData,
+                ["globalRankingSetting"] = GlobalRankingSetting?.ToJson(),
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
-                ["ignoreUserIds"] = ignoreUserIdsJsonData,
-                ["generation"] = Generation,
+                ["sum"] = Sum,
             };
         }
 
@@ -234,6 +237,17 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("scope");
                 writer.Write(Scope.ToString());
             }
+            if (GlobalRankingSetting != null) {
+                GlobalRankingSetting.WriteJson(writer);
+            }
+            if (EntryPeriodEventId != null) {
+                writer.WritePropertyName("entryPeriodEventId");
+                writer.Write(EntryPeriodEventId.ToString());
+            }
+            if (AccessPeriodEventId != null) {
+                writer.WritePropertyName("accessPeriodEventId");
+                writer.Write(AccessPeriodEventId.ToString());
+            }
             if (UniqueByUserId != null) {
                 writer.WritePropertyName("uniqueByUserId");
                 writer.Write(bool.Parse(UniqueByUserId.ToString()));
@@ -265,14 +279,6 @@ namespace Gs2.Gs2Ranking.Request
                 }
                 writer.WriteArrayEnd();
             }
-            if (EntryPeriodEventId != null) {
-                writer.WritePropertyName("entryPeriodEventId");
-                writer.Write(EntryPeriodEventId.ToString());
-            }
-            if (AccessPeriodEventId != null) {
-                writer.WritePropertyName("accessPeriodEventId");
-                writer.Write(AccessPeriodEventId.ToString());
-            }
             if (IgnoreUserIds != null) {
                 writer.WritePropertyName("ignoreUserIds");
                 writer.WriteArrayStart();
@@ -299,16 +305,10 @@ namespace Gs2.Gs2Ranking.Request
             key += MaximumValue + ":";
             key += OrderDirection + ":";
             key += Scope + ":";
-            key += UniqueByUserId + ":";
-            key += Sum + ":";
-            key += CalculateFixedTimingHour + ":";
-            key += CalculateFixedTimingMinute + ":";
-            key += CalculateIntervalMinutes + ":";
-            key += AdditionalScopes + ":";
+            key += GlobalRankingSetting + ":";
             key += EntryPeriodEventId + ":";
             key += AccessPeriodEventId + ":";
-            key += IgnoreUserIds + ":";
-            key += Generation + ":";
+            key += Sum + ":";
             return key;
         }
     }

@@ -1955,6 +1955,21 @@ namespace Gs2.Gs2Ranking
                     jsonWriter.WritePropertyName("scope");
                     jsonWriter.Write(request.Scope);
                 }
+                if (request.GlobalRankingSetting != null)
+                {
+                    jsonWriter.WritePropertyName("globalRankingSetting");
+                    request.GlobalRankingSetting.WriteJson(jsonWriter);
+                }
+                if (request.EntryPeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("entryPeriodEventId");
+                    jsonWriter.Write(request.EntryPeriodEventId);
+                }
+                if (request.AccessPeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("accessPeriodEventId");
+                    jsonWriter.Write(request.AccessPeriodEventId);
+                }
                 if (request.UniqueByUserId != null)
                 {
                     jsonWriter.WritePropertyName("uniqueByUserId");
@@ -1989,16 +2004,6 @@ namespace Gs2.Gs2Ranking
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
-                }
-                if (request.EntryPeriodEventId != null)
-                {
-                    jsonWriter.WritePropertyName("entryPeriodEventId");
-                    jsonWriter.Write(request.EntryPeriodEventId);
-                }
-                if (request.AccessPeriodEventId != null)
-                {
-                    jsonWriter.WritePropertyName("accessPeriodEventId");
-                    jsonWriter.Write(request.AccessPeriodEventId);
                 }
                 if (request.IgnoreUserIds != null)
                 {
@@ -2268,6 +2273,21 @@ namespace Gs2.Gs2Ranking
                     jsonWriter.WritePropertyName("scope");
                     jsonWriter.Write(request.Scope);
                 }
+                if (request.GlobalRankingSetting != null)
+                {
+                    jsonWriter.WritePropertyName("globalRankingSetting");
+                    request.GlobalRankingSetting.WriteJson(jsonWriter);
+                }
+                if (request.EntryPeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("entryPeriodEventId");
+                    jsonWriter.Write(request.EntryPeriodEventId);
+                }
+                if (request.AccessPeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("accessPeriodEventId");
+                    jsonWriter.Write(request.AccessPeriodEventId);
+                }
                 if (request.UniqueByUserId != null)
                 {
                     jsonWriter.WritePropertyName("uniqueByUserId");
@@ -2302,16 +2322,6 @@ namespace Gs2.Gs2Ranking
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
-                }
-                if (request.EntryPeriodEventId != null)
-                {
-                    jsonWriter.WritePropertyName("entryPeriodEventId");
-                    jsonWriter.Write(request.EntryPeriodEventId);
-                }
-                if (request.AccessPeriodEventId != null)
-                {
-                    jsonWriter.WritePropertyName("accessPeriodEventId");
-                    jsonWriter.Write(request.AccessPeriodEventId);
                 }
                 if (request.IgnoreUserIds != null)
                 {
