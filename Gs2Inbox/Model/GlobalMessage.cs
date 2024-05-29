@@ -36,6 +36,7 @@ namespace Gs2.Gs2Inbox.Model
         public string Metadata { set; get; }
         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
+        [Obsolete("This method is deprecated")]
         public long? ExpiresAt { set; get; }
         public string MessageReceptionPeriodEventId { set; get; }
         public GlobalMessage WithGlobalMessageId(string globalMessageId) {
@@ -58,6 +59,7 @@ namespace Gs2.Gs2Inbox.Model
             this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public GlobalMessage WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
@@ -172,7 +174,6 @@ namespace Gs2.Gs2Inbox.Model
                 ["metadata"] = Metadata,
                 ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
-                ["expiresAt"] = ExpiresAt,
                 ["messageReceptionPeriodEventId"] = MessageReceptionPeriodEventId,
             };
         }
@@ -315,18 +316,6 @@ namespace Gs2.Gs2Inbox.Model
                 }
             }
             {
-            }
-            {
-                if (ExpiresAt < 0) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("globalMessage", "inbox.globalMessage.expiresAt.error.invalid"),
-                    });
-                }
-                if (ExpiresAt > 32503680000000) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("globalMessage", "inbox.globalMessage.expiresAt.error.invalid"),
-                    });
-                }
             }
             {
                 if (MessageReceptionPeriodEventId.Length > 1024) {

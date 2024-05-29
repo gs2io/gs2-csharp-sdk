@@ -38,6 +38,7 @@ namespace Gs2.Gs2Inbox.Request
          public string Metadata { set; get; }
          public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
          public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
+        [Obsolete("This method is deprecated")]
          public long? ExpiresAt { set; get; }
          public string MessageReceptionPeriodEventId { set; get; }
         public UpdateGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
@@ -60,6 +61,7 @@ namespace Gs2.Gs2Inbox.Request
             this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateGlobalMessageMasterRequest WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
@@ -85,7 +87,6 @@ namespace Gs2.Gs2Inbox.Request
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
                 .WithMessageReceptionPeriodEventId(!data.Keys.Contains("messageReceptionPeriodEventId") || data["messageReceptionPeriodEventId"] == null ? null : data["messageReceptionPeriodEventId"].ToString());
         }
 
@@ -106,7 +107,6 @@ namespace Gs2.Gs2Inbox.Request
                 ["metadata"] = Metadata,
                 ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
-                ["expiresAt"] = ExpiresAt,
                 ["messageReceptionPeriodEventId"] = MessageReceptionPeriodEventId,
             };
         }
@@ -158,7 +158,6 @@ namespace Gs2.Gs2Inbox.Request
             key += Metadata + ":";
             key += ReadAcquireActions + ":";
             key += ExpiresTimeSpan + ":";
-            key += ExpiresAt + ":";
             key += MessageReceptionPeriodEventId + ":";
             return key;
         }

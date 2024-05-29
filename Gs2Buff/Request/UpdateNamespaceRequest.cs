@@ -35,6 +35,7 @@ namespace Gs2.Gs2Buff.Request
 	{
          public string NamespaceName { set; get; }
          public string Description { set; get; }
+         public Gs2.Gs2Buff.Model.ScriptSetting ApplyBuffScript { set; get; }
          public Gs2.Gs2Buff.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -42,6 +43,10 @@ namespace Gs2.Gs2Buff.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithApplyBuffScript(Gs2.Gs2Buff.Model.ScriptSetting applyBuffScript) {
+            this.ApplyBuffScript = applyBuffScript;
             return this;
         }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Buff.Model.LogSetting logSetting) {
@@ -60,6 +65,7 @@ namespace Gs2.Gs2Buff.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithApplyBuffScript(!data.Keys.Contains("applyBuffScript") || data["applyBuffScript"] == null ? null : Gs2.Gs2Buff.Model.ScriptSetting.FromJson(data["applyBuffScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Buff.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -68,6 +74,7 @@ namespace Gs2.Gs2Buff.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["applyBuffScript"] = ApplyBuffScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -83,6 +90,9 @@ namespace Gs2.Gs2Buff.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (ApplyBuffScript != null) {
+                ApplyBuffScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -93,6 +103,7 @@ namespace Gs2.Gs2Buff.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += ApplyBuffScript + ":";
             key += LogSetting + ":";
             return key;
         }
