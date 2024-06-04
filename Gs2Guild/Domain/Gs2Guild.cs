@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -565,6 +567,18 @@ namespace Gs2.Gs2Guild.Domain
         public static Action<string, DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest, DecreaseMaximumCurrentMaximumMemberCountByGuildNameResult> DecreaseMaximumCurrentMaximumMemberCountByGuildNameComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyCurrentMaximumMemberCountByGuildNameRequest, VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameComplete = new UnityEvent<string, VerifyCurrentMaximumMemberCountByGuildNameRequest, VerifyCurrentMaximumMemberCountByGuildNameResult>();
+    #else
+        public static Action<string, VerifyCurrentMaximumMemberCountByGuildNameRequest, VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyIncludeMemberByUserIdRequest, VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdComplete = new UnityEvent<string, VerifyIncludeMemberByUserIdRequest, VerifyIncludeMemberByUserIdResult>();
+    #else
+        public static Action<string, VerifyIncludeMemberByUserIdRequest, VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
@@ -583,6 +597,40 @@ namespace Gs2.Gs2Guild.Domain
                         );
 
                         DecreaseMaximumCurrentMaximumMemberCountByGuildNameComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyCurrentMaximumMemberCountByGuildName": {
+                        var requestModel = VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCurrentMaximumMemberCountByGuildNameResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.GuildName,
+                            requestModel
+                        );
+
+                        VerifyCurrentMaximumMemberCountByGuildNameComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyIncludeMemberByUserId": {
+                        var requestModel = VerifyIncludeMemberByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyIncludeMemberByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        VerifyIncludeMemberByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

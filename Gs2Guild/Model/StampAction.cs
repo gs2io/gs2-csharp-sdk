@@ -32,6 +32,10 @@ namespace Gs2.Gs2Guild.Model
             switch (action.Action) {
                 case "Gs2Guild:DecreaseMaximumCurrentMaximumMemberCountByGuildName":
                     return DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName":
+                    return VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Guild:VerifyIncludeMemberByUserId":
+                    return VerifyIncludeMemberByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

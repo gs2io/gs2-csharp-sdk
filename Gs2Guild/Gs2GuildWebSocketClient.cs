@@ -1219,6 +1219,543 @@ namespace Gs2.Gs2Guild
 #endif
 
 
+        public class VerifyCurrentMaximumMemberCountTask : Gs2WebSocketSessionTask<Request.VerifyCurrentMaximumMemberCountRequest, Result.VerifyCurrentMaximumMemberCountResult>
+        {
+	        public VerifyCurrentMaximumMemberCountTask(IGs2Session session, Request.VerifyCurrentMaximumMemberCountRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCurrentMaximumMemberCountRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "guild",
+                    "verifyCurrentMaximumMemberCount",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCurrentMaximumMemberCount(
+                Request.VerifyCurrentMaximumMemberCountRequest request,
+                UnityAction<AsyncResult<Result.VerifyCurrentMaximumMemberCountResult>> callback
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCurrentMaximumMemberCountResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCurrentMaximumMemberCountResult> VerifyCurrentMaximumMemberCountFuture(
+                Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCurrentMaximumMemberCountResult> VerifyCurrentMaximumMemberCountAsync(
+            Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+		    var task = new VerifyCurrentMaximumMemberCountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCurrentMaximumMemberCountTask VerifyCurrentMaximumMemberCountAsync(
+                Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCurrentMaximumMemberCountResult> VerifyCurrentMaximumMemberCountAsync(
+            Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+		    var task = new VerifyCurrentMaximumMemberCountTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCurrentMaximumMemberCountByGuildNameTask : Gs2WebSocketSessionTask<Request.VerifyCurrentMaximumMemberCountByGuildNameRequest, Result.VerifyCurrentMaximumMemberCountByGuildNameResult>
+        {
+	        public VerifyCurrentMaximumMemberCountByGuildNameTask(IGs2Session session, Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.GuildName != null)
+                {
+                    jsonWriter.WritePropertyName("guildName");
+                    jsonWriter.Write(request.GuildName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "guild",
+                    "verifyCurrentMaximumMemberCountByGuildName",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCurrentMaximumMemberCountByGuildName(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.VerifyCurrentMaximumMemberCountByGuildNameResult>> callback
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountByGuildNameTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCurrentMaximumMemberCountByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameFuture(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountByGuildNameTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameAsync(
+            Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+		    var task = new VerifyCurrentMaximumMemberCountByGuildNameTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCurrentMaximumMemberCountByGuildNameTask VerifyCurrentMaximumMemberCountByGuildNameAsync(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountByGuildNameTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameAsync(
+            Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+		    var task = new VerifyCurrentMaximumMemberCountByGuildNameTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyIncludeMemberTask : Gs2WebSocketSessionTask<Request.VerifyIncludeMemberRequest, Result.VerifyIncludeMemberResult>
+        {
+	        public VerifyIncludeMemberTask(IGs2Session session, Request.VerifyIncludeMemberRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyIncludeMemberRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.GuildName != null)
+                {
+                    jsonWriter.WritePropertyName("guildName");
+                    jsonWriter.Write(request.GuildName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "guild",
+                    "verifyIncludeMember",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeMember(
+                Request.VerifyIncludeMemberRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeMemberResult>> callback
+        )
+		{
+			var task = new VerifyIncludeMemberTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeMemberResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeMemberResult> VerifyIncludeMemberFuture(
+                Request.VerifyIncludeMemberRequest request
+        )
+		{
+			return new VerifyIncludeMemberTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeMemberResult> VerifyIncludeMemberAsync(
+            Request.VerifyIncludeMemberRequest request
+        )
+		{
+		    var task = new VerifyIncludeMemberTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyIncludeMemberTask VerifyIncludeMemberAsync(
+                Request.VerifyIncludeMemberRequest request
+        )
+		{
+			return new VerifyIncludeMemberTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeMemberResult> VerifyIncludeMemberAsync(
+            Request.VerifyIncludeMemberRequest request
+        )
+		{
+		    var task = new VerifyIncludeMemberTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyIncludeMemberByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyIncludeMemberByUserIdRequest, Result.VerifyIncludeMemberByUserIdResult>
+        {
+	        public VerifyIncludeMemberByUserIdTask(IGs2Session session, Request.VerifyIncludeMemberByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyIncludeMemberByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.GuildName != null)
+                {
+                    jsonWriter.WritePropertyName("guildName");
+                    jsonWriter.Write(request.GuildName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "guild",
+                    "verifyIncludeMemberByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeMemberByUserId(
+                Request.VerifyIncludeMemberByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeMemberByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyIncludeMemberByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeMemberByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdFuture(
+                Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+			return new VerifyIncludeMemberByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdAsync(
+            Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+		    var task = new VerifyIncludeMemberByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyIncludeMemberByUserIdTask VerifyIncludeMemberByUserIdAsync(
+                Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+			return new VerifyIncludeMemberByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdAsync(
+            Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+		    var task = new VerifyIncludeMemberByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetJoinedGuildTask : Gs2WebSocketSessionTask<Request.GetJoinedGuildRequest, Result.GetJoinedGuildResult>
         {
 	        public GetJoinedGuildTask(IGs2Session session, Request.GetJoinedGuildRequest request) : base(session, request)

@@ -76,6 +76,42 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (VerifyCurrentMaximumMemberCountByGuildNameSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifyCurrentMaximumMemberCountByGuildNameSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
+                if (VerifyIncludeMemberByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = VerifyIncludeMemberByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifyIncludeMemberByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -104,6 +140,28 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await DecreaseMaximumCurrentMaximumMemberCountByGuildNameSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyCurrentMaximumMemberCountByGuildNameSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyCurrentMaximumMemberCountByGuildNameSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyIncludeMemberByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = VerifyIncludeMemberByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyIncludeMemberByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

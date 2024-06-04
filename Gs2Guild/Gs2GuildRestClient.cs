@@ -4804,6 +4804,550 @@ namespace Gs2.Gs2Guild
 #endif
 
 
+        public class VerifyCurrentMaximumMemberCountTask : Gs2RestSessionTask<VerifyCurrentMaximumMemberCountRequest, VerifyCurrentMaximumMemberCountResult>
+        {
+            public VerifyCurrentMaximumMemberCountTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCurrentMaximumMemberCountRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCurrentMaximumMemberCountRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/currentMaximumMemberCount/verify";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType);
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCurrentMaximumMemberCount(
+                Request.VerifyCurrentMaximumMemberCountRequest request,
+                UnityAction<AsyncResult<Result.VerifyCurrentMaximumMemberCountResult>> callback
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCurrentMaximumMemberCountResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCurrentMaximumMemberCountResult> VerifyCurrentMaximumMemberCountFuture(
+                Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCurrentMaximumMemberCountResult> VerifyCurrentMaximumMemberCountAsync(
+                Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+            AsyncResult<Result.VerifyCurrentMaximumMemberCountResult> result = null;
+			await VerifyCurrentMaximumMemberCount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyCurrentMaximumMemberCountTask VerifyCurrentMaximumMemberCountAsync(
+                Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCurrentMaximumMemberCountResult> VerifyCurrentMaximumMemberCountAsync(
+                Request.VerifyCurrentMaximumMemberCountRequest request
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCurrentMaximumMemberCountByGuildNameTask : Gs2RestSessionTask<VerifyCurrentMaximumMemberCountByGuildNameRequest, VerifyCurrentMaximumMemberCountByGuildNameResult>
+        {
+            public VerifyCurrentMaximumMemberCountByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCurrentMaximumMemberCountByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCurrentMaximumMemberCountByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/currentMaximumMemberCount/verify";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType);
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCurrentMaximumMemberCountByGuildName(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.VerifyCurrentMaximumMemberCountByGuildNameResult>> callback
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCurrentMaximumMemberCountByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameFuture(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameAsync(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.VerifyCurrentMaximumMemberCountByGuildNameResult> result = null;
+			await VerifyCurrentMaximumMemberCountByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyCurrentMaximumMemberCountByGuildNameTask VerifyCurrentMaximumMemberCountByGuildNameAsync(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameAsync(
+                Request.VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyIncludeMemberTask : Gs2RestSessionTask<VerifyIncludeMemberRequest, VerifyIncludeMemberResult>
+        {
+            public VerifyIncludeMemberTask(IGs2Session session, RestSessionRequestFactory factory, VerifyIncludeMemberRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyIncludeMemberRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/member/me/verify";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeMember(
+                Request.VerifyIncludeMemberRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeMemberResult>> callback
+        )
+		{
+			var task = new VerifyIncludeMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeMemberResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeMemberResult> VerifyIncludeMemberFuture(
+                Request.VerifyIncludeMemberRequest request
+        )
+		{
+			return new VerifyIncludeMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeMemberResult> VerifyIncludeMemberAsync(
+                Request.VerifyIncludeMemberRequest request
+        )
+		{
+            AsyncResult<Result.VerifyIncludeMemberResult> result = null;
+			await VerifyIncludeMember(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyIncludeMemberTask VerifyIncludeMemberAsync(
+                Request.VerifyIncludeMemberRequest request
+        )
+		{
+			return new VerifyIncludeMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeMemberResult> VerifyIncludeMemberAsync(
+                Request.VerifyIncludeMemberRequest request
+        )
+		{
+			var task = new VerifyIncludeMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyIncludeMemberByUserIdTask : Gs2RestSessionTask<VerifyIncludeMemberByUserIdRequest, VerifyIncludeMemberByUserIdResult>
+        {
+            public VerifyIncludeMemberByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyIncludeMemberByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyIncludeMemberByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/member/{userId}/verify";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeMemberByUserId(
+                Request.VerifyIncludeMemberByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeMemberByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyIncludeMemberByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeMemberByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdFuture(
+                Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+			return new VerifyIncludeMemberByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdAsync(
+                Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyIncludeMemberByUserIdResult> result = null;
+			await VerifyIncludeMemberByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyIncludeMemberByUserIdTask VerifyIncludeMemberByUserIdAsync(
+                Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+			return new VerifyIncludeMemberByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdAsync(
+                Request.VerifyIncludeMemberByUserIdRequest request
+        )
+		{
+			var task = new VerifyIncludeMemberByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SetMaximumCurrentMaximumMemberCountByGuildNameTask : Gs2RestSessionTask<SetMaximumCurrentMaximumMemberCountByGuildNameRequest, SetMaximumCurrentMaximumMemberCountByGuildNameResult>
         {
             public SetMaximumCurrentMaximumMemberCountByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, SetMaximumCurrentMaximumMemberCountByGuildNameRequest request) : base(session, factory, request)
@@ -5553,6 +6097,256 @@ namespace Gs2.Gs2Guild
         )
 		{
 			var task = new SetMaximumCurrentMaximumMemberCountByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCurrentMaximumMemberCountByStampTaskTask : Gs2RestSessionTask<VerifyCurrentMaximumMemberCountByStampTaskRequest, VerifyCurrentMaximumMemberCountByStampTaskResult>
+        {
+            public VerifyCurrentMaximumMemberCountByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCurrentMaximumMemberCountByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCurrentMaximumMemberCountByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/guild/currentMaximumMemberCount/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCurrentMaximumMemberCountByStampTask(
+                Request.VerifyCurrentMaximumMemberCountByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyCurrentMaximumMemberCountByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCurrentMaximumMemberCountByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCurrentMaximumMemberCountByStampTaskResult> VerifyCurrentMaximumMemberCountByStampTaskFuture(
+                Request.VerifyCurrentMaximumMemberCountByStampTaskRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCurrentMaximumMemberCountByStampTaskResult> VerifyCurrentMaximumMemberCountByStampTaskAsync(
+                Request.VerifyCurrentMaximumMemberCountByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyCurrentMaximumMemberCountByStampTaskResult> result = null;
+			await VerifyCurrentMaximumMemberCountByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyCurrentMaximumMemberCountByStampTaskTask VerifyCurrentMaximumMemberCountByStampTaskAsync(
+                Request.VerifyCurrentMaximumMemberCountByStampTaskRequest request
+        )
+		{
+			return new VerifyCurrentMaximumMemberCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCurrentMaximumMemberCountByStampTaskResult> VerifyCurrentMaximumMemberCountByStampTaskAsync(
+                Request.VerifyCurrentMaximumMemberCountByStampTaskRequest request
+        )
+		{
+			var task = new VerifyCurrentMaximumMemberCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyIncludeMemberByStampTaskTask : Gs2RestSessionTask<VerifyIncludeMemberByStampTaskRequest, VerifyIncludeMemberByStampTaskResult>
+        {
+            public VerifyIncludeMemberByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyIncludeMemberByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyIncludeMemberByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/guild/member/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeMemberByStampTask(
+                Request.VerifyIncludeMemberByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeMemberByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyIncludeMemberByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeMemberByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeMemberByStampTaskResult> VerifyIncludeMemberByStampTaskFuture(
+                Request.VerifyIncludeMemberByStampTaskRequest request
+        )
+		{
+			return new VerifyIncludeMemberByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeMemberByStampTaskResult> VerifyIncludeMemberByStampTaskAsync(
+                Request.VerifyIncludeMemberByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyIncludeMemberByStampTaskResult> result = null;
+			await VerifyIncludeMemberByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyIncludeMemberByStampTaskTask VerifyIncludeMemberByStampTaskAsync(
+                Request.VerifyIncludeMemberByStampTaskRequest request
+        )
+		{
+			return new VerifyIncludeMemberByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeMemberByStampTaskResult> VerifyIncludeMemberByStampTaskAsync(
+                Request.VerifyIncludeMemberByStampTaskRequest request
+        )
+		{
+			var task = new VerifyIncludeMemberByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

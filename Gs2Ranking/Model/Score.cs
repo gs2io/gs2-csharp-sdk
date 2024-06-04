@@ -39,6 +39,7 @@ namespace Gs2.Gs2Ranking.Model
         public long? Value { set; get; }
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Score WithScoreId(string scoreId) {
             this.ScoreId = scoreId;
             return this;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Ranking.Model
         }
         public Score WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Score WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -207,7 +212,8 @@ namespace Gs2.Gs2Ranking.Model
                 .WithScorerUserId(!data.Keys.Contains("scorerUserId") || data["scorerUserId"] == null ? null : data["scorerUserId"].ToString())
                 .WithValue(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)(data["score"].ToString().Contains(".") ? (long)double.Parse(data["score"].ToString()) : long.Parse(data["score"].ToString())))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -221,6 +227,7 @@ namespace Gs2.Gs2Ranking.Model
                 ["score"] = Value,
                 ["metadata"] = Metadata,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -258,6 +265,10 @@ namespace Gs2.Gs2Ranking.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -330,6 +341,14 @@ namespace Gs2.Gs2Ranking.Model
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
             }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
+            }
             return diff;
         }
 
@@ -400,6 +419,18 @@ namespace Gs2.Gs2Ranking.Model
                     });
                 }
             }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.revision.error.invalid"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -412,6 +443,7 @@ namespace Gs2.Gs2Ranking.Model
                 Value = Value,
                 Metadata = Metadata,
                 CreatedAt = CreatedAt,
+                Revision = Revision,
             };
         }
     }

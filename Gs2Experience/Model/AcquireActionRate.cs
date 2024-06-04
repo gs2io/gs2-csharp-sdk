@@ -199,14 +199,24 @@ namespace Gs2.Gs2Experience.Model
                         });
                 }
             }
-            {
+            if (Mode == "double") {
+                if (Rates.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionRate", "experience.acquireActionRate.rates.error.tooFew"),
+                    });
+                }
                 if (Rates.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("acquireActionRate", "experience.acquireActionRate.rates.error.tooMany"),
                     });
                 }
             }
-            {
+            if (Mode == "big") {
+                if (BigRates.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionRate", "experience.acquireActionRate.bigRates.error.tooFew"),
+                    });
+                }
                 if (BigRates.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("acquireActionRate", "experience.acquireActionRate.bigRates.error.tooMany"),
