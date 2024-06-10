@@ -3572,6 +3572,11 @@ namespace Gs2.Gs2Ranking2
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3699,6 +3704,11 @@ namespace Gs2.Gs2Ranking2
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -7033,6 +7043,11 @@ namespace Gs2.Gs2Ranking2
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -7161,6 +7176,11 @@ namespace Gs2.Gs2Ranking2
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

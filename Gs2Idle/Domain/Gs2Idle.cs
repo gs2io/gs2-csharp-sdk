@@ -515,6 +515,12 @@ namespace Gs2.Gs2Idle.Domain
         public static Action<string, SetMaximumIdleMinutesByUserIdRequest, SetMaximumIdleMinutesByUserIdResult> SetMaximumIdleMinutesByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ReceiveByUserIdRequest, ReceiveByUserIdResult> ReceiveByUserIdComplete = new UnityEvent<string, ReceiveByUserIdRequest, ReceiveByUserIdResult>();
+    #else
+        public static Action<string, ReceiveByUserIdRequest, ReceiveByUserIdResult> ReceiveByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
@@ -550,6 +556,23 @@ namespace Gs2.Gs2Idle.Domain
                         );
 
                         SetMaximumIdleMinutesByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "ReceiveByUserId": {
+                        var requestModel = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        ReceiveByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -626,6 +649,23 @@ namespace Gs2.Gs2Idle.Domain
                     );
 
                     SetMaximumIdleMinutesByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "receive_by_user_id": {
+                    var requestModel = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = ReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    ReceiveByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

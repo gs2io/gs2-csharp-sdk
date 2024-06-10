@@ -94,6 +94,24 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (ReceiveByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -133,6 +151,17 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await SetMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (ReceiveByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request
