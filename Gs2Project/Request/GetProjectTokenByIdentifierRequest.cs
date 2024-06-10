@@ -33,10 +33,10 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetProjectTokenByIdentifierRequest : Gs2Request<GetProjectTokenByIdentifierRequest>
 	{
-         public string AccountName { set; get; }
-         public string ProjectName { set; get; }
-         public string UserName { set; get; }
-         public string Password { set; get; }
+         public string AccountName { set; get; } = null!;
+         public string ProjectName { set; get; } = null!;
+         public string UserName { set; get; } = null!;
+         public string Password { set; get; } = null!;
         public GetProjectTokenByIdentifierRequest WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;

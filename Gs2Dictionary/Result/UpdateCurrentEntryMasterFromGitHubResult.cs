@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class UpdateCurrentEntryMasterFromGitHubResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.CurrentEntryMaster Item { set; get; }
+        public Gs2.Gs2Dictionary.Model.CurrentEntryMaster Item { set; get; } = null!;
 
         public UpdateCurrentEntryMasterFromGitHubResult WithItem(Gs2.Gs2Dictionary.Model.CurrentEntryMaster item) {
             this.Item = item;

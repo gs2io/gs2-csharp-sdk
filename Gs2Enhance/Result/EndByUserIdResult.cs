@@ -33,13 +33,13 @@ namespace Gs2.Gs2Enhance.Result
 	[System.Serializable]
 	public class EndByUserIdResult : IResult
 	{
-        public Gs2.Gs2Enhance.Model.Progress Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
-        public long? AcquireExperience { set; get; }
-        public float? BonusRate { set; get; }
+        public Gs2.Gs2Enhance.Model.Progress Item { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
+        public long? AcquireExperience { set; get; } = null!;
+        public float? BonusRate { set; get; } = null!;
 
         public EndByUserIdResult WithItem(Gs2.Gs2Enhance.Model.Progress item) {
             this.Item = item;

@@ -33,20 +33,20 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting FollowScript { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting UnfollowScript { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting SendRequestScript { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting CancelRequestScript { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting AcceptRequestScript { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting RejectRequestScript { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting DeleteFriendScript { set; get; }
-         public Gs2.Gs2Friend.Model.ScriptSetting UpdateProfileScript { set; get; }
-         public Gs2.Gs2Friend.Model.NotificationSetting FollowNotification { set; get; }
-         public Gs2.Gs2Friend.Model.NotificationSetting ReceiveRequestNotification { set; get; }
-         public Gs2.Gs2Friend.Model.NotificationSetting AcceptRequestNotification { set; get; }
-         public Gs2.Gs2Friend.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting FollowScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting UnfollowScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting SendRequestScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting CancelRequestScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting AcceptRequestScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting RejectRequestScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting DeleteFriendScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.ScriptSetting UpdateProfileScript { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.NotificationSetting FollowNotification { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.NotificationSetting ReceiveRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.NotificationSetting AcceptRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

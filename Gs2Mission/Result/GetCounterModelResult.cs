@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class GetCounterModelResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.CounterModel Item { set; get; }
+        public Gs2.Gs2Mission.Model.CounterModel Item { set; get; } = null!;
 
         public GetCounterModelResult WithItem(Gs2.Gs2Mission.Model.CounterModel item) {
             this.Item = item;

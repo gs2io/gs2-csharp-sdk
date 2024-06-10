@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class GetMissionGroupModelMasterResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.MissionGroupModelMaster Item { set; get; }
+        public Gs2.Gs2Mission.Model.MissionGroupModelMaster Item { set; get; } = null!;
 
         public GetMissionGroupModelMasterResult WithItem(Gs2.Gs2Mission.Model.MissionGroupModelMaster item) {
             this.Item = item;

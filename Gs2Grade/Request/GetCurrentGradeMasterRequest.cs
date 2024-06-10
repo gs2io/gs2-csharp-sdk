@@ -33,7 +33,7 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class GetCurrentGradeMasterRequest : Gs2Request<GetCurrentGradeMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentGradeMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

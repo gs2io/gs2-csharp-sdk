@@ -33,7 +33,7 @@ namespace Gs2.Gs2Chat.Result
 	[System.Serializable]
 	public class UnsubscribeByUserIdResult : IResult
 	{
-        public Gs2.Gs2Chat.Model.Subscribe Item { set; get; }
+        public Gs2.Gs2Chat.Model.Subscribe Item { set; get; } = null!;
 
         public UnsubscribeByUserIdResult WithItem(Gs2.Gs2Chat.Model.Subscribe item) {
             this.Item = item;

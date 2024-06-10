@@ -63,10 +63,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class GatheringAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string GatheringName { get; }
+        public string GatheringName { get; } = null!;
 
         public GatheringAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

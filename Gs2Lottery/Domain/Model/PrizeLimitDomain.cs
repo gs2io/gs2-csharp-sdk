@@ -63,9 +63,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
     public partial class PrizeLimitDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
-        public string NamespaceName { get; }
-        public string PrizeTableName { get; }
-        public string PrizeId { get; }
+        public string NamespaceName { get; } = null!;
+        public string PrizeTableName { get; } = null!;
+        public string PrizeId { get; } = null!;
 
         public PrizeLimitDomain(
             Gs2.Core.Domain.Gs2 gs2,

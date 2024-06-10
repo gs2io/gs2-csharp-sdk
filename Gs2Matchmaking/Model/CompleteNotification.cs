@@ -20,8 +20,8 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class CompleteNotification
 	{
-        public string NamespaceName { set; get; }
-        public string GatheringName { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string GatheringName { set; get; } = null!;
         public CompleteNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

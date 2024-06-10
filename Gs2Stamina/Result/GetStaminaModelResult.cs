@@ -33,7 +33,7 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class GetStaminaModelResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.StaminaModel Item { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModel Item { set; get; } = null!;
 
         public GetStaminaModelResult WithItem(Gs2.Gs2Stamina.Model.StaminaModel item) {
             this.Item = item;

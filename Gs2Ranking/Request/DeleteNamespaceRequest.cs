@@ -33,7 +33,7 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DeleteNamespaceRequest : Gs2Request<DeleteNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DeleteNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

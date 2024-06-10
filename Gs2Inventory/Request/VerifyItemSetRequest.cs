@@ -33,15 +33,15 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifyItemSetRequest : Gs2Request<VerifyItemSetRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string InventoryName { set; get; }
-         public string ItemName { set; get; }
-         public string VerifyType { set; get; }
-         public string ItemSetName { set; get; }
-         public long? Count { set; get; }
-         public bool? MultiplyValueSpecifyingQuantity { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string InventoryName { set; get; } = null!;
+         public string ItemName { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+         public string ItemSetName { set; get; } = null!;
+         public long? Count { set; get; } = null!;
+         public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyItemSetRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

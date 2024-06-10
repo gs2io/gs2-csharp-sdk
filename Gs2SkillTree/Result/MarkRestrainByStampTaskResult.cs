@@ -33,8 +33,8 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class MarkRestrainByStampTaskResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.Status Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2SkillTree.Model.Status Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public MarkRestrainByStampTaskResult WithItem(Gs2.Gs2SkillTree.Model.Status item) {
             this.Item = item;

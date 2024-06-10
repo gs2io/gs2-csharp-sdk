@@ -31,9 +31,9 @@ namespace Gs2.Gs2Quest.Model
 #endif
 	public class Contents : IComparable
 	{
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
-        public int? Weight { set; get; }
+        public string Metadata { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; } = null!;
+        public int? Weight { set; get; } = null!;
         public Contents WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

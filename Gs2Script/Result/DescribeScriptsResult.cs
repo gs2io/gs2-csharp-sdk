@@ -33,8 +33,8 @@ namespace Gs2.Gs2Script.Result
 	[System.Serializable]
 	public class DescribeScriptsResult : IResult
 	{
-        public Gs2.Gs2Script.Model.Script[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Script.Model.Script[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeScriptsResult WithItems(Gs2.Gs2Script.Model.Script[] items) {
             this.Items = items;

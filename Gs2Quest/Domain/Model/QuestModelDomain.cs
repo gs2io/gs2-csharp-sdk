@@ -63,9 +63,9 @@ namespace Gs2.Gs2Quest.Domain.Model
     public partial class QuestModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2QuestRestClient _client;
-        public string NamespaceName { get; }
-        public string QuestGroupName { get; }
-        public string QuestName { get; }
+        public string NamespaceName { get; } = null!;
+        public string QuestGroupName { get; } = null!;
+        public string QuestName { get; } = null!;
 
         public QuestModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class CalcRankingRequest : Gs2Request<CalcRankingRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
-         public string AdditionalScopeName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public string AdditionalScopeName { set; get; } = null!;
         public CalcRankingRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

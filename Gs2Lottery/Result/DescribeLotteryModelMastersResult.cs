@@ -33,8 +33,8 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class DescribeLotteryModelMastersResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.LotteryModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Lottery.Model.LotteryModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeLotteryModelMastersResult WithItems(Gs2.Gs2Lottery.Model.LotteryModelMaster[] items) {
             this.Items = items;

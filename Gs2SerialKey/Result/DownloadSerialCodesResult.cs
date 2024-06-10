@@ -33,7 +33,7 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class DownloadSerialCodesResult : IResult
 	{
-        public string Url { set; get; }
+        public string Url { set; get; } = null!;
 
         public DownloadSerialCodesResult WithUrl(string url) {
             this.Url = url;

@@ -33,13 +33,13 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class SetRecoverIntervalByStatusRequest : Gs2Request<SetRecoverIntervalByStatusRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StaminaName { set; get; }
-         public string AccessToken { set; get; }
-         public string KeyId { set; get; }
-         public string SignedStatusBody { set; get; }
-         public string SignedStatusSignature { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StaminaName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
+         public string SignedStatusBody { set; get; } = null!;
+         public string SignedStatusSignature { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetRecoverIntervalByStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

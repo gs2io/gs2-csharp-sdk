@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class IssuePasswordResult : IResult
 	{
-        public string NewPassword { set; get; }
+        public string NewPassword { set; get; } = null!;
 
         public IssuePasswordResult WithNewPassword(string newPassword) {
             this.NewPassword = newPassword;

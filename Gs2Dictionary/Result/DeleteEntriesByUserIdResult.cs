@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class DeleteEntriesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.Entry[] Items { set; get; }
+        public Gs2.Gs2Dictionary.Model.Entry[] Items { set; get; } = null!;
 
         public DeleteEntriesByUserIdResult WithItems(Gs2.Gs2Dictionary.Model.Entry[] items) {
             this.Items = items;

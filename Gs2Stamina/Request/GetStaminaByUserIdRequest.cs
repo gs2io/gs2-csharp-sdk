@@ -33,10 +33,10 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class GetStaminaByUserIdRequest : Gs2Request<GetStaminaByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StaminaName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StaminaName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetStaminaByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

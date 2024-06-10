@@ -63,7 +63,7 @@ namespace Gs2.Gs2Log.Domain.Model
     public partial class ExecuteStampSheetLogDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public ExecuteStampSheetLogDomain(
             Gs2.Core.Domain.Gs2 gs2,

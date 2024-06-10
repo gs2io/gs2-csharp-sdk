@@ -33,13 +33,13 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class UpdateProfileByUserIdRequest : Gs2Request<UpdateProfileByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string PublicProfile { set; get; }
-         public string FollowerProfile { set; get; }
-         public string FriendProfile { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string PublicProfile { set; get; } = null!;
+         public string FollowerProfile { set; get; } = null!;
+         public string FriendProfile { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UpdateProfileByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

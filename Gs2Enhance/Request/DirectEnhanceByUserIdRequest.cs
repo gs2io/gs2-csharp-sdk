@@ -33,14 +33,14 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DirectEnhanceByUserIdRequest : Gs2Request<DirectEnhanceByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RateName { set; get; }
-         public string UserId { set; get; }
-         public string TargetItemSetId { set; get; }
-         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
-         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RateName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TargetItemSetId { set; get; } = null!;
+         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; } = null!;
+         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DirectEnhanceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

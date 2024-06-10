@@ -33,9 +33,9 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DescribeShowcaseMastersRequest : Gs2Request<DescribeShowcaseMastersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeShowcaseMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

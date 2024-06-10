@@ -33,12 +33,12 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class CreateDistributorModelMasterRequest : Gs2Request<CreateDistributorModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string InboxNamespaceId { set; get; }
-         public string[] WhiteListTargetIds { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string InboxNamespaceId { set; get; } = null!;
+         public string[] WhiteListTargetIds { set; get; } = null!;
         public CreateDistributorModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

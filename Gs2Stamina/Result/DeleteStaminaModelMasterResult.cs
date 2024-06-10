@@ -33,7 +33,7 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class DeleteStaminaModelMasterResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.StaminaModelMaster Item { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModelMaster Item { set; get; } = null!;
 
         public DeleteStaminaModelMasterResult WithItem(Gs2.Gs2Stamina.Model.StaminaModelMaster item) {
             this.Item = item;

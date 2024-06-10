@@ -33,9 +33,9 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class SetCapacityByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
-        public Gs2.Gs2Formation.Model.Mold Old { set; get; }
-        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.Mold Old { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; } = null!;
 
         public SetCapacityByStampSheetResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
             this.Item = item;

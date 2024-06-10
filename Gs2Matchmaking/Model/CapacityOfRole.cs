@@ -31,10 +31,10 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class CapacityOfRole : IComparable
 	{
-        public string RoleName { set; get; }
-        public string[] RoleAliases { set; get; }
-        public int? Capacity { set; get; }
-        public Gs2.Gs2Matchmaking.Model.Player[] Participants { set; get; }
+        public string RoleName { set; get; } = null!;
+        public string[] RoleAliases { set; get; } = null!;
+        public int? Capacity { set; get; } = null!;
+        public Gs2.Gs2Matchmaking.Model.Player[] Participants { set; get; } = null!;
         public CapacityOfRole WithRoleName(string roleName) {
             this.RoleName = roleName;
             return this;

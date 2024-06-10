@@ -31,13 +31,13 @@ namespace Gs2.Gs2SkillTree.Model
 #endif
 	public class Status : IComparable
 	{
-        public string StatusId { set; get; }
-        public string UserId { set; get; }
-        public string PropertyId { set; get; }
-        public string[] ReleasedNodeNames { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string StatusId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string PropertyId { set; get; } = null!;
+        public string[] ReleasedNodeNames { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;

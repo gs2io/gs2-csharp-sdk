@@ -33,7 +33,7 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class UpdateEventMasterResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.EventMaster Item { set; get; }
+        public Gs2.Gs2Schedule.Model.EventMaster Item { set; get; } = null!;
 
         public UpdateEventMasterResult WithItem(Gs2.Gs2Schedule.Model.EventMaster item) {
             this.Item = item;

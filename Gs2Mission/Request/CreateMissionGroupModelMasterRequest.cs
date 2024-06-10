@@ -33,15 +33,15 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CreateMissionGroupModelMasterRequest : Gs2Request<CreateMissionGroupModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Metadata { set; get; }
-         public string Description { set; get; }
-         public string ResetType { set; get; }
-         public int? ResetDayOfMonth { set; get; }
-         public string ResetDayOfWeek { set; get; }
-         public int? ResetHour { set; get; }
-         public string CompleteNotificationNamespaceId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string ResetType { set; get; } = null!;
+         public int? ResetDayOfMonth { set; get; } = null!;
+         public string ResetDayOfWeek { set; get; } = null!;
+         public int? ResetHour { set; get; } = null!;
+         public string CompleteNotificationNamespaceId { set; get; } = null!;
         public CreateMissionGroupModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

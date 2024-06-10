@@ -31,9 +31,9 @@ namespace Gs2.Gs2Deploy.Model
 #endif
 	public class ChangeSet : IComparable
 	{
-        public string ResourceName { set; get; }
-        public string ResourceType { set; get; }
-        public string Operation { set; get; }
+        public string ResourceName { set; get; } = null!;
+        public string ResourceType { set; get; } = null!;
+        public string Operation { set; get; } = null!;
         public ChangeSet WithResourceName(string resourceName) {
             this.ResourceName = resourceName;
             return this;

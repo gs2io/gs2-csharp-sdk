@@ -31,8 +31,8 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class DrawnPrize : IComparable
 	{
-        public string PrizeId { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public string PrizeId { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
         public DrawnPrize WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;

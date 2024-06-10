@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdateCurrentFormMasterRequest : Gs2Request<UpdateCurrentFormMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Settings { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Settings { set; get; } = null!;
         public UpdateCurrentFormMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

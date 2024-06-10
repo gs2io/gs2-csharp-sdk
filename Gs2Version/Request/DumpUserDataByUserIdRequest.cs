@@ -33,9 +33,9 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class DumpUserDataByUserIdRequest : Gs2Request<DumpUserDataByUserIdRequest>
 	{
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DumpUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

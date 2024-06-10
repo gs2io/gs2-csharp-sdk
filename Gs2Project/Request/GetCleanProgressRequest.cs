@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetCleanProgressRequest : Gs2Request<GetCleanProgressRequest>
 	{
-         public string TransactionId { set; get; }
+         public string TransactionId { set; get; } = null!;
         public GetCleanProgressRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

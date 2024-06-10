@@ -33,12 +33,12 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class DescribeMessagesRequest : Gs2Request<DescribeMessagesRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RoomName { set; get; }
-         public string Password { set; get; }
-         public string AccessToken { set; get; }
-         public long? StartAt { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RoomName { set; get; } = null!;
+         public string Password { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public long? StartAt { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeMessagesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

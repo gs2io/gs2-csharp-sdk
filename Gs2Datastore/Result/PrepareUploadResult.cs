@@ -33,8 +33,8 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class PrepareUploadResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
-        public string UploadUrl { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; } = null!;
+        public string UploadUrl { set; get; } = null!;
 
         public PrepareUploadResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
             this.Item = item;

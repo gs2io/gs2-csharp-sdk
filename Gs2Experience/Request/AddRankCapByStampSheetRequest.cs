@@ -33,8 +33,8 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class AddRankCapByStampSheetRequest : Gs2Request<AddRankCapByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public AddRankCapByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

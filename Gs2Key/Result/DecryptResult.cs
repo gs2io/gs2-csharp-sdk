@@ -33,7 +33,7 @@ namespace Gs2.Gs2Key.Result
 	[System.Serializable]
 	public class DecryptResult : IResult
 	{
-        public string Data { set; get; }
+        public string Data { set; get; } = null!;
 
         public DecryptResult WithData(string data) {
             this.Data = data;

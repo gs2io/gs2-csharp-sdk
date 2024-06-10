@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class DescribeSecurityPoliciesRequest : Gs2Request<DescribeSecurityPoliciesRequest>
 	{
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeSecurityPoliciesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;

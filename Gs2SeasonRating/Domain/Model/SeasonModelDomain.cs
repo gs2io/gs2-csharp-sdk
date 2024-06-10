@@ -63,8 +63,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
     public partial class SeasonModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SeasonRatingRestClient _client;
-        public string NamespaceName { get; }
-        public string SeasonName { get; }
+        public string NamespaceName { get; } = null!;
+        public string SeasonName { get; } = null!;
 
         public SeasonModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

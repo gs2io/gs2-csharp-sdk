@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeImportProgressesResult : IResult
 	{
-        public Gs2.Gs2Project.Model.ImportProgress[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Project.Model.ImportProgress[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeImportProgressesResult WithItems(Gs2.Gs2Project.Model.ImportProgress[] items) {
             this.Items = items;

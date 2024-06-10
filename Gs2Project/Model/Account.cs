@@ -31,14 +31,14 @@ namespace Gs2.Gs2Project.Model
 #endif
 	public class Account : IComparable
 	{
-        public string AccountId { set; get; }
-        public string Name { set; get; }
-        public string Email { set; get; }
-        public string FullName { set; get; }
-        public string CompanyName { set; get; }
-        public string Status { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
+        public string AccountId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Email { set; get; } = null!;
+        public string FullName { set; get; } = null!;
+        public string CompanyName { set; get; } = null!;
+        public string Status { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
         public Account WithAccountId(string accountId) {
             this.AccountId = accountId;
             return this;

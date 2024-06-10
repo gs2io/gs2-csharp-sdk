@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DescribeCommonSecurityPoliciesResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.SecurityPolicy[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Identifier.Model.SecurityPolicy[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCommonSecurityPoliciesResult WithItems(Gs2.Gs2Identifier.Model.SecurityPolicy[] items) {
             this.Items = items;

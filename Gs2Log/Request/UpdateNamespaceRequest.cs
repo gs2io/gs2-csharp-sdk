@@ -33,16 +33,16 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public string Type { set; get; }
-         public string GcpCredentialJson { set; get; }
-         public string BigQueryDatasetName { set; get; }
-         public int? LogExpireDays { set; get; }
-         public string AwsRegion { set; get; }
-         public string AwsAccessKeyId { set; get; }
-         public string AwsSecretAccessKey { set; get; }
-         public string FirehoseStreamName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Type { set; get; } = null!;
+         public string GcpCredentialJson { set; get; } = null!;
+         public string BigQueryDatasetName { set; get; } = null!;
+         public int? LogExpireDays { set; get; } = null!;
+         public string AwsRegion { set; get; } = null!;
+         public string AwsAccessKeyId { set; get; } = null!;
+         public string AwsSecretAccessKey { set; get; } = null!;
+         public string FirehoseStreamName { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

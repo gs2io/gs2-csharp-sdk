@@ -33,8 +33,8 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class GetBonusModelRequest : Gs2Request<GetBonusModelRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string BonusModelName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string BonusModelName { set; get; } = null!;
         public GetBonusModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

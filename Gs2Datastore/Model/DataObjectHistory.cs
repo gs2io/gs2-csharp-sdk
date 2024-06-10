@@ -31,12 +31,12 @@ namespace Gs2.Gs2Datastore.Model
 #endif
 	public class DataObjectHistory : IComparable
 	{
-        public string DataObjectHistoryId { set; get; }
-        public string DataObjectName { set; get; }
-        public string Generation { set; get; }
-        public long? ContentLength { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string DataObjectHistoryId { set; get; } = null!;
+        public string DataObjectName { set; get; } = null!;
+        public string Generation { set; get; } = null!;
+        public long? ContentLength { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public DataObjectHistory WithDataObjectHistoryId(string dataObjectHistoryId) {
             this.DataObjectHistoryId = dataObjectHistoryId;
             return this;

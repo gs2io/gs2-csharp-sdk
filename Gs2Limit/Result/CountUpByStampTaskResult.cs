@@ -33,8 +33,8 @@ namespace Gs2.Gs2Limit.Result
 	[System.Serializable]
 	public class CountUpByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Limit.Model.Counter Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Limit.Model.Counter Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public CountUpByStampTaskResult WithItem(Gs2.Gs2Limit.Model.Counter item) {
             this.Item = item;

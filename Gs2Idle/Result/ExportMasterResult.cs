@@ -33,7 +33,7 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class ExportMasterResult : IResult
 	{
-        public Gs2.Gs2Idle.Model.CurrentCategoryMaster Item { set; get; }
+        public Gs2.Gs2Idle.Model.CurrentCategoryMaster Item { set; get; } = null!;
 
         public ExportMasterResult WithItem(Gs2.Gs2Idle.Model.CurrentCategoryMaster item) {
             this.Item = item;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class VerifyCurrentMaximumMemberCountByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyCurrentMaximumMemberCountByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

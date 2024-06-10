@@ -63,8 +63,8 @@ namespace Gs2.Gs2Deploy.Domain.Model
     public partial class OutputDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DeployRestClient _client;
-        public string StackName { get; }
-        public string OutputName { get; }
+        public string StackName { get; } = null!;
+        public string OutputName { get; } = null!;
 
         public OutputDomain(
             Gs2.Core.Domain.Gs2 gs2,

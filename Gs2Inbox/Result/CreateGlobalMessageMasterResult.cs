@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class CreateGlobalMessageMasterResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.GlobalMessageMaster Item { set; get; }
+        public Gs2.Gs2Inbox.Model.GlobalMessageMaster Item { set; get; } = null!;
 
         public CreateGlobalMessageMasterResult WithItem(Gs2.Gs2Inbox.Model.GlobalMessageMaster item) {
             this.Item = item;

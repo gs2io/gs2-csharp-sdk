@@ -65,9 +65,9 @@ namespace Gs2.Gs2Stamina.Domain
     public class Gs2Stamina {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StaminaRestClient _client;
-        public string Url { get; set; }
-        public string UploadToken { get; set; }
-        public string UploadUrl { get; set; }
+        public string Url { get; set; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public Gs2Stamina(
             Gs2.Core.Domain.Gs2 gs2

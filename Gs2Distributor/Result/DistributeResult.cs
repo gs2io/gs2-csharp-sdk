@@ -33,9 +33,9 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class DistributeResult : IResult
 	{
-        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
-        public string InboxNamespaceId { set; get; }
-        public string Result { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; } = null!;
+        public string InboxNamespaceId { set; get; } = null!;
+        public string Result { set; get; } = null!;
 
         public DistributeResult WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
             this.DistributeResource = distributeResource;

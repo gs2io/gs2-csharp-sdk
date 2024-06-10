@@ -33,10 +33,10 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class GetWalletByUserIdRequest : Gs2Request<GetWalletByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public int? Slot { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? Slot { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetWalletByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

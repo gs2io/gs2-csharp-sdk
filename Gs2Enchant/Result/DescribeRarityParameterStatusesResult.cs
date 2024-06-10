@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class DescribeRarityParameterStatusesResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.RarityParameterStatus[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Enchant.Model.RarityParameterStatus[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRarityParameterStatusesResult WithItems(Gs2.Gs2Enchant.Model.RarityParameterStatus[] items) {
             this.Items = items;

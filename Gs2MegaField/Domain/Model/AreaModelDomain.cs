@@ -63,8 +63,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
     public partial class AreaModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MegaFieldRestClient _client;
-        public string NamespaceName { get; }
-        public string AreaModelName { get; }
+        public string NamespaceName { get; } = null!;
+        public string AreaModelName { get; } = null!;
 
         public AreaModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

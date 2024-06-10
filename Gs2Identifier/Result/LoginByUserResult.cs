@@ -33,7 +33,7 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class LoginByUserResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.ProjectToken Item { set; get; }
+        public Gs2.Gs2Identifier.Model.ProjectToken Item { set; get; } = null!;
 
         public LoginByUserResult WithItem(Gs2.Gs2Identifier.Model.ProjectToken item) {
             this.Item = item;

@@ -33,11 +33,11 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class VerifyEventRequest : Gs2Request<VerifyEventRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string EventName { set; get; }
-         public string VerifyType { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string EventName { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyEventRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

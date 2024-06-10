@@ -33,9 +33,9 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class AssumeByUserIdResult : IResult
 	{
-        public string Token { set; get; }
-        public string UserId { set; get; }
-        public long? Expire { set; get; }
+        public string Token { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public long? Expire { set; get; } = null!;
 
         public AssumeByUserIdResult WithToken(string token) {
             this.Token = token;

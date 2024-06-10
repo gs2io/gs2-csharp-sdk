@@ -33,12 +33,12 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class UnlockIncrementalExchangeByUserIdRequest : Gs2Request<UnlockIncrementalExchangeByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RateName { set; get; }
-         public string UserId { set; get; }
-         public string LockTransactionId { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RateName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string LockTransactionId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UnlockIncrementalExchangeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

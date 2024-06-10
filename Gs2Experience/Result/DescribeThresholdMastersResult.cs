@@ -33,8 +33,8 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class DescribeThresholdMastersResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.ThresholdMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Experience.Model.ThresholdMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeThresholdMastersResult WithItems(Gs2.Gs2Experience.Model.ThresholdMaster[] items) {
             this.Items = items;

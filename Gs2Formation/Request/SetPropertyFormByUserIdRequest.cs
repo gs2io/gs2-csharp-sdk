@@ -33,13 +33,13 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class SetPropertyFormByUserIdRequest : Gs2Request<SetPropertyFormByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string PropertyFormModelName { set; get; }
-         public string PropertyId { set; get; }
-         public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string PropertyFormModelName { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetPropertyFormByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

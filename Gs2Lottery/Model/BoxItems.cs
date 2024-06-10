@@ -31,10 +31,10 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class BoxItems : IComparable
 	{
-        public string BoxId { set; get; }
-        public string PrizeTableName { set; get; }
-        public string UserId { set; get; }
-        public Gs2.Gs2Lottery.Model.BoxItem[] Items { set; get; }
+        public string BoxId { set; get; } = null!;
+        public string PrizeTableName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public Gs2.Gs2Lottery.Model.BoxItem[] Items { set; get; } = null!;
         public BoxItems WithBoxId(string boxId) {
             this.BoxId = boxId;
             return this;

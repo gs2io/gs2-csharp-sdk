@@ -31,14 +31,14 @@ namespace Gs2.Gs2Project.Model
 #endif
 	public class Receipt : IComparable
 	{
-        public string ReceiptId { set; get; }
-        public string AccountName { set; get; }
-        public string Name { set; get; }
-        public long? Date { set; get; }
-        public string Amount { set; get; }
-        public string PdfUrl { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
+        public string ReceiptId { set; get; } = null!;
+        public string AccountName { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public long? Date { set; get; } = null!;
+        public string Amount { set; get; } = null!;
+        public string PdfUrl { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
         public Receipt WithReceiptId(string receiptId) {
             this.ReceiptId = receiptId;
             return this;

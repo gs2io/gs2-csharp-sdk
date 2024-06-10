@@ -33,7 +33,7 @@ namespace Gs2.Gs2Chat.Result
 	[System.Serializable]
 	public class CreateNamespaceResult : IResult
 	{
-        public Gs2.Gs2Chat.Model.Namespace Item { set; get; }
+        public Gs2.Gs2Chat.Model.Namespace Item { set; get; } = null!;
 
         public CreateNamespaceResult WithItem(Gs2.Gs2Chat.Model.Namespace item) {
             this.Item = item;

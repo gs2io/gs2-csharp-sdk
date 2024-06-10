@@ -33,10 +33,10 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DescribeBoxesRequest : Gs2Request<DescribeBoxesRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeBoxesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

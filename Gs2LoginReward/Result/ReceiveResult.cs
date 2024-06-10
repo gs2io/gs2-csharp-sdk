@@ -33,12 +33,12 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class ReceiveResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; }
-        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; } = null!;
+        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public ReceiveResult WithItem(Gs2.Gs2LoginReward.Model.ReceiveStatus item) {
             this.Item = item;

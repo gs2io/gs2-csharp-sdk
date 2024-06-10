@@ -31,9 +31,9 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class TargetCounterModel : IComparable
 	{
-        public string CounterName { set; get; }
-        public string ResetType { set; get; }
-        public long? Value { set; get; }
+        public string CounterName { set; get; } = null!;
+        public string ResetType { set; get; } = null!;
+        public long? Value { set; get; } = null!;
         public TargetCounterModel WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;

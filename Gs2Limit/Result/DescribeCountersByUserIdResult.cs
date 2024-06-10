@@ -33,8 +33,8 @@ namespace Gs2.Gs2Limit.Result
 	[System.Serializable]
 	public class DescribeCountersByUserIdResult : IResult
 	{
-        public Gs2.Gs2Limit.Model.Counter[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Limit.Model.Counter[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCountersByUserIdResult WithItems(Gs2.Gs2Limit.Model.Counter[] items) {
             this.Items = items;

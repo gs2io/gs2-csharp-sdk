@@ -33,7 +33,7 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class UpdatePropertyFormModelMasterResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.PropertyFormModelMaster Item { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyFormModelMaster Item { set; get; } = null!;
 
         public UpdatePropertyFormModelMasterResult WithItem(Gs2.Gs2Formation.Model.PropertyFormModelMaster item) {
             this.Item = item;

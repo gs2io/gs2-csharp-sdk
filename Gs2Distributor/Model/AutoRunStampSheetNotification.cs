@@ -20,9 +20,9 @@ namespace Gs2.Gs2Distributor.Model
 {
 	public class AutoRunStampSheetNotification
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string TransactionId { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
         public AutoRunStampSheetNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

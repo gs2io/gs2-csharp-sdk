@@ -31,12 +31,12 @@ namespace Gs2.Gs2News.Model
 #endif
 	public class News : IComparable
 	{
-        public string Section { set; get; }
-        public string Content { set; get; }
-        public string Title { set; get; }
-        public string ScheduleEventId { set; get; }
-        public long? Timestamp { set; get; }
-        public string FrontMatter { set; get; }
+        public string Section { set; get; } = null!;
+        public string Content { set; get; } = null!;
+        public string Title { set; get; } = null!;
+        public string ScheduleEventId { set; get; } = null!;
+        public long? Timestamp { set; get; } = null!;
+        public string FrontMatter { set; get; } = null!;
         public News WithSection(string section) {
             this.Section = section;
             return this;

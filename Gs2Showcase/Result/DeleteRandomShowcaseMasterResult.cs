@@ -33,7 +33,7 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class DeleteRandomShowcaseMasterResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.RandomShowcaseMaster Item { set; get; }
+        public Gs2.Gs2Showcase.Model.RandomShowcaseMaster Item { set; get; } = null!;
 
         public DeleteRandomShowcaseMasterResult WithItem(Gs2.Gs2Showcase.Model.RandomShowcaseMaster item) {
             this.Item = item;

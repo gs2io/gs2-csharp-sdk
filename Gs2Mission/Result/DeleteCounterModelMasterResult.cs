@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DeleteCounterModelMasterResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.CounterModelMaster Item { set; get; }
+        public Gs2.Gs2Mission.Model.CounterModelMaster Item { set; get; } = null!;
 
         public DeleteCounterModelMasterResult WithItem(Gs2.Gs2Mission.Model.CounterModelMaster item) {
             this.Item = item;

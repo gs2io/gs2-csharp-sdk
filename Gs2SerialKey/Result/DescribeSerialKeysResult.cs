@@ -33,8 +33,8 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class DescribeSerialKeysResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.SerialKey[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2SerialKey.Model.SerialKey[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeSerialKeysResult WithItems(Gs2.Gs2SerialKey.Model.SerialKey[] items) {
             this.Items = items;

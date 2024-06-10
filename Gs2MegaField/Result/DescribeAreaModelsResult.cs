@@ -33,7 +33,7 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class DescribeAreaModelsResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.AreaModel[] Items { set; get; }
+        public Gs2.Gs2MegaField.Model.AreaModel[] Items { set; get; } = null!;
 
         public DescribeAreaModelsResult WithItems(Gs2.Gs2MegaField.Model.AreaModel[] items) {
             this.Items = items;

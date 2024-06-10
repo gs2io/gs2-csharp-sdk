@@ -33,10 +33,10 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class GetBoxByUserIdRequest : Gs2Request<GetBoxByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PrizeTableName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PrizeTableName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetBoxByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

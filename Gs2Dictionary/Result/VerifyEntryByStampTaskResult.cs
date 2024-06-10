@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class VerifyEntryByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyEntryByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

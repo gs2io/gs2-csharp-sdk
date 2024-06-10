@@ -33,7 +33,7 @@ namespace Gs2.Gs2Gateway.Result
 	[System.Serializable]
 	public class SetFirebaseTokenByUserIdResult : IResult
 	{
-        public Gs2.Gs2Gateway.Model.FirebaseToken Item { set; get; }
+        public Gs2.Gs2Gateway.Model.FirebaseToken Item { set; get; } = null!;
 
         public SetFirebaseTokenByUserIdResult WithItem(Gs2.Gs2Gateway.Model.FirebaseToken item) {
             this.Item = item;

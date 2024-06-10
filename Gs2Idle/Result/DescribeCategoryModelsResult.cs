@@ -33,7 +33,7 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class DescribeCategoryModelsResult : IResult
 	{
-        public Gs2.Gs2Idle.Model.CategoryModel[] Items { set; get; }
+        public Gs2.Gs2Idle.Model.CategoryModel[] Items { set; get; } = null!;
 
         public DescribeCategoryModelsResult WithItems(Gs2.Gs2Idle.Model.CategoryModel[] items) {
             this.Items = items;

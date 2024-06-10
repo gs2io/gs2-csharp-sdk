@@ -33,13 +33,13 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class MissedReceiveByUserIdRequest : Gs2Request<MissedReceiveByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string BonusModelName { set; get; }
-         public string UserId { set; get; }
-         public int? StepNumber { set; get; }
-         public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string BonusModelName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? StepNumber { set; get; } = null!;
+         public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public MissedReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

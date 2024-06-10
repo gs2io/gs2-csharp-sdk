@@ -31,8 +31,8 @@ namespace Gs2.Gs2SeasonRating.Model
 #endif
 	public class TransactionSetting : IComparable
 	{
-        public string DistributorNamespaceId { set; get; }
-        public string QueueNamespaceId { set; get; }
+        public string DistributorNamespaceId { set; get; } = null!;
+        public string QueueNamespaceId { set; get; } = null!;
         public TransactionSetting WithDistributorNamespaceId(string distributorNamespaceId) {
             this.DistributorNamespaceId = distributorNamespaceId;
             return this;

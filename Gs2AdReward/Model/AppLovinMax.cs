@@ -31,8 +31,8 @@ namespace Gs2.Gs2AdReward.Model
 #endif
 	public class AppLovinMax : IComparable
 	{
-        public string AllowAdUnitId { set; get; }
-        public string EventKey { set; get; }
+        public string AllowAdUnitId { set; get; } = null!;
+        public string EventKey { set; get; } = null!;
         public AppLovinMax WithAllowAdUnitId(string allowAdUnitId) {
             this.AllowAdUnitId = allowAdUnitId;
             return this;

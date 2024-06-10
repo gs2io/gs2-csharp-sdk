@@ -33,11 +33,11 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class ConsumeStaminaRequest : Gs2Request<ConsumeStaminaRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StaminaName { set; get; }
-         public string AccessToken { set; get; }
-         public int? ConsumeValue { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StaminaName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public int? ConsumeValue { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ConsumeStaminaRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

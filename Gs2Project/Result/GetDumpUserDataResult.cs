@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class GetDumpUserDataResult : IResult
 	{
-        public string Url { set; get; }
+        public string Url { set; get; } = null!;
 
         public GetDumpUserDataResult WithUrl(string url) {
             this.Url = url;

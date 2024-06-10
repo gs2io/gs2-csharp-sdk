@@ -33,8 +33,8 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class DescribeEntriesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.Entry[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Dictionary.Model.Entry[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeEntriesByUserIdResult WithItems(Gs2.Gs2Dictionary.Model.Entry[] items) {
             this.Items = items;

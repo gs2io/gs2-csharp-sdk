@@ -33,11 +33,11 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetSubscribeByUserIdRequest : Gs2Request<GetSubscribeByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
-         public string UserId { set; get; }
-         public string TargetUserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TargetUserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetSubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

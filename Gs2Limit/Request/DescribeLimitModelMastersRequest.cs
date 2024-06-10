@@ -33,9 +33,9 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class DescribeLimitModelMastersRequest : Gs2Request<DescribeLimitModelMastersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeLimitModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

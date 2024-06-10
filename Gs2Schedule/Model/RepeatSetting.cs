@@ -31,13 +31,13 @@ namespace Gs2.Gs2Schedule.Model
 #endif
 	public class RepeatSetting : IComparable
 	{
-        public string RepeatType { set; get; }
-        public int? BeginDayOfMonth { set; get; }
-        public int? EndDayOfMonth { set; get; }
-        public string BeginDayOfWeek { set; get; }
-        public string EndDayOfWeek { set; get; }
-        public int? BeginHour { set; get; }
-        public int? EndHour { set; get; }
+        public string RepeatType { set; get; } = null!;
+        public int? BeginDayOfMonth { set; get; } = null!;
+        public int? EndDayOfMonth { set; get; } = null!;
+        public string BeginDayOfWeek { set; get; } = null!;
+        public string EndDayOfWeek { set; get; } = null!;
+        public int? BeginHour { set; get; } = null!;
+        public int? EndHour { set; get; } = null!;
         public RepeatSetting WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;
@@ -283,7 +283,7 @@ namespace Gs2.Gs2Schedule.Model
                         new RequestError("repeatSetting", "schedule.repeatSetting.endHour.error.invalid"),
                     });
                 }
-                if (EndHour > 23) {
+                if (EndHour > 24) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("repeatSetting", "schedule.repeatSetting.endHour.error.invalid"),
                     });

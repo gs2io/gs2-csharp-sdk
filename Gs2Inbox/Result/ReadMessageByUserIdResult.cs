@@ -33,11 +33,11 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class ReadMessageByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.Message Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Gs2Inbox.Model.Message Item { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public ReadMessageByUserIdResult WithItem(Gs2.Gs2Inbox.Model.Message item) {
             this.Item = item;

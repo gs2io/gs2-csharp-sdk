@@ -33,7 +33,7 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class UpdateCurrentExperienceMasterFromGitHubResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.CurrentExperienceMaster Item { set; get; }
+        public Gs2.Gs2Experience.Model.CurrentExperienceMaster Item { set; get; } = null!;
 
         public UpdateCurrentExperienceMasterFromGitHubResult WithItem(Gs2.Gs2Experience.Model.CurrentExperienceMaster item) {
             this.Item = item;

@@ -33,13 +33,13 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class DepositByUserIdRequest : Gs2Request<DepositByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public int? Slot { set; get; }
-         public float? Price { set; get; }
-         public int? Count { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? Slot { set; get; } = null!;
+         public float? Price { set; get; } = null!;
+         public int? Count { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DepositByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

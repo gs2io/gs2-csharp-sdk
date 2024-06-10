@@ -63,8 +63,8 @@ namespace Gs2.Gs2Grade.Domain.Model
     public partial class GradeModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GradeRestClient _client;
-        public string NamespaceName { get; }
-        public string GradeName { get; }
+        public string NamespaceName { get; } = null!;
+        public string GradeName { get; } = null!;
 
         public GradeModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,13 +33,13 @@ namespace Gs2.Gs2Lock.Request
 	[System.Serializable]
 	public class LockByUserIdRequest : Gs2Request<LockByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PropertyId { set; get; }
-         public string UserId { set; get; }
-         public string TransactionId { set; get; }
-         public long? Ttl { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TransactionId { set; get; } = null!;
+         public long? Ttl { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public LockByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

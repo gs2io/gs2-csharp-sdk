@@ -31,8 +31,8 @@ namespace Gs2.Gs2Version.Model
 #endif
 	public class Status : IComparable
 	{
-        public Gs2.Gs2Version.Model.VersionModel VersionModel { set; get; }
-        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
+        public Gs2.Gs2Version.Model.VersionModel VersionModel { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; } = null!;
         public Status WithVersionModel(Gs2.Gs2Version.Model.VersionModel versionModel) {
             this.VersionModel = versionModel;
             return this;

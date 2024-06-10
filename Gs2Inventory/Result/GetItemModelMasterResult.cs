@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class GetItemModelMasterResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.ItemModelMaster Item { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModelMaster Item { set; get; } = null!;
 
         public GetItemModelMasterResult WithItem(Gs2.Gs2Inventory.Model.ItemModelMaster item) {
             this.Item = item;

@@ -63,8 +63,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class SalesItemMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        public string NamespaceName { get; }
-        public string SalesItemName { get; }
+        public string NamespaceName { get; } = null!;
+        public string SalesItemName { get; } = null!;
 
         public SalesItemMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

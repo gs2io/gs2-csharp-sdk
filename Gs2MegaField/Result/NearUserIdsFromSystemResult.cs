@@ -33,7 +33,7 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class NearUserIdsFromSystemResult : IResult
 	{
-        public string[] Items { set; get; }
+        public string[] Items { set; get; } = null!;
 
         public NearUserIdsFromSystemResult WithItems(string[] items) {
             this.Items = items;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class GetStaminaModelRequest : Gs2Request<GetStaminaModelRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StaminaName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StaminaName { set; get; } = null!;
         public GetStaminaModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

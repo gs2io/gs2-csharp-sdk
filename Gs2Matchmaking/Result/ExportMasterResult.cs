@@ -33,7 +33,7 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class ExportMasterResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster Item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster Item { set; get; } = null!;
 
         public ExportMasterResult WithItem(Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster item) {
             this.Item = item;

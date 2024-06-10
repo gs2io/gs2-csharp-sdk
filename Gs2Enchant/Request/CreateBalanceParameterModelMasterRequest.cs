@@ -33,13 +33,13 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class CreateBalanceParameterModelMasterRequest : Gs2Request<CreateBalanceParameterModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public long? TotalValue { set; get; }
-         public string InitialValueStrategy { set; get; }
-         public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public long? TotalValue { set; get; } = null!;
+         public string InitialValueStrategy { set; get; } = null!;
+         public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; } = null!;
         public CreateBalanceParameterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

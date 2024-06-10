@@ -33,8 +33,8 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class UpdateCurrentVersionMasterFromGitHubRequest : Gs2Request<UpdateCurrentVersionMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Version.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Version.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentVersionMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,25 +31,25 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class MissionTaskModelMaster : IComparable
 	{
-        public string MissionTaskId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public string VerifyCompleteType { set; get; }
-        public Gs2.Gs2Mission.Model.TargetCounterModel TargetCounter { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] VerifyCompleteConsumeActions { set; get; }
-        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
-        public string ChallengePeriodEventId { set; get; }
-        public string PremiseMissionTaskName { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string MissionTaskId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string VerifyCompleteType { set; get; } = null!;
+        public Gs2.Gs2Mission.Model.TargetCounterModel TargetCounter { set; get; } = null!;
+        public Gs2.Core.Model.ConsumeAction[] VerifyCompleteConsumeActions { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; } = null!;
+        public string ChallengePeriodEventId { set; get; } = null!;
+        public string PremiseMissionTaskName { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public string CounterName { set; get; }
+        public string CounterName { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public string TargetResetType { set; get; }
+        public string TargetResetType { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public long? TargetValue { set; get; }
+        public long? TargetValue { set; get; } = null!;
         public MissionTaskModelMaster WithMissionTaskId(string missionTaskId) {
             this.MissionTaskId = missionTaskId;
             return this;

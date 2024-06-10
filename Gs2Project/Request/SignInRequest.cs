@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class SignInRequest : Gs2Request<SignInRequest>
 	{
-         public string Email { set; get; }
-         public string Password { set; get; }
+         public string Email { set; get; } = null!;
+         public string Password { set; get; } = null!;
         public SignInRequest WithEmail(string email) {
             this.Email = email;
             return this;

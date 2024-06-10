@@ -33,12 +33,12 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CreateCounterModelMasterRequest : Gs2Request<CreateCounterModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Metadata { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
-         public string ChallengePeriodEventId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; } = null!;
+         public string ChallengePeriodEventId { set; get; } = null!;
         public CreateCounterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

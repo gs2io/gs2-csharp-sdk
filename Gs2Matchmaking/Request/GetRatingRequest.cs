@@ -33,9 +33,9 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class GetRatingRequest : Gs2Request<GetRatingRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string RatingName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string RatingName { set; get; } = null!;
         public GetRatingRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class ForceDeleteStackResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Stack Item { set; get; }
+        public Gs2.Gs2Deploy.Model.Stack Item { set; get; } = null!;
 
         public ForceDeleteStackResult WithItem(Gs2.Gs2Deploy.Model.Stack item) {
             this.Item = item;

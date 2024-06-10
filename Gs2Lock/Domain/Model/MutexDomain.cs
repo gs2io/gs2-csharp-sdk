@@ -63,9 +63,9 @@ namespace Gs2.Gs2Lock.Domain.Model
     public partial class MutexDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LockRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string PropertyId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string PropertyId { get; } = null!;
 
         public MutexDomain(
             Gs2.Core.Domain.Gs2 gs2,

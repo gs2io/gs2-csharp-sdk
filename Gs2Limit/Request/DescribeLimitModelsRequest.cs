@@ -33,7 +33,7 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class DescribeLimitModelsRequest : Gs2Request<DescribeLimitModelsRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DescribeLimitModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

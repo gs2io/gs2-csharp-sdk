@@ -33,11 +33,11 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class ReceiveRequest : Gs2Request<ReceiveRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string CategoryName { set; get; }
-         public Gs2.Gs2Idle.Model.Config[] Config { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public Gs2.Gs2Idle.Model.Config[] Config { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ReceiveRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeReceiptsResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Receipt[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Project.Model.Receipt[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeReceiptsResult WithItems(Gs2.Gs2Project.Model.Receipt[] items) {
             this.Items = items;

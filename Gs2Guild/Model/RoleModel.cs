@@ -31,9 +31,9 @@ namespace Gs2.Gs2Guild.Model
 #endif
 	public class RoleModel : IComparable
 	{
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string PolicyDocument { set; get; }
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string PolicyDocument { set; get; } = null!;
         public RoleModel WithName(string name) {
             this.Name = name;
             return this;

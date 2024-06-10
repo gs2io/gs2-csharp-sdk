@@ -33,13 +33,13 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class VerifyIncludeMemberByUserIdRequest : Gs2Request<VerifyIncludeMemberByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GuildModelName { set; get; }
-         public string GuildName { set; get; }
-         public string UserId { set; get; }
-         public string VerifyType { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string GuildName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyIncludeMemberByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

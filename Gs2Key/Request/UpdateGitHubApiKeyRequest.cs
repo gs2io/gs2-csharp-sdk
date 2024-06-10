@@ -33,11 +33,11 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class UpdateGitHubApiKeyRequest : Gs2Request<UpdateGitHubApiKeyRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ApiKeyName { set; get; }
-         public string Description { set; get; }
-         public string ApiKey { set; get; }
-         public string EncryptionKeyName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ApiKeyName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string ApiKey { set; get; } = null!;
+         public string EncryptionKeyName { set; get; } = null!;
         public UpdateGitHubApiKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

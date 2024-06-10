@@ -33,9 +33,9 @@ namespace Gs2.Gs2Auth.Request
 	[System.Serializable]
 	public class LoginBySignatureRequest : Gs2Request<LoginBySignatureRequest>
 	{
-         public string KeyId { set; get; }
-         public string Body { set; get; }
-         public string Signature { set; get; }
+         public string KeyId { set; get; } = null!;
+         public string Body { set; get; } = null!;
+         public string Signature { set; get; } = null!;
         public LoginBySignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

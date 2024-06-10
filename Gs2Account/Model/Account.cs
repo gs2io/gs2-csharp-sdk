@@ -31,15 +31,15 @@ namespace Gs2.Gs2Account.Model
 #endif
 	public class Account : IComparable
 	{
-        public string AccountId { set; get; }
-        public string UserId { set; get; }
-        public string Password { set; get; }
-        public int? TimeOffset { set; get; }
-        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; }
-        public bool? Banned { set; get; }
-        public long? LastAuthenticatedAt { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string AccountId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string Password { set; get; } = null!;
+        public int? TimeOffset { set; get; } = null!;
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; } = null!;
+        public bool? Banned { set; get; } = null!;
+        public long? LastAuthenticatedAt { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Account WithAccountId(string accountId) {
             this.AccountId = accountId;
             return this;

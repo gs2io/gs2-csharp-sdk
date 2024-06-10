@@ -33,15 +33,15 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareUploadByUserIdRequest : Gs2Request<PrepareUploadByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string Name { set; get; }
-         public string ContentType { set; get; }
-         public string Scope { set; get; }
-         public string[] AllowUserIds { set; get; }
-         public bool? UpdateIfExists { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string ContentType { set; get; } = null!;
+         public string Scope { set; get; } = null!;
+         public string[] AllowUserIds { set; get; } = null!;
+         public bool? UpdateIfExists { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public PrepareUploadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

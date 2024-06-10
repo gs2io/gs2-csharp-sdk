@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enhance.Result
 	[System.Serializable]
 	public class DeleteProgressByUserIdResult : IResult
 	{
-        public Gs2.Gs2Enhance.Model.Progress Item { set; get; }
+        public Gs2.Gs2Enhance.Model.Progress Item { set; get; } = null!;
 
         public DeleteProgressByUserIdResult WithItem(Gs2.Gs2Enhance.Model.Progress item) {
             this.Item = item;

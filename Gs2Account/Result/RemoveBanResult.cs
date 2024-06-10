@@ -33,7 +33,7 @@ namespace Gs2.Gs2Account.Result
 	[System.Serializable]
 	public class RemoveBanResult : IResult
 	{
-        public Gs2.Gs2Account.Model.Account Item { set; get; }
+        public Gs2.Gs2Account.Model.Account Item { set; get; } = null!;
 
         public RemoveBanResult WithItem(Gs2.Gs2Account.Model.Account item) {
             this.Item = item;

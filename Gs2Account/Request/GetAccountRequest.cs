@@ -33,9 +33,9 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class GetAccountRequest : Gs2Request<GetAccountRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetAccountRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

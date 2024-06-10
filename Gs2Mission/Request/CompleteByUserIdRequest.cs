@@ -33,13 +33,13 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CompleteByUserIdRequest : Gs2Request<CompleteByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string MissionGroupName { set; get; }
-         public string MissionTaskName { set; get; }
-         public string UserId { set; get; }
-         public Gs2.Gs2Mission.Model.Config[] Config { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string MissionGroupName { set; get; } = null!;
+         public string MissionTaskName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.Config[] Config { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public CompleteByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

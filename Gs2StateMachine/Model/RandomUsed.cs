@@ -31,8 +31,8 @@ namespace Gs2.Gs2StateMachine.Model
 #endif
 	public class RandomUsed : IComparable
 	{
-        public long? Category { set; get; }
-        public long? Used { set; get; }
+        public long? Category { set; get; } = null!;
+        public long? Used { set; get; } = null!;
         public RandomUsed WithCategory(long? category) {
             this.Category = category;
             return this;

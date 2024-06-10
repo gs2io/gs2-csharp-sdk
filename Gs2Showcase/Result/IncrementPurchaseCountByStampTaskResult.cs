@@ -33,8 +33,8 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class IncrementPurchaseCountByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.RandomDisplayItem Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Showcase.Model.RandomDisplayItem Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public IncrementPurchaseCountByStampTaskResult WithItem(Gs2.Gs2Showcase.Model.RandomDisplayItem item) {
             this.Item = item;

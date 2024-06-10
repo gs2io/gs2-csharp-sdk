@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class DescribeMoldsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Mold[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Formation.Model.Mold[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeMoldsByUserIdResult WithItems(Gs2.Gs2Formation.Model.Mold[] items) {
             this.Items = items;

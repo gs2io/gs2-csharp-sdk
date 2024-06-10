@@ -31,18 +31,18 @@ namespace Gs2.Gs2Distributor.Model
 #endif
 	public class StampSheetResult : IComparable
 	{
-        public string StampSheetResultId { set; get; }
-        public string UserId { set; get; }
-        public string TransactionId { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] TaskRequests { set; get; }
-        public Gs2.Core.Model.AcquireAction SheetRequest { set; get; }
-        public int[] TaskResultCodes { set; get; }
-        public string[] TaskResults { set; get; }
-        public int? SheetResultCode { set; get; }
-        public string SheetResult { set; get; }
-        public string NextTransactionId { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string StampSheetResultId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public Gs2.Core.Model.ConsumeAction[] TaskRequests { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction SheetRequest { set; get; } = null!;
+        public int[] TaskResultCodes { set; get; } = null!;
+        public string[] TaskResults { set; get; } = null!;
+        public int? SheetResultCode { set; get; } = null!;
+        public string SheetResult { set; get; } = null!;
+        public string NextTransactionId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public StampSheetResult WithStampSheetResultId(string stampSheetResultId) {
             this.StampSheetResultId = stampSheetResultId;
             return this;

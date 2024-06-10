@@ -33,7 +33,7 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class CreateInsightRequest : Gs2Request<CreateInsightRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public CreateInsightRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,10 +31,10 @@ namespace Gs2.Gs2Grade.Model
 #endif
 	public class ScriptSetting : IComparable
 	{
-        public string TriggerScriptId { set; get; }
-        public string DoneTriggerTargetType { set; get; }
-        public string DoneTriggerScriptId { set; get; }
-        public string DoneTriggerQueueNamespaceId { set; get; }
+        public string TriggerScriptId { set; get; } = null!;
+        public string DoneTriggerTargetType { set; get; } = null!;
+        public string DoneTriggerScriptId { set; get; } = null!;
+        public string DoneTriggerQueueNamespaceId { set; get; } = null!;
         public ScriptSetting WithTriggerScriptId(string triggerScriptId) {
             this.TriggerScriptId = triggerScriptId;
             return this;

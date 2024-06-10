@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class AcquireBigItemByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.BigItem Item { set; get; }
+        public Gs2.Gs2Inventory.Model.BigItem Item { set; get; } = null!;
 
         public AcquireBigItemByUserIdResult WithItem(Gs2.Gs2Inventory.Model.BigItem item) {
             this.Item = item;

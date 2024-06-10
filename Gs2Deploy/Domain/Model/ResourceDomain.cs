@@ -63,8 +63,8 @@ namespace Gs2.Gs2Deploy.Domain.Model
     public partial class ResourceDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DeployRestClient _client;
-        public string StackName { get; }
-        public string ResourceName { get; }
+        public string StackName { get; } = null!;
+        public string ResourceName { get; } = null!;
 
         public ResourceDomain(
             Gs2.Core.Domain.Gs2 gs2,

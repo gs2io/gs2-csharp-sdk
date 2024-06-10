@@ -31,8 +31,8 @@ namespace Gs2.Gs2Buff.Model
 #endif
 	public class OverrideBuffRate : IComparable
 	{
-        public string Name { set; get; }
-        public float? Rate { set; get; }
+        public string Name { set; get; } = null!;
+        public float? Rate { set; get; } = null!;
         public OverrideBuffRate WithName(string name) {
             this.Name = name;
             return this;

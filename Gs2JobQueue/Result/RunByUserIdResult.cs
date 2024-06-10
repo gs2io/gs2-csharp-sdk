@@ -33,9 +33,9 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class RunByUserIdResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.Job Item { set; get; }
-        public Gs2.Gs2JobQueue.Model.JobResultBody Result { set; get; }
-        public bool? IsLastJob { set; get; }
+        public Gs2.Gs2JobQueue.Model.Job Item { set; get; } = null!;
+        public Gs2.Gs2JobQueue.Model.JobResultBody Result { set; get; } = null!;
+        public bool? IsLastJob { set; get; } = null!;
 
         public RunByUserIdResult WithItem(Gs2.Gs2JobQueue.Model.Job item) {
             this.Item = item;

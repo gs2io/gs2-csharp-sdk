@@ -63,10 +63,10 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class FriendUserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public bool? WithProfile { get; }
-        public string TargetUserId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public bool? WithProfile { get; } = null!;
+        public string TargetUserId { get; } = null!;
 
         public FriendUserDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class GetThresholdMasterResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.ThresholdMaster Item { set; get; }
+        public Gs2.Gs2Experience.Model.ThresholdMaster Item { set; get; } = null!;
 
         public GetThresholdMasterResult WithItem(Gs2.Gs2Experience.Model.ThresholdMaster item) {
             this.Item = item;

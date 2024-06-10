@@ -33,8 +33,8 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class DescribeStacksResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Stack[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Deploy.Model.Stack[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeStacksResult WithItems(Gs2.Gs2Deploy.Model.Stack[] items) {
             this.Items = items;

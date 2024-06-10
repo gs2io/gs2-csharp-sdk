@@ -33,8 +33,8 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class GetExperienceModelRequest : Gs2Request<GetExperienceModelRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ExperienceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ExperienceName { set; get; } = null!;
         public GetExperienceModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

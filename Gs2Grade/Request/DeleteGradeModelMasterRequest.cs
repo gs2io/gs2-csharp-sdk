@@ -33,8 +33,8 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class DeleteGradeModelMasterRequest : Gs2Request<DeleteGradeModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GradeName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GradeName { set; get; } = null!;
         public DeleteGradeModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

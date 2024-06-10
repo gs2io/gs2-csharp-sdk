@@ -63,10 +63,10 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class JoinedGuildDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string GuildModelName { get; }
-        public string GuildName { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string GuildModelName { get; } = null!;
+        public string GuildName { get; } = null!;
 
         public JoinedGuildDomain(
             Gs2.Core.Domain.Gs2 gs2,

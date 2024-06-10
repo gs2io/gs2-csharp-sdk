@@ -33,12 +33,12 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class CreateShowcaseMasterRequest : Gs2Request<CreateShowcaseMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Gs2Showcase.Model.DisplayItemMaster[] DisplayItems { set; get; }
-         public string SalesPeriodEventId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Gs2Showcase.Model.DisplayItemMaster[] DisplayItems { set; get; } = null!;
+         public string SalesPeriodEventId { set; get; } = null!;
         public CreateShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

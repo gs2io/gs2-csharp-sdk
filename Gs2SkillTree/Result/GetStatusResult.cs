@@ -33,7 +33,7 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class GetStatusResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.Status Item { set; get; }
+        public Gs2.Gs2SkillTree.Model.Status Item { set; get; } = null!;
 
         public GetStatusResult WithItem(Gs2.Gs2SkillTree.Model.Status item) {
             this.Item = item;

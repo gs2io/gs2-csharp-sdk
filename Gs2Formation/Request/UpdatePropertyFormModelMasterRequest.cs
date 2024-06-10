@@ -33,11 +33,11 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdatePropertyFormModelMasterRequest : Gs2Request<UpdatePropertyFormModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PropertyFormModelName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PropertyFormModelName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; } = null!;
         public UpdatePropertyFormModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

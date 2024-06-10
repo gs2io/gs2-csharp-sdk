@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class GetGuildByUserIdResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.Guild Item { set; get; }
+        public Gs2.Gs2Guild.Model.Guild Item { set; get; } = null!;
 
         public GetGuildByUserIdResult WithItem(Gs2.Gs2Guild.Model.Guild item) {
             this.Item = item;

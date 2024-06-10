@@ -33,8 +33,8 @@ namespace Gs2.Gs2Buff.Result
 	[System.Serializable]
 	public class DescribeBuffEntryModelMastersResult : IResult
 	{
-        public Gs2.Gs2Buff.Model.BuffEntryModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Buff.Model.BuffEntryModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeBuffEntryModelMastersResult WithItems(Gs2.Gs2Buff.Model.BuffEntryModelMaster[] items) {
             this.Items = items;

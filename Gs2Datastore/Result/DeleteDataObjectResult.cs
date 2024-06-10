@@ -33,7 +33,7 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class DeleteDataObjectResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; } = null!;
 
         public DeleteDataObjectResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
             this.Item = item;

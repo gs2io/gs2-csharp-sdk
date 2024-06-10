@@ -33,9 +33,9 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class DecryptRequest : Gs2Request<DecryptRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string KeyName { set; get; }
-         public string Data { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string KeyName { set; get; } = null!;
+         public string Data { set; get; } = null!;
         public DecryptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

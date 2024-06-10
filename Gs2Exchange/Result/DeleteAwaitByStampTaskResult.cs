@@ -33,8 +33,8 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class DeleteAwaitByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.Await Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Exchange.Model.Await Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DeleteAwaitByStampTaskResult WithItem(Gs2.Gs2Exchange.Model.Await item) {
             this.Item = item;

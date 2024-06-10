@@ -33,9 +33,9 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CommitVoteRequest : Gs2Request<CommitVoteRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RatingName { set; get; }
-         public string GatheringName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RatingName { set; get; } = null!;
+         public string GatheringName { set; get; } = null!;
         public CommitVoteRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

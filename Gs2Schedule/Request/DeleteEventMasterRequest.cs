@@ -33,8 +33,8 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class DeleteEventMasterRequest : Gs2Request<DeleteEventMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string EventName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string EventName { set; get; } = null!;
         public DeleteEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

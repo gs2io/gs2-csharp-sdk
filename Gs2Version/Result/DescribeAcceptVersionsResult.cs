@@ -33,8 +33,8 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class DescribeAcceptVersionsResult : IResult
 	{
-        public Gs2.Gs2Version.Model.AcceptVersion[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Version.Model.AcceptVersion[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeAcceptVersionsResult WithItems(Gs2.Gs2Version.Model.AcceptVersion[] items) {
             this.Items = items;

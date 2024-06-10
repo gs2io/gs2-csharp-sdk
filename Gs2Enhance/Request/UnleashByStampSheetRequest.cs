@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class UnleashByStampSheetRequest : Gs2Request<UnleashByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public UnleashByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

@@ -33,11 +33,11 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CreateAccountRequest : Gs2Request<CreateAccountRequest>
 	{
-         public string Email { set; get; }
-         public string FullName { set; get; }
-         public string CompanyName { set; get; }
-         public string Password { set; get; }
-         public string Lang { set; get; }
+         public string Email { set; get; } = null!;
+         public string FullName { set; get; } = null!;
+         public string CompanyName { set; get; } = null!;
+         public string Password { set; get; } = null!;
+         public string Lang { set; get; } = null!;
         public CreateAccountRequest WithEmail(string email) {
             this.Email = email;
             return this;

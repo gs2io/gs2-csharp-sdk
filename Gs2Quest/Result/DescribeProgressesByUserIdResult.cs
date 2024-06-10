@@ -33,8 +33,8 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class DescribeProgressesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.Progress[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Quest.Model.Progress[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeProgressesByUserIdResult WithItems(Gs2.Gs2Quest.Model.Progress[] items) {
             this.Items = items;

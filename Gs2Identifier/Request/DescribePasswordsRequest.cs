@@ -33,9 +33,9 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class DescribePasswordsRequest : Gs2Request<DescribePasswordsRequest>
 	{
-         public string UserName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string UserName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribePasswordsRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

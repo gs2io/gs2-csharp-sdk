@@ -63,10 +63,10 @@ namespace Gs2.Gs2News.Domain.Model
     public partial class NewsDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2NewsRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string BrowserUrl { get; set; }
-        public string ZipUrl { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string BrowserUrl { get; set; } = null!;
+        public string ZipUrl { get; set; } = null!;
 
         public NewsDomain(
             Gs2.Core.Domain.Gs2 gs2,

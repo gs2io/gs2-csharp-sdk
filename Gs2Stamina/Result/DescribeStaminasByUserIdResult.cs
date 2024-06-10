@@ -33,8 +33,8 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class DescribeStaminasByUserIdResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.Stamina[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Stamina.Model.Stamina[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeStaminasByUserIdResult WithItems(Gs2.Gs2Stamina.Model.Stamina[] items) {
             this.Items = items;

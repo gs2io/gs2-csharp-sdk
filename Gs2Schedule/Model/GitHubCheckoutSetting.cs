@@ -31,13 +31,13 @@ namespace Gs2.Gs2Schedule.Model
 #endif
 	public class GitHubCheckoutSetting : IComparable
 	{
-        public string ApiKeyId { set; get; }
-        public string RepositoryName { set; get; }
-        public string SourcePath { set; get; }
-        public string ReferenceType { set; get; }
-        public string CommitHash { set; get; }
-        public string BranchName { set; get; }
-        public string TagName { set; get; }
+        public string ApiKeyId { set; get; } = null!;
+        public string RepositoryName { set; get; } = null!;
+        public string SourcePath { set; get; } = null!;
+        public string ReferenceType { set; get; } = null!;
+        public string CommitHash { set; get; } = null!;
+        public string BranchName { set; get; } = null!;
+        public string TagName { set; get; } = null!;
         public GitHubCheckoutSetting WithApiKeyId(string apiKeyId) {
             this.ApiKeyId = apiKeyId;
             return this;

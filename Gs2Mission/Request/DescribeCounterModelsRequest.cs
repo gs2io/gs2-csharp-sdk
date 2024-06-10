@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DescribeCounterModelsRequest : Gs2Request<DescribeCounterModelsRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DescribeCounterModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

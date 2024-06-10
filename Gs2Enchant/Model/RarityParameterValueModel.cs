@@ -31,11 +31,11 @@ namespace Gs2.Gs2Enchant.Model
 #endif
 	public class RarityParameterValueModel : IComparable
 	{
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string ResourceName { set; get; }
-        public long? ResourceValue { set; get; }
-        public int? Weight { set; get; }
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string ResourceName { set; get; } = null!;
+        public long? ResourceValue { set; get; } = null!;
+        public int? Weight { set; get; } = null!;
         public RarityParameterValueModel WithName(string name) {
             this.Name = name;
             return this;

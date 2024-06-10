@@ -33,11 +33,11 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Dictionary.Model.ScriptSetting EntryScript { set; get; }
-         public string DuplicateEntryScript { set; get; }
-         public Gs2.Gs2Dictionary.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Dictionary.Model.ScriptSetting EntryScript { set; get; } = null!;
+         public string DuplicateEntryScript { set; get; } = null!;
+         public Gs2.Gs2Dictionary.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

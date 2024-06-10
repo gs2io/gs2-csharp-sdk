@@ -33,8 +33,8 @@ namespace Gs2.Gs2Chat.Result
 	[System.Serializable]
 	public class DescribeSubscribesByRoomNameResult : IResult
 	{
-        public Gs2.Gs2Chat.Model.Subscribe[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Chat.Model.Subscribe[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeSubscribesByRoomNameResult WithItems(Gs2.Gs2Chat.Model.Subscribe[] items) {
             this.Items = items;

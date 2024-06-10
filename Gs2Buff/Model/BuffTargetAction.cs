@@ -31,10 +31,10 @@ namespace Gs2.Gs2Buff.Model
 #endif
 	public class BuffTargetAction : IComparable
 	{
-        public string TargetActionName { set; get; }
-        public string TargetFieldName { set; get; }
-        public Gs2.Gs2Buff.Model.BuffTargetGrn[] ConditionGrns { set; get; }
-        public float? Rate { set; get; }
+        public string TargetActionName { set; get; } = null!;
+        public string TargetFieldName { set; get; } = null!;
+        public Gs2.Gs2Buff.Model.BuffTargetGrn[] ConditionGrns { set; get; } = null!;
+        public float? Rate { set; get; } = null!;
         public BuffTargetAction WithTargetActionName(string targetActionName) {
             this.TargetActionName = targetActionName;
             return this;

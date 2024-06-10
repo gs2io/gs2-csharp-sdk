@@ -33,13 +33,13 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class PredictionByUserIdRequest : Gs2Request<PredictionByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string LotteryName { set; get; }
-         public string UserId { set; get; }
-         public long? RandomSeed { set; get; }
-         public int? Count { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string LotteryName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public long? RandomSeed { set; get; } = null!;
+         public int? Count { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public PredictionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

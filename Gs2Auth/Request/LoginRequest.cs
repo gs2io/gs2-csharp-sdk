@@ -33,9 +33,9 @@ namespace Gs2.Gs2Auth.Request
 	[System.Serializable]
 	public class LoginRequest : Gs2Request<LoginRequest>
 	{
-         public string UserId { set; get; }
-         public int? TimeOffset { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string UserId { set; get; } = null!;
+         public int? TimeOffset { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public LoginRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

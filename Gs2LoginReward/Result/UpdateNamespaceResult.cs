@@ -33,7 +33,7 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class UpdateNamespaceResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.Namespace Item { set; get; }
+        public Gs2.Gs2LoginReward.Model.Namespace Item { set; get; } = null!;
 
         public UpdateNamespaceResult WithItem(Gs2.Gs2LoginReward.Model.Namespace item) {
             this.Item = item;

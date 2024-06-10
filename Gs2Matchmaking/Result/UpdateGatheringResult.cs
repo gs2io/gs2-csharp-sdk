@@ -33,7 +33,7 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class UpdateGatheringResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; } = null!;
 
         public UpdateGatheringResult WithItem(Gs2.Gs2Matchmaking.Model.Gathering item) {
             this.Item = item;

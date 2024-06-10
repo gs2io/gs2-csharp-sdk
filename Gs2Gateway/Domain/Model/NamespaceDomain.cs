@@ -64,11 +64,11 @@ namespace Gs2.Gs2Gateway.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GatewayRestClient _client;
         private readonly Gs2GatewayWebSocketClient _wsclient;
-        public string NamespaceName { get; }
-        public string Status { get; set; }
-        public string Url { get; set; }
-        public string UploadToken { get; set; }
-        public string UploadUrl { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string Status { get; set; } = null!;
+        public string Url { get; set; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public NamespaceDomain(
             Gs2.Core.Domain.Gs2 gs2,

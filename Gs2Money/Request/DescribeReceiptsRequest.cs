@@ -33,14 +33,14 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class DescribeReceiptsRequest : Gs2Request<DescribeReceiptsRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public int? Slot { set; get; }
-         public long? Begin { set; get; }
-         public long? End { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? Slot { set; get; } = null!;
+         public long? Begin { set; get; } = null!;
+         public long? End { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DescribeReceiptsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

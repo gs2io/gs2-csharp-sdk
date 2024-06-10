@@ -33,10 +33,10 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DeleteAwaitRequest : Gs2Request<DeleteAwaitRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string AwaitName { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string AwaitName { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DeleteAwaitRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

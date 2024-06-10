@@ -63,13 +63,13 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class RandomDisplayItemAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string ShowcaseName { get; }
-        public string DisplayItemName { get; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
+        public string ShowcaseName { get; } = null!;
+        public string DisplayItemName { get; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public RandomDisplayItemAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

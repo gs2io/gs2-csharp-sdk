@@ -33,10 +33,10 @@ namespace Gs2.Gs2SeasonRating.Request
 	[System.Serializable]
 	public class VoteMultipleRequest : Gs2Request<VoteMultipleRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2SeasonRating.Model.SignedBallot[] SignedBallots { set; get; }
-         public Gs2.Gs2SeasonRating.Model.GameResult[] GameResults { set; get; }
-         public string KeyId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2SeasonRating.Model.SignedBallot[] SignedBallots { set; get; } = null!;
+         public Gs2.Gs2SeasonRating.Model.GameResult[] GameResults { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public VoteMultipleRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

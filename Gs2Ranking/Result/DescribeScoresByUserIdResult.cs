@@ -33,8 +33,8 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class DescribeScoresByUserIdResult : IResult
 	{
-        public Gs2.Gs2Ranking.Model.Score[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Ranking.Model.Score[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeScoresByUserIdResult WithItems(Gs2.Gs2Ranking.Model.Score[] items) {
             this.Items = items;

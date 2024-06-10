@@ -33,11 +33,11 @@ namespace Gs2.Gs2Auth.Request
 	[System.Serializable]
 	public class FederationRequest : Gs2Request<FederationRequest>
 	{
-         public string OriginalUserId { set; get; }
-         public string UserId { set; get; }
-         public string PolicyDocument { set; get; }
-         public int? TimeOffset { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string OriginalUserId { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string PolicyDocument { set; get; } = null!;
+         public int? TimeOffset { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public FederationRequest WithOriginalUserId(string originalUserId) {
             this.OriginalUserId = originalUserId;
             return this;

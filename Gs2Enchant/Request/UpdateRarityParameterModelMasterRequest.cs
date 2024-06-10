@@ -33,13 +33,13 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class UpdateRarityParameterModelMasterRequest : Gs2Request<UpdateRarityParameterModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ParameterName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public int? MaximumParameterCount { set; get; }
-         public Gs2.Gs2Enchant.Model.RarityParameterCountModel[] ParameterCounts { set; get; }
-         public Gs2.Gs2Enchant.Model.RarityParameterValueModel[] Parameters { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ParameterName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public int? MaximumParameterCount { set; get; } = null!;
+         public Gs2.Gs2Enchant.Model.RarityParameterCountModel[] ParameterCounts { set; get; } = null!;
+         public Gs2.Gs2Enchant.Model.RarityParameterValueModel[] Parameters { set; get; } = null!;
         public UpdateRarityParameterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

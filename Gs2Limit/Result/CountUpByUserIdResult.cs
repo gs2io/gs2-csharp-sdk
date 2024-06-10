@@ -33,7 +33,7 @@ namespace Gs2.Gs2Limit.Result
 	[System.Serializable]
 	public class CountUpByUserIdResult : IResult
 	{
-        public Gs2.Gs2Limit.Model.Counter Item { set; get; }
+        public Gs2.Gs2Limit.Model.Counter Item { set; get; } = null!;
 
         public CountUpByUserIdResult WithItem(Gs2.Gs2Limit.Model.Counter item) {
             this.Item = item;

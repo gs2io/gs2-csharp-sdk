@@ -33,7 +33,7 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class VoteMultipleResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Ballot Item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Ballot Item { set; get; } = null!;
 
         public VoteMultipleResult WithItem(Gs2.Gs2Matchmaking.Model.Ballot item) {
             this.Item = item;

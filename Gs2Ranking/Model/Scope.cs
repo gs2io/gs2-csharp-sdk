@@ -31,8 +31,8 @@ namespace Gs2.Gs2Ranking.Model
 #endif
 	public class Scope : IComparable
 	{
-        public string Name { set; get; }
-        public long? TargetDays { set; get; }
+        public string Name { set; get; } = null!;
+        public long? TargetDays { set; get; } = null!;
         public Scope WithName(string name) {
             this.Name = name;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class GetCurrentDistributorMasterRequest : Gs2Request<GetCurrentDistributorMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentDistributorMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

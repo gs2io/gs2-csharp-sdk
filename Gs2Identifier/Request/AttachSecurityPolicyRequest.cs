@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class AttachSecurityPolicyRequest : Gs2Request<AttachSecurityPolicyRequest>
 	{
-         public string UserName { set; get; }
-         public string SecurityPolicyId { set; get; }
+         public string UserName { set; get; } = null!;
+         public string SecurityPolicyId { set; get; } = null!;
         public AttachSecurityPolicyRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

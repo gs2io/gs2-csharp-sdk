@@ -31,10 +31,10 @@ namespace Gs2.Gs2JobQueue.Model
 #endif
 	public class JobResultBody : IComparable
 	{
-        public int? TryNumber { set; get; }
-        public int? StatusCode { set; get; }
-        public string Result { set; get; }
-        public long? TryAt { set; get; }
+        public int? TryNumber { set; get; } = null!;
+        public int? StatusCode { set; get; } = null!;
+        public string Result { set; get; } = null!;
+        public long? TryAt { set; get; } = null!;
         public JobResultBody WithTryNumber(int? tryNumber) {
             this.TryNumber = tryNumber;
             return this;

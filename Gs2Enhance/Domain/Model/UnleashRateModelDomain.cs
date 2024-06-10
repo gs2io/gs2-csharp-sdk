@@ -63,8 +63,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
     public partial class UnleashRateModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnhanceRestClient _client;
-        public string NamespaceName { get; }
-        public string RateName { get; }
+        public string NamespaceName { get; } = null!;
+        public string RateName { get; } = null!;
 
         public UnleashRateModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

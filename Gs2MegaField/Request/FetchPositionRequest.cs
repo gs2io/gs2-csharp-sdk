@@ -33,12 +33,12 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class FetchPositionRequest : Gs2Request<FetchPositionRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string AreaModelName { set; get; }
-         public string LayerModelName { set; get; }
-         public string[] UserIds { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string AreaModelName { set; get; } = null!;
+         public string LayerModelName { set; get; } = null!;
+         public string[] UserIds { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public FetchPositionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

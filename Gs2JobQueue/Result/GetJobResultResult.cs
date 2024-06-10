@@ -33,7 +33,7 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class GetJobResultResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.JobResult Item { set; get; }
+        public Gs2.Gs2JobQueue.Model.JobResult Item { set; get; } = null!;
 
         public GetJobResultResult WithItem(Gs2.Gs2JobQueue.Model.JobResult item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class SetExperienceByUserIdResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.Status Item { set; get; }
-        public Gs2.Gs2Experience.Model.Status Old { set; get; }
+        public Gs2.Gs2Experience.Model.Status Item { set; get; } = null!;
+        public Gs2.Gs2Experience.Model.Status Old { set; get; } = null!;
 
         public SetExperienceByUserIdResult WithItem(Gs2.Gs2Experience.Model.Status item) {
             this.Item = item;

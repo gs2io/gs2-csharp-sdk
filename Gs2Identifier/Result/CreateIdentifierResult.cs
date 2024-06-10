@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class CreateIdentifierResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.Identifier Item { set; get; }
-        public string ClientSecret { set; get; }
+        public Gs2.Gs2Identifier.Model.Identifier Item { set; get; } = null!;
+        public string ClientSecret { set; get; } = null!;
 
         public CreateIdentifierResult WithItem(Gs2.Gs2Identifier.Model.Identifier item) {
             this.Item = item;

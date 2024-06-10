@@ -63,10 +63,10 @@ namespace Gs2.Gs2SerialKey.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SerialKeyRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string Url { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string Url { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,

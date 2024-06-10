@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lock.Result
 	[System.Serializable]
 	public class UnlockResult : IResult
 	{
-        public Gs2.Gs2Lock.Model.Mutex Item { set; get; }
+        public Gs2.Gs2Lock.Model.Mutex Item { set; get; } = null!;
 
         public UnlockResult WithItem(Gs2.Gs2Lock.Model.Mutex item) {
             this.Item = item;

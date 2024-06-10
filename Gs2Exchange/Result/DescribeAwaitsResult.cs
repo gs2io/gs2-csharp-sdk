@@ -33,8 +33,8 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class DescribeAwaitsResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.Await[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Exchange.Model.Await[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeAwaitsResult WithItems(Gs2.Gs2Exchange.Model.Await[] items) {
             this.Items = items;

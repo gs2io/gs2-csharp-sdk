@@ -33,9 +33,9 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class ResetPrizeLimitRequest : Gs2Request<ResetPrizeLimitRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PrizeTableName { set; get; }
-         public string PrizeId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PrizeTableName { set; get; } = null!;
+         public string PrizeId { set; get; } = null!;
         public ResetPrizeLimitRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,11 +31,11 @@ namespace Gs2.Gs2Showcase.Model
 #endif
 	public class DisplayItem : IComparable
 	{
-        public string DisplayItemId { set; get; }
-        public string Type { set; get; }
-        public Gs2.Gs2Showcase.Model.SalesItem SalesItem { set; get; }
-        public Gs2.Gs2Showcase.Model.SalesItemGroup SalesItemGroup { set; get; }
-        public string SalesPeriodEventId { set; get; }
+        public string DisplayItemId { set; get; } = null!;
+        public string Type { set; get; } = null!;
+        public Gs2.Gs2Showcase.Model.SalesItem SalesItem { set; get; } = null!;
+        public Gs2.Gs2Showcase.Model.SalesItemGroup SalesItemGroup { set; get; } = null!;
+        public string SalesPeriodEventId { set; get; } = null!;
         public DisplayItem WithDisplayItemId(string displayItemId) {
             this.DisplayItemId = displayItemId;
             return this;

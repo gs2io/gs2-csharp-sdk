@@ -33,16 +33,16 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class UpdateGuildModelMasterRequest : Gs2Request<UpdateGuildModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GuildModelName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public int? DefaultMaximumMemberCount { set; get; }
-         public int? MaximumMemberCount { set; get; }
-         public Gs2.Gs2Guild.Model.RoleModel[] Roles { set; get; }
-         public string GuildMasterRole { set; get; }
-         public string GuildMemberDefaultRole { set; get; }
-         public int? RejoinCoolTimeMinutes { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public int? DefaultMaximumMemberCount { set; get; } = null!;
+         public int? MaximumMemberCount { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.RoleModel[] Roles { set; get; } = null!;
+         public string GuildMasterRole { set; get; } = null!;
+         public string GuildMemberDefaultRole { set; get; } = null!;
+         public int? RejoinCoolTimeMinutes { set; get; } = null!;
         public UpdateGuildModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

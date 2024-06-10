@@ -63,9 +63,9 @@ namespace Gs2.Gs2Key.Domain.Model
     public partial class KeyDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2KeyRestClient _client;
-        public string NamespaceName { get; }
-        public string KeyName { get; }
-        public string Data { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string KeyName { get; } = null!;
+        public string Data { get; set; } = null!;
 
         public KeyDomain(
             Gs2.Core.Domain.Gs2 gs2,

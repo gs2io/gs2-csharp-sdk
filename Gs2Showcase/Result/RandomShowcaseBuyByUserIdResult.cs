@@ -33,11 +33,11 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class RandomShowcaseBuyByUserIdResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.RandomDisplayItem Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Gs2Showcase.Model.RandomDisplayItem Item { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public RandomShowcaseBuyByUserIdResult WithItem(Gs2.Gs2Showcase.Model.RandomDisplayItem item) {
             this.Item = item;

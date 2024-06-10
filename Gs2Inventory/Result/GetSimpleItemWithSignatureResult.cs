@@ -33,10 +33,10 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class GetSimpleItemWithSignatureResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; }
-        public Gs2.Gs2Inventory.Model.SimpleItemModel SimpleItemModel { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.SimpleItemModel SimpleItemModel { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
 
         public GetSimpleItemWithSignatureResult WithItem(Gs2.Gs2Inventory.Model.SimpleItem item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class UpdateCurrentLotteryMasterFromGitHubRequest : Gs2Request<UpdateCurrentLotteryMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Lottery.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Lottery.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentLotteryMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

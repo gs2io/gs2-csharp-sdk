@@ -33,9 +33,9 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class GetStaminaRequest : Gs2Request<GetStaminaRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StaminaName { set; get; }
-         public string AccessToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StaminaName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
         public GetStaminaRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

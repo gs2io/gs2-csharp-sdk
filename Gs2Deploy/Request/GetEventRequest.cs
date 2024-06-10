@@ -33,8 +33,8 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class GetEventRequest : Gs2Request<GetEventRequest>
 	{
-         public string StackName { set; get; }
-         public string EventName { set; get; }
+         public string StackName { set; get; } = null!;
+         public string EventName { set; get; } = null!;
         public GetEventRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

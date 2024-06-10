@@ -33,7 +33,7 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class GetEventResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Event Item { set; get; }
+        public Gs2.Gs2Deploy.Model.Event Item { set; get; } = null!;
 
         public GetEventResult WithItem(Gs2.Gs2Deploy.Model.Event item) {
             this.Item = item;

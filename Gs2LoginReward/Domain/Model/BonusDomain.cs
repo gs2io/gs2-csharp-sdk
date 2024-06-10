@@ -63,10 +63,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
     public partial class BonusDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public BonusDomain(
             Gs2.Core.Domain.Gs2 gs2,

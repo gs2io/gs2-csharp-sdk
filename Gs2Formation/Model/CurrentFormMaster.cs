@@ -31,8 +31,8 @@ namespace Gs2.Gs2Formation.Model
 #endif
 	public class CurrentFormMaster : IComparable
 	{
-        public string NamespaceId { set; get; }
-        public string Settings { set; get; }
+        public string NamespaceId { set; get; } = null!;
+        public string Settings { set; get; } = null!;
         public CurrentFormMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

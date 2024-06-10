@@ -33,8 +33,8 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class GetNodeModelRequest : Gs2Request<GetNodeModelRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string NodeModelName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string NodeModelName { set; get; } = null!;
         public GetNodeModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

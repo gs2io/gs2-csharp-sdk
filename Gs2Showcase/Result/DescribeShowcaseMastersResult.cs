@@ -33,8 +33,8 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class DescribeShowcaseMastersResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.ShowcaseMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Showcase.Model.ShowcaseMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeShowcaseMastersResult WithItems(Gs2.Gs2Showcase.Model.ShowcaseMaster[] items) {
             this.Items = items;

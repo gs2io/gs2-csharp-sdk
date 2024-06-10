@@ -33,32 +33,32 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class CreateCategoryModelMasterRequest : Gs2Request<CreateCategoryModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public long? MinimumValue { set; get; }
-         public long? MaximumValue { set; get; }
-         public string OrderDirection { set; get; }
-         public string Scope { set; get; }
-         public Gs2.Gs2Ranking.Model.GlobalRankingSetting GlobalRankingSetting { set; get; }
-         public string EntryPeriodEventId { set; get; }
-         public string AccessPeriodEventId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public long? MinimumValue { set; get; } = null!;
+         public long? MaximumValue { set; get; } = null!;
+         public string OrderDirection { set; get; } = null!;
+         public string Scope { set; get; } = null!;
+         public Gs2.Gs2Ranking.Model.GlobalRankingSetting GlobalRankingSetting { set; get; } = null!;
+         public string EntryPeriodEventId { set; get; } = null!;
+         public string AccessPeriodEventId { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public bool? UniqueByUserId { set; get; }
-         public bool? Sum { set; get; }
+         public bool? UniqueByUserId { set; get; } = null!;
+         public bool? Sum { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public int? CalculateFixedTimingHour { set; get; }
+         public int? CalculateFixedTimingHour { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public int? CalculateFixedTimingMinute { set; get; }
+         public int? CalculateFixedTimingMinute { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public int? CalculateIntervalMinutes { set; get; }
+         public int? CalculateIntervalMinutes { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; }
+         public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string[] IgnoreUserIds { set; get; }
+         public string[] IgnoreUserIds { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string Generation { set; get; }
+         public string Generation { set; get; } = null!;
         public CreateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

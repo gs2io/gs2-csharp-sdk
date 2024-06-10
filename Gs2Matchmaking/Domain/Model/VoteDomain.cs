@@ -63,9 +63,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class VoteDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
-        public string NamespaceName { get; }
-        public string RatingName { get; }
-        public string GatheringName { get; }
+        public string NamespaceName { get; } = null!;
+        public string RatingName { get; } = null!;
+        public string GatheringName { get; } = null!;
 
         public VoteDomain(
             Gs2.Core.Domain.Gs2 gs2,

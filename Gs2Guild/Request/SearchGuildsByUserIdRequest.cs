@@ -33,21 +33,21 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class SearchGuildsByUserIdRequest : Gs2Request<SearchGuildsByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GuildModelName { set; get; }
-         public string UserId { set; get; }
-         public string DisplayName { set; get; }
-         public int[] Attributes1 { set; get; }
-         public int[] Attributes2 { set; get; }
-         public int[] Attributes3 { set; get; }
-         public int[] Attributes4 { set; get; }
-         public int[] Attributes5 { set; get; }
-         public string[] JoinPolicies { set; get; }
-         public bool? IncludeFullMembersGuild { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string DisplayName { set; get; } = null!;
+         public int[] Attributes1 { set; get; } = null!;
+         public int[] Attributes2 { set; get; } = null!;
+         public int[] Attributes3 { set; get; } = null!;
+         public int[] Attributes4 { set; get; } = null!;
+         public int[] Attributes5 { set; get; } = null!;
+         public string[] JoinPolicies { set; get; } = null!;
+         public bool? IncludeFullMembersGuild { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SearchGuildsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

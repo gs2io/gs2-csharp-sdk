@@ -33,18 +33,18 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Priority { set; get; }
-         public bool? ShareFree { set; get; }
-         public string Currency { set; get; }
-         public string AppleKey { set; get; }
-         public string GoogleKey { set; get; }
-         public bool? EnableFakeReceipt { set; get; }
-         public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; }
-         public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; }
-         public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; }
-         public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Priority { set; get; } = null!;
+         public bool? ShareFree { set; get; } = null!;
+         public string Currency { set; get; } = null!;
+         public string AppleKey { set; get; } = null!;
+         public string GoogleKey { set; get; } = null!;
+         public bool? EnableFakeReceipt { set; get; } = null!;
+         public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; } = null!;
+         public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; } = null!;
+         public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; } = null!;
+         public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

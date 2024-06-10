@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class VerifyIncludeMemberByStampTaskRequest : Gs2Request<VerifyIncludeMemberByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public VerifyIncludeMemberByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

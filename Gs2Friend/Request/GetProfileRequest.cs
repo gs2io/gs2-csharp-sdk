@@ -33,8 +33,8 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class GetProfileRequest : Gs2Request<GetProfileRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
         public GetProfileRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class SubRankCapByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.Status Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Experience.Model.Status Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public SubRankCapByStampTaskResult WithItem(Gs2.Gs2Experience.Model.Status item) {
             this.Item = item;

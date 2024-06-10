@@ -33,7 +33,7 @@ namespace Gs2.Gs2Grade.Result
 	[System.Serializable]
 	public class UpdateCurrentGradeMasterFromGitHubResult : IResult
 	{
-        public Gs2.Gs2Grade.Model.CurrentGradeMaster Item { set; get; }
+        public Gs2.Gs2Grade.Model.CurrentGradeMaster Item { set; get; } = null!;
 
         public UpdateCurrentGradeMasterFromGitHubResult WithItem(Gs2.Gs2Grade.Model.CurrentGradeMaster item) {
             this.Item = item;

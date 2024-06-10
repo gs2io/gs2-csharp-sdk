@@ -31,17 +31,17 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class LotteryModelMaster : IComparable
 	{
-        public string LotteryModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public string Mode { set; get; }
-        public string Method { set; get; }
-        public string PrizeTableName { set; get; }
-        public string ChoicePrizeTableScriptId { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string LotteryModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string Mode { set; get; } = null!;
+        public string Method { set; get; } = null!;
+        public string PrizeTableName { set; get; } = null!;
+        public string ChoicePrizeTableScriptId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public LotteryModelMaster WithLotteryModelId(string lotteryModelId) {
             this.LotteryModelId = lotteryModelId;
             return this;

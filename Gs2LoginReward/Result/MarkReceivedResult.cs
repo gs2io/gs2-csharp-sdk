@@ -33,8 +33,8 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class MarkReceivedResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; }
-        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; }
+        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; } = null!;
+        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; } = null!;
 
         public MarkReceivedResult WithItem(Gs2.Gs2LoginReward.Model.ReceiveStatus item) {
             this.Item = item;

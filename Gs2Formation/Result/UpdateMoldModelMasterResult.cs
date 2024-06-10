@@ -33,7 +33,7 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class UpdateMoldModelMasterResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.MoldModelMaster Item { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModelMaster Item { set; get; } = null!;
 
         public UpdateMoldModelMasterResult WithItem(Gs2.Gs2Formation.Model.MoldModelMaster item) {
             this.Item = item;

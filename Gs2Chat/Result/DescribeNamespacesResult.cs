@@ -33,8 +33,8 @@ namespace Gs2.Gs2Chat.Result
 	[System.Serializable]
 	public class DescribeNamespacesResult : IResult
 	{
-        public Gs2.Gs2Chat.Model.Namespace[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Chat.Model.Namespace[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeNamespacesResult WithItems(Gs2.Gs2Chat.Model.Namespace[] items) {
             this.Items = items;

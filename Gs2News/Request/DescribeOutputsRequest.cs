@@ -33,10 +33,10 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class DescribeOutputsRequest : Gs2Request<DescribeOutputsRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UploadToken { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeOutputsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

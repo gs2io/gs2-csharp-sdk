@@ -31,15 +31,15 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class RatingModelMaster : IComparable
 	{
-        public string RatingModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public int? InitialValue { set; get; }
-        public int? Volatility { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string RatingModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public int? InitialValue { set; get; } = null!;
+        public int? Volatility { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public RatingModelMaster WithRatingModelId(string ratingModelId) {
             this.RatingModelId = ratingModelId;
             return this;

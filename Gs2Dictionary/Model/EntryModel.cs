@@ -31,9 +31,9 @@ namespace Gs2.Gs2Dictionary.Model
 #endif
 	public class EntryModel : IComparable
 	{
-        public string EntryModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
+        public string EntryModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public EntryModel WithEntryModelId(string entryModelId) {
             this.EntryModelId = entryModelId;
             return this;

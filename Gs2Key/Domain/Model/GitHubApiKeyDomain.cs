@@ -63,9 +63,9 @@ namespace Gs2.Gs2Key.Domain.Model
     public partial class GitHubApiKeyDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2KeyRestClient _client;
-        public string NamespaceName { get; }
-        public string ApiKeyName { get; }
-        public string ApiKey { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string ApiKeyName { get; } = null!;
+        public string ApiKey { get; set; } = null!;
 
         public GitHubApiKeyDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -63,16 +63,16 @@ namespace Gs2.Gs2Distributor.Domain.Model
     public partial class NamespaceDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
-        public string NamespaceName { get; }
-        public string Status { get; set; }
-        public string Result { get; set; }
-        public string ContextStack { get; set; }
-        public int? StatusCode { get; set; }
-        public int[] TaskResultCodes { get; set; }
-        public string[] TaskResults { get; set; }
-        public int? SheetResultCode { get; set; }
-        public string SheetResult { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string Status { get; set; } = null!;
+        public string Result { get; set; } = null!;
+        public string ContextStack { get; set; } = null!;
+        public int? StatusCode { get; set; } = null!;
+        public int[] TaskResultCodes { get; set; } = null!;
+        public string[] TaskResults { get; set; } = null!;
+        public int? SheetResultCode { get; set; } = null!;
+        public string SheetResult { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public NamespaceDomain(
             Gs2.Core.Domain.Gs2 gs2,

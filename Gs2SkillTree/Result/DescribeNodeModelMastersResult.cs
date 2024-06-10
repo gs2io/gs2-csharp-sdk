@@ -33,8 +33,8 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class DescribeNodeModelMastersResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.NodeModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2SkillTree.Model.NodeModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeNodeModelMastersResult WithItems(Gs2.Gs2SkillTree.Model.NodeModelMaster[] items) {
             this.Items = items;

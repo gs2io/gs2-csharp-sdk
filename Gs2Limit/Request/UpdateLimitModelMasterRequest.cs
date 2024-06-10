@@ -33,14 +33,14 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class UpdateLimitModelMasterRequest : Gs2Request<UpdateLimitModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string LimitName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string ResetType { set; get; }
-         public int? ResetDayOfMonth { set; get; }
-         public string ResetDayOfWeek { set; get; }
-         public int? ResetHour { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string LimitName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string ResetType { set; get; } = null!;
+         public int? ResetDayOfMonth { set; get; } = null!;
+         public string ResetDayOfWeek { set; get; } = null!;
+         public int? ResetHour { set; get; } = null!;
         public UpdateLimitModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

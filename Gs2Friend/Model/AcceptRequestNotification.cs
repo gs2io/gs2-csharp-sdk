@@ -20,8 +20,8 @@ namespace Gs2.Gs2Friend.Model
 {
 	public class AcceptRequestNotification
 	{
-        public string NamespaceName { set; get; }
-        public string TargetUserId { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string TargetUserId { set; get; } = null!;
         public AcceptRequestNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

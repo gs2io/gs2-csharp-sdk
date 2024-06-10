@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class DecreaseMaximumCurrentMaximumMemberCountByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.Guild Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Guild.Model.Guild Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DecreaseMaximumCurrentMaximumMemberCountByStampTaskResult WithItem(Gs2.Gs2Guild.Model.Guild item) {
             this.Item = item;

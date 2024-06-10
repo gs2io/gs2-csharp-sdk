@@ -33,9 +33,9 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class DescribeResourcesRequest : Gs2Request<DescribeResourcesRequest>
 	{
-         public string StackName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string StackName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeResourcesRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

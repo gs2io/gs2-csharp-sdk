@@ -33,12 +33,12 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class RecordReceiptRequest : Gs2Request<RecordReceiptRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string ContentsId { set; get; }
-         public string Receipt { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string ContentsId { set; get; } = null!;
+         public string Receipt { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public RecordReceiptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

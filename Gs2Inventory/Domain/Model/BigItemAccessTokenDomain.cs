@@ -63,11 +63,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class BigItemAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string InventoryName { get; }
-        public string ItemName { get; }
+        public string InventoryName { get; } = null!;
+        public string ItemName { get; } = null!;
 
         public BigItemAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -31,10 +31,10 @@ namespace Gs2.Gs2SeasonRating.Model
 #endif
 	public class Ballot : IComparable
 	{
-        public string UserId { set; get; }
-        public string SeasonName { set; get; }
-        public string SessionName { set; get; }
-        public int? NumberOfPlayer { set; get; }
+        public string UserId { set; get; } = null!;
+        public string SeasonName { set; get; } = null!;
+        public string SessionName { set; get; } = null!;
+        public int? NumberOfPlayer { set; get; } = null!;
         public Ballot WithUserId(string userId) {
             this.UserId = userId;
             return this;

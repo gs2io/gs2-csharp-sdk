@@ -33,9 +33,9 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class UpdateStackRequest : Gs2Request<UpdateStackRequest>
 	{
-         public string StackName { set; get; }
-         public string Description { set; get; }
-         public string Template { set; get; }
+         public string StackName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Template { set; get; } = null!;
         public UpdateStackRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

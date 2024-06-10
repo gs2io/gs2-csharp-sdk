@@ -31,8 +31,8 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class Probability : IComparable
 	{
-        public Gs2.Gs2Lottery.Model.DrawnPrize Prize { set; get; }
-        public float? Rate { set; get; }
+        public Gs2.Gs2Lottery.Model.DrawnPrize Prize { set; get; } = null!;
+        public float? Rate { set; get; } = null!;
         public Probability WithPrize(Gs2.Gs2Lottery.Model.DrawnPrize prize) {
             this.Prize = prize;
             return this;

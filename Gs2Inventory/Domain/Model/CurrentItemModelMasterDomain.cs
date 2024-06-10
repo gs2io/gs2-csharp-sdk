@@ -63,7 +63,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class CurrentItemModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentItemModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

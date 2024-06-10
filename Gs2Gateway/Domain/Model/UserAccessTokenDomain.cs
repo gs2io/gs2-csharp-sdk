@@ -64,11 +64,11 @@ namespace Gs2.Gs2Gateway.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GatewayRestClient _client;
         private readonly Gs2GatewayWebSocketClient _wsclient;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string Protocol { get; set; }
-        public string NextPageToken { get; set; }
+        public string Protocol { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

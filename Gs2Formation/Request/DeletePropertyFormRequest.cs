@@ -33,11 +33,11 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class DeletePropertyFormRequest : Gs2Request<DeletePropertyFormRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string PropertyFormModelName { set; get; }
-         public string PropertyId { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string PropertyFormModelName { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DeletePropertyFormRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

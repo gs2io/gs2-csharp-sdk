@@ -33,18 +33,18 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class QueryIssueStampSheetLogRequest : Gs2Request<QueryIssueStampSheetLogRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Service { set; get; }
-         public string Method { set; get; }
-         public string UserId { set; get; }
-         public string Action { set; get; }
-         public long? Begin { set; get; }
-         public long? End { set; get; }
-         public bool? LongTerm { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Service { set; get; } = null!;
+         public string Method { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string Action { set; get; } = null!;
+         public long? Begin { set; get; } = null!;
+         public long? End { set; get; } = null!;
+         public bool? LongTerm { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public QueryIssueStampSheetLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DescribeProjectsRequest : Gs2Request<DescribeProjectsRequest>
 	{
-         public string AccountToken { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string AccountToken { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeProjectsRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class CheckImportUserDataByUserIdResult : IResult
 	{
-        public string Url { set; get; }
+        public string Url { set; get; } = null!;
 
         public CheckImportUserDataByUserIdResult WithUrl(string url) {
             this.Url = url;

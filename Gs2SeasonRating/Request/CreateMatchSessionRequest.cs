@@ -33,9 +33,9 @@ namespace Gs2.Gs2SeasonRating.Request
 	[System.Serializable]
 	public class CreateMatchSessionRequest : Gs2Request<CreateMatchSessionRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string SessionName { set; get; }
-         public int? TtlSeconds { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string SessionName { set; get; } = null!;
+         public int? TtlSeconds { set; get; } = null!;
         public CreateMatchSessionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

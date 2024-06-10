@@ -33,14 +33,14 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class ActionByUserIdRequest : Gs2Request<ActionByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string AreaModelName { set; get; }
-         public string LayerModelName { set; get; }
-         public Gs2.Gs2MegaField.Model.MyPosition Position { set; get; }
-         public Gs2.Gs2MegaField.Model.Scope[] Scopes { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string AreaModelName { set; get; } = null!;
+         public string LayerModelName { set; get; } = null!;
+         public Gs2.Gs2MegaField.Model.MyPosition Position { set; get; } = null!;
+         public Gs2.Gs2MegaField.Model.Scope[] Scopes { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ActionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

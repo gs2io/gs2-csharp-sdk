@@ -20,10 +20,10 @@ namespace Gs2.Gs2Guild.Model
 {
 	public class LeaveNotification
 	{
-        public string NamespaceName { set; get; }
-        public string GuildModelName { set; get; }
-        public string GuildName { set; get; }
-        public string LeavedUserId { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string GuildModelName { set; get; } = null!;
+        public string GuildName { set; get; } = null!;
+        public string LeavedUserId { set; get; } = null!;
         public LeaveNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

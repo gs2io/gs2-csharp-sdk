@@ -33,9 +33,9 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class PrepareImportUserDataByUserIdRequest : Gs2Request<PrepareImportUserDataByUserIdRequest>
 	{
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public PrepareImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

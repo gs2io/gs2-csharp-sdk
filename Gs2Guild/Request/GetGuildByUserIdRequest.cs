@@ -33,11 +33,11 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class GetGuildByUserIdRequest : Gs2Request<GetGuildByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string GuildModelName { set; get; }
-         public string GuildName { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string GuildName { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetGuildByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

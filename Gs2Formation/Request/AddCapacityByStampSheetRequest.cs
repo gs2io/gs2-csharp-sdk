@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class AddCapacityByStampSheetRequest : Gs2Request<AddCapacityByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public AddCapacityByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

@@ -33,11 +33,11 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class DeleteDeadLetterJobByUserIdRequest : Gs2Request<DeleteDeadLetterJobByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string DeadLetterJobName { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string DeadLetterJobName { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DeleteDeadLetterJobByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

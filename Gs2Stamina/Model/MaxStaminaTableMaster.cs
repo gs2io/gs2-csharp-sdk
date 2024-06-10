@@ -31,15 +31,15 @@ namespace Gs2.Gs2Stamina.Model
 #endif
 	public class MaxStaminaTableMaster : IComparable
 	{
-        public string MaxStaminaTableId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public string ExperienceModelId { set; get; }
-        public int[] Values { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string MaxStaminaTableId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string ExperienceModelId { set; get; } = null!;
+        public int[] Values { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public MaxStaminaTableMaster WithMaxStaminaTableId(string maxStaminaTableId) {
             this.MaxStaminaTableId = maxStaminaTableId;
             return this;

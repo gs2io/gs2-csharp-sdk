@@ -31,13 +31,13 @@ namespace Gs2.Gs2Formation.Model
 #endif
 	public class Form : IComparable
 	{
-        public string FormId { set; get; }
-        public string Name { set; get; }
-        public int? Index { set; get; }
-        public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string FormId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public int? Index { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Form WithFormId(string formId) {
             this.FormId = formId;
             return this;

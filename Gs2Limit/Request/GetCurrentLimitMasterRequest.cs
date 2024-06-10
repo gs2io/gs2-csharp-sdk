@@ -33,7 +33,7 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class GetCurrentLimitMasterRequest : Gs2Request<GetCurrentLimitMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentLimitMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

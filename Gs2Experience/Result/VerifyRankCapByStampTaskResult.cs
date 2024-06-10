@@ -33,7 +33,7 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class VerifyRankCapByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyRankCapByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

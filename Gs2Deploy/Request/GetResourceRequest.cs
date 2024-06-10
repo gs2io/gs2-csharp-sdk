@@ -33,8 +33,8 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class GetResourceRequest : Gs2Request<GetResourceRequest>
 	{
-         public string StackName { set; get; }
-         public string ResourceName { set; get; }
+         public string StackName { set; get; } = null!;
+         public string ResourceName { set; get; } = null!;
         public GetResourceRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

@@ -33,19 +33,19 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public bool? IsAutomaticDeletingEnabled { set; get; }
-         public Gs2.Gs2Inbox.Model.TransactionSetting TransactionSetting { set; get; }
-         public Gs2.Gs2Inbox.Model.ScriptSetting ReceiveMessageScript { set; get; }
-         public Gs2.Gs2Inbox.Model.ScriptSetting ReadMessageScript { set; get; }
-         public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; }
-         public Gs2.Gs2Inbox.Model.NotificationSetting ReceiveNotification { set; get; }
-         public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public bool? IsAutomaticDeletingEnabled { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.ScriptSetting ReceiveMessageScript { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.ScriptSetting ReadMessageScript { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.NotificationSetting ReceiveNotification { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string QueueNamespaceId { set; get; }
+         public string QueueNamespaceId { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string KeyId { set; get; }
+         public string KeyId { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

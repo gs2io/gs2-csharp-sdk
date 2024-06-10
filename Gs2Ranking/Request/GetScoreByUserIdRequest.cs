@@ -33,12 +33,12 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetScoreByUserIdRequest : Gs2Request<GetScoreByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
-         public string UserId { set; get; }
-         public string ScorerUserId { set; get; }
-         public string UniqueId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string ScorerUserId { set; get; } = null!;
+         public string UniqueId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetScoreByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

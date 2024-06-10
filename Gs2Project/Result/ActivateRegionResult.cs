@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class ActivateRegionResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Project Item { set; get; }
+        public Gs2.Gs2Project.Model.Project Item { set; get; } = null!;
 
         public ActivateRegionResult WithItem(Gs2.Gs2Project.Model.Project item) {
             this.Item = item;

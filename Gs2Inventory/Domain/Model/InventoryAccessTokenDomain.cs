@@ -63,12 +63,12 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class InventoryAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string InventoryName { get; }
-        public long? OverflowCount { get; set; }
-        public string NextPageToken { get; set; }
+        public string InventoryName { get; } = null!;
+        public long? OverflowCount { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public InventoryAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

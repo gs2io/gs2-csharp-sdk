@@ -63,9 +63,9 @@ namespace Gs2.Gs2Account.Domain.Model
     public partial class DataOwnerDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string DataOwnerName { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string DataOwnerName { get; } = null!;
 
         public DataOwnerDomain(
             Gs2.Core.Domain.Gs2 gs2,

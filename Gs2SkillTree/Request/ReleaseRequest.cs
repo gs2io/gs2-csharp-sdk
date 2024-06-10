@@ -33,12 +33,12 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class ReleaseRequest : Gs2Request<ReleaseRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string PropertyId { set; get; }
-         public string[] NodeModelNames { set; get; }
-         public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public string[] NodeModelNames { set; get; } = null!;
+         public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ReleaseRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

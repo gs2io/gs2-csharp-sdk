@@ -33,10 +33,10 @@ namespace Gs2.Gs2Buff.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Buff.Model.ScriptSetting ApplyBuffScript { set; get; }
-         public Gs2.Gs2Buff.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Buff.Model.ScriptSetting ApplyBuffScript { set; get; } = null!;
+         public Gs2.Gs2Buff.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

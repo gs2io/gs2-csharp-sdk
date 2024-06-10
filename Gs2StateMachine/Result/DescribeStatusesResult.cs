@@ -33,8 +33,8 @@ namespace Gs2.Gs2StateMachine.Result
 	[System.Serializable]
 	public class DescribeStatusesResult : IResult
 	{
-        public Gs2.Gs2StateMachine.Model.Status[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2StateMachine.Model.Status[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeStatusesResult WithItems(Gs2.Gs2StateMachine.Model.Status[] items) {
             this.Items = items;

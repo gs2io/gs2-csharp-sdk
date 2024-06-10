@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class DescribeGuildModelsResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.GuildModel[] Items { set; get; }
+        public Gs2.Gs2Guild.Model.GuildModel[] Items { set; get; } = null!;
 
         public DescribeGuildModelsResult WithItems(Gs2.Gs2Guild.Model.GuildModel[] items) {
             this.Items = items;

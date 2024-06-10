@@ -33,7 +33,7 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class GetByUserIdAndTransactionIdResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Receipt Item { set; get; }
+        public Gs2.Gs2Money.Model.Receipt Item { set; get; } = null!;
 
         public GetByUserIdAndTransactionIdResult WithItem(Gs2.Gs2Money.Model.Receipt item) {
             this.Item = item;

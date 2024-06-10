@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class GetGlobalMessageRequest : Gs2Request<GetGlobalMessageRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GlobalMessageName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GlobalMessageName { set; get; } = null!;
         public GetGlobalMessageRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

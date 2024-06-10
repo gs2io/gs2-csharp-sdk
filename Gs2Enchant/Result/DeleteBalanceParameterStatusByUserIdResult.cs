@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class DeleteBalanceParameterStatusByUserIdResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Item { set; get; }
+        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Item { set; get; } = null!;
 
         public DeleteBalanceParameterStatusByUserIdResult WithItem(Gs2.Gs2Enchant.Model.BalanceParameterStatus item) {
             this.Item = item;

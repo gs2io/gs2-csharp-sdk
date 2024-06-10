@@ -33,9 +33,9 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class GetStatusRequest : Gs2Request<GetStatusRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string CategoryName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
         public GetStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

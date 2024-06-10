@@ -31,11 +31,11 @@ namespace Gs2.Gs2Distributor.Model
 #endif
 	public class DistributorModel : IComparable
 	{
-        public string DistributorModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string InboxNamespaceId { set; get; }
-        public string[] WhiteListTargetIds { set; get; }
+        public string DistributorModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string InboxNamespaceId { set; get; } = null!;
+        public string[] WhiteListTargetIds { set; get; } = null!;
         public DistributorModel WithDistributorModelId(string distributorModelId) {
             this.DistributorModelId = distributorModelId;
             return this;

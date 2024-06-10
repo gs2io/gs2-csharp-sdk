@@ -33,7 +33,7 @@ namespace Gs2.Gs2Log.Result
 	[System.Serializable]
 	public class CreateInsightResult : IResult
 	{
-        public Gs2.Gs2Log.Model.Insight Item { set; get; }
+        public Gs2.Gs2Log.Model.Insight Item { set; get; } = null!;
 
         public CreateInsightResult WithItem(Gs2.Gs2Log.Model.Insight item) {
             this.Item = item;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class GetCurrentShowcaseMasterRequest : Gs2Request<GetCurrentShowcaseMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

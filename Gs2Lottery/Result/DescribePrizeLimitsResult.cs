@@ -33,8 +33,8 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class DescribePrizeLimitsResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.PrizeLimit[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Lottery.Model.PrizeLimit[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribePrizeLimitsResult WithItems(Gs2.Gs2Lottery.Model.PrizeLimit[] items) {
             this.Items = items;

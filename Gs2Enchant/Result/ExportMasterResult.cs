@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class ExportMasterResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.CurrentParameterMaster Item { set; get; }
+        public Gs2.Gs2Enchant.Model.CurrentParameterMaster Item { set; get; } = null!;
 
         public ExportMasterResult WithItem(Gs2.Gs2Enchant.Model.CurrentParameterMaster item) {
             this.Item = item;

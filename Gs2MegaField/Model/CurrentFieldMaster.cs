@@ -31,8 +31,8 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class CurrentFieldMaster : IComparable
 	{
-        public string NamespaceId { set; get; }
-        public string Settings { set; get; }
+        public string NamespaceId { set; get; } = null!;
+        public string Settings { set; get; } = null!;
         public CurrentFieldMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

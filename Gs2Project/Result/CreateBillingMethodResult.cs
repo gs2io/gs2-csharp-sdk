@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class CreateBillingMethodResult : IResult
 	{
-        public Gs2.Gs2Project.Model.BillingMethod Item { set; get; }
+        public Gs2.Gs2Project.Model.BillingMethod Item { set; get; } = null!;
 
         public CreateBillingMethodResult WithItem(Gs2.Gs2Project.Model.BillingMethod item) {
             this.Item = item;

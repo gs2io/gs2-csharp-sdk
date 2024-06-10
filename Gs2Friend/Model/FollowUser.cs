@@ -31,9 +31,9 @@ namespace Gs2.Gs2Friend.Model
 #endif
 	public class FollowUser : IComparable
 	{
-        public string UserId { set; get; }
-        public string PublicProfile { set; get; }
-        public string FollowerProfile { set; get; }
+        public string UserId { set; get; } = null!;
+        public string PublicProfile { set; get; } = null!;
+        public string FollowerProfile { set; get; } = null!;
         public FollowUser WithUserId(string userId) {
             this.UserId = userId;
             return this;

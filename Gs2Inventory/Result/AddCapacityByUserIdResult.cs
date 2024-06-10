@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class AddCapacityByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.Inventory Item { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory Item { set; get; } = null!;
 
         public AddCapacityByUserIdResult WithItem(Gs2.Gs2Inventory.Model.Inventory item) {
             this.Item = item;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class GetAwaitByUserIdResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.Await Item { set; get; }
+        public Gs2.Gs2Exchange.Model.Await Item { set; get; } = null!;
 
         public GetAwaitByUserIdResult WithItem(Gs2.Gs2Exchange.Model.Await item) {
             this.Item = item;

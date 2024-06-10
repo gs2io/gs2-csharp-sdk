@@ -33,8 +33,8 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class GetKeyRequest : Gs2Request<GetKeyRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string KeyName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string KeyName { set; get; } = null!;
         public GetKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

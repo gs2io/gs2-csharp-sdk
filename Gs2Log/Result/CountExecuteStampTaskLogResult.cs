@@ -33,10 +33,10 @@ namespace Gs2.Gs2Log.Result
 	[System.Serializable]
 	public class CountExecuteStampTaskLogResult : IResult
 	{
-        public Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[] Items { set; get; }
-        public string NextPageToken { set; get; }
-        public long? TotalCount { set; get; }
-        public long? ScanSize { set; get; }
+        public Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
+        public long? TotalCount { set; get; } = null!;
+        public long? ScanSize { set; get; } = null!;
 
         public CountExecuteStampTaskLogResult WithItems(Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[] items) {
             this.Items = items;

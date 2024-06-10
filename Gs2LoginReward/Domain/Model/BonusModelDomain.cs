@@ -63,8 +63,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
     public partial class BonusModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
-        public string NamespaceName { get; }
-        public string BonusModelName { get; }
+        public string NamespaceName { get; } = null!;
+        public string BonusModelName { get; } = null!;
 
         public BonusModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

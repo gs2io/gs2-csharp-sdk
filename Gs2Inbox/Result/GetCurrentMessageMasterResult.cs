@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class GetCurrentMessageMasterResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.CurrentMessageMaster Item { set; get; }
+        public Gs2.Gs2Inbox.Model.CurrentMessageMaster Item { set; get; } = null!;
 
         public GetCurrentMessageMasterResult WithItem(Gs2.Gs2Inbox.Model.CurrentMessageMaster item) {
             this.Item = item;

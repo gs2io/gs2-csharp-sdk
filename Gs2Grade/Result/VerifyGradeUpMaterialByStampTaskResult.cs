@@ -33,7 +33,7 @@ namespace Gs2.Gs2Grade.Result
 	[System.Serializable]
 	public class VerifyGradeUpMaterialByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyGradeUpMaterialByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class DeleteKeyRequest : Gs2Request<DeleteKeyRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string KeyName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string KeyName { set; get; } = null!;
         public DeleteKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

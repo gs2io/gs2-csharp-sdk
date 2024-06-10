@@ -33,7 +33,7 @@ namespace Gs2.Gs2Limit.Result
 	[System.Serializable]
 	public class VerifyCounterByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyCounterByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

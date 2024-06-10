@@ -33,14 +33,14 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class SkipByUserIdRequest : Gs2Request<SkipByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string AwaitName { set; get; }
-         public string SkipType { set; get; }
-         public int? Minutes { set; get; }
-         public float? Rate { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string AwaitName { set; get; } = null!;
+         public string SkipType { set; get; } = null!;
+         public int? Minutes { set; get; } = null!;
+         public float? Rate { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SkipByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

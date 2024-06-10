@@ -33,10 +33,10 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class ResetBoxRequest : Gs2Request<ResetBoxRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PrizeTableName { set; get; }
-         public string AccessToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PrizeTableName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ResetBoxRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

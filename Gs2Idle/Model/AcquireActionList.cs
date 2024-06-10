@@ -31,7 +31,7 @@ namespace Gs2.Gs2Idle.Model
 #endif
 	public class AcquireActionList : IComparable
 	{
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
         public AcquireActionList WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

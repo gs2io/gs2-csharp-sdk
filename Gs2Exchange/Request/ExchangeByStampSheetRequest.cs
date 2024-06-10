@@ -33,8 +33,8 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class ExchangeByStampSheetRequest : Gs2Request<ExchangeByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public ExchangeByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

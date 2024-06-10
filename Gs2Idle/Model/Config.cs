@@ -31,8 +31,8 @@ namespace Gs2.Gs2Idle.Model
 #endif
 	public class Config : IComparable
 	{
-        public string Key { set; get; }
-        public string Value { set; get; }
+        public string Key { set; get; } = null!;
+        public string Value { set; get; } = null!;
         public Config WithKey(string key) {
             this.Key = key;
             return this;

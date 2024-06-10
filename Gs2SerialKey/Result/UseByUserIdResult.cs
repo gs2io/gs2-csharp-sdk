@@ -33,8 +33,8 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class UseByUserIdResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; }
-        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; }
+        public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; } = null!;
+        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; } = null!;
 
         public UseByUserIdResult WithItem(Gs2.Gs2SerialKey.Model.SerialKey item) {
             this.Item = item;

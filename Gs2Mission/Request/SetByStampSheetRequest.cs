@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class SetByStampSheetRequest : Gs2Request<SetByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public SetByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

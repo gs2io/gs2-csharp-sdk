@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class GetCurrentGuildMasterRequest : Gs2Request<GetCurrentGuildMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentGuildMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

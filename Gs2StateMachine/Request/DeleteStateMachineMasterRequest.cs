@@ -33,8 +33,8 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class DeleteStateMachineMasterRequest : Gs2Request<DeleteStateMachineMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public long? Version { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public long? Version { set; get; } = null!;
         public DeleteStateMachineMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

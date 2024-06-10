@@ -31,11 +31,11 @@ namespace Gs2.Gs2LoginReward.Model
 #endif
 	public class TransactionSetting : IComparable
 	{
-        public bool? EnableAutoRun { set; get; }
-        public string DistributorNamespaceId { set; get; }
+        public bool? EnableAutoRun { set; get; } = null!;
+        public string DistributorNamespaceId { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
-        public string QueueNamespaceId { set; get; }
+        public string KeyId { set; get; } = null!;
+        public string QueueNamespaceId { set; get; } = null!;
         public TransactionSetting WithEnableAutoRun(bool? enableAutoRun) {
             this.EnableAutoRun = enableAutoRun;
             return this;

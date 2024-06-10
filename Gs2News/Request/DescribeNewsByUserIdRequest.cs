@@ -33,9 +33,9 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class DescribeNewsByUserIdRequest : Gs2Request<DescribeNewsByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DescribeNewsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class DeleteByStampTaskResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.Job Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2JobQueue.Model.Job Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DeleteByStampTaskResult WithItem(Gs2.Gs2JobQueue.Model.Job item) {
             this.Item = item;

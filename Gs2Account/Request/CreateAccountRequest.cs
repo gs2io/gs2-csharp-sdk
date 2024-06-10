@@ -33,7 +33,7 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class CreateAccountRequest : Gs2Request<CreateAccountRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public CreateAccountRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

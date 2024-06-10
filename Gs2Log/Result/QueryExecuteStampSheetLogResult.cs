@@ -33,10 +33,10 @@ namespace Gs2.Gs2Log.Result
 	[System.Serializable]
 	public class QueryExecuteStampSheetLogResult : IResult
 	{
-        public Gs2.Gs2Log.Model.ExecuteStampSheetLog[] Items { set; get; }
-        public string NextPageToken { set; get; }
-        public long? TotalCount { set; get; }
-        public long? ScanSize { set; get; }
+        public Gs2.Gs2Log.Model.ExecuteStampSheetLog[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
+        public long? TotalCount { set; get; } = null!;
+        public long? ScanSize { set; get; } = null!;
 
         public QueryExecuteStampSheetLogResult WithItems(Gs2.Gs2Log.Model.ExecuteStampSheetLog[] items) {
             this.Items = items;

@@ -33,12 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class AddCapacityByUserIdRequest : Gs2Request<AddCapacityByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string InventoryName { set; get; }
-         public string UserId { set; get; }
-         public int? AddCapacityValue { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string InventoryName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? AddCapacityValue { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public AddCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

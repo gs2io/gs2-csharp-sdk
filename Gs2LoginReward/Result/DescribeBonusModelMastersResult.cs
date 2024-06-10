@@ -33,8 +33,8 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class DescribeBonusModelMastersResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.BonusModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2LoginReward.Model.BonusModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeBonusModelMastersResult WithItems(Gs2.Gs2LoginReward.Model.BonusModelMaster[] items) {
             this.Items = items;

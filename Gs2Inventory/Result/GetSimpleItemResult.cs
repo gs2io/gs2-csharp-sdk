@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class GetSimpleItemResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; }
-        public Gs2.Gs2Inventory.Model.SimpleItemModel ItemModel { set; get; }
+        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.SimpleItemModel ItemModel { set; get; } = null!;
 
         public GetSimpleItemResult WithItem(Gs2.Gs2Inventory.Model.SimpleItem item) {
             this.Item = item;

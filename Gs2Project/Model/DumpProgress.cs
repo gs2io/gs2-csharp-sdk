@@ -31,14 +31,14 @@ namespace Gs2.Gs2Project.Model
 #endif
 	public class DumpProgress : IComparable
 	{
-        public string DumpProgressId { set; get; }
-        public string TransactionId { set; get; }
-        public string UserId { set; get; }
-        public int? Dumped { set; get; }
-        public int? MicroserviceCount { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string DumpProgressId { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public int? Dumped { set; get; } = null!;
+        public int? MicroserviceCount { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public DumpProgress WithDumpProgressId(string dumpProgressId) {
             this.DumpProgressId = dumpProgressId;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class DescribeIncrementalRateModelsResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.IncrementalRateModel[] Items { set; get; }
+        public Gs2.Gs2Exchange.Model.IncrementalRateModel[] Items { set; get; } = null!;
 
         public DescribeIncrementalRateModelsResult WithItems(Gs2.Gs2Exchange.Model.IncrementalRateModel[] items) {
             this.Items = items;

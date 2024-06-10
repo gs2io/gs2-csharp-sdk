@@ -33,12 +33,12 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class GetFormWithSignatureByUserIdRequest : Gs2Request<GetFormWithSignatureByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string MoldModelName { set; get; }
-         public int? Index { set; get; }
-         public string KeyId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string MoldModelName { set; get; } = null!;
+         public int? Index { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetFormWithSignatureByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

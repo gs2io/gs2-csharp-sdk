@@ -31,8 +31,8 @@ namespace Gs2.Gs2Grade.Model
 #endif
 	public class DefaultGradeModel : IComparable
 	{
-        public string PropertyIdRegex { set; get; }
-        public long? DefaultGradeValue { set; get; }
+        public string PropertyIdRegex { set; get; } = null!;
+        public long? DefaultGradeValue { set; get; } = null!;
         public DefaultGradeModel WithPropertyIdRegex(string propertyIdRegex) {
             this.PropertyIdRegex = propertyIdRegex;
             return this;

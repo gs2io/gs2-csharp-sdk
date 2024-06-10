@@ -63,9 +63,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
     public partial class CampaignModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SerialKeyRestClient _client;
-        public string NamespaceName { get; }
-        public string CampaignModelName { get; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string CampaignModelName { get; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public CampaignModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

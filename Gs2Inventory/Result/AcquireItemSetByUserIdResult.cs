@@ -33,10 +33,10 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class AcquireItemSetByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; }
-        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
-        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
-        public long? OverflowCount { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; } = null!;
+        public long? OverflowCount { set; get; } = null!;
 
         public AcquireItemSetByUserIdResult WithItems(Gs2.Gs2Inventory.Model.ItemSet[] items) {
             this.Items = items;

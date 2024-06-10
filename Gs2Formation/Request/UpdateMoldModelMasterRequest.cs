@@ -33,13 +33,13 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdateMoldModelMasterRequest : Gs2Request<UpdateMoldModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string MoldModelName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string FormModelName { set; get; }
-         public int? InitialMaxCapacity { set; get; }
-         public int? MaxCapacity { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string MoldModelName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string FormModelName { set; get; } = null!;
+         public int? InitialMaxCapacity { set; get; } = null!;
+         public int? MaxCapacity { set; get; } = null!;
         public UpdateMoldModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DescribeCounterModelMastersResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.CounterModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Mission.Model.CounterModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCounterModelMastersResult WithItems(Gs2.Gs2Mission.Model.CounterModelMaster[] items) {
             this.Items = items;

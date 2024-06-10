@@ -31,12 +31,12 @@ namespace Gs2.Gs2Schedule.Model
 #endif
 	public class Trigger : IComparable
 	{
-        public string TriggerId { set; get; }
-        public string Name { set; get; }
-        public string UserId { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? ExpiresAt { set; get; }
-        public long? Revision { set; get; }
+        public string TriggerId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? ExpiresAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Trigger WithTriggerId(string triggerId) {
             this.TriggerId = triggerId;
             return this;

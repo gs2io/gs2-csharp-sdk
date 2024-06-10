@@ -33,7 +33,7 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class GetProgressResult : IResult
 	{
-        public Gs2.Gs2News.Model.Progress Item { set; get; }
+        public Gs2.Gs2News.Model.Progress Item { set; get; } = null!;
 
         public GetProgressResult WithItem(Gs2.Gs2News.Model.Progress item) {
             this.Item = item;

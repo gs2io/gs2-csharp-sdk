@@ -31,12 +31,12 @@ namespace Gs2.Gs2Friend.Model
 #endif
 	public class Inbox : IComparable
 	{
-        public string InboxId { set; get; }
-        public string UserId { set; get; }
-        public string[] FromUserIds { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string InboxId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string[] FromUserIds { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Inbox WithInboxId(string inboxId) {
             this.InboxId = inboxId;
             return this;

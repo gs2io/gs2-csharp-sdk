@@ -31,15 +31,15 @@ namespace Gs2.Gs2Ranking.Model
 #endif
 	public class Score : IComparable
 	{
-        public string ScoreId { set; get; }
-        public string CategoryName { set; get; }
-        public string UserId { set; get; }
-        public string UniqueId { set; get; }
-        public string ScorerUserId { set; get; }
-        public long? Value { set; get; }
-        public string Metadata { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ScoreId { set; get; } = null!;
+        public string CategoryName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string UniqueId { set; get; } = null!;
+        public string ScorerUserId { set; get; } = null!;
+        public long? Value { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Score WithScoreId(string scoreId) {
             this.ScoreId = scoreId;
             return this;

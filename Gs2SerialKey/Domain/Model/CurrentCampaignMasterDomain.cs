@@ -63,7 +63,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
     public partial class CurrentCampaignMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SerialKeyRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentCampaignMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DecreaseCounterByUserIdResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.Counter Item { set; get; }
-        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { set; get; }
+        public Gs2.Gs2Mission.Model.Counter Item { set; get; } = null!;
+        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { set; get; } = null!;
 
         public DecreaseCounterByUserIdResult WithItem(Gs2.Gs2Mission.Model.Counter item) {
             this.Item = item;

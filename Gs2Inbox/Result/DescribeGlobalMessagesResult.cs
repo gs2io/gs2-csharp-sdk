@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class DescribeGlobalMessagesResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.GlobalMessage[] Items { set; get; }
+        public Gs2.Gs2Inbox.Model.GlobalMessage[] Items { set; get; } = null!;
 
         public DescribeGlobalMessagesResult WithItems(Gs2.Gs2Inbox.Model.GlobalMessage[] items) {
             this.Items = items;

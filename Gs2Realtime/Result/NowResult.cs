@@ -33,7 +33,7 @@ namespace Gs2.Gs2Realtime.Result
 	[System.Serializable]
 	public class NowResult : IResult
 	{
-        public long? Timestamp { set; get; }
+        public long? Timestamp { set; get; } = null!;
 
         public NowResult WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;

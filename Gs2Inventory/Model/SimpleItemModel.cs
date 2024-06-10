@@ -31,9 +31,9 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class SimpleItemModel : IComparable
 	{
-        public string ItemModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
+        public string ItemModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public SimpleItemModel WithItemModelId(string itemModelId) {
             this.ItemModelId = itemModelId;
             return this;

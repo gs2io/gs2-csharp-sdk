@@ -33,9 +33,9 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class GetMissionTaskModelRequest : Gs2Request<GetMissionTaskModelRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string MissionGroupName { set; get; }
-         public string MissionTaskName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string MissionGroupName { set; get; } = null!;
+         public string MissionTaskName { set; get; } = null!;
         public GetMissionTaskModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

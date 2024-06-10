@@ -31,13 +31,13 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class BigItem : IComparable
 	{
-        public string ItemId { set; get; }
-        public string UserId { set; get; }
-        public string ItemName { set; get; }
-        public string Count { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ItemId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string ItemName { set; get; } = null!;
+        public string Count { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public BigItem WithItemId(string itemId) {
             this.ItemId = itemId;
             return this;

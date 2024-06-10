@@ -31,13 +31,13 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class Prize : IComparable
 	{
-        public string PrizeId { set; get; }
-        public string Type { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-        public int? DrawnLimit { set; get; }
-        public string LimitFailOverPrizeId { set; get; }
-        public string PrizeTableName { set; get; }
-        public int? Weight { set; get; }
+        public string PrizeId { set; get; } = null!;
+        public string Type { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public int? DrawnLimit { set; get; } = null!;
+        public string LimitFailOverPrizeId { set; get; } = null!;
+        public string PrizeTableName { set; get; } = null!;
+        public int? Weight { set; get; } = null!;
         public Prize WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class ConsumeItemSetByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; }
-        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
-        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; } = null!;
 
         public ConsumeItemSetByUserIdResult WithItems(Gs2.Gs2Inventory.Model.ItemSet[] items) {
             this.Items = items;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class GetNodeModelResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.NodeModel Item { set; get; }
+        public Gs2.Gs2SkillTree.Model.NodeModel Item { set; get; } = null!;
 
         public GetNodeModelResult WithItem(Gs2.Gs2SkillTree.Model.NodeModel item) {
             this.Item = item;

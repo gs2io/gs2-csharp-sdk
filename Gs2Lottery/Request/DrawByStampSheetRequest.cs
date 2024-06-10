@@ -33,8 +33,8 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DrawByStampSheetRequest : Gs2Request<DrawByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DrawByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

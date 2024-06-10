@@ -33,13 +33,13 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class CountDownByUserIdRequest : Gs2Request<CountDownByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string LimitName { set; get; }
-         public string CounterName { set; get; }
-         public string UserId { set; get; }
-         public int? CountDownValue { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string LimitName { set; get; } = null!;
+         public string CounterName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? CountDownValue { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public CountDownByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

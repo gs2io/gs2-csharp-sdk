@@ -33,8 +33,8 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class DescribeProgressesResult : IResult
 	{
-        public Gs2.Gs2News.Model.Progress[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2News.Model.Progress[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeProgressesResult WithItems(Gs2.Gs2News.Model.Progress[] items) {
             this.Items = items;

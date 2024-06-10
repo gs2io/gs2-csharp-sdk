@@ -33,7 +33,7 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class CreateQuestGroupModelMasterResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.QuestGroupModelMaster Item { set; get; }
+        public Gs2.Gs2Quest.Model.QuestGroupModelMaster Item { set; get; } = null!;
 
         public CreateQuestGroupModelMasterResult WithItem(Gs2.Gs2Quest.Model.QuestGroupModelMaster item) {
             this.Item = item;

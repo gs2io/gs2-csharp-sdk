@@ -33,8 +33,8 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class DescribeRatingsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Rating[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Rating[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRatingsByUserIdResult WithItems(Gs2.Gs2Matchmaking.Model.Rating[] items) {
             this.Items = items;

@@ -20,9 +20,9 @@ namespace Gs2.Gs2JobQueue.Model
 {
 	public class RunNotification
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string JobName { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string JobName { set; get; } = null!;
         public RunNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

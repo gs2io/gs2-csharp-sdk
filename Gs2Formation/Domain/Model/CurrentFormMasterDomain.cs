@@ -63,7 +63,7 @@ namespace Gs2.Gs2Formation.Domain.Model
     public partial class CurrentFormMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentFormMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

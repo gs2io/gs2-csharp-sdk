@@ -31,8 +31,8 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class Attribute_ : IComparable
 	{
-        public string Name { set; get; }
-        public int? Value { set; get; }
+        public string Name { set; get; } = null!;
+        public int? Value { set; get; } = null!;
         public Attribute_ WithName(string name) {
             this.Name = name;
             return this;

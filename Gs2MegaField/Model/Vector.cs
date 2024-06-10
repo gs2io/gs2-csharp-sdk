@@ -31,9 +31,9 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class Vector : IComparable
 	{
-        public float? X { set; get; }
-        public float? Y { set; get; }
-        public float? Z { set; get; }
+        public float? X { set; get; } = null!;
+        public float? Y { set; get; } = null!;
+        public float? Z { set; get; } = null!;
         public Vector WithX(float? x) {
             this.X = x;
             return this;

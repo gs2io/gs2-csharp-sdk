@@ -31,17 +31,17 @@ namespace Gs2.Gs2Datastore.Model
 #endif
 	public class DataObject : IComparable
 	{
-        public string DataObjectId { set; get; }
-        public string Name { set; get; }
-        public string UserId { set; get; }
-        public string Scope { set; get; }
-        public string[] AllowUserIds { set; get; }
-        public string Status { set; get; }
-        public string Generation { set; get; }
-        public string PreviousGeneration { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string DataObjectId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string Scope { set; get; } = null!;
+        public string[] AllowUserIds { set; get; } = null!;
+        public string Status { set; get; } = null!;
+        public string Generation { set; get; } = null!;
+        public string PreviousGeneration { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public DataObject WithDataObjectId(string dataObjectId) {
             this.DataObjectId = dataObjectId;
             return this;

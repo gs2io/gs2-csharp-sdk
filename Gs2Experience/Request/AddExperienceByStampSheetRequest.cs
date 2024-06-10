@@ -33,8 +33,8 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class AddExperienceByStampSheetRequest : Gs2Request<AddExperienceByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public AddExperienceByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

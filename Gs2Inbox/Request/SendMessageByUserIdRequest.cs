@@ -33,14 +33,14 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class SendMessageByUserIdRequest : Gs2Request<SendMessageByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
-         public long? ExpiresAt { set; get; }
-         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; } = null!;
+         public long? ExpiresAt { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SendMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class CreateStackFromGitHubResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Stack Item { set; get; }
+        public Gs2.Gs2Deploy.Model.Stack Item { set; get; } = null!;
 
         public CreateStackFromGitHubResult WithItem(Gs2.Gs2Deploy.Model.Stack item) {
             this.Item = item;

@@ -31,16 +31,16 @@ namespace Gs2.Gs2Enhance.Model
 #endif
 	public class Progress : IComparable
 	{
-        public string ProgressId { set; get; }
-        public string UserId { set; get; }
-        public string RateName { set; get; }
-        public string Name { set; get; }
-        public string PropertyId { set; get; }
-        public long? ExperienceValue { set; get; }
-        public float? Rate { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ProgressId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string RateName { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string PropertyId { set; get; } = null!;
+        public long? ExperienceValue { set; get; } = null!;
+        public float? Rate { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Progress WithProgressId(string progressId) {
             this.ProgressId = progressId;
             return this;

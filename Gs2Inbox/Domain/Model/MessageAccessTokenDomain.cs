@@ -63,12 +63,12 @@ namespace Gs2.Gs2Inbox.Domain.Model
     public partial class MessageAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InboxRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string MessageName { get; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
+        public string MessageName { get; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public MessageAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

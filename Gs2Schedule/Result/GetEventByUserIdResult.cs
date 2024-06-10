@@ -33,11 +33,11 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class GetEventByUserIdResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.Event Item { set; get; }
-        public bool? InSchedule { set; get; }
-        public long? ScheduleStartAt { set; get; }
-        public long? ScheduleEndAt { set; get; }
-        public Gs2.Gs2Schedule.Model.RepeatSchedule RepeatSchedule { set; get; }
+        public Gs2.Gs2Schedule.Model.Event Item { set; get; } = null!;
+        public bool? InSchedule { set; get; } = null!;
+        public long? ScheduleStartAt { set; get; } = null!;
+        public long? ScheduleEndAt { set; get; } = null!;
+        public Gs2.Gs2Schedule.Model.RepeatSchedule RepeatSchedule { set; get; } = null!;
 
         public GetEventByUserIdResult WithItem(Gs2.Gs2Schedule.Model.Event item) {
             this.Item = item;

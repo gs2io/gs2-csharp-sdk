@@ -33,12 +33,12 @@ namespace Gs2.Gs2SeasonRating.Request
 	[System.Serializable]
 	public class GetBallotRequest : Gs2Request<GetBallotRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string SeasonName { set; get; }
-         public string SessionName { set; get; }
-         public string AccessToken { set; get; }
-         public int? NumberOfPlayer { set; get; }
-         public string KeyId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string SeasonName { set; get; } = null!;
+         public string SessionName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public int? NumberOfPlayer { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public GetBallotRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

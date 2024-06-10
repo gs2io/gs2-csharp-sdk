@@ -33,10 +33,10 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class CompleteByUserIdResult : IResult
 	{
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public CompleteByUserIdResult WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;

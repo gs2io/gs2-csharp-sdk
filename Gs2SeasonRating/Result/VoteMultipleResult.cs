@@ -33,7 +33,7 @@ namespace Gs2.Gs2SeasonRating.Result
 	[System.Serializable]
 	public class VoteMultipleResult : IResult
 	{
-        public Gs2.Gs2SeasonRating.Model.Ballot Item { set; get; }
+        public Gs2.Gs2SeasonRating.Model.Ballot Item { set; get; } = null!;
 
         public VoteMultipleResult WithItem(Gs2.Gs2SeasonRating.Model.Ballot item) {
             this.Item = item;

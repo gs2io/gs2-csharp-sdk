@@ -63,13 +63,13 @@ namespace Gs2.Gs2Script.Domain.Model
     public partial class ScriptDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScriptRestClient _client;
-        public string NamespaceName { get; }
-        public string ScriptName { get; }
-        public int? Code { get; set; }
-        public string Result { get; set; }
-        public int? ExecuteTime { get; set; }
-        public int? Charged { get; set; }
-        public string[] Output { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string ScriptName { get; } = null!;
+        public int? Code { get; set; } = null!;
+        public string Result { get; set; } = null!;
+        public int? ExecuteTime { get; set; } = null!;
+        public int? Charged { get; set; } = null!;
+        public string[] Output { get; set; } = null!;
 
         public ScriptDomain(
             Gs2.Core.Domain.Gs2 gs2,

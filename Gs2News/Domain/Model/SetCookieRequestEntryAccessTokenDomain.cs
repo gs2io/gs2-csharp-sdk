@@ -63,11 +63,11 @@ namespace Gs2.Gs2News.Domain.Model
     public partial class SetCookieRequestEntryAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2NewsRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string Key { get; }
-        public string Value { get; }
+        public string Key { get; } = null!;
+        public string Value { get; } = null!;
 
         public SetCookieRequestEntryAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

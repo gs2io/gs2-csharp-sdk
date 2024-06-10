@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class DescribeSendRequestsResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.SendMemberRequest[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Guild.Model.SendMemberRequest[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeSendRequestsResult WithItems(Gs2.Gs2Guild.Model.SendMemberRequest[] items) {
             this.Items = items;

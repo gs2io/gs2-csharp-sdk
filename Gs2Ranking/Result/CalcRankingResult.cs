@@ -33,7 +33,7 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class CalcRankingResult : IResult
 	{
-        public bool? Processing { set; get; }
+        public bool? Processing { set; get; } = null!;
 
         public CalcRankingResult WithProcessing(bool? processing) {
             this.Processing = processing;

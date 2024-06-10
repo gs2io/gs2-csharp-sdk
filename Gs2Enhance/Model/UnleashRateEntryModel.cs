@@ -31,8 +31,8 @@ namespace Gs2.Gs2Enhance.Model
 #endif
 	public class UnleashRateEntryModel : IComparable
 	{
-        public long? GradeValue { set; get; }
-        public int? NeedCount { set; get; }
+        public long? GradeValue { set; get; } = null!;
+        public int? NeedCount { set; get; } = null!;
         public UnleashRateEntryModel WithGradeValue(long? gradeValue) {
             this.GradeValue = gradeValue;
             return this;

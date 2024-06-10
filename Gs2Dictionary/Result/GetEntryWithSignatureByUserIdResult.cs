@@ -33,9 +33,9 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class GetEntryWithSignatureByUserIdResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.Entry Item { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public Gs2.Gs2Dictionary.Model.Entry Item { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
 
         public GetEntryWithSignatureByUserIdResult WithItem(Gs2.Gs2Dictionary.Model.Entry item) {
             this.Item = item;

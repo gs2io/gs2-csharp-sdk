@@ -63,7 +63,7 @@ namespace Gs2.Gs2Quest.Domain.Model
     public partial class CurrentQuestMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2QuestRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentQuestMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -31,8 +31,8 @@ namespace Gs2.Gs2Project.Model
 #endif
 	public class Gs2Region : IComparable
 	{
-        public string RegionName { set; get; }
-        public string Status { set; get; }
+        public string RegionName { set; get; } = null!;
+        public string Status { set; get; } = null!;
         public Gs2Region WithRegionName(string regionName) {
             this.RegionName = regionName;
             return this;

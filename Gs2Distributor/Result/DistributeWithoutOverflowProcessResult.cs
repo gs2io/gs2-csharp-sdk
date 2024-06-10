@@ -33,8 +33,8 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class DistributeWithoutOverflowProcessResult : IResult
 	{
-        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
-        public string Result { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; } = null!;
+        public string Result { set; get; } = null!;
 
         public DistributeWithoutOverflowProcessResult WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
             this.DistributeResource = distributeResource;

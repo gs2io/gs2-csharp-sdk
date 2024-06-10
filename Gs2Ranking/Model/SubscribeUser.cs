@@ -31,10 +31,10 @@ namespace Gs2.Gs2Ranking.Model
 #endif
 	public class SubscribeUser : IComparable
 	{
-        public string SubscribeUserId { set; get; }
-        public string CategoryName { set; get; }
-        public string UserId { set; get; }
-        public string TargetUserId { set; get; }
+        public string SubscribeUserId { set; get; } = null!;
+        public string CategoryName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string TargetUserId { set; get; } = null!;
         public SubscribeUser WithSubscribeUserId(string subscribeUserId) {
             this.SubscribeUserId = subscribeUserId;
             return this;

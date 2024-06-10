@@ -33,8 +33,8 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class DescribeDataObjectsResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObject[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeDataObjectsResult WithItems(Gs2.Gs2Datastore.Model.DataObject[] items) {
             this.Items = items;

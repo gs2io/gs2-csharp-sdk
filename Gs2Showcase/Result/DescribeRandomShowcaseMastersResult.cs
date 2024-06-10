@@ -33,8 +33,8 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class DescribeRandomShowcaseMastersResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.RandomShowcaseMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Showcase.Model.RandomShowcaseMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRandomShowcaseMastersResult WithItems(Gs2.Gs2Showcase.Model.RandomShowcaseMaster[] items) {
             this.Items = items;

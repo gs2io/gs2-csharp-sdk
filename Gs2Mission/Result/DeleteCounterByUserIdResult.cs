@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DeleteCounterByUserIdResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.Counter Item { set; get; }
+        public Gs2.Gs2Mission.Model.Counter Item { set; get; } = null!;
 
         public DeleteCounterByUserIdResult WithItem(Gs2.Gs2Mission.Model.Counter item) {
             this.Item = item;

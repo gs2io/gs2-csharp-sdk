@@ -33,7 +33,7 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DeletePasswordResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.Password Item { set; get; }
+        public Gs2.Gs2Identifier.Model.Password Item { set; get; } = null!;
 
         public DeletePasswordResult WithItem(Gs2.Gs2Identifier.Model.Password item) {
             this.Item = item;

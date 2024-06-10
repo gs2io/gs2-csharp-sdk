@@ -33,7 +33,7 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class RejectRequestResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.FriendRequest Item { set; get; }
+        public Gs2.Gs2Friend.Model.FriendRequest Item { set; get; } = null!;
 
         public RejectRequestResult WithItem(Gs2.Gs2Friend.Model.FriendRequest item) {
             this.Item = item;

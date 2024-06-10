@@ -33,10 +33,10 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunStampSheetExpressWithoutNamespaceResult : IResult
 	{
-        public int[] TaskResultCodes { set; get; }
-        public string[] TaskResults { set; get; }
-        public int? SheetResultCode { set; get; }
-        public string SheetResult { set; get; }
+        public int[] TaskResultCodes { set; get; } = null!;
+        public string[] TaskResults { set; get; } = null!;
+        public int? SheetResultCode { set; get; } = null!;
+        public string SheetResult { set; get; } = null!;
 
         public RunStampSheetExpressWithoutNamespaceResult WithTaskResultCodes(int[] taskResultCodes) {
             this.TaskResultCodes = taskResultCodes;

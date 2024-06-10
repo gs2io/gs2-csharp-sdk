@@ -33,7 +33,7 @@ namespace Gs2.Gs2Key.Result
 	[System.Serializable]
 	public class UpdateGitHubApiKeyResult : IResult
 	{
-        public Gs2.Gs2Key.Model.GitHubApiKey Item { set; get; }
+        public Gs2.Gs2Key.Model.GitHubApiKey Item { set; get; } = null!;
 
         public UpdateGitHubApiKeyResult WithItem(Gs2.Gs2Key.Model.GitHubApiKey item) {
             this.Item = item;

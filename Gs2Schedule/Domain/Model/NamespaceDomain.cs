@@ -63,12 +63,12 @@ namespace Gs2.Gs2Schedule.Domain.Model
     public partial class NamespaceDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScheduleRestClient _client;
-        public string NamespaceName { get; }
-        public string Status { get; set; }
-        public string Url { get; set; }
-        public string UploadToken { get; set; }
-        public string UploadUrl { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string Status { get; set; } = null!;
+        public string Url { get; set; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public NamespaceDomain(
             Gs2.Core.Domain.Gs2 gs2,

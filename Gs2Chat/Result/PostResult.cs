@@ -33,7 +33,7 @@ namespace Gs2.Gs2Chat.Result
 	[System.Serializable]
 	public class PostResult : IResult
 	{
-        public Gs2.Gs2Chat.Model.Message Item { set; get; }
+        public Gs2.Gs2Chat.Model.Message Item { set; get; } = null!;
 
         public PostResult WithItem(Gs2.Gs2Chat.Model.Message item) {
             this.Item = item;

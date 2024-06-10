@@ -33,8 +33,8 @@ namespace Gs2.Gs2Buff.Request
 	[System.Serializable]
 	public class UpdateCurrentBuffMasterRequest : Gs2Request<UpdateCurrentBuffMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Settings { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Settings { set; get; } = null!;
         public UpdateCurrentBuffMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

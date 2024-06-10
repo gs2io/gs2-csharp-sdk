@@ -31,13 +31,13 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class Counter : IComparable
 	{
-        public string CounterId { set; get; }
-        public string UserId { set; get; }
-        public string Name { set; get; }
-        public Gs2.Gs2Mission.Model.ScopedValue[] Values { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string CounterId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public Gs2.Gs2Mission.Model.ScopedValue[] Values { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Counter WithCounterId(string counterId) {
             this.CounterId = counterId;
             return this;

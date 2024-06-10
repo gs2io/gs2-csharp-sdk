@@ -33,8 +33,8 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class MarkReleaseByStampSheetRequest : Gs2Request<MarkReleaseByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public MarkReleaseByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

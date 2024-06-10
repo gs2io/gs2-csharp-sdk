@@ -63,12 +63,12 @@ namespace Gs2.Gs2Formation.Domain.Model
     public partial class MoldDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string MoldModelName { get; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string MoldModelName { get; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public MoldDomain(
             Gs2.Core.Domain.Gs2 gs2,

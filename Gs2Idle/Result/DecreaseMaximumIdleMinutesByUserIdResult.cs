@@ -33,7 +33,7 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class DecreaseMaximumIdleMinutesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Idle.Model.Status Item { set; get; }
+        public Gs2.Gs2Idle.Model.Status Item { set; get; } = null!;
 
         public DecreaseMaximumIdleMinutesByUserIdResult WithItem(Gs2.Gs2Idle.Model.Status item) {
             this.Item = item;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class GetOutputResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Output Item { set; get; }
+        public Gs2.Gs2Deploy.Model.Output Item { set; get; } = null!;
 
         public GetOutputResult WithItem(Gs2.Gs2Deploy.Model.Output item) {
             this.Item = item;

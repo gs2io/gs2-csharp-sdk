@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class DescribeInventoriesResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.Inventory[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeInventoriesResult WithItems(Gs2.Gs2Inventory.Model.Inventory[] items) {
             this.Items = items;

@@ -33,11 +33,11 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class DescribeBalanceParameterStatusesRequest : Gs2Request<DescribeBalanceParameterStatusesRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string ParameterName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string ParameterName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeBalanceParameterStatusesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

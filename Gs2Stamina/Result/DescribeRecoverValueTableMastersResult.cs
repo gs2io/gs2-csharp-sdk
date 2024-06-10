@@ -33,8 +33,8 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class DescribeRecoverValueTableMastersResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.RecoverValueTableMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Stamina.Model.RecoverValueTableMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRecoverValueTableMastersResult WithItems(Gs2.Gs2Stamina.Model.RecoverValueTableMaster[] items) {
             this.Items = items;

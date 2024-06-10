@@ -31,8 +31,8 @@ namespace Gs2.Gs2Guild.Model
 #endif
 	public class SendMemberRequest : IComparable
 	{
-        public string UserId { set; get; }
-        public string TargetGuildName { set; get; }
+        public string UserId { set; get; } = null!;
+        public string TargetGuildName { set; get; } = null!;
         public SendMemberRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

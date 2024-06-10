@@ -33,8 +33,8 @@ namespace Gs2.Gs2AdReward.Result
 	[System.Serializable]
 	public class ConsumePointByStampTaskResult : IResult
 	{
-        public Gs2.Gs2AdReward.Model.Point Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2AdReward.Model.Point Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public ConsumePointByStampTaskResult WithItem(Gs2.Gs2AdReward.Model.Point item) {
             this.Item = item;

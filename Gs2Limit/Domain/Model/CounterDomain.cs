@@ -63,10 +63,10 @@ namespace Gs2.Gs2Limit.Domain.Model
     public partial class CounterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LimitRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string LimitName { get; }
-        public string CounterName { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string LimitName { get; } = null!;
+        public string CounterName { get; } = null!;
 
         public CounterDomain(
             Gs2.Core.Domain.Gs2 gs2,

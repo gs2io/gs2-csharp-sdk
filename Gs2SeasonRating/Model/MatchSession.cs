@@ -31,10 +31,10 @@ namespace Gs2.Gs2SeasonRating.Model
 #endif
 	public class MatchSession : IComparable
 	{
-        public string SessionId { set; get; }
-        public string Name { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string SessionId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public MatchSession WithSessionId(string sessionId) {
             this.SessionId = sessionId;
             return this;

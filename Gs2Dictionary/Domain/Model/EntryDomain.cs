@@ -63,11 +63,11 @@ namespace Gs2.Gs2Dictionary.Domain.Model
     public partial class EntryDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string EntryName { get; }
-        public string Body { get; set; }
-        public string Signature { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string EntryName { get; } = null!;
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
 
         public EntryDomain(
             Gs2.Core.Domain.Gs2 gs2,

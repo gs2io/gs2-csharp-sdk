@@ -33,10 +33,10 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class DescribeIssueJobsRequest : Gs2Request<DescribeIssueJobsRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CampaignModelName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CampaignModelName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeIssueJobsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

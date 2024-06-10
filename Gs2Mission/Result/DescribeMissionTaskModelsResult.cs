@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DescribeMissionTaskModelsResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.MissionTaskModel[] Items { set; get; }
+        public Gs2.Gs2Mission.Model.MissionTaskModel[] Items { set; get; } = null!;
 
         public DescribeMissionTaskModelsResult WithItems(Gs2.Gs2Mission.Model.MissionTaskModel[] items) {
             this.Items = items;

@@ -33,12 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class DescribeSimpleItemsByUserIdRequest : Gs2Request<DescribeSimpleItemsByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string InventoryName { set; get; }
-         public string UserId { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string InventoryName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DescribeSimpleItemsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

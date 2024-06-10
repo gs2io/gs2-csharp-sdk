@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetImportProgressRequest : Gs2Request<GetImportProgressRequest>
 	{
-         public string TransactionId { set; get; }
+         public string TransactionId { set; get; } = null!;
         public GetImportProgressRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

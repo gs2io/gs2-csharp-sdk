@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class DeleteGuildModelMasterRequest : Gs2Request<DeleteGuildModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GuildModelName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
         public DeleteGuildModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

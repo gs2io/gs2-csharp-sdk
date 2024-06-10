@@ -33,11 +33,11 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class UpdateAccountRequest : Gs2Request<UpdateAccountRequest>
 	{
-         public string Email { set; get; }
-         public string FullName { set; get; }
-         public string CompanyName { set; get; }
-         public string Password { set; get; }
-         public string AccountToken { set; get; }
+         public string Email { set; get; } = null!;
+         public string FullName { set; get; } = null!;
+         public string CompanyName { set; get; } = null!;
+         public string Password { set; get; } = null!;
+         public string AccountToken { set; get; } = null!;
         public UpdateAccountRequest WithEmail(string email) {
             this.Email = email;
             return this;

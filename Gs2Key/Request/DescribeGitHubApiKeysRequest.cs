@@ -33,9 +33,9 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class DescribeGitHubApiKeysRequest : Gs2Request<DescribeGitHubApiKeysRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeGitHubApiKeysRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Limit.Result
 	[System.Serializable]
 	public class GetLimitModelMasterResult : IResult
 	{
-        public Gs2.Gs2Limit.Model.LimitModelMaster Item { set; get; }
+        public Gs2.Gs2Limit.Model.LimitModelMaster Item { set; get; } = null!;
 
         public GetLimitModelMasterResult WithItem(Gs2.Gs2Limit.Model.LimitModelMaster item) {
             this.Item = item;

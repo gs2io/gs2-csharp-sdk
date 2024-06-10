@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class GetEntryByUserIdResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.Entry Item { set; get; }
+        public Gs2.Gs2Dictionary.Model.Entry Item { set; get; } = null!;
 
         public GetEntryByUserIdResult WithItem(Gs2.Gs2Dictionary.Model.Entry item) {
             this.Item = item;

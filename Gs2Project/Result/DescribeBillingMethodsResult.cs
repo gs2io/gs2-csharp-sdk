@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeBillingMethodsResult : IResult
 	{
-        public Gs2.Gs2Project.Model.BillingMethod[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Project.Model.BillingMethod[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeBillingMethodsResult WithItems(Gs2.Gs2Project.Model.BillingMethod[] items) {
             this.Items = items;

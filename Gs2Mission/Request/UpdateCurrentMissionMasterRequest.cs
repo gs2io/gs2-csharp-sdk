@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class UpdateCurrentMissionMasterRequest : Gs2Request<UpdateCurrentMissionMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Settings { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Settings { set; get; } = null!;
         public UpdateCurrentMissionMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

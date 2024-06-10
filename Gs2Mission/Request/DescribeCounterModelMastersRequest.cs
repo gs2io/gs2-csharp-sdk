@@ -33,9 +33,9 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DescribeCounterModelMastersRequest : Gs2Request<DescribeCounterModelMastersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeCounterModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

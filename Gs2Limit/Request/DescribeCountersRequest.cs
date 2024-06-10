@@ -33,11 +33,11 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class DescribeCountersRequest : Gs2Request<DescribeCountersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string LimitName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string LimitName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeCountersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

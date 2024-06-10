@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class DescribeMessagesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.Message[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Inbox.Model.Message[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeMessagesByUserIdResult WithItems(Gs2.Gs2Inbox.Model.Message[] items) {
             this.Items = items;

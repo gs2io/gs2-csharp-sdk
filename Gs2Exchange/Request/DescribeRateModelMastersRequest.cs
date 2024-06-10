@@ -33,9 +33,9 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DescribeRateModelMastersRequest : Gs2Request<DescribeRateModelMastersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeRateModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

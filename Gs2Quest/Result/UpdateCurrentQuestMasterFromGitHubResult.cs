@@ -33,7 +33,7 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class UpdateCurrentQuestMasterFromGitHubResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.CurrentQuestMaster Item { set; get; }
+        public Gs2.Gs2Quest.Model.CurrentQuestMaster Item { set; get; } = null!;
 
         public UpdateCurrentQuestMasterFromGitHubResult WithItem(Gs2.Gs2Quest.Model.CurrentQuestMaster item) {
             this.Item = item;

@@ -31,8 +31,8 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class GameResult : IComparable
 	{
-        public int? Rank { set; get; }
-        public string UserId { set; get; }
+        public int? Rank { set; get; } = null!;
+        public string UserId { set; get; } = null!;
         public GameResult WithRank(int? rank) {
             this.Rank = rank;
             return this;

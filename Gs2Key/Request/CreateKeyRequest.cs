@@ -33,9 +33,9 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class CreateKeyRequest : Gs2Request<CreateKeyRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
         public CreateKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

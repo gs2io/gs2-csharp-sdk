@@ -33,8 +33,8 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class UpdateCurrentFieldMasterFromGitHubRequest : Gs2Request<UpdateCurrentFieldMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2MegaField.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2MegaField.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentFieldMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

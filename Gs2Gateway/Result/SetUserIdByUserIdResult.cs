@@ -33,7 +33,7 @@ namespace Gs2.Gs2Gateway.Result
 	[System.Serializable]
 	public class SetUserIdByUserIdResult : IResult
 	{
-        public Gs2.Gs2Gateway.Model.WebSocketSession Item { set; get; }
+        public Gs2.Gs2Gateway.Model.WebSocketSession Item { set; get; } = null!;
 
         public SetUserIdByUserIdResult WithItem(Gs2.Gs2Gateway.Model.WebSocketSession item) {
             this.Item = item;

@@ -33,18 +33,18 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class CreateIncrementalRateModelMasterRequest : Gs2Request<CreateIncrementalRateModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; }
-         public string CalculateType { set; get; }
-         public long? BaseValue { set; get; }
-         public long? CoefficientValue { set; get; }
-         public string CalculateScriptId { set; get; }
-         public string ExchangeCountId { set; get; }
-         public int? MaximumExchangeCount { set; get; }
-         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; } = null!;
+         public string CalculateType { set; get; } = null!;
+         public long? BaseValue { set; get; } = null!;
+         public long? CoefficientValue { set; get; } = null!;
+         public string CalculateScriptId { set; get; } = null!;
+         public string ExchangeCountId { set; get; } = null!;
+         public int? MaximumExchangeCount { set; get; } = null!;
+         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
         public CreateIncrementalRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

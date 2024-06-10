@@ -33,7 +33,7 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class GetCurrentCampaignMasterResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.CurrentCampaignMaster Item { set; get; }
+        public Gs2.Gs2SerialKey.Model.CurrentCampaignMaster Item { set; get; } = null!;
 
         public GetCurrentCampaignMasterResult WithItem(Gs2.Gs2SerialKey.Model.CurrentCampaignMaster item) {
             this.Item = item;

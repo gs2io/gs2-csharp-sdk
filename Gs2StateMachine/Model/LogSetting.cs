@@ -31,7 +31,7 @@ namespace Gs2.Gs2StateMachine.Model
 #endif
 	public class LogSetting : IComparable
 	{
-        public string LoggingNamespaceId { set; get; }
+        public string LoggingNamespaceId { set; get; } = null!;
         public LogSetting WithLoggingNamespaceId(string loggingNamespaceId) {
             this.LoggingNamespaceId = loggingNamespaceId;
             return this;

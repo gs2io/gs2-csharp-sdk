@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifyReferenceOfByStampTaskRequest : Gs2Request<VerifyReferenceOfByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public VerifyReferenceOfByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

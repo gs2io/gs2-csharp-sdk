@@ -31,19 +31,19 @@ namespace Gs2.Gs2Money.Model
 #endif
 	public class Receipt : IComparable
 	{
-        public string ReceiptId { set; get; }
-        public string TransactionId { set; get; }
-        public string PurchaseToken { set; get; }
-        public string UserId { set; get; }
-        public string Type { set; get; }
-        public int? Slot { set; get; }
-        public float? Price { set; get; }
-        public int? Paid { set; get; }
-        public int? Free { set; get; }
-        public int? Total { set; get; }
-        public string ContentsId { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ReceiptId { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string PurchaseToken { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string Type { set; get; } = null!;
+        public int? Slot { set; get; } = null!;
+        public float? Price { set; get; } = null!;
+        public int? Paid { set; get; } = null!;
+        public int? Free { set; get; } = null!;
+        public int? Total { set; get; } = null!;
+        public string ContentsId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Receipt WithReceiptId(string receiptId) {
             this.ReceiptId = receiptId;
             return this;

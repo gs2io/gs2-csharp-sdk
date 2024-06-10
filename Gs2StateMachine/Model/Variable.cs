@@ -31,8 +31,8 @@ namespace Gs2.Gs2StateMachine.Model
 #endif
 	public class Variable : IComparable
 	{
-        public string StateMachineName { set; get; }
-        public string Value { set; get; }
+        public string StateMachineName { set; get; } = null!;
+        public string Value { set; get; } = null!;
         public Variable WithStateMachineName(string stateMachineName) {
             this.StateMachineName = stateMachineName;
             return this;

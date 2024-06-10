@@ -33,8 +33,8 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class DescribeFollowsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.FollowUser[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Friend.Model.FollowUser[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeFollowsByUserIdResult WithItems(Gs2.Gs2Friend.Model.FollowUser[] items) {
             this.Items = items;

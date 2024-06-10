@@ -31,10 +31,10 @@ namespace Gs2.Gs2Deploy.Model
 #endif
 	public class Output : IComparable
 	{
-        public string OutputId { set; get; }
-        public string Name { set; get; }
-        public string Value { set; get; }
-        public long? CreatedAt { set; get; }
+        public string OutputId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Value { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
         public Output WithOutputId(string outputId) {
             this.OutputId = outputId;
             return this;

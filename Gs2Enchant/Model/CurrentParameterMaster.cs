@@ -31,8 +31,8 @@ namespace Gs2.Gs2Enchant.Model
 #endif
 	public class CurrentParameterMaster : IComparable
 	{
-        public string NamespaceId { set; get; }
-        public string Settings { set; get; }
+        public string NamespaceId { set; get; } = null!;
+        public string Settings { set; get; } = null!;
         public CurrentParameterMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

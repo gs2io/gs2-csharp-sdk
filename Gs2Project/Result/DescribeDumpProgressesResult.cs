@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeDumpProgressesResult : IResult
 	{
-        public Gs2.Gs2Project.Model.DumpProgress[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Project.Model.DumpProgress[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeDumpProgressesResult WithItems(Gs2.Gs2Project.Model.DumpProgress[] items) {
             this.Items = items;

@@ -20,9 +20,9 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class LeaveNotification
 	{
-        public string NamespaceName { set; get; }
-        public string GatheringName { set; get; }
-        public string LeaveUserId { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string GatheringName { set; get; } = null!;
+        public string LeaveUserId { set; get; } = null!;
         public LeaveNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,12 +31,12 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class Vote : IComparable
 	{
-        public string VoteId { set; get; }
-        public string RatingName { set; get; }
-        public string GatheringName { set; get; }
-        public Gs2.Gs2Matchmaking.Model.WrittenBallot[] WrittenBallots { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
+        public string VoteId { set; get; } = null!;
+        public string RatingName { set; get; } = null!;
+        public string GatheringName { set; get; } = null!;
+        public Gs2.Gs2Matchmaking.Model.WrittenBallot[] WrittenBallots { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
         public Vote WithVoteId(string voteId) {
             this.VoteId = voteId;
             return this;

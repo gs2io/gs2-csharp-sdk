@@ -33,7 +33,7 @@ namespace Gs2.Gs2SeasonRating.Result
 	[System.Serializable]
 	public class GetMatchSessionResult : IResult
 	{
-        public Gs2.Gs2SeasonRating.Model.MatchSession Item { set; get; }
+        public Gs2.Gs2SeasonRating.Model.MatchSession Item { set; get; } = null!;
 
         public GetMatchSessionResult WithItem(Gs2.Gs2SeasonRating.Model.MatchSession item) {
             this.Item = item;

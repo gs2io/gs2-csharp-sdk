@@ -20,10 +20,10 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class ChangeRatingNotification
 	{
-        public string NamespaceName { set; get; }
-        public string RatingName { set; get; }
-        public string UserId { set; get; }
-        public float? RateValue { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string RatingName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public float? RateValue { set; get; } = null!;
         public ChangeRatingNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

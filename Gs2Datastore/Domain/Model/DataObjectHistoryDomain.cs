@@ -63,10 +63,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
     public partial class DataObjectHistoryDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DatastoreRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string DataObjectName { get; }
-        public string Generation { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string DataObjectName { get; } = null!;
+        public string Generation { get; } = null!;
 
         public DataObjectHistoryDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunStampTaskResult : IResult
 	{
-        public string ContextStack { set; get; }
-        public int? StatusCode { set; get; }
-        public string Result { set; get; }
+        public string ContextStack { set; get; } = null!;
+        public int? StatusCode { set; get; } = null!;
+        public string Result { set; get; } = null!;
 
         public RunStampTaskResult WithContextStack(string contextStack) {
             this.ContextStack = contextStack;

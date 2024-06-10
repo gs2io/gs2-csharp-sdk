@@ -33,8 +33,8 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class VerifyEntryByStampTaskRequest : Gs2Request<VerifyEntryByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public VerifyEntryByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

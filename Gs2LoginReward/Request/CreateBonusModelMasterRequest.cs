@@ -33,17 +33,17 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class CreateBonusModelMasterRequest : Gs2Request<CreateBonusModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string Mode { set; get; }
-         public string PeriodEventId { set; get; }
-         public int? ResetHour { set; get; }
-         public string Repeat { set; get; }
-         public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; }
-         public string MissedReceiveRelief { set; get; }
-         public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string Mode { set; get; } = null!;
+         public string PeriodEventId { set; get; } = null!;
+         public int? ResetHour { set; get; } = null!;
+         public string Repeat { set; get; } = null!;
+         public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; } = null!;
+         public string MissedReceiveRelief { set; get; } = null!;
+         public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; } = null!;
         public CreateBonusModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

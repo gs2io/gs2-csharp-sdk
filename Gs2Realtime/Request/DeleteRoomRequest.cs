@@ -33,8 +33,8 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class DeleteRoomRequest : Gs2Request<DeleteRoomRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RoomName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RoomName { set; get; } = null!;
         public DeleteRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

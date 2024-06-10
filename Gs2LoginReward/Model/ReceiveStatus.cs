@@ -31,14 +31,14 @@ namespace Gs2.Gs2LoginReward.Model
 #endif
 	public class ReceiveStatus : IComparable
 	{
-        public string ReceiveStatusId { set; get; }
-        public string BonusModelName { set; get; }
-        public string UserId { set; get; }
-        public bool[] ReceivedSteps { set; get; }
-        public long? LastReceivedAt { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ReceiveStatusId { set; get; } = null!;
+        public string BonusModelName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public bool[] ReceivedSteps { set; get; } = null!;
+        public long? LastReceivedAt { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public ReceiveStatus WithReceiveStatusId(string receiveStatusId) {
             this.ReceiveStatusId = receiveStatusId;
             return this;

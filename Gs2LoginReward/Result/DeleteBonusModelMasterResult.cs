@@ -33,7 +33,7 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class DeleteBonusModelMasterResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.BonusModelMaster Item { set; get; }
+        public Gs2.Gs2LoginReward.Model.BonusModelMaster Item { set; get; } = null!;
 
         public DeleteBonusModelMasterResult WithItem(Gs2.Gs2LoginReward.Model.BonusModelMaster item) {
             this.Item = item;

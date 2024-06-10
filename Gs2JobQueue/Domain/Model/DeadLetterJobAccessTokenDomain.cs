@@ -63,10 +63,10 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class DeadLetterJobAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string DeadLetterJobName { get; }
+        public string DeadLetterJobName { get; } = null!;
 
         public DeadLetterJobAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

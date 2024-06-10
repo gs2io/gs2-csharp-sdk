@@ -33,12 +33,12 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class SetMaximumIdleMinutesByUserIdRequest : Gs2Request<SetMaximumIdleMinutesByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string CategoryName { set; get; }
-         public int? MaximumIdleMinutes { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public int? MaximumIdleMinutes { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetMaximumIdleMinutesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

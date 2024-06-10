@@ -31,10 +31,10 @@ namespace Gs2.Gs2Grade.Model
 #endif
 	public class AcquireActionRate : IComparable
 	{
-        public string Name { set; get; }
-        public string Mode { set; get; }
-        public double[] Rates { set; get; }
-        public string[] BigRates { set; get; }
+        public string Name { set; get; } = null!;
+        public string Mode { set; get; } = null!;
+        public double[] Rates { set; get; } = null!;
+        public string[] BigRates { set; get; } = null!;
         public AcquireActionRate WithName(string name) {
             this.Name = name;
             return this;

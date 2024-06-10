@@ -31,8 +31,8 @@ namespace Gs2.Gs2Ranking.Model
 #endif
 	public class FixedTiming : IComparable
 	{
-        public int? Hour { set; get; }
-        public int? Minute { set; get; }
+        public int? Hour { set; get; } = null!;
+        public int? Minute { set; get; } = null!;
         public FixedTiming WithHour(int? hour) {
             this.Hour = hour;
             return this;

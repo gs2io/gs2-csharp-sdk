@@ -33,8 +33,8 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class DeleteInsightRequest : Gs2Request<DeleteInsightRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string InsightName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string InsightName { set; get; } = null!;
         public DeleteInsightRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

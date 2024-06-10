@@ -33,11 +33,11 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class AcquireActionToPropertyFormPropertiesByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public AcquireActionToPropertyFormPropertiesByStampSheetResult WithItem(Gs2.Gs2Formation.Model.PropertyForm item) {
             this.Item = item;

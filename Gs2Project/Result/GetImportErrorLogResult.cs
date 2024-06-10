@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class GetImportErrorLogResult : IResult
 	{
-        public Gs2.Gs2Project.Model.ImportErrorLog Item { set; get; }
+        public Gs2.Gs2Project.Model.ImportErrorLog Item { set; get; } = null!;
 
         public GetImportErrorLogResult WithItem(Gs2.Gs2Project.Model.ImportErrorLog item) {
             this.Item = item;

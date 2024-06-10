@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class DeleteSimpleInventoryModelMasterResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster Item { set; get; }
+        public Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster Item { set; get; } = null!;
 
         public DeleteSimpleInventoryModelMasterResult WithItem(Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster item) {
             this.Item = item;

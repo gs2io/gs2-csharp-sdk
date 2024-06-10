@@ -33,7 +33,7 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class DeletePasswordRequest : Gs2Request<DeletePasswordRequest>
 	{
-         public string UserName { set; get; }
+         public string UserName { set; get; } = null!;
         public DeletePasswordRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

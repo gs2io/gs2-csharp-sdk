@@ -33,8 +33,8 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DecrementPurchaseCountByStampSheetRequest : Gs2Request<DecrementPurchaseCountByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DecrementPurchaseCountByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

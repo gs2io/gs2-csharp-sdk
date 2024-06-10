@@ -31,13 +31,13 @@ namespace Gs2.Gs2Log.Model
 #endif
 	public class ExecuteStampSheetLog : IComparable
 	{
-        public long? Timestamp { set; get; }
-        public string TransactionId { set; get; }
-        public string Service { set; get; }
-        public string Method { set; get; }
-        public string UserId { set; get; }
-        public string Action { set; get; }
-        public string Args { set; get; }
+        public long? Timestamp { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string Service { set; get; } = null!;
+        public string Method { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string Action { set; get; } = null!;
+        public string Args { set; get; } = null!;
         public ExecuteStampSheetLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;

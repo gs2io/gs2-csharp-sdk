@@ -33,14 +33,14 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class UpdateGradeModelMasterRequest : Gs2Request<UpdateGradeModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GradeName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Gs2Grade.Model.DefaultGradeModel[] DefaultGrades { set; get; }
-         public string ExperienceModelId { set; get; }
-         public Gs2.Gs2Grade.Model.GradeEntryModel[] GradeEntries { set; get; }
-         public Gs2.Gs2Grade.Model.AcquireActionRate[] AcquireActionRates { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GradeName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Gs2Grade.Model.DefaultGradeModel[] DefaultGrades { set; get; } = null!;
+         public string ExperienceModelId { set; get; } = null!;
+         public Gs2.Gs2Grade.Model.GradeEntryModel[] GradeEntries { set; get; } = null!;
+         public Gs2.Gs2Grade.Model.AcquireActionRate[] AcquireActionRates { set; get; } = null!;
         public UpdateGradeModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

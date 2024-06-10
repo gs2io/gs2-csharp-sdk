@@ -33,7 +33,7 @@ namespace Gs2.Gs2Buff.Result
 	[System.Serializable]
 	public class CreateBuffEntryModelMasterResult : IResult
 	{
-        public Gs2.Gs2Buff.Model.BuffEntryModelMaster Item { set; get; }
+        public Gs2.Gs2Buff.Model.BuffEntryModelMaster Item { set; get; } = null!;
 
         public CreateBuffEntryModelMasterResult WithItem(Gs2.Gs2Buff.Model.BuffEntryModelMaster item) {
             this.Item = item;

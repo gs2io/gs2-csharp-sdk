@@ -33,10 +33,10 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class VerifyReferenceOfResult : IResult
 	{
-        public string Item { set; get; }
-        public Gs2.Gs2Inventory.Model.ItemSet ItemSet { set; get; }
-        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
-        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
+        public string Item { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.ItemSet ItemSet { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; } = null!;
 
         public VerifyReferenceOfResult WithItem(string item) {
             this.Item = item;

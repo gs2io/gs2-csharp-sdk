@@ -33,8 +33,8 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class UpdateCurrentRatingModelMasterFromGitHubRequest : Gs2Request<UpdateCurrentRatingModelMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Matchmaking.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentRatingModelMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

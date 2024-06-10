@@ -33,11 +33,11 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class IncrementalExchangeResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.IncrementalRateModel Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Gs2Exchange.Model.IncrementalRateModel Item { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public IncrementalExchangeResult WithItem(Gs2.Gs2Exchange.Model.IncrementalRateModel item) {
             this.Item = item;

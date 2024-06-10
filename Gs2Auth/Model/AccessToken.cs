@@ -31,11 +31,11 @@ namespace Gs2.Gs2Auth.Model
 #endif
 	public class AccessToken : IComparable
 	{
-        public string Token { set; get; }
-        public string UserId { set; get; }
-        public string FederationFromUserId { set; get; }
-        public long? Expire { set; get; }
-        public int? TimeOffset { set; get; }
+        public string Token { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string FederationFromUserId { set; get; } = null!;
+        public long? Expire { set; get; } = null!;
+        public int? TimeOffset { set; get; } = null!;
         public AccessToken WithToken(string token) {
             this.Token = token;
             return this;

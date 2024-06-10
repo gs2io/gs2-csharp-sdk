@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class IssuePasswordRequest : Gs2Request<IssuePasswordRequest>
 	{
-         public string IssuePasswordToken { set; get; }
+         public string IssuePasswordToken { set; get; } = null!;
         public IssuePasswordRequest WithIssuePasswordToken(string issuePasswordToken) {
             this.IssuePasswordToken = issuePasswordToken;
             return this;

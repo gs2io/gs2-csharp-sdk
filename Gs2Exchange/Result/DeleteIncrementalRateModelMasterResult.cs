@@ -33,7 +33,7 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class DeleteIncrementalRateModelMasterResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.IncrementalRateModelMaster Item { set; get; }
+        public Gs2.Gs2Exchange.Model.IncrementalRateModelMaster Item { set; get; } = null!;
 
         public DeleteIncrementalRateModelMasterResult WithItem(Gs2.Gs2Exchange.Model.IncrementalRateModelMaster item) {
             this.Item = item;

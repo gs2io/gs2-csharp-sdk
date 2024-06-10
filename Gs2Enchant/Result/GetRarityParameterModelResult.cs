@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class GetRarityParameterModelResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.RarityParameterModel Item { set; get; }
+        public Gs2.Gs2Enchant.Model.RarityParameterModel Item { set; get; } = null!;
 
         public GetRarityParameterModelResult WithItem(Gs2.Gs2Enchant.Model.RarityParameterModel item) {
             this.Item = item;

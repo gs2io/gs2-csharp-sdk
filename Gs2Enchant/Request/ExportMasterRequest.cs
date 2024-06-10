@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class ExportMasterRequest : Gs2Request<ExportMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public ExportMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

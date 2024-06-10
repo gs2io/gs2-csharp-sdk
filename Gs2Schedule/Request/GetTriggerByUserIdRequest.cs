@@ -33,10 +33,10 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class GetTriggerByUserIdRequest : Gs2Request<GetTriggerByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TriggerName { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TriggerName { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetTriggerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

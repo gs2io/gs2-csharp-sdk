@@ -31,13 +31,13 @@ namespace Gs2.Gs2Gateway.Model
 #endif
 	public class WebSocketSession : IComparable
 	{
-        public string WebSocketSessionId { set; get; }
-        public string ConnectionId { set; get; }
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string WebSocketSessionId { set; get; } = null!;
+        public string ConnectionId { set; get; } = null!;
+        public string NamespaceName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public WebSocketSession WithWebSocketSessionId(string webSocketSessionId) {
             this.WebSocketSessionId = webSocketSessionId;
             return this;

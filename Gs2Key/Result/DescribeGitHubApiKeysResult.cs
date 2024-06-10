@@ -33,8 +33,8 @@ namespace Gs2.Gs2Key.Result
 	[System.Serializable]
 	public class DescribeGitHubApiKeysResult : IResult
 	{
-        public Gs2.Gs2Key.Model.GitHubApiKey[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Key.Model.GitHubApiKey[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeGitHubApiKeysResult WithItems(Gs2.Gs2Key.Model.GitHubApiKey[] items) {
             this.Items = items;

@@ -31,8 +31,8 @@ namespace Gs2.Gs2News.Model
 #endif
 	public class SetCookieRequestEntry : IComparable
 	{
-        public string Key { set; get; }
-        public string Value { set; get; }
+        public string Key { set; get; } = null!;
+        public string Value { set; get; } = null!;
         public SetCookieRequestEntry WithKey(string key) {
             this.Key = key;
             return this;

@@ -33,12 +33,12 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class UpdateMemberRoleRequest : Gs2Request<UpdateMemberRoleRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GuildModelName { set; get; }
-         public string AccessToken { set; get; }
-         public string TargetUserId { set; get; }
-         public string RoleName { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string TargetUserId { set; get; } = null!;
+         public string RoleName { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UpdateMemberRoleRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

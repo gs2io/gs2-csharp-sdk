@@ -33,10 +33,10 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class UseRequest : Gs2Request<UseRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string Code { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string Code { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UseRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

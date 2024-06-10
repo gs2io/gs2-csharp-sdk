@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DeleteBillingMethodRequest : Gs2Request<DeleteBillingMethodRequest>
 	{
-         public string AccountToken { set; get; }
-         public string BillingMethodName { set; get; }
+         public string AccountToken { set; get; } = null!;
+         public string BillingMethodName { set; get; } = null!;
         public DeleteBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

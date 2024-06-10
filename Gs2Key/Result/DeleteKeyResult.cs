@@ -33,7 +33,7 @@ namespace Gs2.Gs2Key.Result
 	[System.Serializable]
 	public class DeleteKeyResult : IResult
 	{
-        public Gs2.Gs2Key.Model.Key Item { set; get; }
+        public Gs2.Gs2Key.Model.Key Item { set; get; } = null!;
 
         public DeleteKeyResult WithItem(Gs2.Gs2Key.Model.Key item) {
             this.Item = item;

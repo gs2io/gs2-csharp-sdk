@@ -33,8 +33,8 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class DeleteTriggerByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.Trigger Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Schedule.Model.Trigger Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DeleteTriggerByStampTaskResult WithItem(Gs2.Gs2Schedule.Model.Trigger item) {
             this.Item = item;

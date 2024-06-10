@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enhance.Result
 	[System.Serializable]
 	public class CreateRateModelMasterResult : IResult
 	{
-        public Gs2.Gs2Enhance.Model.RateModelMaster Item { set; get; }
+        public Gs2.Gs2Enhance.Model.RateModelMaster Item { set; get; } = null!;
 
         public CreateRateModelMasterResult WithItem(Gs2.Gs2Enhance.Model.RateModelMaster item) {
             this.Item = item;

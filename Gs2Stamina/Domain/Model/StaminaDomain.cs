@@ -63,10 +63,10 @@ namespace Gs2.Gs2Stamina.Domain.Model
     public partial class StaminaDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StaminaRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string StaminaName { get; }
-        public int? OverflowValue { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string StaminaName { get; } = null!;
+        public int? OverflowValue { get; set; } = null!;
 
         public StaminaDomain(
             Gs2.Core.Domain.Gs2 gs2,

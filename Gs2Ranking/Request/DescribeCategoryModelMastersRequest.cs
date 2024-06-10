@@ -33,9 +33,9 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DescribeCategoryModelMastersRequest : Gs2Request<DescribeCategoryModelMastersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeCategoryModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

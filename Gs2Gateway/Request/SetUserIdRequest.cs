@@ -33,10 +33,10 @@ namespace Gs2.Gs2Gateway.Request
 	[System.Serializable]
 	public class SetUserIdRequest : Gs2Request<SetUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public bool? AllowConcurrentAccess { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public bool? AllowConcurrentAccess { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

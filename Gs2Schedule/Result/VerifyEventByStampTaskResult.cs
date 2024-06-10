@@ -33,7 +33,7 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class VerifyEventByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyEventByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

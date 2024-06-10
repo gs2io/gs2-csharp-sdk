@@ -33,8 +33,8 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class DescribeWalletsResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Wallet[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Money.Model.Wallet[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeWalletsResult WithItems(Gs2.Gs2Money.Model.Wallet[] items) {
             this.Items = items;

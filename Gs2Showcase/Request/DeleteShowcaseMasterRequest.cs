@@ -33,8 +33,8 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DeleteShowcaseMasterRequest : Gs2Request<DeleteShowcaseMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ShowcaseName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ShowcaseName { set; get; } = null!;
         public DeleteShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class GetIssueJobResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.IssueJob Item { set; get; }
+        public Gs2.Gs2SerialKey.Model.IssueJob Item { set; get; } = null!;
 
         public GetIssueJobResult WithItem(Gs2.Gs2SerialKey.Model.IssueJob item) {
             this.Item = item;

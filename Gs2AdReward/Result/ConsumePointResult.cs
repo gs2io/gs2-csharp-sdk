@@ -33,7 +33,7 @@ namespace Gs2.Gs2AdReward.Result
 	[System.Serializable]
 	public class ConsumePointResult : IResult
 	{
-        public Gs2.Gs2AdReward.Model.Point Item { set; get; }
+        public Gs2.Gs2AdReward.Model.Point Item { set; get; } = null!;
 
         public ConsumePointResult WithItem(Gs2.Gs2AdReward.Model.Point item) {
             this.Item = item;

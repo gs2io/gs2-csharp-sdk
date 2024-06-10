@@ -65,7 +65,7 @@ namespace Gs2.Gs2Realtime.Domain
     public class Gs2Realtime {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RealtimeRestClient _client;
-        public long? Timestamp { get; set; }
+        public long? Timestamp { get; set; } = null!;
 
         public Gs2Realtime(
             Gs2.Core.Domain.Gs2 gs2

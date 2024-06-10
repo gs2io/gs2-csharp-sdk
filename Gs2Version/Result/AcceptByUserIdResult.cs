@@ -33,7 +33,7 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class AcceptByUserIdResult : IResult
 	{
-        public Gs2.Gs2Version.Model.AcceptVersion Item { set; get; }
+        public Gs2.Gs2Version.Model.AcceptVersion Item { set; get; } = null!;
 
         public AcceptByUserIdResult WithItem(Gs2.Gs2Version.Model.AcceptVersion item) {
             this.Item = item;

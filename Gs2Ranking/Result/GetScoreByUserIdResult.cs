@@ -33,7 +33,7 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class GetScoreByUserIdResult : IResult
 	{
-        public Gs2.Gs2Ranking.Model.Score Item { set; get; }
+        public Gs2.Gs2Ranking.Model.Score Item { set; get; } = null!;
 
         public GetScoreByUserIdResult WithItem(Gs2.Gs2Ranking.Model.Score item) {
             this.Item = item;

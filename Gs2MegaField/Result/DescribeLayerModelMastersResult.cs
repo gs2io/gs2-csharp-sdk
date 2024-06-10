@@ -33,8 +33,8 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class DescribeLayerModelMastersResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.LayerModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2MegaField.Model.LayerModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeLayerModelMastersResult WithItems(Gs2.Gs2MegaField.Model.LayerModelMaster[] items) {
             this.Items = items;

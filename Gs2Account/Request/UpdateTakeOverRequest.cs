@@ -33,12 +33,12 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class UpdateTakeOverRequest : Gs2Request<UpdateTakeOverRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public int? Type { set; get; }
-         public string OldPassword { set; get; }
-         public string Password { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public int? Type { set; get; } = null!;
+         public string OldPassword { set; get; } = null!;
+         public string Password { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UpdateTakeOverRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

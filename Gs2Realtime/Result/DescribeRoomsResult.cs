@@ -33,8 +33,8 @@ namespace Gs2.Gs2Realtime.Result
 	[System.Serializable]
 	public class DescribeRoomsResult : IResult
 	{
-        public Gs2.Gs2Realtime.Model.Room[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Realtime.Model.Room[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRoomsResult WithItems(Gs2.Gs2Realtime.Model.Room[] items) {
             this.Items = items;

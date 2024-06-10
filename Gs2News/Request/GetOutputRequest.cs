@@ -33,9 +33,9 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class GetOutputRequest : Gs2Request<GetOutputRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UploadToken { set; get; }
-         public string OutputName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
+         public string OutputName { set; get; } = null!;
         public GetOutputRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

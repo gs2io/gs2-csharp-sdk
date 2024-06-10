@@ -63,8 +63,8 @@ namespace Gs2.Gs2Limit.Domain.Model
     public partial class LimitModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LimitRestClient _client;
-        public string NamespaceName { get; }
-        public string LimitName { get; }
+        public string NamespaceName { get; } = null!;
+        public string LimitName { get; } = null!;
 
         public LimitModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

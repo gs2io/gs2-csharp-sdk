@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DescribeRateModelsRequest : Gs2Request<DescribeRateModelsRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DescribeRateModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

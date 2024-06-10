@@ -63,14 +63,14 @@ namespace Gs2.Gs2Experience.Domain.Model
     public partial class StatusDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExperienceRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string ExperienceName { get; }
-        public string PropertyId { get; }
-        public string Body { get; set; }
-        public string Signature { get; set; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string ExperienceName { get; } = null!;
+        public string PropertyId { get; } = null!;
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public StatusDomain(
             Gs2.Core.Domain.Gs2 gs2,

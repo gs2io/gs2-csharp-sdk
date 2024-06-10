@@ -33,8 +33,8 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class WithdrawResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Wallet Item { set; get; }
-        public float? Price { set; get; }
+        public Gs2.Gs2Money.Model.Wallet Item { set; get; } = null!;
+        public float? Price { set; get; } = null!;
 
         public WithdrawResult WithItem(Gs2.Gs2Money.Model.Wallet item) {
             this.Item = item;

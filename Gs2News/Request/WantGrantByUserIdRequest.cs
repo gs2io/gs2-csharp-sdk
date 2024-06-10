@@ -33,9 +33,9 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class WantGrantByUserIdRequest : Gs2Request<WantGrantByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public WantGrantByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

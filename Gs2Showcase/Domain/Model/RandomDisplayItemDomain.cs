@@ -63,12 +63,12 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class RandomDisplayItemDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string ShowcaseName { get; }
-        public string DisplayItemName { get; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string ShowcaseName { get; } = null!;
+        public string DisplayItemName { get; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public RandomDisplayItemDomain(
             Gs2.Core.Domain.Gs2 gs2,

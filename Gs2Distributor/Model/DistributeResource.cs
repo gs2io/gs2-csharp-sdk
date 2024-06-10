@@ -31,8 +31,8 @@ namespace Gs2.Gs2Distributor.Model
 #endif
 	public class DistributeResource : IComparable
 	{
-        public string Action { set; get; }
-        public string Request { set; get; }
+        public string Action { set; get; } = null!;
+        public string Request { set; get; } = null!;
         public DistributeResource WithAction(string action) {
             this.Action = action;
             return this;

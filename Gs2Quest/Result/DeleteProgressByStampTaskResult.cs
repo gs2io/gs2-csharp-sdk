@@ -33,8 +33,8 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class DeleteProgressByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.Progress Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Quest.Model.Progress Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DeleteProgressByStampTaskResult WithItem(Gs2.Gs2Quest.Model.Progress item) {
             this.Item = item;

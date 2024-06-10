@@ -31,9 +31,9 @@ namespace Gs2.Gs2JobQueue.Model
 #endif
 	public class JobEntry : IComparable
 	{
-        public string ScriptId { set; get; }
-        public string Args { set; get; }
-        public int? MaxTryCount { set; get; }
+        public string ScriptId { set; get; } = null!;
+        public string Args { set; get; } = null!;
+        public int? MaxTryCount { set; get; } = null!;
         public JobEntry WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;

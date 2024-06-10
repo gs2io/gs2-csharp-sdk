@@ -33,11 +33,11 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class AcquireItemSetWithGradeByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.ItemSet Item { set; get; }
-        public Gs2.Gs2Grade.Model.Status Status { set; get; }
-        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
-        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
-        public long? OverflowCount { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet Item { set; get; } = null!;
+        public Gs2.Gs2Grade.Model.Status Status { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; } = null!;
+        public long? OverflowCount { set; get; } = null!;
 
         public AcquireItemSetWithGradeByStampSheetResult WithItem(Gs2.Gs2Inventory.Model.ItemSet item) {
             this.Item = item;

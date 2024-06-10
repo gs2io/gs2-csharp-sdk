@@ -33,9 +33,9 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class UpdateStackFromGitHubRequest : Gs2Request<UpdateStackFromGitHubRequest>
 	{
-         public string StackName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Deploy.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string StackName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Deploy.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateStackFromGitHubRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

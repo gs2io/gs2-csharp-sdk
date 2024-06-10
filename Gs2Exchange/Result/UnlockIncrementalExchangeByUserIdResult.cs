@@ -33,7 +33,7 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class UnlockIncrementalExchangeByUserIdResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.IncrementalRateModel Item { set; get; }
+        public Gs2.Gs2Exchange.Model.IncrementalRateModel Item { set; get; } = null!;
 
         public UnlockIncrementalExchangeByUserIdResult WithItem(Gs2.Gs2Exchange.Model.IncrementalRateModel item) {
             this.Item = item;

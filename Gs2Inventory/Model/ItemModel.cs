@@ -31,12 +31,12 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class ItemModel : IComparable
 	{
-        public string ItemModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public long? StackingLimit { set; get; }
-        public bool? AllowMultipleStacks { set; get; }
-        public int? SortValue { set; get; }
+        public string ItemModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public long? StackingLimit { set; get; } = null!;
+        public bool? AllowMultipleStacks { set; get; } = null!;
+        public int? SortValue { set; get; } = null!;
         public ItemModel WithItemModelId(string itemModelId) {
             this.ItemModelId = itemModelId;
             return this;

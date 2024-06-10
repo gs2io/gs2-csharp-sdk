@@ -33,29 +33,29 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class CreateEventMasterRequest : Gs2Request<CreateEventMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string ScheduleType { set; get; }
-         public long? AbsoluteBegin { set; get; }
-         public long? AbsoluteEnd { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string ScheduleType { set; get; } = null!;
+         public long? AbsoluteBegin { set; get; } = null!;
+         public long? AbsoluteEnd { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string RepeatType { set; get; }
+         public string RepeatType { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public int? RepeatBeginDayOfMonth { set; get; }
+         public int? RepeatBeginDayOfMonth { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public int? RepeatEndDayOfMonth { set; get; }
+         public int? RepeatEndDayOfMonth { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string RepeatBeginDayOfWeek { set; get; }
+         public string RepeatBeginDayOfWeek { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string RepeatEndDayOfWeek { set; get; }
+         public string RepeatEndDayOfWeek { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public int? RepeatBeginHour { set; get; }
+         public int? RepeatBeginHour { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public int? RepeatEndHour { set; get; }
-         public string RelativeTriggerName { set; get; }
-         public Gs2.Gs2Schedule.Model.RepeatSetting RepeatSetting { set; get; }
+         public int? RepeatEndHour { set; get; } = null!;
+         public string RelativeTriggerName { set; get; } = null!;
+         public Gs2.Gs2Schedule.Model.RepeatSetting RepeatSetting { set; get; } = null!;
         public CreateEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

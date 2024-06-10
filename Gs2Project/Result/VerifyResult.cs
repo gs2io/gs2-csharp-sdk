@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class VerifyResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Account Item { set; get; }
+        public Gs2.Gs2Project.Model.Account Item { set; get; } = null!;
 
         public VerifyResult WithItem(Gs2.Gs2Project.Model.Account item) {
             this.Item = item;

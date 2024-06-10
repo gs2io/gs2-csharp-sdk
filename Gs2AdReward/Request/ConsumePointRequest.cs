@@ -33,10 +33,10 @@ namespace Gs2.Gs2AdReward.Request
 	[System.Serializable]
 	public class ConsumePointRequest : Gs2Request<ConsumePointRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public long? Point { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public long? Point { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ConsumePointRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

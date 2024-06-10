@@ -63,12 +63,12 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class SimpleItemDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string InventoryName { get; }
-        public string ItemName { get; }
-        public string Body { get; set; }
-        public string Signature { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string InventoryName { get; } = null!;
+        public string ItemName { get; } = null!;
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
 
         public SimpleItemDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,14 +33,14 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class UpdateGlobalMessageMasterRequest : Gs2Request<UpdateGlobalMessageMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GlobalMessageName { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
-         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GlobalMessageName { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public long? ExpiresAt { set; get; }
-         public string MessageReceptionPeriodEventId { set; get; }
+         public long? ExpiresAt { set; get; } = null!;
+         public string MessageReceptionPeriodEventId { set; get; } = null!;
         public UpdateGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

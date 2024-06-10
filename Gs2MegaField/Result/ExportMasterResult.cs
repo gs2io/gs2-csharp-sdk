@@ -33,7 +33,7 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class ExportMasterResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.CurrentFieldMaster Item { set; get; }
+        public Gs2.Gs2MegaField.Model.CurrentFieldMaster Item { set; get; } = null!;
 
         public ExportMasterResult WithItem(Gs2.Gs2MegaField.Model.CurrentFieldMaster item) {
             this.Item = item;

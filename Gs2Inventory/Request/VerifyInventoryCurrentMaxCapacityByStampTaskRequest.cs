@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifyInventoryCurrentMaxCapacityByStampTaskRequest : Gs2Request<VerifyInventoryCurrentMaxCapacityByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public VerifyInventoryCurrentMaxCapacityByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

@@ -31,16 +31,16 @@ namespace Gs2.Gs2Exchange.Model
 #endif
 	public class Await : IComparable
 	{
-        public string AwaitId { set; get; }
-        public string UserId { set; get; }
-        public string RateName { set; get; }
-        public string Name { set; get; }
-        public int? Count { set; get; }
-        public int? SkipSeconds { set; get; }
-        public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
-        public long? AcquirableAt { set; get; }
-        public long? ExchangedAt { set; get; }
-        public long? Revision { set; get; }
+        public string AwaitId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string RateName { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public int? Count { set; get; } = null!;
+        public int? SkipSeconds { set; get; } = null!;
+        public Gs2.Gs2Exchange.Model.Config[] Config { set; get; } = null!;
+        public long? AcquirableAt { set; get; } = null!;
+        public long? ExchangedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Await WithAwaitId(string awaitId) {
             this.AwaitId = awaitId;
             return this;

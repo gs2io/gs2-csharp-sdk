@@ -33,10 +33,10 @@ namespace Gs2.Gs2Account.Result
 	[System.Serializable]
 	public class AuthenticationResult : IResult
 	{
-        public Gs2.Gs2Account.Model.Account Item { set; get; }
-        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public Gs2.Gs2Account.Model.Account Item { set; get; } = null!;
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
 
         public AuthenticationResult WithItem(Gs2.Gs2Account.Model.Account item) {
             this.Item = item;

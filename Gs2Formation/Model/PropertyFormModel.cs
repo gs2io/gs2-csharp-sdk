@@ -31,10 +31,10 @@ namespace Gs2.Gs2Formation.Model
 #endif
 	public class PropertyFormModel : IComparable
 	{
-        public string PropertyFormModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
+        public string PropertyFormModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; } = null!;
         public PropertyFormModel WithPropertyFormModelId(string propertyFormModelId) {
             this.PropertyFormModelId = propertyFormModelId;
             return this;

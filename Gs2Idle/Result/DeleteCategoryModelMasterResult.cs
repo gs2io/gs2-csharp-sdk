@@ -33,7 +33,7 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class DeleteCategoryModelMasterResult : IResult
 	{
-        public Gs2.Gs2Idle.Model.CategoryModelMaster Item { set; get; }
+        public Gs2.Gs2Idle.Model.CategoryModelMaster Item { set; get; } = null!;
 
         public DeleteCategoryModelMasterResult WithItem(Gs2.Gs2Idle.Model.CategoryModelMaster item) {
             this.Item = item;

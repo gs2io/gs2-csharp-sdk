@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class SignInResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Account Item { set; get; }
-        public string AccountToken { set; get; }
+        public Gs2.Gs2Project.Model.Account Item { set; get; } = null!;
+        public string AccountToken { set; get; } = null!;
 
         public SignInResult WithItem(Gs2.Gs2Project.Model.Account item) {
             this.Item = item;

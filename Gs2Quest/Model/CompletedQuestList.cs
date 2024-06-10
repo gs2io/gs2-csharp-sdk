@@ -31,13 +31,13 @@ namespace Gs2.Gs2Quest.Model
 #endif
 	public class CompletedQuestList : IComparable
 	{
-        public string CompletedQuestListId { set; get; }
-        public string UserId { set; get; }
-        public string QuestGroupName { set; get; }
-        public string[] CompleteQuestNames { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string CompletedQuestListId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string QuestGroupName { set; get; } = null!;
+        public string[] CompleteQuestNames { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public CompletedQuestList WithCompletedQuestListId(string completedQuestListId) {
             this.CompletedQuestListId = completedQuestListId;
             return this;

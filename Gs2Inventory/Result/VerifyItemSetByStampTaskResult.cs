@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class VerifyItemSetByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyItemSetByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

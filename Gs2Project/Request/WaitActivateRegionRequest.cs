@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class WaitActivateRegionRequest : Gs2Request<WaitActivateRegionRequest>
 	{
-         public string ProjectName { set; get; }
-         public string RegionName { set; get; }
+         public string ProjectName { set; get; } = null!;
+         public string RegionName { set; get; } = null!;
         public WaitActivateRegionRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;

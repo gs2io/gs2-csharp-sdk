@@ -31,8 +31,8 @@ namespace Gs2.Gs2SeasonRating.Model
 #endif
 	public class WrittenBallot : IComparable
 	{
-        public Gs2.Gs2SeasonRating.Model.Ballot Ballot { set; get; }
-        public Gs2.Gs2SeasonRating.Model.GameResult[] GameResults { set; get; }
+        public Gs2.Gs2SeasonRating.Model.Ballot Ballot { set; get; } = null!;
+        public Gs2.Gs2SeasonRating.Model.GameResult[] GameResults { set; get; } = null!;
         public WrittenBallot WithBallot(Gs2.Gs2SeasonRating.Model.Ballot ballot) {
             this.Ballot = ballot;
             return this;

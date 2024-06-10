@@ -33,7 +33,7 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class GetCurrentRateMasterResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.CurrentRateMaster Item { set; get; }
+        public Gs2.Gs2Exchange.Model.CurrentRateMaster Item { set; get; } = null!;
 
         public GetCurrentRateMasterResult WithItem(Gs2.Gs2Exchange.Model.CurrentRateMaster item) {
             this.Item = item;

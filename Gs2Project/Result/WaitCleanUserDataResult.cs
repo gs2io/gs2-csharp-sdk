@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class WaitCleanUserDataResult : IResult
 	{
-        public Gs2.Gs2Project.Model.CleanProgress Item { set; get; }
+        public Gs2.Gs2Project.Model.CleanProgress Item { set; get; } = null!;
 
         public WaitCleanUserDataResult WithItem(Gs2.Gs2Project.Model.CleanProgress item) {
             this.Item = item;

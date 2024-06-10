@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enhance.Result
 	[System.Serializable]
 	public class DescribeRateModelMastersResult : IResult
 	{
-        public Gs2.Gs2Enhance.Model.RateModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Enhance.Model.RateModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRateModelMastersResult WithItems(Gs2.Gs2Enhance.Model.RateModelMaster[] items) {
             this.Items = items;

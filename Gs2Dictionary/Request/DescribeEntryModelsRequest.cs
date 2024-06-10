@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class DescribeEntryModelsRequest : Gs2Request<DescribeEntryModelsRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DescribeEntryModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

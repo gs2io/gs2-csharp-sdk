@@ -33,8 +33,8 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class SubRankCapByStampTaskRequest : Gs2Request<SubRankCapByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public SubRankCapByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

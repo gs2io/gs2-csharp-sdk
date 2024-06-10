@@ -33,8 +33,8 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class RecordReceiptByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Receipt Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Money.Model.Receipt Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public RecordReceiptByStampTaskResult WithItem(Gs2.Gs2Money.Model.Receipt item) {
             this.Item = item;

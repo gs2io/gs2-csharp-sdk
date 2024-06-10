@@ -20,10 +20,10 @@ namespace Gs2.Gs2Guild.Model
 {
 	public class ChangeMemberNotification
 	{
-        public string NamespaceName { set; get; }
-        public string GuildModelName { set; get; }
-        public string GuildName { set; get; }
-        public string ChangedUserId { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string GuildModelName { set; get; } = null!;
+        public string GuildName { set; get; } = null!;
+        public string ChangedUserId { set; get; } = null!;
         public ChangeMemberNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -63,10 +63,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
     public partial class NamespaceDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RealtimeRestClient _client;
-        public string NamespaceName { get; }
-        public string Status { get; set; }
-        public long? Timestamp { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string Status { get; set; } = null!;
+        public long? Timestamp { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public NamespaceDomain(
             Gs2.Core.Domain.Gs2 gs2,

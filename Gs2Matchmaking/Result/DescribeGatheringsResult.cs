@@ -33,8 +33,8 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class DescribeGatheringsResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Gathering[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Gathering[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeGatheringsResult WithItems(Gs2.Gs2Matchmaking.Model.Gathering[] items) {
             this.Items = items;

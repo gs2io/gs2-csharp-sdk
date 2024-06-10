@@ -33,9 +33,9 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DescribeSubscribesByCategoryNameRequest : Gs2Request<DescribeSubscribesByCategoryNameRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
-         public string AccessToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
         public DescribeSubscribesByCategoryNameRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

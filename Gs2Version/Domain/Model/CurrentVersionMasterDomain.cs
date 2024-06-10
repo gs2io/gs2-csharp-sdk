@@ -63,7 +63,7 @@ namespace Gs2.Gs2Version.Domain.Model
     public partial class CurrentVersionMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2VersionRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentVersionMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -63,11 +63,11 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class JoinedGuildAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string GuildModelName { get; }
-        public string GuildName { get; }
+        public string GuildModelName { get; } = null!;
+        public string GuildName { get; } = null!;
 
         public JoinedGuildAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,12 +33,12 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public bool? EnableAutoRun { set; get; }
-         public Gs2.Gs2JobQueue.Model.NotificationSetting PushNotification { set; get; }
-         public Gs2.Gs2JobQueue.Model.NotificationSetting RunNotification { set; get; }
-         public Gs2.Gs2JobQueue.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public bool? EnableAutoRun { set; get; } = null!;
+         public Gs2.Gs2JobQueue.Model.NotificationSetting PushNotification { set; get; } = null!;
+         public Gs2.Gs2JobQueue.Model.NotificationSetting RunNotification { set; get; } = null!;
+         public Gs2.Gs2JobQueue.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

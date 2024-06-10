@@ -33,16 +33,16 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public bool? AllowCreateRoom { set; get; }
-         public Gs2.Gs2Chat.Model.ScriptSetting PostMessageScript { set; get; }
-         public Gs2.Gs2Chat.Model.ScriptSetting CreateRoomScript { set; get; }
-         public Gs2.Gs2Chat.Model.ScriptSetting DeleteRoomScript { set; get; }
-         public Gs2.Gs2Chat.Model.ScriptSetting SubscribeRoomScript { set; get; }
-         public Gs2.Gs2Chat.Model.ScriptSetting UnsubscribeRoomScript { set; get; }
-         public Gs2.Gs2Chat.Model.NotificationSetting PostNotification { set; get; }
-         public Gs2.Gs2Chat.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public bool? AllowCreateRoom { set; get; } = null!;
+         public Gs2.Gs2Chat.Model.ScriptSetting PostMessageScript { set; get; } = null!;
+         public Gs2.Gs2Chat.Model.ScriptSetting CreateRoomScript { set; get; } = null!;
+         public Gs2.Gs2Chat.Model.ScriptSetting DeleteRoomScript { set; get; } = null!;
+         public Gs2.Gs2Chat.Model.ScriptSetting SubscribeRoomScript { set; get; } = null!;
+         public Gs2.Gs2Chat.Model.ScriptSetting UnsubscribeRoomScript { set; get; } = null!;
+         public Gs2.Gs2Chat.Model.NotificationSetting PostNotification { set; get; } = null!;
+         public Gs2.Gs2Chat.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

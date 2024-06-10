@@ -33,7 +33,7 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class DescribeEventsResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.Event[] Items { set; get; }
+        public Gs2.Gs2Schedule.Model.Event[] Items { set; get; } = null!;
 
         public DescribeEventsResult WithItems(Gs2.Gs2Schedule.Model.Event[] items) {
             this.Items = items;

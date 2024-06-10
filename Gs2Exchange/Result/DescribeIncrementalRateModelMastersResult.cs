@@ -33,8 +33,8 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class DescribeIncrementalRateModelMastersResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.IncrementalRateModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Exchange.Model.IncrementalRateModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeIncrementalRateModelMastersResult WithItems(Gs2.Gs2Exchange.Model.IncrementalRateModelMaster[] items) {
             this.Items = items;

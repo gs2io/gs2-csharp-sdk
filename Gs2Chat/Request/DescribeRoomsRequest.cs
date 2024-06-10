@@ -33,9 +33,9 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class DescribeRoomsRequest : Gs2Request<DescribeRoomsRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeRoomsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

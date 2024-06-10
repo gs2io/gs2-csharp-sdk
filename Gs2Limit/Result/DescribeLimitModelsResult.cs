@@ -33,7 +33,7 @@ namespace Gs2.Gs2Limit.Result
 	[System.Serializable]
 	public class DescribeLimitModelsResult : IResult
 	{
-        public Gs2.Gs2Limit.Model.LimitModel[] Items { set; get; }
+        public Gs2.Gs2Limit.Model.LimitModel[] Items { set; get; } = null!;
 
         public DescribeLimitModelsResult WithItems(Gs2.Gs2Limit.Model.LimitModel[] items) {
             this.Items = items;

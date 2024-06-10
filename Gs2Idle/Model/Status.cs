@@ -31,15 +31,15 @@ namespace Gs2.Gs2Idle.Model
 #endif
 	public class Status : IComparable
 	{
-        public string StatusId { set; get; }
-        public string CategoryName { set; get; }
-        public string UserId { set; get; }
-        public long? RandomSeed { set; get; }
-        public int? IdleMinutes { set; get; }
-        public int? MaximumIdleMinutes { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string StatusId { set; get; } = null!;
+        public string CategoryName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public long? RandomSeed { set; get; } = null!;
+        public int? IdleMinutes { set; get; } = null!;
+        public int? MaximumIdleMinutes { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;

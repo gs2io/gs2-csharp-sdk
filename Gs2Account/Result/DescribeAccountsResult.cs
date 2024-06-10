@@ -33,8 +33,8 @@ namespace Gs2.Gs2Account.Result
 	[System.Serializable]
 	public class DescribeAccountsResult : IResult
 	{
-        public Gs2.Gs2Account.Model.Account[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Account.Model.Account[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeAccountsResult WithItems(Gs2.Gs2Account.Model.Account[] items) {
             this.Items = items;

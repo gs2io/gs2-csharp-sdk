@@ -31,11 +31,11 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class CounterModel : IComparable
 	{
-        public string CounterId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
-        public string ChallengePeriodEventId { set; get; }
+        public string CounterId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; } = null!;
+        public string ChallengePeriodEventId { set; get; } = null!;
         public CounterModel WithCounterId(string counterId) {
             this.CounterId = counterId;
             return this;

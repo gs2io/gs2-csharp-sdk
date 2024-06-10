@@ -33,15 +33,15 @@ namespace Gs2.Gs2AdReward.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
-         public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
-         public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2AdReward.Model.ScriptSetting AcquirePointScript { set; get; }
-         public Gs2.Gs2AdReward.Model.ScriptSetting ConsumePointScript { set; get; }
-         public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
-         public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.ScriptSetting AcquirePointScript { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.ScriptSetting ConsumePointScript { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

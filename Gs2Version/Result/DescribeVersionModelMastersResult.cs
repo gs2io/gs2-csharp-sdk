@@ -33,8 +33,8 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class DescribeVersionModelMastersResult : IResult
 	{
-        public Gs2.Gs2Version.Model.VersionModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Version.Model.VersionModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeVersionModelMastersResult WithItems(Gs2.Gs2Version.Model.VersionModelMaster[] items) {
             this.Items = items;

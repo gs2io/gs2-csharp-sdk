@@ -33,8 +33,8 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class DeleteEntriesByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.Entry[] Items { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Dictionary.Model.Entry[] Items { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DeleteEntriesByStampTaskResult WithItems(Gs2.Gs2Dictionary.Model.Entry[] items) {
             this.Items = items;

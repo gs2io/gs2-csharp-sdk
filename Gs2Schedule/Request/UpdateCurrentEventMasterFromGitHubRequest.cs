@@ -33,8 +33,8 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class UpdateCurrentEventMasterFromGitHubRequest : Gs2Request<UpdateCurrentEventMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Schedule.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Schedule.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentEventMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

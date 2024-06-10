@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class UpdateCurrentRateMasterFromGitHubRequest : Gs2Request<UpdateCurrentRateMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Enhance.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Enhance.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentRateMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

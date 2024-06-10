@@ -63,8 +63,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
     public partial class RarityParameterModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
-        public string NamespaceName { get; }
-        public string ParameterName { get; }
+        public string NamespaceName { get; } = null!;
+        public string ParameterName { get; } = null!;
 
         public RarityParameterModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

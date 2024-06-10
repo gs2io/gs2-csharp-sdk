@@ -33,8 +33,8 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class DescribeReceiveStatusesResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.ReceiveStatus[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2LoginReward.Model.ReceiveStatus[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeReceiveStatusesResult WithItems(Gs2.Gs2LoginReward.Model.ReceiveStatus[] items) {
             this.Items = items;

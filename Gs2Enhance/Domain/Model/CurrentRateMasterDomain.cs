@@ -63,7 +63,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
     public partial class CurrentRateMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnhanceRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentRateMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

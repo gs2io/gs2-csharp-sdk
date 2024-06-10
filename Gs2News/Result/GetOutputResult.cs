@@ -33,7 +33,7 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class GetOutputResult : IResult
 	{
-        public Gs2.Gs2News.Model.Output Item { set; get; }
+        public Gs2.Gs2News.Model.Output Item { set; get; } = null!;
 
         public GetOutputResult WithItem(Gs2.Gs2News.Model.Output item) {
             this.Item = item;

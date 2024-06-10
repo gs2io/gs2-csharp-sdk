@@ -33,13 +33,13 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class CreateRoomRequest : Gs2Request<CreateRoomRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string Name { set; get; }
-         public string Metadata { set; get; }
-         public string Password { set; get; }
-         public string[] WhiteListUserIds { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string Password { set; get; } = null!;
+         public string[] WhiteListUserIds { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public CreateRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

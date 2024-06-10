@@ -33,13 +33,13 @@ namespace Gs2.Gs2Gateway.Request
 	[System.Serializable]
 	public class SendMobileNotificationByUserIdRequest : Gs2Request<SendMobileNotificationByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string Subject { set; get; }
-         public string Payload { set; get; }
-         public string Sound { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string Subject { set; get; } = null!;
+         public string Payload { set; get; } = null!;
+         public string Sound { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SendMobileNotificationByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

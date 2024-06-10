@@ -31,8 +31,8 @@ namespace Gs2.Gs2Money.Model
 #endif
 	public class WalletDetail : IComparable
 	{
-        public float? Price { set; get; }
-        public int? Count { set; get; }
+        public float? Price { set; get; } = null!;
+        public int? Count { set; get; } = null!;
         public WalletDetail WithPrice(float? price) {
             this.Price = price;
             return this;

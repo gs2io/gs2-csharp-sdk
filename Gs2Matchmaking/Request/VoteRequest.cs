@@ -33,11 +33,11 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class VoteRequest : Gs2Request<VoteRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string BallotBody { set; get; }
-         public string BallotSignature { set; get; }
-         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
-         public string KeyId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string BallotBody { set; get; } = null!;
+         public string BallotSignature { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public VoteRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

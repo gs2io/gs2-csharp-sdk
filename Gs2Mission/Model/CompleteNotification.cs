@@ -20,10 +20,10 @@ namespace Gs2.Gs2Mission.Model
 {
 	public class CompleteNotification
 	{
-        public string NamespaceName { set; get; }
-        public string GroupName { set; get; }
-        public string UserId { set; get; }
-        public string TaskName { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string GroupName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string TaskName { set; get; } = null!;
         public CompleteNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

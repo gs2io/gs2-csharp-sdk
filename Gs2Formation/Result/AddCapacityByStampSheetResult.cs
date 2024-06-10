@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class AddCapacityByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
-        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; } = null!;
 
         public AddCapacityByStampSheetResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
             this.Item = item;

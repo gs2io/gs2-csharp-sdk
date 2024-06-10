@@ -33,11 +33,11 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class DistributeRequest : Gs2Request<DistributeRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string DistributorName { set; get; }
-         public string UserId { set; get; }
-         public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string DistributorName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DistributeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

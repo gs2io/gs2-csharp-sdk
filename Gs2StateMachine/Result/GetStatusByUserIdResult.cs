@@ -33,7 +33,7 @@ namespace Gs2.Gs2StateMachine.Result
 	[System.Serializable]
 	public class GetStatusByUserIdResult : IResult
 	{
-        public Gs2.Gs2StateMachine.Model.Status Item { set; get; }
+        public Gs2.Gs2StateMachine.Model.Status Item { set; get; } = null!;
 
         public GetStatusByUserIdResult WithItem(Gs2.Gs2StateMachine.Model.Status item) {
             this.Item = item;

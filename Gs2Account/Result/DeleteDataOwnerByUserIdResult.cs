@@ -33,7 +33,7 @@ namespace Gs2.Gs2Account.Result
 	[System.Serializable]
 	public class DeleteDataOwnerByUserIdResult : IResult
 	{
-        public Gs2.Gs2Account.Model.DataOwner Item { set; get; }
+        public Gs2.Gs2Account.Model.DataOwner Item { set; get; } = null!;
 
         public DeleteDataOwnerByUserIdResult WithItem(Gs2.Gs2Account.Model.DataOwner item) {
             this.Item = item;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class PutResultRequest : Gs2Request<PutResultRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RatingName { set; get; }
-         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RatingName { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; } = null!;
         public PutResultRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

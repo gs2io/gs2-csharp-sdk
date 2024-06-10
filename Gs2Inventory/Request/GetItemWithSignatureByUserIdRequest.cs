@@ -33,13 +33,13 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class GetItemWithSignatureByUserIdRequest : Gs2Request<GetItemWithSignatureByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string InventoryName { set; get; }
-         public string UserId { set; get; }
-         public string ItemName { set; get; }
-         public string ItemSetName { set; get; }
-         public string KeyId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string InventoryName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string ItemName { set; get; } = null!;
+         public string ItemSetName { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetItemWithSignatureByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,11 +33,11 @@ namespace Gs2.Gs2Enhance.Result
 	[System.Serializable]
 	public class UnleashByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Enhance.Model.UnleashRateModel Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Gs2Enhance.Model.UnleashRateModel Item { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public UnleashByStampSheetResult WithItem(Gs2.Gs2Enhance.Model.UnleashRateModel item) {
             this.Item = item;

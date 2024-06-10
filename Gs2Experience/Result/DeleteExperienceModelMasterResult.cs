@@ -33,7 +33,7 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class DeleteExperienceModelMasterResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.ExperienceModelMaster Item { set; get; }
+        public Gs2.Gs2Experience.Model.ExperienceModelMaster Item { set; get; } = null!;
 
         public DeleteExperienceModelMasterResult WithItem(Gs2.Gs2Experience.Model.ExperienceModelMaster item) {
             this.Item = item;

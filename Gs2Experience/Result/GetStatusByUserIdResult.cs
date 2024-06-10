@@ -33,7 +33,7 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class GetStatusByUserIdResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.Status Item { set; get; }
+        public Gs2.Gs2Experience.Model.Status Item { set; get; } = null!;
 
         public GetStatusByUserIdResult WithItem(Gs2.Gs2Experience.Model.Status item) {
             this.Item = item;

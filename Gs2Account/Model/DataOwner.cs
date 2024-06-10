@@ -31,11 +31,11 @@ namespace Gs2.Gs2Account.Model
 #endif
 	public class DataOwner : IComparable
 	{
-        public string DataOwnerId { set; get; }
-        public string UserId { set; get; }
-        public string Name { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string DataOwnerId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public DataOwner WithDataOwnerId(string dataOwnerId) {
             this.DataOwnerId = dataOwnerId;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class GetNamespaceStatusResult : IResult
 	{
-        public string Status { set; get; }
+        public string Status { set; get; } = null!;
 
         public GetNamespaceStatusResult WithStatus(string status) {
             this.Status = status;

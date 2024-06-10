@@ -20,9 +20,9 @@ namespace Gs2.Gs2Inbox.Model
 {
 	public class ReceiveNotification
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string MessageName { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string MessageName { set; get; } = null!;
         public ReceiveNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

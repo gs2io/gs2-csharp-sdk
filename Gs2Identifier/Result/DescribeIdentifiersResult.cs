@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DescribeIdentifiersResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.Identifier[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Identifier.Model.Identifier[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeIdentifiersResult WithItems(Gs2.Gs2Identifier.Model.Identifier[] items) {
             this.Items = items;

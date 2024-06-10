@@ -63,8 +63,8 @@ namespace Gs2.Gs2Mission.Domain.Model
     public partial class MissionGroupModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
-        public string NamespaceName { get; }
-        public string MissionGroupName { get; }
+        public string NamespaceName { get; } = null!;
+        public string MissionGroupName { get; } = null!;
 
         public MissionGroupModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Lock.Result
 	[System.Serializable]
 	public class DescribeMutexesResult : IResult
 	{
-        public Gs2.Gs2Lock.Model.Mutex[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Lock.Model.Mutex[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeMutexesResult WithItems(Gs2.Gs2Lock.Model.Mutex[] items) {
             this.Items = items;

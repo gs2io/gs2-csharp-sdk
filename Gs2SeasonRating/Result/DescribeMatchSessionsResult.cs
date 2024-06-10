@@ -33,8 +33,8 @@ namespace Gs2.Gs2SeasonRating.Result
 	[System.Serializable]
 	public class DescribeMatchSessionsResult : IResult
 	{
-        public Gs2.Gs2SeasonRating.Model.MatchSession[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2SeasonRating.Model.MatchSession[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeMatchSessionsResult WithItems(Gs2.Gs2SeasonRating.Model.MatchSession[] items) {
             this.Items = items;

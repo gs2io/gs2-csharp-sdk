@@ -63,11 +63,11 @@ namespace Gs2.Gs2Money.Domain.Model
     public partial class WalletAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MoneyRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public int? Slot { get; }
-        public float? Price { get; set; }
+        public int? Slot { get; } = null!;
+        public float? Price { get; set; } = null!;
 
         public WalletAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

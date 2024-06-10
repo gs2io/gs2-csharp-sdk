@@ -33,14 +33,14 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class UpdateRateModelMasterRequest : Gs2Request<UpdateRateModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RateName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string TimingType { set; get; }
-         public int? LockTime { set; get; }
-         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RateName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string TimingType { set; get; } = null!;
+         public int? LockTime { set; get; } = null!;
+         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
         public UpdateRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,16 +33,16 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CreateProjectRequest : Gs2Request<CreateProjectRequest>
 	{
-         public string AccountToken { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Plan { set; get; }
-         public string Currency { set; get; }
-         public string ActivateRegionName { set; get; }
-         public string BillingMethodName { set; get; }
-         public string EnableEventBridge { set; get; }
-         public string EventBridgeAwsAccountId { set; get; }
-         public string EventBridgeAwsRegion { set; get; }
+         public string AccountToken { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Plan { set; get; } = null!;
+         public string Currency { set; get; } = null!;
+         public string ActivateRegionName { set; get; } = null!;
+         public string BillingMethodName { set; get; } = null!;
+         public string EnableEventBridge { set; get; } = null!;
+         public string EventBridgeAwsAccountId { set; get; } = null!;
+         public string EventBridgeAwsRegion { set; get; } = null!;
         public CreateProjectRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

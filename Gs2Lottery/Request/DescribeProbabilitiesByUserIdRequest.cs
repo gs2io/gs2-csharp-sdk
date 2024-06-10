@@ -33,10 +33,10 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DescribeProbabilitiesByUserIdRequest : Gs2Request<DescribeProbabilitiesByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string LotteryName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string LotteryName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DescribeProbabilitiesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

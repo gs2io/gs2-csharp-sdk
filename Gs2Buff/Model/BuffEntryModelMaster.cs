@@ -31,19 +31,19 @@ namespace Gs2.Gs2Buff.Model
 #endif
 	public class BuffEntryModelMaster : IComparable
 	{
-        public string BuffEntryModelId { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string TargetType { set; get; }
-        public Gs2.Gs2Buff.Model.BuffTargetModel TargetModel { set; get; }
-        public Gs2.Gs2Buff.Model.BuffTargetAction TargetAction { set; get; }
-        public string Expression { set; get; }
-        public int? Priority { set; get; }
-        public string ApplyPeriodScheduleEventId { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string BuffEntryModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string TargetType { set; get; } = null!;
+        public Gs2.Gs2Buff.Model.BuffTargetModel TargetModel { set; get; } = null!;
+        public Gs2.Gs2Buff.Model.BuffTargetAction TargetAction { set; get; } = null!;
+        public string Expression { set; get; } = null!;
+        public int? Priority { set; get; } = null!;
+        public string ApplyPeriodScheduleEventId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public BuffEntryModelMaster WithBuffEntryModelId(string buffEntryModelId) {
             this.BuffEntryModelId = buffEntryModelId;
             return this;

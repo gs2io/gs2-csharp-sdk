@@ -63,7 +63,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
     public partial class CurrentEntryMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentEntryMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

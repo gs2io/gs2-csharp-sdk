@@ -31,14 +31,14 @@ namespace Gs2.Gs2Experience.Model
 #endif
 	public class ExperienceModel : IComparable
 	{
-        public string ExperienceModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public long? DefaultExperience { set; get; }
-        public long? DefaultRankCap { set; get; }
-        public long? MaxRankCap { set; get; }
-        public Gs2.Gs2Experience.Model.Threshold RankThreshold { set; get; }
-        public Gs2.Gs2Experience.Model.AcquireActionRate[] AcquireActionRates { set; get; }
+        public string ExperienceModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public long? DefaultExperience { set; get; } = null!;
+        public long? DefaultRankCap { set; get; } = null!;
+        public long? MaxRankCap { set; get; } = null!;
+        public Gs2.Gs2Experience.Model.Threshold RankThreshold { set; get; } = null!;
+        public Gs2.Gs2Experience.Model.AcquireActionRate[] AcquireActionRates { set; get; } = null!;
         public ExperienceModel WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;

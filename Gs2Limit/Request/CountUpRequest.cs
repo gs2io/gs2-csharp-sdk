@@ -33,13 +33,13 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class CountUpRequest : Gs2Request<CountUpRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string LimitName { set; get; }
-         public string CounterName { set; get; }
-         public string AccessToken { set; get; }
-         public int? CountUpValue { set; get; }
-         public int? MaxValue { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string LimitName { set; get; } = null!;
+         public string CounterName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public int? CountUpValue { set; get; } = null!;
+         public int? MaxValue { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public CountUpRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

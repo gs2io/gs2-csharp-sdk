@@ -33,8 +33,8 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class WantGrantRequest : Gs2Request<WantGrantRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
         public WantGrantRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

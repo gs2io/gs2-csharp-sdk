@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class VerifyIncludeMemberByStampTaskResult : IResult
 	{
-        public string NewContextStack { set; get; }
+        public string NewContextStack { set; get; } = null!;
 
         public VerifyIncludeMemberByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;

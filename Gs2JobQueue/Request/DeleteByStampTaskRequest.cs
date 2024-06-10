@@ -33,8 +33,8 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class DeleteByStampTaskRequest : Gs2Request<DeleteByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DeleteByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class FetchPositionFromSystemResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.Spatial[] Items { set; get; }
+        public Gs2.Gs2MegaField.Model.Spatial[] Items { set; get; } = null!;
 
         public FetchPositionFromSystemResult WithItems(Gs2.Gs2MegaField.Model.Spatial[] items) {
             this.Items = items;

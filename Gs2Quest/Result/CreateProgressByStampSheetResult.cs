@@ -33,7 +33,7 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class CreateProgressByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.Progress Item { set; get; }
+        public Gs2.Gs2Quest.Model.Progress Item { set; get; } = null!;
 
         public CreateProgressByStampSheetResult WithItem(Gs2.Gs2Quest.Model.Progress item) {
             this.Item = item;

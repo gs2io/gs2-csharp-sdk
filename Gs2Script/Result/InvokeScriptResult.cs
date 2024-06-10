@@ -33,13 +33,13 @@ namespace Gs2.Gs2Script.Result
 	[System.Serializable]
 	public class InvokeScriptResult : IResult
 	{
-        public int? Code { set; get; }
-        public string Result { set; get; }
-        public Gs2.Gs2Script.Model.Transaction Transaction { set; get; }
-        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
-        public int? ExecuteTime { set; get; }
-        public int? Charged { set; get; }
-        public string[] Output { set; get; }
+        public int? Code { set; get; } = null!;
+        public string Result { set; get; } = null!;
+        public Gs2.Gs2Script.Model.Transaction Transaction { set; get; } = null!;
+        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; } = null!;
+        public int? ExecuteTime { set; get; } = null!;
+        public int? Charged { set; get; } = null!;
+        public string[] Output { set; get; } = null!;
 
         public InvokeScriptResult WithCode(int? code) {
             this.Code = code;

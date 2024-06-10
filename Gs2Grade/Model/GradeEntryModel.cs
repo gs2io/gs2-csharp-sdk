@@ -31,10 +31,10 @@ namespace Gs2.Gs2Grade.Model
 #endif
 	public class GradeEntryModel : IComparable
 	{
-        public string Metadata { set; get; }
-        public long? RankCapValue { set; get; }
-        public string PropertyIdRegex { set; get; }
-        public string GradeUpPropertyIdRegex { set; get; }
+        public string Metadata { set; get; } = null!;
+        public long? RankCapValue { set; get; } = null!;
+        public string PropertyIdRegex { set; get; } = null!;
+        public string GradeUpPropertyIdRegex { set; get; } = null!;
         public GradeEntryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

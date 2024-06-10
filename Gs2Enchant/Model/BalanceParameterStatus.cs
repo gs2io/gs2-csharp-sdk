@@ -31,14 +31,14 @@ namespace Gs2.Gs2Enchant.Model
 #endif
 	public class BalanceParameterStatus : IComparable
 	{
-        public string BalanceParameterStatusId { set; get; }
-        public string UserId { set; get; }
-        public string ParameterName { set; get; }
-        public string PropertyId { set; get; }
-        public Gs2.Gs2Enchant.Model.BalanceParameterValue[] ParameterValues { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string BalanceParameterStatusId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string ParameterName { set; get; } = null!;
+        public string PropertyId { set; get; } = null!;
+        public Gs2.Gs2Enchant.Model.BalanceParameterValue[] ParameterValues { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public BalanceParameterStatus WithBalanceParameterStatusId(string balanceParameterStatusId) {
             this.BalanceParameterStatusId = balanceParameterStatusId;
             return this;

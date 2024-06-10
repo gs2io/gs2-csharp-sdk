@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class UpdateEntryModelMasterResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.EntryModelMaster Item { set; get; }
+        public Gs2.Gs2Dictionary.Model.EntryModelMaster Item { set; get; } = null!;
 
         public UpdateEntryModelMasterResult WithItem(Gs2.Gs2Dictionary.Model.EntryModelMaster item) {
             this.Item = item;

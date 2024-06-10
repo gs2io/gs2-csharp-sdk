@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class UpdateNamespaceResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.Namespace Item { set; get; }
+        public Gs2.Gs2Lottery.Model.Namespace Item { set; get; } = null!;
 
         public UpdateNamespaceResult WithItem(Gs2.Gs2Lottery.Model.Namespace item) {
             this.Item = item;

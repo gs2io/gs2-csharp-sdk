@@ -33,15 +33,15 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public bool? ChangePasswordIfTakeOver { set; get; }
-         public bool? DifferentUserIdForLoginAndDataRetention { set; get; }
-         public Gs2.Gs2Account.Model.ScriptSetting CreateAccountScript { set; get; }
-         public Gs2.Gs2Account.Model.ScriptSetting AuthenticationScript { set; get; }
-         public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; }
-         public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; }
-         public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public bool? ChangePasswordIfTakeOver { set; get; } = null!;
+         public bool? DifferentUserIdForLoginAndDataRetention { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting CreateAccountScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting AuthenticationScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

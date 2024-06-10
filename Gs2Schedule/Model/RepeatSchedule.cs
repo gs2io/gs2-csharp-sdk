@@ -31,11 +31,11 @@ namespace Gs2.Gs2Schedule.Model
 #endif
 	public class RepeatSchedule : IComparable
 	{
-        public int? RepeatCount { set; get; }
-        public long? CurrentRepeatStartAt { set; get; }
-        public long? CurrentRepeatEndAt { set; get; }
-        public long? LastRepeatEndAt { set; get; }
-        public long? NextRepeatStartAt { set; get; }
+        public int? RepeatCount { set; get; } = null!;
+        public long? CurrentRepeatStartAt { set; get; } = null!;
+        public long? CurrentRepeatEndAt { set; get; } = null!;
+        public long? LastRepeatEndAt { set; get; } = null!;
+        public long? NextRepeatStartAt { set; get; } = null!;
         public RepeatSchedule WithRepeatCount(int? repeatCount) {
             this.RepeatCount = repeatCount;
             return this;

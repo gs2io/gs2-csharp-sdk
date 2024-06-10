@@ -33,15 +33,15 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Experience.Model.TransactionSetting TransactionSetting { set; get; }
-         public string RankCapScriptId { set; get; }
-         public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
-         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
-         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
-         public string OverflowExperienceScript { set; get; }
-         public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Experience.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public string RankCapScriptId { set; get; } = null!;
+         public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; } = null!;
+         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; } = null!;
+         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; } = null!;
+         public string OverflowExperienceScript { set; get; } = null!;
+         public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DescribeCountersResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.Counter[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Mission.Model.Counter[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCountersResult WithItems(Gs2.Gs2Mission.Model.Counter[] items) {
             this.Items = items;

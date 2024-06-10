@@ -33,9 +33,9 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class RunStampSheetExpressRequest : Gs2Request<RunStampSheetExpressRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public RunStampSheetExpressRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

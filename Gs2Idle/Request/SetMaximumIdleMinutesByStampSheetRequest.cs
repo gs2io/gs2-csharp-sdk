@@ -33,8 +33,8 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class SetMaximumIdleMinutesByStampSheetRequest : Gs2Request<SetMaximumIdleMinutesByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public SetMaximumIdleMinutesByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DeleteProjectRequest : Gs2Request<DeleteProjectRequest>
 	{
-         public string AccountToken { set; get; }
-         public string ProjectName { set; get; }
+         public string AccountToken { set; get; } = null!;
+         public string ProjectName { set; get; } = null!;
         public DeleteProjectRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

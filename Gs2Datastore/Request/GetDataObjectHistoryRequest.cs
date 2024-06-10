@@ -33,10 +33,10 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class GetDataObjectHistoryRequest : Gs2Request<GetDataObjectHistoryRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string DataObjectName { set; get; }
-         public string Generation { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string DataObjectName { set; get; } = null!;
+         public string Generation { set; get; } = null!;
         public GetDataObjectHistoryRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

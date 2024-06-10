@@ -63,11 +63,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class InventoryDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string InventoryName { get; }
-        public long? OverflowCount { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string InventoryName { get; } = null!;
+        public long? OverflowCount { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public InventoryDomain(
             Gs2.Core.Domain.Gs2 gs2,

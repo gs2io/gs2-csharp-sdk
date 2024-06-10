@@ -31,19 +31,19 @@ namespace Gs2.Gs2Project.Model
 #endif
 	public class Billing : IComparable
 	{
-        public string BillingId { set; get; }
-        public string ProjectName { set; get; }
-        public int? Year { set; get; }
-        public int? Month { set; get; }
-        public string Region { set; get; }
-        public string Service { set; get; }
-        public string ActivityType { set; get; }
-        public double? Unit { set; get; }
-        public string UnitName { set; get; }
-        public double? Price { set; get; }
-        public string Currency { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
+        public string BillingId { set; get; } = null!;
+        public string ProjectName { set; get; } = null!;
+        public int? Year { set; get; } = null!;
+        public int? Month { set; get; } = null!;
+        public string Region { set; get; } = null!;
+        public string Service { set; get; } = null!;
+        public string ActivityType { set; get; } = null!;
+        public double? Unit { set; get; } = null!;
+        public string UnitName { set; get; } = null!;
+        public double? Price { set; get; } = null!;
+        public string Currency { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
         public Billing WithBillingId(string billingId) {
             this.BillingId = billingId;
             return this;

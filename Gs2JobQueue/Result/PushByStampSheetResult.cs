@@ -33,8 +33,8 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class PushByStampSheetResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.Job[] Items { set; get; }
-        public bool? AutoRun { set; get; }
+        public Gs2.Gs2JobQueue.Model.Job[] Items { set; get; } = null!;
+        public bool? AutoRun { set; get; } = null!;
 
         public PushByStampSheetResult WithItems(Gs2.Gs2JobQueue.Model.Job[] items) {
             this.Items = items;

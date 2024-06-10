@@ -31,13 +31,13 @@ namespace Gs2.Gs2News.Model
 #endif
 	public class Progress : IComparable
 	{
-        public string ProgressId { set; get; }
-        public string UploadToken { set; get; }
-        public int? Generated { set; get; }
-        public int? PatternCount { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ProgressId { set; get; } = null!;
+        public string UploadToken { set; get; } = null!;
+        public int? Generated { set; get; } = null!;
+        public int? PatternCount { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Progress WithProgressId(string progressId) {
             this.ProgressId = progressId;
             return this;

@@ -31,8 +31,8 @@ namespace Gs2.Gs2StateMachine.Model
 #endif
 	public class RandomStatus : IComparable
 	{
-        public long? Seed { set; get; }
-        public Gs2.Gs2StateMachine.Model.RandomUsed[] Used { set; get; }
+        public long? Seed { set; get; } = null!;
+        public Gs2.Gs2StateMachine.Model.RandomUsed[] Used { set; get; } = null!;
         public RandomStatus WithSeed(long? seed) {
             this.Seed = seed;
             return this;

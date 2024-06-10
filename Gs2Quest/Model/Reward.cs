@@ -31,10 +31,10 @@ namespace Gs2.Gs2Quest.Model
 #endif
 	public class Reward : IComparable
 	{
-        public string Action { set; get; }
-        public string Request { set; get; }
-        public string ItemId { set; get; }
-        public int? Value { set; get; }
+        public string Action { set; get; } = null!;
+        public string Request { set; get; } = null!;
+        public string ItemId { set; get; } = null!;
+        public int? Value { set; get; } = null!;
         public Reward WithAction(string action) {
             this.Action = action;
             return this;

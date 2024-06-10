@@ -33,11 +33,11 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class DescribeMessagesRequest : Gs2Request<DescribeMessagesRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public bool? IsRead { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public bool? IsRead { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeMessagesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,10 +33,10 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class FollowRequest : Gs2Request<FollowRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string TargetUserId { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string TargetUserId { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public FollowRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

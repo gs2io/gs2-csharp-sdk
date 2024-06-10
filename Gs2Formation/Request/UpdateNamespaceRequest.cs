@@ -33,13 +33,13 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; }
-         public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
-         public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
-         public Gs2.Gs2Formation.Model.ScriptSetting UpdatePropertyFormScript { set; get; }
-         public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.ScriptSetting UpdatePropertyFormScript { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

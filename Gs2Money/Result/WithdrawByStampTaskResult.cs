@@ -33,9 +33,9 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class WithdrawByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Wallet Item { set; get; }
-        public float? Price { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Money.Model.Wallet Item { set; get; } = null!;
+        public float? Price { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public WithdrawByStampTaskResult WithItem(Gs2.Gs2Money.Model.Wallet item) {
             this.Item = item;

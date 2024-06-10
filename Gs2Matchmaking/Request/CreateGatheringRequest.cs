@@ -33,15 +33,15 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CreateGatheringRequest : Gs2Request<CreateGatheringRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
-         public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
-         public Gs2.Gs2Matchmaking.Model.CapacityOfRole[] CapacityOfRoles { set; get; }
-         public string[] AllowUserIds { set; get; }
-         public long? ExpiresAt { set; get; }
-         public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.Player Player { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.CapacityOfRole[] CapacityOfRoles { set; get; } = null!;
+         public string[] AllowUserIds { set; get; } = null!;
+         public long? ExpiresAt { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public CreateGatheringRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

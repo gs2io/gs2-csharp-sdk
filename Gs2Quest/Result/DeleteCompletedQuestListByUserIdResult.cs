@@ -33,7 +33,7 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class DeleteCompletedQuestListByUserIdResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.CompletedQuestList Item { set; get; }
+        public Gs2.Gs2Quest.Model.CompletedQuestList Item { set; get; } = null!;
 
         public DeleteCompletedQuestListByUserIdResult WithItem(Gs2.Gs2Quest.Model.CompletedQuestList item) {
             this.Item = item;

@@ -63,8 +63,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
     public partial class RecoverIntervalTableMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StaminaRestClient _client;
-        public string NamespaceName { get; }
-        public string RecoverIntervalTableName { get; }
+        public string NamespaceName { get; } = null!;
+        public string RecoverIntervalTableName { get; } = null!;
 
         public RecoverIntervalTableMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

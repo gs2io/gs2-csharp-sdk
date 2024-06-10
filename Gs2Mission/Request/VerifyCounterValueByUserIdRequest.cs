@@ -33,15 +33,15 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class VerifyCounterValueByUserIdRequest : Gs2Request<VerifyCounterValueByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string CounterName { set; get; }
-         public string VerifyType { set; get; }
-         public string ResetType { set; get; }
-         public long? Value { set; get; }
-         public bool? MultiplyValueSpecifyingQuantity { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string CounterName { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+         public string ResetType { set; get; } = null!;
+         public long? Value { set; get; } = null!;
+         public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyCounterValueByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class DescribeTriggersByUserIdResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.Trigger[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Schedule.Model.Trigger[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeTriggersByUserIdResult WithItems(Gs2.Gs2Schedule.Model.Trigger[] items) {
             this.Items = items;

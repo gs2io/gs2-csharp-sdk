@@ -63,7 +63,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
     public partial class AttachSecurityPolicyDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
-        public string UserName { get; }
+        public string UserName { get; } = null!;
 
         public AttachSecurityPolicyDomain(
             Gs2.Core.Domain.Gs2 gs2,

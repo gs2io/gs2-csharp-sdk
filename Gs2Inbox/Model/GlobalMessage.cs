@@ -31,14 +31,14 @@ namespace Gs2.Gs2Inbox.Model
 #endif
 	public class GlobalMessage : IComparable
 	{
-        public string GlobalMessageId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
-        public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
+        public string GlobalMessageId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; } = null!;
+        public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public long? ExpiresAt { set; get; }
-        public string MessageReceptionPeriodEventId { set; get; }
+        public long? ExpiresAt { set; get; } = null!;
+        public string MessageReceptionPeriodEventId { set; get; } = null!;
         public GlobalMessage WithGlobalMessageId(string globalMessageId) {
             this.GlobalMessageId = globalMessageId;
             return this;

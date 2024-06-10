@@ -33,8 +33,8 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class DescribeStatusesByUserIdResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.Status[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2SkillTree.Model.Status[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeStatusesByUserIdResult WithItems(Gs2.Gs2SkillTree.Model.Status[] items) {
             this.Items = items;

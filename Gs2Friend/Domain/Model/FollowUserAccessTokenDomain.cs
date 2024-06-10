@@ -63,11 +63,11 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class FollowUserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public bool? WithProfile { get; }
-        public string TargetUserId { get; }
+        public bool? WithProfile { get; } = null!;
+        public string TargetUserId { get; } = null!;
 
         public FollowUserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class DescribeVersionModelsResult : IResult
 	{
-        public Gs2.Gs2Version.Model.VersionModel[] Items { set; get; }
+        public Gs2.Gs2Version.Model.VersionModel[] Items { set; get; } = null!;
 
         public DescribeVersionModelsResult WithItems(Gs2.Gs2Version.Model.VersionModel[] items) {
             this.Items = items;

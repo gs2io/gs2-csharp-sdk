@@ -33,12 +33,12 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateRecoverIntervalTableMasterRequest : Gs2Request<UpdateRecoverIntervalTableMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RecoverIntervalTableName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string ExperienceModelId { set; get; }
-         public int[] Values { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RecoverIntervalTableName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string ExperienceModelId { set; get; } = null!;
+         public int[] Values { set; get; } = null!;
         public UpdateRecoverIntervalTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,16 +33,16 @@ namespace Gs2.Gs2Buff.Request
 	[System.Serializable]
 	public class UpdateBuffEntryModelMasterRequest : Gs2Request<UpdateBuffEntryModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string BuffEntryName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string TargetType { set; get; }
-         public Gs2.Gs2Buff.Model.BuffTargetModel TargetModel { set; get; }
-         public Gs2.Gs2Buff.Model.BuffTargetAction TargetAction { set; get; }
-         public string Expression { set; get; }
-         public int? Priority { set; get; }
-         public string ApplyPeriodScheduleEventId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string BuffEntryName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string TargetType { set; get; } = null!;
+         public Gs2.Gs2Buff.Model.BuffTargetModel TargetModel { set; get; } = null!;
+         public Gs2.Gs2Buff.Model.BuffTargetAction TargetAction { set; get; } = null!;
+         public string Expression { set; get; } = null!;
+         public int? Priority { set; get; } = null!;
+         public string ApplyPeriodScheduleEventId { set; get; } = null!;
         public UpdateBuffEntryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

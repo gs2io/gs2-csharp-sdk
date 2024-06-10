@@ -33,9 +33,9 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class DistributeWithoutOverflowProcessRequest : Gs2Request<DistributeWithoutOverflowProcessRequest>
 	{
-         public string UserId { set; get; }
-         public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string UserId { set; get; } = null!;
+         public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DistributeWithoutOverflowProcessRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class LoginRequest : Gs2Request<LoginRequest>
 	{
-         public string ClientId { set; get; }
-         public string ClientSecret { set; get; }
+         public string ClientId { set; get; } = null!;
+         public string ClientSecret { set; get; } = null!;
         public LoginRequest WithClientId(string clientId) {
             this.ClientId = clientId;
             return this;

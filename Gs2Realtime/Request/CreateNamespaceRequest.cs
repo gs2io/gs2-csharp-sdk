@@ -33,12 +33,12 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string ServerType { set; get; }
-         public string ServerSpec { set; get; }
-         public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; }
-         public Gs2.Gs2Realtime.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string ServerType { set; get; } = null!;
+         public string ServerSpec { set; get; } = null!;
+         public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; } = null!;
+         public Gs2.Gs2Realtime.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

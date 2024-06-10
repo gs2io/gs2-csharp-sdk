@@ -33,7 +33,7 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class UpdateShowcaseMasterResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.ShowcaseMaster Item { set; get; }
+        public Gs2.Gs2Showcase.Model.ShowcaseMaster Item { set; get; } = null!;
 
         public UpdateShowcaseMasterResult WithItem(Gs2.Gs2Showcase.Model.ShowcaseMaster item) {
             this.Item = item;

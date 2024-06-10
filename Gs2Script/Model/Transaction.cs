@@ -31,9 +31,9 @@ namespace Gs2.Gs2Script.Model
 #endif
 	public class Transaction : IComparable
 	{
-        public string TransactionId { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public string TransactionId { set; get; } = null!;
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
         public Transaction WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

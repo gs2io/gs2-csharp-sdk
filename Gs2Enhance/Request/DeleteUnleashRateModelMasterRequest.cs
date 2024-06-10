@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DeleteUnleashRateModelMasterRequest : Gs2Request<DeleteUnleashRateModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RateName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RateName { set; get; } = null!;
         public DeleteUnleashRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

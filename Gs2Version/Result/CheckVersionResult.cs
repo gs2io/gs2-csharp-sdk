@@ -33,9 +33,9 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class CheckVersionResult : IResult
 	{
-        public string ProjectToken { set; get; }
-        public Gs2.Gs2Version.Model.Status[] Warnings { set; get; }
-        public Gs2.Gs2Version.Model.Status[] Errors { set; get; }
+        public string ProjectToken { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Status[] Warnings { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Status[] Errors { set; get; } = null!;
 
         public CheckVersionResult WithProjectToken(string projectToken) {
             this.ProjectToken = projectToken;

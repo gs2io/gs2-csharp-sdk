@@ -31,14 +31,14 @@ namespace Gs2.Gs2Grade.Model
 #endif
 	public class Status : IComparable
 	{
-        public string StatusId { set; get; }
-        public string GradeName { set; get; }
-        public string UserId { set; get; }
-        public string PropertyId { set; get; }
-        public long? GradeValue { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string StatusId { set; get; } = null!;
+        public string GradeName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string PropertyId { set; get; } = null!;
+        public long? GradeValue { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;

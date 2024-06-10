@@ -63,8 +63,8 @@ namespace Gs2.Gs2Log.Domain.Model
     public partial class InsightDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
-        public string NamespaceName { get; }
-        public string InsightName { get; }
+        public string NamespaceName { get; } = null!;
+        public string InsightName { get; } = null!;
 
         public InsightDomain(
             Gs2.Core.Domain.Gs2 gs2,

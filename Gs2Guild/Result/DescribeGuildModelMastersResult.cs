@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class DescribeGuildModelMastersResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.GuildModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Guild.Model.GuildModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeGuildModelMastersResult WithItems(Gs2.Gs2Guild.Model.GuildModelMaster[] items) {
             this.Items = items;

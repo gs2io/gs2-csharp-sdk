@@ -33,8 +33,8 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class DescribeDataObjectHistoriesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObjectHistory[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObjectHistory[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeDataObjectHistoriesByUserIdResult WithItems(Gs2.Gs2Datastore.Model.DataObjectHistory[] items) {
             this.Items = items;

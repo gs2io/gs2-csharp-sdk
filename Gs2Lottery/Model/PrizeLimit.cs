@@ -31,12 +31,12 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class PrizeLimit : IComparable
 	{
-        public string PrizeLimitId { set; get; }
-        public string PrizeId { set; get; }
-        public int? DrawnCount { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string PrizeLimitId { set; get; } = null!;
+        public string PrizeId { set; get; } = null!;
+        public int? DrawnCount { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public PrizeLimit WithPrizeLimitId(string prizeLimitId) {
             this.PrizeLimitId = prizeLimitId;
             return this;

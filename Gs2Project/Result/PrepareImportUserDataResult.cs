@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class PrepareImportUserDataResult : IResult
 	{
-        public string UploadToken { set; get; }
-        public string UploadUrl { set; get; }
+        public string UploadToken { set; get; } = null!;
+        public string UploadUrl { set; get; } = null!;
 
         public PrepareImportUserDataResult WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;

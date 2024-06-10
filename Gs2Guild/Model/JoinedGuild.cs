@@ -31,11 +31,11 @@ namespace Gs2.Gs2Guild.Model
 #endif
 	public class JoinedGuild : IComparable
 	{
-        public string JoinedGuildId { set; get; }
-        public string GuildModelName { set; get; }
-        public string GuildName { set; get; }
-        public string UserId { set; get; }
-        public long? CreatedAt { set; get; }
+        public string JoinedGuildId { set; get; } = null!;
+        public string GuildModelName { set; get; } = null!;
+        public string GuildName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
         public JoinedGuild WithJoinedGuildId(string joinedGuildId) {
             this.JoinedGuildId = joinedGuildId;
             return this;

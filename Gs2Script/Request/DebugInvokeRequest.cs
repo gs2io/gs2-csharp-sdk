@@ -33,9 +33,9 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class DebugInvokeRequest : Gs2Request<DebugInvokeRequest>
 	{
-         public string Script { set; get; }
-         public string Args { set; get; }
-         public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
+         public string Script { set; get; } = null!;
+         public string Args { set; get; } = null!;
+         public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; } = null!;
         public DebugInvokeRequest WithScript(string script) {
             this.Script = script;
             return this;

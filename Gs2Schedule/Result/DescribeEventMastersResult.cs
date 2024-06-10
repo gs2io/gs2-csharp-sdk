@@ -33,8 +33,8 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class DescribeEventMastersResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.EventMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Schedule.Model.EventMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeEventMastersResult WithItems(Gs2.Gs2Schedule.Model.EventMaster[] items) {
             this.Items = items;

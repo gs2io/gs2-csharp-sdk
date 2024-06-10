@@ -31,15 +31,15 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class Complete : IComparable
 	{
-        public string CompleteId { set; get; }
-        public string UserId { set; get; }
-        public string MissionGroupName { set; get; }
-        public string[] CompletedMissionTaskNames { set; get; }
-        public string[] ReceivedMissionTaskNames { set; get; }
-        public long? NextResetAt { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string CompleteId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string MissionGroupName { set; get; } = null!;
+        public string[] CompletedMissionTaskNames { set; get; } = null!;
+        public string[] ReceivedMissionTaskNames { set; get; } = null!;
+        public long? NextResetAt { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Complete WithCompleteId(string completeId) {
             this.CompleteId = completeId;
             return this;

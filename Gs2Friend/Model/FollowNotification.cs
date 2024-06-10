@@ -20,8 +20,8 @@ namespace Gs2.Gs2Friend.Model
 {
 	public class FollowNotification
 	{
-        public string NamespaceName { set; get; }
-        public string FromUserId { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string FromUserId { set; get; } = null!;
         public FollowNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

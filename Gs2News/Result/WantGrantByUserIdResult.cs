@@ -33,9 +33,9 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class WantGrantByUserIdResult : IResult
 	{
-        public Gs2.Gs2News.Model.SetCookieRequestEntry[] Items { set; get; }
-        public string BrowserUrl { set; get; }
-        public string ZipUrl { set; get; }
+        public Gs2.Gs2News.Model.SetCookieRequestEntry[] Items { set; get; } = null!;
+        public string BrowserUrl { set; get; } = null!;
+        public string ZipUrl { set; get; } = null!;
 
         public WantGrantByUserIdResult WithItems(Gs2.Gs2News.Model.SetCookieRequestEntry[] items) {
             this.Items = items;

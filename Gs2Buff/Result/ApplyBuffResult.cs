@@ -33,8 +33,8 @@ namespace Gs2.Gs2Buff.Result
 	[System.Serializable]
 	public class ApplyBuffResult : IResult
 	{
-        public Gs2.Gs2Buff.Model.BuffEntryModel[] Items { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Buff.Model.BuffEntryModel[] Items { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public ApplyBuffResult WithItems(Gs2.Gs2Buff.Model.BuffEntryModel[] items) {
             this.Items = items;

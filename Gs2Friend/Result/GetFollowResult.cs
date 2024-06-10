@@ -33,7 +33,7 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class GetFollowResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.FollowUser Item { set; get; }
+        public Gs2.Gs2Friend.Model.FollowUser Item { set; get; } = null!;
 
         public GetFollowResult WithItem(Gs2.Gs2Friend.Model.FollowUser item) {
             this.Item = item;

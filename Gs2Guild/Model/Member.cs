@@ -31,9 +31,9 @@ namespace Gs2.Gs2Guild.Model
 #endif
 	public class Member : IComparable
 	{
-        public string UserId { set; get; }
-        public string RoleName { set; get; }
-        public long? JoinedAt { set; get; }
+        public string UserId { set; get; } = null!;
+        public string RoleName { set; get; } = null!;
+        public long? JoinedAt { set; get; } = null!;
         public Member WithUserId(string userId) {
             this.UserId = userId;
             return this;

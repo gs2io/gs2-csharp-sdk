@@ -33,14 +33,14 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class BuyByUserIdRequest : Gs2Request<BuyByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ShowcaseName { set; get; }
-         public string DisplayItemId { set; get; }
-         public string UserId { set; get; }
-         public int? Quantity { set; get; }
-         public Gs2.Gs2Showcase.Model.Config[] Config { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ShowcaseName { set; get; } = null!;
+         public string DisplayItemId { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? Quantity { set; get; } = null!;
+         public Gs2.Gs2Showcase.Model.Config[] Config { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public BuyByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

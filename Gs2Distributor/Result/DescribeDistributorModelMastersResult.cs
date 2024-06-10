@@ -33,8 +33,8 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class DescribeDistributorModelMastersResult : IResult
 	{
-        public Gs2.Gs2Distributor.Model.DistributorModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributorModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeDistributorModelMastersResult WithItems(Gs2.Gs2Distributor.Model.DistributorModelMaster[] items) {
             this.Items = items;

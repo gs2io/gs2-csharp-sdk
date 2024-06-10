@@ -33,11 +33,11 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class MultiplyAcquireActionsByUserIdResult : IResult
 	{
-        public Gs2.Core.Model.AcquireAction[] Items { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Core.Model.AcquireAction[] Items { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public MultiplyAcquireActionsByUserIdResult WithItems(Gs2.Core.Model.AcquireAction[] items) {
             this.Items = items;

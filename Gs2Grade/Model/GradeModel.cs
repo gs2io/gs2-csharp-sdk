@@ -31,13 +31,13 @@ namespace Gs2.Gs2Grade.Model
 #endif
 	public class GradeModel : IComparable
 	{
-        public string GradeModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Grade.Model.DefaultGradeModel[] DefaultGrades { set; get; }
-        public string ExperienceModelId { set; get; }
-        public Gs2.Gs2Grade.Model.GradeEntryModel[] GradeEntries { set; get; }
-        public Gs2.Gs2Grade.Model.AcquireActionRate[] AcquireActionRates { set; get; }
+        public string GradeModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Gs2Grade.Model.DefaultGradeModel[] DefaultGrades { set; get; } = null!;
+        public string ExperienceModelId { set; get; } = null!;
+        public Gs2.Gs2Grade.Model.GradeEntryModel[] GradeEntries { set; get; } = null!;
+        public Gs2.Gs2Grade.Model.AcquireActionRate[] AcquireActionRates { set; get; } = null!;
         public GradeModel WithGradeModelId(string gradeModelId) {
             this.GradeModelId = gradeModelId;
             return this;

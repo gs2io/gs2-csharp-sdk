@@ -31,15 +31,15 @@ namespace Gs2.Gs2Guild.Model
 #endif
 	public class GuildModel : IComparable
 	{
-        public string GuildModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public int? DefaultMaximumMemberCount { set; get; }
-        public int? MaximumMemberCount { set; get; }
-        public Gs2.Gs2Guild.Model.RoleModel[] Roles { set; get; }
-        public string GuildMasterRole { set; get; }
-        public string GuildMemberDefaultRole { set; get; }
-        public int? RejoinCoolTimeMinutes { set; get; }
+        public string GuildModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public int? DefaultMaximumMemberCount { set; get; } = null!;
+        public int? MaximumMemberCount { set; get; } = null!;
+        public Gs2.Gs2Guild.Model.RoleModel[] Roles { set; get; } = null!;
+        public string GuildMasterRole { set; get; } = null!;
+        public string GuildMemberDefaultRole { set; get; } = null!;
+        public int? RejoinCoolTimeMinutes { set; get; } = null!;
         public GuildModel WithGuildModelId(string guildModelId) {
             this.GuildModelId = guildModelId;
             return this;

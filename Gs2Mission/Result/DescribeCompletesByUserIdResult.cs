@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DescribeCompletesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.Complete[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Mission.Model.Complete[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCompletesByUserIdResult WithItems(Gs2.Gs2Mission.Model.Complete[] items) {
             this.Items = items;

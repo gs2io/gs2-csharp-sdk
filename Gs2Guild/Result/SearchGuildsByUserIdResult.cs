@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class SearchGuildsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.Guild[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Guild.Model.Guild[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public SearchGuildsByUserIdResult WithItems(Gs2.Gs2Guild.Model.Guild[] items) {
             this.Items = items;

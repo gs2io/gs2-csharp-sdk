@@ -33,8 +33,8 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class DescribeQuestModelsRequest : Gs2Request<DescribeQuestModelsRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string QuestGroupName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string QuestGroupName { set; get; } = null!;
         public DescribeQuestModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -63,10 +63,10 @@ namespace Gs2.Gs2Mission.Domain.Model
     public partial class CounterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string CounterName { get; }
-        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string CounterName { get; } = null!;
+        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { get; set; } = null!;
 
         public CounterDomain(
             Gs2.Core.Domain.Gs2 gs2,

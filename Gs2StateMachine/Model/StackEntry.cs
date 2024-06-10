@@ -31,8 +31,8 @@ namespace Gs2.Gs2StateMachine.Model
 #endif
 	public class StackEntry : IComparable
 	{
-        public string StateMachineName { set; get; }
-        public string TaskName { set; get; }
+        public string StateMachineName { set; get; } = null!;
+        public string TaskName { set; get; } = null!;
         public StackEntry WithStateMachineName(string stateMachineName) {
             this.StateMachineName = stateMachineName;
             return this;

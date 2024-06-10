@@ -33,7 +33,7 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class CheckDumpUserDataByUserIdResult : IResult
 	{
-        public string Url { set; get; }
+        public string Url { set; get; } = null!;
 
         public CheckDumpUserDataByUserIdResult WithUrl(string url) {
             this.Url = url;

@@ -63,13 +63,13 @@ namespace Gs2.Gs2Version.Domain.Model
     public partial class CheckerDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2VersionRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string ProjectToken { get; set; }
-        public Gs2.Gs2Version.Model.Status[] Warnings { get; set; }
-        public Gs2.Gs2Version.Model.Status[] Errors { get; set; }
-        public string Body { get; set; }
-        public string Signature { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string ProjectToken { get; set; } = null!;
+        public Gs2.Gs2Version.Model.Status[] Warnings { get; set; } = null!;
+        public Gs2.Gs2Version.Model.Status[] Errors { get; set; } = null!;
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
 
         public CheckerDomain(
             Gs2.Core.Domain.Gs2 gs2,

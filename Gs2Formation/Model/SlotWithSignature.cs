@@ -31,11 +31,11 @@ namespace Gs2.Gs2Formation.Model
 #endif
 	public class SlotWithSignature : IComparable
 	{
-        public string Name { set; get; }
-        public string PropertyType { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
-        public string Metadata { set; get; }
+        public string Name { set; get; } = null!;
+        public string PropertyType { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public SlotWithSignature WithName(string name) {
             this.Name = name;
             return this;

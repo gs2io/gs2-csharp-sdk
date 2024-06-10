@@ -63,9 +63,9 @@ namespace Gs2.Gs2Money.Domain.Model
     public partial class ReceiptDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MoneyRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string TransactionId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string TransactionId { get; } = null!;
 
         public ReceiptDomain(
             Gs2.Core.Domain.Gs2 gs2,

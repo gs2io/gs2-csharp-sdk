@@ -31,16 +31,16 @@ namespace Gs2.Gs2SkillTree.Model
 #endif
 	public class NodeModelMaster : IComparable
 	{
-        public string NodeModelId { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; }
-        public float? RestrainReturnRate { set; get; }
-        public string[] PremiseNodeNames { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string NodeModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; } = null!;
+        public float? RestrainReturnRate { set; get; } = null!;
+        public string[] PremiseNodeNames { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public NodeModelMaster WithNodeModelId(string nodeModelId) {
             this.NodeModelId = nodeModelId;
             return this;

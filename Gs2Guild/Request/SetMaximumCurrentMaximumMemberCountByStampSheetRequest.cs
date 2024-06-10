@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class SetMaximumCurrentMaximumMemberCountByStampSheetRequest : Gs2Request<SetMaximumCurrentMaximumMemberCountByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public SetMaximumCurrentMaximumMemberCountByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

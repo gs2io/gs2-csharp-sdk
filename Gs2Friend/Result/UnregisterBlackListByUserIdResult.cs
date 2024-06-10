@@ -33,7 +33,7 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class UnregisterBlackListByUserIdResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.BlackList Item { set; get; }
+        public Gs2.Gs2Friend.Model.BlackList Item { set; get; } = null!;
 
         public UnregisterBlackListByUserIdResult WithItem(Gs2.Gs2Friend.Model.BlackList item) {
             this.Item = item;

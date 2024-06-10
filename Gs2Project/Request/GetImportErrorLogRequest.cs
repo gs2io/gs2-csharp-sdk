@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetImportErrorLogRequest : Gs2Request<GetImportErrorLogRequest>
 	{
-         public string TransactionId { set; get; }
-         public string ErrorLogName { set; get; }
+         public string TransactionId { set; get; } = null!;
+         public string ErrorLogName { set; get; } = null!;
         public GetImportErrorLogRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Gateway.Result
 	[System.Serializable]
 	public class DescribeWebSocketSessionsResult : IResult
 	{
-        public Gs2.Gs2Gateway.Model.WebSocketSession[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Gateway.Model.WebSocketSession[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeWebSocketSessionsResult WithItems(Gs2.Gs2Gateway.Model.WebSocketSession[] items) {
             this.Items = items;

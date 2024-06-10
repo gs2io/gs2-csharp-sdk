@@ -33,8 +33,8 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunStampSheetWithoutNamespaceResult : IResult
 	{
-        public int? StatusCode { set; get; }
-        public string Result { set; get; }
+        public int? StatusCode { set; get; } = null!;
+        public string Result { set; get; } = null!;
 
         public RunStampSheetWithoutNamespaceResult WithStatusCode(int? statusCode) {
             this.StatusCode = statusCode;

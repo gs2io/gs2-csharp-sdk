@@ -33,7 +33,7 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class DeleteJobByUserIdResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.Job Item { set; get; }
+        public Gs2.Gs2JobQueue.Model.Job Item { set; get; } = null!;
 
         public DeleteJobByUserIdResult WithItem(Gs2.Gs2JobQueue.Model.Job item) {
             this.Item = item;

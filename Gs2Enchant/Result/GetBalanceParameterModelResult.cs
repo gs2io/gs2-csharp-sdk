@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class GetBalanceParameterModelResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.BalanceParameterModel Item { set; get; }
+        public Gs2.Gs2Enchant.Model.BalanceParameterModel Item { set; get; } = null!;
 
         public GetBalanceParameterModelResult WithItem(Gs2.Gs2Enchant.Model.BalanceParameterModel item) {
             this.Item = item;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class CancelMatchmakingResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; } = null!;
 
         public CancelMatchmakingResult WithItem(Gs2.Gs2Matchmaking.Model.Gathering item) {
             this.Item = item;

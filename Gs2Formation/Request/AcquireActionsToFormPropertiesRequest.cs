@@ -33,14 +33,14 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class AcquireActionsToFormPropertiesRequest : Gs2Request<AcquireActionsToFormPropertiesRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string MoldModelName { set; get; }
-         public int? Index { set; get; }
-         public Gs2.Core.Model.AcquireAction AcquireAction { set; get; }
-         public Gs2.Gs2Formation.Model.Config[] Config { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string MoldModelName { set; get; } = null!;
+         public int? Index { set; get; } = null!;
+         public Gs2.Core.Model.AcquireAction AcquireAction { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.Config[] Config { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public AcquireActionsToFormPropertiesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

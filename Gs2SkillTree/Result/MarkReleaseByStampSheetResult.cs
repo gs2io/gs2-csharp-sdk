@@ -33,7 +33,7 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class MarkReleaseByStampSheetResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.Status Item { set; get; }
+        public Gs2.Gs2SkillTree.Model.Status Item { set; get; } = null!;
 
         public MarkReleaseByStampSheetResult WithItem(Gs2.Gs2SkillTree.Model.Status item) {
             this.Item = item;

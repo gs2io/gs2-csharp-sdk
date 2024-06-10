@@ -33,10 +33,10 @@ namespace Gs2.Gs2Grade.Result
 	[System.Serializable]
 	public class SubGradeByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Grade.Model.Status Item { set; get; }
-        public string NewContextStack { set; get; }
-        public string ExperienceNamespaceName { set; get; }
-        public Gs2.Gs2Experience.Model.Status ExperienceStatus { set; get; }
+        public Gs2.Gs2Grade.Model.Status Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
+        public string ExperienceNamespaceName { set; get; } = null!;
+        public Gs2.Gs2Experience.Model.Status ExperienceStatus { set; get; } = null!;
 
         public SubGradeByStampTaskResult WithItem(Gs2.Gs2Grade.Model.Status item) {
             this.Item = item;

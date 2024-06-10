@@ -31,14 +31,14 @@ namespace Gs2.Gs2JobQueue.Model
 #endif
 	public class DeadLetterJob : IComparable
 	{
-        public string DeadLetterJobId { set; get; }
-        public string Name { set; get; }
-        public string UserId { set; get; }
-        public string ScriptId { set; get; }
-        public string Args { set; get; }
-        public Gs2.Gs2JobQueue.Model.JobResultBody[] Result { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
+        public string DeadLetterJobId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string ScriptId { set; get; } = null!;
+        public string Args { set; get; } = null!;
+        public Gs2.Gs2JobQueue.Model.JobResultBody[] Result { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
         public DeadLetterJob WithDeadLetterJobId(string deadLetterJobId) {
             this.DeadLetterJobId = deadLetterJobId;
             return this;

@@ -31,12 +31,12 @@ namespace Gs2.Gs2Identifier.Model
 #endif
 	public class User : IComparable
 	{
-        public string UserId { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string UserId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public User WithUserId(string userId) {
             this.UserId = userId;
             return this;

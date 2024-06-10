@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class ResetBoxByUserIdResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.BoxItems Item { set; get; }
+        public Gs2.Gs2Lottery.Model.BoxItems Item { set; get; } = null!;
 
         public ResetBoxByUserIdResult WithItem(Gs2.Gs2Lottery.Model.BoxItems item) {
             this.Item = item;

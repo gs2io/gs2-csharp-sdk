@@ -33,15 +33,15 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class UpdateRandomShowcaseMasterRequest : Gs2Request<UpdateRandomShowcaseMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ShowcaseName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public int? MaximumNumberOfChoice { set; get; }
-         public Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] DisplayItems { set; get; }
-         public long? BaseTimestamp { set; get; }
-         public int? ResetIntervalHours { set; get; }
-         public string SalesPeriodEventId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ShowcaseName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public int? MaximumNumberOfChoice { set; get; } = null!;
+         public Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] DisplayItems { set; get; } = null!;
+         public long? BaseTimestamp { set; get; } = null!;
+         public int? ResetIntervalHours { set; get; } = null!;
+         public string SalesPeriodEventId { set; get; } = null!;
         public UpdateRandomShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

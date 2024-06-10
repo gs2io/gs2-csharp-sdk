@@ -33,11 +33,11 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class DescribeStatusesRequest : Gs2Request<DescribeStatusesRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GradeName { set; get; }
-         public string AccessToken { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GradeName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeStatusesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

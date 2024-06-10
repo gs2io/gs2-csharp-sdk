@@ -31,10 +31,10 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class SimpleInventoryModel : IComparable
 	{
-        public string InventoryModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Inventory.Model.SimpleItemModel[] SimpleItemModels { set; get; }
+        public string InventoryModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.SimpleItemModel[] SimpleItemModels { set; get; } = null!;
         public SimpleInventoryModel WithInventoryModelId(string inventoryModelId) {
             this.InventoryModelId = inventoryModelId;
             return this;

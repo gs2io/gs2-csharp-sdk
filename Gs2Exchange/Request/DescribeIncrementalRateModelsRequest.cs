@@ -33,7 +33,7 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DescribeIncrementalRateModelsRequest : Gs2Request<DescribeIncrementalRateModelsRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DescribeIncrementalRateModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

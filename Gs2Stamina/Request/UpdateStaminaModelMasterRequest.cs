@@ -33,18 +33,18 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateStaminaModelMasterRequest : Gs2Request<UpdateStaminaModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StaminaName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public int? RecoverIntervalMinutes { set; get; }
-         public int? RecoverValue { set; get; }
-         public int? InitialCapacity { set; get; }
-         public bool? IsOverflow { set; get; }
-         public int? MaxCapacity { set; get; }
-         public string MaxStaminaTableName { set; get; }
-         public string RecoverIntervalTableName { set; get; }
-         public string RecoverValueTableName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StaminaName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public int? RecoverIntervalMinutes { set; get; } = null!;
+         public int? RecoverValue { set; get; } = null!;
+         public int? InitialCapacity { set; get; } = null!;
+         public bool? IsOverflow { set; get; } = null!;
+         public int? MaxCapacity { set; get; } = null!;
+         public string MaxStaminaTableName { set; get; } = null!;
+         public string RecoverIntervalTableName { set; get; } = null!;
+         public string RecoverValueTableName { set; get; } = null!;
         public UpdateStaminaModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

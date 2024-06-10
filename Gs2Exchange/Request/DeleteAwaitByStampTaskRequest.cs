@@ -33,8 +33,8 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DeleteAwaitByStampTaskRequest : Gs2Request<DeleteAwaitByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DeleteAwaitByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

@@ -31,8 +31,8 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class ReferenceOf : IComparable
 	{
-        public string ReferenceOfId { set; get; }
-        public string Name { set; get; }
+        public string ReferenceOfId { set; get; } = null!;
+        public string Name { set; get; } = null!;
         public ReferenceOf WithReferenceOfId(string referenceOfId) {
             this.ReferenceOfId = referenceOfId;
             return this;

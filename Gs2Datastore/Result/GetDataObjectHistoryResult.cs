@@ -33,7 +33,7 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class GetDataObjectHistoryResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObjectHistory Item { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObjectHistory Item { set; get; } = null!;
 
         public GetDataObjectHistoryResult WithItem(Gs2.Gs2Datastore.Model.DataObjectHistory item) {
             this.Item = item;

@@ -20,11 +20,11 @@ namespace Gs2.Gs2Chat.Model
 {
 	public class PostNotification
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
-        public string UserId { set; get; }
-        public int? Category { set; get; }
-        public long? CreatedAt { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string RoomName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public int? Category { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
         public PostNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class DescribeEventsByUserIdRequest : Gs2Request<DescribeEventsByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DescribeEventsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

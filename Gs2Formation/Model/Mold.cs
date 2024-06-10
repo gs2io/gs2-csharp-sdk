@@ -31,13 +31,13 @@ namespace Gs2.Gs2Formation.Model
 #endif
 	public class Mold : IComparable
 	{
-        public string MoldId { set; get; }
-        public string Name { set; get; }
-        public string UserId { set; get; }
-        public int? Capacity { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string MoldId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public int? Capacity { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Mold WithMoldId(string moldId) {
             this.MoldId = moldId;
             return this;

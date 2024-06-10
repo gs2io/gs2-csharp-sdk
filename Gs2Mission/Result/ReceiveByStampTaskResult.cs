@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class ReceiveByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.Complete Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Mission.Model.Complete Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public ReceiveByStampTaskResult WithItem(Gs2.Gs2Mission.Model.Complete item) {
             this.Item = item;

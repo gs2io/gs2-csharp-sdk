@@ -33,8 +33,8 @@ namespace Gs2.Gs2Buff.Request
 	[System.Serializable]
 	public class GetBuffEntryModelRequest : Gs2Request<GetBuffEntryModelRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string BuffEntryName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string BuffEntryName { set; get; } = null!;
         public GetBuffEntryModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,7 +31,7 @@ namespace Gs2.Gs2AdReward.Model
 #endif
 	public class UnityAd : IComparable
 	{
-        public string[] Keys { set; get; }
+        public string[] Keys { set; get; } = null!;
         public UnityAd WithKeys(string[] keys) {
             this.Keys = keys;
             return this;

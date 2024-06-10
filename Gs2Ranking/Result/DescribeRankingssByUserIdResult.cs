@@ -33,8 +33,8 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class DescribeRankingssByUserIdResult : IResult
 	{
-        public Gs2.Gs2Ranking.Model.Ranking[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Ranking.Model.Ranking[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRankingssByUserIdResult WithItems(Gs2.Gs2Ranking.Model.Ranking[] items) {
             this.Items = items;

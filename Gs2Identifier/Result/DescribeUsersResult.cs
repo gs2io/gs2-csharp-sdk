@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DescribeUsersResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.User[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Identifier.Model.User[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeUsersResult WithItems(Gs2.Gs2Identifier.Model.User[] items) {
             this.Items = items;

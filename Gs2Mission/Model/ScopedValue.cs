@@ -31,10 +31,10 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class ScopedValue : IComparable
 	{
-        public string ResetType { set; get; }
-        public long? Value { set; get; }
-        public long? NextResetAt { set; get; }
-        public long? UpdatedAt { set; get; }
+        public string ResetType { set; get; } = null!;
+        public long? Value { set; get; } = null!;
+        public long? NextResetAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
         public ScopedValue WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;

@@ -33,11 +33,11 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class GetEventByUserIdRequest : Gs2Request<GetEventByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string EventName { set; get; }
-         public string UserId { set; get; }
-         public bool? IsInSchedule { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string EventName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public bool? IsInSchedule { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetEventByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

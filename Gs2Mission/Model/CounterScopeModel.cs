@@ -31,10 +31,10 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class CounterScopeModel : IComparable
 	{
-        public string ResetType { set; get; }
-        public int? ResetDayOfMonth { set; get; }
-        public string ResetDayOfWeek { set; get; }
-        public int? ResetHour { set; get; }
+        public string ResetType { set; get; } = null!;
+        public int? ResetDayOfMonth { set; get; } = null!;
+        public string ResetDayOfWeek { set; get; } = null!;
+        public int? ResetHour { set; get; } = null!;
         public CounterScopeModel WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;

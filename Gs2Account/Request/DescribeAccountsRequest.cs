@@ -33,9 +33,9 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DescribeAccountsRequest : Gs2Request<DescribeAccountsRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeAccountsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

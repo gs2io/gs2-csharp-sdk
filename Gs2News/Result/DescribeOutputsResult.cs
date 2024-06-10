@@ -33,8 +33,8 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class DescribeOutputsResult : IResult
 	{
-        public Gs2.Gs2News.Model.Output[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2News.Model.Output[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeOutputsResult WithItems(Gs2.Gs2News.Model.Output[] items) {
             this.Items = items;

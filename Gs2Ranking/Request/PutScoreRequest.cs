@@ -33,12 +33,12 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class PutScoreRequest : Gs2Request<PutScoreRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
-         public string AccessToken { set; get; }
-         public long? Score { set; get; }
-         public string Metadata { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public long? Score { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public PutScoreRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

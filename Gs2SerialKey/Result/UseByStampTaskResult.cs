@@ -33,9 +33,9 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class UseByStampTaskResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; }
-        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; } = null!;
+        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public UseByStampTaskResult WithItem(Gs2.Gs2SerialKey.Model.SerialKey item) {
             this.Item = item;

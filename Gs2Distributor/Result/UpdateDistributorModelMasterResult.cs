@@ -33,7 +33,7 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class UpdateDistributorModelMasterResult : IResult
 	{
-        public Gs2.Gs2Distributor.Model.DistributorModelMaster Item { set; get; }
+        public Gs2.Gs2Distributor.Model.DistributorModelMaster Item { set; get; } = null!;
 
         public UpdateDistributorModelMasterResult WithItem(Gs2.Gs2Distributor.Model.DistributorModelMaster item) {
             this.Item = item;

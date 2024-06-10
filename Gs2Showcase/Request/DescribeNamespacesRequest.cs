@@ -33,8 +33,8 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DescribeNamespacesRequest : Gs2Request<DescribeNamespacesRequest>
 	{
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeNamespacesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;

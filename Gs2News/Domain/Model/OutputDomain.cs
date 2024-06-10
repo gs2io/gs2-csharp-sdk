@@ -63,9 +63,9 @@ namespace Gs2.Gs2News.Domain.Model
     public partial class OutputDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2NewsRestClient _client;
-        public string NamespaceName { get; }
-        public string UploadToken { get; }
-        public string OutputName { get; }
+        public string NamespaceName { get; } = null!;
+        public string UploadToken { get; } = null!;
+        public string OutputName { get; } = null!;
 
         public OutputDomain(
             Gs2.Core.Domain.Gs2 gs2,

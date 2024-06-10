@@ -63,11 +63,11 @@ namespace Gs2.Gs2Datastore.Domain.Model
     public partial class DataObjectHistoryAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DatastoreRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string DataObjectName { get; }
-        public string Generation { get; }
+        public string DataObjectName { get; } = null!;
+        public string Generation { get; } = null!;
 
         public DataObjectHistoryAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

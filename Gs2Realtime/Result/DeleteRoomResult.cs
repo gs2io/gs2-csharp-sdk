@@ -33,7 +33,7 @@ namespace Gs2.Gs2Realtime.Result
 	[System.Serializable]
 	public class DeleteRoomResult : IResult
 	{
-        public Gs2.Gs2Realtime.Model.Room Item { set; get; }
+        public Gs2.Gs2Realtime.Model.Room Item { set; get; } = null!;
 
         public DeleteRoomResult WithItem(Gs2.Gs2Realtime.Model.Room item) {
             this.Item = item;

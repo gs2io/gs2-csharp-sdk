@@ -33,7 +33,7 @@ namespace Gs2.Gs2Enhance.Result
 	[System.Serializable]
 	public class DescribeUnleashRateModelsResult : IResult
 	{
-        public Gs2.Gs2Enhance.Model.UnleashRateModel[] Items { set; get; }
+        public Gs2.Gs2Enhance.Model.UnleashRateModel[] Items { set; get; } = null!;
 
         public DescribeUnleashRateModelsResult WithItems(Gs2.Gs2Enhance.Model.UnleashRateModel[] items) {
             this.Items = items;

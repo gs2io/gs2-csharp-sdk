@@ -31,8 +31,8 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class SignedBallot : IComparable
 	{
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
         public SignedBallot WithBody(string body) {
             this.Body = body;
             return this;

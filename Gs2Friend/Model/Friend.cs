@@ -31,12 +31,12 @@ namespace Gs2.Gs2Friend.Model
 #endif
 	public class Friend : IComparable
 	{
-        public string FriendId { set; get; }
-        public string UserId { set; get; }
-        public string[] TargetUserIds { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string FriendId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string[] TargetUserIds { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Friend WithFriendId(string friendId) {
             this.FriendId = friendId;
             return this;

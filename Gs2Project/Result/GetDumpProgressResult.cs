@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class GetDumpProgressResult : IResult
 	{
-        public Gs2.Gs2Project.Model.DumpProgress Item { set; get; }
+        public Gs2.Gs2Project.Model.DumpProgress Item { set; get; } = null!;
 
         public GetDumpProgressResult WithItem(Gs2.Gs2Project.Model.DumpProgress item) {
             this.Item = item;

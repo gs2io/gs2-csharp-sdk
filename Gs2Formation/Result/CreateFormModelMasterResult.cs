@@ -33,7 +33,7 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class CreateFormModelMasterResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.FormModelMaster Item { set; get; }
+        public Gs2.Gs2Formation.Model.FormModelMaster Item { set; get; } = null!;
 
         public CreateFormModelMasterResult WithItem(Gs2.Gs2Formation.Model.FormModelMaster item) {
             this.Item = item;

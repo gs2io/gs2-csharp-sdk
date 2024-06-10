@@ -63,8 +63,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
     public partial class CategoryModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
-        public string NamespaceName { get; }
-        public string CategoryName { get; }
+        public string NamespaceName { get; } = null!;
+        public string CategoryName { get; } = null!;
 
         public CategoryModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

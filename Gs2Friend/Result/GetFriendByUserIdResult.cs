@@ -33,7 +33,7 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class GetFriendByUserIdResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.FriendUser Item { set; get; }
+        public Gs2.Gs2Friend.Model.FriendUser Item { set; get; } = null!;
 
         public GetFriendByUserIdResult WithItem(Gs2.Gs2Friend.Model.FriendUser item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DeleteRatingModelMasterRequest : Gs2Request<DeleteRatingModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RatingName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RatingName { set; get; } = null!;
         public DeleteRatingModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class GetBallotByUserIdResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Ballot Item { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Ballot Item { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
 
         public GetBallotByUserIdResult WithItem(Gs2.Gs2Matchmaking.Model.Ballot item) {
             this.Item = item;

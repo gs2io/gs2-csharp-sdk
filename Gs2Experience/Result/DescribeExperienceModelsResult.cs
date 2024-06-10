@@ -33,7 +33,7 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class DescribeExperienceModelsResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.ExperienceModel[] Items { set; get; }
+        public Gs2.Gs2Experience.Model.ExperienceModel[] Items { set; get; } = null!;
 
         public DescribeExperienceModelsResult WithItems(Gs2.Gs2Experience.Model.ExperienceModel[] items) {
             this.Items = items;

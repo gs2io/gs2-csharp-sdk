@@ -33,9 +33,9 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class RunStampTaskRequest : Gs2Request<RunStampTaskRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public RunStampTaskRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

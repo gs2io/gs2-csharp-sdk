@@ -31,8 +31,8 @@ namespace Gs2.Gs2Friend.Model
 #endif
 	public class SendFriendRequest : IComparable
 	{
-        public string UserId { set; get; }
-        public string TargetUserId { set; get; }
+        public string UserId { set; get; } = null!;
+        public string TargetUserId { set; get; } = null!;
         public SendFriendRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

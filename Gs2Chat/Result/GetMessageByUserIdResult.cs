@@ -33,7 +33,7 @@ namespace Gs2.Gs2Chat.Result
 	[System.Serializable]
 	public class GetMessageByUserIdResult : IResult
 	{
-        public Gs2.Gs2Chat.Model.Message Item { set; get; }
+        public Gs2.Gs2Chat.Model.Message Item { set; get; } = null!;
 
         public GetMessageByUserIdResult WithItem(Gs2.Gs2Chat.Model.Message item) {
             this.Item = item;

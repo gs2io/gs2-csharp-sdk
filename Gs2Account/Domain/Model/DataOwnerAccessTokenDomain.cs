@@ -63,10 +63,10 @@ namespace Gs2.Gs2Account.Domain.Model
     public partial class DataOwnerAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string DataOwnerName { get; }
+        public string DataOwnerName { get; } = null!;
 
         public DataOwnerAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

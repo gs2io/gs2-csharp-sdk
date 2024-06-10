@@ -64,8 +64,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GatewayRestClient _client;
         private readonly Gs2GatewayWebSocketClient _wsclient;
-        public string NamespaceName { get; }
-        public string UserId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
 
         public FirebaseTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

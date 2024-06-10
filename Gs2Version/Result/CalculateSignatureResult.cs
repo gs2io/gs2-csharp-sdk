@@ -33,8 +33,8 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class CalculateSignatureResult : IResult
 	{
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
 
         public CalculateSignatureResult WithBody(string body) {
             this.Body = body;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class DeleteMaxStaminaTableMasterResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.MaxStaminaTableMaster Item { set; get; }
+        public Gs2.Gs2Stamina.Model.MaxStaminaTableMaster Item { set; get; } = null!;
 
         public DeleteMaxStaminaTableMasterResult WithItem(Gs2.Gs2Stamina.Model.MaxStaminaTableMaster item) {
             this.Item = item;

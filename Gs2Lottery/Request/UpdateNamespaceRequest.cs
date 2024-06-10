@@ -33,16 +33,16 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Lottery.Model.TransactionSetting TransactionSetting { set; get; }
-         public string LotteryTriggerScriptId { set; get; }
-         public string ChoicePrizeTableScriptId { set; get; }
-         public Gs2.Gs2Lottery.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Lottery.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public string LotteryTriggerScriptId { set; get; } = null!;
+         public string ChoicePrizeTableScriptId { set; get; } = null!;
+         public Gs2.Gs2Lottery.Model.LogSetting LogSetting { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string QueueNamespaceId { set; get; }
+         public string QueueNamespaceId { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string KeyId { set; get; }
+         public string KeyId { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

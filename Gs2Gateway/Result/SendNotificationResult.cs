@@ -33,7 +33,7 @@ namespace Gs2.Gs2Gateway.Result
 	[System.Serializable]
 	public class SendNotificationResult : IResult
 	{
-        public string Protocol { set; get; }
+        public string Protocol { set; get; } = null!;
 
         public SendNotificationResult WithProtocol(string protocol) {
             this.Protocol = protocol;

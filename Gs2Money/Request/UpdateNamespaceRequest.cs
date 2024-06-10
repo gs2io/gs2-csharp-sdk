@@ -33,16 +33,16 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public string Priority { set; get; }
-         public string AppleKey { set; get; }
-         public string GoogleKey { set; get; }
-         public bool? EnableFakeReceipt { set; get; }
-         public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; }
-         public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; }
-         public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; }
-         public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Priority { set; get; } = null!;
+         public string AppleKey { set; get; } = null!;
+         public string GoogleKey { set; get; } = null!;
+         public bool? EnableFakeReceipt { set; get; } = null!;
+         public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; } = null!;
+         public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; } = null!;
+         public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; } = null!;
+         public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,9 +31,9 @@ namespace Gs2.Gs2Formation.Model
 #endif
 	public class Slot : IComparable
 	{
-        public string Name { set; get; }
-        public string PropertyId { set; get; }
-        public string Metadata { set; get; }
+        public string Name { set; get; } = null!;
+        public string PropertyId { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public Slot WithName(string name) {
             this.Name = name;
             return this;

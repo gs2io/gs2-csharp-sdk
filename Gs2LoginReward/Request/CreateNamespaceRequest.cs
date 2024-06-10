@@ -33,11 +33,11 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2LoginReward.Model.TransactionSetting TransactionSetting { set; get; }
-         public Gs2.Gs2LoginReward.Model.ScriptSetting ReceiveScript { set; get; }
-         public Gs2.Gs2LoginReward.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2LoginReward.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2LoginReward.Model.ScriptSetting ReceiveScript { set; get; } = null!;
+         public Gs2.Gs2LoginReward.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

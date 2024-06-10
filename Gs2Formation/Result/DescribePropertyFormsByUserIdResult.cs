@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class DescribePropertyFormsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.PropertyForm[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyForm[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribePropertyFormsByUserIdResult WithItems(Gs2.Gs2Formation.Model.PropertyForm[] items) {
             this.Items = items;

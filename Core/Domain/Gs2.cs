@@ -73,6 +73,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2News.Domain.Gs2News News;
         public readonly Gs2Quest.Domain.Gs2Quest Quest;
         public readonly Gs2Ranking.Domain.Gs2Ranking Ranking;
+        public readonly Gs2Ranking2.Domain.Gs2Ranking2 Ranking2;
         public readonly Gs2Realtime.Domain.Gs2Realtime Realtime;
         public readonly Gs2Schedule.Domain.Gs2Schedule Schedule;
         public readonly Gs2Script.Domain.Gs2Script Script;
@@ -139,6 +140,7 @@ namespace Gs2.Core.Domain
             this.News = new Gs2News.Domain.Gs2News(this);
             this.Quest = new Gs2Quest.Domain.Gs2Quest(this);
             this.Ranking = new Gs2Ranking.Domain.Gs2Ranking(this);
+            this.Ranking2 = new Gs2Ranking2.Domain.Gs2Ranking2(this);
             this.Realtime = new Gs2Realtime.Domain.Gs2Realtime(this);
             this.Schedule = new Gs2Schedule.Domain.Gs2Schedule(this);
             this.Script = new Gs2Script.Domain.Gs2Script(this);
@@ -267,6 +269,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Ranking":
                                 this.Ranking.HandleNotification(this._cache, method, message.payload);
+                                break;
+                            case "Gs2Ranking2":
+                                this.Ranking2.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Realtime":
                                 this.Realtime.HandleNotification(this._cache, method, message.payload);
@@ -623,6 +628,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Ranking":
                         this.Ranking.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
+                    case "Gs2Ranking2":
+                        this.Ranking2.UpdateCacheFromStampSheet(transactionId, method, request, result);
+                        break;
                     case "Gs2Realtime":
                         this.Realtime.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
@@ -778,6 +786,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Ranking":
                         this.Ranking.UpdateCacheFromStampTask(taskId, method, request, result);
+                        break;
+                    case "Gs2Ranking2":
+                        this.Ranking2.UpdateCacheFromStampTask(taskId, method, request, result);
                         break;
                     case "Gs2Realtime":
                         this.Realtime.UpdateCacheFromStampTask(taskId, method, request, result);
@@ -944,6 +955,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "ranking":
                                 this.Ranking.UpdateCacheFromJobResult(method, job, result);
+                                break;
+                            case "ranking2":
+                                this.Ranking2.UpdateCacheFromJobResult(method, job, result);
                                 break;
                             case "realtime":
                                 this.Realtime.UpdateCacheFromJobResult(method, job, result);

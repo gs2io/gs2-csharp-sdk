@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class DescribeGlobalMessageMastersResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.GlobalMessageMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Inbox.Model.GlobalMessageMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeGlobalMessageMastersResult WithItems(Gs2.Gs2Inbox.Model.GlobalMessageMaster[] items) {
             this.Items = items;

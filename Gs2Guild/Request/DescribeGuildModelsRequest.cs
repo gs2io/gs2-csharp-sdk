@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class DescribeGuildModelsRequest : Gs2Request<DescribeGuildModelsRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DescribeGuildModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

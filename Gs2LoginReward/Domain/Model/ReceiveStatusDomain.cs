@@ -63,9 +63,9 @@ namespace Gs2.Gs2LoginReward.Domain.Model
     public partial class ReceiveStatusDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string BonusModelName { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string BonusModelName { get; } = null!;
 
         public ReceiveStatusDomain(
             Gs2.Core.Domain.Gs2 gs2,

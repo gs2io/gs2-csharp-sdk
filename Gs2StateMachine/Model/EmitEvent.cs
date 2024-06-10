@@ -31,9 +31,9 @@ namespace Gs2.Gs2StateMachine.Model
 #endif
 	public class EmitEvent : IComparable
 	{
-        public string Event { set; get; }
-        public string Parameters { set; get; }
-        public long? Timestamp { set; get; }
+        public string Event { set; get; } = null!;
+        public string Parameters { set; get; } = null!;
+        public long? Timestamp { set; get; } = null!;
         public EmitEvent WithEvent(string event_) {
             this.Event = event_;
             return this;

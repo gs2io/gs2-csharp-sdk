@@ -33,8 +33,8 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class PrepareUpdateCurrentNewsMasterFromGitHubRequest : Gs2Request<PrepareUpdateCurrentNewsMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2News.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2News.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public PrepareUpdateCurrentNewsMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

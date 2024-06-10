@@ -33,8 +33,8 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DeleteRecoverIntervalTableMasterRequest : Gs2Request<DeleteRecoverIntervalTableMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RecoverIntervalTableName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RecoverIntervalTableName { set; get; } = null!;
         public DeleteRecoverIntervalTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

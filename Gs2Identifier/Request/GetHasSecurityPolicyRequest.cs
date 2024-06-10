@@ -33,7 +33,7 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class GetHasSecurityPolicyRequest : Gs2Request<GetHasSecurityPolicyRequest>
 	{
-         public string UserName { set; get; }
+         public string UserName { set; get; } = null!;
         public GetHasSecurityPolicyRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

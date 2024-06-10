@@ -31,11 +31,11 @@ namespace Gs2.Gs2Quest.Model
 #endif
 	public class QuestGroupModel : IComparable
 	{
-        public string QuestGroupModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Quest.Model.QuestModel[] Quests { set; get; }
-        public string ChallengePeriodEventId { set; get; }
+        public string QuestGroupModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Gs2Quest.Model.QuestModel[] Quests { set; get; } = null!;
+        public string ChallengePeriodEventId { set; get; } = null!;
         public QuestGroupModel WithQuestGroupModelId(string questGroupModelId) {
             this.QuestGroupModelId = questGroupModelId;
             return this;

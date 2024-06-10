@@ -31,17 +31,17 @@ namespace Gs2.Gs2Quest.Model
 #endif
 	public class Progress : IComparable
 	{
-        public string ProgressId { set; get; }
-        public string UserId { set; get; }
-        public string TransactionId { set; get; }
-        public string QuestModelId { set; get; }
-        public long? RandomSeed { set; get; }
-        public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
-        public Gs2.Gs2Quest.Model.Reward[] FailedRewards { set; get; }
-        public string Metadata { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ProgressId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string QuestModelId { set; get; } = null!;
+        public long? RandomSeed { set; get; } = null!;
+        public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; } = null!;
+        public Gs2.Gs2Quest.Model.Reward[] FailedRewards { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Progress WithProgressId(string progressId) {
             this.ProgressId = progressId;
             return this;

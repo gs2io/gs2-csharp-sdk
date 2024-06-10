@@ -33,12 +33,12 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class UpdateRatingModelMasterRequest : Gs2Request<UpdateRatingModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RatingName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public int? InitialValue { set; get; }
-         public int? Volatility { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RatingName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public int? InitialValue { set; get; } = null!;
+         public int? Volatility { set; get; } = null!;
         public UpdateRatingModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

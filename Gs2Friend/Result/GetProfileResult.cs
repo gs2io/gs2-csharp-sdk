@@ -33,7 +33,7 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class GetProfileResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.Profile Item { set; get; }
+        public Gs2.Gs2Friend.Model.Profile Item { set; get; } = null!;
 
         public GetProfileResult WithItem(Gs2.Gs2Friend.Model.Profile item) {
             this.Item = item;

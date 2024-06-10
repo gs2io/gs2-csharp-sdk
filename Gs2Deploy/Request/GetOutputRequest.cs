@@ -33,8 +33,8 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class GetOutputRequest : Gs2Request<GetOutputRequest>
 	{
-         public string StackName { set; get; }
-         public string OutputName { set; get; }
+         public string StackName { set; get; } = null!;
+         public string OutputName { set; get; } = null!;
         public GetOutputRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

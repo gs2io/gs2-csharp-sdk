@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class PredictionResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.DrawnPrize[] Items { set; get; }
+        public Gs2.Gs2Lottery.Model.DrawnPrize[] Items { set; get; } = null!;
 
         public PredictionResult WithItems(Gs2.Gs2Lottery.Model.DrawnPrize[] items) {
             this.Items = items;

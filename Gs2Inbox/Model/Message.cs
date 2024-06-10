@@ -31,16 +31,16 @@ namespace Gs2.Gs2Inbox.Model
 #endif
 	public class Message : IComparable
 	{
-        public string MessageId { set; get; }
-        public string Name { set; get; }
-        public string UserId { set; get; }
-        public string Metadata { set; get; }
-        public bool? IsRead { set; get; }
-        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
-        public long? ReceivedAt { set; get; }
-        public long? ReadAt { set; get; }
-        public long? ExpiresAt { set; get; }
-        public long? Revision { set; get; }
+        public string MessageId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public bool? IsRead { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; } = null!;
+        public long? ReceivedAt { set; get; } = null!;
+        public long? ReadAt { set; get; } = null!;
+        public long? ExpiresAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Message WithMessageId(string messageId) {
             this.MessageId = messageId;
             return this;

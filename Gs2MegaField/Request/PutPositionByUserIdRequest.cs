@@ -33,15 +33,15 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class PutPositionByUserIdRequest : Gs2Request<PutPositionByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string AreaModelName { set; get; }
-         public string LayerModelName { set; get; }
-         public Gs2.Gs2MegaField.Model.Position Position { set; get; }
-         public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
-         public float? R { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string AreaModelName { set; get; } = null!;
+         public string LayerModelName { set; get; } = null!;
+         public Gs2.Gs2MegaField.Model.Position Position { set; get; } = null!;
+         public Gs2.Gs2MegaField.Model.Vector Vector { set; get; } = null!;
+         public float? R { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public PutPositionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

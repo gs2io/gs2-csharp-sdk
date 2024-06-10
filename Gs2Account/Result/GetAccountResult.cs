@@ -33,7 +33,7 @@ namespace Gs2.Gs2Account.Result
 	[System.Serializable]
 	public class GetAccountResult : IResult
 	{
-        public Gs2.Gs2Account.Model.Account Item { set; get; }
+        public Gs2.Gs2Account.Model.Account Item { set; get; } = null!;
 
         public GetAccountResult WithItem(Gs2.Gs2Account.Model.Account item) {
             this.Item = item;

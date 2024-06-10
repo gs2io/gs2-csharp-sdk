@@ -63,12 +63,12 @@ namespace Gs2.Gs2Enhance.Domain.Model
     public partial class EnhanceDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnhanceRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
-        public long? AcquireExperience { get; set; }
-        public float? BonusRate { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
+        public long? AcquireExperience { get; set; } = null!;
+        public float? BonusRate { get; set; } = null!;
 
         public EnhanceDomain(
             Gs2.Core.Domain.Gs2 gs2,

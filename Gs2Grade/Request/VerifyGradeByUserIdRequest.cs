@@ -33,15 +33,15 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class VerifyGradeByUserIdRequest : Gs2Request<VerifyGradeByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string GradeName { set; get; }
-         public string VerifyType { set; get; }
-         public string PropertyId { set; get; }
-         public long? GradeValue { set; get; }
-         public bool? MultiplyValueSpecifyingQuantity { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string GradeName { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public long? GradeValue { set; get; } = null!;
+         public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyGradeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

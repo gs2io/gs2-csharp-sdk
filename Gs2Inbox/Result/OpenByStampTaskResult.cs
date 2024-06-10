@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class OpenByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.Message Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Inbox.Model.Message Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public OpenByStampTaskResult WithItem(Gs2.Gs2Inbox.Model.Message item) {
             this.Item = item;

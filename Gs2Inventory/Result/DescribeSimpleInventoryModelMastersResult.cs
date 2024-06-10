@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class DescribeSimpleInventoryModelMastersResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeSimpleInventoryModelMastersResult WithItems(Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster[] items) {
             this.Items = items;

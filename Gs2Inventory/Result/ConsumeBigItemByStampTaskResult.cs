@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class ConsumeBigItemByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.BigItem Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Inventory.Model.BigItem Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public ConsumeBigItemByStampTaskResult WithItem(Gs2.Gs2Inventory.Model.BigItem item) {
             this.Item = item;

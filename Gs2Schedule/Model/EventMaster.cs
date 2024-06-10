@@ -31,32 +31,32 @@ namespace Gs2.Gs2Schedule.Model
 #endif
 	public class EventMaster : IComparable
 	{
-        public string EventId { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string ScheduleType { set; get; }
-        public long? AbsoluteBegin { set; get; }
-        public long? AbsoluteEnd { set; get; }
-        public string RelativeTriggerName { set; get; }
-        public Gs2.Gs2Schedule.Model.RepeatSetting RepeatSetting { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string EventId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string ScheduleType { set; get; } = null!;
+        public long? AbsoluteBegin { set; get; } = null!;
+        public long? AbsoluteEnd { set; get; } = null!;
+        public string RelativeTriggerName { set; get; } = null!;
+        public Gs2.Gs2Schedule.Model.RepeatSetting RepeatSetting { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public string RepeatType { set; get; }
+        public string RepeatType { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public int? RepeatBeginDayOfMonth { set; get; }
+        public int? RepeatBeginDayOfMonth { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public int? RepeatEndDayOfMonth { set; get; }
+        public int? RepeatEndDayOfMonth { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public string RepeatBeginDayOfWeek { set; get; }
+        public string RepeatBeginDayOfWeek { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public string RepeatEndDayOfWeek { set; get; }
+        public string RepeatEndDayOfWeek { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public int? RepeatBeginHour { set; get; }
+        public int? RepeatBeginHour { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-        public int? RepeatEndHour { set; get; }
+        public int? RepeatEndHour { set; get; } = null!;
         public EventMaster WithEventId(string eventId) {
             this.EventId = eventId;
             return this;

@@ -63,12 +63,12 @@ namespace Gs2.Gs2Ranking.Domain.Model
     public partial class RankingCategoryDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string CategoryName { get; }
-        public string AdditionalScopeName { get; }
-        public string NextPageToken { get; set; }
-        public bool? Processing { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string CategoryName { get; } = null!;
+        public string AdditionalScopeName { get; } = null!;
+        public string NextPageToken { get; set; } = null!;
+        public bool? Processing { get; set; } = null!;
 
         public RankingCategoryDomain(
             Gs2.Core.Domain.Gs2 gs2,

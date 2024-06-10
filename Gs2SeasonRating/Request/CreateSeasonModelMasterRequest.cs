@@ -33,13 +33,13 @@ namespace Gs2.Gs2SeasonRating.Request
 	[System.Serializable]
 	public class CreateSeasonModelMasterRequest : Gs2Request<CreateSeasonModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; }
-         public string ExperienceModelId { set; get; }
-         public string ChallengePeriodEventId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; } = null!;
+         public string ExperienceModelId { set; get; } = null!;
+         public string ChallengePeriodEventId { set; get; } = null!;
         public CreateSeasonModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

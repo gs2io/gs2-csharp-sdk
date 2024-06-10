@@ -33,11 +33,11 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class GetFollowByUserIdRequest : Gs2Request<GetFollowByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TargetUserId { set; get; }
-         public bool? WithProfile { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TargetUserId { set; get; } = null!;
+         public bool? WithProfile { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetFollowByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

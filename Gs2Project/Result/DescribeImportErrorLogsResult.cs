@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeImportErrorLogsResult : IResult
 	{
-        public Gs2.Gs2Project.Model.ImportErrorLog[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Project.Model.ImportErrorLog[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeImportErrorLogsResult WithItems(Gs2.Gs2Project.Model.ImportErrorLog[] items) {
             this.Items = items;

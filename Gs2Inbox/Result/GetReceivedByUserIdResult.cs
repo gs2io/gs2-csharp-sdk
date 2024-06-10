@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class GetReceivedByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.Received Item { set; get; }
+        public Gs2.Gs2Inbox.Model.Received Item { set; get; } = null!;
 
         public GetReceivedByUserIdResult WithItem(Gs2.Gs2Inbox.Model.Received item) {
             this.Item = item;

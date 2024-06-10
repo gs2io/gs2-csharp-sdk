@@ -33,7 +33,7 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class DeleteMoldResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; } = null!;
 
         public DeleteMoldResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
             this.Item = item;

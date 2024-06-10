@@ -33,8 +33,8 @@ namespace Gs2.Gs2Log.Result
 	[System.Serializable]
 	public class DescribeInsightsResult : IResult
 	{
-        public Gs2.Gs2Log.Model.Insight[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Log.Model.Insight[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeInsightsResult WithItems(Gs2.Gs2Log.Model.Insight[] items) {
             this.Items = items;

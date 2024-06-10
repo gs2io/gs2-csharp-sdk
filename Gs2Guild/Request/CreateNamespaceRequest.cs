@@ -33,14 +33,14 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; }
-         public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; }
-         public Gs2.Gs2Guild.Model.NotificationSetting ChangeMemberNotification { set; get; }
-         public Gs2.Gs2Guild.Model.NotificationSetting ReceiveRequestNotification { set; get; }
-         public Gs2.Gs2Guild.Model.NotificationSetting RemoveRequestNotification { set; get; }
-         public Gs2.Gs2Guild.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.NotificationSetting ChangeMemberNotification { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.NotificationSetting ReceiveRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.NotificationSetting RemoveRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

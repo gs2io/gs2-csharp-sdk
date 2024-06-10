@@ -31,7 +31,7 @@ namespace Gs2.Gs2AdReward.Model
 #endif
 	public class AdMob : IComparable
 	{
-        public string[] AllowAdUnitIds { set; get; }
+        public string[] AllowAdUnitIds { set; get; } = null!;
         public AdMob WithAllowAdUnitIds(string[] allowAdUnitIds) {
             this.AllowAdUnitIds = allowAdUnitIds;
             return this;

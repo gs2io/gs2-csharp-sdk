@@ -31,9 +31,9 @@ namespace Gs2.Gs2News.Model
 #endif
 	public class Content : IComparable
 	{
-        public string Section { set; get; }
-        public string Value { set; get; }
-        public string FrontMatter { set; get; }
+        public string Section { set; get; } = null!;
+        public string Value { set; get; } = null!;
+        public string FrontMatter { set; get; } = null!;
         public Content WithSection(string section) {
             this.Section = section;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DeleteIdentifierResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.Identifier Item { set; get; }
+        public Gs2.Gs2Identifier.Model.Identifier Item { set; get; } = null!;
 
         public DeleteIdentifierResult WithItem(Gs2.Gs2Identifier.Model.Identifier item) {
             this.Item = item;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class DescribeEntryModelsResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.EntryModel[] Items { set; get; }
+        public Gs2.Gs2Dictionary.Model.EntryModel[] Items { set; get; } = null!;
 
         public DescribeEntryModelsResult WithItems(Gs2.Gs2Dictionary.Model.EntryModel[] items) {
             this.Items = items;

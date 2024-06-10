@@ -33,7 +33,7 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class DescribeRandomDisplayItemsResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.RandomDisplayItem[] Items { set; get; }
+        public Gs2.Gs2Showcase.Model.RandomDisplayItem[] Items { set; get; } = null!;
 
         public DescribeRandomDisplayItemsResult WithItems(Gs2.Gs2Showcase.Model.RandomDisplayItem[] items) {
             this.Items = items;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2SeasonRating.Result
 	[System.Serializable]
 	public class GetCurrentSeasonModelMasterResult : IResult
 	{
-        public Gs2.Gs2SeasonRating.Model.CurrentSeasonModelMaster Item { set; get; }
+        public Gs2.Gs2SeasonRating.Model.CurrentSeasonModelMaster Item { set; get; } = null!;
 
         public GetCurrentSeasonModelMasterResult WithItem(Gs2.Gs2SeasonRating.Model.CurrentSeasonModelMaster item) {
             this.Item = item;

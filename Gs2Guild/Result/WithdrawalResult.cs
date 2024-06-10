@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class WithdrawalResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.JoinedGuild Item { set; get; }
-        public Gs2.Gs2Guild.Model.Guild Guild { set; get; }
+        public Gs2.Gs2Guild.Model.JoinedGuild Item { set; get; } = null!;
+        public Gs2.Gs2Guild.Model.Guild Guild { set; get; } = null!;
 
         public WithdrawalResult WithItem(Gs2.Gs2Guild.Model.JoinedGuild item) {
             this.Item = item;

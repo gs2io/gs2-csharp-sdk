@@ -31,8 +31,8 @@ namespace Gs2.Gs2Enhance.Model
 #endif
 	public class BonusRate : IComparable
 	{
-        public float? Rate { set; get; }
-        public int? Weight { set; get; }
+        public float? Rate { set; get; } = null!;
+        public int? Weight { set; get; } = null!;
         public BonusRate WithRate(float? rate) {
             this.Rate = rate;
             return this;

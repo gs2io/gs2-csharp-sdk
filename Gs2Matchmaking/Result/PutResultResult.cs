@@ -33,7 +33,7 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class PutResultResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Rating[] Items { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Rating[] Items { set; get; } = null!;
 
         public PutResultResult WithItems(Gs2.Gs2Matchmaking.Model.Rating[] items) {
             this.Items = items;

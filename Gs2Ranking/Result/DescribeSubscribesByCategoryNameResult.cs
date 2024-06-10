@@ -33,7 +33,7 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class DescribeSubscribesByCategoryNameResult : IResult
 	{
-        public Gs2.Gs2Ranking.Model.SubscribeUser[] Items { set; get; }
+        public Gs2.Gs2Ranking.Model.SubscribeUser[] Items { set; get; } = null!;
 
         public DescribeSubscribesByCategoryNameResult WithItems(Gs2.Gs2Ranking.Model.SubscribeUser[] items) {
             this.Items = items;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DescribeImportErrorLogsRequest : Gs2Request<DescribeImportErrorLogsRequest>
 	{
-         public string TransactionId { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string TransactionId { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeImportErrorLogsRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

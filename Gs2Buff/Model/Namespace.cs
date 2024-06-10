@@ -31,14 +31,14 @@ namespace Gs2.Gs2Buff.Model
 #endif
 	public class Namespace : IComparable
 	{
-        public string NamespaceId { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Buff.Model.ScriptSetting ApplyBuffScript { set; get; }
-        public Gs2.Gs2Buff.Model.LogSetting LogSetting { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string NamespaceId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public Gs2.Gs2Buff.Model.ScriptSetting ApplyBuffScript { set; get; } = null!;
+        public Gs2.Gs2Buff.Model.LogSetting LogSetting { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

@@ -31,10 +31,10 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class AreaModel : IComparable
 	{
-        public string AreaModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2MegaField.Model.LayerModel[] LayerModels { set; get; }
+        public string AreaModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Gs2MegaField.Model.LayerModel[] LayerModels { set; get; } = null!;
         public AreaModel WithAreaModelId(string areaModelId) {
             this.AreaModelId = areaModelId;
             return this;

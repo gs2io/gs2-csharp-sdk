@@ -33,19 +33,19 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class CreateGuildRequest : Gs2Request<CreateGuildRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string GuildModelName { set; get; }
-         public string DisplayName { set; get; }
-         public int? Attribute1 { set; get; }
-         public int? Attribute2 { set; get; }
-         public int? Attribute3 { set; get; }
-         public int? Attribute4 { set; get; }
-         public int? Attribute5 { set; get; }
-         public string JoinPolicy { set; get; }
-         public Gs2.Gs2Guild.Model.RoleModel[] CustomRoles { set; get; }
-         public string GuildMemberDefaultRole { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string DisplayName { set; get; } = null!;
+         public int? Attribute1 { set; get; } = null!;
+         public int? Attribute2 { set; get; } = null!;
+         public int? Attribute3 { set; get; } = null!;
+         public int? Attribute4 { set; get; } = null!;
+         public int? Attribute5 { set; get; } = null!;
+         public string JoinPolicy { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.RoleModel[] CustomRoles { set; get; } = null!;
+         public string GuildMemberDefaultRole { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public CreateGuildRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

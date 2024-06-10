@@ -33,9 +33,9 @@ namespace Gs2.Gs2SeasonRating.Result
 	[System.Serializable]
 	public class GetBallotResult : IResult
 	{
-        public Gs2.Gs2SeasonRating.Model.Ballot Item { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public Gs2.Gs2SeasonRating.Model.Ballot Item { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
 
         public GetBallotResult WithItem(Gs2.Gs2SeasonRating.Model.Ballot item) {
             this.Item = item;

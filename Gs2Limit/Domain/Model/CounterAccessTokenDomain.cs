@@ -63,11 +63,11 @@ namespace Gs2.Gs2Limit.Domain.Model
     public partial class CounterAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LimitRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string LimitName { get; }
-        public string CounterName { get; }
+        public string LimitName { get; } = null!;
+        public string CounterName { get; } = null!;
 
         public CounterAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -63,9 +63,9 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
     public partial class VoteDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SeasonRatingRestClient _client;
-        public string NamespaceName { get; }
-        public string SeasonName { get; }
-        public string SessionName { get; }
+        public string NamespaceName { get; } = null!;
+        public string SeasonName { get; } = null!;
+        public string SessionName { get; } = null!;
 
         public VoteDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -31,10 +31,10 @@ namespace Gs2.Gs2Version.Model
 #endif
 	public class SignTargetVersion : IComparable
 	{
-        public string Region { set; get; }
-        public string NamespaceName { set; get; }
-        public string VersionName { set; get; }
-        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
+        public string Region { set; get; } = null!;
+        public string NamespaceName { set; get; } = null!;
+        public string VersionName { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; } = null!;
         public SignTargetVersion WithRegion(string region) {
             this.Region = region;
             return this;

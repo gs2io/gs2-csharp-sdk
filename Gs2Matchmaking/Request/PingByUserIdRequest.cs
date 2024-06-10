@@ -33,11 +33,11 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class PingByUserIdRequest : Gs2Request<PingByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GatheringName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GatheringName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public PingByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

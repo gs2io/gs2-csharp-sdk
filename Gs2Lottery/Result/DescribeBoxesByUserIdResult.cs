@@ -33,8 +33,8 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class DescribeBoxesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.BoxItems[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Lottery.Model.BoxItems[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeBoxesByUserIdResult WithItems(Gs2.Gs2Lottery.Model.BoxItems[] items) {
             this.Items = items;

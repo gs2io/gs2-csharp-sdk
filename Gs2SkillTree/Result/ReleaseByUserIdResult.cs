@@ -33,11 +33,11 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class ReleaseByUserIdResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.Status Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
+        public Gs2.Gs2SkillTree.Model.Status Item { set; get; } = null!;
+        public string TransactionId { set; get; } = null!;
+        public string StampSheet { set; get; } = null!;
+        public string StampSheetEncryptionKeyId { set; get; } = null!;
+        public bool? AutoRunStampSheet { set; get; } = null!;
 
         public ReleaseByUserIdResult WithItem(Gs2.Gs2SkillTree.Model.Status item) {
             this.Item = item;

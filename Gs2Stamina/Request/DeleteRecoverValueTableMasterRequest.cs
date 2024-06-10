@@ -33,8 +33,8 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DeleteRecoverValueTableMasterRequest : Gs2Request<DeleteRecoverValueTableMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RecoverValueTableName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RecoverValueTableName { set; get; } = null!;
         public DeleteRecoverValueTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

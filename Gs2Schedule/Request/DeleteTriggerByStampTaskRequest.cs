@@ -33,8 +33,8 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class DeleteTriggerByStampTaskRequest : Gs2Request<DeleteTriggerByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DeleteTriggerByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Buff.Request
 	[System.Serializable]
 	public class ApplyBuffRequest : Gs2Request<ApplyBuffRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ApplyBuffRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

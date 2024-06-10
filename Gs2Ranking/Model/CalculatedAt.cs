@@ -31,8 +31,8 @@ namespace Gs2.Gs2Ranking.Model
 #endif
 	public class CalculatedAt : IComparable
 	{
-        public string CategoryName { set; get; }
-        public long? Value { set; get; }
+        public string CategoryName { set; get; } = null!;
+        public long? Value { set; get; } = null!;
         public CalculatedAt WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;

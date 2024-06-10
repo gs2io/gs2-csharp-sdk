@@ -33,11 +33,11 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class ApplyRankCapRequest : Gs2Request<ApplyRankCapRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string GradeName { set; get; }
-         public string PropertyId { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string GradeName { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ApplyRankCapRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

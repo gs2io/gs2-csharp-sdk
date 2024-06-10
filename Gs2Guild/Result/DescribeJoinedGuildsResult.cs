@@ -33,8 +33,8 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class DescribeJoinedGuildsResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.JoinedGuild[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Guild.Model.JoinedGuild[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeJoinedGuildsResult WithItems(Gs2.Gs2Guild.Model.JoinedGuild[] items) {
             this.Items = items;

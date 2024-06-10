@@ -31,12 +31,12 @@ namespace Gs2.Gs2SeasonRating.Model
 #endif
 	public class SeasonModel : IComparable
 	{
-        public string SeasonModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; }
-        public string ExperienceModelId { set; get; }
-        public string ChallengePeriodEventId { set; get; }
+        public string SeasonModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; } = null!;
+        public string ExperienceModelId { set; get; } = null!;
+        public string ChallengePeriodEventId { set; get; } = null!;
         public SeasonModel WithSeasonModelId(string seasonModelId) {
             this.SeasonModelId = seasonModelId;
             return this;

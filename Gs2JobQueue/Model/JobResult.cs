@@ -31,14 +31,14 @@ namespace Gs2.Gs2JobQueue.Model
 #endif
 	public class JobResult : IComparable
 	{
-        public string JobResultId { set; get; }
-        public string JobId { set; get; }
-        public string ScriptId { set; get; }
-        public string Args { set; get; }
-        public int? TryNumber { set; get; }
-        public int? StatusCode { set; get; }
-        public string Result { set; get; }
-        public long? TryAt { set; get; }
+        public string JobResultId { set; get; } = null!;
+        public string JobId { set; get; } = null!;
+        public string ScriptId { set; get; } = null!;
+        public string Args { set; get; } = null!;
+        public int? TryNumber { set; get; } = null!;
+        public int? StatusCode { set; get; } = null!;
+        public string Result { set; get; } = null!;
+        public long? TryAt { set; get; } = null!;
         public JobResult WithJobResultId(string jobResultId) {
             this.JobResultId = jobResultId;
             return this;

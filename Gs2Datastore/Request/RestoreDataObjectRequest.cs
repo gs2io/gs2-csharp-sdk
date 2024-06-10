@@ -33,8 +33,8 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class RestoreDataObjectRequest : Gs2Request<RestoreDataObjectRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string DataObjectId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string DataObjectId { set; get; } = null!;
         public RestoreDataObjectRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

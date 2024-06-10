@@ -31,14 +31,14 @@ namespace Gs2.Gs2Experience.Model
 #endif
 	public class ThresholdMaster : IComparable
 	{
-        public string ThresholdId { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public long[] Values { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string ThresholdId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public long[] Values { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public ThresholdMaster WithThresholdId(string thresholdId) {
             this.ThresholdId = thresholdId;
             return this;

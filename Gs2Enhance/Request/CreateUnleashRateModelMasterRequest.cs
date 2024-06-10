@@ -33,13 +33,13 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class CreateUnleashRateModelMasterRequest : Gs2Request<CreateUnleashRateModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string TargetInventoryModelId { set; get; }
-         public string GradeModelId { set; get; }
-         public Gs2.Gs2Enhance.Model.UnleashRateEntryModel[] GradeEntries { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string TargetInventoryModelId { set; get; } = null!;
+         public string GradeModelId { set; get; } = null!;
+         public Gs2.Gs2Enhance.Model.UnleashRateEntryModel[] GradeEntries { set; get; } = null!;
         public CreateUnleashRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

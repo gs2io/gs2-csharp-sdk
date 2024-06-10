@@ -33,10 +33,10 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class GetEntryWithSignatureRequest : Gs2Request<GetEntryWithSignatureRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string EntryModelName { set; get; }
-         public string KeyId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string EntryModelName { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public GetEntryWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

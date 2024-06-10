@@ -33,7 +33,7 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class DescribeMoldModelsResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.MoldModel[] Items { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModel[] Items { set; get; } = null!;
 
         public DescribeMoldModelsResult WithItems(Gs2.Gs2Formation.Model.MoldModel[] items) {
             this.Items = items;

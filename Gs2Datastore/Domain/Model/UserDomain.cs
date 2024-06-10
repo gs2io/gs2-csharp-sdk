@@ -63,12 +63,12 @@ namespace Gs2.Gs2Datastore.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DatastoreRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string UploadUrl { get; set; }
-        public string FileUrl { get; set; }
-        public long? ContentLength { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string UploadUrl { get; set; } = null!;
+        public string FileUrl { get; set; } = null!;
+        public long? ContentLength { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DeleteCompleteByUserIdResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.Complete Item { set; get; }
+        public Gs2.Gs2Mission.Model.Complete Item { set; get; } = null!;
 
         public DeleteCompleteByUserIdResult WithItem(Gs2.Gs2Mission.Model.Complete item) {
             this.Item = item;

@@ -31,12 +31,12 @@ namespace Gs2.Gs2Friend.Model
 #endif
 	public class Follow : IComparable
 	{
-        public string FollowId { set; get; }
-        public string UserId { set; get; }
-        public string[] TargetUserIds { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string FollowId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string[] TargetUserIds { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Follow WithFollowId(string followId) {
             this.FollowId = followId;
             return this;

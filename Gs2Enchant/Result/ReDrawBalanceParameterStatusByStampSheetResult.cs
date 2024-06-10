@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class ReDrawBalanceParameterStatusByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Item { set; get; }
-        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Old { set; get; }
+        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Item { set; get; } = null!;
+        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Old { set; get; } = null!;
 
         public ReDrawBalanceParameterStatusByStampSheetResult WithItem(Gs2.Gs2Enchant.Model.BalanceParameterStatus item) {
             this.Item = item;

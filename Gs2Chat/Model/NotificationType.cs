@@ -31,8 +31,8 @@ namespace Gs2.Gs2Chat.Model
 #endif
 	public class NotificationType : IComparable
 	{
-        public int? Category { set; get; }
-        public bool? EnableTransferMobilePushNotification { set; get; }
+        public int? Category { set; get; } = null!;
+        public bool? EnableTransferMobilePushNotification { set; get; } = null!;
         public NotificationType WithCategory(int? category) {
             this.Category = category;
             return this;

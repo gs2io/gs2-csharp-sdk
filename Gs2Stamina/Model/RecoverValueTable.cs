@@ -31,10 +31,10 @@ namespace Gs2.Gs2Stamina.Model
 #endif
 	public class RecoverValueTable : IComparable
 	{
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string ExperienceModelId { set; get; }
-        public int[] Values { set; get; }
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string ExperienceModelId { set; get; } = null!;
+        public int[] Values { set; get; } = null!;
         public RecoverValueTable WithName(string name) {
             this.Name = name;
             return this;

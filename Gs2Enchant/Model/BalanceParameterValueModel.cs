@@ -31,8 +31,8 @@ namespace Gs2.Gs2Enchant.Model
 #endif
 	public class BalanceParameterValueModel : IComparable
 	{
-        public string Name { set; get; }
-        public string Metadata { set; get; }
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public BalanceParameterValueModel WithName(string name) {
             this.Name = name;
             return this;

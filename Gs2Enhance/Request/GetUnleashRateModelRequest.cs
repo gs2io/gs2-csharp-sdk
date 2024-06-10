@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class GetUnleashRateModelRequest : Gs2Request<GetUnleashRateModelRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RateName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RateName { set; get; } = null!;
         public GetUnleashRateModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,8 +31,8 @@ namespace Gs2.Gs2Showcase.Model
 #endif
 	public class PurchaseCount : IComparable
 	{
-        public string Name { set; get; }
-        public int? Count { set; get; }
+        public string Name { set; get; } = null!;
+        public int? Count { set; get; } = null!;
         public PurchaseCount WithName(string name) {
             this.Name = name;
             return this;

@@ -63,7 +63,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
     public partial class CurrentTreeMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SkillTreeRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentTreeMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

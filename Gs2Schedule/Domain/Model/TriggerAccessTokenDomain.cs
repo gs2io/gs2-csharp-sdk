@@ -63,10 +63,10 @@ namespace Gs2.Gs2Schedule.Domain.Model
     public partial class TriggerAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScheduleRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string TriggerName { get; }
+        public string TriggerName { get; } = null!;
 
         public TriggerAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

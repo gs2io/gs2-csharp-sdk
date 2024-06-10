@@ -33,7 +33,7 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class GetCurrentVersionMasterRequest : Gs2Request<GetCurrentVersionMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentVersionMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

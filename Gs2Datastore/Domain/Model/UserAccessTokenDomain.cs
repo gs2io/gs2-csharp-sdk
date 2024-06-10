@@ -63,13 +63,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
     public partial class UserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DatastoreRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string UploadUrl { get; set; }
-        public string FileUrl { get; set; }
-        public long? ContentLength { get; set; }
-        public string NextPageToken { get; set; }
+        public string UploadUrl { get; set; } = null!;
+        public string FileUrl { get; set; } = null!;
+        public long? ContentLength { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -63,10 +63,10 @@ namespace Gs2.Gs2Identifier.Domain.Model
     public partial class ProjectTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
-        public string AccessToken { get; set; }
-        public string TokenType { get; set; }
-        public int? ExpiresIn { get; set; }
-        public string OwnerId { get; set; }
+        public string AccessToken { get; set; } = null!;
+        public string TokenType { get; set; } = null!;
+        public int? ExpiresIn { get; set; } = null!;
+        public string OwnerId { get; set; } = null!;
 
         public ProjectTokenDomain(
             Gs2.Core.Domain.Gs2 gs2

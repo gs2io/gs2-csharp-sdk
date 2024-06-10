@@ -31,10 +31,10 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class Ballot : IComparable
 	{
-        public string UserId { set; get; }
-        public string RatingName { set; get; }
-        public string GatheringName { set; get; }
-        public int? NumberOfPlayer { set; get; }
+        public string UserId { set; get; } = null!;
+        public string RatingName { set; get; } = null!;
+        public string GatheringName { set; get; } = null!;
+        public int? NumberOfPlayer { set; get; } = null!;
         public Ballot WithUserId(string userId) {
             this.UserId = userId;
             return this;

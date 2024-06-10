@@ -33,11 +33,11 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class MarkReceivedRequest : Gs2Request<MarkReceivedRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string BonusModelName { set; get; }
-         public string AccessToken { set; get; }
-         public int? StepNumber { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string BonusModelName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public int? StepNumber { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public MarkReceivedRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

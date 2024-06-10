@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class UpdateCurrentMissionMasterFromGitHubRequest : Gs2Request<UpdateCurrentMissionMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Mission.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentMissionMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

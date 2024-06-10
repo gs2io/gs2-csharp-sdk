@@ -33,7 +33,7 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class GetStackStatusResult : IResult
 	{
-        public string Status { set; get; }
+        public string Status { set; get; } = null!;
 
         public GetStackStatusResult WithStatus(string status) {
             this.Status = status;

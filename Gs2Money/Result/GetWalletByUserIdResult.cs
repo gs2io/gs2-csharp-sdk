@@ -33,7 +33,7 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class GetWalletByUserIdResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Wallet Item { set; get; }
+        public Gs2.Gs2Money.Model.Wallet Item { set; get; } = null!;
 
         public GetWalletByUserIdResult WithItem(Gs2.Gs2Money.Model.Wallet item) {
             this.Item = item;

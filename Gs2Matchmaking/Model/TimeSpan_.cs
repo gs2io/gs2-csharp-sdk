@@ -31,9 +31,9 @@ namespace Gs2.Gs2Matchmaking.Model
 #endif
 	public class TimeSpan_ : IComparable
 	{
-        public int? Days { set; get; }
-        public int? Hours { set; get; }
-        public int? Minutes { set; get; }
+        public int? Days { set; get; } = null!;
+        public int? Hours { set; get; } = null!;
+        public int? Minutes { set; get; } = null!;
         public TimeSpan_ WithDays(int? days) {
             this.Days = days;
             return this;

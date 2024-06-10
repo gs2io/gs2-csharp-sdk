@@ -33,8 +33,8 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class DepositByStampSheetRequest : Gs2Request<DepositByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DepositByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

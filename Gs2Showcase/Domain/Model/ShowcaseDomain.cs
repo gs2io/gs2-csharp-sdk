@@ -63,9 +63,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class ShowcaseDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string ShowcaseName { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string ShowcaseName { get; } = null!;
 
         public ShowcaseDomain(
             Gs2.Core.Domain.Gs2 gs2,

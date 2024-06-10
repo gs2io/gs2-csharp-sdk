@@ -33,8 +33,8 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class DescribeResourcesResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Resource[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Deploy.Model.Resource[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeResourcesResult WithItems(Gs2.Gs2Deploy.Model.Resource[] items) {
             this.Items = items;

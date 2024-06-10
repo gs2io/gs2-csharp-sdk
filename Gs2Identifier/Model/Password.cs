@@ -31,11 +31,11 @@ namespace Gs2.Gs2Identifier.Model
 #endif
 	public class Password : IComparable
 	{
-        public string PasswordId { set; get; }
-        public string UserId { set; get; }
-        public string UserName { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string PasswordId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string UserName { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Password WithPasswordId(string passwordId) {
             this.PasswordId = passwordId;
             return this;

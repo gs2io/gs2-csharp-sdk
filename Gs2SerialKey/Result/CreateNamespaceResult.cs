@@ -33,7 +33,7 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class CreateNamespaceResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.Namespace Item { set; get; }
+        public Gs2.Gs2SerialKey.Model.Namespace Item { set; get; } = null!;
 
         public CreateNamespaceResult WithItem(Gs2.Gs2SerialKey.Model.Namespace item) {
             this.Item = item;

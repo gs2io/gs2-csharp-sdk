@@ -33,7 +33,7 @@ namespace Gs2.Gs2SeasonRating.Request
 	[System.Serializable]
 	public class GetCurrentSeasonModelMasterRequest : Gs2Request<GetCurrentSeasonModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentSeasonModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class SetRecoverValueByStatusResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
-        public Gs2.Gs2Stamina.Model.Stamina Old { set; get; }
-        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
+        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; } = null!;
+        public Gs2.Gs2Stamina.Model.Stamina Old { set; get; } = null!;
+        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; } = null!;
 
         public SetRecoverValueByStatusResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
             this.Item = item;

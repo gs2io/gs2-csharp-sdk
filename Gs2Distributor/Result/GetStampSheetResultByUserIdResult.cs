@@ -33,7 +33,7 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class GetStampSheetResultByUserIdResult : IResult
 	{
-        public Gs2.Gs2Distributor.Model.StampSheetResult Item { set; get; }
+        public Gs2.Gs2Distributor.Model.StampSheetResult Item { set; get; } = null!;
 
         public GetStampSheetResultByUserIdResult WithItem(Gs2.Gs2Distributor.Model.StampSheetResult item) {
             this.Item = item;

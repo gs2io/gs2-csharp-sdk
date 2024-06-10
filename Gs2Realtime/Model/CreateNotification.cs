@@ -20,8 +20,8 @@ namespace Gs2.Gs2Realtime.Model
 {
 	public class CreateNotification
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string RoomName { set; get; } = null!;
         public CreateNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -31,15 +31,15 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class Spatial : IComparable
 	{
-        public string SpatialId { set; get; }
-        public string UserId { set; get; }
-        public string AreaModelName { set; get; }
-        public string LayerModelName { set; get; }
-        public Gs2.Gs2MegaField.Model.Position Position { set; get; }
-        public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
-        public float? R { set; get; }
-        public long? LastSyncAt { set; get; }
-        public long? CreatedAt { set; get; }
+        public string SpatialId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string AreaModelName { set; get; } = null!;
+        public string LayerModelName { set; get; } = null!;
+        public Gs2.Gs2MegaField.Model.Position Position { set; get; } = null!;
+        public Gs2.Gs2MegaField.Model.Vector Vector { set; get; } = null!;
+        public float? R { set; get; } = null!;
+        public long? LastSyncAt { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
         public Spatial WithSpatialId(string spatialId) {
             this.SpatialId = spatialId;
             return this;

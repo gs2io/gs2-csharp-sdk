@@ -31,9 +31,9 @@ namespace Gs2.Gs2StateMachine.Model
 #endif
 	public class Event : IComparable
 	{
-        public string EventType { set; get; }
-        public Gs2.Gs2StateMachine.Model.ChangeStateEvent ChangeStateEvent { set; get; }
-        public Gs2.Gs2StateMachine.Model.EmitEvent EmitEvent { set; get; }
+        public string EventType { set; get; } = null!;
+        public Gs2.Gs2StateMachine.Model.ChangeStateEvent ChangeStateEvent { set; get; } = null!;
+        public Gs2.Gs2StateMachine.Model.EmitEvent EmitEvent { set; get; } = null!;
         public Event WithEventType(string eventType) {
             this.EventType = eventType;
             return this;

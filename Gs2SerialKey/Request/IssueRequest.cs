@@ -33,10 +33,10 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class IssueRequest : Gs2Request<IssueRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CampaignModelName { set; get; }
-         public string Metadata { set; get; }
-         public int? IssueRequestCount { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CampaignModelName { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public int? IssueRequestCount { set; get; } = null!;
         public IssueRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class ImportUserDataResult : IResult
 	{
-        public Gs2.Gs2Project.Model.ImportProgress Item { set; get; }
+        public Gs2.Gs2Project.Model.ImportProgress Item { set; get; } = null!;
 
         public ImportUserDataResult WithItem(Gs2.Gs2Project.Model.ImportProgress item) {
             this.Item = item;

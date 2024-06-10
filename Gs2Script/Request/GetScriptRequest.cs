@@ -33,8 +33,8 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class GetScriptRequest : Gs2Request<GetScriptRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ScriptName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ScriptName { set; get; } = null!;
         public GetScriptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

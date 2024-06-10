@@ -63,8 +63,8 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class GuildModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
-        public string GuildModelName { get; }
+        public string NamespaceName { get; } = null!;
+        public string GuildModelName { get; } = null!;
 
         public GuildModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

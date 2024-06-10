@@ -33,9 +33,9 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class GetStatusWithSignatureResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.Status Item { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
+        public Gs2.Gs2Experience.Model.Status Item { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
 
         public GetStatusWithSignatureResult WithItem(Gs2.Gs2Experience.Model.Status item) {
             this.Item = item;

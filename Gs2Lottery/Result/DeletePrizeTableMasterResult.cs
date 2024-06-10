@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class DeletePrizeTableMasterResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.PrizeTableMaster Item { set; get; }
+        public Gs2.Gs2Lottery.Model.PrizeTableMaster Item { set; get; } = null!;
 
         public DeletePrizeTableMasterResult WithItem(Gs2.Gs2Lottery.Model.PrizeTableMaster item) {
             this.Item = item;

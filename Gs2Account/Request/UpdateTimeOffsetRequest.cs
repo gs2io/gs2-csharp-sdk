@@ -33,11 +33,11 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class UpdateTimeOffsetRequest : Gs2Request<UpdateTimeOffsetRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public int? TimeOffset { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public int? TimeOffset { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UpdateTimeOffsetRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

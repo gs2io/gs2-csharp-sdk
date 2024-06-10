@@ -33,12 +33,12 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class AuthenticationRequest : Gs2Request<AuthenticationRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string KeyId { set; get; }
-         public string Password { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
+         public string Password { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public AuthenticationRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

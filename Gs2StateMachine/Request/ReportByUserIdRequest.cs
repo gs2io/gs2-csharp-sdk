@@ -33,12 +33,12 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class ReportByUserIdRequest : Gs2Request<ReportByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string StatusName { set; get; }
-         public Gs2.Gs2StateMachine.Model.Event[] Events { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string StatusName { set; get; } = null!;
+         public Gs2.Gs2StateMachine.Model.Event[] Events { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ReportByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

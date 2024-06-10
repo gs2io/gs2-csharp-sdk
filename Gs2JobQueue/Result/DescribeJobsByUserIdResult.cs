@@ -33,8 +33,8 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class DescribeJobsByUserIdResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.Job[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2JobQueue.Model.Job[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeJobsByUserIdResult WithItems(Gs2.Gs2JobQueue.Model.Job[] items) {
             this.Items = items;

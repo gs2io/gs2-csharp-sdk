@@ -31,10 +31,10 @@ namespace Gs2.Gs2Version.Model
 #endif
 	public class ScheduleVersion : IComparable
 	{
-        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
-        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
-        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
-        public string ScheduleEventId { set; get; }
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; } = null!;
+        public string ScheduleEventId { set; get; } = null!;
         public ScheduleVersion WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;

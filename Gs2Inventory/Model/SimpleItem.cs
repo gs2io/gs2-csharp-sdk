@@ -31,11 +31,11 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class SimpleItem : IComparable
 	{
-        public string ItemId { set; get; }
-        public string UserId { set; get; }
-        public string ItemName { set; get; }
-        public long? Count { set; get; }
-        public long? Revision { set; get; }
+        public string ItemId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string ItemName { set; get; } = null!;
+        public long? Count { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public SimpleItem WithItemId(string itemId) {
             this.ItemId = itemId;
             return this;

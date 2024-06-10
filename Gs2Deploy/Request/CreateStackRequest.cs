@@ -33,9 +33,9 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class CreateStackRequest : Gs2Request<CreateStackRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Template { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Template { set; get; } = null!;
         public CreateStackRequest WithName(string name) {
             this.Name = name;
             return this;

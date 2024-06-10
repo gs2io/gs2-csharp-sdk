@@ -63,10 +63,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
     public partial class ReceiveStatusAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string BonusModelName { get; }
+        public string BonusModelName { get; } = null!;
 
         public ReceiveStatusAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class PrepareDownloadByGenerationResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
-        public string FileUrl { set; get; }
-        public long? ContentLength { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; } = null!;
+        public string FileUrl { set; get; } = null!;
+        public long? ContentLength { set; get; } = null!;
 
         public PrepareDownloadByGenerationResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
             this.Item = item;

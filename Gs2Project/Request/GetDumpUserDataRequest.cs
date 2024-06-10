@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetDumpUserDataRequest : Gs2Request<GetDumpUserDataRequest>
 	{
-         public string TransactionId { set; get; }
+         public string TransactionId { set; get; } = null!;
         public GetDumpUserDataRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

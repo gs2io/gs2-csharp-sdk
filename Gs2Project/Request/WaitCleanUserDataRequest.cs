@@ -33,11 +33,11 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class WaitCleanUserDataRequest : Gs2Request<WaitCleanUserDataRequest>
 	{
-         public string TransactionId { set; get; }
-         public string UserId { set; get; }
-         public string MicroserviceName { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string TransactionId { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string MicroserviceName { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public WaitCleanUserDataRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

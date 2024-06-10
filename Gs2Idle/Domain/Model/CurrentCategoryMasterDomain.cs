@@ -63,7 +63,7 @@ namespace Gs2.Gs2Idle.Domain.Model
     public partial class CurrentCategoryMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdleRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentCategoryMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

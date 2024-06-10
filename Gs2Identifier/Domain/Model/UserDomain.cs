@@ -63,9 +63,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
-        public string UserName { get; }
-        public string ClientSecret { get; set; }
-        public string NextPageToken { get; set; }
+        public string UserName { get; } = null!;
+        public string ClientSecret { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,

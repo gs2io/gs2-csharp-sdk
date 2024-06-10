@@ -33,9 +33,9 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class WantRoomRequest : Gs2Request<WantRoomRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string[] NotificationUserIds { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string[] NotificationUserIds { set; get; } = null!;
         public WantRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

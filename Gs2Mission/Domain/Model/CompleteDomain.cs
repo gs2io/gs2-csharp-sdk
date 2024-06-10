@@ -63,11 +63,11 @@ namespace Gs2.Gs2Mission.Domain.Model
     public partial class CompleteDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string MissionGroupName { get; }
-        public string TransactionId { get; set; }
-        public bool? AutoRunStampSheet { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string MissionGroupName { get; } = null!;
+        public string TransactionId { get; set; } = null!;
+        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public CompleteDomain(
             Gs2.Core.Domain.Gs2 gs2,

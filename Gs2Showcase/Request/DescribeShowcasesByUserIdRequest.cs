@@ -33,9 +33,9 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DescribeShowcasesByUserIdRequest : Gs2Request<DescribeShowcasesByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DescribeShowcasesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

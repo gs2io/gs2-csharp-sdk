@@ -33,12 +33,12 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class GetFormWithSignatureByUserIdResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Form Item { set; get; }
-        public string Body { set; get; }
-        public string Signature { set; get; }
-        public Gs2.Gs2Formation.Model.Mold Mold { set; get; }
-        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
-        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
+        public Gs2.Gs2Formation.Model.Form Item { set; get; } = null!;
+        public string Body { set; get; } = null!;
+        public string Signature { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.Mold Mold { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; } = null!;
 
         public GetFormWithSignatureByUserIdResult WithItem(Gs2.Gs2Formation.Model.Form item) {
             this.Item = item;

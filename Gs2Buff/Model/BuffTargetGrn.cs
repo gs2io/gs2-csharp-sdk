@@ -31,8 +31,8 @@ namespace Gs2.Gs2Buff.Model
 #endif
 	public class BuffTargetGrn : IComparable
 	{
-        public string TargetModelName { set; get; }
-        public string TargetGrn { set; get; }
+        public string TargetModelName { set; get; } = null!;
+        public string TargetGrn { set; get; } = null!;
         public BuffTargetGrn WithTargetModelName(string targetModelName) {
             this.TargetModelName = targetModelName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DeleteGatheringRequest : Gs2Request<DeleteGatheringRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GatheringName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GatheringName { set; get; } = null!;
         public DeleteGatheringRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

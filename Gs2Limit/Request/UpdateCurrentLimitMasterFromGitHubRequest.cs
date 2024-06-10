@@ -33,8 +33,8 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class UpdateCurrentLimitMasterFromGitHubRequest : Gs2Request<UpdateCurrentLimitMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Limit.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Limit.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentLimitMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

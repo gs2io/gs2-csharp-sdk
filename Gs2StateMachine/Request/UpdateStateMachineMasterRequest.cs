@@ -33,9 +33,9 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class UpdateStateMachineMasterRequest : Gs2Request<UpdateStateMachineMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string MainStateMachineName { set; get; }
-         public string Payload { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string MainStateMachineName { set; get; } = null!;
+         public string Payload { set; get; } = null!;
         public UpdateStateMachineMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

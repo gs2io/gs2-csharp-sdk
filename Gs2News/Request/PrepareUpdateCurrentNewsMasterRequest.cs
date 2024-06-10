@@ -33,7 +33,7 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class PrepareUpdateCurrentNewsMasterRequest : Gs2Request<PrepareUpdateCurrentNewsMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public PrepareUpdateCurrentNewsMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

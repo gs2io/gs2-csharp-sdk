@@ -33,14 +33,14 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class CreateLotteryModelMasterRequest : Gs2Request<CreateLotteryModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string Mode { set; get; }
-         public string Method { set; get; }
-         public string PrizeTableName { set; get; }
-         public string ChoicePrizeTableScriptId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string Mode { set; get; } = null!;
+         public string Method { set; get; } = null!;
+         public string PrizeTableName { set; get; } = null!;
+         public string ChoicePrizeTableScriptId { set; get; } = null!;
         public CreateLotteryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

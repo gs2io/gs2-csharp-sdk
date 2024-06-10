@@ -31,13 +31,13 @@ namespace Gs2.Gs2Limit.Model
 #endif
 	public class LimitModel : IComparable
 	{
-        public string LimitModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string ResetType { set; get; }
-        public int? ResetDayOfMonth { set; get; }
-        public string ResetDayOfWeek { set; get; }
-        public int? ResetHour { set; get; }
+        public string LimitModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string ResetType { set; get; } = null!;
+        public int? ResetDayOfMonth { set; get; } = null!;
+        public string ResetDayOfWeek { set; get; } = null!;
+        public int? ResetHour { set; get; } = null!;
         public LimitModel WithLimitModelId(string limitModelId) {
             this.LimitModelId = limitModelId;
             return this;

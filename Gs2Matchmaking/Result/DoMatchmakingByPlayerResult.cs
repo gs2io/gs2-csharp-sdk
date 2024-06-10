@@ -33,8 +33,8 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class DoMatchmakingByPlayerResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; }
-        public string MatchmakingContextToken { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; } = null!;
+        public string MatchmakingContextToken { set; get; } = null!;
 
         public DoMatchmakingByPlayerResult WithItem(Gs2.Gs2Matchmaking.Model.Gathering item) {
             this.Item = item;

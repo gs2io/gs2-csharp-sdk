@@ -33,11 +33,11 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class UpdateCampaignModelMasterRequest : Gs2Request<UpdateCampaignModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CampaignModelName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public bool? EnableCampaignCode { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CampaignModelName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public bool? EnableCampaignCode { set; get; } = null!;
         public UpdateCampaignModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,12 +33,12 @@ namespace Gs2.Gs2Lock.Request
 	[System.Serializable]
 	public class LockRequest : Gs2Request<LockRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PropertyId { set; get; }
-         public string AccessToken { set; get; }
-         public string TransactionId { set; get; }
-         public long? Ttl { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string TransactionId { set; get; } = null!;
+         public long? Ttl { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public LockRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

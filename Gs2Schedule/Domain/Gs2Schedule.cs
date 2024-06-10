@@ -65,9 +65,9 @@ namespace Gs2.Gs2Schedule.Domain
     public class Gs2Schedule {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScheduleRestClient _client;
-        public string Url { get; set; }
-        public string UploadToken { get; set; }
-        public string UploadUrl { get; set; }
+        public string Url { get; set; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public Gs2Schedule(
             Gs2.Core.Domain.Gs2 gs2

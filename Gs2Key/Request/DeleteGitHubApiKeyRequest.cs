@@ -33,8 +33,8 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class DeleteGitHubApiKeyRequest : Gs2Request<DeleteGitHubApiKeyRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ApiKeyName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ApiKeyName { set; get; } = null!;
         public DeleteGitHubApiKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

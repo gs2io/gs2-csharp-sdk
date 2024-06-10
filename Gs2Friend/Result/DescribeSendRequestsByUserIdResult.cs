@@ -33,8 +33,8 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class DescribeSendRequestsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.FriendRequest[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Friend.Model.FriendRequest[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeSendRequestsByUserIdResult WithItems(Gs2.Gs2Friend.Model.FriendRequest[] items) {
             this.Items = items;

@@ -33,10 +33,10 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class ConsumeItemSetByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; }
-        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
-        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public ConsumeItemSetByStampTaskResult WithItems(Gs2.Gs2Inventory.Model.ItemSet[] items) {
             this.Items = items;

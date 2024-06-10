@@ -33,10 +33,10 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class UpdateEntryModelMasterRequest : Gs2Request<UpdateEntryModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string EntryName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string EntryName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
         public UpdateEntryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,11 +33,11 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class RejectRequestRequest : Gs2Request<RejectRequestRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GuildModelName { set; get; }
-         public string AccessToken { set; get; }
-         public string FromUserId { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string FromUserId { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public RejectRequestRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class VerifyCounterValueByStampTaskRequest : Gs2Request<VerifyCounterValueByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public VerifyCounterValueByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DescribeDumpProgressesRequest : Gs2Request<DescribeDumpProgressesRequest>
 	{
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeDumpProgressesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;

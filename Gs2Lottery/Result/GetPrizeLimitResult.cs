@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class GetPrizeLimitResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.PrizeLimit Item { set; get; }
+        public Gs2.Gs2Lottery.Model.PrizeLimit Item { set; get; } = null!;
 
         public GetPrizeLimitResult WithItem(Gs2.Gs2Lottery.Model.PrizeLimit item) {
             this.Item = item;

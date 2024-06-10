@@ -33,7 +33,7 @@ namespace Gs2.Gs2Chat.Result
 	[System.Serializable]
 	public class DeleteRoomFromBackendResult : IResult
 	{
-        public Gs2.Gs2Chat.Model.Room Item { set; get; }
+        public Gs2.Gs2Chat.Model.Room Item { set; get; } = null!;
 
         public DeleteRoomFromBackendResult WithItem(Gs2.Gs2Chat.Model.Room item) {
             this.Item = item;

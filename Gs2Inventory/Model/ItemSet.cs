@@ -31,17 +31,17 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class ItemSet : IComparable
 	{
-        public string ItemSetId { set; get; }
-        public string Name { set; get; }
-        public string InventoryName { set; get; }
-        public string UserId { set; get; }
-        public string ItemName { set; get; }
-        public long? Count { set; get; }
-        public string[] ReferenceOf { set; get; }
-        public int? SortValue { set; get; }
-        public long? ExpiresAt { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
+        public string ItemSetId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string InventoryName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string ItemName { set; get; } = null!;
+        public long? Count { set; get; } = null!;
+        public string[] ReferenceOf { set; get; } = null!;
+        public int? SortValue { set; get; } = null!;
+        public long? ExpiresAt { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
         public ItemSet WithItemSetId(string itemSetId) {
             this.ItemSetId = itemSetId;
             return this;

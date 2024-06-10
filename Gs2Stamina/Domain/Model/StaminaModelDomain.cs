@@ -63,8 +63,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
     public partial class StaminaModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StaminaRestClient _client;
-        public string NamespaceName { get; }
-        public string StaminaName { get; }
+        public string NamespaceName { get; } = null!;
+        public string StaminaName { get; } = null!;
 
         public StaminaModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

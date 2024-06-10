@@ -33,8 +33,8 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class DeleteByStampSheetRequest : Gs2Request<DeleteByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DeleteByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

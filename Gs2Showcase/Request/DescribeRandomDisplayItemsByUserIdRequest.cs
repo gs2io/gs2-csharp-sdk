@@ -33,10 +33,10 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class DescribeRandomDisplayItemsByUserIdRequest : Gs2Request<DescribeRandomDisplayItemsByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ShowcaseName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ShowcaseName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public DescribeRandomDisplayItemsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

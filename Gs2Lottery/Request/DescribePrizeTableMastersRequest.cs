@@ -33,9 +33,9 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DescribePrizeTableMastersRequest : Gs2Request<DescribePrizeTableMastersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribePrizeTableMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

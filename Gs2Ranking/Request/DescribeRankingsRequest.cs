@@ -33,13 +33,13 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DescribeRankingsRequest : Gs2Request<DescribeRankingsRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
-         public string AccessToken { set; get; }
-         public string AdditionalScopeName { set; get; }
-         public long? StartIndex { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string AdditionalScopeName { set; get; } = null!;
+         public long? StartIndex { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeRankingsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class SetPropertyFormWithSignatureResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; }
-        public Gs2.Gs2Formation.Model.PropertyFormModel ProeprtyFormModel { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.PropertyFormModel ProeprtyFormModel { set; get; } = null!;
 
         public SetPropertyFormWithSignatureResult WithItem(Gs2.Gs2Formation.Model.PropertyForm item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class ForgetRequest : Gs2Request<ForgetRequest>
 	{
-         public string Email { set; get; }
-         public string Lang { set; get; }
+         public string Email { set; get; } = null!;
+         public string Lang { set; get; } = null!;
         public ForgetRequest WithEmail(string email) {
             this.Email = email;
             return this;

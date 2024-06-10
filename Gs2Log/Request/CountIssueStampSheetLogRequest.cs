@@ -33,17 +33,17 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class CountIssueStampSheetLogRequest : Gs2Request<CountIssueStampSheetLogRequest>
 	{
-         public string NamespaceName { set; get; }
-         public bool? Service { set; get; }
-         public bool? Method { set; get; }
-         public bool? UserId { set; get; }
-         public bool? Action { set; get; }
-         public long? Begin { set; get; }
-         public long? End { set; get; }
-         public bool? LongTerm { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public bool? Service { set; get; } = null!;
+         public bool? Method { set; get; } = null!;
+         public bool? UserId { set; get; } = null!;
+         public bool? Action { set; get; } = null!;
+         public long? Begin { set; get; } = null!;
+         public long? End { set; get; } = null!;
+         public bool? LongTerm { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public CountIssueStampSheetLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

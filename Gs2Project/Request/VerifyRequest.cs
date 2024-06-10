@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class VerifyRequest : Gs2Request<VerifyRequest>
 	{
-         public string VerifyToken { set; get; }
+         public string VerifyToken { set; get; } = null!;
         public VerifyRequest WithVerifyToken(string verifyToken) {
             this.VerifyToken = verifyToken;
             return this;

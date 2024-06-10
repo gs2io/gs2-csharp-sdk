@@ -33,8 +33,8 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class DescribeCompletedQuestListsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.CompletedQuestList[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Quest.Model.CompletedQuestList[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCompletedQuestListsByUserIdResult WithItems(Gs2.Gs2Quest.Model.CompletedQuestList[] items) {
             this.Items = items;

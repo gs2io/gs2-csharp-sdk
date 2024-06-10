@@ -33,12 +33,12 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class SetCounterByUserIdRequest : Gs2Request<SetCounterByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CounterName { set; get; }
-         public string UserId { set; get; }
-         public Gs2.Gs2Mission.Model.ScopedValue[] Values { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CounterName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.ScopedValue[] Values { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

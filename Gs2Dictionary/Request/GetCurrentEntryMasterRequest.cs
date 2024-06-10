@@ -33,7 +33,7 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class GetCurrentEntryMasterRequest : Gs2Request<GetCurrentEntryMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentEntryMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

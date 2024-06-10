@@ -31,14 +31,14 @@ namespace Gs2.Gs2Showcase.Model
 #endif
 	public class RandomShowcase : IComparable
 	{
-        public string RandomShowcaseId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public int? MaximumNumberOfChoice { set; get; }
-        public Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] DisplayItems { set; get; }
-        public long? BaseTimestamp { set; get; }
-        public int? ResetIntervalHours { set; get; }
-        public string SalesPeriodEventId { set; get; }
+        public string RandomShowcaseId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public int? MaximumNumberOfChoice { set; get; } = null!;
+        public Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] DisplayItems { set; get; } = null!;
+        public long? BaseTimestamp { set; get; } = null!;
+        public int? ResetIntervalHours { set; get; } = null!;
+        public string SalesPeriodEventId { set; get; } = null!;
         public RandomShowcase WithRandomShowcaseId(string randomShowcaseId) {
             this.RandomShowcaseId = randomShowcaseId;
             return this;

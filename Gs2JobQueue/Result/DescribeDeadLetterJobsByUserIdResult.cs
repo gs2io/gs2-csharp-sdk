@@ -33,8 +33,8 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class DescribeDeadLetterJobsByUserIdResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.DeadLetterJob[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2JobQueue.Model.DeadLetterJob[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeDeadLetterJobsByUserIdResult WithItems(Gs2.Gs2JobQueue.Model.DeadLetterJob[] items) {
             this.Items = items;

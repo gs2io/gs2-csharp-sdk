@@ -33,7 +33,7 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class DescribeProbabilitiesResult : IResult
 	{
-        public Gs2.Gs2Lottery.Model.Probability[] Items { set; get; }
+        public Gs2.Gs2Lottery.Model.Probability[] Items { set; get; } = null!;
 
         public DescribeProbabilitiesResult WithItems(Gs2.Gs2Lottery.Model.Probability[] items) {
             this.Items = items;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class DescribeOutputsResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Output[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Deploy.Model.Output[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeOutputsResult WithItems(Gs2.Gs2Deploy.Model.Output[] items) {
             this.Items = items;

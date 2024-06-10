@@ -33,7 +33,7 @@ namespace Gs2.Gs2Grade.Result
 	[System.Serializable]
 	public class GetGradeModelResult : IResult
 	{
-        public Gs2.Gs2Grade.Model.GradeModel Item { set; get; }
+        public Gs2.Gs2Grade.Model.GradeModel Item { set; get; } = null!;
 
         public GetGradeModelResult WithItem(Gs2.Gs2Grade.Model.GradeModel item) {
             this.Item = item;

@@ -31,8 +31,8 @@ namespace Gs2.Gs2Buff.Model
 #endif
 	public class CurrentBuffMaster : IComparable
 	{
-        public string NamespaceId { set; get; }
-        public string Settings { set; get; }
+        public string NamespaceId { set; get; } = null!;
+        public string Settings { set; get; } = null!;
         public CurrentBuffMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

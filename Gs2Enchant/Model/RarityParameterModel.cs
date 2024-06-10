@@ -31,12 +31,12 @@ namespace Gs2.Gs2Enchant.Model
 #endif
 	public class RarityParameterModel : IComparable
 	{
-        public string RarityParameterModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public int? MaximumParameterCount { set; get; }
-        public Gs2.Gs2Enchant.Model.RarityParameterCountModel[] ParameterCounts { set; get; }
-        public Gs2.Gs2Enchant.Model.RarityParameterValueModel[] Parameters { set; get; }
+        public string RarityParameterModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public int? MaximumParameterCount { set; get; } = null!;
+        public Gs2.Gs2Enchant.Model.RarityParameterCountModel[] ParameterCounts { set; get; } = null!;
+        public Gs2.Gs2Enchant.Model.RarityParameterValueModel[] Parameters { set; get; } = null!;
         public RarityParameterModel WithRarityParameterModelId(string rarityParameterModelId) {
             this.RarityParameterModelId = rarityParameterModelId;
             return this;

@@ -33,13 +33,13 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class UpdateNodeModelMasterRequest : Gs2Request<UpdateNodeModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string NodeModelName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; }
-         public float? RestrainReturnRate { set; get; }
-         public string[] PremiseNodeNames { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string NodeModelName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; } = null!;
+         public float? RestrainReturnRate { set; get; } = null!;
+         public string[] PremiseNodeNames { set; get; } = null!;
         public UpdateNodeModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

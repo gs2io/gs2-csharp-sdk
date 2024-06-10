@@ -31,8 +31,8 @@ namespace Gs2.Gs2Ranking.Model
 #endif
 	public class CurrentRankingMaster : IComparable
 	{
-        public string NamespaceId { set; get; }
-        public string Settings { set; get; }
+        public string NamespaceId { set; get; } = null!;
+        public string Settings { set; get; } = null!;
         public CurrentRankingMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

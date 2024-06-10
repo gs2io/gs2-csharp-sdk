@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class SendByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.Message Item { set; get; }
+        public Gs2.Gs2Inbox.Model.Message Item { set; get; } = null!;
 
         public SendByStampSheetResult WithItem(Gs2.Gs2Inbox.Model.Message item) {
             this.Item = item;

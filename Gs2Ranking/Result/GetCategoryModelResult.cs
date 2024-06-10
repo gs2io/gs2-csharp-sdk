@@ -33,7 +33,7 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class GetCategoryModelResult : IResult
 	{
-        public Gs2.Gs2Ranking.Model.CategoryModel Item { set; get; }
+        public Gs2.Gs2Ranking.Model.CategoryModel Item { set; get; } = null!;
 
         public GetCategoryModelResult WithItem(Gs2.Gs2Ranking.Model.CategoryModel item) {
             this.Item = item;

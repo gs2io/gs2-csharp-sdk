@@ -63,12 +63,12 @@ namespace Gs2.Gs2Schedule.Domain.Model
     public partial class EventDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScheduleRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string EventName { get; }
-        public bool? InSchedule { get; set; }
-        public long? ScheduleStartAt { get; set; }
-        public long? ScheduleEndAt { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string EventName { get; } = null!;
+        public bool? InSchedule { get; set; } = null!;
+        public long? ScheduleStartAt { get; set; } = null!;
+        public long? ScheduleEndAt { get; set; } = null!;
 
         public EventDomain(
             Gs2.Core.Domain.Gs2 gs2,

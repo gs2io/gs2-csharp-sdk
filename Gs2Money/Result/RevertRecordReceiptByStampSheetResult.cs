@@ -33,7 +33,7 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class RevertRecordReceiptByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Receipt Item { set; get; }
+        public Gs2.Gs2Money.Model.Receipt Item { set; get; } = null!;
 
         public RevertRecordReceiptByStampSheetResult WithItem(Gs2.Gs2Money.Model.Receipt item) {
             this.Item = item;

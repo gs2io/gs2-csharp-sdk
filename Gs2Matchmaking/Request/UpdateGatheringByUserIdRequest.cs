@@ -33,12 +33,12 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class UpdateGatheringByUserIdRequest : Gs2Request<UpdateGatheringByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GatheringName { set; get; }
-         public string UserId { set; get; }
-         public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GatheringName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UpdateGatheringByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

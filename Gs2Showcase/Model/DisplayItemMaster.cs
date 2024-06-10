@@ -31,12 +31,12 @@ namespace Gs2.Gs2Showcase.Model
 #endif
 	public class DisplayItemMaster : IComparable
 	{
-        public string DisplayItemId { set; get; }
-        public string Type { set; get; }
-        public string SalesItemName { set; get; }
-        public string SalesItemGroupName { set; get; }
-        public string SalesPeriodEventId { set; get; }
-        public long? Revision { set; get; }
+        public string DisplayItemId { set; get; } = null!;
+        public string Type { set; get; } = null!;
+        public string SalesItemName { set; get; } = null!;
+        public string SalesItemGroupName { set; get; } = null!;
+        public string SalesPeriodEventId { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public DisplayItemMaster WithDisplayItemId(string displayItemId) {
             this.DisplayItemId = displayItemId;
             return this;

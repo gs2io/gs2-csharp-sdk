@@ -33,11 +33,11 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class AssumeRequest : Gs2Request<AssumeRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string GuildModelName { set; get; }
-         public string GuildName { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string GuildName { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public AssumeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

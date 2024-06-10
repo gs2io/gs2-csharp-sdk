@@ -33,7 +33,7 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class GetTriggerByUserIdResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.Trigger Item { set; get; }
+        public Gs2.Gs2Schedule.Model.Trigger Item { set; get; } = null!;
 
         public GetTriggerByUserIdResult WithItem(Gs2.Gs2Schedule.Model.Trigger item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeProjectsResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Project[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Project.Model.Project[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeProjectsResult WithItems(Gs2.Gs2Project.Model.Project[] items) {
             this.Items = items;

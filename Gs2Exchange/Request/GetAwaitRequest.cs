@@ -33,9 +33,9 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class GetAwaitRequest : Gs2Request<GetAwaitRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string AwaitName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string AwaitName { set; get; } = null!;
         public GetAwaitRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

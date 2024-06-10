@@ -33,7 +33,7 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class UpdateDataObjectResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; } = null!;
 
         public UpdateDataObjectResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class DescribeBlackListResult : IResult
 	{
-        public string[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public string[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeBlackListResult WithItems(string[] items) {
             this.Items = items;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class AddGradeByStampSheetRequest : Gs2Request<AddGradeByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public AddGradeByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

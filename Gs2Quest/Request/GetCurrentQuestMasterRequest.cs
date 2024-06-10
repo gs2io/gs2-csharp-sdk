@@ -33,7 +33,7 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class GetCurrentQuestMasterRequest : Gs2Request<GetCurrentQuestMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentQuestMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

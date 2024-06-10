@@ -31,8 +31,8 @@ namespace Gs2.Gs2Enhance.Model
 #endif
 	public class Material : IComparable
 	{
-        public string MaterialItemSetId { set; get; }
-        public int? Count { set; get; }
+        public string MaterialItemSetId { set; get; } = null!;
+        public int? Count { set; get; } = null!;
         public Material WithMaterialItemSetId(string materialItemSetId) {
             this.MaterialItemSetId = materialItemSetId;
             return this;

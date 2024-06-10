@@ -33,8 +33,8 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetCategoryModelMasterRequest : Gs2Request<GetCategoryModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
         public GetCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Script.Result
 	[System.Serializable]
 	public class UpdateScriptResult : IResult
 	{
-        public Gs2.Gs2Script.Model.Script Item { set; get; }
+        public Gs2.Gs2Script.Model.Script Item { set; get; } = null!;
 
         public UpdateScriptResult WithItem(Gs2.Gs2Script.Model.Script item) {
             this.Item = item;

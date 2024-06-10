@@ -33,12 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DescribeBillingsRequest : Gs2Request<DescribeBillingsRequest>
 	{
-         public string AccountToken { set; get; }
-         public string ProjectName { set; get; }
-         public int? Year { set; get; }
-         public int? Month { set; get; }
-         public string Region { set; get; }
-         public string Service { set; get; }
+         public string AccountToken { set; get; } = null!;
+         public string ProjectName { set; get; } = null!;
+         public int? Year { set; get; } = null!;
+         public int? Month { set; get; } = null!;
+         public string Region { set; get; } = null!;
+         public string Service { set; get; } = null!;
         public DescribeBillingsRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

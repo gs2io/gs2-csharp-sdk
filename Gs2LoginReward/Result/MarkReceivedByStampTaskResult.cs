@@ -33,9 +33,9 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class MarkReceivedByStampTaskResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; }
-        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; } = null!;
+        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public MarkReceivedByStampTaskResult WithItem(Gs2.Gs2LoginReward.Model.ReceiveStatus item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class DeleteInventoryModelMasterRequest : Gs2Request<DeleteInventoryModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string InventoryName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string InventoryName { set; get; } = null!;
         public DeleteInventoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

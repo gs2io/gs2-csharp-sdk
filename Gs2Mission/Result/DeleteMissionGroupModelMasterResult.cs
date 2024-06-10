@@ -33,7 +33,7 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DeleteMissionGroupModelMasterResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.MissionGroupModelMaster Item { set; get; }
+        public Gs2.Gs2Mission.Model.MissionGroupModelMaster Item { set; get; } = null!;
 
         public DeleteMissionGroupModelMasterResult WithItem(Gs2.Gs2Mission.Model.MissionGroupModelMaster item) {
             this.Item = item;

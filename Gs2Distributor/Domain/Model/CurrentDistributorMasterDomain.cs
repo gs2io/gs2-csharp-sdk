@@ -63,7 +63,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
     public partial class CurrentDistributorMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
 
         public CurrentDistributorMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

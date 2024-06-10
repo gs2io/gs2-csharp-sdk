@@ -31,9 +31,9 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class Scope : IComparable
 	{
-        public string LayerName { set; get; }
-        public float? R { set; get; }
-        public int? Limit { set; get; }
+        public string LayerName { set; get; } = null!;
+        public float? R { set; get; } = null!;
+        public int? Limit { set; get; } = null!;
         public Scope WithLayerName(string layerName) {
             this.LayerName = layerName;
             return this;

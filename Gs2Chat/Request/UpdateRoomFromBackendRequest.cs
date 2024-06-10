@@ -33,14 +33,14 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class UpdateRoomFromBackendRequest : Gs2Request<UpdateRoomFromBackendRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RoomName { set; get; }
-         public string Metadata { set; get; }
-         public string Password { set; get; }
-         public string[] WhiteListUserIds { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RoomName { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string Password { set; get; } = null!;
+         public string[] WhiteListUserIds { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UpdateRoomFromBackendRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

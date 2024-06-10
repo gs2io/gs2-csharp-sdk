@@ -31,8 +31,8 @@ namespace Gs2.Gs2Experience.Model
 #endif
 	public class Threshold : IComparable
 	{
-        public string Metadata { set; get; }
-        public long[] Values { set; get; }
+        public string Metadata { set; get; } = null!;
+        public long[] Values { set; get; } = null!;
         public Threshold WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

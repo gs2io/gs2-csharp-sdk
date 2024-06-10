@@ -33,8 +33,8 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeCleanProgressesResult : IResult
 	{
-        public Gs2.Gs2Project.Model.CleanProgress[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Project.Model.CleanProgress[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCleanProgressesResult WithItems(Gs2.Gs2Project.Model.CleanProgress[] items) {
             this.Items = items;

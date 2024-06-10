@@ -33,13 +33,13 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class SetFormWithSignatureRequest : Gs2Request<SetFormWithSignatureRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string MoldModelName { set; get; }
-         public int? Index { set; get; }
-         public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; }
-         public string KeyId { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string MoldModelName { set; get; } = null!;
+         public int? Index { set; get; } = null!;
+         public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetFormWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

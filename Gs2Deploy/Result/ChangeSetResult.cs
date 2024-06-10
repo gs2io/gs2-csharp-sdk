@@ -33,7 +33,7 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class ChangeSetResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.ChangeSet[] Items { set; get; }
+        public Gs2.Gs2Deploy.Model.ChangeSet[] Items { set; get; } = null!;
 
         public ChangeSetResult WithItems(Gs2.Gs2Deploy.Model.ChangeSet[] items) {
             this.Items = items;

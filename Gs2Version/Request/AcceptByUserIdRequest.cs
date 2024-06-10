@@ -33,12 +33,12 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class AcceptByUserIdRequest : Gs2Request<AcceptByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string VersionName { set; get; }
-         public string UserId { set; get; }
-         public Gs2.Gs2Version.Model.Version_ Version { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string VersionName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public Gs2.Gs2Version.Model.Version_ Version { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public AcceptByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class DecreaseMaximumIdleMinutesByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Idle.Model.Status Item { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Idle.Model.Status Item { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DecreaseMaximumIdleMinutesByStampTaskResult WithItem(Gs2.Gs2Idle.Model.Status item) {
             this.Item = item;

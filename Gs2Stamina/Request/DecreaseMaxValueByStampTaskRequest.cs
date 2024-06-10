@@ -33,8 +33,8 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DecreaseMaxValueByStampTaskRequest : Gs2Request<DecreaseMaxValueByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DecreaseMaxValueByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

@@ -33,16 +33,16 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
-         public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
-         public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
-         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemAcquireScript { set; get; }
-         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemConsumeScript { set; get; }
-         public Gs2.Gs2Inventory.Model.ScriptSetting BigItemAcquireScript { set; get; }
-         public Gs2.Gs2Inventory.Model.ScriptSetting BigItemConsumeScript { set; get; }
-         public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemAcquireScript { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemConsumeScript { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.ScriptSetting BigItemAcquireScript { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.ScriptSetting BigItemConsumeScript { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

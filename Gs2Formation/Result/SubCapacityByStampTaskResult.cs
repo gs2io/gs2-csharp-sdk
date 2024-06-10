@@ -33,9 +33,9 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class SubCapacityByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
-        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public SubCapacityByStampTaskResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
             this.Item = item;

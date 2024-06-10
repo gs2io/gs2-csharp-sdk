@@ -33,9 +33,9 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class GetWalletRequest : Gs2Request<GetWalletRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public int? Slot { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public int? Slot { set; get; } = null!;
         public GetWalletRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

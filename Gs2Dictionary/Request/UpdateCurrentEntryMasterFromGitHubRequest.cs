@@ -33,8 +33,8 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class UpdateCurrentEntryMasterFromGitHubRequest : Gs2Request<UpdateCurrentEntryMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2Dictionary.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2Dictionary.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentEntryMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

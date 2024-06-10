@@ -33,8 +33,8 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class ConsumeItemSetByStampTaskRequest : Gs2Request<ConsumeItemSetByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public ConsumeItemSetByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

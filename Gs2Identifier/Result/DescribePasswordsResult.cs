@@ -33,8 +33,8 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DescribePasswordsResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.Password[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Identifier.Model.Password[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribePasswordsResult WithItems(Gs2.Gs2Identifier.Model.Password[] items) {
             this.Items = items;

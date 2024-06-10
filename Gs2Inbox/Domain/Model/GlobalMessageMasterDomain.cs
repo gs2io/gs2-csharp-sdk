@@ -63,8 +63,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
     public partial class GlobalMessageMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InboxRestClient _client;
-        public string NamespaceName { get; }
-        public string GlobalMessageName { get; }
+        public string NamespaceName { get; } = null!;
+        public string GlobalMessageName { get; } = null!;
 
         public GlobalMessageMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,

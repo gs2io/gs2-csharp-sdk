@@ -31,12 +31,12 @@ namespace Gs2.Gs2Chat.Model
 #endif
 	public class Subscribe : IComparable
 	{
-        public string SubscribeId { set; get; }
-        public string UserId { set; get; }
-        public string RoomName { set; get; }
-        public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string SubscribeId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public string RoomName { set; get; } = null!;
+        public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Subscribe WithSubscribeId(string subscribeId) {
             this.SubscribeId = subscribeId;
             return this;

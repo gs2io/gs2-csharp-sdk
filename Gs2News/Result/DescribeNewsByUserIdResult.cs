@@ -33,9 +33,9 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class DescribeNewsByUserIdResult : IResult
 	{
-        public Gs2.Gs2News.Model.News[] Items { set; get; }
-        public string ContentHash { set; get; }
-        public string TemplateHash { set; get; }
+        public Gs2.Gs2News.Model.News[] Items { set; get; } = null!;
+        public string ContentHash { set; get; } = null!;
+        public string TemplateHash { set; get; } = null!;
 
         public DescribeNewsByUserIdResult WithItems(Gs2.Gs2News.Model.News[] items) {
             this.Items = items;

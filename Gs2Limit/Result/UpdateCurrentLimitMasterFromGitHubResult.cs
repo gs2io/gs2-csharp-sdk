@@ -33,7 +33,7 @@ namespace Gs2.Gs2Limit.Result
 	[System.Serializable]
 	public class UpdateCurrentLimitMasterFromGitHubResult : IResult
 	{
-        public Gs2.Gs2Limit.Model.CurrentLimitMaster Item { set; get; }
+        public Gs2.Gs2Limit.Model.CurrentLimitMaster Item { set; get; } = null!;
 
         public UpdateCurrentLimitMasterFromGitHubResult WithItem(Gs2.Gs2Limit.Model.CurrentLimitMaster item) {
             this.Item = item;

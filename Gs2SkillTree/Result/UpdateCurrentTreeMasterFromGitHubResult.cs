@@ -33,7 +33,7 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class UpdateCurrentTreeMasterFromGitHubResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.CurrentTreeMaster Item { set; get; }
+        public Gs2.Gs2SkillTree.Model.CurrentTreeMaster Item { set; get; } = null!;
 
         public UpdateCurrentTreeMasterFromGitHubResult WithItem(Gs2.Gs2SkillTree.Model.CurrentTreeMaster item) {
             this.Item = item;

@@ -33,9 +33,9 @@ namespace Gs2.Gs2SeasonRating.Request
 	[System.Serializable]
 	public class CommitVoteRequest : Gs2Request<CommitVoteRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string SeasonName { set; get; }
-         public string SessionName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string SeasonName { set; get; } = null!;
+         public string SessionName { set; get; } = null!;
         public CommitVoteRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

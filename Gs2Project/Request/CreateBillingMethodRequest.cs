@@ -33,11 +33,11 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CreateBillingMethodRequest : Gs2Request<CreateBillingMethodRequest>
 	{
-         public string AccountToken { set; get; }
-         public string Description { set; get; }
-         public string MethodType { set; get; }
-         public string CardCustomerId { set; get; }
-         public string PartnerId { set; get; }
+         public string AccountToken { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string MethodType { set; get; } = null!;
+         public string CardCustomerId { set; get; } = null!;
+         public string PartnerId { set; get; } = null!;
         public CreateBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

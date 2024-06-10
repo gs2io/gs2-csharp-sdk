@@ -33,10 +33,10 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class CheckImportUserDataByUserIdRequest : Gs2Request<CheckImportUserDataByUserIdRequest>
 	{
-         public string UserId { set; get; }
-         public string UploadToken { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string UserId { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public CheckImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

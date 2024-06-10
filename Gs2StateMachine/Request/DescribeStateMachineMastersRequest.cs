@@ -33,9 +33,9 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class DescribeStateMachineMastersRequest : Gs2Request<DescribeStateMachineMastersRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PageToken { set; get; }
-         public int? Limit { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
+         public int? Limit { set; get; } = null!;
         public DescribeStateMachineMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

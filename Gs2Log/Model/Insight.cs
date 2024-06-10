@@ -31,14 +31,14 @@ namespace Gs2.Gs2Log.Model
 #endif
 	public class Insight : IComparable
 	{
-        public string InsightId { set; get; }
-        public string Name { set; get; }
-        public string TaskId { set; get; }
-        public string Host { set; get; }
-        public string Password { set; get; }
-        public string Status { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string InsightId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string TaskId { set; get; } = null!;
+        public string Host { set; get; } = null!;
+        public string Password { set; get; } = null!;
+        public string Status { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Insight WithInsightId(string insightId) {
             this.InsightId = insightId;
             return this;

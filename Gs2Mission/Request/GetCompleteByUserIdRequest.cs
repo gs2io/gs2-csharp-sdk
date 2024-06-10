@@ -33,10 +33,10 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class GetCompleteByUserIdRequest : Gs2Request<GetCompleteByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string MissionGroupName { set; get; }
-         public string UserId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string MissionGroupName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetCompleteByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

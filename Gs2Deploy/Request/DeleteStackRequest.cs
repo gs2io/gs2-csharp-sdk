@@ -33,7 +33,7 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class DeleteStackRequest : Gs2Request<DeleteStackRequest>
 	{
-         public string StackName { set; get; }
+         public string StackName { set; get; } = null!;
         public DeleteStackRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

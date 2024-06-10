@@ -33,7 +33,7 @@ namespace Gs2.Gs2Buff.Result
 	[System.Serializable]
 	public class DeleteBuffEntryModelMasterResult : IResult
 	{
-        public Gs2.Gs2Buff.Model.BuffEntryModelMaster Item { set; get; }
+        public Gs2.Gs2Buff.Model.BuffEntryModelMaster Item { set; get; } = null!;
 
         public DeleteBuffEntryModelMasterResult WithItem(Gs2.Gs2Buff.Model.BuffEntryModelMaster item) {
             this.Item = item;

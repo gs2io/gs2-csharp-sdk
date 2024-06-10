@@ -31,8 +31,8 @@ namespace Gs2.Gs2Deploy.Model
 #endif
 	public class OutputField : IComparable
 	{
-        public string Name { set; get; }
-        public string FieldName { set; get; }
+        public string Name { set; get; } = null!;
+        public string FieldName { set; get; } = null!;
         public OutputField WithName(string name) {
             this.Name = name;
             return this;

@@ -63,8 +63,8 @@ namespace Gs2.Gs2Realtime.Domain.Model
     public partial class RoomDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RealtimeRestClient _client;
-        public string NamespaceName { get; }
-        public string RoomName { get; }
+        public string NamespaceName { get; } = null!;
+        public string RoomName { get; } = null!;
 
         public RoomDomain(
             Gs2.Core.Domain.Gs2 gs2,

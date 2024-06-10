@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DecreaseByStampTaskRequest : Gs2Request<DecreaseByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DecreaseByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

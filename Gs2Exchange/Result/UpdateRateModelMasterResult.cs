@@ -33,7 +33,7 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class UpdateRateModelMasterResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.RateModelMaster Item { set; get; }
+        public Gs2.Gs2Exchange.Model.RateModelMaster Item { set; get; } = null!;
 
         public UpdateRateModelMasterResult WithItem(Gs2.Gs2Exchange.Model.RateModelMaster item) {
             this.Item = item;

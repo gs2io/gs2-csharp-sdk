@@ -31,8 +31,8 @@ namespace Gs2.Gs2News.Model
 #endif
 	public class View : IComparable
 	{
-        public Gs2.Gs2News.Model.Content[] Contents { set; get; }
-        public Gs2.Gs2News.Model.Content[] RemoveContents { set; get; }
+        public Gs2.Gs2News.Model.Content[] Contents { set; get; } = null!;
+        public Gs2.Gs2News.Model.Content[] RemoveContents { set; get; } = null!;
         public View WithContents(Gs2.Gs2News.Model.Content[] contents) {
             this.Contents = contents;
             return this;

@@ -31,9 +31,9 @@ namespace Gs2.Gs2Version.Model
 #endif
 	public class Version_ : IComparable
 	{
-        public int? Major { set; get; }
-        public int? Minor { set; get; }
-        public int? Micro { set; get; }
+        public int? Major { set; get; } = null!;
+        public int? Minor { set; get; } = null!;
+        public int? Micro { set; get; } = null!;
         public Version_ WithMajor(int? major) {
             this.Major = major;
             return this;

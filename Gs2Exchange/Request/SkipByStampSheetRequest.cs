@@ -33,8 +33,8 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class SkipByStampSheetRequest : Gs2Request<SkipByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public SkipByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

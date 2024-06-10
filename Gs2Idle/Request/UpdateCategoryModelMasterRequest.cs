@@ -33,15 +33,15 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class UpdateCategoryModelMasterRequest : Gs2Request<UpdateCategoryModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string CategoryName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public int? RewardIntervalMinutes { set; get; }
-         public int? DefaultMaximumIdleMinutes { set; get; }
-         public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
-         public string IdlePeriodScheduleId { set; get; }
-         public string ReceivePeriodScheduleId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string CategoryName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public int? RewardIntervalMinutes { set; get; } = null!;
+         public int? DefaultMaximumIdleMinutes { set; get; } = null!;
+         public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; } = null!;
+         public string IdlePeriodScheduleId { set; get; } = null!;
+         public string ReceivePeriodScheduleId { set; get; } = null!;
         public UpdateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

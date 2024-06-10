@@ -33,7 +33,7 @@ namespace Gs2.Gs2Account.Result
 	[System.Serializable]
 	public class DeleteTakeOverByUserIdentifierResult : IResult
 	{
-        public Gs2.Gs2Account.Model.TakeOver Item { set; get; }
+        public Gs2.Gs2Account.Model.TakeOver Item { set; get; } = null!;
 
         public DeleteTakeOverByUserIdentifierResult WithItem(Gs2.Gs2Account.Model.TakeOver item) {
             this.Item = item;

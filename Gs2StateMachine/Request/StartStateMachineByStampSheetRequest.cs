@@ -33,8 +33,8 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class StartStateMachineByStampSheetRequest : Gs2Request<StartStateMachineByStampSheetRequest>
 	{
-         public string StampSheet { set; get; }
-         public string KeyId { set; get; }
+         public string StampSheet { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public StartStateMachineByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;

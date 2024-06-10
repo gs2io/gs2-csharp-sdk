@@ -33,8 +33,8 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DeleteProgressByStampTaskRequest : Gs2Request<DeleteProgressByStampTaskRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public DeleteProgressByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

@@ -33,18 +33,18 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class UpdateVersionModelMasterRequest : Gs2Request<UpdateVersionModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string VersionName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public string Scope { set; get; }
-         public string Type { set; get; }
-         public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
-         public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
-         public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
-         public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
-         public bool? NeedSignature { set; get; }
-         public string SignatureKeyId { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string VersionName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public string Scope { set; get; } = null!;
+         public string Type { set; get; } = null!;
+         public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; } = null!;
+         public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; } = null!;
+         public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; } = null!;
+         public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; } = null!;
+         public bool? NeedSignature { set; get; } = null!;
+         public string SignatureKeyId { set; get; } = null!;
         public UpdateVersionModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

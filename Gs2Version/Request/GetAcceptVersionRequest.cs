@@ -33,9 +33,9 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class GetAcceptVersionRequest : Gs2Request<GetAcceptVersionRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string VersionName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string VersionName { set; get; } = null!;
         public GetAcceptVersionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

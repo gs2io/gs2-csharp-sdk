@@ -31,12 +31,12 @@ namespace Gs2.Gs2AdReward.Model
 #endif
 	public class Point : IComparable
 	{
-        public string PointId { set; get; }
-        public string UserId { set; get; }
-        public long? Value { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string PointId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public long? Value { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Point WithPointId(string pointId) {
             this.PointId = pointId;
             return this;

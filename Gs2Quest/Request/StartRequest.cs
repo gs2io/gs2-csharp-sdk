@@ -33,13 +33,13 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class StartRequest : Gs2Request<StartRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string QuestGroupName { set; get; }
-         public string QuestName { set; get; }
-         public string AccessToken { set; get; }
-         public bool? Force { set; get; }
-         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string QuestGroupName { set; get; } = null!;
+         public string QuestName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public bool? Force { set; get; } = null!;
+         public Gs2.Gs2Quest.Model.Config[] Config { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public StartRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class DescribeMissionGroupModelMastersResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.MissionGroupModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Mission.Model.MissionGroupModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeMissionGroupModelMastersResult WithItems(Gs2.Gs2Mission.Model.MissionGroupModelMaster[] items) {
             this.Items = items;

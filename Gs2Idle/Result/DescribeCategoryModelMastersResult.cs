@@ -33,8 +33,8 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class DescribeCategoryModelMastersResult : IResult
 	{
-        public Gs2.Gs2Idle.Model.CategoryModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Idle.Model.CategoryModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCategoryModelMastersResult WithItems(Gs2.Gs2Idle.Model.CategoryModelMaster[] items) {
             this.Items = items;

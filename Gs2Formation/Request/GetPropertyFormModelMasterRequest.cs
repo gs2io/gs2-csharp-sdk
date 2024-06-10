@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class GetPropertyFormModelMasterRequest : Gs2Request<GetPropertyFormModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string PropertyFormModelName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string PropertyFormModelName { set; get; } = null!;
         public GetPropertyFormModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

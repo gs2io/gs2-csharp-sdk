@@ -31,12 +31,12 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class Layer : IComparable
 	{
-        public string LayerId { set; get; }
-        public string AreaModelName { set; get; }
-        public string LayerModelName { set; get; }
-        public int? NumberOfMinEntries { set; get; }
-        public int? NumberOfMaxEntries { set; get; }
-        public long? CreatedAt { set; get; }
+        public string LayerId { set; get; } = null!;
+        public string AreaModelName { set; get; } = null!;
+        public string LayerModelName { set; get; } = null!;
+        public int? NumberOfMinEntries { set; get; } = null!;
+        public int? NumberOfMaxEntries { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
         public Layer WithLayerId(string layerId) {
             this.LayerId = layerId;
             return this;

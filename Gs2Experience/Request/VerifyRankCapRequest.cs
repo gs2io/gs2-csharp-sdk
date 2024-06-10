@@ -33,14 +33,14 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class VerifyRankCapRequest : Gs2Request<VerifyRankCapRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string ExperienceName { set; get; }
-         public string VerifyType { set; get; }
-         public string PropertyId { set; get; }
-         public long? RankCapValue { set; get; }
-         public bool? MultiplyValueSpecifyingQuantity { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string ExperienceName { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public long? RankCapValue { set; get; } = null!;
+         public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyRankCapRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

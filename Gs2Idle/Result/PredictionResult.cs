@@ -33,8 +33,8 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class PredictionResult : IResult
 	{
-        public Gs2.Core.Model.AcquireAction[] Items { set; get; }
-        public Gs2.Gs2Idle.Model.Status Status { set; get; }
+        public Gs2.Core.Model.AcquireAction[] Items { set; get; } = null!;
+        public Gs2.Gs2Idle.Model.Status Status { set; get; } = null!;
 
         public PredictionResult WithItems(Gs2.Core.Model.AcquireAction[] items) {
             this.Items = items;

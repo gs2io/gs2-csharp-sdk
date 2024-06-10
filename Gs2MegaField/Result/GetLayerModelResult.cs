@@ -33,7 +33,7 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class GetLayerModelResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.LayerModel Item { set; get; }
+        public Gs2.Gs2MegaField.Model.LayerModel Item { set; get; } = null!;
 
         public GetLayerModelResult WithItem(Gs2.Gs2MegaField.Model.LayerModel item) {
             this.Item = item;

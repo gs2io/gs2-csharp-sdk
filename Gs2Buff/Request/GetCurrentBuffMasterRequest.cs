@@ -33,7 +33,7 @@ namespace Gs2.Gs2Buff.Request
 	[System.Serializable]
 	public class GetCurrentBuffMasterRequest : Gs2Request<GetCurrentBuffMasterRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public GetCurrentBuffMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

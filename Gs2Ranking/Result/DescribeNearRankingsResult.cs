@@ -33,7 +33,7 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class DescribeNearRankingsResult : IResult
 	{
-        public Gs2.Gs2Ranking.Model.Ranking[] Items { set; get; }
+        public Gs2.Gs2Ranking.Model.Ranking[] Items { set; get; } = null!;
 
         public DescribeNearRankingsResult WithItems(Gs2.Gs2Ranking.Model.Ranking[] items) {
             this.Items = items;

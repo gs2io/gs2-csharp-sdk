@@ -63,8 +63,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class BigInventoryModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        public string NamespaceName { get; }
-        public string InventoryName { get; }
+        public string NamespaceName { get; } = null!;
+        public string InventoryName { get; } = null!;
 
         public BigInventoryModelDomain(
             Gs2.Core.Domain.Gs2 gs2,

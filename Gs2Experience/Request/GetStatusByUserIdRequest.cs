@@ -33,11 +33,11 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class GetStatusByUserIdRequest : Gs2Request<GetStatusByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string ExperienceName { set; get; }
-         public string PropertyId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string ExperienceName { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

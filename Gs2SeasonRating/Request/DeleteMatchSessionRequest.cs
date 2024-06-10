@@ -33,8 +33,8 @@ namespace Gs2.Gs2SeasonRating.Request
 	[System.Serializable]
 	public class DeleteMatchSessionRequest : Gs2Request<DeleteMatchSessionRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string SessionName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string SessionName { set; get; } = null!;
         public DeleteMatchSessionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

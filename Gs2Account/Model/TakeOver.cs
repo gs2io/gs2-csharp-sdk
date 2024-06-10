@@ -31,13 +31,13 @@ namespace Gs2.Gs2Account.Model
 #endif
 	public class TakeOver : IComparable
 	{
-        public string TakeOverId { set; get; }
-        public string UserId { set; get; }
-        public int? Type { set; get; }
-        public string UserIdentifier { set; get; }
-        public string Password { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string TakeOverId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public int? Type { set; get; } = null!;
+        public string UserIdentifier { set; get; } = null!;
+        public string Password { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public TakeOver WithTakeOverId(string takeOverId) {
             this.TakeOverId = takeOverId;
             return this;

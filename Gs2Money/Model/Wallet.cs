@@ -31,16 +31,16 @@ namespace Gs2.Gs2Money.Model
 #endif
 	public class Wallet : IComparable
 	{
-        public string WalletId { set; get; }
-        public string UserId { set; get; }
-        public int? Slot { set; get; }
-        public int? Paid { set; get; }
-        public int? Free { set; get; }
-        public Gs2.Gs2Money.Model.WalletDetail[] Detail { set; get; }
-        public bool? ShareFree { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string WalletId { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public int? Slot { set; get; } = null!;
+        public int? Paid { set; get; } = null!;
+        public int? Free { set; get; } = null!;
+        public Gs2.Gs2Money.Model.WalletDetail[] Detail { set; get; } = null!;
+        public bool? ShareFree { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public Wallet WithWalletId(string walletId) {
             this.WalletId = walletId;
             return this;

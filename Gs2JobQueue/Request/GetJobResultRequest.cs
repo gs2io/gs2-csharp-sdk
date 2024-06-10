@@ -33,10 +33,10 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class GetJobResultRequest : Gs2Request<GetJobResultRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string JobName { set; get; }
-         public int? TryNumber { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string JobName { set; get; } = null!;
+         public int? TryNumber { set; get; } = null!;
         public GetJobResultRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

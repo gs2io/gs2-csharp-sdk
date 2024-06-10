@@ -33,13 +33,13 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class TriggerByUserIdRequest : Gs2Request<TriggerByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string TriggerName { set; get; }
-         public string UserId { set; get; }
-         public string TriggerStrategy { set; get; }
-         public int? Ttl { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string TriggerName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TriggerStrategy { set; get; } = null!;
+         public int? Ttl { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public TriggerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

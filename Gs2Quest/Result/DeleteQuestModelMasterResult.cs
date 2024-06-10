@@ -33,7 +33,7 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class DeleteQuestModelMasterResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.QuestModelMaster Item { set; get; }
+        public Gs2.Gs2Quest.Model.QuestModelMaster Item { set; get; } = null!;
 
         public DeleteQuestModelMasterResult WithItem(Gs2.Gs2Quest.Model.QuestModelMaster item) {
             this.Item = item;

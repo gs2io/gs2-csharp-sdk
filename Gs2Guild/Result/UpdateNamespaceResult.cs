@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class UpdateNamespaceResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.Namespace Item { set; get; }
+        public Gs2.Gs2Guild.Model.Namespace Item { set; get; } = null!;
 
         public UpdateNamespaceResult WithItem(Gs2.Gs2Guild.Model.Namespace item) {
             this.Item = item;

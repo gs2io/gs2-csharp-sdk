@@ -33,11 +33,11 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class ReportRequest : Gs2Request<ReportRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string StatusName { set; get; }
-         public Gs2.Gs2StateMachine.Model.Event[] Events { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string StatusName { set; get; } = null!;
+         public Gs2.Gs2StateMachine.Model.Event[] Events { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ReportRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

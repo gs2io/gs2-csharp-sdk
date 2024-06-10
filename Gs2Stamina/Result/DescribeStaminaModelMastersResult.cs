@@ -33,8 +33,8 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class DescribeStaminaModelMastersResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.StaminaModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeStaminaModelMastersResult WithItems(Gs2.Gs2Stamina.Model.StaminaModelMaster[] items) {
             this.Items = items;

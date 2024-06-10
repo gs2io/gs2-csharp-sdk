@@ -63,11 +63,11 @@ namespace Gs2.Gs2Account.Domain.Model
     public partial class TakeOverAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public int? Type { get; }
-        public string UserIdentifier { get; }
+        public int? Type { get; } = null!;
+        public string UserIdentifier { get; } = null!;
 
         public TakeOverAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -33,9 +33,9 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DescribeProbabilitiesRequest : Gs2Request<DescribeProbabilitiesRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string LotteryName { set; get; }
-         public string AccessToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string LotteryName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
         public DescribeProbabilitiesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

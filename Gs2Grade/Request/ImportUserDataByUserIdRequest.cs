@@ -33,10 +33,10 @@ namespace Gs2.Gs2Grade.Request
 	[System.Serializable]
 	public class ImportUserDataByUserIdRequest : Gs2Request<ImportUserDataByUserIdRequest>
 	{
-         public string UserId { set; get; }
-         public string UploadToken { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string UserId { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -33,7 +33,7 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class UpdateVersionModelMasterResult : IResult
 	{
-        public Gs2.Gs2Version.Model.VersionModelMaster Item { set; get; }
+        public Gs2.Gs2Version.Model.VersionModelMaster Item { set; get; } = null!;
 
         public UpdateVersionModelMasterResult WithItem(Gs2.Gs2Version.Model.VersionModelMaster item) {
             this.Item = item;

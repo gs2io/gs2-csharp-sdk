@@ -31,10 +31,10 @@ namespace Gs2.Gs2Log.Model
 #endif
 	public class AccessLogCount : IComparable
 	{
-        public string Service { set; get; }
-        public string Method { set; get; }
-        public string UserId { set; get; }
-        public long? Count { set; get; }
+        public string Service { set; get; } = null!;
+        public string Method { set; get; } = null!;
+        public string UserId { set; get; } = null!;
+        public long? Count { set; get; } = null!;
         public AccessLogCount WithService(string service) {
             this.Service = service;
             return this;

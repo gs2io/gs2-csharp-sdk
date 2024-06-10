@@ -33,7 +33,7 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class CreateRecoverIntervalTableMasterResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster Item { set; get; }
+        public Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster Item { set; get; } = null!;
 
         public CreateRecoverIntervalTableMasterResult WithItem(Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster item) {
             this.Item = item;

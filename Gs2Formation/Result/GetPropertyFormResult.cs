@@ -33,8 +33,8 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class GetPropertyFormResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; }
-        public Gs2.Gs2Formation.Model.PropertyFormModel PropertyFormModel { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.PropertyFormModel PropertyFormModel { set; get; } = null!;
 
         public GetPropertyFormResult WithItem(Gs2.Gs2Formation.Model.PropertyForm item) {
             this.Item = item;

@@ -33,13 +33,13 @@ namespace Gs2.Gs2Guild.Request
 	[System.Serializable]
 	public class VerifyCurrentMaximumMemberCountByGuildNameRequest : Gs2Request<VerifyCurrentMaximumMemberCountByGuildNameRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string GuildModelName { set; get; }
-         public string GuildName { set; get; }
-         public string VerifyType { set; get; }
-         public int? Value { set; get; }
-         public bool? MultiplyValueSpecifyingQuantity { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string GuildModelName { set; get; } = null!;
+         public string GuildName { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+         public int? Value { set; get; } = null!;
+         public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyCurrentMaximumMemberCountByGuildNameRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

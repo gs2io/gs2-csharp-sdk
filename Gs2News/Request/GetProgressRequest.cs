@@ -33,8 +33,8 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class GetProgressRequest : Gs2Request<GetProgressRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UploadToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
         public GetProgressRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

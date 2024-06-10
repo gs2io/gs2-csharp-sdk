@@ -33,7 +33,7 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class DescribeBillingsResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Billing[] Items { set; get; }
+        public Gs2.Gs2Project.Model.Billing[] Items { set; get; } = null!;
 
         public DescribeBillingsResult WithItems(Gs2.Gs2Project.Model.Billing[] items) {
             this.Items = items;

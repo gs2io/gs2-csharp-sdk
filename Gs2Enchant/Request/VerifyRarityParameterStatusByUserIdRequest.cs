@@ -33,16 +33,16 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class VerifyRarityParameterStatusByUserIdRequest : Gs2Request<VerifyRarityParameterStatusByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string ParameterName { set; get; }
-         public string UserId { set; get; }
-         public string PropertyId { set; get; }
-         public string VerifyType { set; get; }
-         public string ParameterValueName { set; get; }
-         public int? ParameterCount { set; get; }
-         public bool? MultiplyValueSpecifyingQuantity { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string ParameterName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string PropertyId { set; get; } = null!;
+         public string VerifyType { set; get; } = null!;
+         public string ParameterValueName { set; get; } = null!;
+         public int? ParameterCount { set; get; } = null!;
+         public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public VerifyRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

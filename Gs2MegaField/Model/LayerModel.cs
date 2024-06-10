@@ -31,9 +31,9 @@ namespace Gs2.Gs2MegaField.Model
 #endif
 	public class LayerModel : IComparable
 	{
-        public string LayerModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
+        public string LayerModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public LayerModel WithLayerModelId(string layerModelId) {
             this.LayerModelId = layerModelId;
             return this;

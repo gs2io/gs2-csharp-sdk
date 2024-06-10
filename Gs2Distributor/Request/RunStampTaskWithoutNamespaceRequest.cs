@@ -33,8 +33,8 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class RunStampTaskWithoutNamespaceRequest : Gs2Request<RunStampTaskWithoutNamespaceRequest>
 	{
-         public string StampTask { set; get; }
-         public string KeyId { set; get; }
+         public string StampTask { set; get; } = null!;
+         public string KeyId { set; get; } = null!;
         public RunStampTaskWithoutNamespaceRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;

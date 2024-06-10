@@ -31,21 +31,21 @@ namespace Gs2.Gs2Exchange.Model
 #endif
 	public class IncrementalRateModelMaster : IComparable
 	{
-        public string IncrementalRateModelId { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; }
-        public string CalculateType { set; get; }
-        public long? BaseValue { set; get; }
-        public long? CoefficientValue { set; get; }
-        public string CalculateScriptId { set; get; }
-        public string ExchangeCountId { set; get; }
-        public int? MaximumExchangeCount { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string IncrementalRateModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; } = null!;
+        public string CalculateType { set; get; } = null!;
+        public long? BaseValue { set; get; } = null!;
+        public long? CoefficientValue { set; get; } = null!;
+        public string CalculateScriptId { set; get; } = null!;
+        public string ExchangeCountId { set; get; } = null!;
+        public int? MaximumExchangeCount { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public IncrementalRateModelMaster WithIncrementalRateModelId(string incrementalRateModelId) {
             this.IncrementalRateModelId = incrementalRateModelId;
             return this;

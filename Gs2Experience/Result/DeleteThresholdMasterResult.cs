@@ -33,7 +33,7 @@ namespace Gs2.Gs2Experience.Result
 	[System.Serializable]
 	public class DeleteThresholdMasterResult : IResult
 	{
-        public Gs2.Gs2Experience.Model.ThresholdMaster Item { set; get; }
+        public Gs2.Gs2Experience.Model.ThresholdMaster Item { set; get; } = null!;
 
         public DeleteThresholdMasterResult WithItem(Gs2.Gs2Experience.Model.ThresholdMaster item) {
             this.Item = item;

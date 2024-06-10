@@ -33,7 +33,7 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class CreateAreaModelMasterResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.AreaModelMaster Item { set; get; }
+        public Gs2.Gs2MegaField.Model.AreaModelMaster Item { set; get; } = null!;
 
         public CreateAreaModelMasterResult WithItem(Gs2.Gs2MegaField.Model.AreaModelMaster item) {
             this.Item = item;

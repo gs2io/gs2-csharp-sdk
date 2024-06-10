@@ -33,7 +33,7 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DescribeRatingModelsRequest : Gs2Request<DescribeRatingModelsRequest>
 	{
-         public string NamespaceName { set; get; }
+         public string NamespaceName { set; get; } = null!;
         public DescribeRatingModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

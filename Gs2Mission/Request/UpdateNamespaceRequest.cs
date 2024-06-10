@@ -33,18 +33,18 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string Description { set; get; }
-         public Gs2.Gs2Mission.Model.TransactionSetting TransactionSetting { set; get; }
-         public Gs2.Gs2Mission.Model.ScriptSetting MissionCompleteScript { set; get; }
-         public Gs2.Gs2Mission.Model.ScriptSetting CounterIncrementScript { set; get; }
-         public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; }
-         public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; }
-         public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.ScriptSetting MissionCompleteScript { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.ScriptSetting CounterIncrementScript { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string QueueNamespaceId { set; get; }
+         public string QueueNamespaceId { set; get; } = null!;
         [Obsolete("This method is deprecated")]
-         public string KeyId { set; get; }
+         public string KeyId { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

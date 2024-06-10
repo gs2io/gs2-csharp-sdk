@@ -33,7 +33,7 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class GetQuestGroupModelResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.QuestGroupModel Item { set; get; }
+        public Gs2.Gs2Quest.Model.QuestGroupModel Item { set; get; } = null!;
 
         public GetQuestGroupModelResult WithItem(Gs2.Gs2Quest.Model.QuestGroupModel item) {
             this.Item = item;

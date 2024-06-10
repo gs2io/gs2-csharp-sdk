@@ -33,17 +33,17 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class UpdateQuestModelMasterRequest : Gs2Request<UpdateQuestModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string QuestGroupName { set; get; }
-         public string QuestName { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
-         public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
-         public string ChallengePeriodEventId { set; get; }
-         public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
-         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
-         public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
-         public string[] PremiseQuestNames { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string QuestGroupName { set; get; } = null!;
+         public string QuestName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
+         public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; } = null!;
+         public string ChallengePeriodEventId { set; get; } = null!;
+         public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; } = null!;
+         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
+         public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; } = null!;
+         public string[] PremiseQuestNames { set; get; } = null!;
         public UpdateQuestModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

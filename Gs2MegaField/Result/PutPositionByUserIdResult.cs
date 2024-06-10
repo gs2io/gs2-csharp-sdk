@@ -33,7 +33,7 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class PutPositionByUserIdResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.Spatial Item { set; get; }
+        public Gs2.Gs2MegaField.Model.Spatial Item { set; get; } = null!;
 
         public PutPositionByUserIdResult WithItem(Gs2.Gs2MegaField.Model.Spatial item) {
             this.Item = item;

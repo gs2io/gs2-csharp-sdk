@@ -31,17 +31,17 @@ namespace Gs2.Gs2Deploy.Model
 #endif
 	public class Resource : IComparable
 	{
-        public string ResourceId { set; get; }
-        public string Type { set; get; }
-        public string Name { set; get; }
-        public string Request { set; get; }
-        public string Response { set; get; }
-        public string RollbackContext { set; get; }
-        public string RollbackRequest { set; get; }
-        public string[] RollbackAfter { set; get; }
-        public Gs2.Gs2Deploy.Model.OutputField[] OutputFields { set; get; }
-        public string WorkId { set; get; }
-        public long? CreatedAt { set; get; }
+        public string ResourceId { set; get; } = null!;
+        public string Type { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Request { set; get; } = null!;
+        public string Response { set; get; } = null!;
+        public string RollbackContext { set; get; } = null!;
+        public string RollbackRequest { set; get; } = null!;
+        public string[] RollbackAfter { set; get; } = null!;
+        public Gs2.Gs2Deploy.Model.OutputField[] OutputFields { set; get; } = null!;
+        public string WorkId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
         public Resource WithResourceId(string resourceId) {
             this.ResourceId = resourceId;
             return this;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class DescribeRatingModelMastersResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.RatingModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Matchmaking.Model.RatingModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeRatingModelMastersResult WithItems(Gs2.Gs2Matchmaking.Model.RatingModelMaster[] items) {
             this.Items = items;

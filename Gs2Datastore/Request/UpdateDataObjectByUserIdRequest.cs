@@ -33,13 +33,13 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class UpdateDataObjectByUserIdRequest : Gs2Request<UpdateDataObjectByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string DataObjectName { set; get; }
-         public string UserId { set; get; }
-         public string Scope { set; get; }
-         public string[] AllowUserIds { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string DataObjectName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string Scope { set; get; } = null!;
+         public string[] AllowUserIds { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public UpdateDataObjectByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

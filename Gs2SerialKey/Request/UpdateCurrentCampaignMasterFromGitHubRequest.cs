@@ -33,8 +33,8 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class UpdateCurrentCampaignMasterFromGitHubRequest : Gs2Request<UpdateCurrentCampaignMasterFromGitHubRequest>
 	{
-         public string NamespaceName { set; get; }
-         public Gs2.Gs2SerialKey.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public Gs2.Gs2SerialKey.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
         public UpdateCurrentCampaignMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

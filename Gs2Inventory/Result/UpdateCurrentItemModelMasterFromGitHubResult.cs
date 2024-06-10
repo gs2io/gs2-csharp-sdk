@@ -33,7 +33,7 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class UpdateCurrentItemModelMasterFromGitHubResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.CurrentItemModelMaster Item { set; get; }
+        public Gs2.Gs2Inventory.Model.CurrentItemModelMaster Item { set; get; } = null!;
 
         public UpdateCurrentItemModelMasterFromGitHubResult WithItem(Gs2.Gs2Inventory.Model.CurrentItemModelMaster item) {
             this.Item = item;

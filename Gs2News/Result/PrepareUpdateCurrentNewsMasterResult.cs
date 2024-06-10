@@ -33,8 +33,8 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class PrepareUpdateCurrentNewsMasterResult : IResult
 	{
-        public string UploadToken { set; get; }
-        public string TemplateUploadUrl { set; get; }
+        public string UploadToken { set; get; } = null!;
+        public string TemplateUploadUrl { set; get; } = null!;
 
         public PrepareUpdateCurrentNewsMasterResult WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;

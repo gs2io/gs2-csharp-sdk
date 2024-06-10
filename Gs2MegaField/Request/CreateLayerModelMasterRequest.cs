@@ -33,11 +33,11 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class CreateLayerModelMasterRequest : Gs2Request<CreateLayerModelMasterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string AreaModelName { set; get; }
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public string Metadata { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string AreaModelName { set; get; } = null!;
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
         public CreateLayerModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

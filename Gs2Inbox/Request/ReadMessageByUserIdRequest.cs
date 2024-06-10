@@ -33,12 +33,12 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class ReadMessageByUserIdRequest : Gs2Request<ReadMessageByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string MessageName { set; get; }
-         public Gs2.Gs2Inbox.Model.Config[] Config { set; get; }
-         public string TimeOffsetToken { set; get; }
-        public string DuplicationAvoider { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string MessageName { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.Config[] Config { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public ReadMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

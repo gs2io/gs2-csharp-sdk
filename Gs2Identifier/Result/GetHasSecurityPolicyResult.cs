@@ -33,7 +33,7 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class GetHasSecurityPolicyResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.SecurityPolicy[] Items { set; get; }
+        public Gs2.Gs2Identifier.Model.SecurityPolicy[] Items { set; get; } = null!;
 
         public GetHasSecurityPolicyResult WithItems(Gs2.Gs2Identifier.Model.SecurityPolicy[] items) {
             this.Items = items;

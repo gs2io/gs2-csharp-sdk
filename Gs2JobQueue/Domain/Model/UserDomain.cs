@@ -63,11 +63,11 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public bool? AutoRun { get; set; }
-        public bool? IsLastJob { get; set; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public bool? AutoRun { get; set; } = null!;
+        public bool? IsLastJob { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,

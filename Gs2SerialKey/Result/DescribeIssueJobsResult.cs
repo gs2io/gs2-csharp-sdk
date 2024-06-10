@@ -33,8 +33,8 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class DescribeIssueJobsResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.IssueJob[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2SerialKey.Model.IssueJob[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeIssueJobsResult WithItems(Gs2.Gs2SerialKey.Model.IssueJob[] items) {
             this.Items = items;

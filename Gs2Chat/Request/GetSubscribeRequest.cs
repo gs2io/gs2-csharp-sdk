@@ -33,9 +33,9 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class GetSubscribeRequest : Gs2Request<GetSubscribeRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string RoomName { set; get; }
-         public string AccessToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string RoomName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
         public GetSubscribeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

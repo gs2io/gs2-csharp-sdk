@@ -33,9 +33,9 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class UpdateSecurityPolicyRequest : Gs2Request<UpdateSecurityPolicyRequest>
 	{
-         public string SecurityPolicyName { set; get; }
-         public string Description { set; get; }
-         public string Policy { set; get; }
+         public string SecurityPolicyName { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public string Policy { set; get; } = null!;
         public UpdateSecurityPolicyRequest WithSecurityPolicyName(string securityPolicyName) {
             this.SecurityPolicyName = securityPolicyName;
             return this;

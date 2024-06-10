@@ -33,10 +33,10 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class GetStampSheetResultByUserIdRequest : Gs2Request<GetStampSheetResultByUserIdRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string UserId { set; get; }
-         public string TransactionId { set; get; }
-         public string TimeOffsetToken { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string UserId { set; get; } = null!;
+         public string TransactionId { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
         public GetStampSheetResultByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

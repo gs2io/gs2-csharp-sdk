@@ -31,18 +31,18 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class MissionGroupModelMaster : IComparable
 	{
-        public string MissionGroupId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public string ResetType { set; get; }
-        public int? ResetDayOfMonth { set; get; }
-        public string ResetDayOfWeek { set; get; }
-        public int? ResetHour { set; get; }
-        public string CompleteNotificationNamespaceId { set; get; }
-        public long? CreatedAt { set; get; }
-        public long? UpdatedAt { set; get; }
-        public long? Revision { set; get; }
+        public string MissionGroupId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string Description { set; get; } = null!;
+        public string ResetType { set; get; } = null!;
+        public int? ResetDayOfMonth { set; get; } = null!;
+        public string ResetDayOfWeek { set; get; } = null!;
+        public int? ResetHour { set; get; } = null!;
+        public string CompleteNotificationNamespaceId { set; get; } = null!;
+        public long? CreatedAt { set; get; } = null!;
+        public long? UpdatedAt { set; get; } = null!;
+        public long? Revision { set; get; } = null!;
         public MissionGroupModelMaster WithMissionGroupId(string missionGroupId) {
             this.MissionGroupId = missionGroupId;
             return this;

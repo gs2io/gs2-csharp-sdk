@@ -31,8 +31,8 @@ namespace Gs2.Gs2Inventory.Model
 #endif
 	public class HeldCount : IComparable
 	{
-        public string ItemName { set; get; }
-        public long? Count { set; get; }
+        public string ItemName { set; get; } = null!;
+        public long? Count { set; get; } = null!;
         public HeldCount WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;

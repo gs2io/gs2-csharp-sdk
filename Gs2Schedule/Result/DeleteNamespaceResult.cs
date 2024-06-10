@@ -33,7 +33,7 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class DeleteNamespaceResult : IResult
 	{
-        public Gs2.Gs2Schedule.Model.Namespace Item { set; get; }
+        public Gs2.Gs2Schedule.Model.Namespace Item { set; get; } = null!;
 
         public DeleteNamespaceResult WithItem(Gs2.Gs2Schedule.Model.Namespace item) {
             this.Item = item;

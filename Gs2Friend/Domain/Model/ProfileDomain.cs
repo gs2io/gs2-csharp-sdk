@@ -63,8 +63,8 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class ProfileDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
 
         public ProfileDomain(
             Gs2.Core.Domain.Gs2 gs2,

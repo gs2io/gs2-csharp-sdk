@@ -33,10 +33,10 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class GetCounterRequest : Gs2Request<GetCounterRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string LimitName { set; get; }
-         public string AccessToken { set; get; }
-         public string CounterName { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string LimitName { set; get; } = null!;
+         public string AccessToken { set; get; } = null!;
+         public string CounterName { set; get; } = null!;
         public GetCounterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

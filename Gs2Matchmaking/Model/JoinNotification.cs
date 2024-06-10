@@ -20,9 +20,9 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class JoinNotification
 	{
-        public string NamespaceName { set; get; }
-        public string GatheringName { set; get; }
-        public string JoinUserId { set; get; }
+        public string NamespaceName { set; get; } = null!;
+        public string GatheringName { set; get; } = null!;
+        public string JoinUserId { set; get; } = null!;
         public JoinNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

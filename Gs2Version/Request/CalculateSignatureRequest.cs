@@ -33,9 +33,9 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class CalculateSignatureRequest : Gs2Request<CalculateSignatureRequest>
 	{
-         public string NamespaceName { set; get; }
-         public string VersionName { set; get; }
-         public Gs2.Gs2Version.Model.Version_ Version { set; get; }
+         public string NamespaceName { set; get; } = null!;
+         public string VersionName { set; get; } = null!;
+         public Gs2.Gs2Version.Model.Version_ Version { set; get; } = null!;
         public CalculateSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

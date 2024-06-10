@@ -33,7 +33,7 @@ namespace Gs2.Gs2SkillTree.Result
 	[System.Serializable]
 	public class UpdateNamespaceResult : IResult
 	{
-        public Gs2.Gs2SkillTree.Model.Namespace Item { set; get; }
+        public Gs2.Gs2SkillTree.Model.Namespace Item { set; get; } = null!;
 
         public UpdateNamespaceResult WithItem(Gs2.Gs2SkillTree.Model.Namespace item) {
             this.Item = item;

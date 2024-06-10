@@ -33,26 +33,26 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-         public string Name { set; get; }
-         public string Description { set; get; }
-         public bool? EnableRating { set; get; }
-         public string EnableDisconnectDetection { set; get; }
-         public int? DisconnectDetectionTimeoutSeconds { set; get; }
-         public string CreateGatheringTriggerType { set; get; }
-         public string CreateGatheringTriggerRealtimeNamespaceId { set; get; }
-         public string CreateGatheringTriggerScriptId { set; get; }
-         public string CompleteMatchmakingTriggerType { set; get; }
-         public string CompleteMatchmakingTriggerRealtimeNamespaceId { set; get; }
-         public string CompleteMatchmakingTriggerScriptId { set; get; }
-         public string EnableCollaborateSeasonRating { set; get; }
-         public string CollaborateSeasonRatingNamespaceId { set; get; }
-         public int? CollaborateSeasonRatingTtl { set; get; }
-         public Gs2.Gs2Matchmaking.Model.ScriptSetting ChangeRatingScript { set; get; }
-         public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
-         public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
-         public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
-         public Gs2.Gs2Matchmaking.Model.NotificationSetting ChangeRatingNotification { set; get; }
-         public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; }
+         public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public bool? EnableRating { set; get; } = null!;
+         public string EnableDisconnectDetection { set; get; } = null!;
+         public int? DisconnectDetectionTimeoutSeconds { set; get; } = null!;
+         public string CreateGatheringTriggerType { set; get; } = null!;
+         public string CreateGatheringTriggerRealtimeNamespaceId { set; get; } = null!;
+         public string CreateGatheringTriggerScriptId { set; get; } = null!;
+         public string CompleteMatchmakingTriggerType { set; get; } = null!;
+         public string CompleteMatchmakingTriggerRealtimeNamespaceId { set; get; } = null!;
+         public string CompleteMatchmakingTriggerScriptId { set; get; } = null!;
+         public string EnableCollaborateSeasonRating { set; get; } = null!;
+         public string CollaborateSeasonRatingNamespaceId { set; get; } = null!;
+         public int? CollaborateSeasonRatingTtl { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.ScriptSetting ChangeRatingScript { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting ChangeRatingNotification { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;

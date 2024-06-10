@@ -31,13 +31,13 @@ namespace Gs2.Gs2Showcase.Model
 #endif
 	public class RandomDisplayItem : IComparable
 	{
-        public string ShowcaseName { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-        public int? CurrentPurchaseCount { set; get; }
-        public int? MaximumPurchaseCount { set; get; }
+        public string ShowcaseName { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public int? CurrentPurchaseCount { set; get; } = null!;
+        public int? MaximumPurchaseCount { set; get; } = null!;
         public RandomDisplayItem WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;

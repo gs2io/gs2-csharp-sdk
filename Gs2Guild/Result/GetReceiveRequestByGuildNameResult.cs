@@ -33,7 +33,7 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class GetReceiveRequestByGuildNameResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.ReceiveMemberRequest Item { set; get; }
+        public Gs2.Gs2Guild.Model.ReceiveMemberRequest Item { set; get; } = null!;
 
         public GetReceiveRequestByGuildNameResult WithItem(Gs2.Gs2Guild.Model.ReceiveMemberRequest item) {
             this.Item = item;

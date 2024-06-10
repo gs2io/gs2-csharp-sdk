@@ -31,9 +31,9 @@ namespace Gs2.Gs2Account.Model
 #endif
 	public class BanStatus : IComparable
 	{
-        public string Name { set; get; }
-        public string Reason { set; get; }
-        public long? ReleaseTimestamp { set; get; }
+        public string Name { set; get; } = null!;
+        public string Reason { set; get; } = null!;
+        public long? ReleaseTimestamp { set; get; } = null!;
         public BanStatus WithName(string name) {
             this.Name = name;
             return this;

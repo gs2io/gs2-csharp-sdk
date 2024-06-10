@@ -33,8 +33,8 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class DescribeCampaignModelMastersResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.CampaignModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2SerialKey.Model.CampaignModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeCampaignModelMastersResult WithItems(Gs2.Gs2SerialKey.Model.CampaignModelMaster[] items) {
             this.Items = items;

@@ -31,12 +31,12 @@ namespace Gs2.Gs2Enchant.Model
 #endif
 	public class BalanceParameterModel : IComparable
 	{
-        public string BalanceParameterModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public long? TotalValue { set; get; }
-        public string InitialValueStrategy { set; get; }
-        public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; }
+        public string BalanceParameterModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public long? TotalValue { set; get; } = null!;
+        public string InitialValueStrategy { set; get; } = null!;
+        public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; } = null!;
         public BalanceParameterModel WithBalanceParameterModelId(string balanceParameterModelId) {
             this.BalanceParameterModelId = balanceParameterModelId;
             return this;

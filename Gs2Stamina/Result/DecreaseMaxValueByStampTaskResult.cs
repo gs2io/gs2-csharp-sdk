@@ -33,9 +33,9 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class DecreaseMaxValueByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
-        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
-        public string NewContextStack { set; get; }
+        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; } = null!;
+        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; } = null!;
+        public string NewContextStack { set; get; } = null!;
 
         public DecreaseMaxValueByStampTaskResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
             this.Item = item;

@@ -33,8 +33,8 @@ namespace Gs2.Gs2Quest.Result
 	[System.Serializable]
 	public class DescribeQuestGroupModelMastersResult : IResult
 	{
-        public Gs2.Gs2Quest.Model.QuestGroupModelMaster[] Items { set; get; }
-        public string NextPageToken { set; get; }
+        public Gs2.Gs2Quest.Model.QuestGroupModelMaster[] Items { set; get; } = null!;
+        public string NextPageToken { set; get; } = null!;
 
         public DescribeQuestGroupModelMastersResult WithItems(Gs2.Gs2Quest.Model.QuestGroupModelMaster[] items) {
             this.Items = items;

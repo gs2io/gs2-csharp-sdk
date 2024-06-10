@@ -33,7 +33,7 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class DeleteCampaignModelMasterResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.CampaignModelMaster Item { set; get; }
+        public Gs2.Gs2SerialKey.Model.CampaignModelMaster Item { set; get; } = null!;
 
         public DeleteCampaignModelMasterResult WithItem(Gs2.Gs2SerialKey.Model.CampaignModelMaster item) {
             this.Item = item;
