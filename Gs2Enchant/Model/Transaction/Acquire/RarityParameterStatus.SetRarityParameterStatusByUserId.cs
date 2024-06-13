@@ -46,12 +46,12 @@ namespace Gs2.Gs2Enchant.Model.Transaction
             this RarityParameterStatus self,
             SetRarityParameterStatusByUserIdRequest request
         ) {
-            if (self.Clone() is not RarityParameterStatus clone)
-            {
-                throw new NullReferenceException();
-            }
-            clone.ParameterValues = request.ParameterValues;
-            return clone;
+#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Enchant:SetRarityParameterStatusByUserId");
+#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Enchant:SetRarityParameterStatusByUserId");
+#endif
+            return self.Clone() as RarityParameterStatus;
         }
 
         public static SetRarityParameterStatusByUserIdRequest Rate(

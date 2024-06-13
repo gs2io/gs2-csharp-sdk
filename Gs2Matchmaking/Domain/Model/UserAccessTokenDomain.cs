@@ -340,5 +340,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
+        public Gs2.Gs2Matchmaking.Domain.Model.SeasonAccessTokenDomain Season(
+            string seasonName,
+            long? season
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.SeasonAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                seasonName,
+                season
+            );
+        }
+
     }
 }

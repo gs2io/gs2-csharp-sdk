@@ -65,10 +65,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string NextPageToken { get; set; }
-        public string MatchmakingContextToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string NextPageToken { get; set; } = null!;
+        public string MatchmakingContextToken { get; set; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -333,23 +333,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 gatheringName
             );
         }
-
-        public Gs2.Gs2Matchmaking.Domain.Model.BallotDomain Ballot(
-            string ratingName,
-            string gatheringName,
-            int? numberOfPlayer,
-            string keyId
-        ) {
-            return new Gs2.Gs2Matchmaking.Domain.Model.BallotDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.UserId,
-                ratingName,
-                gatheringName,
-                numberOfPlayer,
-                keyId
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
             string timeOffsetToken = null
@@ -437,6 +420,36 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 ratingName
+            );
+        }
+
+        public Gs2.Gs2Matchmaking.Domain.Model.BallotDomain Ballot(
+            string ratingName,
+            string gatheringName,
+            int? numberOfPlayer,
+            string keyId
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.BallotDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                ratingName,
+                gatheringName,
+                numberOfPlayer,
+                keyId
+            );
+        }
+
+        public Gs2.Gs2Matchmaking.Domain.Model.SeasonDomain Season(
+            string seasonName,
+            long? season
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.SeasonDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                seasonName,
+                season
             );
         }
 

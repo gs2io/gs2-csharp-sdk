@@ -153,6 +153,7 @@ namespace Gs2.Gs2Enchant.Request
             key += UserId + ":";
             key += ParameterName + ":";
             key += PropertyId + ":";
+            key += ParameterValues + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

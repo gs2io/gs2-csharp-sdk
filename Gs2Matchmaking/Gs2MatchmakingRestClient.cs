@@ -4703,13 +4703,13 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        public class GetCurrentRatingModelMasterTask : Gs2RestSessionTask<GetCurrentRatingModelMasterRequest, GetCurrentRatingModelMasterResult>
+        public class GetCurrentModelMasterTask : Gs2RestSessionTask<GetCurrentModelMasterRequest, GetCurrentModelMasterResult>
         {
-            public GetCurrentRatingModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentRatingModelMasterRequest request) : base(session, factory, request)
+            public GetCurrentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentModelMasterRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(GetCurrentRatingModelMasterRequest request)
+            protected override IGs2SessionRequest CreateRequest(GetCurrentModelMasterRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "matchmaking")
@@ -4739,25 +4739,25 @@ namespace Gs2.Gs2Matchmaking
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetCurrentRatingModelMaster(
-                Request.GetCurrentRatingModelMasterRequest request,
-                UnityAction<AsyncResult<Result.GetCurrentRatingModelMasterResult>> callback
+		public IEnumerator GetCurrentModelMaster(
+                Request.GetCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetCurrentModelMasterResult>> callback
         )
 		{
-			var task = new GetCurrentRatingModelMasterTask(
+			var task = new GetCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCurrentRatingModelMasterResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.GetCurrentModelMasterResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.GetCurrentRatingModelMasterResult> GetCurrentRatingModelMasterFuture(
-                Request.GetCurrentRatingModelMasterRequest request
+		public IFuture<Result.GetCurrentModelMasterResult> GetCurrentModelMasterFuture(
+                Request.GetCurrentModelMasterRequest request
         )
 		{
-			return new GetCurrentRatingModelMasterTask(
+			return new GetCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -4765,12 +4765,12 @@ namespace Gs2.Gs2Matchmaking
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCurrentRatingModelMasterResult> GetCurrentRatingModelMasterAsync(
-                Request.GetCurrentRatingModelMasterRequest request
+		public async UniTask<Result.GetCurrentModelMasterResult> GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
         )
 		{
-            AsyncResult<Result.GetCurrentRatingModelMasterResult> result = null;
-			await GetCurrentRatingModelMaster(
+            AsyncResult<Result.GetCurrentModelMasterResult> result = null;
+			await GetCurrentModelMaster(
                 request,
                 r => result = r
             );
@@ -4781,11 +4781,11 @@ namespace Gs2.Gs2Matchmaking
             return result.Result;
         }
     #else
-		public GetCurrentRatingModelMasterTask GetCurrentRatingModelMasterAsync(
-                Request.GetCurrentRatingModelMasterRequest request
+		public GetCurrentModelMasterTask GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
         )
 		{
-			return new GetCurrentRatingModelMasterTask(
+			return new GetCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -4793,11 +4793,11 @@ namespace Gs2.Gs2Matchmaking
         }
     #endif
 #else
-		public async Task<Result.GetCurrentRatingModelMasterResult> GetCurrentRatingModelMasterAsync(
-                Request.GetCurrentRatingModelMasterRequest request
+		public async Task<Result.GetCurrentModelMasterResult> GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
         )
 		{
-			var task = new GetCurrentRatingModelMasterTask(
+			var task = new GetCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -4807,13 +4807,13 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        public class UpdateCurrentRatingModelMasterTask : Gs2RestSessionTask<UpdateCurrentRatingModelMasterRequest, UpdateCurrentRatingModelMasterResult>
+        public class UpdateCurrentModelMasterTask : Gs2RestSessionTask<UpdateCurrentModelMasterRequest, UpdateCurrentModelMasterResult>
         {
-            public UpdateCurrentRatingModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentRatingModelMasterRequest request) : base(session, factory, request)
+            public UpdateCurrentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentModelMasterRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(UpdateCurrentRatingModelMasterRequest request)
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentModelMasterRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "matchmaking")
@@ -4861,25 +4861,25 @@ namespace Gs2.Gs2Matchmaking
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateCurrentRatingModelMaster(
-                Request.UpdateCurrentRatingModelMasterRequest request,
-                UnityAction<AsyncResult<Result.UpdateCurrentRatingModelMasterResult>> callback
+		public IEnumerator UpdateCurrentModelMaster(
+                Request.UpdateCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentModelMasterResult>> callback
         )
 		{
-			var task = new UpdateCurrentRatingModelMasterTask(
+			var task = new UpdateCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentRatingModelMasterResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentModelMasterResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.UpdateCurrentRatingModelMasterResult> UpdateCurrentRatingModelMasterFuture(
-                Request.UpdateCurrentRatingModelMasterRequest request
+		public IFuture<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterFuture(
+                Request.UpdateCurrentModelMasterRequest request
         )
 		{
-			return new UpdateCurrentRatingModelMasterTask(
+			return new UpdateCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -4887,12 +4887,12 @@ namespace Gs2.Gs2Matchmaking
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentRatingModelMasterResult> UpdateCurrentRatingModelMasterAsync(
-                Request.UpdateCurrentRatingModelMasterRequest request
+		public async UniTask<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
         )
 		{
-            AsyncResult<Result.UpdateCurrentRatingModelMasterResult> result = null;
-			await UpdateCurrentRatingModelMaster(
+            AsyncResult<Result.UpdateCurrentModelMasterResult> result = null;
+			await UpdateCurrentModelMaster(
                 request,
                 r => result = r
             );
@@ -4903,11 +4903,11 @@ namespace Gs2.Gs2Matchmaking
             return result.Result;
         }
     #else
-		public UpdateCurrentRatingModelMasterTask UpdateCurrentRatingModelMasterAsync(
-                Request.UpdateCurrentRatingModelMasterRequest request
+		public UpdateCurrentModelMasterTask UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
         )
 		{
-			return new UpdateCurrentRatingModelMasterTask(
+			return new UpdateCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -4915,11 +4915,11 @@ namespace Gs2.Gs2Matchmaking
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentRatingModelMasterResult> UpdateCurrentRatingModelMasterAsync(
-                Request.UpdateCurrentRatingModelMasterRequest request
+		public async Task<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
         )
 		{
-			var task = new UpdateCurrentRatingModelMasterTask(
+			var task = new UpdateCurrentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -4929,13 +4929,13 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
-        public class UpdateCurrentRatingModelMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentRatingModelMasterFromGitHubRequest, UpdateCurrentRatingModelMasterFromGitHubResult>
+        public class UpdateCurrentModelMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentModelMasterFromGitHubRequest, UpdateCurrentModelMasterFromGitHubResult>
         {
-            public UpdateCurrentRatingModelMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentRatingModelMasterFromGitHubRequest request) : base(session, factory, request)
+            public UpdateCurrentModelMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentModelMasterFromGitHubRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(UpdateCurrentRatingModelMasterFromGitHubRequest request)
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentModelMasterFromGitHubRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "matchmaking")
@@ -4983,25 +4983,25 @@ namespace Gs2.Gs2Matchmaking
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateCurrentRatingModelMasterFromGitHub(
-                Request.UpdateCurrentRatingModelMasterFromGitHubRequest request,
-                UnityAction<AsyncResult<Result.UpdateCurrentRatingModelMasterFromGitHubResult>> callback
+		public IEnumerator UpdateCurrentModelMasterFromGitHub(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult>> callback
         )
 		{
-			var task = new UpdateCurrentRatingModelMasterFromGitHubTask(
+			var task = new UpdateCurrentModelMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentRatingModelMasterFromGitHubResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.UpdateCurrentRatingModelMasterFromGitHubResult> UpdateCurrentRatingModelMasterFromGitHubFuture(
-                Request.UpdateCurrentRatingModelMasterFromGitHubRequest request
+		public IFuture<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubFuture(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
         )
 		{
-			return new UpdateCurrentRatingModelMasterFromGitHubTask(
+			return new UpdateCurrentModelMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -5009,12 +5009,12 @@ namespace Gs2.Gs2Matchmaking
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentRatingModelMasterFromGitHubResult> UpdateCurrentRatingModelMasterFromGitHubAsync(
-                Request.UpdateCurrentRatingModelMasterFromGitHubRequest request
+		public async UniTask<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
         )
 		{
-            AsyncResult<Result.UpdateCurrentRatingModelMasterFromGitHubResult> result = null;
-			await UpdateCurrentRatingModelMasterFromGitHub(
+            AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult> result = null;
+			await UpdateCurrentModelMasterFromGitHub(
                 request,
                 r => result = r
             );
@@ -5025,11 +5025,11 @@ namespace Gs2.Gs2Matchmaking
             return result.Result;
         }
     #else
-		public UpdateCurrentRatingModelMasterFromGitHubTask UpdateCurrentRatingModelMasterFromGitHubAsync(
-                Request.UpdateCurrentRatingModelMasterFromGitHubRequest request
+		public UpdateCurrentModelMasterFromGitHubTask UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
         )
 		{
-			return new UpdateCurrentRatingModelMasterFromGitHubTask(
+			return new UpdateCurrentModelMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -5037,11 +5037,1989 @@ namespace Gs2.Gs2Matchmaking
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentRatingModelMasterFromGitHubResult> UpdateCurrentRatingModelMasterFromGitHubAsync(
-                Request.UpdateCurrentRatingModelMasterFromGitHubRequest request
+		public async Task<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
         )
 		{
-			var task = new UpdateCurrentRatingModelMasterFromGitHubTask(
+			var task = new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSeasonModelsTask : Gs2RestSessionTask<DescribeSeasonModelsRequest, DescribeSeasonModelsResult>
+        {
+            public DescribeSeasonModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSeasonModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSeasonModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSeasonModels(
+                Request.DescribeSeasonModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeSeasonModelsResult>> callback
+        )
+		{
+			var task = new DescribeSeasonModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSeasonModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSeasonModelsResult> DescribeSeasonModelsFuture(
+                Request.DescribeSeasonModelsRequest request
+        )
+		{
+			return new DescribeSeasonModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSeasonModelsResult> DescribeSeasonModelsAsync(
+                Request.DescribeSeasonModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSeasonModelsResult> result = null;
+			await DescribeSeasonModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSeasonModelsTask DescribeSeasonModelsAsync(
+                Request.DescribeSeasonModelsRequest request
+        )
+		{
+			return new DescribeSeasonModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSeasonModelsResult> DescribeSeasonModelsAsync(
+                Request.DescribeSeasonModelsRequest request
+        )
+		{
+			var task = new DescribeSeasonModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSeasonModelTask : Gs2RestSessionTask<GetSeasonModelRequest, GetSeasonModelResult>
+        {
+            public GetSeasonModelTask(IGs2Session session, RestSessionRequestFactory factory, GetSeasonModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSeasonModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season/{seasonName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSeasonModel(
+                Request.GetSeasonModelRequest request,
+                UnityAction<AsyncResult<Result.GetSeasonModelResult>> callback
+        )
+		{
+			var task = new GetSeasonModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSeasonModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSeasonModelResult> GetSeasonModelFuture(
+                Request.GetSeasonModelRequest request
+        )
+		{
+			return new GetSeasonModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSeasonModelResult> GetSeasonModelAsync(
+                Request.GetSeasonModelRequest request
+        )
+		{
+            AsyncResult<Result.GetSeasonModelResult> result = null;
+			await GetSeasonModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSeasonModelTask GetSeasonModelAsync(
+                Request.GetSeasonModelRequest request
+        )
+		{
+			return new GetSeasonModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSeasonModelResult> GetSeasonModelAsync(
+                Request.GetSeasonModelRequest request
+        )
+		{
+			var task = new GetSeasonModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSeasonModelMastersTask : Gs2RestSessionTask<DescribeSeasonModelMastersRequest, DescribeSeasonModelMastersResult>
+        {
+            public DescribeSeasonModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSeasonModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSeasonModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/season";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSeasonModelMasters(
+                Request.DescribeSeasonModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeSeasonModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeSeasonModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSeasonModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSeasonModelMastersResult> DescribeSeasonModelMastersFuture(
+                Request.DescribeSeasonModelMastersRequest request
+        )
+		{
+			return new DescribeSeasonModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSeasonModelMastersResult> DescribeSeasonModelMastersAsync(
+                Request.DescribeSeasonModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSeasonModelMastersResult> result = null;
+			await DescribeSeasonModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSeasonModelMastersTask DescribeSeasonModelMastersAsync(
+                Request.DescribeSeasonModelMastersRequest request
+        )
+		{
+			return new DescribeSeasonModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSeasonModelMastersResult> DescribeSeasonModelMastersAsync(
+                Request.DescribeSeasonModelMastersRequest request
+        )
+		{
+			var task = new DescribeSeasonModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateSeasonModelMasterTask : Gs2RestSessionTask<CreateSeasonModelMasterRequest, CreateSeasonModelMasterResult>
+        {
+            public CreateSeasonModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateSeasonModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateSeasonModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/season";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.MaximumParticipants != null)
+                {
+                    jsonWriter.WritePropertyName("maximumParticipants");
+                    jsonWriter.Write(request.MaximumParticipants.ToString());
+                }
+                if (request.ExperienceModelId != null)
+                {
+                    jsonWriter.WritePropertyName("experienceModelId");
+                    jsonWriter.Write(request.ExperienceModelId);
+                }
+                if (request.ChallengePeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("challengePeriodEventId");
+                    jsonWriter.Write(request.ChallengePeriodEventId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateSeasonModelMaster(
+                Request.CreateSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new CreateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateSeasonModelMasterResult> CreateSeasonModelMasterFuture(
+                Request.CreateSeasonModelMasterRequest request
+        )
+		{
+			return new CreateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSeasonModelMasterResult> CreateSeasonModelMasterAsync(
+                Request.CreateSeasonModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateSeasonModelMasterResult> result = null;
+			await CreateSeasonModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateSeasonModelMasterTask CreateSeasonModelMasterAsync(
+                Request.CreateSeasonModelMasterRequest request
+        )
+		{
+			return new CreateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateSeasonModelMasterResult> CreateSeasonModelMasterAsync(
+                Request.CreateSeasonModelMasterRequest request
+        )
+		{
+			var task = new CreateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSeasonModelMasterTask : Gs2RestSessionTask<GetSeasonModelMasterRequest, GetSeasonModelMasterResult>
+        {
+            public GetSeasonModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetSeasonModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSeasonModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/season/{seasonName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSeasonModelMaster(
+                Request.GetSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new GetSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSeasonModelMasterResult> GetSeasonModelMasterFuture(
+                Request.GetSeasonModelMasterRequest request
+        )
+		{
+			return new GetSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSeasonModelMasterResult> GetSeasonModelMasterAsync(
+                Request.GetSeasonModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetSeasonModelMasterResult> result = null;
+			await GetSeasonModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSeasonModelMasterTask GetSeasonModelMasterAsync(
+                Request.GetSeasonModelMasterRequest request
+        )
+		{
+			return new GetSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSeasonModelMasterResult> GetSeasonModelMasterAsync(
+                Request.GetSeasonModelMasterRequest request
+        )
+		{
+			var task = new GetSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateSeasonModelMasterTask : Gs2RestSessionTask<UpdateSeasonModelMasterRequest, UpdateSeasonModelMasterResult>
+        {
+            public UpdateSeasonModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateSeasonModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateSeasonModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/season/{seasonName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.MaximumParticipants != null)
+                {
+                    jsonWriter.WritePropertyName("maximumParticipants");
+                    jsonWriter.Write(request.MaximumParticipants.ToString());
+                }
+                if (request.ExperienceModelId != null)
+                {
+                    jsonWriter.WritePropertyName("experienceModelId");
+                    jsonWriter.Write(request.ExperienceModelId);
+                }
+                if (request.ChallengePeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("challengePeriodEventId");
+                    jsonWriter.Write(request.ChallengePeriodEventId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateSeasonModelMaster(
+                Request.UpdateSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateSeasonModelMasterResult> UpdateSeasonModelMasterFuture(
+                Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+			return new UpdateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSeasonModelMasterResult> UpdateSeasonModelMasterAsync(
+                Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateSeasonModelMasterResult> result = null;
+			await UpdateSeasonModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateSeasonModelMasterTask UpdateSeasonModelMasterAsync(
+                Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+			return new UpdateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateSeasonModelMasterResult> UpdateSeasonModelMasterAsync(
+                Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+			var task = new UpdateSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSeasonModelMasterTask : Gs2RestSessionTask<DeleteSeasonModelMasterRequest, DeleteSeasonModelMasterResult>
+        {
+            public DeleteSeasonModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteSeasonModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteSeasonModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/season/{seasonName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSeasonModelMaster(
+                Request.DeleteSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSeasonModelMasterResult> DeleteSeasonModelMasterFuture(
+                Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+			return new DeleteSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSeasonModelMasterResult> DeleteSeasonModelMasterAsync(
+                Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteSeasonModelMasterResult> result = null;
+			await DeleteSeasonModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteSeasonModelMasterTask DeleteSeasonModelMasterAsync(
+                Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+			return new DeleteSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSeasonModelMasterResult> DeleteSeasonModelMasterAsync(
+                Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+			var task = new DeleteSeasonModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSeasonGatheringsTask : Gs2RestSessionTask<DescribeSeasonGatheringsRequest, DescribeSeasonGatheringsResult>
+        {
+            public DescribeSeasonGatheringsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSeasonGatheringsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSeasonGatheringsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season/{seasonName}/{season}/gathering";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+                url = url.Replace("{tier}",request.Tier != null ? request.Tier.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSeasonGatherings(
+                Request.DescribeSeasonGatheringsRequest request,
+                UnityAction<AsyncResult<Result.DescribeSeasonGatheringsResult>> callback
+        )
+		{
+			var task = new DescribeSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSeasonGatheringsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSeasonGatheringsResult> DescribeSeasonGatheringsFuture(
+                Request.DescribeSeasonGatheringsRequest request
+        )
+		{
+			return new DescribeSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSeasonGatheringsResult> DescribeSeasonGatheringsAsync(
+                Request.DescribeSeasonGatheringsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSeasonGatheringsResult> result = null;
+			await DescribeSeasonGatherings(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSeasonGatheringsTask DescribeSeasonGatheringsAsync(
+                Request.DescribeSeasonGatheringsRequest request
+        )
+		{
+			return new DescribeSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSeasonGatheringsResult> DescribeSeasonGatheringsAsync(
+                Request.DescribeSeasonGatheringsRequest request
+        )
+		{
+			var task = new DescribeSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeMatchmakingSeasonGatheringsTask : Gs2RestSessionTask<DescribeMatchmakingSeasonGatheringsRequest, DescribeMatchmakingSeasonGatheringsResult>
+        {
+            public DescribeMatchmakingSeasonGatheringsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeMatchmakingSeasonGatheringsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeMatchmakingSeasonGatheringsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season/{seasonName}/{season}/gathering/matchmaking";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Tier != null) {
+                    sessionRequest.AddQueryString("tier", $"{request.Tier}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeMatchmakingSeasonGatherings(
+                Request.DescribeMatchmakingSeasonGatheringsRequest request,
+                UnityAction<AsyncResult<Result.DescribeMatchmakingSeasonGatheringsResult>> callback
+        )
+		{
+			var task = new DescribeMatchmakingSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeMatchmakingSeasonGatheringsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeMatchmakingSeasonGatheringsResult> DescribeMatchmakingSeasonGatheringsFuture(
+                Request.DescribeMatchmakingSeasonGatheringsRequest request
+        )
+		{
+			return new DescribeMatchmakingSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeMatchmakingSeasonGatheringsResult> DescribeMatchmakingSeasonGatheringsAsync(
+                Request.DescribeMatchmakingSeasonGatheringsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeMatchmakingSeasonGatheringsResult> result = null;
+			await DescribeMatchmakingSeasonGatherings(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeMatchmakingSeasonGatheringsTask DescribeMatchmakingSeasonGatheringsAsync(
+                Request.DescribeMatchmakingSeasonGatheringsRequest request
+        )
+		{
+			return new DescribeMatchmakingSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeMatchmakingSeasonGatheringsResult> DescribeMatchmakingSeasonGatheringsAsync(
+                Request.DescribeMatchmakingSeasonGatheringsRequest request
+        )
+		{
+			var task = new DescribeMatchmakingSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DoSeasonMatchmakingTask : Gs2RestSessionTask<DoSeasonMatchmakingRequest, DoSeasonMatchmakingResult>
+        {
+            public DoSeasonMatchmakingTask(IGs2Session session, RestSessionRequestFactory factory, DoSeasonMatchmakingRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DoSeasonMatchmakingRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/season/{seasonName}/gathering/do";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MatchmakingContextToken != null)
+                {
+                    jsonWriter.WritePropertyName("matchmakingContextToken");
+                    jsonWriter.Write(request.MatchmakingContextToken);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DoSeasonMatchmaking(
+                Request.DoSeasonMatchmakingRequest request,
+                UnityAction<AsyncResult<Result.DoSeasonMatchmakingResult>> callback
+        )
+		{
+			var task = new DoSeasonMatchmakingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DoSeasonMatchmakingResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DoSeasonMatchmakingResult> DoSeasonMatchmakingFuture(
+                Request.DoSeasonMatchmakingRequest request
+        )
+		{
+			return new DoSeasonMatchmakingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoSeasonMatchmakingResult> DoSeasonMatchmakingAsync(
+                Request.DoSeasonMatchmakingRequest request
+        )
+		{
+            AsyncResult<Result.DoSeasonMatchmakingResult> result = null;
+			await DoSeasonMatchmaking(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DoSeasonMatchmakingTask DoSeasonMatchmakingAsync(
+                Request.DoSeasonMatchmakingRequest request
+        )
+		{
+			return new DoSeasonMatchmakingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DoSeasonMatchmakingResult> DoSeasonMatchmakingAsync(
+                Request.DoSeasonMatchmakingRequest request
+        )
+		{
+			var task = new DoSeasonMatchmakingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DoSeasonMatchmakingByUserIdTask : Gs2RestSessionTask<DoSeasonMatchmakingByUserIdRequest, DoSeasonMatchmakingByUserIdResult>
+        {
+            public DoSeasonMatchmakingByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DoSeasonMatchmakingByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DoSeasonMatchmakingByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/season/{seasonName}/gathering/do";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MatchmakingContextToken != null)
+                {
+                    jsonWriter.WritePropertyName("matchmakingContextToken");
+                    jsonWriter.Write(request.MatchmakingContextToken);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DoSeasonMatchmakingByUserId(
+                Request.DoSeasonMatchmakingByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DoSeasonMatchmakingByUserIdResult>> callback
+        )
+		{
+			var task = new DoSeasonMatchmakingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DoSeasonMatchmakingByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DoSeasonMatchmakingByUserIdResult> DoSeasonMatchmakingByUserIdFuture(
+                Request.DoSeasonMatchmakingByUserIdRequest request
+        )
+		{
+			return new DoSeasonMatchmakingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoSeasonMatchmakingByUserIdResult> DoSeasonMatchmakingByUserIdAsync(
+                Request.DoSeasonMatchmakingByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DoSeasonMatchmakingByUserIdResult> result = null;
+			await DoSeasonMatchmakingByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DoSeasonMatchmakingByUserIdTask DoSeasonMatchmakingByUserIdAsync(
+                Request.DoSeasonMatchmakingByUserIdRequest request
+        )
+		{
+			return new DoSeasonMatchmakingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DoSeasonMatchmakingByUserIdResult> DoSeasonMatchmakingByUserIdAsync(
+                Request.DoSeasonMatchmakingByUserIdRequest request
+        )
+		{
+			var task = new DoSeasonMatchmakingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSeasonGatheringTask : Gs2RestSessionTask<GetSeasonGatheringRequest, GetSeasonGatheringResult>
+        {
+            public GetSeasonGatheringTask(IGs2Session session, RestSessionRequestFactory factory, GetSeasonGatheringRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSeasonGatheringRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season/{seasonName}/{season}/{tier}/gathering/{seasonGatheringName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+                url = url.Replace("{tier}",request.Tier != null ? request.Tier.ToString() : "null");
+                url = url.Replace("{seasonGatheringName}", !string.IsNullOrEmpty(request.SeasonGatheringName) ? request.SeasonGatheringName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSeasonGathering(
+                Request.GetSeasonGatheringRequest request,
+                UnityAction<AsyncResult<Result.GetSeasonGatheringResult>> callback
+        )
+		{
+			var task = new GetSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSeasonGatheringResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSeasonGatheringResult> GetSeasonGatheringFuture(
+                Request.GetSeasonGatheringRequest request
+        )
+		{
+			return new GetSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSeasonGatheringResult> GetSeasonGatheringAsync(
+                Request.GetSeasonGatheringRequest request
+        )
+		{
+            AsyncResult<Result.GetSeasonGatheringResult> result = null;
+			await GetSeasonGathering(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSeasonGatheringTask GetSeasonGatheringAsync(
+                Request.GetSeasonGatheringRequest request
+        )
+		{
+			return new GetSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSeasonGatheringResult> GetSeasonGatheringAsync(
+                Request.GetSeasonGatheringRequest request
+        )
+		{
+			var task = new GetSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSeasonGatheringTask : Gs2RestSessionTask<DeleteSeasonGatheringRequest, DeleteSeasonGatheringResult>
+        {
+            public DeleteSeasonGatheringTask(IGs2Session session, RestSessionRequestFactory factory, DeleteSeasonGatheringRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteSeasonGatheringRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season/{seasonName}/{season}/{tier}/gathering/{seasonGatheringName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+                url = url.Replace("{tier}",request.Tier != null ? request.Tier.ToString() : "null");
+                url = url.Replace("{seasonGatheringName}", !string.IsNullOrEmpty(request.SeasonGatheringName) ? request.SeasonGatheringName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSeasonGathering(
+                Request.DeleteSeasonGatheringRequest request,
+                UnityAction<AsyncResult<Result.DeleteSeasonGatheringResult>> callback
+        )
+		{
+			var task = new DeleteSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSeasonGatheringResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSeasonGatheringResult> DeleteSeasonGatheringFuture(
+                Request.DeleteSeasonGatheringRequest request
+        )
+		{
+			return new DeleteSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSeasonGatheringResult> DeleteSeasonGatheringAsync(
+                Request.DeleteSeasonGatheringRequest request
+        )
+		{
+            AsyncResult<Result.DeleteSeasonGatheringResult> result = null;
+			await DeleteSeasonGathering(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteSeasonGatheringTask DeleteSeasonGatheringAsync(
+                Request.DeleteSeasonGatheringRequest request
+        )
+		{
+			return new DeleteSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSeasonGatheringResult> DeleteSeasonGatheringAsync(
+                Request.DeleteSeasonGatheringRequest request
+        )
+		{
+			var task = new DeleteSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeJoinedSeasonGatheringsTask : Gs2RestSessionTask<DescribeJoinedSeasonGatheringsRequest, DescribeJoinedSeasonGatheringsResult>
+        {
+            public DescribeJoinedSeasonGatheringsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeJoinedSeasonGatheringsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeJoinedSeasonGatheringsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/season/{seasonName}/gathering/join";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeJoinedSeasonGatherings(
+                Request.DescribeJoinedSeasonGatheringsRequest request,
+                UnityAction<AsyncResult<Result.DescribeJoinedSeasonGatheringsResult>> callback
+        )
+		{
+			var task = new DescribeJoinedSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeJoinedSeasonGatheringsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeJoinedSeasonGatheringsResult> DescribeJoinedSeasonGatheringsFuture(
+                Request.DescribeJoinedSeasonGatheringsRequest request
+        )
+		{
+			return new DescribeJoinedSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeJoinedSeasonGatheringsResult> DescribeJoinedSeasonGatheringsAsync(
+                Request.DescribeJoinedSeasonGatheringsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeJoinedSeasonGatheringsResult> result = null;
+			await DescribeJoinedSeasonGatherings(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeJoinedSeasonGatheringsTask DescribeJoinedSeasonGatheringsAsync(
+                Request.DescribeJoinedSeasonGatheringsRequest request
+        )
+		{
+			return new DescribeJoinedSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeJoinedSeasonGatheringsResult> DescribeJoinedSeasonGatheringsAsync(
+                Request.DescribeJoinedSeasonGatheringsRequest request
+        )
+		{
+			var task = new DescribeJoinedSeasonGatheringsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeJoinedSeasonGatheringsByUserIdTask : Gs2RestSessionTask<DescribeJoinedSeasonGatheringsByUserIdRequest, DescribeJoinedSeasonGatheringsByUserIdResult>
+        {
+            public DescribeJoinedSeasonGatheringsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeJoinedSeasonGatheringsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeJoinedSeasonGatheringsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/season/{seasonName}/gathering/join";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeJoinedSeasonGatheringsByUserId(
+                Request.DescribeJoinedSeasonGatheringsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeJoinedSeasonGatheringsByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeJoinedSeasonGatheringsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeJoinedSeasonGatheringsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeJoinedSeasonGatheringsByUserIdResult> DescribeJoinedSeasonGatheringsByUserIdFuture(
+                Request.DescribeJoinedSeasonGatheringsByUserIdRequest request
+        )
+		{
+			return new DescribeJoinedSeasonGatheringsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeJoinedSeasonGatheringsByUserIdResult> DescribeJoinedSeasonGatheringsByUserIdAsync(
+                Request.DescribeJoinedSeasonGatheringsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeJoinedSeasonGatheringsByUserIdResult> result = null;
+			await DescribeJoinedSeasonGatheringsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeJoinedSeasonGatheringsByUserIdTask DescribeJoinedSeasonGatheringsByUserIdAsync(
+                Request.DescribeJoinedSeasonGatheringsByUserIdRequest request
+        )
+		{
+			return new DescribeJoinedSeasonGatheringsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeJoinedSeasonGatheringsByUserIdResult> DescribeJoinedSeasonGatheringsByUserIdAsync(
+                Request.DescribeJoinedSeasonGatheringsByUserIdRequest request
+        )
+		{
+			var task = new DescribeJoinedSeasonGatheringsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetJoinedSeasonGatheringTask : Gs2RestSessionTask<GetJoinedSeasonGatheringRequest, GetJoinedSeasonGatheringResult>
+        {
+            public GetJoinedSeasonGatheringTask(IGs2Session session, RestSessionRequestFactory factory, GetJoinedSeasonGatheringRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetJoinedSeasonGatheringRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/season/{seasonName}/gathering/join/{season}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetJoinedSeasonGathering(
+                Request.GetJoinedSeasonGatheringRequest request,
+                UnityAction<AsyncResult<Result.GetJoinedSeasonGatheringResult>> callback
+        )
+		{
+			var task = new GetJoinedSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetJoinedSeasonGatheringResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetJoinedSeasonGatheringResult> GetJoinedSeasonGatheringFuture(
+                Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetJoinedSeasonGatheringResult> GetJoinedSeasonGatheringAsync(
+                Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+            AsyncResult<Result.GetJoinedSeasonGatheringResult> result = null;
+			await GetJoinedSeasonGathering(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetJoinedSeasonGatheringTask GetJoinedSeasonGatheringAsync(
+                Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetJoinedSeasonGatheringResult> GetJoinedSeasonGatheringAsync(
+                Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+			var task = new GetJoinedSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetJoinedSeasonGatheringByUserIdTask : Gs2RestSessionTask<GetJoinedSeasonGatheringByUserIdRequest, GetJoinedSeasonGatheringByUserIdResult>
+        {
+            public GetJoinedSeasonGatheringByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetJoinedSeasonGatheringByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetJoinedSeasonGatheringByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/season/{seasonName}/gathering/join/{season}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetJoinedSeasonGatheringByUserId(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetJoinedSeasonGatheringByUserIdResult>> callback
+        )
+		{
+			var task = new GetJoinedSeasonGatheringByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetJoinedSeasonGatheringByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetJoinedSeasonGatheringByUserIdResult> GetJoinedSeasonGatheringByUserIdFuture(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetJoinedSeasonGatheringByUserIdResult> GetJoinedSeasonGatheringByUserIdAsync(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetJoinedSeasonGatheringByUserIdResult> result = null;
+			await GetJoinedSeasonGatheringByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetJoinedSeasonGatheringByUserIdTask GetJoinedSeasonGatheringByUserIdAsync(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetJoinedSeasonGatheringByUserIdResult> GetJoinedSeasonGatheringByUserIdAsync(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+			var task = new GetJoinedSeasonGatheringByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

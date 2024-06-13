@@ -33,9 +33,9 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class ExportMasterResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster Item { set; get; } = null!;
+        public Gs2.Gs2Matchmaking.Model.CurrentModelMaster Item { set; get; } = null!;
 
-        public ExportMasterResult WithItem(Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster item) {
+        public ExportMasterResult WithItem(Gs2.Gs2Matchmaking.Model.CurrentModelMaster item) {
             this.Item = item;
             return this;
         }
@@ -49,7 +49,7 @@ namespace Gs2.Gs2Matchmaking.Result
                 return null;
             }
             return new ExportMasterResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.CurrentModelMaster.FromJson(data["item"]));
         }
 
         public JsonData ToJson()

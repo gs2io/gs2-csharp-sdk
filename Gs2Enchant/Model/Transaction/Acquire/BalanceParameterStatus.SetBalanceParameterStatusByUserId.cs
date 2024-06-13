@@ -46,12 +46,12 @@ namespace Gs2.Gs2Enchant.Model.Transaction
             this BalanceParameterStatus self,
             SetBalanceParameterStatusByUserIdRequest request
         ) {
-            if (self.Clone() is not BalanceParameterStatus clone)
-            {
-                throw new NullReferenceException();
-            }
-            clone.ParameterValues = request.ParameterValues;
-            return clone;
+#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Enchant:SetBalanceParameterStatusByUserId");
+#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Enchant:SetBalanceParameterStatusByUserId");
+#endif
+            return self.Clone() as BalanceParameterStatus;
         }
 
         public static SetBalanceParameterStatusByUserIdRequest Rate(

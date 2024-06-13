@@ -81,9 +81,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this.NamespaceName = namespaceName;
         }
 
-        public Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain CurrentRatingModelMaster(
+        public Gs2.Gs2Matchmaking.Domain.Model.CurrentModelMasterDomain CurrentModelMaster(
         ) {
-            return new Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain(
+            return new Gs2.Gs2Matchmaking.Domain.Model.CurrentModelMasterDomain(
                 this._gs2,
                 this.NamespaceName
             );
@@ -278,6 +278,166 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 ratingName,
                 gatheringName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.SeasonModel> SeasonModels(
+        )
+        {
+            return new DescribeSeasonModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonModel> SeasonModelsAsync(
+            #else
+        public DescribeSeasonModelsIterator SeasonModelsAsync(
+            #endif
+        )
+        {
+            return new DescribeSeasonModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeSeasonModels(
+            Action<Gs2.Gs2Matchmaking.Model.SeasonModel[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.SeasonModel>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSeasonModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.SeasonModel[]> callback
+        )
+        {
+            var items = await SeasonModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSeasonModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSeasonModels(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.SeasonModel>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Matchmaking.Domain.Model.SeasonModelDomain SeasonModel(
+            string seasonName
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.SeasonModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                seasonName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Matchmaking.Model.SeasonModelMaster> SeasonModelMasters(
+        )
+        {
+            return new DescribeSeasonModelMastersIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonModelMaster> SeasonModelMastersAsync(
+            #else
+        public DescribeSeasonModelMastersIterator SeasonModelMastersAsync(
+            #endif
+        )
+        {
+            return new DescribeSeasonModelMastersIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeSeasonModelMasters(
+            Action<Gs2.Gs2Matchmaking.Model.SeasonModelMaster[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.SeasonModelMaster>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSeasonModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.SeasonModelMaster[]> callback
+        )
+        {
+            var items = await SeasonModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSeasonModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSeasonModelMasters(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.SeasonModelMaster>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain SeasonModelMaster(
+            string seasonName
+        ) {
+            return new Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                seasonName
             );
         }
 
@@ -669,6 +829,64 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 result?.Item?.GatheringName,
                 result?.Item?.NumberOfPlayer,
                 request.KeyId
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain> CreateSeasonModelMasterFuture(
+            CreateSeasonModelMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateSeasonModelMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain> CreateSeasonModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain> CreateSeasonModelMasterAsync(
+            #endif
+            CreateSeasonModelMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateSeasonModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Matchmaking.Domain.Model.SeasonModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
             );
 
             return domain;

@@ -1919,6 +1919,842 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
+        public class GetSeasonModelTask : Gs2WebSocketSessionTask<Request.GetSeasonModelRequest, Result.GetSeasonModelResult>
+        {
+	        public GetSeasonModelTask(IGs2Session session, Request.GetSeasonModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSeasonModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.SeasonName != null)
+                {
+                    jsonWriter.WritePropertyName("seasonName");
+                    jsonWriter.Write(request.SeasonName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "seasonModel",
+                    "getSeasonModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSeasonModel(
+                Request.GetSeasonModelRequest request,
+                UnityAction<AsyncResult<Result.GetSeasonModelResult>> callback
+        )
+		{
+			var task = new GetSeasonModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSeasonModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSeasonModelResult> GetSeasonModelFuture(
+                Request.GetSeasonModelRequest request
+        )
+		{
+			return new GetSeasonModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSeasonModelResult> GetSeasonModelAsync(
+            Request.GetSeasonModelRequest request
+        )
+		{
+		    var task = new GetSeasonModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSeasonModelTask GetSeasonModelAsync(
+                Request.GetSeasonModelRequest request
+        )
+		{
+			return new GetSeasonModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSeasonModelResult> GetSeasonModelAsync(
+            Request.GetSeasonModelRequest request
+        )
+		{
+		    var task = new GetSeasonModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateSeasonModelMasterTask : Gs2WebSocketSessionTask<Request.CreateSeasonModelMasterRequest, Result.CreateSeasonModelMasterResult>
+        {
+	        public CreateSeasonModelMasterTask(IGs2Session session, Request.CreateSeasonModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateSeasonModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.MaximumParticipants != null)
+                {
+                    jsonWriter.WritePropertyName("maximumParticipants");
+                    jsonWriter.Write(request.MaximumParticipants.ToString());
+                }
+                if (request.ExperienceModelId != null)
+                {
+                    jsonWriter.WritePropertyName("experienceModelId");
+                    jsonWriter.Write(request.ExperienceModelId.ToString());
+                }
+                if (request.ChallengePeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("challengePeriodEventId");
+                    jsonWriter.Write(request.ChallengePeriodEventId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "seasonModelMaster",
+                    "createSeasonModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateSeasonModelMaster(
+                Request.CreateSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new CreateSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateSeasonModelMasterResult> CreateSeasonModelMasterFuture(
+                Request.CreateSeasonModelMasterRequest request
+        )
+		{
+			return new CreateSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateSeasonModelMasterResult> CreateSeasonModelMasterAsync(
+            Request.CreateSeasonModelMasterRequest request
+        )
+		{
+		    var task = new CreateSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateSeasonModelMasterTask CreateSeasonModelMasterAsync(
+                Request.CreateSeasonModelMasterRequest request
+        )
+		{
+			return new CreateSeasonModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateSeasonModelMasterResult> CreateSeasonModelMasterAsync(
+            Request.CreateSeasonModelMasterRequest request
+        )
+		{
+		    var task = new CreateSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSeasonModelMasterTask : Gs2WebSocketSessionTask<Request.GetSeasonModelMasterRequest, Result.GetSeasonModelMasterResult>
+        {
+	        public GetSeasonModelMasterTask(IGs2Session session, Request.GetSeasonModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetSeasonModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.SeasonName != null)
+                {
+                    jsonWriter.WritePropertyName("seasonName");
+                    jsonWriter.Write(request.SeasonName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "seasonModelMaster",
+                    "getSeasonModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSeasonModelMaster(
+                Request.GetSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new GetSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSeasonModelMasterResult> GetSeasonModelMasterFuture(
+                Request.GetSeasonModelMasterRequest request
+        )
+		{
+			return new GetSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSeasonModelMasterResult> GetSeasonModelMasterAsync(
+            Request.GetSeasonModelMasterRequest request
+        )
+		{
+		    var task = new GetSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetSeasonModelMasterTask GetSeasonModelMasterAsync(
+                Request.GetSeasonModelMasterRequest request
+        )
+		{
+			return new GetSeasonModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSeasonModelMasterResult> GetSeasonModelMasterAsync(
+            Request.GetSeasonModelMasterRequest request
+        )
+		{
+		    var task = new GetSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateSeasonModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateSeasonModelMasterRequest, Result.UpdateSeasonModelMasterResult>
+        {
+	        public UpdateSeasonModelMasterTask(IGs2Session session, Request.UpdateSeasonModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateSeasonModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.SeasonName != null)
+                {
+                    jsonWriter.WritePropertyName("seasonName");
+                    jsonWriter.Write(request.SeasonName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.MaximumParticipants != null)
+                {
+                    jsonWriter.WritePropertyName("maximumParticipants");
+                    jsonWriter.Write(request.MaximumParticipants.ToString());
+                }
+                if (request.ExperienceModelId != null)
+                {
+                    jsonWriter.WritePropertyName("experienceModelId");
+                    jsonWriter.Write(request.ExperienceModelId.ToString());
+                }
+                if (request.ChallengePeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("challengePeriodEventId");
+                    jsonWriter.Write(request.ChallengePeriodEventId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "seasonModelMaster",
+                    "updateSeasonModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateSeasonModelMaster(
+                Request.UpdateSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateSeasonModelMasterResult> UpdateSeasonModelMasterFuture(
+                Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+			return new UpdateSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateSeasonModelMasterResult> UpdateSeasonModelMasterAsync(
+            Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+		    var task = new UpdateSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateSeasonModelMasterTask UpdateSeasonModelMasterAsync(
+                Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+			return new UpdateSeasonModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateSeasonModelMasterResult> UpdateSeasonModelMasterAsync(
+            Request.UpdateSeasonModelMasterRequest request
+        )
+		{
+		    var task = new UpdateSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteSeasonModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteSeasonModelMasterRequest, Result.DeleteSeasonModelMasterResult>
+        {
+	        public DeleteSeasonModelMasterTask(IGs2Session session, Request.DeleteSeasonModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteSeasonModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.SeasonName != null)
+                {
+                    jsonWriter.WritePropertyName("seasonName");
+                    jsonWriter.Write(request.SeasonName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "seasonModelMaster",
+                    "deleteSeasonModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteSeasonModelMaster(
+                Request.DeleteSeasonModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteSeasonModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteSeasonModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteSeasonModelMasterResult> DeleteSeasonModelMasterFuture(
+                Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+			return new DeleteSeasonModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteSeasonModelMasterResult> DeleteSeasonModelMasterAsync(
+            Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+		    var task = new DeleteSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteSeasonModelMasterTask DeleteSeasonModelMasterAsync(
+                Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+			return new DeleteSeasonModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteSeasonModelMasterResult> DeleteSeasonModelMasterAsync(
+            Request.DeleteSeasonModelMasterRequest request
+        )
+		{
+		    var task = new DeleteSeasonModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetJoinedSeasonGatheringTask : Gs2WebSocketSessionTask<Request.GetJoinedSeasonGatheringRequest, Result.GetJoinedSeasonGatheringResult>
+        {
+	        public GetJoinedSeasonGatheringTask(IGs2Session session, Request.GetJoinedSeasonGatheringRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetJoinedSeasonGatheringRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.SeasonName != null)
+                {
+                    jsonWriter.WritePropertyName("seasonName");
+                    jsonWriter.Write(request.SeasonName.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "joinedSeasonGathering",
+                    "getJoinedSeasonGathering",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetJoinedSeasonGathering(
+                Request.GetJoinedSeasonGatheringRequest request,
+                UnityAction<AsyncResult<Result.GetJoinedSeasonGatheringResult>> callback
+        )
+		{
+			var task = new GetJoinedSeasonGatheringTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetJoinedSeasonGatheringResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetJoinedSeasonGatheringResult> GetJoinedSeasonGatheringFuture(
+                Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetJoinedSeasonGatheringResult> GetJoinedSeasonGatheringAsync(
+            Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+		    var task = new GetJoinedSeasonGatheringTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetJoinedSeasonGatheringTask GetJoinedSeasonGatheringAsync(
+                Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetJoinedSeasonGatheringResult> GetJoinedSeasonGatheringAsync(
+            Request.GetJoinedSeasonGatheringRequest request
+        )
+		{
+		    var task = new GetJoinedSeasonGatheringTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetJoinedSeasonGatheringByUserIdTask : Gs2WebSocketSessionTask<Request.GetJoinedSeasonGatheringByUserIdRequest, Result.GetJoinedSeasonGatheringByUserIdResult>
+        {
+	        public GetJoinedSeasonGatheringByUserIdTask(IGs2Session session, Request.GetJoinedSeasonGatheringByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetJoinedSeasonGatheringByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.SeasonName != null)
+                {
+                    jsonWriter.WritePropertyName("seasonName");
+                    jsonWriter.Write(request.SeasonName.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "joinedSeasonGathering",
+                    "getJoinedSeasonGatheringByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetJoinedSeasonGatheringByUserId(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetJoinedSeasonGatheringByUserIdResult>> callback
+        )
+		{
+			var task = new GetJoinedSeasonGatheringByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetJoinedSeasonGatheringByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetJoinedSeasonGatheringByUserIdResult> GetJoinedSeasonGatheringByUserIdFuture(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetJoinedSeasonGatheringByUserIdResult> GetJoinedSeasonGatheringByUserIdAsync(
+            Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+		    var task = new GetJoinedSeasonGatheringByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetJoinedSeasonGatheringByUserIdTask GetJoinedSeasonGatheringByUserIdAsync(
+                Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+			return new GetJoinedSeasonGatheringByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetJoinedSeasonGatheringByUserIdResult> GetJoinedSeasonGatheringByUserIdAsync(
+            Request.GetJoinedSeasonGatheringByUserIdRequest request
+        )
+		{
+		    var task = new GetJoinedSeasonGatheringByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetRatingTask : Gs2WebSocketSessionTask<Request.GetRatingRequest, Result.GetRatingResult>
         {
 	        public GetRatingTask(IGs2Session session, Request.GetRatingRequest request) : base(session, request)
