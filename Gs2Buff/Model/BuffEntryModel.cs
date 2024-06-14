@@ -340,8 +340,9 @@ namespace Gs2.Gs2Buff.Model
             }
             {
                 switch (Expression) {
-                    case "add":
+                    case "rate_add":
                     case "mul":
+                    case "value_add":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
