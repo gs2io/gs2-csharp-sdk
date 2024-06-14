@@ -6469,6 +6469,275 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
+        public class VerifyIncludeParticipantTask : Gs2RestSessionTask<VerifyIncludeParticipantRequest, VerifyIncludeParticipantResult>
+        {
+            public VerifyIncludeParticipantTask(IGs2Session session, RestSessionRequestFactory factory, VerifyIncludeParticipantRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyIncludeParticipantRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season/{seasonName}/{season}/{tier}/gathering/{seasonGatheringName}/participant/me/verify";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+                url = url.Replace("{tier}",request.Tier != null ? request.Tier.ToString() : "null");
+                url = url.Replace("{seasonGatheringName}", !string.IsNullOrEmpty(request.SeasonGatheringName) ? request.SeasonGatheringName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeParticipant(
+                Request.VerifyIncludeParticipantRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeParticipantResult>> callback
+        )
+		{
+			var task = new VerifyIncludeParticipantTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeParticipantResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeParticipantResult> VerifyIncludeParticipantFuture(
+                Request.VerifyIncludeParticipantRequest request
+        )
+		{
+			return new VerifyIncludeParticipantTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeParticipantResult> VerifyIncludeParticipantAsync(
+                Request.VerifyIncludeParticipantRequest request
+        )
+		{
+            AsyncResult<Result.VerifyIncludeParticipantResult> result = null;
+			await VerifyIncludeParticipant(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyIncludeParticipantTask VerifyIncludeParticipantAsync(
+                Request.VerifyIncludeParticipantRequest request
+        )
+		{
+			return new VerifyIncludeParticipantTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeParticipantResult> VerifyIncludeParticipantAsync(
+                Request.VerifyIncludeParticipantRequest request
+        )
+		{
+			var task = new VerifyIncludeParticipantTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyIncludeParticipantByUserIdTask : Gs2RestSessionTask<VerifyIncludeParticipantByUserIdRequest, VerifyIncludeParticipantByUserIdResult>
+        {
+            public VerifyIncludeParticipantByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyIncludeParticipantByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyIncludeParticipantByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/season/{seasonName}/{season}/{tier}/gathering/{seasonGatheringName}/participant/{userId}/verify";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
+                url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
+                url = url.Replace("{tier}",request.Tier != null ? request.Tier.ToString() : "null");
+                url = url.Replace("{seasonGatheringName}", !string.IsNullOrEmpty(request.SeasonGatheringName) ? request.SeasonGatheringName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeParticipantByUserId(
+                Request.VerifyIncludeParticipantByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeParticipantByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyIncludeParticipantByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeParticipantByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeParticipantByUserIdResult> VerifyIncludeParticipantByUserIdFuture(
+                Request.VerifyIncludeParticipantByUserIdRequest request
+        )
+		{
+			return new VerifyIncludeParticipantByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeParticipantByUserIdResult> VerifyIncludeParticipantByUserIdAsync(
+                Request.VerifyIncludeParticipantByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyIncludeParticipantByUserIdResult> result = null;
+			await VerifyIncludeParticipantByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyIncludeParticipantByUserIdTask VerifyIncludeParticipantByUserIdAsync(
+                Request.VerifyIncludeParticipantByUserIdRequest request
+        )
+		{
+			return new VerifyIncludeParticipantByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeParticipantByUserIdResult> VerifyIncludeParticipantByUserIdAsync(
+                Request.VerifyIncludeParticipantByUserIdRequest request
+        )
+		{
+			var task = new VerifyIncludeParticipantByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteSeasonGatheringTask : Gs2RestSessionTask<DeleteSeasonGatheringRequest, DeleteSeasonGatheringResult>
         {
             public DeleteSeasonGatheringTask(IGs2Session session, RestSessionRequestFactory factory, DeleteSeasonGatheringRequest request) : base(session, factory, request)
@@ -6568,6 +6837,131 @@ namespace Gs2.Gs2Matchmaking
         )
 		{
 			var task = new DeleteSeasonGatheringTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyIncludeParticipantByStampTaskTask : Gs2RestSessionTask<VerifyIncludeParticipantByStampTaskRequest, VerifyIncludeParticipantByStampTaskResult>
+        {
+            public VerifyIncludeParticipantByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyIncludeParticipantByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyIncludeParticipantByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/season/gathering/participant/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyIncludeParticipantByStampTask(
+                Request.VerifyIncludeParticipantByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyIncludeParticipantByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyIncludeParticipantByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyIncludeParticipantByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyIncludeParticipantByStampTaskResult> VerifyIncludeParticipantByStampTaskFuture(
+                Request.VerifyIncludeParticipantByStampTaskRequest request
+        )
+		{
+			return new VerifyIncludeParticipantByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyIncludeParticipantByStampTaskResult> VerifyIncludeParticipantByStampTaskAsync(
+                Request.VerifyIncludeParticipantByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyIncludeParticipantByStampTaskResult> result = null;
+			await VerifyIncludeParticipantByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyIncludeParticipantByStampTaskTask VerifyIncludeParticipantByStampTaskAsync(
+                Request.VerifyIncludeParticipantByStampTaskRequest request
+        )
+		{
+			return new VerifyIncludeParticipantByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyIncludeParticipantByStampTaskResult> VerifyIncludeParticipantByStampTaskAsync(
+                Request.VerifyIncludeParticipantByStampTaskRequest request
+        )
+		{
+			var task = new VerifyIncludeParticipantByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

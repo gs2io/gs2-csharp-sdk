@@ -30,6 +30,8 @@ namespace Gs2.Gs2Matchmaking.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Matchmaking:VerifyIncludeParticipantByUserId":
+                    return VerifyIncludeParticipantByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

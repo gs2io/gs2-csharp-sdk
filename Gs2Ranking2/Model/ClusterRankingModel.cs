@@ -387,6 +387,7 @@ namespace Gs2.Gs2Ranking2.Model
                 switch (ClusterType) {
                     case "Raw":
                     case "Gs2Guild::Guild":
+                    case "Gs2Matchmaking::SeasonGathering":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
