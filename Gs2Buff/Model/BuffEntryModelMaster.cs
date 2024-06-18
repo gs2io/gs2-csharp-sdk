@@ -35,10 +35,10 @@ namespace Gs2.Gs2Buff.Model
         public string Name { set; get; } = null!;
         public string Description { set; get; } = null!;
         public string Metadata { set; get; } = null!;
+        public string Expression { set; get; } = null!;
         public string TargetType { set; get; } = null!;
         public Gs2.Gs2Buff.Model.BuffTargetModel TargetModel { set; get; } = null!;
         public Gs2.Gs2Buff.Model.BuffTargetAction TargetAction { set; get; } = null!;
-        public string Expression { set; get; } = null!;
         public int? Priority { set; get; } = null!;
         public string ApplyPeriodScheduleEventId { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
@@ -60,6 +60,10 @@ namespace Gs2.Gs2Buff.Model
             this.Metadata = metadata;
             return this;
         }
+        public BuffEntryModelMaster WithExpression(string expression) {
+            this.Expression = expression;
+            return this;
+        }
         public BuffEntryModelMaster WithTargetType(string targetType) {
             this.TargetType = targetType;
             return this;
@@ -70,10 +74,6 @@ namespace Gs2.Gs2Buff.Model
         }
         public BuffEntryModelMaster WithTargetAction(Gs2.Gs2Buff.Model.BuffTargetAction targetAction) {
             this.TargetAction = targetAction;
-            return this;
-        }
-        public BuffEntryModelMaster WithExpression(string expression) {
-            this.Expression = expression;
             return this;
         }
         public BuffEntryModelMaster WithPriority(int? priority) {
@@ -178,10 +178,10 @@ namespace Gs2.Gs2Buff.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithExpression(!data.Keys.Contains("expression") || data["expression"] == null ? null : data["expression"].ToString())
                 .WithTargetType(!data.Keys.Contains("targetType") || data["targetType"] == null ? null : data["targetType"].ToString())
                 .WithTargetModel(!data.Keys.Contains("targetModel") || data["targetModel"] == null ? null : Gs2.Gs2Buff.Model.BuffTargetModel.FromJson(data["targetModel"]))
                 .WithTargetAction(!data.Keys.Contains("targetAction") || data["targetAction"] == null ? null : Gs2.Gs2Buff.Model.BuffTargetAction.FromJson(data["targetAction"]))
-                .WithExpression(!data.Keys.Contains("expression") || data["expression"] == null ? null : data["expression"].ToString())
                 .WithPriority(!data.Keys.Contains("priority") || data["priority"] == null ? null : (int?)(data["priority"].ToString().Contains(".") ? (int)double.Parse(data["priority"].ToString()) : int.Parse(data["priority"].ToString())))
                 .WithApplyPeriodScheduleEventId(!data.Keys.Contains("applyPeriodScheduleEventId") || data["applyPeriodScheduleEventId"] == null ? null : data["applyPeriodScheduleEventId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
@@ -196,10 +196,10 @@ namespace Gs2.Gs2Buff.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
+                ["expression"] = Expression,
                 ["targetType"] = TargetType,
                 ["targetModel"] = TargetModel?.ToJson(),
                 ["targetAction"] = TargetAction?.ToJson(),
-                ["expression"] = Expression,
                 ["priority"] = Priority,
                 ["applyPeriodScheduleEventId"] = ApplyPeriodScheduleEventId,
                 ["createdAt"] = CreatedAt,
@@ -227,6 +227,10 @@ namespace Gs2.Gs2Buff.Model
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
+            if (Expression != null) {
+                writer.WritePropertyName("expression");
+                writer.Write(Expression.ToString());
+            }
             if (TargetType != null) {
                 writer.WritePropertyName("targetType");
                 writer.Write(TargetType.ToString());
@@ -238,10 +242,6 @@ namespace Gs2.Gs2Buff.Model
             if (TargetAction != null) {
                 writer.WritePropertyName("targetAction");
                 TargetAction.WriteJson(writer);
-            }
-            if (Expression != null) {
-                writer.WritePropertyName("expression");
-                writer.Write(Expression.ToString());
             }
             if (Priority != null) {
                 writer.WritePropertyName("priority");
@@ -302,6 +302,14 @@ namespace Gs2.Gs2Buff.Model
             {
                 diff += Metadata.CompareTo(other.Metadata);
             }
+            if (Expression == null && Expression == other.Expression)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Expression.CompareTo(other.Expression);
+            }
             if (TargetType == null && TargetType == other.TargetType)
             {
                 // null and null
@@ -325,14 +333,6 @@ namespace Gs2.Gs2Buff.Model
             else
             {
                 diff += TargetAction.CompareTo(other.TargetAction);
-            }
-            if (Expression == null && Expression == other.Expression)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Expression.CompareTo(other.Expression);
             }
             if (Priority == null && Priority == other.Priority)
             {
@@ -407,6 +407,18 @@ namespace Gs2.Gs2Buff.Model
                 }
             }
             {
+                switch (Expression) {
+                    case "rate_add":
+                    case "mul":
+                    case "value_add":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("buffEntryModelMaster", "buff.buffEntryModelMaster.expression.error.invalid"),
+                        });
+                }
+            }
+            {
                 switch (TargetType) {
                     case "model":
                     case "action":
@@ -420,18 +432,6 @@ namespace Gs2.Gs2Buff.Model
             if (TargetType == "model") {
             }
             if (TargetType == "action") {
-            }
-            {
-                switch (Expression) {
-                    case "rate_add":
-                    case "mul":
-                    case "value_add":
-                        break;
-                    default:
-                        throw new Gs2.Core.Exception.BadRequestException(new [] {
-                            new RequestError("buffEntryModelMaster", "buff.buffEntryModelMaster.expression.error.invalid"),
-                        });
-                }
             }
             {
                 if (Priority < 0) {
@@ -496,10 +496,10 @@ namespace Gs2.Gs2Buff.Model
                 Name = Name,
                 Description = Description,
                 Metadata = Metadata,
+                Expression = Expression,
                 TargetType = TargetType,
                 TargetModel = TargetModel.Clone() as Gs2.Gs2Buff.Model.BuffTargetModel,
                 TargetAction = TargetAction.Clone() as Gs2.Gs2Buff.Model.BuffTargetAction,
-                Expression = Expression,
                 Priority = Priority,
                 ApplyPeriodScheduleEventId = ApplyPeriodScheduleEventId,
                 CreatedAt = CreatedAt,

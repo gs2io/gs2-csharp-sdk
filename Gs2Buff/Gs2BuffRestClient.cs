@@ -1945,6 +1945,11 @@ namespace Gs2.Gs2Buff
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.Expression != null)
+                {
+                    jsonWriter.WritePropertyName("expression");
+                    jsonWriter.Write(request.Expression);
+                }
                 if (request.TargetType != null)
                 {
                     jsonWriter.WritePropertyName("targetType");
@@ -1959,11 +1964,6 @@ namespace Gs2.Gs2Buff
                 {
                     jsonWriter.WritePropertyName("targetAction");
                     request.TargetAction.WriteJson(jsonWriter);
-                }
-                if (request.Expression != null)
-                {
-                    jsonWriter.WritePropertyName("expression");
-                    jsonWriter.Write(request.Expression);
                 }
                 if (request.Priority != null)
                 {
@@ -2208,6 +2208,11 @@ namespace Gs2.Gs2Buff
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.Expression != null)
+                {
+                    jsonWriter.WritePropertyName("expression");
+                    jsonWriter.Write(request.Expression);
+                }
                 if (request.TargetType != null)
                 {
                     jsonWriter.WritePropertyName("targetType");
@@ -2222,11 +2227,6 @@ namespace Gs2.Gs2Buff
                 {
                     jsonWriter.WritePropertyName("targetAction");
                     request.TargetAction.WriteJson(jsonWriter);
-                }
-                if (request.Expression != null)
-                {
-                    jsonWriter.WritePropertyName("expression");
-                    jsonWriter.Write(request.Expression);
                 }
                 if (request.Priority != null)
                 {
