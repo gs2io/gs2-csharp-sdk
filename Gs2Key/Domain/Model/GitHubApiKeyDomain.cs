@@ -91,7 +91,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithApiKeyName(this.ApiKeyName);
                 var future = request.InvokeFuture(
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Key.Domain.Model
             UpdateGitHubApiKeyRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithApiKeyName(this.ApiKeyName);
             var result = await request.InvokeAsync(
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Model.GitHubApiKey> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithApiKeyName(this.ApiKeyName);
                 var future = request.InvokeFuture(
@@ -172,7 +172,7 @@ namespace Gs2.Gs2Key.Domain.Model
             GetGitHubApiKeyRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithApiKeyName(this.ApiKeyName);
             var result = await request.InvokeAsync(
@@ -191,7 +191,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithApiKeyName(this.ApiKeyName);
                 var future = request.InvokeFuture(
@@ -225,7 +225,7 @@ namespace Gs2.Gs2Key.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithApiKeyName(this.ApiKeyName);
                 var result = await request.InvokeAsync(

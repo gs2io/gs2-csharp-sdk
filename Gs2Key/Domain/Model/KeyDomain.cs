@@ -91,7 +91,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
@@ -122,7 +122,7 @@ namespace Gs2.Gs2Key.Domain.Model
             UpdateKeyRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
             var result = await request.InvokeAsync(
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Model.Key> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
@@ -172,7 +172,7 @@ namespace Gs2.Gs2Key.Domain.Model
             GetKeyRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
             var result = await request.InvokeAsync(
@@ -191,7 +191,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
@@ -225,7 +225,7 @@ namespace Gs2.Gs2Key.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
                 var result = await request.InvokeAsync(
@@ -247,7 +247,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
@@ -278,7 +278,7 @@ namespace Gs2.Gs2Key.Domain.Model
             EncryptRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
             var result = await request.InvokeAsync(
@@ -299,7 +299,7 @@ namespace Gs2.Gs2Key.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
@@ -330,7 +330,7 @@ namespace Gs2.Gs2Key.Domain.Model
             DecryptRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
             var result = await request.InvokeAsync(

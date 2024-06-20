@@ -93,7 +93,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.PrizeLimit> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithPrizeTableName(this.PrizeTableName)
                     .WithPrizeId(this.PrizeId);
@@ -123,7 +123,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             GetPrizeLimitRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithPrizeTableName(this.PrizeTableName)
                 .WithPrizeId(this.PrizeId);
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithPrizeTableName(this.PrizeTableName)
                     .WithPrizeId(this.PrizeId);
@@ -174,7 +174,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             ResetPrizeLimitRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithPrizeTableName(this.PrizeTableName)
                 .WithPrizeId(this.PrizeId);

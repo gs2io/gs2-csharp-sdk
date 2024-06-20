@@ -176,7 +176,7 @@ namespace Gs2.Gs2News.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2News.Model.Progress> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUploadToken(this.UploadToken);
                 var future = request.InvokeFuture(
@@ -205,7 +205,7 @@ namespace Gs2.Gs2News.Domain.Model
             GetProgressRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUploadToken(this.UploadToken);
             var result = await request.InvokeAsync(

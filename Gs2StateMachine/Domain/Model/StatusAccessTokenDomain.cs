@@ -90,7 +90,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Model.Status> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithStatusName(this.StatusName);
@@ -120,7 +120,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             GetStatusRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithStatusName(this.StatusName);
@@ -140,7 +140,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithStatusName(this.StatusName);
@@ -172,7 +172,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             EmitRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithStatusName(this.StatusName);
@@ -194,7 +194,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithStatusName(this.StatusName);
@@ -226,7 +226,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             ReportRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithStatusName(this.StatusName);
@@ -248,7 +248,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithStatusName(this.StatusName);
@@ -280,7 +280,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             ExitStateMachineRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithStatusName(this.StatusName);

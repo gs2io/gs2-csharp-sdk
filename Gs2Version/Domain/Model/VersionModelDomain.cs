@@ -90,7 +90,7 @@ namespace Gs2.Gs2Version.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.VersionModel> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithVersionName(this.VersionName);
                 var future = request.InvokeFuture(
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Version.Domain.Model
             GetVersionModelRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithVersionName(this.VersionName);
             var result = await request.InvokeAsync(

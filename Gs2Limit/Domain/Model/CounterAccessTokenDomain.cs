@@ -93,7 +93,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Model.Counter> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithLimitName(this.LimitName)
@@ -124,7 +124,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             GetCounterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithLimitName(this.LimitName)
@@ -145,7 +145,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithLimitName(this.LimitName)
@@ -178,7 +178,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             CountUpRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithLimitName(this.LimitName)
@@ -201,7 +201,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithLimitName(this.LimitName)
@@ -233,7 +233,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             VerifyCounterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithLimitName(this.LimitName)

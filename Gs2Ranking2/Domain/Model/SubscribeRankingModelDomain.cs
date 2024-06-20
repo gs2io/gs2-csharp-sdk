@@ -90,7 +90,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Model.SubscribeRankingModel> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithRankingName(this.RankingName);
                 var future = request.InvokeFuture(
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             GetSubscribeRankingModelRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithRankingName(this.RankingName);
             var result = await request.InvokeAsync(

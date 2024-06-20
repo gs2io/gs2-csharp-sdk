@@ -105,7 +105,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.SubscribeUserDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRankingName(this.RankingName);
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             AddSubscribeByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRankingName(this.RankingName);

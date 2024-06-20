@@ -87,7 +87,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             GetHasSecurityPolicyRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithUserName(this.UserName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -141,7 +141,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -173,7 +173,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             AttachSecurityPolicyRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithUserName(this.UserName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -195,7 +195,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -227,7 +227,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             DetachSecurityPolicyRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithUserName(this.UserName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

@@ -95,7 +95,7 @@ namespace Gs2.Gs2Script.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Script> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
                 var future = request.InvokeFuture(
@@ -124,7 +124,7 @@ namespace Gs2.Gs2Script.Domain.Model
             GetScriptRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
             var result = await request.InvokeAsync(
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Script.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
                 var future = request.InvokeFuture(
@@ -174,7 +174,7 @@ namespace Gs2.Gs2Script.Domain.Model
             UpdateScriptRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
             var result = await request.InvokeAsync(
@@ -195,7 +195,7 @@ namespace Gs2.Gs2Script.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
                 var future = request.InvokeFuture(
@@ -226,7 +226,7 @@ namespace Gs2.Gs2Script.Domain.Model
             UpdateScriptFromGitHubRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
             var result = await request.InvokeAsync(
@@ -247,7 +247,7 @@ namespace Gs2.Gs2Script.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
                 var future = request.InvokeFuture(
@@ -281,7 +281,7 @@ namespace Gs2.Gs2Script.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
                 var result = await request.InvokeAsync(

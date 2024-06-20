@@ -90,7 +90,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Model.LimitModelMaster> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithLimitName(this.LimitName);
                 var future = request.InvokeFuture(
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             GetLimitModelMasterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithLimitName(this.LimitName);
             var result = await request.InvokeAsync(
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithLimitName(this.LimitName);
                 var future = request.InvokeFuture(
@@ -169,7 +169,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             UpdateLimitModelMasterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithLimitName(this.LimitName);
             var result = await request.InvokeAsync(
@@ -190,7 +190,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithLimitName(this.LimitName);
                 var future = request.InvokeFuture(
@@ -224,7 +224,7 @@ namespace Gs2.Gs2Limit.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithLimitName(this.LimitName);
                 var result = await request.InvokeAsync(

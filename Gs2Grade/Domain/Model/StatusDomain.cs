@@ -100,7 +100,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.Status> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -131,7 +131,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             GetStatusByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
@@ -152,7 +152,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -186,7 +186,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             AddGradeByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
@@ -210,7 +210,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -244,7 +244,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             SubGradeByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
@@ -268,7 +268,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -302,7 +302,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             SetGradeByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
@@ -326,7 +326,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -360,7 +360,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             ApplyRankCapByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
@@ -384,7 +384,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -420,7 +420,7 @@ namespace Gs2.Gs2Grade.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -444,7 +444,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -476,7 +476,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             VerifyGradeByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
@@ -498,7 +498,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -530,7 +530,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             VerifyGradeUpMaterialByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
@@ -552,7 +552,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
@@ -600,7 +600,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             MultiplyAcquireActionsByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)

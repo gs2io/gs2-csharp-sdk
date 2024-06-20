@@ -90,7 +90,7 @@ namespace Gs2.Gs2Buff.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Buff.Model.BuffEntryModel> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithBuffEntryName(this.BuffEntryName);
                 var future = request.InvokeFuture(
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Buff.Domain.Model
             GetBuffEntryModelRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithBuffEntryName(this.BuffEntryName);
             var result = await request.InvokeAsync(

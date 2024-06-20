@@ -90,7 +90,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Output> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName)
                     .WithOutputName(this.OutputName);
                 var future = request.InvokeFuture(
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             GetOutputRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithStackName(this.StackName)
                 .WithOutputName(this.OutputName);
             var result = await request.InvokeAsync(

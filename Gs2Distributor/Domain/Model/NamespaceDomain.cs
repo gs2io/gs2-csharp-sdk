@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -73,6 +75,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public int? SheetResultCode { get; set; } = null!;
         public string SheetResult { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
+        public string NewContextStack { get; set; } = null!;
 
         public NamespaceDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -292,7 +295,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -322,7 +325,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -342,7 +345,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.Namespace> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -370,7 +373,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -388,7 +391,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -418,7 +421,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -438,7 +441,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -471,7 +474,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -487,14 +490,14 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> SetTransactionDefaultConfigFuture(
-            SetTransactionDefaultConfigByUserIdRequest request
+            SetTransactionDefaultConfigRequest request
         ) {
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> self)
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
-                    () => this._client.SetTransactionDefaultConfigByUserIdFuture(request)
+                    () => this._client.SetTransactionDefaultConfigFuture(request)
                 );
                 yield return future;
                 if (future.Error != null) {
@@ -503,6 +506,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+                domain.NewContextStack = result.NewContextStack;
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain>(Impl);
@@ -515,14 +519,15 @@ namespace Gs2.Gs2Distributor.Domain.Model
             #else
         public async Task<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> SetTransactionDefaultConfigAsync(
             #endif
-            SetTransactionDefaultConfigByUserIdRequest request
+            SetTransactionDefaultConfigRequest request
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
-                () => this._client.SetTransactionDefaultConfigByUserIdAsync(request)
+                () => this._client.SetTransactionDefaultConfigAsync(request)
             );
             var domain = this;
+            domain.NewContextStack = result.NewContextStack;
             return domain;
         }
         #endif
@@ -534,7 +539,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -568,7 +573,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             CreateDistributorModelMasterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

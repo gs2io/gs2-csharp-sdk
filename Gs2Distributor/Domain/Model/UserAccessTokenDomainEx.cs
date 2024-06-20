@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -33,10 +31,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Gs2Buff.Domain.Iterator;
-using Gs2.Gs2Buff.Model.Cache;
-using Gs2.Gs2Buff.Request;
-using Gs2.Gs2Buff.Result;
+using Gs2.Gs2Distributor.Domain.Iterator;
+using Gs2.Gs2Distributor.Model.Cache;
+using Gs2.Gs2Distributor.Request;
+using Gs2.Gs2Distributor.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -59,44 +57,23 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Buff.Domain.Model
+namespace Gs2.Gs2Distributor.Domain.Model
 {
 
-    public partial class BuffAccessTokenDomain {
-        public readonly Gs2.Core.Domain.Gs2 Gs2;
-        private readonly Gs2BuffRestClient _client;
-        public string NamespaceName { get; }
-        public AccessToken AccessToken { get; }
-        public string UserId => this.AccessToken.UserId;
-        public Gs2.Gs2Buff.Model.BuffEntryModel[] BuffEntryModels;
-
-        public BuffAccessTokenDomain(
-            Gs2.Core.Domain.Gs2 gs2,
-            string namespaceName,
-            AccessToken accessToken
-        ) {
-            this.Gs2 = gs2;
-            this._client = new Gs2BuffRestClient(
-                gs2.RestSession
-            );
-            this.NamespaceName = namespaceName;
-            this.AccessToken = accessToken;
-        }
-
+    public partial class UserAccessTokenDomain {
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Core.Domain.Gs2> ApplyFuture(
-            ApplyBuffRequest request
+        public IFuture<Gs2.Core.Domain.Gs2> SetTransactionDefaultConfigFuture(
+            SetTransactionDefaultConfigRequest request
         ) {
             IEnumerator Impl(IFuture<Gs2.Core.Domain.Gs2> self)
             {
                 request = request
                     .WithContextStack(this.Gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
-                    Gs2.Cache,
+                    this.Gs2.Cache,
                     this.UserId,
-                    () => this._client.ApplyBuffFuture(request)
+                    () => this._client.SetTransactionDefaultConfigFuture(request)
                 );
                 yield return future;
                 if (future.Error != null) {
@@ -104,7 +81,6 @@ namespace Gs2.Gs2Buff.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                this.BuffEntryModels = result?.Items;
                 var newGs2 =  new Core.Domain.Gs2(
                     this.Gs2.RestSession,
                     this.Gs2.WebSocketSession,
@@ -119,22 +95,20 @@ namespace Gs2.Gs2Buff.Domain.Model
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Core.Domain.Gs2> ApplyAsync(
+        public async UniTask<Gs2.Core.Domain.Gs2> SetTransactionDefaultConfigAsync(
             #else
-        public async Task<Gs2.Core.Domain.Gs2> ApplyAsync(
+        public async Task<Gs2.Core.Domain.Gs2> SetTransactionDefaultConfigAsync(
             #endif
-            ApplyBuffRequest request
+            SetTransactionDefaultConfigRequest request
         ) {
             request = request
                 .WithContextStack(this.Gs2.DefaultContextStack)
-                .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
-                Gs2.Cache,
+                this.Gs2.Cache,
                 this.UserId,
-                () => this._client.ApplyBuffAsync(request)
+                () => this._client.SetTransactionDefaultConfigAsync(request)
             );
-            this.BuffEntryModels = result?.Items;
             var newGs2 =  new Core.Domain.Gs2(
                 this.Gs2.RestSession,
                 this.Gs2.WebSocketSession,
