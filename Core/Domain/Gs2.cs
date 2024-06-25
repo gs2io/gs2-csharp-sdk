@@ -70,6 +70,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2MegaField.Domain.Gs2MegaField MegaField;
         public readonly Gs2Mission.Domain.Gs2Mission Mission;
         public readonly Gs2Money.Domain.Gs2Money Money;
+        public readonly Gs2Money2.Domain.Gs2Money2 Money2;
         public readonly Gs2News.Domain.Gs2News News;
         public readonly Gs2Quest.Domain.Gs2Quest Quest;
         public readonly Gs2Ranking.Domain.Gs2Ranking Ranking;
@@ -137,6 +138,7 @@ namespace Gs2.Core.Domain
             this.MegaField = new Gs2MegaField.Domain.Gs2MegaField(this);
             this.Mission = new Gs2Mission.Domain.Gs2Mission(this);
             this.Money = new Gs2Money.Domain.Gs2Money(this);
+            this.Money2 = new Gs2Money2.Domain.Gs2Money2(this);
             this.News = new Gs2News.Domain.Gs2News(this);
             this.Quest = new Gs2Quest.Domain.Gs2Quest(this);
             this.Ranking = new Gs2Ranking.Domain.Gs2Ranking(this);
@@ -260,6 +262,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Money":
                                 this.Money.HandleNotification(this._cache, method, message.payload);
+                                break;
+                            case "Gs2Money2":
+                                this.Money2.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2News":
                                 this.News.HandleNotification(this._cache, method, message.payload);
@@ -619,6 +624,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Money":
                         this.Money.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
+                    case "Gs2Money2":
+                        this.Money2.UpdateCacheFromStampSheet(transactionId, method, request, result);
+                        break;
                     case "Gs2News":
                         this.News.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
@@ -777,6 +785,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Money":
                         this.Money.UpdateCacheFromStampTask(taskId, method, request, result);
+                        break;
+                    case "Gs2Money2":
+                        this.Money2.UpdateCacheFromStampTask(taskId, method, request, result);
                         break;
                     case "Gs2News":
                         this.News.UpdateCacheFromStampTask(taskId, method, request, result);
@@ -946,6 +957,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "money":
                                 this.Money.UpdateCacheFromJobResult(method, job, result);
+                                break;
+                            case "money2":
+                                this.Money2.UpdateCacheFromJobResult(method, job, result);
                                 break;
                             case "news":
                                 this.News.UpdateCacheFromJobResult(method, job, result);

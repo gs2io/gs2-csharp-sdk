@@ -87,7 +87,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -117,7 +117,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             ExportMasterRequest request
         ) {
             request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.CurrentDistributorMaster> self)
             {
                 request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -165,7 +165,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             GetCurrentDistributorMasterRequest request
         ) {
             request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -183,7 +183,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             UpdateCurrentDistributorMasterRequest request
         ) {
             request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -233,7 +233,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -263,7 +263,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             UpdateCurrentDistributorMasterFromGitHubRequest request
         ) {
             request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithContextStack(this._gs2.DefaultContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

@@ -2384,6 +2384,19 @@ namespace Gs2.Core.SpeculativeExecutor
                         }
                     }
                     {
+                        var c = await Gs2.Gs2Money2.Domain.SpeculativeExecutor
+                            .AcquireActionSpeculativeExecutorIndex.ExecuteAsync(
+                                domain,
+                                accessToken,
+                                acquireAction,
+                                this._rate
+                            );
+                        if (c != null) {
+                            commit.Add(c);
+                            continue;
+                        }
+                    }
+                    {
                         var c = await Gs2.Gs2News.Domain.SpeculativeExecutor.AcquireActionSpeculativeExecutorIndex
                             .ExecuteAsync(
                                 domain,
