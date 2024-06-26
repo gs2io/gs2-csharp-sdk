@@ -37,6 +37,7 @@ namespace Gs2.Gs2Idle.Request
          public string Description { set; get; } = null!;
          public Gs2.Gs2Idle.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Idle.Model.ScriptSetting ReceiveScript { set; get; } = null!;
+         public string OverrideAcquireActionsScriptId { set; get; } = null!;
          public Gs2.Gs2Idle.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Idle.Request
         }
         public CreateNamespaceRequest WithReceiveScript(Gs2.Gs2Idle.Model.ScriptSetting receiveScript) {
             this.ReceiveScript = receiveScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithOverrideAcquireActionsScriptId(string overrideAcquireActionsScriptId) {
+            this.OverrideAcquireActionsScriptId = overrideAcquireActionsScriptId;
             return this;
         }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Idle.Model.LogSetting logSetting) {
@@ -72,6 +77,7 @@ namespace Gs2.Gs2Idle.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Idle.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithReceiveScript(!data.Keys.Contains("receiveScript") || data["receiveScript"] == null ? null : Gs2.Gs2Idle.Model.ScriptSetting.FromJson(data["receiveScript"]))
+                .WithOverrideAcquireActionsScriptId(!data.Keys.Contains("overrideAcquireActionsScriptId") || data["overrideAcquireActionsScriptId"] == null ? null : data["overrideAcquireActionsScriptId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Idle.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Idle.Request
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["receiveScript"] = ReceiveScript?.ToJson(),
+                ["overrideAcquireActionsScriptId"] = OverrideAcquireActionsScriptId,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -103,6 +110,10 @@ namespace Gs2.Gs2Idle.Request
             if (ReceiveScript != null) {
                 ReceiveScript.WriteJson(writer);
             }
+            if (OverrideAcquireActionsScriptId != null) {
+                writer.WritePropertyName("overrideAcquireActionsScriptId");
+                writer.Write(OverrideAcquireActionsScriptId.ToString());
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -115,6 +126,7 @@ namespace Gs2.Gs2Idle.Request
             key += Description + ":";
             key += TransactionSetting + ":";
             key += ReceiveScript + ":";
+            key += OverrideAcquireActionsScriptId + ":";
             key += LogSetting + ":";
             return key;
         }

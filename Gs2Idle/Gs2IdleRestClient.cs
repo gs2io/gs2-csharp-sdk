@@ -208,6 +208,11 @@ namespace Gs2.Gs2Idle
                     jsonWriter.WritePropertyName("receiveScript");
                     request.ReceiveScript.WriteJson(jsonWriter);
                 }
+                if (request.OverrideAcquireActionsScriptId != null)
+                {
+                    jsonWriter.WritePropertyName("overrideAcquireActionsScriptId");
+                    jsonWriter.Write(request.OverrideAcquireActionsScriptId);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -552,6 +557,11 @@ namespace Gs2.Gs2Idle
                 {
                     jsonWriter.WritePropertyName("receiveScript");
                     request.ReceiveScript.WriteJson(jsonWriter);
+                }
+                if (request.OverrideAcquireActionsScriptId != null)
+                {
+                    jsonWriter.WritePropertyName("overrideAcquireActionsScriptId");
+                    jsonWriter.Write(request.OverrideAcquireActionsScriptId);
                 }
                 if (request.LogSetting != null)
                 {

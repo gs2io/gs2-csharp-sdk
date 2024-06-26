@@ -36,6 +36,7 @@ namespace Gs2.Gs2Idle.Model
         public string Description { set; get; } = null!;
         public Gs2.Gs2Idle.Model.TransactionSetting TransactionSetting { set; get; } = null!;
         public Gs2.Gs2Idle.Model.ScriptSetting ReceiveScript { set; get; } = null!;
+        public string OverrideAcquireActionsScriptId { set; get; } = null!;
         public Gs2.Gs2Idle.Model.LogSetting LogSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -58,6 +59,10 @@ namespace Gs2.Gs2Idle.Model
         }
         public Namespace WithReceiveScript(Gs2.Gs2Idle.Model.ScriptSetting receiveScript) {
             this.ReceiveScript = receiveScript;
+            return this;
+        }
+        public Namespace WithOverrideAcquireActionsScriptId(string overrideAcquireActionsScriptId) {
+            this.OverrideAcquireActionsScriptId = overrideAcquireActionsScriptId;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Idle.Model.LogSetting logSetting) {
@@ -142,6 +147,7 @@ namespace Gs2.Gs2Idle.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Idle.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithReceiveScript(!data.Keys.Contains("receiveScript") || data["receiveScript"] == null ? null : Gs2.Gs2Idle.Model.ScriptSetting.FromJson(data["receiveScript"]))
+                .WithOverrideAcquireActionsScriptId(!data.Keys.Contains("overrideAcquireActionsScriptId") || data["overrideAcquireActionsScriptId"] == null ? null : data["overrideAcquireActionsScriptId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Idle.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -156,6 +162,7 @@ namespace Gs2.Gs2Idle.Model
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["receiveScript"] = ReceiveScript?.ToJson(),
+                ["overrideAcquireActionsScriptId"] = OverrideAcquireActionsScriptId,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -185,6 +192,10 @@ namespace Gs2.Gs2Idle.Model
             if (ReceiveScript != null) {
                 writer.WritePropertyName("receiveScript");
                 ReceiveScript.WriteJson(writer);
+            }
+            if (OverrideAcquireActionsScriptId != null) {
+                writer.WritePropertyName("overrideAcquireActionsScriptId");
+                writer.Write(OverrideAcquireActionsScriptId.ToString());
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -249,6 +260,14 @@ namespace Gs2.Gs2Idle.Model
             {
                 diff += ReceiveScript.CompareTo(other.ReceiveScript);
             }
+            if (OverrideAcquireActionsScriptId == null && OverrideAcquireActionsScriptId == other.OverrideAcquireActionsScriptId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += OverrideAcquireActionsScriptId.CompareTo(other.OverrideAcquireActionsScriptId);
+            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -311,6 +330,13 @@ namespace Gs2.Gs2Idle.Model
             {
             }
             {
+                if (OverrideAcquireActionsScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "idle.namespace.overrideAcquireActionsScriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
             }
             {
                 if (CreatedAt < 0) {
@@ -357,6 +383,7 @@ namespace Gs2.Gs2Idle.Model
                 Description = Description,
                 TransactionSetting = TransactionSetting.Clone() as Gs2.Gs2Idle.Model.TransactionSetting,
                 ReceiveScript = ReceiveScript.Clone() as Gs2.Gs2Idle.Model.ScriptSetting,
+                OverrideAcquireActionsScriptId = OverrideAcquireActionsScriptId,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Idle.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
