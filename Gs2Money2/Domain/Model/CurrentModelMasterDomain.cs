@@ -87,7 +87,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.CurrentModelMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -117,7 +117,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             ExportMasterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Model.CurrentModelMaster> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -165,7 +165,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             GetCurrentModelMasterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -183,7 +183,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.CurrentModelMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             UpdateCurrentModelMasterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -233,7 +233,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.CurrentModelMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -263,7 +263,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             UpdateCurrentModelMasterFromGitHubRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

@@ -4653,5 +4653,560 @@ namespace Gs2.Gs2Money2
 			return await task.Invoke();
         }
 #endif
+
+
+        public class DescribeDailyTransactionHistoriesByCurrencyTask : Gs2RestSessionTask<DescribeDailyTransactionHistoriesByCurrencyRequest, DescribeDailyTransactionHistoriesByCurrencyResult>
+        {
+            public DescribeDailyTransactionHistoriesByCurrencyTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDailyTransactionHistoriesByCurrencyRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeDailyTransactionHistoriesByCurrencyRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/transaction/daily/currency/{currency}/date/{year}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{currency}", !string.IsNullOrEmpty(request.Currency) ? request.Currency.ToString() : "null");
+                url = url.Replace("{year}",request.Year != null ? request.Year.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Month != null) {
+                    sessionRequest.AddQueryString("month", $"{request.Month}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeDailyTransactionHistoriesByCurrency(
+                Request.DescribeDailyTransactionHistoriesByCurrencyRequest request,
+                UnityAction<AsyncResult<Result.DescribeDailyTransactionHistoriesByCurrencyResult>> callback
+        )
+		{
+			var task = new DescribeDailyTransactionHistoriesByCurrencyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeDailyTransactionHistoriesByCurrencyResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeDailyTransactionHistoriesByCurrencyResult> DescribeDailyTransactionHistoriesByCurrencyFuture(
+                Request.DescribeDailyTransactionHistoriesByCurrencyRequest request
+        )
+		{
+			return new DescribeDailyTransactionHistoriesByCurrencyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDailyTransactionHistoriesByCurrencyResult> DescribeDailyTransactionHistoriesByCurrencyAsync(
+                Request.DescribeDailyTransactionHistoriesByCurrencyRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDailyTransactionHistoriesByCurrencyResult> result = null;
+			await DescribeDailyTransactionHistoriesByCurrency(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDailyTransactionHistoriesByCurrencyTask DescribeDailyTransactionHistoriesByCurrencyAsync(
+                Request.DescribeDailyTransactionHistoriesByCurrencyRequest request
+        )
+		{
+			return new DescribeDailyTransactionHistoriesByCurrencyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeDailyTransactionHistoriesByCurrencyResult> DescribeDailyTransactionHistoriesByCurrencyAsync(
+                Request.DescribeDailyTransactionHistoriesByCurrencyRequest request
+        )
+		{
+			var task = new DescribeDailyTransactionHistoriesByCurrencyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeDailyTransactionHistoriesTask : Gs2RestSessionTask<DescribeDailyTransactionHistoriesRequest, DescribeDailyTransactionHistoriesResult>
+        {
+            public DescribeDailyTransactionHistoriesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDailyTransactionHistoriesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeDailyTransactionHistoriesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/transaction/daily/{year}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{year}",request.Year != null ? request.Year.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Month != null) {
+                    sessionRequest.AddQueryString("month", $"{request.Month}");
+                }
+                if (request.Day != null) {
+                    sessionRequest.AddQueryString("day", $"{request.Day}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeDailyTransactionHistories(
+                Request.DescribeDailyTransactionHistoriesRequest request,
+                UnityAction<AsyncResult<Result.DescribeDailyTransactionHistoriesResult>> callback
+        )
+		{
+			var task = new DescribeDailyTransactionHistoriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeDailyTransactionHistoriesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeDailyTransactionHistoriesResult> DescribeDailyTransactionHistoriesFuture(
+                Request.DescribeDailyTransactionHistoriesRequest request
+        )
+		{
+			return new DescribeDailyTransactionHistoriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDailyTransactionHistoriesResult> DescribeDailyTransactionHistoriesAsync(
+                Request.DescribeDailyTransactionHistoriesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDailyTransactionHistoriesResult> result = null;
+			await DescribeDailyTransactionHistories(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDailyTransactionHistoriesTask DescribeDailyTransactionHistoriesAsync(
+                Request.DescribeDailyTransactionHistoriesRequest request
+        )
+		{
+			return new DescribeDailyTransactionHistoriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeDailyTransactionHistoriesResult> DescribeDailyTransactionHistoriesAsync(
+                Request.DescribeDailyTransactionHistoriesRequest request
+        )
+		{
+			var task = new DescribeDailyTransactionHistoriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetDailyTransactionHistoryTask : Gs2RestSessionTask<GetDailyTransactionHistoryRequest, GetDailyTransactionHistoryResult>
+        {
+            public GetDailyTransactionHistoryTask(IGs2Session session, RestSessionRequestFactory factory, GetDailyTransactionHistoryRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetDailyTransactionHistoryRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/transaction/daily/{year}/{month}/{day}/currency/{currency}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{year}",request.Year != null ? request.Year.ToString() : "null");
+                url = url.Replace("{month}",request.Month != null ? request.Month.ToString() : "null");
+                url = url.Replace("{day}",request.Day != null ? request.Day.ToString() : "null");
+                url = url.Replace("{currency}", !string.IsNullOrEmpty(request.Currency) ? request.Currency.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetDailyTransactionHistory(
+                Request.GetDailyTransactionHistoryRequest request,
+                UnityAction<AsyncResult<Result.GetDailyTransactionHistoryResult>> callback
+        )
+		{
+			var task = new GetDailyTransactionHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetDailyTransactionHistoryResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetDailyTransactionHistoryResult> GetDailyTransactionHistoryFuture(
+                Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+			return new GetDailyTransactionHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDailyTransactionHistoryResult> GetDailyTransactionHistoryAsync(
+                Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+            AsyncResult<Result.GetDailyTransactionHistoryResult> result = null;
+			await GetDailyTransactionHistory(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetDailyTransactionHistoryTask GetDailyTransactionHistoryAsync(
+                Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+			return new GetDailyTransactionHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetDailyTransactionHistoryResult> GetDailyTransactionHistoryAsync(
+                Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+			var task = new GetDailyTransactionHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeUnusedBalancesTask : Gs2RestSessionTask<DescribeUnusedBalancesRequest, DescribeUnusedBalancesResult>
+        {
+            public DescribeUnusedBalancesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeUnusedBalancesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeUnusedBalancesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/balance/unused";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeUnusedBalances(
+                Request.DescribeUnusedBalancesRequest request,
+                UnityAction<AsyncResult<Result.DescribeUnusedBalancesResult>> callback
+        )
+		{
+			var task = new DescribeUnusedBalancesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeUnusedBalancesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeUnusedBalancesResult> DescribeUnusedBalancesFuture(
+                Request.DescribeUnusedBalancesRequest request
+        )
+		{
+			return new DescribeUnusedBalancesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeUnusedBalancesResult> DescribeUnusedBalancesAsync(
+                Request.DescribeUnusedBalancesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeUnusedBalancesResult> result = null;
+			await DescribeUnusedBalances(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeUnusedBalancesTask DescribeUnusedBalancesAsync(
+                Request.DescribeUnusedBalancesRequest request
+        )
+		{
+			return new DescribeUnusedBalancesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeUnusedBalancesResult> DescribeUnusedBalancesAsync(
+                Request.DescribeUnusedBalancesRequest request
+        )
+		{
+			var task = new DescribeUnusedBalancesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetUnusedBalanceTask : Gs2RestSessionTask<GetUnusedBalanceRequest, GetUnusedBalanceResult>
+        {
+            public GetUnusedBalanceTask(IGs2Session session, RestSessionRequestFactory factory, GetUnusedBalanceRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetUnusedBalanceRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/balance/unused/{currency}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{currency}", !string.IsNullOrEmpty(request.Currency) ? request.Currency.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetUnusedBalance(
+                Request.GetUnusedBalanceRequest request,
+                UnityAction<AsyncResult<Result.GetUnusedBalanceResult>> callback
+        )
+		{
+			var task = new GetUnusedBalanceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetUnusedBalanceResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetUnusedBalanceResult> GetUnusedBalanceFuture(
+                Request.GetUnusedBalanceRequest request
+        )
+		{
+			return new GetUnusedBalanceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUnusedBalanceResult> GetUnusedBalanceAsync(
+                Request.GetUnusedBalanceRequest request
+        )
+		{
+            AsyncResult<Result.GetUnusedBalanceResult> result = null;
+			await GetUnusedBalance(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetUnusedBalanceTask GetUnusedBalanceAsync(
+                Request.GetUnusedBalanceRequest request
+        )
+		{
+			return new GetUnusedBalanceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetUnusedBalanceResult> GetUnusedBalanceAsync(
+                Request.GetUnusedBalanceRequest request
+        )
+		{
+			var task = new GetUnusedBalanceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

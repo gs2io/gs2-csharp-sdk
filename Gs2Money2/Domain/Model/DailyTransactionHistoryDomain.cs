@@ -31,10 +31,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
-using Gs2.Gs2Distributor.Domain.Iterator;
-using Gs2.Gs2Distributor.Model.Cache;
-using Gs2.Gs2Distributor.Request;
-using Gs2.Gs2Distributor.Result;
+using Gs2.Gs2Money2.Domain.Iterator;
+using Gs2.Gs2Money2.Model.Cache;
+using Gs2.Gs2Money2.Request;
+using Gs2.Gs2Money2.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -57,46 +57,58 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Distributor.Domain.Model
+namespace Gs2.Gs2Money2.Domain.Model
 {
 
-    public partial class DistributorModelDomain {
+    public partial class DailyTransactionHistoryDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
-        private readonly Gs2DistributorRestClient _client;
+        private readonly Gs2Money2RestClient _client;
         public string NamespaceName { get; } = null!;
-        public string DistributorName { get; } = null!;
+        public int? Year { get; } = null!;
+        public int? Month { get; } = null!;
+        public int? Day { get; } = null!;
+        public string Currency { get; } = null!;
 
-        public DistributorModelDomain(
+        public DailyTransactionHistoryDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            string distributorName
+            int? year,
+            int? month,
+            int? day,
+            string currency
         ) {
             this._gs2 = gs2;
-            this._client = new Gs2DistributorRestClient(
+            this._client = new Gs2Money2RestClient(
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.DistributorName = distributorName;
+            this.Year = year;
+            this.Month = month;
+            this.Day = day;
+            this.Currency = currency;
         }
 
     }
 
-    public partial class DistributorModelDomain {
+    public partial class DailyTransactionHistoryDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        private IFuture<Gs2.Gs2Distributor.Model.DistributorModel> GetFuture(
-            GetDistributorModelRequest request
+        private IFuture<Gs2.Gs2Money2.Model.DailyTransactionHistory> GetFuture(
+            GetDailyTransactionHistoryRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.DistributorModel> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Model.DailyTransactionHistory> self)
             {
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithDistributorName(this.DistributorName);
+                    .WithYear(this.Year)
+                    .WithMonth(this.Month)
+                    .WithDay(this.Day)
+                    .WithCurrency(this.Currency);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
-                    () => this._client.GetDistributorModelFuture(request)
+                    () => this._client.GetDailyTransactionHistoryFuture(request)
                 );
                 yield return future;
                 if (future.Error != null) {
@@ -106,26 +118,29 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var result = future.Result;
                 self.OnComplete(result?.Item);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Distributor.Model.DistributorModel>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Money2.Model.DailyTransactionHistory>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        private async UniTask<Gs2.Gs2Distributor.Model.DistributorModel> GetAsync(
+        private async UniTask<Gs2.Gs2Money2.Model.DailyTransactionHistory> GetAsync(
             #else
-        private async Task<Gs2.Gs2Distributor.Model.DistributorModel> GetAsync(
+        private async Task<Gs2.Gs2Money2.Model.DailyTransactionHistory> GetAsync(
             #endif
-            GetDistributorModelRequest request
+            GetDailyTransactionHistoryRequest request
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithDistributorName(this.DistributorName);
+                .WithYear(this.Year)
+                .WithMonth(this.Month)
+                .WithDay(this.Day)
+                .WithCurrency(this.Currency);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
-                () => this._client.GetDistributorModelAsync(request)
+                () => this._client.GetDailyTransactionHistoryAsync(request)
             );
             return result?.Item;
         }
@@ -133,28 +148,34 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
     }
 
-    public partial class DistributorModelDomain {
+    public partial class DailyTransactionHistoryDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Distributor.Model.DistributorModel> ModelFuture()
+        public IFuture<Gs2.Gs2Money2.Model.DailyTransactionHistory> ModelFuture()
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.DistributorModel> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Model.DailyTransactionHistory> self)
             {
-                var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModel).GetCache(
+                var (value, find) = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.DistributorName
+                    this.Year ?? default,
+                    this.Month ?? default,
+                    this.Day ?? default,
+                    this.Currency
                 );
                 if (find) {
                     self.OnComplete(value);
                     yield break;
                 }
-                var future = (null as Gs2.Gs2Distributor.Model.DistributorModel).FetchFuture(
+                var future = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.DistributorName,
+                    this.Year ?? default,
+                    this.Month ?? default,
+                    this.Day ?? default,
+                    this.Currency,
                     () => this.GetFuture(
-                        new GetDistributorModelRequest()
+                        new GetDailyTransactionHistoryRequest()
                     )
                 );
                 yield return future;
@@ -164,31 +185,37 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 }
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Distributor.Model.DistributorModel>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Money2.Model.DailyTransactionHistory>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Distributor.Model.DistributorModel> ModelAsync()
+        public async UniTask<Gs2.Gs2Money2.Model.DailyTransactionHistory> ModelAsync()
             #else
-        public async Task<Gs2.Gs2Distributor.Model.DistributorModel> ModelAsync()
+        public async Task<Gs2.Gs2Money2.Model.DailyTransactionHistory> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModel).GetCache(
+            var (value, find) = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.DistributorName
+                this.Year ?? default,
+                this.Month ?? default,
+                this.Day ?? default,
+                this.Currency
             );
             if (find) {
                 return value;
             }
-            return await (null as Gs2.Gs2Distributor.Model.DistributorModel).FetchAsync(
+            return await (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.DistributorName,
+                this.Year ?? default,
+                this.Month ?? default,
+                this.Day ?? default,
+                this.Currency,
                 () => this.GetAsync(
-                    new GetDistributorModelRequest()
+                    new GetDailyTransactionHistoryRequest()
                 )
             );
         }
@@ -197,20 +224,20 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Distributor.Model.DistributorModel> Model()
+        public async UniTask<Gs2.Gs2Money2.Model.DailyTransactionHistory> Model()
         {
             return await ModelAsync();
         }
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Distributor.Model.DistributorModel> Model()
+        public IFuture<Gs2.Gs2Money2.Model.DailyTransactionHistory> Model()
         {
             return ModelFuture();
         }
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Distributor.Model.DistributorModel> Model()
+        public async Task<Gs2.Gs2Money2.Model.DailyTransactionHistory> Model()
         {
             return await ModelAsync();
         }
@@ -219,21 +246,27 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
         public void Invalidate()
         {
-            (null as Gs2.Gs2Distributor.Model.DistributorModel).DeleteCache(
+            (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.DistributorName
+                this.Year ?? default,
+                this.Month ?? default,
+                this.Day ?? default,
+                this.Currency
             );
         }
 
-        public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.DistributorModel> callback)
+        public ulong Subscribe(Action<Gs2.Gs2Money2.Model.DailyTransactionHistory> callback)
         {
             return this._gs2.Cache.Subscribe(
-                (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
                     this.NamespaceName
                 ),
-                (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheKey(
-                    this.DistributorName
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheKey(
+                    this.Year ?? default,
+                    this.Month ?? default,
+                    this.Day ?? default,
+                    this.Currency
                 ),
                 callback,
                 () =>
@@ -251,19 +284,22 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Cache.Unsubscribe<Gs2.Gs2Distributor.Model.DistributorModel>(
-                (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
                     this.NamespaceName
                 ),
-                (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheKey(
-                    this.DistributorName
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheKey(
+                    this.Year ?? default,
+                    this.Month ?? default,
+                    this.Day ?? default,
+                    this.Currency
                 ),
                 callbackId
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Distributor.Model.DistributorModel> callback)
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Money2.Model.DailyTransactionHistory> callback)
         {
             IEnumerator Impl(IFuture<ulong> self)
             {
@@ -284,9 +320,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Distributor.Model.DistributorModel> callback)
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Money2.Model.DailyTransactionHistory> callback)
             #else
-        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Distributor.Model.DistributorModel> callback)
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Money2.Model.DailyTransactionHistory> callback)
             #endif
         {
             var item = await ModelAsync();

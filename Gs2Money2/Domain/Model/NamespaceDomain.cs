@@ -80,6 +80,216 @@ namespace Gs2.Gs2Money2.Domain.Model
             );
             this.NamespaceName = namespaceName;
         }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Money2.Model.DailyTransactionHistory> DailyTransactionHistoriesByCurrency(
+            string currency,
+            int? year,
+            int? month = null
+        )
+        {
+            return new DescribeDailyTransactionHistoriesByCurrencyIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                currency,
+                year,
+                month
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.DailyTransactionHistory> DailyTransactionHistoriesByCurrencyAsync(
+            #else
+        public DescribeDailyTransactionHistoriesByCurrencyIterator DailyTransactionHistoriesByCurrencyAsync(
+            #endif
+            string currency,
+            int? year,
+            int? month = null
+        )
+        {
+            return new DescribeDailyTransactionHistoriesByCurrencyIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                currency,
+                year,
+                month
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeDailyTransactionHistoriesByCurrency(
+            Action<Gs2.Gs2Money2.Model.DailyTransactionHistory[]> callback,
+            string currency,
+            int? year,
+            int? month = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeDailyTransactionHistoriesByCurrencyWithInitialCallAsync(
+            Action<Gs2.Gs2Money2.Model.DailyTransactionHistory[]> callback,
+            string currency,
+            int? year,
+            int? month = null
+        )
+        {
+            var items = await DailyTransactionHistoriesByCurrencyAsync(
+                currency,
+                year,
+                month
+            ).ToArrayAsync();
+            var callbackId = SubscribeDailyTransactionHistoriesByCurrency(
+                callback,
+                currency,
+                year,
+                month
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeDailyTransactionHistoriesByCurrency(
+            ulong callbackId,
+            string currency,
+            int? year,
+            int? month = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Money2.Model.DailyTransactionHistory> DailyTransactionHistories(
+            int? year,
+            int? month = null,
+            int? day = null
+        )
+        {
+            return new DescribeDailyTransactionHistoriesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                year,
+                month,
+                day
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.DailyTransactionHistory> DailyTransactionHistoriesAsync(
+            #else
+        public DescribeDailyTransactionHistoriesIterator DailyTransactionHistoriesAsync(
+            #endif
+            int? year,
+            int? month = null,
+            int? day = null
+        )
+        {
+            return new DescribeDailyTransactionHistoriesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                year,
+                month,
+                day
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeDailyTransactionHistories(
+            Action<Gs2.Gs2Money2.Model.DailyTransactionHistory[]> callback,
+            int? year,
+            int? month = null,
+            int? day = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeDailyTransactionHistoriesWithInitialCallAsync(
+            Action<Gs2.Gs2Money2.Model.DailyTransactionHistory[]> callback,
+            int? year,
+            int? month = null,
+            int? day = null
+        )
+        {
+            var items = await DailyTransactionHistoriesAsync(
+                year,
+                month,
+                day
+            ).ToArrayAsync();
+            var callbackId = SubscribeDailyTransactionHistories(
+                callback,
+                year,
+                month,
+                day
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeDailyTransactionHistories(
+            ulong callbackId,
+            int? year,
+            int? month = null,
+            int? day = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Money2.Domain.Model.DailyTransactionHistoryDomain DailyTransactionHistory(
+            int? year,
+            int? month,
+            int? day,
+            string currency
+        ) {
+            return new Gs2.Gs2Money2.Domain.Model.DailyTransactionHistoryDomain(
+                this._gs2,
+                this.NamespaceName,
+                year,
+                month,
+                day,
+                currency
+            );
+        }
 
         public Gs2.Gs2Money2.Domain.Model.UserDomain User(
             string userId
@@ -189,6 +399,86 @@ namespace Gs2.Gs2Money2.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Money2.Model.UnusedBalance> UnusedBalances(
+        )
+        {
+            return new DescribeUnusedBalancesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.UnusedBalance> UnusedBalancesAsync(
+            #else
+        public DescribeUnusedBalancesIterator UnusedBalancesAsync(
+            #endif
+        )
+        {
+            return new DescribeUnusedBalancesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeUnusedBalances(
+            Action<Gs2.Gs2Money2.Model.UnusedBalance[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.UnusedBalance>(
+                (null as Gs2.Gs2Money2.Model.UnusedBalance).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeUnusedBalancesWithInitialCallAsync(
+            Action<Gs2.Gs2Money2.Model.UnusedBalance[]> callback
+        )
+        {
+            var items = await UnusedBalancesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeUnusedBalances(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeUnusedBalances(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.UnusedBalance>(
+                (null as Gs2.Gs2Money2.Model.UnusedBalance).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Money2.Domain.Model.UnusedBalanceDomain UnusedBalance(
+            string currency
+        ) {
+            return new Gs2.Gs2Money2.Domain.Model.UnusedBalanceDomain(
+                this._gs2,
+                this.NamespaceName,
+                currency
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Money2.Model.StoreContentModelMaster> StoreContentModelMasters(
         )
         {
@@ -280,7 +570,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.NamespaceDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -310,7 +600,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             GetNamespaceStatusRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -330,7 +620,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Model.Namespace> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -358,7 +648,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             GetNamespaceRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -376,7 +666,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.NamespaceDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -406,7 +696,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             UpdateNamespaceRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -426,7 +716,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.NamespaceDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -459,7 +749,7 @@ namespace Gs2.Gs2Money2.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -480,7 +770,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.StoreContentModelMasterDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -514,7 +804,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             CreateStoreContentModelMasterRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

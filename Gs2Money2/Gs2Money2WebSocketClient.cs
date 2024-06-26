@@ -2269,5 +2269,236 @@ namespace Gs2.Gs2Money2
 			return await task.Invoke();
         }
 #endif
+
+
+        public class GetDailyTransactionHistoryTask : Gs2WebSocketSessionTask<Request.GetDailyTransactionHistoryRequest, Result.GetDailyTransactionHistoryResult>
+        {
+	        public GetDailyTransactionHistoryTask(IGs2Session session, Request.GetDailyTransactionHistoryRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetDailyTransactionHistoryRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Year != null)
+                {
+                    jsonWriter.WritePropertyName("year");
+                    jsonWriter.Write(request.Year.ToString());
+                }
+                if (request.Month != null)
+                {
+                    jsonWriter.WritePropertyName("month");
+                    jsonWriter.Write(request.Month.ToString());
+                }
+                if (request.Day != null)
+                {
+                    jsonWriter.WritePropertyName("day");
+                    jsonWriter.Write(request.Day.ToString());
+                }
+                if (request.Currency != null)
+                {
+                    jsonWriter.WritePropertyName("currency");
+                    jsonWriter.Write(request.Currency.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "dailyTransactionHistory",
+                    "getDailyTransactionHistory",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetDailyTransactionHistory(
+                Request.GetDailyTransactionHistoryRequest request,
+                UnityAction<AsyncResult<Result.GetDailyTransactionHistoryResult>> callback
+        )
+		{
+			var task = new GetDailyTransactionHistoryTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetDailyTransactionHistoryResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetDailyTransactionHistoryResult> GetDailyTransactionHistoryFuture(
+                Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+			return new GetDailyTransactionHistoryTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDailyTransactionHistoryResult> GetDailyTransactionHistoryAsync(
+            Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+		    var task = new GetDailyTransactionHistoryTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetDailyTransactionHistoryTask GetDailyTransactionHistoryAsync(
+                Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+			return new GetDailyTransactionHistoryTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetDailyTransactionHistoryResult> GetDailyTransactionHistoryAsync(
+            Request.GetDailyTransactionHistoryRequest request
+        )
+		{
+		    var task = new GetDailyTransactionHistoryTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetUnusedBalanceTask : Gs2WebSocketSessionTask<Request.GetUnusedBalanceRequest, Result.GetUnusedBalanceResult>
+        {
+	        public GetUnusedBalanceTask(IGs2Session session, Request.GetUnusedBalanceRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetUnusedBalanceRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Currency != null)
+                {
+                    jsonWriter.WritePropertyName("currency");
+                    jsonWriter.Write(request.Currency.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "unusedBalance",
+                    "getUnusedBalance",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetUnusedBalance(
+                Request.GetUnusedBalanceRequest request,
+                UnityAction<AsyncResult<Result.GetUnusedBalanceResult>> callback
+        )
+		{
+			var task = new GetUnusedBalanceTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetUnusedBalanceResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetUnusedBalanceResult> GetUnusedBalanceFuture(
+                Request.GetUnusedBalanceRequest request
+        )
+		{
+			return new GetUnusedBalanceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUnusedBalanceResult> GetUnusedBalanceAsync(
+            Request.GetUnusedBalanceRequest request
+        )
+		{
+		    var task = new GetUnusedBalanceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetUnusedBalanceTask GetUnusedBalanceAsync(
+                Request.GetUnusedBalanceRequest request
+        )
+		{
+			return new GetUnusedBalanceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetUnusedBalanceResult> GetUnusedBalanceAsync(
+            Request.GetUnusedBalanceRequest request
+        )
+		{
+		    var task = new GetUnusedBalanceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

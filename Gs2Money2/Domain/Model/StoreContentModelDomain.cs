@@ -90,7 +90,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Money2.Model.StoreContentModel> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithContentName(this.ContentName);
                 var future = request.InvokeFuture(
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             GetStoreContentModelRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithContentName(this.ContentName);
             var result = await request.InvokeAsync(
