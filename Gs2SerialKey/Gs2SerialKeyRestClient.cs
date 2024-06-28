@@ -2790,7 +2790,7 @@ namespace Gs2.Gs2SerialKey
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "serial-key")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/serialKey/use";
+                    + "/serialKey/revert";
 
                 var sessionRequest = Factory.Post(url);
 
