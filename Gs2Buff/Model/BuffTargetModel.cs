@@ -193,7 +193,7 @@ namespace Gs2.Gs2Buff.Model
                         new RequestError("buffTargetModel", "buff.buffTargetModel.rate.error.invalid"),
                     });
                 }
-                if (Rate > 100) {
+                if (Rate > 1000000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("buffTargetModel", "buff.buffTargetModel.rate.error.invalid"),
                     });
