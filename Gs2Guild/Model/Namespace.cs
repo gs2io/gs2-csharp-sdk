@@ -350,7 +350,7 @@ namespace Gs2.Gs2Guild.Model
                 }
             }
             {
-                if (Name.Length > 32) {
+                if (Name.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "guild.namespace.name.error.tooLong"),
                     });

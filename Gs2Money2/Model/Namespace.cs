@@ -331,7 +331,7 @@ namespace Gs2.Gs2Money2.Model
                 }
             }
             {
-                if (Name.Length > 32) {
+                if (Name.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "money2.namespace.name.error.tooLong"),
                     });

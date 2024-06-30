@@ -274,7 +274,7 @@ namespace Gs2.Gs2Ranking2.Model
                 }
             }
             {
-                if (Name.Length > 32) {
+                if (Name.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "ranking2.namespace.name.error.tooLong"),
                     });

@@ -390,7 +390,7 @@ namespace Gs2.Gs2Mission.Model
                 }
             }
             {
-                if (Name.Length > 32) {
+                if (Name.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "mission.namespace.name.error.tooLong"),
                     });

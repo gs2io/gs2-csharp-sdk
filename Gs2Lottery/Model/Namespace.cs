@@ -352,7 +352,7 @@ namespace Gs2.Gs2Lottery.Model
                 }
             }
             {
-                if (Name.Length > 32) {
+                if (Name.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "lottery.namespace.name.error.tooLong"),
                     });

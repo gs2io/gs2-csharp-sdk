@@ -464,7 +464,7 @@ namespace Gs2.Gs2Friend.Model
                 }
             }
             {
-                if (Name.Length > 32) {
+                if (Name.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "friend.namespace.name.error.tooLong"),
                     });
