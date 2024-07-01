@@ -8,7 +8,7 @@ namespace Gs2.Core.Net
         where TRequest : IRequest
         where TResult : IResult
     {
-        public Gs2WebSocketSessionTask(IGs2Session session, TRequest request) : base(session, request)
+        protected Gs2WebSocketSessionTask(IGs2Session session, TRequest request) : base(session, request)
         {
         }
         

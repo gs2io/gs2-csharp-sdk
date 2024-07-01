@@ -5,29 +5,28 @@
         private const int InvalidIdValue = 0;
         private const int ReservedIdValueMax = 10000;
 
-        public static readonly Gs2SessionTaskId InvalidId = new Gs2SessionTaskId(InvalidIdValue);
+        public readonly static Gs2SessionTaskId InvalidId = new(InvalidIdValue);
 
         private readonly int _value;
 
         private Gs2SessionTaskId(int value)
         {
-            _value = value;
+            this._value = value;
         }
 
         public Gs2SessionTaskId(string value)
         {
-            int num;
-            _value = int.TryParse(value, out num) ? num : InvalidIdValue;
+            this._value = int.TryParse(value, out var num) ? num : InvalidIdValue;
         }
 
         public override string ToString()
         {
-            return _value.ToString();
+            return this._value.ToString();
         }
 		
         public static bool operator ==(Gs2SessionTaskId gs2SessionTaskId1, Gs2SessionTaskId gs2SessionTaskId2)
         {
-            return gs2SessionTaskId1._value == gs2SessionTaskId2._value;
+            return gs2SessionTaskId1?._value == gs2SessionTaskId2?._value;
         }
 
         public static bool operator !=(Gs2SessionTaskId gs2SessionTaskId1, Gs2SessionTaskId gs2SessionTaskId2)
@@ -39,7 +38,7 @@
         {
             if (obj is Gs2SessionTaskId id)
             {
-                return _value.Equals(id._value);
+                return this._value.Equals(id._value);
             }
 
             return false;
@@ -47,7 +46,7 @@
 
         public override int GetHashCode()
         {
-            return _value.GetHashCode();
+            return this._value.GetHashCode();
         }
 
         public static class Generator

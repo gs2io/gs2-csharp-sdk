@@ -17,12 +17,12 @@ namespace Gs2.Core.Net
 
         public void AddHeader(string key, string value)
         {
-            Headers[key] = value;
+            this.Headers[key] = value;
         }
 
         public void AddQueryString(string key, string value)
         {
-            QueryStrings[key] = value;
+            this.QueryStrings[key] = value;
         }
 
         public abstract Task<RestResult> Invoke();

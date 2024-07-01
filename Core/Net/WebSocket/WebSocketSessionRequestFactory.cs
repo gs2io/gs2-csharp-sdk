@@ -4,8 +4,9 @@
     {
         public static T New<T>(string body) where T : WebSocketSessionRequest, new()
         {
-            var request = new T();
-            request.Body = body;
+            var request = new T {
+                Body = body
+            };
             return request;
         }
     }

@@ -12,16 +12,16 @@ namespace Gs2.Core.Net
     
     public class RestSessionRequestFactory
     {
-        private Func<RestSessionRequest> _new;
+        private readonly Func<RestSessionRequest> _new;
 
         public RestSessionRequestFactory(Func<RestSessionRequest> @new)
         {
-            _new = @new;
+            this._new = @new;
         }
 
         public RestSessionRequest Get(string url) 
         {
-            var request = _new();
+            var request = this._new();
             request.Method = HttpMethod.Get;
             request.Url = url;
             return request;
@@ -29,7 +29,7 @@ namespace Gs2.Core.Net
 
         public RestSessionRequest Post(string url) 
         {
-            var request = _new();
+            var request = this._new();
             request.Method = HttpMethod.Post;
             request.Url = url;
             request.Body = "{}";
@@ -38,7 +38,7 @@ namespace Gs2.Core.Net
 
         public RestSessionRequest Put(string url) 
         {
-            var request = _new();
+            var request = this._new();
             request.Method = HttpMethod.Put;
             request.Url = url;
             request.Body = "{}";
@@ -47,7 +47,7 @@ namespace Gs2.Core.Net
 
         public RestSessionRequest Delete(string url) 
         {
-            var request = _new();
+            var request = this._new();
             request.Method = HttpMethod.Delete;
             request.Url = url;
             return request;

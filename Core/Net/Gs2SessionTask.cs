@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
-#if UNITY_2017_1_OR_NEWER
+#if UNITY_WEBGL && !UNITY_EDITOR
 using UnityEngine;
 #endif
 
@@ -14,14 +14,16 @@ namespace Gs2.Core.Net
         where TResult : IResult
     {
         protected abstract IGs2SessionRequest CreateRequest(TRequest request);
-        public new Gs2SessionTaskId TaskId { get; set; }
-        public new TRequest Request { get; set; }
+
+        protected new Gs2SessionTaskId TaskId { get; set; }
+
+        protected new TRequest Request { get; set; }
 
         protected IGs2Session Session;
-        
-        public Gs2SessionTask(IGs2Session session, TRequest request)
+
+        protected Gs2SessionTask(IGs2Session session, TRequest request)
         {
-            Session = session;
+            this.Session = session;
             Request = request;
             TaskId = Gs2SessionTaskId.Generator.Issue();
         }
@@ -31,30 +33,30 @@ namespace Gs2.Core.Net
             var request = CreateRequest(Request);
             request.TaskId = TaskId;
             
-            if (Session.IsCanceled())
+            if (this.Session.IsCanceled())
             {
-                OnError(new UserCancelException(new RequestError[0]));
+                OnError(new UserCancelException(Array.Empty<RequestError>()));
                 yield break;
             }
 
-            if (Session.IsDisconnected())
+            if (this.Session.IsDisconnected())
             {
                 OnError(new SessionNotOpenException("Session no longer open."));
                 yield break;
             }
 
-            yield return Session.Send(request);
+            yield return this.Session.Send(request);
             var begin = DateTime.Now;
-            while (!Session.IsCompleted(request))
+            while (!this.Session.IsCompleted(request))
             {
                 if ((DateTime.Now - begin).Seconds > 10)
                 {
-                    OnError(new RequestTimeoutException(new RequestError[0]));
+                    OnError(new RequestTimeoutException(Array.Empty<RequestError>()));
                     yield break;
                 }
-                if (Session.IsCanceled())
+                if (this.Session.IsCanceled())
                 {
-                    OnError(new UserCancelException(new RequestError[0]));
+                    OnError(new UserCancelException(Array.Empty<RequestError>()));
                     yield break;
                 }
 
@@ -62,7 +64,7 @@ namespace Gs2.Core.Net
                 yield return new WaitForSeconds(0.05f);
 #endif
             }
-            var response = Session.MarkRead(request);
+            var response = this.Session.MarkRead(request);
             if (response.IsSuccess)
             {
                 OnComplete((TResult)typeof(TResult).GetMethod("FromJson")?.Invoke(null, new object[] { response.Body }));
@@ -78,35 +80,35 @@ namespace Gs2.Core.Net
             var request = CreateRequest(Request);
             request.TaskId = TaskId;
 
-            if (Session.IsCanceled())
+            if (this.Session.IsCanceled())
             {
-                throw new UserCancelException(new RequestError[0]);
+                throw new UserCancelException(Array.Empty<RequestError>());
             }
 
-            if (Session.IsDisconnected())
+            if (this.Session.IsDisconnected())
             {
                 throw new SessionNotOpenException("Session no longer open.");
             }
 
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            Session.Send(request);
+            this.Session.Send(request);
 #else
-            await Session.SendAsync(request);
+            await this.Session.SendAsync(request);
 #endif
             var begin = DateTime.Now;
-            while (!Session.IsCompleted(request))
+            while (!this.Session.IsCompleted(request))
             {
                 if ((DateTime.Now - begin).Seconds > 10)
                 {
-                    throw new RequestTimeoutException(new RequestError[0]);
+                    throw new RequestTimeoutException(Array.Empty<RequestError>());
                 }
-                if (Session.IsCanceled())
+                if (this.Session.IsCanceled())
                 {
-                    throw new UserCancelException(new RequestError[0]);
+                    throw new UserCancelException(Array.Empty<RequestError>());
                 }
                 await Task.Delay(50);
             }
-            var response = Session.MarkRead(request);
+            var response = this.Session.MarkRead(request);
             if (response.IsSuccess)
             {
                 return (TResult)typeof(TResult).GetMethod("FromJson")?.Invoke(null, new object[] { response.Body });

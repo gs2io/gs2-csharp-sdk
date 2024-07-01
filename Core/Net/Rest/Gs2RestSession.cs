@@ -22,20 +22,20 @@ namespace Gs2.Core.Net
     {
         public static string EndpointHost = "https://{service}.{region}.gen2.gs2io.com";
 
+        // ReSharper disable once MemberCanBePrivate.Global
         public State State;
         private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
         
         private Dictionary<Gs2SessionTaskId, RestSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, RestSessionRequest>();
-        private Dictionary<Gs2SessionTaskId, RestResult> _result = new Dictionary<Gs2SessionTaskId, RestResult>();
+        protected Dictionary<Gs2SessionTaskId, RestResult> _result = new Dictionary<Gs2SessionTaskId, RestResult>();
 
         public IGs2Credential Credential { get; }
         public Region Region { get; }
         public string OwnerId { get; private set; }
 
-        public bool _checkCertificateRevocation { get; } = true;
+        private readonly bool _checkCertificateRevocation;
         
-        public Gs2RestSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : this(basicGs2Credential, region.DisplayName(), checkCertificateRevocation)
-        {
+        public Gs2RestSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : this(basicGs2Credential, region.DisplayName(), checkCertificateRevocation) {
             
         }
 
@@ -44,8 +44,8 @@ namespace Gs2.Core.Net
             Credential = basicGs2Credential;
             Region = RegionExt.ValueOf(region);
 
-            _checkCertificateRevocation = checkCertificateRevocation;
-            State = State.Idle;
+            this._checkCertificateRevocation = checkCertificateRevocation;
+            this.State = State.Idle;
         }
 
         // Open
@@ -131,6 +131,7 @@ namespace Gs2.Core.Net
         public async Task<OpenResult> OpenAsync()
     #endif
         {
+            // ReSharper disable once MethodHasAsyncOverload
             while (!this._semaphore.Wait(0)) {
     #if UNITY_2017_1_OR_NEWER
                 await UniTask.Yield();
@@ -201,6 +202,7 @@ namespace Gs2.Core.Net
             );
         }
         
+        // ReSharper disable once MemberCanBePrivate.Global
         public Gs2Future<OpenResult> ReOpenFuture()
         {
             IEnumerator Impl(Gs2Future<OpenResult> result) {
@@ -209,7 +211,7 @@ namespace Gs2.Core.Net
                     while (this.State != State.Available) {
                         if ((DateTime.Now - begin).Seconds > 10) {
                             result.OnError(
-                                new RequestTimeoutException(new RequestError[0])
+                                new RequestTimeoutException(Array.Empty<RequestError>())
                             );
                             yield break;
                         }
@@ -236,6 +238,7 @@ namespace Gs2.Core.Net
             return new Gs2InlineFuture<OpenResult>(Impl);
         }
         
+        // ReSharper disable once MemberCanBePrivate.Global
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
         public async UniTask<OpenResult> ReOpenAsync()
@@ -247,7 +250,7 @@ namespace Gs2.Core.Net
                 var begin = DateTime.Now;
                 while (this.State != State.Available) {
                     if ((DateTime.Now - begin).Seconds > 10) {
-                        throw new RequestTimeoutException(new RequestError[0]);
+                        throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
                     await Task.Delay(TimeSpan.FromMilliseconds(50));
@@ -341,7 +344,7 @@ namespace Gs2.Core.Net
         
         // Send
         
-        public IEnumerator Send(IGs2SessionRequest request) {
+        public virtual IEnumerator Send(IGs2SessionRequest request) {
             if (request is RestSessionRequestFuture sessionRequest) {
                 this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
 
@@ -358,9 +361,9 @@ namespace Gs2.Core.Net
         
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public async UniTask SendAsync(IGs2SessionRequest request)
+        public virtual async UniTask SendAsync(IGs2SessionRequest request)
     #else
-        public async Task SendAsync(IGs2SessionRequest request)
+        public virtual async Task SendAsync(IGs2SessionRequest request)
     #endif
         {
             if (request is RestSessionRequestFuture sessionRequest) {
@@ -384,24 +387,24 @@ namespace Gs2.Core.Net
 
         public bool IsCanceled()
         {
-            return State == State.CancellingTasks;
+            return this.State == State.CancellingTasks;
         }
 
         public bool IsCompleted(IGs2SessionRequest request)
         {
-            return _result.ContainsKey(request.TaskId);
+            return this._result.ContainsKey(request.TaskId);
         }
 
         public bool IsDisconnected()
         {
-            return State == State.Idle || State == State.Closing || State == State.Closed;
+            return this.State == State.Idle || this.State == State.Closing || this.State == State.Closed;
         }
 
         public IGs2SessionResult MarkRead(IGs2SessionRequest request)
         {
             var result = _result[request.TaskId];
-            _inflightRequest.Remove(request.TaskId);
-            _result.Remove(request.TaskId);
+            this._inflightRequest.Remove(request.TaskId);
+            this._result.Remove(request.TaskId);
             return result;
         }
     }

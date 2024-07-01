@@ -8,8 +8,8 @@ namespace Gs2.Core.Net
         where TResult : IResult
     {
         protected RestSessionRequestFactory Factory;
-        
-        public Gs2RestSessionTask(IGs2Session session, RestSessionRequestFactory factory, TRequest request) : base(session, request)
+
+        protected Gs2RestSessionTask(IGs2Session session, RestSessionRequestFactory factory, TRequest request) : base(session, request)
         {
             Session = session;
             Factory = factory;

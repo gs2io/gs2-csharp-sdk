@@ -17,10 +17,10 @@ namespace Gs2.Core.Net
         
         private readonly IEnumerator _inflightAction;
 
-        public TaskFuture()
+        protected TaskFuture()
         {
             // ReSharper disable once VirtualMemberCallInConstructor
-            _inflightAction = Action();
+            this._inflightAction = Action();
         }
 
         public abstract IEnumerator Action();
@@ -29,15 +29,15 @@ namespace Gs2.Core.Net
 
         public bool MoveNext()
         {
-            return _inflightAction?.MoveNext() ?? false;
+            return this._inflightAction?.MoveNext() ?? false;
         }
 
         public void Reset()
         {
-            _inflightAction?.Reset();
+            this._inflightAction?.Reset();
         }
 
-        public object Current => _inflightAction?.Current;
+        public object Current => this._inflightAction?.Current;
 
         public bool IsComplete()
         {

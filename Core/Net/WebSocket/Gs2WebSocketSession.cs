@@ -34,19 +34,20 @@ namespace Gs2.Core.Net
         public event DisconnectHandler OnDisconnect;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        internal HybridWebSocket.WebSocket _session;
+        private HybridWebSocket.WebSocket _session;
 #else
-        internal WebSocket _session;
+        private WebSocket _session;
 #endif
+        // ReSharper disable once MemberCanBePrivate.Global
         public State State;
         private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
 
-        internal Dictionary<Gs2SessionTaskId, WebSocketSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, WebSocketSessionRequest>();
-        private Dictionary<Gs2SessionTaskId, WebSocketResult> _result = new Dictionary<Gs2SessionTaskId, WebSocketResult>();
+        private readonly Dictionary<Gs2SessionTaskId, WebSocketSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, WebSocketSessionRequest>();
+        private readonly Dictionary<Gs2SessionTaskId, WebSocketResult> _result = new Dictionary<Gs2SessionTaskId, WebSocketResult>();
 
         public IGs2Credential Credential { get; }
         public Region Region { get; }
-        public bool _checkCertificateRevocation { get; } = false;
+        private readonly bool _checkCertificateRevocation;
 
         public Gs2WebSocketSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : this(basicGs2Credential, region.DisplayName(), checkCertificateRevocation)
         {
@@ -57,52 +58,52 @@ namespace Gs2.Core.Net
             Credential = basicGs2Credential;
             Region = RegionExt.ValueOf(region);
 
-            _checkCertificateRevocation = checkCertificateRevocation;
-            State = State.Idle;
+            this._checkCertificateRevocation = checkCertificateRevocation;
+            this.State = State.Idle;
         }
 
         private OpenResult OpenImpl()
         {
-            if (State == State.Available)
+            if (this.State == State.Available)
             {
                 return new OpenResult();
             }
 
-            if (State != State.Idle && State != State.Closed)
+            if (this.State != State.Idle && this.State != State.Closed)
             {
                 throw new InvalidOperationException("invalid state");
             }
 
-            _result.Clear();
-            _inflightRequest.Clear();
-            State = State.Opening;
+            this._result.Clear();
+            this._inflightRequest.Clear();
+            this.State = State.Opening;
             
             var url = EndpointHost.Replace("{region}", Region.DisplayName());
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            _session = WebSocketFactory.CreateInstance(url);
+            this._session = WebSocketFactory.CreateInstance(url);
 #else
-            _session = new WebSocket(url) {SslConfiguration = {EnabledSslProtocols = SslProtocols.Tls12, CheckCertificateRevocation = _checkCertificateRevocation}};
+            this._session = new WebSocket(url) {SslConfiguration = {EnabledSslProtocols = SslProtocols.Tls12, CheckCertificateRevocation = this._checkCertificateRevocation}};
 #endif
             
 #if UNITY_WEBGL && !UNITY_EDITOR
-            _session.OnOpen += () =>
+            this._session.OnOpen += () =>
 #else
-            _session.OnOpen += (sender, eventArgs) =>
+            this._session.OnOpen += (_, _) =>
 #endif
             {
-                State = State.LoggingIn;
+                this.State = State.LoggingIn;
                 new WebSocketOpenTask(this, new LoginRequest {ClientId = Credential.ClientId, ClientSecret = Credential.ClientSecret,}).NonBlockingInvoke();
             };
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            _session.OnMessage += (message) =>
+            this._session.OnMessage += (_) =>
 			{
                 var gs2WebSocketResponse = new WebSocketResult(message);
                 if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
                 {
                     // API 応答以外のメッセージ
-                    OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
+                    this.OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
                 }
                 else
                 {
@@ -110,8 +111,12 @@ namespace Gs2.Core.Net
                     {
                         if (gs2WebSocketResponse.Error == null)
                         {
-                            Credential.ProjectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
-                            State = State.Available;
+                            var projectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
+                            if (projectToken != null)
+                            {
+                                Credential.ProjectToken = projectToken;
+                                this.State = State.Available;
+                            }
                         }
                         else
                         {
@@ -125,46 +130,47 @@ namespace Gs2.Core.Net
                 }
             };
 #else
-            _session.OnMessage += (sender, messageEventArgs) =>
+            this._session.OnMessage += (_, messageEventArgs) =>
             {
-                if (messageEventArgs.IsText)
+                if (!messageEventArgs.IsText) {
+                    return;
+                }
+                
+                var gs2WebSocketResponse = new WebSocketResult(messageEventArgs.Data);
+                if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
                 {
-                    var gs2WebSocketResponse = new WebSocketResult(messageEventArgs.Data);
-                    if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
+                    // API 応答以外のメッセージ
+                    OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
+                }
+                else
+                {
+                    if (this.State == State.LoggingIn)
                     {
-                        // API 応答以外のメッセージ
-                        OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
-                    }
-                    else
-                    {
-                        if (State == State.LoggingIn)
+                        if (gs2WebSocketResponse.Error == null)
                         {
-                            if (gs2WebSocketResponse.Error == null)
+                            var projectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
+                            if (projectToken != null)
                             {
-                                var ProjectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
-                                if (ProjectToken != null)
-                                {
-                                    Credential.ProjectToken = ProjectToken;
-                                    State = State.Available;
-                                }
-                            }
-                            else
-                            {
-#pragma warning disable 4014
-                                CloseAsync();
-#pragma warning restore 4014
+                                this.Credential.ProjectToken = projectToken;
+                                this.State = State.Available;
                             }
                         }
-                        OnMessage(gs2WebSocketResponse);
+                        else
+                        {
+#pragma warning disable 4014
+                            CloseAsync();
+#pragma warning restore 4014
+                        }
                     }
+                    OnMessage(gs2WebSocketResponse);
                 }
             };
 #endif
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            _session.OnClose += (closeEventArgs) =>
+            this._session.OnClose += (_) =>
 #else
-            _session.OnClose += (sender, closeEventArgs) =>
+            this._session.OnClose += (_, _) =>
 #endif
             {
                 OnDisconnect?.Invoke();
@@ -174,9 +180,9 @@ namespace Gs2.Core.Net
             };
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            _session.OnError += (errorEventArgs) =>
+            this._session.OnError += (errorEventArgs) =>
 #else
-            _session.OnError += (sender, errorEventArgs) =>
+            this._session.OnError += (_, _) =>
 #endif
             {
 #pragma warning disable 4014
@@ -185,15 +191,15 @@ namespace Gs2.Core.Net
             };
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            _session.Connect();
+            this._session.Connect();
 #else
             try
             {
-                _session.ConnectAsync();
+                this._session.ConnectAsync();
             }
             catch (PlatformNotSupportedException)
             {
-                _session.Connect();
+                this._session.Connect();
             }
 #endif
             return new OpenResult();
@@ -231,7 +237,7 @@ namespace Gs2.Core.Net
                         while (this.State == State.LoggingIn) {
                             if ((DateTime.Now - begin).Seconds > 10) {
                                 result.OnError(
-                                    new RequestTimeoutException(new RequestError[0])
+                                    new RequestTimeoutException(Array.Empty<RequestError>())
                                 );
                                 yield break;
                             }
@@ -251,7 +257,7 @@ namespace Gs2.Core.Net
                         {
                             if ((DateTime.Now - begin).Seconds > 10) {
                                 result.OnError(
-                                    new RequestTimeoutException(new RequestError[0])
+                                    new RequestTimeoutException(Array.Empty<RequestError>())
                                 );
                                 yield break;
                             }
@@ -278,6 +284,7 @@ namespace Gs2.Core.Net
         public async Task<OpenResult> OpenAsync()
     #endif
         {
+            // ReSharper disable once MethodHasAsyncOverload
             while (!this._semaphore.Wait(0)) {
     #if UNITY_2017_1_OR_NEWER
                 await UniTask.Yield();
@@ -289,11 +296,11 @@ namespace Gs2.Core.Net
                 var result = OpenImpl();
                 {
                     var begin = DateTime.Now;
-                    while (State != State.Available)
+                    while (this.State != State.Available)
                     {
                         if ((DateTime.Now - begin).Seconds > 10)
                         {
-                            throw new RequestTimeoutException(new RequestError[0]);
+                            throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
                         await Task.Delay(TimeSpan.FromMilliseconds(50));
@@ -304,12 +311,12 @@ namespace Gs2.Core.Net
     #if UNITY_WEBGL && !UNITY_EDITOR
                     while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
     #else
-                    while (_session.ReadyState != WebSocketState.Open)
+                    while (this._session.ReadyState != WebSocketState.Open)
     #endif
                     {
                         if ((DateTime.Now - begin).Seconds > 10)
                         {
-                            throw new RequestTimeoutException(new RequestError[0]);
+                            throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
                         await Task.Delay(TimeSpan.FromMilliseconds(50));
@@ -343,6 +350,7 @@ namespace Gs2.Core.Net
             );
         }
         
+        // ReSharper disable once MemberCanBePrivate.Global
         public Gs2Future<OpenResult> ReOpenFuture()
         {
             IEnumerator Impl(Gs2Future<OpenResult> result) {
@@ -350,7 +358,7 @@ namespace Gs2.Core.Net
                     var begin = DateTime.Now;
                     while (this.State != State.Available) {
                         if ((DateTime.Now - begin).Seconds > 10) {
-                            throw new RequestTimeoutException(new RequestError[0]);
+                            throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -368,6 +376,7 @@ namespace Gs2.Core.Net
             return new Gs2InlineFuture<OpenResult>(Impl);
         }
         
+        // ReSharper disable once MemberCanBePrivate.Global
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
         public async UniTask<OpenResult> ReOpenAsync()
@@ -379,7 +388,7 @@ namespace Gs2.Core.Net
                 var begin = DateTime.Now;
                 while (this.State != State.Available) {
                     if ((DateTime.Now - begin).Seconds > 10) {
-                        throw new RequestTimeoutException(new RequestError[0]);
+                        throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
                     await Task.Delay(TimeSpan.FromMilliseconds(50));
@@ -490,6 +499,7 @@ namespace Gs2.Core.Net
 
                 this.State = State.Closing;
 
+                // ReSharper disable once MethodHasAsyncOverload
                 this._session.Close();
 
                 {
@@ -520,7 +530,7 @@ namespace Gs2.Core.Net
                 this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
 
                 try {
-                    this._session.Send(sessionRequest?.Body);
+                    this._session.Send(sessionRequest.Body);
                 }
                 catch (SystemException) {
                     this._inflightRequest.Remove(sessionRequest.TaskId);
@@ -540,7 +550,7 @@ namespace Gs2.Core.Net
                 this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
 
                 try {
-                    this._session.Send(sessionRequest?.Body);
+                    this._session.Send(sessionRequest.Body);
                 }
                 catch (SystemException) {
                     this._inflightRequest.Remove(sessionRequest.TaskId);
@@ -553,15 +563,15 @@ namespace Gs2.Core.Net
         {
             if (request is WebSocketSessionRequest sessionRequest)
             {
-                _inflightRequest[sessionRequest.TaskId] = sessionRequest;
+                this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
 
                 try
                 {
-                    _session.Send(sessionRequest?.Body);
+                    this._session.Send(sessionRequest.Body);
                 }
                 catch (SystemException)
                 {
-                    _inflightRequest.Remove(sessionRequest.TaskId);
+                    this._inflightRequest.Remove(sessionRequest.TaskId);
                 }
             }
         }
@@ -571,48 +581,48 @@ namespace Gs2.Core.Net
 #if UNITY_WEBGL && !UNITY_EDITOR
             return true;
 #else
-            return _session.Ping();
+            return this._session.Ping();
 #endif
         }
 
         public bool IsCanceled()
         {
-            return State == State.CancellingTasks;
+            return this.State == State.CancellingTasks;
         }
 
         public bool IsCompleted(IGs2SessionRequest request)
         {
-            return _result.ContainsKey(request.TaskId);
+            return this._result.ContainsKey(request.TaskId);
         }
 
         public bool IsDisconnected()
         {
-            return State == State.Idle || State == State.Closing || State == State.Closed;
+            return this.State == State.Idle || this.State == State.Closing || this.State == State.Closed;
         }
 
         public IGs2SessionResult MarkRead(IGs2SessionRequest request)
         {
             var result = _result[request.TaskId];
-            _result.Remove(request.TaskId);
+            this._result.Remove(request.TaskId);
             return result;
         }
-        
-        public void OnMessage(WebSocketResult result)
+
+        private void OnMessage(WebSocketResult result)
         {
-            if (_inflightRequest.ContainsKey(result.Gs2SessionTaskId))
+            if (this._inflightRequest.ContainsKey(result.Gs2SessionTaskId))
             {
                 try
                 {
-                    _result[result.Gs2SessionTaskId] = result;
+                    this._result[result.Gs2SessionTaskId] = result;
                 }
                 catch (Gs2Exception e)
                 {
-                    _result[result.Gs2SessionTaskId] = new WebSocketResult("{}")
+                    this._result[result.Gs2SessionTaskId] = new WebSocketResult("{}")
                     {
                         Error = e,
                     };
                 }
-                _inflightRequest.Remove(result.Gs2SessionTaskId);
+                this._inflightRequest.Remove(result.Gs2SessionTaskId);
             }
         }
     }

@@ -32,5 +32,7 @@ namespace Gs2.Core.Exception
 		{
 			
 		}
+
+		public override int StatusCode => 502;
 	}
 }

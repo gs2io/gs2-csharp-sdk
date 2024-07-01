@@ -43,6 +43,8 @@ namespace Gs2.Core.Exception
                 exception is UnauthorizedException;
         }
 
+        public override int StatusCode => 500;
+
         public bool IsWorthRetry() {
             return _isWorthRetry;
         }

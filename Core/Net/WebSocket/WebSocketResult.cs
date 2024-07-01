@@ -20,16 +20,17 @@ namespace Gs2.Core.Net
 #endif
         private class Gs2Message
         {
-            public string type { set; get; }
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
+            public string Type { private set; get; }
 		    
             /** Gs2SessionTaskId */
-            public string requestId { set; get; }
+            public string RequestId { private set; get; }
 
             /** HTTP ステータスコード */
-            public int? status { set; get; }
+            public int? Status { private set; get; }
 	        
             /** メッセージ本体 */
-            public JsonData body { set; get; }
+            public JsonData Body { private set; get; }
 
             public static Gs2Message FromJson(JsonData data)
             {
@@ -39,10 +40,10 @@ namespace Gs2.Core.Net
                 }
                 return new Gs2Message
                 {
-                    type = data.Keys.Contains("type") ? (string)data["type"] : null,
-                    requestId = data.Keys.Contains("requestId") ? (string)data["requestId"] : null,
-                    status = data.Keys.Contains("status") ? (int?)data["status"] : null,
-                    body = data.Keys.Contains("body") ? data["body"] : null,
+                    Type = data.Keys.Contains("type") ? (string)data["type"] : null,
+                    RequestId = data.Keys.Contains("requestId") ? (string)data["requestId"] : null,
+                    Status = data.Keys.Contains("status") ? (int?)data["status"] : null,
+                    Body = data.Keys.Contains("body") ? data["body"] : null,
                 };
             }
         }
@@ -50,18 +51,18 @@ namespace Gs2.Core.Net
         public WebSocketResult(string body)
         {
             var gs2Message = Gs2Message.FromJson(JsonMapper.ToObject(body));
-            Body = gs2Message.body;
+            Body = gs2Message.Body;
 
-            if (gs2Message.status != 200 && gs2Message.body != null)
+            if (gs2Message.Status != 200 && gs2Message.Body != null)
             {
-                var error = GeneralError.FromJson(gs2Message.body);
+                var error = GeneralError.FromJson(gs2Message.Body);
                 var errorMessage = error != null ? error.Message : body;
-                Error = ExtractError(errorMessage, gs2Message.status ?? 0);
+                Error = ExtractError(errorMessage, gs2Message.Status ?? 0);
             }
 
-            Gs2SessionTaskId = new Gs2SessionTaskId(gs2Message.requestId);
-            StatusCode = gs2Message.status ?? 0;
-            Body = gs2Message.body;
+            Gs2SessionTaskId = new Gs2SessionTaskId(gs2Message.RequestId);
+            StatusCode = gs2Message.Status ?? 0;
+            Body = gs2Message.Body;
         }
         
         private static Gs2Exception ExtractError(string message, long statusCode)

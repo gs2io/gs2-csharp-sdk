@@ -45,6 +45,8 @@ namespace Gs2.Core.Exception
 			get { return errors; }
 			set { errors = value; }
 		}
+		
+		public abstract int StatusCode { get; }
 
 		public override string ToString() {
 			return string.Join(", ", this.errors.Select(v => v.ToString()).ToArray());
