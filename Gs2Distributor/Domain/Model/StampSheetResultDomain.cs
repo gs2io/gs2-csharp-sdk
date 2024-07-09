@@ -41,6 +41,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -64,12 +65,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
     public partial class StampSheetResultDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _transactionId;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string TransactionId => _transactionId;
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string TransactionId { get; } = null!;
 
         public StampSheetResultDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -81,9 +79,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this._client = new Gs2DistributorRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._transactionId = transactionId;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.TransactionId = transactionId;
         }
 
     }
@@ -97,6 +95,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.StampSheetResult> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithTransactionId(this.TransactionId);
@@ -126,6 +125,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             GetStampSheetResultByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithTransactionId(this.TransactionId);
@@ -296,9 +296,21 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

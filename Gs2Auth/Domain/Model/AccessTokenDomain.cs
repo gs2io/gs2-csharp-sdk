@@ -64,10 +64,10 @@ namespace Gs2.Gs2Auth.Domain.Model
     public partial class AccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AuthRestClient _client;
-        public string Token { get; set; }
-        public string UserId { get; set; }
-        public long? Expire { get; set; }
-        public string Status { get; set; }
+        public string Token { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+        public long? Expire { get; set; } = null!;
+        public string Status { get; set; } = null!;
 
         public AccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2
@@ -342,9 +342,21 @@ namespace Gs2.Gs2Auth.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

@@ -41,6 +41,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -64,11 +65,11 @@ namespace Gs2.Gs2MegaField.Domain.Model
     public partial class SpatialAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MegaFieldRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
-        public string AreaModelName { get; }
-        public string LayerModelName { get; }
         public string UserId => this.AccessToken.UserId;
+        public string AreaModelName { get; } = null!;
+        public string LayerModelName { get; } = null!;
 
         public SpatialAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -94,6 +95,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAreaModelName(this.AreaModelName)
@@ -126,6 +128,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             PutPositionRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithAreaModelName(this.AreaModelName)
@@ -148,6 +151,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain[]> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAreaModelName(this.AreaModelName)
@@ -185,6 +189,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             FetchPositionRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithAreaModelName(this.AreaModelName)
@@ -212,6 +217,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAreaModelName(this.AreaModelName)
@@ -253,6 +259,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             NearUserIdsRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithAreaModelName(this.AreaModelName)
@@ -284,6 +291,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.SpatialDomain[]> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithAreaModelName(this.AreaModelName)
@@ -324,6 +332,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             ActionRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithAreaModelName(this.AreaModelName)
@@ -441,9 +450,21 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

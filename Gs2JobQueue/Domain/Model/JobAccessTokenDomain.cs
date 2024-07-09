@@ -41,6 +41,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2JobQueue.Model;
 #if UNITY_2017_1_OR_NEWER
@@ -65,17 +66,14 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class JobAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly string _jobName;
-        public bool? AutoRun { get; set; }
-        public bool? IsLastJob { get; set; }
+        public string NamespaceName { get; } = null!;
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string JobName { get; } = null!;
+        public bool? AutoRun { get; set; } = null!;
+        public bool? IsLastJob { get; set; } = null!;
         public JobResultBody Result { get; set; }
-        public bool? NeedRetry { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public string JobName => _jobName;
+        public bool? NeedRetry { get; set; } = null!;
 
         public JobAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -87,9 +85,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._client = new Gs2JobQueueRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._jobName = jobName;
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.JobName = jobName;
         }
 
         public Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain JobResult(
@@ -98,7 +96,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             return new Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 this.JobName,
                 tryNumber
             );
@@ -193,9 +191,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

@@ -47,6 +47,9 @@ namespace Gs2.Core.Exception
 		}
 		
 		public abstract int StatusCode { get; }
+		
+		public abstract bool RecommendRetry { get; }
+		public abstract bool RecommendAutoRetry { get; }
 
 		public override string ToString() {
 			return string.Join(", ", this.errors.Select(v => v.ToString()).ToArray());

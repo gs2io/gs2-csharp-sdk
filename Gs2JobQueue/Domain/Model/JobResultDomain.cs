@@ -65,10 +65,10 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class JobResultDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string JobName { get; }
-        public int? TryNumber { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string JobName { get; } = null!;
+        public int? TryNumber { get; } = null!;
 
         public JobResultDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -98,6 +98,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithJobName(this.JobName)
@@ -128,6 +129,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             GetJobResultByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithJobName(this.JobName)
@@ -308,9 +310,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

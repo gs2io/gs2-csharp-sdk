@@ -20,9 +20,11 @@
 
 using System;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;

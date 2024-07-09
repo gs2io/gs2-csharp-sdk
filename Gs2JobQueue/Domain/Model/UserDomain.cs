@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -371,6 +373,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     result?.Item?.UserId,
                     result?.Item?.Name
                 );
+                domain.Result = result?.Result;
                 domain.IsLastJob = result?.IsLastJob;
 
                 self.OnComplete(domain);
@@ -408,6 +411,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 result?.Item?.UserId,
                 result?.Item?.Name
             );
+            domain.Result = result?.Result;
             domain.IsLastJob = result?.IsLastJob;
 
             return domain;

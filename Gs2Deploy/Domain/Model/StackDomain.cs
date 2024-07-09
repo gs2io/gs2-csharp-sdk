@@ -65,9 +65,9 @@ namespace Gs2.Gs2Deploy.Domain.Model
     public partial class StackDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DeployRestClient _client;
-        public string StackName { get; }
-        public string Status { get; set; }
-        public string NextPageToken { get; set; }
+        public string StackName { get; } = null!;
+        public string Status { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public StackDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -331,7 +331,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -361,7 +361,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             GetStackStatusRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithStackName(this.StackName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -381,7 +381,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Stack> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -409,7 +409,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             GetStackRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithStackName(this.StackName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -427,7 +427,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -457,7 +457,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             UpdateStackRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithStackName(this.StackName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -506,7 +506,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             ChangeSetRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithStackName(this.StackName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -525,7 +525,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -555,7 +555,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             UpdateStackFromGitHubRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithStackName(this.StackName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -575,7 +575,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -608,7 +608,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -629,7 +629,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -659,7 +659,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             ForceDeleteStackRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithStackName(this.StackName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -679,7 +679,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -712,7 +712,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -733,7 +733,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -766,7 +766,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -883,9 +883,21 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

@@ -65,9 +65,9 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class SendFriendRequestDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string TargetUserId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string TargetUserId { get; } = null!;
 
         public SendFriendRequestDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -95,6 +95,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.FriendRequest> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithTargetUserId(this.TargetUserId);
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             GetSendRequestByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithTargetUserId(this.TargetUserId);
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestDomain> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithTargetUserId(this.TargetUserId);
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         ) {
             try {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithTargetUserId(this.TargetUserId);
@@ -317,9 +321,21 @@ namespace Gs2.Gs2Friend.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

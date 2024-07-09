@@ -43,6 +43,9 @@ namespace Gs2.Core.Exception
                 exception is UnauthorizedException;
         }
 
+        public override bool RecommendRetry => this._isWorthRetry;
+        public override bool RecommendAutoRetry => this._isWorthRetry;
+
         public override int StatusCode => 500;
 
         public bool IsWorthRetry() {

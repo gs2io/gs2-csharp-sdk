@@ -65,11 +65,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
     public partial class ScoreDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string CategoryName { get; }
-        public string ScorerUserId { get; }
-        public string UniqueId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string CategoryName { get; } = null!;
+        public string ScorerUserId { get; } = null!;
+        public string UniqueId { get; } = null!;
 
         public ScoreDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -101,6 +101,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Score> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName)
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             GetScoreByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName)
@@ -267,9 +269,21 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

@@ -141,17 +141,23 @@ namespace Gs2.Core.Domain
                     self.OnError(new UnknownException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked."));
                     yield break;
                 }
-                var future = Gs2.JobQueue.Namespace(
+                var domain = Gs2.JobQueue.Namespace(
                     this._namespaceName
                 ).AccessToken(
                     AccessToken
                 ).Job(
                     this._jobName
-                ).JobResult().ModelFuture();
+                ).JobResult();
+                var future = domain.ModelFuture();
                 yield return future;
                 if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
+                    domain.Invalidate();
+                    if (!future.Error.RecommendAutoRetry) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                    yield return new WaitForSeconds(0.01f);
+                    goto RETRY;
                 }
                 var result = future.Result;
                 if (result == null) {
@@ -212,43 +218,56 @@ namespace Gs2.Core.Domain
             if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
                 throw new TimeoutException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked.");
             }
-            var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
-                Gs2
-            ).Namespace(
+            var domain = Gs2.JobQueue.Namespace(
                 this._namespaceName
             ).AccessToken(
                 AccessToken
             ).Job(
                 this._jobName
-            ).JobResult().ModelAsync();
-            if (result == null) {
+            ).JobResult();
+            try {
+                var result = await domain.ModelAsync();
+                if (result == null) {
+#if UNITY_2017_1_OR_NEWER
+                    await UniTask.Delay(TimeSpan.FromMilliseconds(10));
+#else
+                    await Task.Delay(TimeSpan.FromMilliseconds(10));
+#endif
+                    await Gs2.JobQueue.DispatchAsync(AccessToken);
+                    goto RETRY;
+                }
+
+                var transaction = HandleResult(
+                    new Job {
+                        JobId = result.JobId,
+                        Name = Job.GetJobNameFromGrn(result.JobId),
+                        UserId = Job.GetUserIdFromGrn(result.JobId),
+                        ScriptId = result.ScriptId,
+                        Args = result.Args,
+                    },
+                    new JobResultBody {
+                        TryNumber = result.TryNumber,
+                        StatusCode = result.StatusCode,
+                        Result = result.Result,
+                    }
+                );
+                if (all && transaction != null) {
+                    return await transaction.WaitAsync(true);
+                }
+                return transaction;
+            }
+            catch (Gs2Exception e) {
+                domain.Invalidate();
+                if (!e.RecommendAutoRetry) {
+                    throw;
+                }
 #if UNITY_2017_1_OR_NEWER
                 await UniTask.Delay(TimeSpan.FromMilliseconds(10));
 #else
                 await Task.Delay(TimeSpan.FromMilliseconds(10));
 #endif
-                await Gs2.JobQueue.DispatchAsync(AccessToken);
                 goto RETRY;
             }
-
-            var transaction = HandleResult(
-                new Job {
-                    JobId = result.JobId,
-                    Name = Job.GetJobNameFromGrn(result.JobId),
-                    UserId = Job.GetUserIdFromGrn(result.JobId),
-                    ScriptId = result.ScriptId,
-                    Args = result.Args,
-                },
-                new JobResultBody {
-                    TryNumber = result.TryNumber,
-                    StatusCode = result.StatusCode,
-                    Result = result.Result,
-                }
-            );
-            if (all && transaction != null) {
-                return await transaction.WaitAsync(true);
-            }
-            return transaction;
         }
 #endif
     }

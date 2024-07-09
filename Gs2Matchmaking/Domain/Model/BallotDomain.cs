@@ -41,6 +41,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Matchmaking.Model;
 #if UNITY_2017_1_OR_NEWER
@@ -65,12 +66,14 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class BallotDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string RatingName { get; }
-        public string GatheringName { get; }
-        public int? NumberOfPlayer { get; }
-        public string KeyId { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string RatingName { get; } = null!;
+        public string GatheringName { get; } = null!;
+        public int? NumberOfPlayer { get; } = null!;
+        public string KeyId { get; } = null!;
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
 
         public BallotDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -104,6 +107,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.SignedBallot> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRatingName(this.RatingName)
@@ -139,6 +143,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             GetBallotByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRatingName(this.RatingName)
@@ -278,9 +283,21 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

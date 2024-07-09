@@ -41,6 +41,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -64,15 +65,11 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class JobResultAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly string _jobName;
-        private readonly int? _tryNumber;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public string JobName => _jobName;
-        public int? TryNumber => _tryNumber;
+        public string NamespaceName { get; } = null!;
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string JobName { get; } = null!;
+        public int? TryNumber { get; } = null!;
 
         public JobResultAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -85,10 +82,10 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._client = new Gs2JobQueueRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._jobName = jobName;
-            this._tryNumber = tryNumber;
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.JobName = jobName;
+            this.TryNumber = tryNumber;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -98,8 +95,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithJobName(this.JobName)
                     .WithTryNumber(this.TryNumber);
                 var future = request.InvokeFuture(
@@ -128,8 +126,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             GetJobResultRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithJobName(this.JobName)
                 .WithTryNumber(this.TryNumber);
             var result = await request.InvokeAsync(
@@ -304,9 +303,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

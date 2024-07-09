@@ -38,7 +38,6 @@ namespace Gs2.Core.Net.Chaos
                 new Gs2.Core.Exception.BadGatewayException(payload),
                 new Gs2.Core.Exception.ServiceUnavailableException(payload),
                 new Gs2.Core.Exception.RequestTimeoutException(payload),
-                new Gs2.Core.Exception.NoInternetConnectionException(payload),
             };
             var exception = exceptions[this._random.Next(exceptions.Length)];
             this._result[request.TaskId] = new RestResult(

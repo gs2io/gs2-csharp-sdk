@@ -41,6 +41,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2JobQueue.Model;
 #if UNITY_2017_1_OR_NEWER
@@ -65,16 +66,13 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class JobDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _jobName;
-        public bool? AutoRun { get; set; }
-        public bool? IsLastJob { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string JobName { get; } = null!;
+        public bool? AutoRun { get; set; } = null!;
+        public bool? IsLastJob { get; set; } = null!;
         public JobResultBody Result { get; set; }
-        public bool? NeedRetry { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string JobName => _jobName;
+        public bool? NeedRetry { get; set; } = null!;
 
         public JobDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -86,9 +84,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._client = new Gs2JobQueueRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._jobName = jobName;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.JobName = jobName;
         }
 
         public Gs2.Gs2JobQueue.Domain.Model.JobResultDomain JobResult(
@@ -114,6 +112,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.Job> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithJobName(this.JobName);
@@ -143,6 +142,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             GetJobByUserIdRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithJobName(this.JobName);
@@ -162,6 +162,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithJobName(this.JobName);
@@ -192,17 +193,20 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             #endif
             DeleteJobByUserIdRequest request
         ) {
-            request = request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithJobName(this.JobName);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                this.UserId,
-                () => this._client.DeleteJobByUserIdAsync(request)
-            );
+            try {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithJobName(this.JobName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteJobByUserIdAsync(request)
+                );
+            }
+            catch (NotFoundException e) {}
             var domain = this;
-
             return domain;
         }
         #endif
@@ -322,9 +326,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

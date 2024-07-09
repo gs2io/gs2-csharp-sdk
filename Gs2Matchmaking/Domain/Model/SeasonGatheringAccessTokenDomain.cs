@@ -95,13 +95,71 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.SeasonGatheringAccessTokenDomain> VerifyIncludeParticipantFuture(
+            VerifyIncludeParticipantRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.SeasonGatheringAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithSeasonName(this.SeasonName)
+                    .WithSeason(this.Season)
+                    .WithTier(this.Tier)
+                    .WithSeasonGatheringName(this.SeasonGatheringName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyIncludeParticipantFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.SeasonGatheringAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.SeasonGatheringAccessTokenDomain> VerifyIncludeParticipantAsync(
+            #else
+        public async Task<Gs2.Gs2Matchmaking.Domain.Model.SeasonGatheringAccessTokenDomain> VerifyIncludeParticipantAsync(
+            #endif
+            VerifyIncludeParticipantRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithSeasonName(this.SeasonName)
+                .WithSeason(this.Season)
+                .WithTier(this.Tier)
+                .WithSeasonGatheringName(this.SeasonGatheringName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyIncludeParticipantAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Matchmaking.Model.SeasonGathering> GetFuture(
             GetSeasonGatheringRequest request
         ) {
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.SeasonGathering> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithSeasonName(this.SeasonName)
                     .WithSeason(this.Season)
@@ -133,7 +191,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             GetSeasonGatheringRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithSeasonName(this.SeasonName)
                 .WithSeason(this.Season)
@@ -277,9 +335,21 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

@@ -65,11 +65,11 @@ namespace Gs2.Gs2SerialKey.Domain.Model
     public partial class SerialKeyAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SerialKeyRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string SerialKeyCode { get; }
-        public string Url { get; set; }
+        public string SerialKeyCode { get; } = null!;
+        public string Url { get; set; } = null!;
 
         public SerialKeyAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -93,6 +93,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithCode(this.SerialKeyCode);
@@ -124,6 +125,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             UseRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithCode(this.SerialKeyCode);
@@ -227,9 +229,21 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

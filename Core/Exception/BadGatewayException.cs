@@ -33,6 +33,9 @@ namespace Gs2.Core.Exception
 			
 		}
 
+		public override bool RecommendRetry => true;
+		public override bool RecommendAutoRetry => true;
+
 		public override int StatusCode => 502;
 	}
 }

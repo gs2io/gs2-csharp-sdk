@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -65,13 +63,13 @@ namespace Gs2.Gs2Account.Domain.Model
     public partial class AccountAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; }
-        public string Body { get; set; }
-        public string Signature { get; set; }
-        public string NextPageToken { get; set; }
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; } = null!;
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public AccountAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -86,7 +84,6 @@ namespace Gs2.Gs2Account.Domain.Model
             this.AccessToken = accessToken;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
         )
         {
@@ -97,14 +94,14 @@ namespace Gs2.Gs2Account.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver> TakeOversAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
-            #endif
-        #else
         public DescribeTakeOversIterator TakeOversAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeTakeOversIterator(
@@ -112,16 +109,13 @@ namespace Gs2.Gs2Account.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeTakeOvers(
             Action<Gs2.Gs2Account.Model.TakeOver[]> callback
@@ -176,7 +170,6 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         public Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain DataOwner(
-            string dataOwnerName
         ) {
             return new Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain(
                 this._gs2,
@@ -270,9 +263,21 @@ namespace Gs2.Gs2Account.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }

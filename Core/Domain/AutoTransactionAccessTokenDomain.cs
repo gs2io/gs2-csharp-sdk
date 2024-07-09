@@ -157,17 +157,23 @@ namespace Gs2.Core.Domain
                     self.OnError(new UnknownException("Failed to retrieve transaction results, either because there is some failure in GS2, or the GS2-Gateway used to notify the GS2-Distributor used to execute the transaction is not yet configured, or the GS2-Gateway has a user ID to receive notifications The configuration API may not have been invoked."));
                     yield break;
                 }
-                var future = Gs2.Distributor.Namespace(
+                var domain = Gs2.Distributor.Namespace(
                     Gs2.TransactionConfiguration.NamespaceName
                 ).AccessToken(
                     AccessToken
                 ).StampSheetResult(
                     this._transactionId
-                ).ModelFuture();
+                );
+                var future = domain.ModelFuture();
                 yield return future;
                 if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
+                    domain.Invalidate();
+                    if (!future.Error.RecommendAutoRetry) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                    yield return new WaitForSeconds(0.01f);
+                    goto RETRY;
                 }
                 var result = future.Result;
                 if (result == null) {
@@ -215,7 +221,7 @@ namespace Gs2.Core.Domain
             if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
                 throw new TimeoutException("Failed to retrieve transaction results, either because there is some failure in GS2, or the GS2-Gateway used to notify the GS2-Distributor used to execute the transaction is not yet configured, or the GS2-Gateway has a user ID to receive notifications The configuration API may not have been invoked.");
             }
-            var result = await new Gs2Distributor.Domain.Gs2Distributor(
+            var domain = new Gs2Distributor.Domain.Gs2Distributor(
                 Gs2
             ).Namespace(
                 Gs2.TransactionConfiguration.NamespaceName
@@ -223,22 +229,37 @@ namespace Gs2.Core.Domain
                 AccessToken
             ).StampSheetResult(
                 this._transactionId
-            ).ModelAsync();
-            if (result == null) {
+            );
+            try {
+                var result = await domain.ModelAsync();
+                if (result == null) {
+#if UNITY_2017_1_OR_NEWER
+                    await UniTask.Delay(TimeSpan.FromMilliseconds(10));
+#else
+                    await Task.Delay(TimeSpan.FromMilliseconds(10));
+#endif
+                    await Gs2.Distributor.DispatchAsync(AccessToken);
+                    goto RETRY;
+                }
+
+                var transaction = HandleResult(result);
+                if (all && transaction != null) {
+                    return await transaction.WaitAsync(true);
+                }
+                return transaction;
+            }
+            catch (Gs2Exception e) {
+                domain.Invalidate();
+                if (!e.RecommendAutoRetry) {
+                    throw;
+                }
 #if UNITY_2017_1_OR_NEWER
                 await UniTask.Delay(TimeSpan.FromMilliseconds(10));
 #else
                 await Task.Delay(TimeSpan.FromMilliseconds(10));
 #endif
-                await Gs2.Distributor.DispatchAsync(AccessToken);
                 goto RETRY;
             }
-
-            var transaction = HandleResult(result);
-            if (all && transaction != null) {
-                return await transaction.WaitAsync(true);
-            }
-            return transaction;
         }
 #endif
     }

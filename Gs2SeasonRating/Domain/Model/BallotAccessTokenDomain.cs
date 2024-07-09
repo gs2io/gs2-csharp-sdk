@@ -53,7 +53,7 @@ using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
-#endif
+    #endif
 #else
 using System.Collections.Generic;
 using System.Threading;
@@ -66,13 +66,15 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
     public partial class BallotAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SeasonRatingRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string SeasonName { get; }
-        public string SessionName { get; }
-        public int? NumberOfPlayer { get; }
-        public string KeyId { get; }
+        public string SeasonName { get; } = null!;
+        public string SessionName { get; } = null!;
+        public int? NumberOfPlayer { get; } = null!;
+        public string KeyId { get; } = null!;
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
 
         public BallotAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -102,6 +104,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.SignedBallot> self)
             {
                 request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithSeasonName(this.SeasonName)
@@ -137,6 +140,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             GetBallotRequest request
         ) {
             request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithSeasonName(this.SeasonName)
@@ -272,9 +276,21 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+                    async UniTask Impl() {
             #else
-                    ModelAsync();
+                    async Task Impl() {
+            #endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+            #if GS2_ENABLE_UNITASK
+                    Impl().Forget();
+            #else
+                    Impl();
             #endif
         #endif
                 }
