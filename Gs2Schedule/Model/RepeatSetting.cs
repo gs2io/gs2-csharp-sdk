@@ -38,6 +38,9 @@ namespace Gs2.Gs2Schedule.Model
         public string EndDayOfWeek { set; get; } = null!;
         public int? BeginHour { set; get; } = null!;
         public int? EndHour { set; get; } = null!;
+        public long? AnchorTimestamp { set; get; } = null!;
+        public int? ActiveDays { set; get; } = null!;
+        public int? InactiveDays { set; get; } = null!;
         public RepeatSetting WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;
@@ -66,6 +69,18 @@ namespace Gs2.Gs2Schedule.Model
             this.EndHour = endHour;
             return this;
         }
+        public RepeatSetting WithAnchorTimestamp(long? anchorTimestamp) {
+            this.AnchorTimestamp = anchorTimestamp;
+            return this;
+        }
+        public RepeatSetting WithActiveDays(int? activeDays) {
+            this.ActiveDays = activeDays;
+            return this;
+        }
+        public RepeatSetting WithInactiveDays(int? inactiveDays) {
+            this.InactiveDays = inactiveDays;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -82,7 +97,10 @@ namespace Gs2.Gs2Schedule.Model
                 .WithBeginDayOfWeek(!data.Keys.Contains("beginDayOfWeek") || data["beginDayOfWeek"] == null ? null : data["beginDayOfWeek"].ToString())
                 .WithEndDayOfWeek(!data.Keys.Contains("endDayOfWeek") || data["endDayOfWeek"] == null ? null : data["endDayOfWeek"].ToString())
                 .WithBeginHour(!data.Keys.Contains("beginHour") || data["beginHour"] == null ? null : (int?)(data["beginHour"].ToString().Contains(".") ? (int)double.Parse(data["beginHour"].ToString()) : int.Parse(data["beginHour"].ToString())))
-                .WithEndHour(!data.Keys.Contains("endHour") || data["endHour"] == null ? null : (int?)(data["endHour"].ToString().Contains(".") ? (int)double.Parse(data["endHour"].ToString()) : int.Parse(data["endHour"].ToString())));
+                .WithEndHour(!data.Keys.Contains("endHour") || data["endHour"] == null ? null : (int?)(data["endHour"].ToString().Contains(".") ? (int)double.Parse(data["endHour"].ToString()) : int.Parse(data["endHour"].ToString())))
+                .WithAnchorTimestamp(!data.Keys.Contains("anchorTimestamp") || data["anchorTimestamp"] == null ? null : (long?)(data["anchorTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["anchorTimestamp"].ToString()) : long.Parse(data["anchorTimestamp"].ToString())))
+                .WithActiveDays(!data.Keys.Contains("activeDays") || data["activeDays"] == null ? null : (int?)(data["activeDays"].ToString().Contains(".") ? (int)double.Parse(data["activeDays"].ToString()) : int.Parse(data["activeDays"].ToString())))
+                .WithInactiveDays(!data.Keys.Contains("inactiveDays") || data["inactiveDays"] == null ? null : (int?)(data["inactiveDays"].ToString().Contains(".") ? (int)double.Parse(data["inactiveDays"].ToString()) : int.Parse(data["inactiveDays"].ToString())));
         }
 
         public JsonData ToJson()
@@ -95,6 +113,9 @@ namespace Gs2.Gs2Schedule.Model
                 ["endDayOfWeek"] = EndDayOfWeek,
                 ["beginHour"] = BeginHour,
                 ["endHour"] = EndHour,
+                ["anchorTimestamp"] = AnchorTimestamp,
+                ["activeDays"] = ActiveDays,
+                ["inactiveDays"] = InactiveDays,
             };
         }
 
@@ -128,6 +149,18 @@ namespace Gs2.Gs2Schedule.Model
             if (EndHour != null) {
                 writer.WritePropertyName("endHour");
                 writer.Write((EndHour.ToString().Contains(".") ? (int)double.Parse(EndHour.ToString()) : int.Parse(EndHour.ToString())));
+            }
+            if (AnchorTimestamp != null) {
+                writer.WritePropertyName("anchorTimestamp");
+                writer.Write((AnchorTimestamp.ToString().Contains(".") ? (long)double.Parse(AnchorTimestamp.ToString()) : long.Parse(AnchorTimestamp.ToString())));
+            }
+            if (ActiveDays != null) {
+                writer.WritePropertyName("activeDays");
+                writer.Write((ActiveDays.ToString().Contains(".") ? (int)double.Parse(ActiveDays.ToString()) : int.Parse(ActiveDays.ToString())));
+            }
+            if (InactiveDays != null) {
+                writer.WritePropertyName("inactiveDays");
+                writer.Write((InactiveDays.ToString().Contains(".") ? (int)double.Parse(InactiveDays.ToString()) : int.Parse(InactiveDays.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -192,6 +225,30 @@ namespace Gs2.Gs2Schedule.Model
             {
                 diff += (int)(EndHour - other.EndHour);
             }
+            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
+            }
+            if (ActiveDays == null && ActiveDays == other.ActiveDays)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(ActiveDays - other.ActiveDays);
+            }
+            if (InactiveDays == null && InactiveDays == other.InactiveDays)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(InactiveDays - other.InactiveDays);
+            }
             return diff;
         }
 
@@ -202,6 +259,7 @@ namespace Gs2.Gs2Schedule.Model
                     case "daily":
                     case "weekly":
                     case "monthly":
+                    case "custom":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
@@ -289,6 +347,42 @@ namespace Gs2.Gs2Schedule.Model
                     });
                 }
             }
+            if (RepeatType == "custom") {
+                if (AnchorTimestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSetting", "schedule.repeatSetting.anchorTimestamp.error.invalid"),
+                    });
+                }
+                if (AnchorTimestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSetting", "schedule.repeatSetting.anchorTimestamp.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "custom") {
+                if (ActiveDays < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSetting", "schedule.repeatSetting.activeDays.error.invalid"),
+                    });
+                }
+                if (ActiveDays > 2147483646.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSetting", "schedule.repeatSetting.activeDays.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "custom") {
+                if (InactiveDays < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSetting", "schedule.repeatSetting.inactiveDays.error.invalid"),
+                    });
+                }
+                if (InactiveDays > 2147483646.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSetting", "schedule.repeatSetting.inactiveDays.error.invalid"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -300,6 +394,9 @@ namespace Gs2.Gs2Schedule.Model
                 EndDayOfWeek = EndDayOfWeek,
                 BeginHour = BeginHour,
                 EndHour = EndHour,
+                AnchorTimestamp = AnchorTimestamp,
+                ActiveDays = ActiveDays,
+                InactiveDays = InactiveDays,
             };
         }
     }
