@@ -4241,6 +4241,1294 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class DescribePlatformIdsTask : Gs2RestSessionTask<DescribePlatformIdsRequest, DescribePlatformIdsResult>
+        {
+            public DescribePlatformIdsTask(IGs2Session session, RestSessionRequestFactory factory, DescribePlatformIdsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribePlatformIdsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/platformId";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribePlatformIds(
+                Request.DescribePlatformIdsRequest request,
+                UnityAction<AsyncResult<Result.DescribePlatformIdsResult>> callback
+        )
+		{
+			var task = new DescribePlatformIdsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribePlatformIdsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribePlatformIdsResult> DescribePlatformIdsFuture(
+                Request.DescribePlatformIdsRequest request
+        )
+		{
+			return new DescribePlatformIdsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribePlatformIdsResult> DescribePlatformIdsAsync(
+                Request.DescribePlatformIdsRequest request
+        )
+		{
+            AsyncResult<Result.DescribePlatformIdsResult> result = null;
+			await DescribePlatformIds(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribePlatformIdsTask DescribePlatformIdsAsync(
+                Request.DescribePlatformIdsRequest request
+        )
+		{
+			return new DescribePlatformIdsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribePlatformIdsResult> DescribePlatformIdsAsync(
+                Request.DescribePlatformIdsRequest request
+        )
+		{
+			var task = new DescribePlatformIdsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribePlatformIdsByUserIdTask : Gs2RestSessionTask<DescribePlatformIdsByUserIdRequest, DescribePlatformIdsByUserIdResult>
+        {
+            public DescribePlatformIdsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribePlatformIdsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribePlatformIdsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/platformId";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribePlatformIdsByUserId(
+                Request.DescribePlatformIdsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribePlatformIdsByUserIdResult>> callback
+        )
+		{
+			var task = new DescribePlatformIdsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribePlatformIdsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribePlatformIdsByUserIdResult> DescribePlatformIdsByUserIdFuture(
+                Request.DescribePlatformIdsByUserIdRequest request
+        )
+		{
+			return new DescribePlatformIdsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribePlatformIdsByUserIdResult> DescribePlatformIdsByUserIdAsync(
+                Request.DescribePlatformIdsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribePlatformIdsByUserIdResult> result = null;
+			await DescribePlatformIdsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribePlatformIdsByUserIdTask DescribePlatformIdsByUserIdAsync(
+                Request.DescribePlatformIdsByUserIdRequest request
+        )
+		{
+			return new DescribePlatformIdsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribePlatformIdsByUserIdResult> DescribePlatformIdsByUserIdAsync(
+                Request.DescribePlatformIdsByUserIdRequest request
+        )
+		{
+			var task = new DescribePlatformIdsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreatePlatformIdTask : Gs2RestSessionTask<CreatePlatformIdRequest, CreatePlatformIdResult>
+        {
+            public CreatePlatformIdTask(IGs2Session session, RestSessionRequestFactory factory, CreatePlatformIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreatePlatformIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/platformId";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreatePlatformId(
+                Request.CreatePlatformIdRequest request,
+                UnityAction<AsyncResult<Result.CreatePlatformIdResult>> callback
+        )
+		{
+			var task = new CreatePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreatePlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreatePlatformIdResult> CreatePlatformIdFuture(
+                Request.CreatePlatformIdRequest request
+        )
+		{
+			return new CreatePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreatePlatformIdResult> CreatePlatformIdAsync(
+                Request.CreatePlatformIdRequest request
+        )
+		{
+            AsyncResult<Result.CreatePlatformIdResult> result = null;
+			await CreatePlatformId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreatePlatformIdTask CreatePlatformIdAsync(
+                Request.CreatePlatformIdRequest request
+        )
+		{
+			return new CreatePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreatePlatformIdResult> CreatePlatformIdAsync(
+                Request.CreatePlatformIdRequest request
+        )
+		{
+			var task = new CreatePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreatePlatformIdByUserIdTask : Gs2RestSessionTask<CreatePlatformIdByUserIdRequest, CreatePlatformIdByUserIdResult>
+        {
+            public CreatePlatformIdByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CreatePlatformIdByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreatePlatformIdByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/platformId";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreatePlatformIdByUserId(
+                Request.CreatePlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CreatePlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new CreatePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreatePlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreatePlatformIdByUserIdResult> CreatePlatformIdByUserIdFuture(
+                Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+			return new CreatePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreatePlatformIdByUserIdResult> CreatePlatformIdByUserIdAsync(
+                Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CreatePlatformIdByUserIdResult> result = null;
+			await CreatePlatformIdByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreatePlatformIdByUserIdTask CreatePlatformIdByUserIdAsync(
+                Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+			return new CreatePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreatePlatformIdByUserIdResult> CreatePlatformIdByUserIdAsync(
+                Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+			var task = new CreatePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPlatformIdTask : Gs2RestSessionTask<GetPlatformIdRequest, GetPlatformIdResult>
+        {
+            public GetPlatformIdTask(IGs2Session session, RestSessionRequestFactory factory, GetPlatformIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetPlatformIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/platformId/type/{type}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPlatformId(
+                Request.GetPlatformIdRequest request,
+                UnityAction<AsyncResult<Result.GetPlatformIdResult>> callback
+        )
+		{
+			var task = new GetPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPlatformIdResult> GetPlatformIdFuture(
+                Request.GetPlatformIdRequest request
+        )
+		{
+			return new GetPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPlatformIdResult> GetPlatformIdAsync(
+                Request.GetPlatformIdRequest request
+        )
+		{
+            AsyncResult<Result.GetPlatformIdResult> result = null;
+			await GetPlatformId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetPlatformIdTask GetPlatformIdAsync(
+                Request.GetPlatformIdRequest request
+        )
+		{
+			return new GetPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPlatformIdResult> GetPlatformIdAsync(
+                Request.GetPlatformIdRequest request
+        )
+		{
+			var task = new GetPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPlatformIdByUserIdTask : Gs2RestSessionTask<GetPlatformIdByUserIdRequest, GetPlatformIdByUserIdResult>
+        {
+            public GetPlatformIdByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetPlatformIdByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetPlatformIdByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/platformId/type/{type}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPlatformIdByUserId(
+                Request.GetPlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetPlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new GetPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPlatformIdByUserIdResult> GetPlatformIdByUserIdFuture(
+                Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+			return new GetPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPlatformIdByUserIdResult> GetPlatformIdByUserIdAsync(
+                Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetPlatformIdByUserIdResult> result = null;
+			await GetPlatformIdByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetPlatformIdByUserIdTask GetPlatformIdByUserIdAsync(
+                Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+			return new GetPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPlatformIdByUserIdResult> GetPlatformIdByUserIdAsync(
+                Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+			var task = new GetPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class FindPlatformIdTask : Gs2RestSessionTask<FindPlatformIdRequest, FindPlatformIdResult>
+        {
+            public FindPlatformIdTask(IGs2Session session, RestSessionRequestFactory factory, FindPlatformIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(FindPlatformIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/platformId/type/{type}/userIdentifier/{userIdentifier}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+                url = url.Replace("{userIdentifier}", !string.IsNullOrEmpty(request.UserIdentifier) ? request.UserIdentifier.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator FindPlatformId(
+                Request.FindPlatformIdRequest request,
+                UnityAction<AsyncResult<Result.FindPlatformIdResult>> callback
+        )
+		{
+			var task = new FindPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.FindPlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.FindPlatformIdResult> FindPlatformIdFuture(
+                Request.FindPlatformIdRequest request
+        )
+		{
+			return new FindPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.FindPlatformIdResult> FindPlatformIdAsync(
+                Request.FindPlatformIdRequest request
+        )
+		{
+            AsyncResult<Result.FindPlatformIdResult> result = null;
+			await FindPlatformId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public FindPlatformIdTask FindPlatformIdAsync(
+                Request.FindPlatformIdRequest request
+        )
+		{
+			return new FindPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.FindPlatformIdResult> FindPlatformIdAsync(
+                Request.FindPlatformIdRequest request
+        )
+		{
+			var task = new FindPlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class FindPlatformIdByUserIdTask : Gs2RestSessionTask<FindPlatformIdByUserIdRequest, FindPlatformIdByUserIdResult>
+        {
+            public FindPlatformIdByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, FindPlatformIdByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(FindPlatformIdByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/platformId/type/{type}/userIdentifier/{userIdentifier}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+                url = url.Replace("{userIdentifier}", !string.IsNullOrEmpty(request.UserIdentifier) ? request.UserIdentifier.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator FindPlatformIdByUserId(
+                Request.FindPlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.FindPlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new FindPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.FindPlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.FindPlatformIdByUserIdResult> FindPlatformIdByUserIdFuture(
+                Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+			return new FindPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.FindPlatformIdByUserIdResult> FindPlatformIdByUserIdAsync(
+                Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.FindPlatformIdByUserIdResult> result = null;
+			await FindPlatformIdByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public FindPlatformIdByUserIdTask FindPlatformIdByUserIdAsync(
+                Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+			return new FindPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.FindPlatformIdByUserIdResult> FindPlatformIdByUserIdAsync(
+                Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+			var task = new FindPlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeletePlatformIdTask : Gs2RestSessionTask<DeletePlatformIdRequest, DeletePlatformIdResult>
+        {
+            public DeletePlatformIdTask(IGs2Session session, RestSessionRequestFactory factory, DeletePlatformIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeletePlatformIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/platformId/type/{type}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.UserIdentifier != null) {
+                    sessionRequest.AddQueryString("userIdentifier", $"{request.UserIdentifier}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeletePlatformId(
+                Request.DeletePlatformIdRequest request,
+                UnityAction<AsyncResult<Result.DeletePlatformIdResult>> callback
+        )
+		{
+			var task = new DeletePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeletePlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeletePlatformIdResult> DeletePlatformIdFuture(
+                Request.DeletePlatformIdRequest request
+        )
+		{
+			return new DeletePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePlatformIdResult> DeletePlatformIdAsync(
+                Request.DeletePlatformIdRequest request
+        )
+		{
+            AsyncResult<Result.DeletePlatformIdResult> result = null;
+			await DeletePlatformId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeletePlatformIdTask DeletePlatformIdAsync(
+                Request.DeletePlatformIdRequest request
+        )
+		{
+			return new DeletePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeletePlatformIdResult> DeletePlatformIdAsync(
+                Request.DeletePlatformIdRequest request
+        )
+		{
+			var task = new DeletePlatformIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeletePlatformIdByUserIdentifierTask : Gs2RestSessionTask<DeletePlatformIdByUserIdentifierRequest, DeletePlatformIdByUserIdentifierResult>
+        {
+            public DeletePlatformIdByUserIdentifierTask(IGs2Session session, RestSessionRequestFactory factory, DeletePlatformIdByUserIdentifierRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeletePlatformIdByUserIdentifierRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/platformId/type/{type}/userIdentifier/{userIdentifier}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+                url = url.Replace("{userIdentifier}", !string.IsNullOrEmpty(request.UserIdentifier) ? request.UserIdentifier.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeletePlatformIdByUserIdentifier(
+                Request.DeletePlatformIdByUserIdentifierRequest request,
+                UnityAction<AsyncResult<Result.DeletePlatformIdByUserIdentifierResult>> callback
+        )
+		{
+			var task = new DeletePlatformIdByUserIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeletePlatformIdByUserIdentifierResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeletePlatformIdByUserIdentifierResult> DeletePlatformIdByUserIdentifierFuture(
+                Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePlatformIdByUserIdentifierResult> DeletePlatformIdByUserIdentifierAsync(
+                Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+            AsyncResult<Result.DeletePlatformIdByUserIdentifierResult> result = null;
+			await DeletePlatformIdByUserIdentifier(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeletePlatformIdByUserIdentifierTask DeletePlatformIdByUserIdentifierAsync(
+                Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeletePlatformIdByUserIdentifierResult> DeletePlatformIdByUserIdentifierAsync(
+                Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+			var task = new DeletePlatformIdByUserIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeletePlatformIdByUserIdTask : Gs2RestSessionTask<DeletePlatformIdByUserIdRequest, DeletePlatformIdByUserIdResult>
+        {
+            public DeletePlatformIdByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeletePlatformIdByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeletePlatformIdByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/platformId/type/{type}/platformId";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeletePlatformIdByUserId(
+                Request.DeletePlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeletePlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new DeletePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeletePlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeletePlatformIdByUserIdResult> DeletePlatformIdByUserIdFuture(
+                Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePlatformIdByUserIdResult> DeletePlatformIdByUserIdAsync(
+                Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeletePlatformIdByUserIdResult> result = null;
+			await DeletePlatformIdByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeletePlatformIdByUserIdTask DeletePlatformIdByUserIdAsync(
+                Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeletePlatformIdByUserIdResult> DeletePlatformIdByUserIdAsync(
+                Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+			var task = new DeletePlatformIdByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetDataOwnerByUserIdTask : Gs2RestSessionTask<GetDataOwnerByUserIdRequest, GetDataOwnerByUserIdResult>
         {
             public GetDataOwnerByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetDataOwnerByUserIdRequest request) : base(session, factory, request)

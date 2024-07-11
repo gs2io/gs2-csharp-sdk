@@ -3335,6 +3335,1123 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class CreatePlatformIdTask : Gs2WebSocketSessionTask<Request.CreatePlatformIdRequest, Result.CreatePlatformIdResult>
+        {
+	        public CreatePlatformIdTask(IGs2Session session, Request.CreatePlatformIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreatePlatformIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "createPlatformId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreatePlatformId(
+                Request.CreatePlatformIdRequest request,
+                UnityAction<AsyncResult<Result.CreatePlatformIdResult>> callback
+        )
+		{
+			var task = new CreatePlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreatePlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreatePlatformIdResult> CreatePlatformIdFuture(
+                Request.CreatePlatformIdRequest request
+        )
+		{
+			return new CreatePlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreatePlatformIdResult> CreatePlatformIdAsync(
+            Request.CreatePlatformIdRequest request
+        )
+		{
+		    var task = new CreatePlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreatePlatformIdTask CreatePlatformIdAsync(
+                Request.CreatePlatformIdRequest request
+        )
+		{
+			return new CreatePlatformIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreatePlatformIdResult> CreatePlatformIdAsync(
+            Request.CreatePlatformIdRequest request
+        )
+		{
+		    var task = new CreatePlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreatePlatformIdByUserIdTask : Gs2WebSocketSessionTask<Request.CreatePlatformIdByUserIdRequest, Result.CreatePlatformIdByUserIdResult>
+        {
+	        public CreatePlatformIdByUserIdTask(IGs2Session session, Request.CreatePlatformIdByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreatePlatformIdByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "createPlatformIdByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreatePlatformIdByUserId(
+                Request.CreatePlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CreatePlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new CreatePlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreatePlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreatePlatformIdByUserIdResult> CreatePlatformIdByUserIdFuture(
+                Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+			return new CreatePlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreatePlatformIdByUserIdResult> CreatePlatformIdByUserIdAsync(
+            Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new CreatePlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreatePlatformIdByUserIdTask CreatePlatformIdByUserIdAsync(
+                Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+			return new CreatePlatformIdByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreatePlatformIdByUserIdResult> CreatePlatformIdByUserIdAsync(
+            Request.CreatePlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new CreatePlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPlatformIdTask : Gs2WebSocketSessionTask<Request.GetPlatformIdRequest, Result.GetPlatformIdResult>
+        {
+	        public GetPlatformIdTask(IGs2Session session, Request.GetPlatformIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetPlatformIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "getPlatformId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPlatformId(
+                Request.GetPlatformIdRequest request,
+                UnityAction<AsyncResult<Result.GetPlatformIdResult>> callback
+        )
+		{
+			var task = new GetPlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPlatformIdResult> GetPlatformIdFuture(
+                Request.GetPlatformIdRequest request
+        )
+		{
+			return new GetPlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPlatformIdResult> GetPlatformIdAsync(
+            Request.GetPlatformIdRequest request
+        )
+		{
+		    var task = new GetPlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetPlatformIdTask GetPlatformIdAsync(
+                Request.GetPlatformIdRequest request
+        )
+		{
+			return new GetPlatformIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPlatformIdResult> GetPlatformIdAsync(
+            Request.GetPlatformIdRequest request
+        )
+		{
+		    var task = new GetPlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPlatformIdByUserIdTask : Gs2WebSocketSessionTask<Request.GetPlatformIdByUserIdRequest, Result.GetPlatformIdByUserIdResult>
+        {
+	        public GetPlatformIdByUserIdTask(IGs2Session session, Request.GetPlatformIdByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetPlatformIdByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "getPlatformIdByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPlatformIdByUserId(
+                Request.GetPlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetPlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new GetPlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPlatformIdByUserIdResult> GetPlatformIdByUserIdFuture(
+                Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+			return new GetPlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPlatformIdByUserIdResult> GetPlatformIdByUserIdAsync(
+            Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new GetPlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetPlatformIdByUserIdTask GetPlatformIdByUserIdAsync(
+                Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+			return new GetPlatformIdByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPlatformIdByUserIdResult> GetPlatformIdByUserIdAsync(
+            Request.GetPlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new GetPlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class FindPlatformIdTask : Gs2WebSocketSessionTask<Request.FindPlatformIdRequest, Result.FindPlatformIdResult>
+        {
+	        public FindPlatformIdTask(IGs2Session session, Request.FindPlatformIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.FindPlatformIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "findPlatformId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator FindPlatformId(
+                Request.FindPlatformIdRequest request,
+                UnityAction<AsyncResult<Result.FindPlatformIdResult>> callback
+        )
+		{
+			var task = new FindPlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.FindPlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.FindPlatformIdResult> FindPlatformIdFuture(
+                Request.FindPlatformIdRequest request
+        )
+		{
+			return new FindPlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.FindPlatformIdResult> FindPlatformIdAsync(
+            Request.FindPlatformIdRequest request
+        )
+		{
+		    var task = new FindPlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public FindPlatformIdTask FindPlatformIdAsync(
+                Request.FindPlatformIdRequest request
+        )
+		{
+			return new FindPlatformIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.FindPlatformIdResult> FindPlatformIdAsync(
+            Request.FindPlatformIdRequest request
+        )
+		{
+		    var task = new FindPlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class FindPlatformIdByUserIdTask : Gs2WebSocketSessionTask<Request.FindPlatformIdByUserIdRequest, Result.FindPlatformIdByUserIdResult>
+        {
+	        public FindPlatformIdByUserIdTask(IGs2Session session, Request.FindPlatformIdByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.FindPlatformIdByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "findPlatformIdByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator FindPlatformIdByUserId(
+                Request.FindPlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.FindPlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new FindPlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.FindPlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.FindPlatformIdByUserIdResult> FindPlatformIdByUserIdFuture(
+                Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+			return new FindPlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.FindPlatformIdByUserIdResult> FindPlatformIdByUserIdAsync(
+            Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new FindPlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public FindPlatformIdByUserIdTask FindPlatformIdByUserIdAsync(
+                Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+			return new FindPlatformIdByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.FindPlatformIdByUserIdResult> FindPlatformIdByUserIdAsync(
+            Request.FindPlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new FindPlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeletePlatformIdTask : Gs2WebSocketSessionTask<Request.DeletePlatformIdRequest, Result.DeletePlatformIdResult>
+        {
+	        public DeletePlatformIdTask(IGs2Session session, Request.DeletePlatformIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeletePlatformIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "deletePlatformId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeletePlatformId(
+                Request.DeletePlatformIdRequest request,
+                UnityAction<AsyncResult<Result.DeletePlatformIdResult>> callback
+        )
+		{
+			var task = new DeletePlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeletePlatformIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeletePlatformIdResult> DeletePlatformIdFuture(
+                Request.DeletePlatformIdRequest request
+        )
+		{
+			return new DeletePlatformIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePlatformIdResult> DeletePlatformIdAsync(
+            Request.DeletePlatformIdRequest request
+        )
+		{
+		    var task = new DeletePlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeletePlatformIdTask DeletePlatformIdAsync(
+                Request.DeletePlatformIdRequest request
+        )
+		{
+			return new DeletePlatformIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeletePlatformIdResult> DeletePlatformIdAsync(
+            Request.DeletePlatformIdRequest request
+        )
+		{
+		    var task = new DeletePlatformIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeletePlatformIdByUserIdentifierTask : Gs2WebSocketSessionTask<Request.DeletePlatformIdByUserIdentifierRequest, Result.DeletePlatformIdByUserIdentifierResult>
+        {
+	        public DeletePlatformIdByUserIdentifierTask(IGs2Session session, Request.DeletePlatformIdByUserIdentifierRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeletePlatformIdByUserIdentifierRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "deletePlatformIdByUserIdentifier",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeletePlatformIdByUserIdentifier(
+                Request.DeletePlatformIdByUserIdentifierRequest request,
+                UnityAction<AsyncResult<Result.DeletePlatformIdByUserIdentifierResult>> callback
+        )
+		{
+			var task = new DeletePlatformIdByUserIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeletePlatformIdByUserIdentifierResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeletePlatformIdByUserIdentifierResult> DeletePlatformIdByUserIdentifierFuture(
+                Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdentifierTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePlatformIdByUserIdentifierResult> DeletePlatformIdByUserIdentifierAsync(
+            Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+		    var task = new DeletePlatformIdByUserIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeletePlatformIdByUserIdentifierTask DeletePlatformIdByUserIdentifierAsync(
+                Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdentifierTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeletePlatformIdByUserIdentifierResult> DeletePlatformIdByUserIdentifierAsync(
+            Request.DeletePlatformIdByUserIdentifierRequest request
+        )
+		{
+		    var task = new DeletePlatformIdByUserIdentifierTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeletePlatformIdByUserIdTask : Gs2WebSocketSessionTask<Request.DeletePlatformIdByUserIdRequest, Result.DeletePlatformIdByUserIdResult>
+        {
+	        public DeletePlatformIdByUserIdTask(IGs2Session session, Request.DeletePlatformIdByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeletePlatformIdByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "platformId",
+                    "deletePlatformIdByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeletePlatformIdByUserId(
+                Request.DeletePlatformIdByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeletePlatformIdByUserIdResult>> callback
+        )
+		{
+			var task = new DeletePlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeletePlatformIdByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeletePlatformIdByUserIdResult> DeletePlatformIdByUserIdFuture(
+                Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePlatformIdByUserIdResult> DeletePlatformIdByUserIdAsync(
+            Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new DeletePlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeletePlatformIdByUserIdTask DeletePlatformIdByUserIdAsync(
+                Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+			return new DeletePlatformIdByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeletePlatformIdByUserIdResult> DeletePlatformIdByUserIdAsync(
+            Request.DeletePlatformIdByUserIdRequest request
+        )
+		{
+		    var task = new DeletePlatformIdByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetDataOwnerByUserIdTask : Gs2WebSocketSessionTask<Request.GetDataOwnerByUserIdRequest, Result.GetDataOwnerByUserIdResult>
         {
 	        public GetDataOwnerByUserIdTask(IGs2Session session, Request.GetDataOwnerByUserIdRequest request) : base(session, request)

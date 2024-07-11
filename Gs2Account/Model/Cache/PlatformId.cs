@@ -33,44 +33,44 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Mission.Model.Cache
+namespace Gs2.Gs2Account.Model.Cache
 {
-    public static partial class CompleteExt
+    public static partial class PlatformIdExt
     {
         public static string CacheParentKey(
-            this Complete self,
+            this PlatformId self,
             string namespaceName,
             string userId
         ) {
             return string.Join(
                 ":",
-                "mission",
+                "account",
                 namespaceName,
                 userId,
-                "Complete"
+                "PlatformId"
             );
         }
 
         public static string CacheKey(
-            this Complete self,
-            string missionGroupName
+            this PlatformId self,
+            int? type
         ) {
             return string.Join(
                 ":",
-                missionGroupName
+                type.ToString()
             );
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<Complete> FetchFuture(
-            this Complete self,
+        public static IFuture<PlatformId> FetchFuture(
+            this PlatformId self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName,
-            Func<IFuture<Complete>> fetchImpl
+            int? type,
+            Func<IFuture<PlatformId>> fetchImpl
         ) {
-            IEnumerator Impl(IFuture<Complete> self)
+            IEnumerator Impl(IFuture<PlatformId> self)
             {
                 var future = fetchImpl();
                 yield return future;
@@ -78,13 +78,13 @@ namespace Gs2.Gs2Mission.Model.Cache
                 {
                     if (future.Error is Gs2.Core.Exception.NotFoundException e)
                     {
-                        (null as Complete).PutCache(
+                        (null as PlatformId).PutCache(
                             cache,
                             namespaceName,
                             userId,
-                            missionGroupName
+                            type
                         );
-                        if (e.Errors.Length != 0 && e.Errors[0].Component == "complete") {
+                        if (e.Errors.Length != 0 && e.Errors[0].Component == "platformId") {
                             self.OnComplete(default);
                             yield break;
                         }
@@ -97,38 +97,38 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    missionGroupName
+                    type
                 );
                 self.OnComplete(item);
             }
-            return new Gs2InlineFuture<Complete>(Impl);
+            return new Gs2InlineFuture<PlatformId>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<Complete> FetchAsync(
+        public static async UniTask<PlatformId> FetchAsync(
     #else
-        public static async Task<Complete> FetchAsync(
+        public static async Task<PlatformId> FetchAsync(
     #endif
-            this Complete self,
+            this PlatformId self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName,
+            int? type,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<Complete>> fetchImpl
+            Func<UniTask<PlatformId>> fetchImpl
     #else
-            Func<Task<Complete>> fetchImpl
+            Func<Task<PlatformId>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Complete>(
+            using (await cache.GetLockObject<PlatformId>(
                        self.CacheParentKey(
                             namespaceName,
                             userId
                        ),
                        self.CacheKey(
-                            missionGroupName
+                            type
                        )
                    ).LockAsync()) {
                 try {
@@ -137,18 +137,18 @@ namespace Gs2.Gs2Mission.Model.Cache
                         cache,
                         namespaceName,
                         userId,
-                        missionGroupName
+                        type
                     );
                     return item;
                 }
                 catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Complete).PutCache(
+                    (null as PlatformId).PutCache(
                         cache,
                         namespaceName,
                         userId,
-                        missionGroupName
+                        type
                     );
-                    if (e.errors.Length == 0 || e.errors[0].component != "complete") {
+                    if (e.errors.Length == 0 || e.errors[0].component != "platformId") {
                         throw;
                     }
                     return null;
@@ -157,44 +157,44 @@ namespace Gs2.Gs2Mission.Model.Cache
         }
 #endif
 
-        public static Tuple<Complete, bool> GetCache(
-            this Complete self,
+        public static Tuple<PlatformId, bool> GetCache(
+            this PlatformId self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName
+            int? type
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            return cache.Get<Complete>(
+            return cache.Get<PlatformId>(
                 self.CacheParentKey(
                     namespaceName,
                     userId
                 ),
                 self.CacheKey(
-                    missionGroupName
+                    type
                 )
             );
         }
 
         public static void PutCache(
-            this Complete self,
+            this PlatformId self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName
+            int? type
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            var (value, find) = cache.Get<Complete>(
+            var (value, find) = cache.Get<PlatformId>(
                 self.CacheParentKey(
                     namespaceName,
                     userId
                 ),
                 self.CacheKey(
-                    missionGroupName
+                    type
                 )
             );
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
@@ -206,7 +206,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                     userId
                 ),
                 self.CacheKey(
-                    missionGroupName
+                    type
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -214,34 +214,34 @@ namespace Gs2.Gs2Mission.Model.Cache
         }
 
         public static void DeleteCache(
-            this Complete self,
+            this PlatformId self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName
+            int? type
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            cache.Delete<Complete>(
+            cache.Delete<PlatformId>(
                 self.CacheParentKey(
                     namespaceName,
                     userId
                 ),
                 self.CacheKey(
-                    missionGroupName
+                    type
                 )
             );
         }
 
         public static void ListSubscribe(
-            this Complete self,
+            this PlatformId self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            Action<Complete[]> callback
+            Action<PlatformId[]> callback
         ) {
-            cache.ListSubscribe<Complete>(
+            cache.ListSubscribe<PlatformId>(
                 self.CacheParentKey(
                     namespaceName,
                     userId
@@ -251,13 +251,13 @@ namespace Gs2.Gs2Mission.Model.Cache
         }
 
         public static void ListUnsubscribe(
-            this Complete self,
+            this PlatformId self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             ulong callbackId
         ) {
-            cache.ListUnsubscribe<Complete>(
+            cache.ListUnsubscribe<PlatformId>(
                 self.CacheParentKey(
                     namespaceName,
                     userId

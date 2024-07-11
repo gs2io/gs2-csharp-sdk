@@ -559,6 +559,76 @@ namespace Gs2.Gs2Account.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> DeletePlatformIdByUserIdentifierFuture(
+            DeletePlatformIdByUserIdentifierRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeletePlatformIdByUserIdentifierFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Account.Domain.Model.PlatformIdDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.Type,
+                    result?.Item?.UserIdentifier
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.PlatformIdDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> DeletePlatformIdByUserIdentifierAsync(
+            #else
+        public async Task<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> DeletePlatformIdByUserIdentifierAsync(
+            #endif
+            DeletePlatformIdByUserIdentifierRequest request
+        ) {
+            try {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack)
+                        ? this._gs2.DefaultContextStack
+                        : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeletePlatformIdByUserIdentifierAsync(request)
+                );
+                var domain = new Gs2.Gs2Account.Domain.Model.PlatformIdDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.Type,
+                    result?.Item?.UserIdentifier
+                );
+                return domain;
+            }
+            catch (NotFoundException e) {
+                return null;
+            }
+        }
+        #endif
+
     }
 
     public partial class NamespaceDomain {

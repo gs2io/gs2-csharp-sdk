@@ -53,8 +53,8 @@ namespace Gs2.Gs2Identifier.Request
                 return null;
             }
             return new LoginRequest()
-                .WithClientId(!data.Keys.Contains("clientId") || data["clientId"] == null ? null : data["clientId"].ToString())
-                .WithClientSecret(!data.Keys.Contains("clientSecret") || data["clientSecret"] == null ? null : data["clientSecret"].ToString());
+                .WithClientId(!data.Keys.Contains("client_id") || data["client_id"] == null ? null : data["client_id"].ToString())
+                .WithClientSecret(!data.Keys.Contains("client_secret") || data["client_secret"] == null ? null : data["client_secret"].ToString());
         }
 
         public override JsonData ToJson()
