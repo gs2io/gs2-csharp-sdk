@@ -34,6 +34,8 @@ namespace Gs2.Gs2Identifier.Model
         public string PasswordId { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string UserName { set; get; } = null!;
+        public string EnableTwoFactorAuthentication { set; get; } = null!;
+        public Gs2.Gs2Identifier.Model.TwoFactorAuthenticationSetting TwoFactorAuthenticationSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
         public Password WithPasswordId(string passwordId) {
@@ -46,6 +48,14 @@ namespace Gs2.Gs2Identifier.Model
         }
         public Password WithUserName(string userName) {
             this.UserName = userName;
+            return this;
+        }
+        public Password WithEnableTwoFactorAuthentication(string enableTwoFactorAuthentication) {
+            this.EnableTwoFactorAuthentication = enableTwoFactorAuthentication;
+            return this;
+        }
+        public Password WithTwoFactorAuthenticationSetting(Gs2.Gs2Identifier.Model.TwoFactorAuthenticationSetting twoFactorAuthenticationSetting) {
+            this.TwoFactorAuthenticationSetting = twoFactorAuthenticationSetting;
             return this;
         }
         public Password WithCreatedAt(long? createdAt) {
@@ -103,6 +113,8 @@ namespace Gs2.Gs2Identifier.Model
                 .WithPasswordId(!data.Keys.Contains("passwordId") || data["passwordId"] == null ? null : data["passwordId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
+                .WithEnableTwoFactorAuthentication(!data.Keys.Contains("enableTwoFactorAuthentication") || data["enableTwoFactorAuthentication"] == null ? null : data["enableTwoFactorAuthentication"].ToString())
+                .WithTwoFactorAuthenticationSetting(!data.Keys.Contains("twoFactorAuthenticationSetting") || data["twoFactorAuthenticationSetting"] == null ? null : Gs2.Gs2Identifier.Model.TwoFactorAuthenticationSetting.FromJson(data["twoFactorAuthenticationSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -113,6 +125,8 @@ namespace Gs2.Gs2Identifier.Model
                 ["passwordId"] = PasswordId,
                 ["userId"] = UserId,
                 ["userName"] = UserName,
+                ["enableTwoFactorAuthentication"] = EnableTwoFactorAuthentication,
+                ["twoFactorAuthenticationSetting"] = TwoFactorAuthenticationSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
@@ -132,6 +146,14 @@ namespace Gs2.Gs2Identifier.Model
             if (UserName != null) {
                 writer.WritePropertyName("userName");
                 writer.Write(UserName.ToString());
+            }
+            if (EnableTwoFactorAuthentication != null) {
+                writer.WritePropertyName("enableTwoFactorAuthentication");
+                writer.Write(EnableTwoFactorAuthentication.ToString());
+            }
+            if (TwoFactorAuthenticationSetting != null) {
+                writer.WritePropertyName("twoFactorAuthenticationSetting");
+                TwoFactorAuthenticationSetting.WriteJson(writer);
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -171,6 +193,22 @@ namespace Gs2.Gs2Identifier.Model
             else
             {
                 diff += UserName.CompareTo(other.UserName);
+            }
+            if (EnableTwoFactorAuthentication == null && EnableTwoFactorAuthentication == other.EnableTwoFactorAuthentication)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += EnableTwoFactorAuthentication.CompareTo(other.EnableTwoFactorAuthentication);
+            }
+            if (TwoFactorAuthenticationSetting == null && TwoFactorAuthenticationSetting == other.TwoFactorAuthenticationSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TwoFactorAuthenticationSetting.CompareTo(other.TwoFactorAuthenticationSetting);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -214,6 +252,19 @@ namespace Gs2.Gs2Identifier.Model
                 }
             }
             {
+                switch (EnableTwoFactorAuthentication) {
+                    case "RFC6238":
+                    case "Disable":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("password", "identifier.password.enableTwoFactorAuthentication.error.invalid"),
+                        });
+                }
+            }
+            {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("password", "identifier.password.createdAt.error.invalid"),
@@ -244,6 +295,8 @@ namespace Gs2.Gs2Identifier.Model
                 PasswordId = PasswordId,
                 UserId = UserId,
                 UserName = UserName,
+                EnableTwoFactorAuthentication = EnableTwoFactorAuthentication,
+                TwoFactorAuthenticationSetting = TwoFactorAuthenticationSetting.Clone() as Gs2.Gs2Identifier.Model.TwoFactorAuthenticationSetting,
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

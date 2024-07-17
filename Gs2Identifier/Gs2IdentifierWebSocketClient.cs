@@ -1001,6 +1001,320 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
+        public class EnableMfaTask : Gs2WebSocketSessionTask<Request.EnableMfaRequest, Result.EnableMfaResult>
+        {
+	        public EnableMfaTask(IGs2Session session, Request.EnableMfaRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.EnableMfaRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserName != null)
+                {
+                    jsonWriter.WritePropertyName("userName");
+                    jsonWriter.Write(request.UserName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "identifier",
+                    "password",
+                    "enableMfa",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator EnableMfa(
+                Request.EnableMfaRequest request,
+                UnityAction<AsyncResult<Result.EnableMfaResult>> callback
+        )
+		{
+			var task = new EnableMfaTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EnableMfaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.EnableMfaResult> EnableMfaFuture(
+                Request.EnableMfaRequest request
+        )
+		{
+			return new EnableMfaTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EnableMfaResult> EnableMfaAsync(
+            Request.EnableMfaRequest request
+        )
+		{
+		    var task = new EnableMfaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public EnableMfaTask EnableMfaAsync(
+                Request.EnableMfaRequest request
+        )
+		{
+			return new EnableMfaTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.EnableMfaResult> EnableMfaAsync(
+            Request.EnableMfaRequest request
+        )
+		{
+		    var task = new EnableMfaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ChallengeMfaTask : Gs2WebSocketSessionTask<Request.ChallengeMfaRequest, Result.ChallengeMfaResult>
+        {
+	        public ChallengeMfaTask(IGs2Session session, Request.ChallengeMfaRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ChallengeMfaRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserName != null)
+                {
+                    jsonWriter.WritePropertyName("userName");
+                    jsonWriter.Write(request.UserName.ToString());
+                }
+                if (request.Passcode != null)
+                {
+                    jsonWriter.WritePropertyName("passcode");
+                    jsonWriter.Write(request.Passcode.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "identifier",
+                    "password",
+                    "challengeMfa",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ChallengeMfa(
+                Request.ChallengeMfaRequest request,
+                UnityAction<AsyncResult<Result.ChallengeMfaResult>> callback
+        )
+		{
+			var task = new ChallengeMfaTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ChallengeMfaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ChallengeMfaResult> ChallengeMfaFuture(
+                Request.ChallengeMfaRequest request
+        )
+		{
+			return new ChallengeMfaTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ChallengeMfaResult> ChallengeMfaAsync(
+            Request.ChallengeMfaRequest request
+        )
+		{
+		    var task = new ChallengeMfaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ChallengeMfaTask ChallengeMfaAsync(
+                Request.ChallengeMfaRequest request
+        )
+		{
+			return new ChallengeMfaTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ChallengeMfaResult> ChallengeMfaAsync(
+            Request.ChallengeMfaRequest request
+        )
+		{
+		    var task = new ChallengeMfaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DisableMfaTask : Gs2WebSocketSessionTask<Request.DisableMfaRequest, Result.DisableMfaResult>
+        {
+	        public DisableMfaTask(IGs2Session session, Request.DisableMfaRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DisableMfaRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserName != null)
+                {
+                    jsonWriter.WritePropertyName("userName");
+                    jsonWriter.Write(request.UserName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "identifier",
+                    "password",
+                    "disableMfa",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DisableMfa(
+                Request.DisableMfaRequest request,
+                UnityAction<AsyncResult<Result.DisableMfaResult>> callback
+        )
+		{
+			var task = new DisableMfaTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DisableMfaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DisableMfaResult> DisableMfaFuture(
+                Request.DisableMfaRequest request
+        )
+		{
+			return new DisableMfaTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DisableMfaResult> DisableMfaAsync(
+            Request.DisableMfaRequest request
+        )
+		{
+		    var task = new DisableMfaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DisableMfaTask DisableMfaAsync(
+                Request.DisableMfaRequest request
+        )
+		{
+			return new DisableMfaTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DisableMfaResult> DisableMfaAsync(
+            Request.DisableMfaRequest request
+        )
+		{
+		    var task = new DisableMfaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeletePasswordTask : Gs2WebSocketSessionTask<Request.DeletePasswordRequest, Result.DeletePasswordResult>
         {
 	        public DeletePasswordTask(IGs2Session session, Request.DeletePasswordRequest request) : base(session, request)
@@ -1126,6 +1440,11 @@ namespace Gs2.Gs2Identifier
                 {
                     jsonWriter.WritePropertyName("password");
                     jsonWriter.Write(request.Password.ToString());
+                }
+                if (request.Otp != null)
+                {
+                    jsonWriter.WritePropertyName("otp");
+                    jsonWriter.Write(request.Otp.ToString());
                 }
                 if (request.ContextStack != null)
                 {

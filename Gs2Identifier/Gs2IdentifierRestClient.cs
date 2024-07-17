@@ -111,7 +111,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DescribeUsersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -124,7 +124,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeUsersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -152,7 +152,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeUsersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -236,7 +236,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new CreateUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -249,7 +249,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreateUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -277,7 +277,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreateUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -358,7 +358,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new UpdateUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -371,7 +371,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new UpdateUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -399,7 +399,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new UpdateUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -462,7 +462,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new GetUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -475,7 +475,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -503,7 +503,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -566,7 +566,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DeleteUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -579,7 +579,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeleteUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -607,7 +607,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeleteUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -674,7 +674,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DescribeSecurityPoliciesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -687,7 +687,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeSecurityPoliciesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -715,7 +715,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeSecurityPoliciesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -782,7 +782,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DescribeCommonSecurityPoliciesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -795,7 +795,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeCommonSecurityPoliciesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -823,7 +823,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeCommonSecurityPoliciesTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -912,7 +912,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new CreateSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -925,7 +925,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreateSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -953,7 +953,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreateSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1039,7 +1039,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new UpdateSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1052,7 +1052,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new UpdateSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1080,7 +1080,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new UpdateSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1143,7 +1143,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new GetSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1156,7 +1156,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1184,7 +1184,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1247,7 +1247,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DeleteSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1260,7 +1260,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeleteSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1288,7 +1288,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeleteSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1357,7 +1357,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DescribeIdentifiersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1370,7 +1370,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeIdentifiersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1398,7 +1398,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribeIdentifiersTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1474,7 +1474,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new CreateIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1487,7 +1487,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreateIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1515,7 +1515,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreateIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1579,7 +1579,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new GetIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1592,7 +1592,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1620,7 +1620,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1684,7 +1684,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DeleteIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1697,7 +1697,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeleteIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1725,7 +1725,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeleteIdentifierTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1794,7 +1794,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DescribePasswordsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1807,7 +1807,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribePasswordsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1835,7 +1835,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DescribePasswordsTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -1916,7 +1916,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new CreatePasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -1929,7 +1929,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreatePasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -1957,7 +1957,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new CreatePasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2020,7 +2020,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new GetPasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2033,7 +2033,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetPasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2061,7 +2061,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetPasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2072,6 +2072,349 @@ namespace Gs2.Gs2Identifier
         )
 		{
 			var task = new GetPasswordTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class EnableMfaTask : Gs2RestSessionTask<EnableMfaRequest, EnableMfaResult>
+        {
+            public EnableMfaTask(IGs2Session session, RestSessionRequestFactory factory, EnableMfaRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(EnableMfaRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "identifier")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/{userName}/mfa";
+
+                url = url.Replace("{userName}", !string.IsNullOrEmpty(request.UserName) ? request.UserName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator EnableMfa(
+                Request.EnableMfaRequest request,
+                UnityAction<AsyncResult<Result.EnableMfaResult>> callback
+        )
+		{
+			var task = new EnableMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EnableMfaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.EnableMfaResult> EnableMfaFuture(
+                Request.EnableMfaRequest request
+        )
+		{
+			return new EnableMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EnableMfaResult> EnableMfaAsync(
+                Request.EnableMfaRequest request
+        )
+		{
+            AsyncResult<Result.EnableMfaResult> result = null;
+			await EnableMfa(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EnableMfaTask EnableMfaAsync(
+                Request.EnableMfaRequest request
+        )
+		{
+			return new EnableMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.EnableMfaResult> EnableMfaAsync(
+                Request.EnableMfaRequest request
+        )
+		{
+			var task = new EnableMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ChallengeMfaTask : Gs2RestSessionTask<ChallengeMfaRequest, ChallengeMfaResult>
+        {
+            public ChallengeMfaTask(IGs2Session session, RestSessionRequestFactory factory, ChallengeMfaRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ChallengeMfaRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "identifier")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/{userName}/mfa/challenge";
+
+                url = url.Replace("{userName}", !string.IsNullOrEmpty(request.UserName) ? request.UserName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Passcode != null)
+                {
+                    jsonWriter.WritePropertyName("passcode");
+                    jsonWriter.Write(request.Passcode);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ChallengeMfa(
+                Request.ChallengeMfaRequest request,
+                UnityAction<AsyncResult<Result.ChallengeMfaResult>> callback
+        )
+		{
+			var task = new ChallengeMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ChallengeMfaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ChallengeMfaResult> ChallengeMfaFuture(
+                Request.ChallengeMfaRequest request
+        )
+		{
+			return new ChallengeMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ChallengeMfaResult> ChallengeMfaAsync(
+                Request.ChallengeMfaRequest request
+        )
+		{
+            AsyncResult<Result.ChallengeMfaResult> result = null;
+			await ChallengeMfa(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ChallengeMfaTask ChallengeMfaAsync(
+                Request.ChallengeMfaRequest request
+        )
+		{
+			return new ChallengeMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ChallengeMfaResult> ChallengeMfaAsync(
+                Request.ChallengeMfaRequest request
+        )
+		{
+			var task = new ChallengeMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DisableMfaTask : Gs2RestSessionTask<DisableMfaRequest, DisableMfaResult>
+        {
+            public DisableMfaTask(IGs2Session session, RestSessionRequestFactory factory, DisableMfaRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DisableMfaRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "identifier")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/{userName}/mfa";
+
+                url = url.Replace("{userName}", !string.IsNullOrEmpty(request.UserName) ? request.UserName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DisableMfa(
+                Request.DisableMfaRequest request,
+                UnityAction<AsyncResult<Result.DisableMfaResult>> callback
+        )
+		{
+			var task = new DisableMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DisableMfaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DisableMfaResult> DisableMfaFuture(
+                Request.DisableMfaRequest request
+        )
+		{
+			return new DisableMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DisableMfaResult> DisableMfaAsync(
+                Request.DisableMfaRequest request
+        )
+		{
+            AsyncResult<Result.DisableMfaResult> result = null;
+			await DisableMfa(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DisableMfaTask DisableMfaAsync(
+                Request.DisableMfaRequest request
+        )
+		{
+			return new DisableMfaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DisableMfaResult> DisableMfaAsync(
+                Request.DisableMfaRequest request
+        )
+		{
+			var task = new DisableMfaTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -2124,7 +2467,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DeletePasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2137,7 +2480,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeletePasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2165,7 +2508,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DeletePasswordTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2228,7 +2571,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new GetHasSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2241,7 +2584,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetHasSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2269,7 +2612,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new GetHasSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2350,7 +2693,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new AttachSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2363,7 +2706,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new AttachSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2391,7 +2734,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new AttachSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2455,7 +2798,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new DetachSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2468,7 +2811,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DetachSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2496,7 +2839,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new DetachSecurityPolicyTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2580,7 +2923,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new LoginTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2593,7 +2936,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new LoginTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2621,7 +2964,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new LoginTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }
@@ -2669,6 +3012,11 @@ namespace Gs2.Gs2Identifier
                     jsonWriter.WritePropertyName("password");
                     jsonWriter.Write(request.Password);
                 }
+                if (request.Otp != null)
+                {
+                    jsonWriter.WritePropertyName("otp");
+                    jsonWriter.Write(request.Otp);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2705,7 +3053,7 @@ namespace Gs2.Gs2Identifier
 		{
 			var task = new LoginByUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
@@ -2718,7 +3066,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new LoginByUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
         }
@@ -2746,7 +3094,7 @@ namespace Gs2.Gs2Identifier
 		{
 			return new LoginByUserTask(
                 Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest()),
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
             );
         }

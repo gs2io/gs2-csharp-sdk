@@ -31,44 +31,30 @@ namespace Gs2.Gs2Identifier.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class LoginByUserRequest : Gs2Request<LoginByUserRequest>
+	public class EnableMfaRequest : Gs2Request<EnableMfaRequest>
 	{
          public string UserName { set; get; } = null!;
-         public string Password { set; get; } = null!;
-         public string Otp { set; get; } = null!;
-        public LoginByUserRequest WithUserName(string userName) {
+        public EnableMfaRequest WithUserName(string userName) {
             this.UserName = userName;
-            return this;
-        }
-        public LoginByUserRequest WithPassword(string password) {
-            this.Password = password;
-            return this;
-        }
-        public LoginByUserRequest WithOtp(string otp) {
-            this.Otp = otp;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static LoginByUserRequest FromJson(JsonData data)
+        public static EnableMfaRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new LoginByUserRequest()
-                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
-                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithOtp(!data.Keys.Contains("otp") || data["otp"] == null ? null : data["otp"].ToString());
+            return new EnableMfaRequest()
+                .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["userName"] = UserName,
-                ["password"] = Password,
-                ["otp"] = Otp,
             };
         }
 
@@ -79,22 +65,12 @@ namespace Gs2.Gs2Identifier.Request
                 writer.WritePropertyName("userName");
                 writer.Write(UserName.ToString());
             }
-            if (Password != null) {
-                writer.WritePropertyName("password");
-                writer.Write(Password.ToString());
-            }
-            if (Otp != null) {
-                writer.WritePropertyName("otp");
-                writer.Write(Otp.ToString());
-            }
             writer.WriteObjectEnd();
         }
 
         public override string UniqueKey() {
             var key = "";
             key += UserName + ":";
-            key += Password + ":";
-            key += Otp + ":";
             return key;
         }
     }

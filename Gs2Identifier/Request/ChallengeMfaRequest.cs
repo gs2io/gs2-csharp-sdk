@@ -31,44 +31,37 @@ namespace Gs2.Gs2Identifier.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class LoginByUserRequest : Gs2Request<LoginByUserRequest>
+	public class ChallengeMfaRequest : Gs2Request<ChallengeMfaRequest>
 	{
          public string UserName { set; get; } = null!;
-         public string Password { set; get; } = null!;
-         public string Otp { set; get; } = null!;
-        public LoginByUserRequest WithUserName(string userName) {
+         public string Passcode { set; get; } = null!;
+        public ChallengeMfaRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-        public LoginByUserRequest WithPassword(string password) {
-            this.Password = password;
-            return this;
-        }
-        public LoginByUserRequest WithOtp(string otp) {
-            this.Otp = otp;
+        public ChallengeMfaRequest WithPasscode(string passcode) {
+            this.Passcode = passcode;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static LoginByUserRequest FromJson(JsonData data)
+        public static ChallengeMfaRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new LoginByUserRequest()
+            return new ChallengeMfaRequest()
                 .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
-                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithOtp(!data.Keys.Contains("otp") || data["otp"] == null ? null : data["otp"].ToString());
+                .WithPasscode(!data.Keys.Contains("passcode") || data["passcode"] == null ? null : data["passcode"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["userName"] = UserName,
-                ["password"] = Password,
-                ["otp"] = Otp,
+                ["passcode"] = Passcode,
             };
         }
 
@@ -79,13 +72,9 @@ namespace Gs2.Gs2Identifier.Request
                 writer.WritePropertyName("userName");
                 writer.Write(UserName.ToString());
             }
-            if (Password != null) {
-                writer.WritePropertyName("password");
-                writer.Write(Password.ToString());
-            }
-            if (Otp != null) {
-                writer.WritePropertyName("otp");
-                writer.Write(Otp.ToString());
+            if (Passcode != null) {
+                writer.WritePropertyName("passcode");
+                writer.Write(Passcode.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -93,8 +82,7 @@ namespace Gs2.Gs2Identifier.Request
         public override string UniqueKey() {
             var key = "";
             key += UserName + ":";
-            key += Password + ":";
-            key += Otp + ":";
+            key += Passcode + ":";
             return key;
         }
     }
