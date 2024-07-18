@@ -91,10 +91,8 @@ namespace Gs2.Core.Domain
                 (callback.Value.Item1 as Action<TKind>)?.Invoke(obj);
             }
             if (this._listCached.Get(typeof(TKind))?.Contains(parentKey) == true) {
-                if (!exists) {
-                    foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                        (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
-                    }
+                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+                    (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
                 }
             }
         }
