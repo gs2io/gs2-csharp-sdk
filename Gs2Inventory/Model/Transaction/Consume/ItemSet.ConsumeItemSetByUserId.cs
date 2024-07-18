@@ -66,6 +66,9 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             {
                 throw new NullReferenceException();
             }
+            if (clone.Length == 0) {
+                return clone;
+            }
             clone[clone.Length - 1].Count -= request.ConsumeCount;
             return clone;
         }
