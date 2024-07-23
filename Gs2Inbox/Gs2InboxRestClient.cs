@@ -857,10 +857,6 @@ namespace Gs2.Gs2Inbox
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -968,10 +964,6 @@ namespace Gs2.Gs2Inbox
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -1094,10 +1086,6 @@ namespace Gs2.Gs2Inbox
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -1205,10 +1193,6 @@ namespace Gs2.Gs2Inbox
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -1330,10 +1314,6 @@ namespace Gs2.Gs2Inbox
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -1461,10 +1441,6 @@ namespace Gs2.Gs2Inbox
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -1573,10 +1549,6 @@ namespace Gs2.Gs2Inbox
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {

@@ -98,8 +98,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithCategoryName(this.CategoryName)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithTargetUserId(this.TargetUserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -129,8 +129,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithCategoryName(this.CategoryName)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithTargetUserId(this.TargetUserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -150,8 +150,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithCategoryName(this.CategoryName)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithTargetUserId(this.TargetUserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -183,8 +183,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithCategoryName(this.CategoryName)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithTargetUserId(this.TargetUserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

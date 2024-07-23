@@ -89,7 +89,7 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
+                            request.UserId,
                             request.MoldModelName,
                             request.Index
                         );
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
+                    request.UserId,
                     request.MoldModelName,
                     request.Index
                 );

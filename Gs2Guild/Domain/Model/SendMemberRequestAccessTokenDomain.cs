@@ -65,11 +65,11 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class SendMemberRequestAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string GuildModelName { get; }
-        public string GuildName { get; }
+        public string GuildModelName { get; } = null!;
+        public string GuildName { get; } = null!;
 
         public SendMemberRequestAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -95,7 +95,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Model.SendMemberRequest> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithGuildModelName(this.GuildModelName)
@@ -126,7 +126,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             GetSendRequestRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithGuildModelName(this.GuildModelName)
@@ -187,8 +187,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             var (value, find) = (null as Gs2.Gs2Guild.Model.SendMemberRequest).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.GuildModelName,
                 this.UserId,
+                this.GuildModelName,
                 this.GuildName
             );
             if (find) {
@@ -197,8 +197,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             return await (null as Gs2.Gs2Guild.Model.SendMemberRequest).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.GuildModelName,
                 this.UserId,
+                this.GuildModelName,
                 this.GuildName,
                 () => this.GetAsync(
                     new GetSendRequestRequest()

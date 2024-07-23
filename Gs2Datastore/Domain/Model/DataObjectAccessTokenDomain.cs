@@ -96,8 +96,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithDataObjectName(this.DataObjectName);
+                    .WithDataObjectName(this.DataObjectName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -128,8 +128,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithDataObjectName(this.DataObjectName);
+                .WithDataObjectName(this.DataObjectName)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -150,8 +150,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithDataObjectName(this.DataObjectName);
+                    .WithDataObjectName(this.DataObjectName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -183,8 +183,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithDataObjectName(this.DataObjectName);
+                .WithDataObjectName(this.DataObjectName)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -206,8 +206,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithDataObjectName(this.DataObjectName);
+                    .WithDataObjectName(this.DataObjectName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -238,8 +238,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithDataObjectName(this.DataObjectName);
+                .WithDataObjectName(this.DataObjectName)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,

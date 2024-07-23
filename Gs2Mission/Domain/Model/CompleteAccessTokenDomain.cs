@@ -95,8 +95,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithMissionGroupName(this.MissionGroupName);
+                    .WithMissionGroupName(this.MissionGroupName)
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -159,8 +159,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithMissionGroupName(this.MissionGroupName);
+                .WithMissionGroupName(this.MissionGroupName)
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -199,8 +199,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithMissionGroupName(this.MissionGroupName);
+                    .WithMissionGroupName(this.MissionGroupName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -229,8 +229,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithMissionGroupName(this.MissionGroupName);
+                .WithMissionGroupName(this.MissionGroupName)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,

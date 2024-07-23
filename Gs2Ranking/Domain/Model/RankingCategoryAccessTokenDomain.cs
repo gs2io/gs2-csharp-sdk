@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -97,8 +99,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
+                    .WithCategoryName(this.CategoryName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -136,8 +138,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithCategoryName(this.CategoryName);
+                .WithCategoryName(this.CategoryName)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -165,8 +167,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
+                    .WithCategoryName(this.CategoryName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -204,8 +206,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithCategoryName(this.CategoryName);
+                .WithCategoryName(this.CategoryName)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,

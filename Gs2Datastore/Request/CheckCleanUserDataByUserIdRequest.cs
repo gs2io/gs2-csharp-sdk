@@ -35,18 +35,12 @@ namespace Gs2.Gs2Datastore.Request
 	{
          public string UserId { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public CheckCleanUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public CheckCleanUserDataByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public CheckCleanUserDataByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

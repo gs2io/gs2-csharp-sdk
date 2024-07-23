@@ -65,9 +65,8 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -382,7 +381,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -418,7 +417,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             CreateGuildByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -444,7 +443,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -477,7 +476,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             AssumeByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -500,7 +499,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -536,7 +535,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             SendRequestByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -562,7 +561,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.SendMemberRequestDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -602,7 +601,7 @@ namespace Gs2.Gs2Guild.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var result = await request.InvokeAsync(

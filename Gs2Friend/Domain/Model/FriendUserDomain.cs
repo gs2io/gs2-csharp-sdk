@@ -99,8 +99,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
-                    .WithWithProfile(this.WithProfile)
-                    .WithTargetUserId(this.TargetUserId);
+                    .WithTargetUserId(this.TargetUserId)
+                    .WithWithProfile(this.WithProfile);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -130,8 +130,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithWithProfile(this.WithProfile)
-                .WithTargetUserId(this.TargetUserId);
+                .WithTargetUserId(this.TargetUserId)
+                .WithWithProfile(this.WithProfile);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,

@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -73,7 +71,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         public string NamespaceName { get; }
         public string GuildModelName { get; }
         public AccessToken AccessToken { get; }
-        public string GuildName => AccessToken?.UserId;
+        public string GuildName => this.AccessToken.UserId;
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -117,16 +115,16 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                         NamespaceName,
                         GuildModelName,
-                        GuildName
+                        AccessToken?.UserId
                     ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this.AccessToken == null || item.TargetGuildName == this.AccessToken.UserId)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
             } else {
+
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeReceiveRequestsFuture(
                 #else
@@ -150,7 +148,6 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this.AccessToken == null || item.TargetGuildName == this.AccessToken.UserId)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
@@ -159,7 +156,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                         this._gs2.Cache,
                         NamespaceName,
                         GuildModelName,
-                        item.TargetGuildName,
+                        default,
                         item.UserId
                     );
                 }
@@ -169,7 +166,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                         (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                             NamespaceName,
                             GuildModelName,
-                            GuildName
+                            AccessToken?.UserId
                         )
                     );
                 }

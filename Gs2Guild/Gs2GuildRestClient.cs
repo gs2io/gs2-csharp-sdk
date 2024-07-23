@@ -827,10 +827,6 @@ namespace Gs2.Gs2Guild
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -938,10 +934,6 @@ namespace Gs2.Gs2Guild
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -1064,10 +1056,6 @@ namespace Gs2.Gs2Guild
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -1175,10 +1163,6 @@ namespace Gs2.Gs2Guild
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -1300,10 +1284,6 @@ namespace Gs2.Gs2Guild
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -1431,10 +1411,6 @@ namespace Gs2.Gs2Guild
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -1543,10 +1519,6 @@ namespace Gs2.Gs2Guild
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -9340,6 +9312,938 @@ namespace Gs2.Gs2Guild
         )
 		{
 			var task = new DeleteRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeIgnoreUsersTask : Gs2RestSessionTask<DescribeIgnoreUsersRequest, DescribeIgnoreUsersResult>
+        {
+            public DescribeIgnoreUsersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeIgnoreUsersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeIgnoreUsersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/ignore/user";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeIgnoreUsers(
+                Request.DescribeIgnoreUsersRequest request,
+                UnityAction<AsyncResult<Result.DescribeIgnoreUsersResult>> callback
+        )
+		{
+			var task = new DescribeIgnoreUsersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeIgnoreUsersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeIgnoreUsersResult> DescribeIgnoreUsersFuture(
+                Request.DescribeIgnoreUsersRequest request
+        )
+		{
+			return new DescribeIgnoreUsersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeIgnoreUsersResult> DescribeIgnoreUsersAsync(
+                Request.DescribeIgnoreUsersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeIgnoreUsersResult> result = null;
+			await DescribeIgnoreUsers(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeIgnoreUsersTask DescribeIgnoreUsersAsync(
+                Request.DescribeIgnoreUsersRequest request
+        )
+		{
+			return new DescribeIgnoreUsersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeIgnoreUsersResult> DescribeIgnoreUsersAsync(
+                Request.DescribeIgnoreUsersRequest request
+        )
+		{
+			var task = new DescribeIgnoreUsersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeIgnoreUsersByGuildNameTask : Gs2RestSessionTask<DescribeIgnoreUsersByGuildNameRequest, DescribeIgnoreUsersByGuildNameResult>
+        {
+            public DescribeIgnoreUsersByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, DescribeIgnoreUsersByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeIgnoreUsersByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/ignore/user";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeIgnoreUsersByGuildName(
+                Request.DescribeIgnoreUsersByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.DescribeIgnoreUsersByGuildNameResult>> callback
+        )
+		{
+			var task = new DescribeIgnoreUsersByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeIgnoreUsersByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeIgnoreUsersByGuildNameResult> DescribeIgnoreUsersByGuildNameFuture(
+                Request.DescribeIgnoreUsersByGuildNameRequest request
+        )
+		{
+			return new DescribeIgnoreUsersByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeIgnoreUsersByGuildNameResult> DescribeIgnoreUsersByGuildNameAsync(
+                Request.DescribeIgnoreUsersByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.DescribeIgnoreUsersByGuildNameResult> result = null;
+			await DescribeIgnoreUsersByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeIgnoreUsersByGuildNameTask DescribeIgnoreUsersByGuildNameAsync(
+                Request.DescribeIgnoreUsersByGuildNameRequest request
+        )
+		{
+			return new DescribeIgnoreUsersByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeIgnoreUsersByGuildNameResult> DescribeIgnoreUsersByGuildNameAsync(
+                Request.DescribeIgnoreUsersByGuildNameRequest request
+        )
+		{
+			var task = new DescribeIgnoreUsersByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetIgnoreUserTask : Gs2RestSessionTask<GetIgnoreUserRequest, GetIgnoreUserResult>
+        {
+            public GetIgnoreUserTask(IGs2Session session, RestSessionRequestFactory factory, GetIgnoreUserRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetIgnoreUserRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/ignore/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetIgnoreUser(
+                Request.GetIgnoreUserRequest request,
+                UnityAction<AsyncResult<Result.GetIgnoreUserResult>> callback
+        )
+		{
+			var task = new GetIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetIgnoreUserResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetIgnoreUserResult> GetIgnoreUserFuture(
+                Request.GetIgnoreUserRequest request
+        )
+		{
+			return new GetIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIgnoreUserResult> GetIgnoreUserAsync(
+                Request.GetIgnoreUserRequest request
+        )
+		{
+            AsyncResult<Result.GetIgnoreUserResult> result = null;
+			await GetIgnoreUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetIgnoreUserTask GetIgnoreUserAsync(
+                Request.GetIgnoreUserRequest request
+        )
+		{
+			return new GetIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetIgnoreUserResult> GetIgnoreUserAsync(
+                Request.GetIgnoreUserRequest request
+        )
+		{
+			var task = new GetIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetIgnoreUserByGuildNameTask : Gs2RestSessionTask<GetIgnoreUserByGuildNameRequest, GetIgnoreUserByGuildNameResult>
+        {
+            public GetIgnoreUserByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, GetIgnoreUserByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetIgnoreUserByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/ignore/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetIgnoreUserByGuildName(
+                Request.GetIgnoreUserByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.GetIgnoreUserByGuildNameResult>> callback
+        )
+		{
+			var task = new GetIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetIgnoreUserByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetIgnoreUserByGuildNameResult> GetIgnoreUserByGuildNameFuture(
+                Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new GetIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIgnoreUserByGuildNameResult> GetIgnoreUserByGuildNameAsync(
+                Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.GetIgnoreUserByGuildNameResult> result = null;
+			await GetIgnoreUserByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetIgnoreUserByGuildNameTask GetIgnoreUserByGuildNameAsync(
+                Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new GetIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetIgnoreUserByGuildNameResult> GetIgnoreUserByGuildNameAsync(
+                Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+			var task = new GetIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AddIgnoreUserTask : Gs2RestSessionTask<AddIgnoreUserRequest, AddIgnoreUserResult>
+        {
+            public AddIgnoreUserTask(IGs2Session session, RestSessionRequestFactory factory, AddIgnoreUserRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AddIgnoreUserRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/ignore/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddIgnoreUser(
+                Request.AddIgnoreUserRequest request,
+                UnityAction<AsyncResult<Result.AddIgnoreUserResult>> callback
+        )
+		{
+			var task = new AddIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddIgnoreUserResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddIgnoreUserResult> AddIgnoreUserFuture(
+                Request.AddIgnoreUserRequest request
+        )
+		{
+			return new AddIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddIgnoreUserResult> AddIgnoreUserAsync(
+                Request.AddIgnoreUserRequest request
+        )
+		{
+            AsyncResult<Result.AddIgnoreUserResult> result = null;
+			await AddIgnoreUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AddIgnoreUserTask AddIgnoreUserAsync(
+                Request.AddIgnoreUserRequest request
+        )
+		{
+			return new AddIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddIgnoreUserResult> AddIgnoreUserAsync(
+                Request.AddIgnoreUserRequest request
+        )
+		{
+			var task = new AddIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AddIgnoreUserByGuildNameTask : Gs2RestSessionTask<AddIgnoreUserByGuildNameRequest, AddIgnoreUserByGuildNameResult>
+        {
+            public AddIgnoreUserByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, AddIgnoreUserByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AddIgnoreUserByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/ignore/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddIgnoreUserByGuildName(
+                Request.AddIgnoreUserByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.AddIgnoreUserByGuildNameResult>> callback
+        )
+		{
+			var task = new AddIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddIgnoreUserByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddIgnoreUserByGuildNameResult> AddIgnoreUserByGuildNameFuture(
+                Request.AddIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new AddIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddIgnoreUserByGuildNameResult> AddIgnoreUserByGuildNameAsync(
+                Request.AddIgnoreUserByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.AddIgnoreUserByGuildNameResult> result = null;
+			await AddIgnoreUserByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AddIgnoreUserByGuildNameTask AddIgnoreUserByGuildNameAsync(
+                Request.AddIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new AddIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddIgnoreUserByGuildNameResult> AddIgnoreUserByGuildNameAsync(
+                Request.AddIgnoreUserByGuildNameRequest request
+        )
+		{
+			var task = new AddIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteIgnoreUserTask : Gs2RestSessionTask<DeleteIgnoreUserRequest, DeleteIgnoreUserResult>
+        {
+            public DeleteIgnoreUserTask(IGs2Session session, RestSessionRequestFactory factory, DeleteIgnoreUserRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteIgnoreUserRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/ignore/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteIgnoreUser(
+                Request.DeleteIgnoreUserRequest request,
+                UnityAction<AsyncResult<Result.DeleteIgnoreUserResult>> callback
+        )
+		{
+			var task = new DeleteIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteIgnoreUserResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteIgnoreUserResult> DeleteIgnoreUserFuture(
+                Request.DeleteIgnoreUserRequest request
+        )
+		{
+			return new DeleteIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteIgnoreUserResult> DeleteIgnoreUserAsync(
+                Request.DeleteIgnoreUserRequest request
+        )
+		{
+            AsyncResult<Result.DeleteIgnoreUserResult> result = null;
+			await DeleteIgnoreUser(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteIgnoreUserTask DeleteIgnoreUserAsync(
+                Request.DeleteIgnoreUserRequest request
+        )
+		{
+			return new DeleteIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteIgnoreUserResult> DeleteIgnoreUserAsync(
+                Request.DeleteIgnoreUserRequest request
+        )
+		{
+			var task = new DeleteIgnoreUserTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteIgnoreUserByGuildNameTask : Gs2RestSessionTask<DeleteIgnoreUserByGuildNameRequest, DeleteIgnoreUserByGuildNameResult>
+        {
+            public DeleteIgnoreUserByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, DeleteIgnoreUserByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteIgnoreUserByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/ignore/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteIgnoreUserByGuildName(
+                Request.DeleteIgnoreUserByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.DeleteIgnoreUserByGuildNameResult>> callback
+        )
+		{
+			var task = new DeleteIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteIgnoreUserByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteIgnoreUserByGuildNameResult> DeleteIgnoreUserByGuildNameFuture(
+                Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new DeleteIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteIgnoreUserByGuildNameResult> DeleteIgnoreUserByGuildNameAsync(
+                Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.DeleteIgnoreUserByGuildNameResult> result = null;
+			await DeleteIgnoreUserByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteIgnoreUserByGuildNameTask DeleteIgnoreUserByGuildNameAsync(
+                Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new DeleteIgnoreUserByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteIgnoreUserByGuildNameResult> DeleteIgnoreUserByGuildNameAsync(
+                Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+			var task = new DeleteIgnoreUserByGuildNameTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

@@ -101,10 +101,10 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRoomName(this.RoomName)
+                    .WithMessageName(this.MessageName)
                     .WithPassword(this.Password)
-                    .WithMessageName(this.MessageName);
+                    .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -133,10 +133,10 @@ namespace Gs2.Gs2Chat.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithRoomName(this.RoomName)
+                .WithMessageName(this.MessageName)
                 .WithPassword(this.Password)
-                .WithMessageName(this.MessageName);
+                .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -155,8 +155,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRoomName(this.RoomName)
+                    .WithUserId(this.UserId)
                     .WithMessageName(this.MessageName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -191,8 +191,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRoomName(this.RoomName)
+                    .WithUserId(this.UserId)
                     .WithMessageName(this.MessageName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,

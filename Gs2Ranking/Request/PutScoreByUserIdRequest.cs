@@ -39,7 +39,6 @@ namespace Gs2.Gs2Ranking.Request
          public long? Score { set; get; } = null!;
          public string Metadata { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public PutScoreByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -62,11 +61,6 @@ namespace Gs2.Gs2Ranking.Request
         }
         public PutScoreByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public PutScoreByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

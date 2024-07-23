@@ -148,8 +148,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithParameterName(this.ParameterName)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -181,8 +181,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithParameterName(this.ParameterName)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

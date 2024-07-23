@@ -36,7 +36,6 @@ namespace Gs2.Gs2LoginReward.Request
          public string UserId { set; get; } = null!;
          public string UploadToken { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public CheckImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -47,11 +46,6 @@ namespace Gs2.Gs2LoginReward.Request
         }
         public CheckImportUserDataByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public CheckImportUserDataByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

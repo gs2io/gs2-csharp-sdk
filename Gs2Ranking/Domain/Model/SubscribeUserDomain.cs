@@ -101,8 +101,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName)
+                    .WithUserId(this.UserId)
                     .WithTargetUserId(this.TargetUserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -132,8 +132,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName)
+                .WithUserId(this.UserId)
                 .WithTargetUserId(this.TargetUserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -153,8 +153,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithCategoryName(this.CategoryName)
+                    .WithUserId(this.UserId)
                     .WithTargetUserId(this.TargetUserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -186,8 +186,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithCategoryName(this.CategoryName)
+                .WithUserId(this.UserId)
                 .WithTargetUserId(this.TargetUserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

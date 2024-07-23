@@ -564,11 +564,6 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
-                }
 
                 AddHeader(
                     Session.Credential,
@@ -676,11 +671,6 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -790,11 +780,6 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
-                }
 
                 AddHeader(
                     Session.Credential,
@@ -902,11 +887,6 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -1021,11 +1001,6 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
-                }
 
                 AddHeader(
                     Session.Credential,
@@ -1138,11 +1113,6 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
                 }
 
                 AddHeader(
@@ -2988,6 +2958,508 @@ namespace Gs2.Gs2Guild
         )
 		{
 		    var task = new DeleteRequestByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetIgnoreUserTask : Gs2WebSocketSessionTask<Request.GetIgnoreUserRequest, Result.GetIgnoreUserResult>
+        {
+	        public GetIgnoreUserTask(IGs2Session session, Request.GetIgnoreUserRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetIgnoreUserRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "ignoreUser",
+                    "getIgnoreUser",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetIgnoreUser(
+                Request.GetIgnoreUserRequest request,
+                UnityAction<AsyncResult<Result.GetIgnoreUserResult>> callback
+        )
+		{
+			var task = new GetIgnoreUserTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetIgnoreUserResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetIgnoreUserResult> GetIgnoreUserFuture(
+                Request.GetIgnoreUserRequest request
+        )
+		{
+			return new GetIgnoreUserTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIgnoreUserResult> GetIgnoreUserAsync(
+            Request.GetIgnoreUserRequest request
+        )
+		{
+		    var task = new GetIgnoreUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetIgnoreUserTask GetIgnoreUserAsync(
+                Request.GetIgnoreUserRequest request
+        )
+		{
+			return new GetIgnoreUserTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetIgnoreUserResult> GetIgnoreUserAsync(
+            Request.GetIgnoreUserRequest request
+        )
+		{
+		    var task = new GetIgnoreUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetIgnoreUserByGuildNameTask : Gs2WebSocketSessionTask<Request.GetIgnoreUserByGuildNameRequest, Result.GetIgnoreUserByGuildNameResult>
+        {
+	        public GetIgnoreUserByGuildNameTask(IGs2Session session, Request.GetIgnoreUserByGuildNameRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetIgnoreUserByGuildNameRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.GuildName != null)
+                {
+                    jsonWriter.WritePropertyName("guildName");
+                    jsonWriter.Write(request.GuildName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "ignoreUser",
+                    "getIgnoreUserByGuildName",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetIgnoreUserByGuildName(
+                Request.GetIgnoreUserByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.GetIgnoreUserByGuildNameResult>> callback
+        )
+		{
+			var task = new GetIgnoreUserByGuildNameTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetIgnoreUserByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetIgnoreUserByGuildNameResult> GetIgnoreUserByGuildNameFuture(
+                Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new GetIgnoreUserByGuildNameTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetIgnoreUserByGuildNameResult> GetIgnoreUserByGuildNameAsync(
+            Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+		    var task = new GetIgnoreUserByGuildNameTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetIgnoreUserByGuildNameTask GetIgnoreUserByGuildNameAsync(
+                Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new GetIgnoreUserByGuildNameTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetIgnoreUserByGuildNameResult> GetIgnoreUserByGuildNameAsync(
+            Request.GetIgnoreUserByGuildNameRequest request
+        )
+		{
+		    var task = new GetIgnoreUserByGuildNameTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteIgnoreUserTask : Gs2WebSocketSessionTask<Request.DeleteIgnoreUserRequest, Result.DeleteIgnoreUserResult>
+        {
+	        public DeleteIgnoreUserTask(IGs2Session session, Request.DeleteIgnoreUserRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteIgnoreUserRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "ignoreUser",
+                    "deleteIgnoreUser",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteIgnoreUser(
+                Request.DeleteIgnoreUserRequest request,
+                UnityAction<AsyncResult<Result.DeleteIgnoreUserResult>> callback
+        )
+		{
+			var task = new DeleteIgnoreUserTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteIgnoreUserResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteIgnoreUserResult> DeleteIgnoreUserFuture(
+                Request.DeleteIgnoreUserRequest request
+        )
+		{
+			return new DeleteIgnoreUserTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteIgnoreUserResult> DeleteIgnoreUserAsync(
+            Request.DeleteIgnoreUserRequest request
+        )
+		{
+		    var task = new DeleteIgnoreUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteIgnoreUserTask DeleteIgnoreUserAsync(
+                Request.DeleteIgnoreUserRequest request
+        )
+		{
+			return new DeleteIgnoreUserTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteIgnoreUserResult> DeleteIgnoreUserAsync(
+            Request.DeleteIgnoreUserRequest request
+        )
+		{
+		    var task = new DeleteIgnoreUserTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteIgnoreUserByGuildNameTask : Gs2WebSocketSessionTask<Request.DeleteIgnoreUserByGuildNameRequest, Result.DeleteIgnoreUserByGuildNameResult>
+        {
+	        public DeleteIgnoreUserByGuildNameTask(IGs2Session session, Request.DeleteIgnoreUserByGuildNameRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteIgnoreUserByGuildNameRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.GuildModelName != null)
+                {
+                    jsonWriter.WritePropertyName("guildModelName");
+                    jsonWriter.Write(request.GuildModelName.ToString());
+                }
+                if (request.GuildName != null)
+                {
+                    jsonWriter.WritePropertyName("guildName");
+                    jsonWriter.Write(request.GuildName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "guild",
+                    "ignoreUser",
+                    "deleteIgnoreUserByGuildName",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteIgnoreUserByGuildName(
+                Request.DeleteIgnoreUserByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.DeleteIgnoreUserByGuildNameResult>> callback
+        )
+		{
+			var task = new DeleteIgnoreUserByGuildNameTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteIgnoreUserByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteIgnoreUserByGuildNameResult> DeleteIgnoreUserByGuildNameFuture(
+                Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new DeleteIgnoreUserByGuildNameTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteIgnoreUserByGuildNameResult> DeleteIgnoreUserByGuildNameAsync(
+            Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+		    var task = new DeleteIgnoreUserByGuildNameTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteIgnoreUserByGuildNameTask DeleteIgnoreUserByGuildNameAsync(
+                Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+			return new DeleteIgnoreUserByGuildNameTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteIgnoreUserByGuildNameResult> DeleteIgnoreUserByGuildNameAsync(
+            Request.DeleteIgnoreUserByGuildNameRequest request
+        )
+		{
+		    var task = new DeleteIgnoreUserByGuildNameTask(
 		        Gs2WebSocketSession,
 		        request
             );

@@ -35,18 +35,12 @@ namespace Gs2.Gs2Formation.Request
 	{
          public string UserId { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public DumpUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public DumpUserDataByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public DumpUserDataByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

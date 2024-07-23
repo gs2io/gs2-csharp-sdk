@@ -97,7 +97,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithGuildModelName(this.GuildModelName)
-                    .WithAccessToken(this.AccessToken?.Token);
+                    .WithGuildName(this.GuildName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithGuildModelName(this.GuildModelName)
-                .WithAccessToken(this.AccessToken?.Token);
+                .WithGuildName(this.GuildName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -149,7 +149,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
                     .WithGuildModelName(this.GuildModelName)
-                    .WithAccessToken(this.AccessToken?.Token);
+                    .WithGuildName(this.GuildName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -182,7 +182,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
                 .WithGuildModelName(this.GuildModelName)
-                .WithAccessToken(this.AccessToken?.Token);
+                .WithGuildName(this.GuildName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,

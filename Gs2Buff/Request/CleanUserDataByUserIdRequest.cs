@@ -35,18 +35,12 @@ namespace Gs2.Gs2Buff.Request
 	{
          public string UserId { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public CleanUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public CleanUserDataByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public CleanUserDataByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

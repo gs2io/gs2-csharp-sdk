@@ -98,8 +98,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName)
+                    .WithUserId(this.UserId)
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -129,8 +129,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName)
+                .WithUserId(this.UserId)
                 .WithItemName(this.ItemName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -150,8 +150,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName)
+                    .WithUserId(this.UserId)
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -183,8 +183,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName)
+                .WithUserId(this.UserId)
                 .WithItemName(this.ItemName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -206,8 +206,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName)
+                    .WithUserId(this.UserId)
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -239,8 +239,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName)
+                .WithUserId(this.UserId)
                 .WithItemName(this.ItemName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -262,8 +262,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName)
+                    .WithUserId(this.UserId)
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -295,8 +295,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName)
+                .WithUserId(this.UserId)
                 .WithItemName(this.ItemName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -318,8 +318,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName)
+                    .WithUserId(this.UserId)
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -354,8 +354,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithInventoryName(this.InventoryName)
+                    .WithUserId(this.UserId)
                     .WithItemName(this.ItemName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,

@@ -86,7 +86,7 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId
+                            request.UserId
                         );
                         return null;
                     });
@@ -129,7 +129,7 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId
+                    request.UserId
                 );
                 return null;
             };

@@ -88,7 +88,7 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
+                            request.UserId,
                             request.ParameterName,
                             request.PropertyId
                         );
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
+                    request.UserId,
                     request.ParameterName,
                     request.PropertyId
                 );

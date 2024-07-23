@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -65,12 +63,11 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class ReceiveMemberRequestAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
-        public string GuildModelName { get; }
+        public string NamespaceName { get; } = null!;
+        public string GuildModelName { get; } = null!;
         public AccessToken AccessToken { get; }
-
-        public string GuildName => AccessToken.UserId;
-        public string FromUserId { get; }
+        public string GuildName => this.AccessToken.UserId;
+        public string FromUserId { get; } = null!;
 
         public ReceiveMemberRequestAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -96,14 +93,14 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Model.ReceiveMemberRequest> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
-                    .WithAccessToken(this.AccessToken.Token)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithFromUserId(this.FromUserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
-                    GuildName,
+                    this.GuildName,
                     () => this._client.GetReceiveRequestFuture(request)
                 );
                 yield return future;
@@ -112,7 +109,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                self.OnComplete(result.Item);
+                self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Guild.Model.ReceiveMemberRequest>(Impl);
         }
@@ -127,17 +124,17 @@ namespace Gs2.Gs2Guild.Domain.Model
             GetReceiveRequestRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
-                .WithAccessToken(this.AccessToken.Token)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithFromUserId(this.FromUserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
-                GuildName,
+                this.GuildName,
                 () => this._client.GetReceiveRequestAsync(request)
             );
-            return result.Item;
+            return result?.Item;
         }
         #endif
 
@@ -148,10 +145,10 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.ReceiveMemberRequestAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
-                    .WithAccessToken(this.AccessToken.Token)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithFromUserId(this.FromUserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -181,10 +178,10 @@ namespace Gs2.Gs2Guild.Domain.Model
             AcceptRequestRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
-                .WithAccessToken(this.AccessToken.Token)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithFromUserId(this.FromUserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -204,10 +201,10 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.ReceiveMemberRequestAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
-                    .WithAccessToken(this.AccessToken.Token)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithFromUserId(this.FromUserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -237,10 +234,10 @@ namespace Gs2.Gs2Guild.Domain.Model
             RejectRequestRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
-                .WithAccessToken(this.AccessToken.Token)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithFromUserId(this.FromUserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -307,7 +304,16 @@ namespace Gs2.Gs2Guild.Domain.Model
             if (find) {
                 return value;
             }
-            return null;
+            return await (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.GuildModelName,
+                this.GuildName,
+                this.FromUserId,
+                () => this.GetAsync(
+                    new GetReceiveRequestRequest()
+                )
+            );
         }
         #endif
 

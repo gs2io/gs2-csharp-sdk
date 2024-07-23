@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -65,10 +63,10 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class ReceiveMemberRequestDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
-        public string GuildModelName { get; }
-        public string GuildName { get; }
-        public string FromUserId { get; }
+        public string NamespaceName { get; } = null!;
+        public string GuildModelName { get; } = null!;
+        public string GuildName { get; } = null!;
+        public string FromUserId { get; } = null!;
 
         public ReceiveMemberRequestDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -98,7 +96,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.ReceiveMemberRequestDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName)
@@ -131,7 +129,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             GetReceiveRequestByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
                 .WithGuildName(this.GuildName)
@@ -154,7 +152,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.ReceiveMemberRequestDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName)
@@ -187,7 +185,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             AcceptRequestByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
                 .WithGuildName(this.GuildName)
@@ -210,7 +208,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.ReceiveMemberRequestDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName)
@@ -243,7 +241,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             RejectRequestByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
                 .WithGuildName(this.GuildName)

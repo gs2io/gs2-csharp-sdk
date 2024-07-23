@@ -95,8 +95,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -126,8 +126,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithItemName(this.ItemName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -147,8 +147,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -180,8 +180,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithItemName(this.ItemName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

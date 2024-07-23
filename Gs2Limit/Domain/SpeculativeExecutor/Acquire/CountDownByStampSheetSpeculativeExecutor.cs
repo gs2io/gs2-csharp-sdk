@@ -88,7 +88,7 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
+                            request.UserId,
                             request.LimitName,
                             request.CounterName
                         );
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
+                    request.UserId,
                     request.LimitName,
                     request.CounterName
                 );

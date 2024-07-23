@@ -65,9 +65,9 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class GuildDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
-        public string GuildModelName { get; }
-        public string GuildName { get; }
+        public string NamespaceName { get; } = null!;
+        public string GuildModelName { get; } = null!;
+        public string GuildName { get; } = null!;
 
         public GuildDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -163,7 +163,6 @@ namespace Gs2.Gs2Guild.Domain.Model
         }
 
         public Gs2.Gs2Guild.Domain.Model.ReceiveMemberRequestDomain ReceiveMemberRequest(
-            string targetGuildName,
             string fromUserId
         ) {
             return new Gs2.Gs2Guild.Domain.Model.ReceiveMemberRequestDomain(
@@ -172,6 +171,94 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.GuildModelName,
                 this.GuildName,
                 fromUserId
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Guild.Model.IgnoreUser> IgnoreUsersByGuildName(
+        )
+        {
+            return new DescribeIgnoreUsersByGuildNameIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.GuildModelName,
+                this.GuildName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.IgnoreUser> IgnoreUsersByGuildNameAsync(
+            #else
+        public DescribeIgnoreUsersByGuildNameIterator IgnoreUsersByGuildNameAsync(
+            #endif
+        )
+        {
+            return new DescribeIgnoreUsersByGuildNameIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.GuildModelName,
+                this.GuildName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeIgnoreUsersByGuildName(
+            Action<Gs2.Gs2Guild.Model.IgnoreUser[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.IgnoreUser>(
+                (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeIgnoreUsersByGuildNameWithInitialCallAsync(
+            Action<Gs2.Gs2Guild.Model.IgnoreUser[]> callback
+        )
+        {
+            var items = await IgnoreUsersByGuildNameAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeIgnoreUsersByGuildName(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeIgnoreUsersByGuildName(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Guild.Model.IgnoreUser>(
+                (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Guild.Domain.Model.IgnoreUserDomain IgnoreUser(
+        ) {
+            return new Gs2.Gs2Guild.Domain.Model.IgnoreUserDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.GuildModelName,
+                this.GuildName
             );
         }
 
@@ -186,7 +273,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Model.Guild> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -216,7 +303,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             GetGuildRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
                 .WithGuildName(this.GuildName);
@@ -236,10 +323,10 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
+                    .WithGuildName(this.GuildName)
+                    .WithGuildModelName(this.GuildModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
@@ -268,10 +355,10 @@ namespace Gs2.Gs2Guild.Domain.Model
             UpdateGuildByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithGuildModelName(this.GuildModelName)
-                .WithGuildName(this.GuildName);
+                .WithGuildName(this.GuildName)
+                .WithGuildModelName(this.GuildModelName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
@@ -290,7 +377,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -325,7 +412,7 @@ namespace Gs2.Gs2Guild.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -348,7 +435,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -380,7 +467,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             UpdateMemberRoleByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
                 .WithGuildName(this.GuildName);
@@ -402,7 +489,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -437,7 +524,7 @@ namespace Gs2.Gs2Guild.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -460,7 +547,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -492,7 +579,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IncreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
                 .WithGuildName(this.GuildName);
@@ -514,7 +601,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithGuildName(this.GuildName);
@@ -546,7 +633,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithGuildModelName(this.GuildModelName)
                 .WithGuildName(this.GuildName);
@@ -562,16 +649,120 @@ namespace Gs2.Gs2Guild.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyCurrentMaximumMemberCountFuture(
+            VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithGuildModelName(this.GuildModelName)
+                    .WithGuildName(this.GuildName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.GuildName,
+                    () => this._client.VerifyCurrentMaximumMemberCountByGuildNameFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyCurrentMaximumMemberCountAsync(
+            #else
+        public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyCurrentMaximumMemberCountAsync(
+            #endif
+            VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithGuildModelName(this.GuildModelName)
+                .WithGuildName(this.GuildName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.GuildName,
+                () => this._client.VerifyCurrentMaximumMemberCountByGuildNameAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyIncludeMemberFuture(
+            VerifyIncludeMemberByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithGuildModelName(this.GuildModelName)
+                    .WithGuildName(this.GuildName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.GuildName,
+                    () => this._client.VerifyIncludeMemberByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyIncludeMemberAsync(
+            #else
+        public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyIncludeMemberAsync(
+            #endif
+            VerifyIncludeMemberByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithGuildModelName(this.GuildModelName)
+                .WithGuildName(this.GuildName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.GuildName,
+                () => this._client.VerifyIncludeMemberByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> SetMaximumCurrentMaximumMemberCountFuture(
             SetMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
+                    .WithGuildName(this.GuildName)
+                    .WithGuildModelName(this.GuildModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
@@ -600,10 +791,10 @@ namespace Gs2.Gs2Guild.Domain.Model
             SetMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithGuildModelName(this.GuildModelName)
-                .WithGuildName(this.GuildName);
+                .WithGuildName(this.GuildName)
+                .WithGuildModelName(this.GuildModelName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,

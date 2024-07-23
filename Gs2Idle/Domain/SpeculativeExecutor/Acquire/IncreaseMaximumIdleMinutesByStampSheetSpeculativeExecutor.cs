@@ -87,7 +87,7 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
+                            request.UserId,
                             request.CategoryName
                         );
                         return null;
@@ -132,7 +132,7 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
+                    request.UserId,
                     request.CategoryName
                 );
                 return null;

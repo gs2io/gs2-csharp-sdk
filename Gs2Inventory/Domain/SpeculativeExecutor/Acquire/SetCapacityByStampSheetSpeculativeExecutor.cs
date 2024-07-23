@@ -87,7 +87,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
+                            request.UserId,
                             request.InventoryName
                         );
                         return null;
@@ -132,7 +132,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
+                    request.UserId,
                     request.InventoryName
                 );
                 return null;

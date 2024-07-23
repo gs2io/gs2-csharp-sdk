@@ -35,18 +35,12 @@ namespace Gs2.Gs2Money2.Request
 	{
          public string UserId { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public PrepareImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public PrepareImportUserDataByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public PrepareImportUserDataByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -126,6 +126,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                 this._pageToken = null;
                 this._last = true;
             } else {
+
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeSendRequestsFuture(
                 #else
@@ -156,8 +157,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     item.PutCache(
                         this._gs2.Cache,
                         NamespaceName,
-                        GuildModelName,
                         AccessToken?.UserId,
+                        GuildModelName,
                         item.TargetGuildName
                     );
                 }

@@ -65,10 +65,10 @@ namespace Gs2.Gs2Guild.Domain.Model
     public partial class SendMemberRequestDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string GuildModelName { get; }
-        public string GuildName { get; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string GuildModelName { get; } = null!;
+        public string GuildName { get; } = null!;
 
         public SendMemberRequestDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -98,7 +98,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Guild.Model.SendMemberRequest> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGuildModelName(this.GuildModelName)
@@ -129,7 +129,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             GetSendRequestByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGuildModelName(this.GuildModelName)

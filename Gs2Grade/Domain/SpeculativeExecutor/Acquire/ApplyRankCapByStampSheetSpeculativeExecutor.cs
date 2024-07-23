@@ -88,7 +88,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
+                            request.UserId,
                             request.GradeName,
                             request.PropertyId
                         );
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
+                    request.UserId,
                     request.GradeName,
                     request.PropertyId
                 );

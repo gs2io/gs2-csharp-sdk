@@ -159,8 +159,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     item.PutCache(
                         this._gs2.Cache,
                         NamespaceName,
-                        GuildModelName,
                         UserId,
+                        GuildModelName,
                         item.TargetGuildName
                     );
                 }

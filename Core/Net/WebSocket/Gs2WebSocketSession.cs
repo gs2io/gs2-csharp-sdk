@@ -103,7 +103,7 @@ namespace Gs2.Core.Net
                 if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
                 {
                     // API 応答以外のメッセージ
-                    this.OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
+                    OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
                 }
                 else
                 {
