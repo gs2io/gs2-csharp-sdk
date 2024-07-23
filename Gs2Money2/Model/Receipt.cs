@@ -133,7 +133,7 @@ namespace Gs2.Gs2Money2.Model
                 }
             }
             {
-                if (TransactionID.Length > 128) {
+                if (TransactionID.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("receipt", "money2.receipt.transactionID.error.tooLong"),
                     });
