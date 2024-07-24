@@ -478,6 +478,70 @@ namespace Gs2.Gs2Guild.Domain.Model
             return domain;
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain> PromoteSeniorMemberFuture(
+            PromoteSeniorMemberRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithGuildModelName(this.GuildModelName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.GuildName,
+                    () => this._client.PromoteSeniorMemberFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.AccessToken
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain> PromoteSeniorMemberAsync(
+            #else
+        public async Task<Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain> PromoteSeniorMemberAsync(
+            #endif
+            PromoteSeniorMemberRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithGuildModelName(this.GuildModelName)
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.GuildName,
+                () => this._client.PromoteSeniorMemberAsync(request)
+            );
+            var domain = new Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.GuildModelName,
+                this.AccessToken
+            );
+
+            return domain;
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Guild.Model.ReceiveMemberRequest> ReceiveRequests(
         )
@@ -650,6 +714,16 @@ namespace Gs2.Gs2Guild.Domain.Model
         public Gs2.Gs2Guild.Domain.Model.IgnoreUserAccessTokenDomain IgnoreUser(
         ) {
             return new Gs2.Gs2Guild.Domain.Model.IgnoreUserAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.GuildModelName,
+                this.AccessToken
+            );
+        }
+
+        public Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain LastGuildMasterActivity(
+        ) {
+            return new Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.GuildModelName,

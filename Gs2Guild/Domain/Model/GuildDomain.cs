@@ -262,6 +262,16 @@ namespace Gs2.Gs2Guild.Domain.Model
             );
         }
 
+        public Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityDomain LastGuildMasterActivity(
+        ) {
+            return new Gs2.Gs2Guild.Domain.Model.LastGuildMasterActivityDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.GuildModelName,
+                this.GuildName
+            );
+        }
+
     }
 
     public partial class GuildDomain {
