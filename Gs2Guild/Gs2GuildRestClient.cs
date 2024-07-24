@@ -223,6 +223,26 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("removeRequestNotification");
                     request.RemoveRequestNotification.WriteJson(jsonWriter);
                 }
+                if (request.CreateGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("createGuildScript");
+                    request.CreateGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.JoinGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("joinGuildScript");
+                    request.JoinGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.LeaveGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("leaveGuildScript");
+                    request.LeaveGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.ChangeRoleScript != null)
+                {
+                    jsonWriter.WritePropertyName("changeRoleScript");
+                    request.ChangeRoleScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -582,6 +602,26 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("removeRequestNotification");
                     request.RemoveRequestNotification.WriteJson(jsonWriter);
+                }
+                if (request.CreateGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("createGuildScript");
+                    request.CreateGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.JoinGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("joinGuildScript");
+                    request.JoinGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.LeaveGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("leaveGuildScript");
+                    request.LeaveGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.ChangeRoleScript != null)
+                {
+                    jsonWriter.WritePropertyName("changeRoleScript");
+                    request.ChangeRoleScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -1758,6 +1798,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("maximumMemberCount");
                     jsonWriter.Write(request.MaximumMemberCount.ToString());
                 }
+                if (request.InactivityPeriodDays != null)
+                {
+                    jsonWriter.WritePropertyName("inactivityPeriodDays");
+                    jsonWriter.Write(request.InactivityPeriodDays.ToString());
+                }
                 if (request.Roles != null)
                 {
                     jsonWriter.WritePropertyName("roles");
@@ -2025,6 +2070,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("maximumMemberCount");
                     jsonWriter.Write(request.MaximumMemberCount.ToString());
+                }
+                if (request.InactivityPeriodDays != null)
+                {
+                    jsonWriter.WritePropertyName("inactivityPeriodDays");
+                    jsonWriter.Write(request.InactivityPeriodDays.ToString());
                 }
                 if (request.Roles != null)
                 {
@@ -7004,6 +7054,470 @@ namespace Gs2.Gs2Guild
         )
 		{
 			var task = new WithdrawalByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetLastGuildMasterActivityTask : Gs2RestSessionTask<GetLastGuildMasterActivityRequest, GetLastGuildMasterActivityResult>
+        {
+            public GetLastGuildMasterActivityTask(IGs2Session session, RestSessionRequestFactory factory, GetLastGuildMasterActivityRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetLastGuildMasterActivityRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/activity/guildMaster/last";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetLastGuildMasterActivity(
+                Request.GetLastGuildMasterActivityRequest request,
+                UnityAction<AsyncResult<Result.GetLastGuildMasterActivityResult>> callback
+        )
+		{
+			var task = new GetLastGuildMasterActivityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetLastGuildMasterActivityResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetLastGuildMasterActivityResult> GetLastGuildMasterActivityFuture(
+                Request.GetLastGuildMasterActivityRequest request
+        )
+		{
+			return new GetLastGuildMasterActivityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLastGuildMasterActivityResult> GetLastGuildMasterActivityAsync(
+                Request.GetLastGuildMasterActivityRequest request
+        )
+		{
+            AsyncResult<Result.GetLastGuildMasterActivityResult> result = null;
+			await GetLastGuildMasterActivity(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetLastGuildMasterActivityTask GetLastGuildMasterActivityAsync(
+                Request.GetLastGuildMasterActivityRequest request
+        )
+		{
+			return new GetLastGuildMasterActivityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetLastGuildMasterActivityResult> GetLastGuildMasterActivityAsync(
+                Request.GetLastGuildMasterActivityRequest request
+        )
+		{
+			var task = new GetLastGuildMasterActivityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetLastGuildMasterActivityByGuildNameTask : Gs2RestSessionTask<GetLastGuildMasterActivityByGuildNameRequest, GetLastGuildMasterActivityByGuildNameResult>
+        {
+            public GetLastGuildMasterActivityByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, GetLastGuildMasterActivityByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetLastGuildMasterActivityByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/activity/guildMaster/last";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetLastGuildMasterActivityByGuildName(
+                Request.GetLastGuildMasterActivityByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.GetLastGuildMasterActivityByGuildNameResult>> callback
+        )
+		{
+			var task = new GetLastGuildMasterActivityByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetLastGuildMasterActivityByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetLastGuildMasterActivityByGuildNameResult> GetLastGuildMasterActivityByGuildNameFuture(
+                Request.GetLastGuildMasterActivityByGuildNameRequest request
+        )
+		{
+			return new GetLastGuildMasterActivityByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLastGuildMasterActivityByGuildNameResult> GetLastGuildMasterActivityByGuildNameAsync(
+                Request.GetLastGuildMasterActivityByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.GetLastGuildMasterActivityByGuildNameResult> result = null;
+			await GetLastGuildMasterActivityByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetLastGuildMasterActivityByGuildNameTask GetLastGuildMasterActivityByGuildNameAsync(
+                Request.GetLastGuildMasterActivityByGuildNameRequest request
+        )
+		{
+			return new GetLastGuildMasterActivityByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetLastGuildMasterActivityByGuildNameResult> GetLastGuildMasterActivityByGuildNameAsync(
+                Request.GetLastGuildMasterActivityByGuildNameRequest request
+        )
+		{
+			var task = new GetLastGuildMasterActivityByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PromoteSeniorMemberTask : Gs2RestSessionTask<PromoteSeniorMemberRequest, PromoteSeniorMemberResult>
+        {
+            public PromoteSeniorMemberTask(IGs2Session session, RestSessionRequestFactory factory, PromoteSeniorMemberRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PromoteSeniorMemberRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/promote";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PromoteSeniorMember(
+                Request.PromoteSeniorMemberRequest request,
+                UnityAction<AsyncResult<Result.PromoteSeniorMemberResult>> callback
+        )
+		{
+			var task = new PromoteSeniorMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PromoteSeniorMemberResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PromoteSeniorMemberResult> PromoteSeniorMemberFuture(
+                Request.PromoteSeniorMemberRequest request
+        )
+		{
+			return new PromoteSeniorMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PromoteSeniorMemberResult> PromoteSeniorMemberAsync(
+                Request.PromoteSeniorMemberRequest request
+        )
+		{
+            AsyncResult<Result.PromoteSeniorMemberResult> result = null;
+			await PromoteSeniorMember(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PromoteSeniorMemberTask PromoteSeniorMemberAsync(
+                Request.PromoteSeniorMemberRequest request
+        )
+		{
+			return new PromoteSeniorMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PromoteSeniorMemberResult> PromoteSeniorMemberAsync(
+                Request.PromoteSeniorMemberRequest request
+        )
+		{
+			var task = new PromoteSeniorMemberTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PromoteSeniorMemberByGuildNameTask : Gs2RestSessionTask<PromoteSeniorMemberByGuildNameRequest, PromoteSeniorMemberByGuildNameResult>
+        {
+            public PromoteSeniorMemberByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, PromoteSeniorMemberByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PromoteSeniorMemberByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/promote";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PromoteSeniorMemberByGuildName(
+                Request.PromoteSeniorMemberByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.PromoteSeniorMemberByGuildNameResult>> callback
+        )
+		{
+			var task = new PromoteSeniorMemberByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PromoteSeniorMemberByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PromoteSeniorMemberByGuildNameResult> PromoteSeniorMemberByGuildNameFuture(
+                Request.PromoteSeniorMemberByGuildNameRequest request
+        )
+		{
+			return new PromoteSeniorMemberByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PromoteSeniorMemberByGuildNameResult> PromoteSeniorMemberByGuildNameAsync(
+                Request.PromoteSeniorMemberByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.PromoteSeniorMemberByGuildNameResult> result = null;
+			await PromoteSeniorMemberByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PromoteSeniorMemberByGuildNameTask PromoteSeniorMemberByGuildNameAsync(
+                Request.PromoteSeniorMemberByGuildNameRequest request
+        )
+		{
+			return new PromoteSeniorMemberByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PromoteSeniorMemberByGuildNameResult> PromoteSeniorMemberByGuildNameAsync(
+                Request.PromoteSeniorMemberByGuildNameRequest request
+        )
+		{
+			var task = new PromoteSeniorMemberByGuildNameTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

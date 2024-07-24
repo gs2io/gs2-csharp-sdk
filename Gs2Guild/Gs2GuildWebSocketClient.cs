@@ -97,6 +97,26 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("removeRequestNotification");
                     request.RemoveRequestNotification.WriteJson(jsonWriter);
                 }
+                if (request.CreateGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("createGuildScript");
+                    request.CreateGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.JoinGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("joinGuildScript");
+                    request.JoinGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.LeaveGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("leaveGuildScript");
+                    request.LeaveGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.ChangeRoleScript != null)
+                {
+                    jsonWriter.WritePropertyName("changeRoleScript");
+                    request.ChangeRoleScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -337,6 +357,26 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("removeRequestNotification");
                     request.RemoveRequestNotification.WriteJson(jsonWriter);
+                }
+                if (request.CreateGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("createGuildScript");
+                    request.CreateGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.JoinGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("joinGuildScript");
+                    request.JoinGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.LeaveGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("leaveGuildScript");
+                    request.LeaveGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.ChangeRoleScript != null)
+                {
+                    jsonWriter.WritePropertyName("changeRoleScript");
+                    request.ChangeRoleScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

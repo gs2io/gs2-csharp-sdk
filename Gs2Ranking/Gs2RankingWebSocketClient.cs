@@ -1671,6 +1671,11 @@ namespace Gs2.Gs2Ranking
                     jsonWriter.WritePropertyName("xGs2RequestId");
                     jsonWriter.Write(request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,

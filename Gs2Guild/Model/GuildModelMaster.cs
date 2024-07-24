@@ -37,6 +37,7 @@ namespace Gs2.Gs2Guild.Model
         public string Metadata { set; get; } = null!;
         public int? DefaultMaximumMemberCount { set; get; } = null!;
         public int? MaximumMemberCount { set; get; } = null!;
+        public int? InactivityPeriodDays { set; get; } = null!;
         public Gs2.Gs2Guild.Model.RoleModel[] Roles { set; get; } = null!;
         public string GuildMasterRole { set; get; } = null!;
         public string GuildMemberDefaultRole { set; get; } = null!;
@@ -66,6 +67,10 @@ namespace Gs2.Gs2Guild.Model
         }
         public GuildModelMaster WithMaximumMemberCount(int? maximumMemberCount) {
             this.MaximumMemberCount = maximumMemberCount;
+            return this;
+        }
+        public GuildModelMaster WithInactivityPeriodDays(int? inactivityPeriodDays) {
+            this.InactivityPeriodDays = inactivityPeriodDays;
             return this;
         }
         public GuildModelMaster WithRoles(Gs2.Gs2Guild.Model.RoleModel[] roles) {
@@ -180,6 +185,7 @@ namespace Gs2.Gs2Guild.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithDefaultMaximumMemberCount(!data.Keys.Contains("defaultMaximumMemberCount") || data["defaultMaximumMemberCount"] == null ? null : (int?)(data["defaultMaximumMemberCount"].ToString().Contains(".") ? (int)double.Parse(data["defaultMaximumMemberCount"].ToString()) : int.Parse(data["defaultMaximumMemberCount"].ToString())))
                 .WithMaximumMemberCount(!data.Keys.Contains("maximumMemberCount") || data["maximumMemberCount"] == null ? null : (int?)(data["maximumMemberCount"].ToString().Contains(".") ? (int)double.Parse(data["maximumMemberCount"].ToString()) : int.Parse(data["maximumMemberCount"].ToString())))
+                .WithInactivityPeriodDays(!data.Keys.Contains("inactivityPeriodDays") || data["inactivityPeriodDays"] == null ? null : (int?)(data["inactivityPeriodDays"].ToString().Contains(".") ? (int)double.Parse(data["inactivityPeriodDays"].ToString()) : int.Parse(data["inactivityPeriodDays"].ToString())))
                 .WithRoles(!data.Keys.Contains("roles") || data["roles"] == null || !data["roles"].IsArray ? new Gs2.Gs2Guild.Model.RoleModel[]{} : data["roles"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.RoleModel.FromJson(v);
                 }).ToArray())
@@ -209,6 +215,7 @@ namespace Gs2.Gs2Guild.Model
                 ["metadata"] = Metadata,
                 ["defaultMaximumMemberCount"] = DefaultMaximumMemberCount,
                 ["maximumMemberCount"] = MaximumMemberCount,
+                ["inactivityPeriodDays"] = InactivityPeriodDays,
                 ["roles"] = rolesJsonData,
                 ["guildMasterRole"] = GuildMasterRole,
                 ["guildMemberDefaultRole"] = GuildMemberDefaultRole,
@@ -245,6 +252,10 @@ namespace Gs2.Gs2Guild.Model
             if (MaximumMemberCount != null) {
                 writer.WritePropertyName("maximumMemberCount");
                 writer.Write((MaximumMemberCount.ToString().Contains(".") ? (int)double.Parse(MaximumMemberCount.ToString()) : int.Parse(MaximumMemberCount.ToString())));
+            }
+            if (InactivityPeriodDays != null) {
+                writer.WritePropertyName("inactivityPeriodDays");
+                writer.Write((InactivityPeriodDays.ToString().Contains(".") ? (int)double.Parse(InactivityPeriodDays.ToString()) : int.Parse(InactivityPeriodDays.ToString())));
             }
             if (Roles != null) {
                 writer.WritePropertyName("roles");
@@ -335,6 +346,14 @@ namespace Gs2.Gs2Guild.Model
             else
             {
                 diff += (int)(MaximumMemberCount - other.MaximumMemberCount);
+            }
+            if (InactivityPeriodDays == null && InactivityPeriodDays == other.InactivityPeriodDays)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(InactivityPeriodDays - other.InactivityPeriodDays);
             }
             if (Roles == null && Roles == other.Roles)
             {
@@ -453,6 +472,18 @@ namespace Gs2.Gs2Guild.Model
                 }
             }
             {
+                if (InactivityPeriodDays < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("guildModelMaster", "guild.guildModelMaster.inactivityPeriodDays.error.invalid"),
+                    });
+                }
+                if (InactivityPeriodDays > 365) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("guildModelMaster", "guild.guildModelMaster.inactivityPeriodDays.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (Roles.Length < 1) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("guildModelMaster", "guild.guildModelMaster.roles.error.tooFew"),
@@ -536,6 +567,7 @@ namespace Gs2.Gs2Guild.Model
                 Metadata = Metadata,
                 DefaultMaximumMemberCount = DefaultMaximumMemberCount,
                 MaximumMemberCount = MaximumMemberCount,
+                InactivityPeriodDays = InactivityPeriodDays,
                 Roles = Roles.Clone() as Gs2.Gs2Guild.Model.RoleModel[],
                 GuildMasterRole = GuildMasterRole,
                 GuildMemberDefaultRole = GuildMemberDefaultRole,

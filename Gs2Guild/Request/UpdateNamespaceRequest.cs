@@ -40,6 +40,10 @@ namespace Gs2.Gs2Guild.Request
          public Gs2.Gs2Guild.Model.NotificationSetting ChangeMemberNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting ReceiveRequestNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting RemoveRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.ScriptSetting CreateGuildScript { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.ScriptSetting JoinGuildScript { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.ScriptSetting LeaveGuildScript { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.ScriptSetting ChangeRoleScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +73,22 @@ namespace Gs2.Gs2Guild.Request
             this.RemoveRequestNotification = removeRequestNotification;
             return this;
         }
+        public UpdateNamespaceRequest WithCreateGuildScript(Gs2.Gs2Guild.Model.ScriptSetting createGuildScript) {
+            this.CreateGuildScript = createGuildScript;
+            return this;
+        }
+        public UpdateNamespaceRequest WithJoinGuildScript(Gs2.Gs2Guild.Model.ScriptSetting joinGuildScript) {
+            this.JoinGuildScript = joinGuildScript;
+            return this;
+        }
+        public UpdateNamespaceRequest WithLeaveGuildScript(Gs2.Gs2Guild.Model.ScriptSetting leaveGuildScript) {
+            this.LeaveGuildScript = leaveGuildScript;
+            return this;
+        }
+        public UpdateNamespaceRequest WithChangeRoleScript(Gs2.Gs2Guild.Model.ScriptSetting changeRoleScript) {
+            this.ChangeRoleScript = changeRoleScript;
+            return this;
+        }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Guild.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -90,6 +110,10 @@ namespace Gs2.Gs2Guild.Request
                 .WithChangeMemberNotification(!data.Keys.Contains("changeMemberNotification") || data["changeMemberNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeMemberNotification"]))
                 .WithReceiveRequestNotification(!data.Keys.Contains("receiveRequestNotification") || data["receiveRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["receiveRequestNotification"]))
                 .WithRemoveRequestNotification(!data.Keys.Contains("removeRequestNotification") || data["removeRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["removeRequestNotification"]))
+                .WithCreateGuildScript(!data.Keys.Contains("createGuildScript") || data["createGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["createGuildScript"]))
+                .WithJoinGuildScript(!data.Keys.Contains("joinGuildScript") || data["joinGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["joinGuildScript"]))
+                .WithLeaveGuildScript(!data.Keys.Contains("leaveGuildScript") || data["leaveGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["leaveGuildScript"]))
+                .WithChangeRoleScript(!data.Keys.Contains("changeRoleScript") || data["changeRoleScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["changeRoleScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Guild.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -103,6 +127,10 @@ namespace Gs2.Gs2Guild.Request
                 ["changeMemberNotification"] = ChangeMemberNotification?.ToJson(),
                 ["receiveRequestNotification"] = ReceiveRequestNotification?.ToJson(),
                 ["removeRequestNotification"] = RemoveRequestNotification?.ToJson(),
+                ["createGuildScript"] = CreateGuildScript?.ToJson(),
+                ["joinGuildScript"] = JoinGuildScript?.ToJson(),
+                ["leaveGuildScript"] = LeaveGuildScript?.ToJson(),
+                ["changeRoleScript"] = ChangeRoleScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -133,6 +161,18 @@ namespace Gs2.Gs2Guild.Request
             if (RemoveRequestNotification != null) {
                 RemoveRequestNotification.WriteJson(writer);
             }
+            if (CreateGuildScript != null) {
+                CreateGuildScript.WriteJson(writer);
+            }
+            if (JoinGuildScript != null) {
+                JoinGuildScript.WriteJson(writer);
+            }
+            if (LeaveGuildScript != null) {
+                LeaveGuildScript.WriteJson(writer);
+            }
+            if (ChangeRoleScript != null) {
+                ChangeRoleScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -148,6 +188,10 @@ namespace Gs2.Gs2Guild.Request
             key += ChangeMemberNotification + ":";
             key += ReceiveRequestNotification + ":";
             key += RemoveRequestNotification + ":";
+            key += CreateGuildScript + ":";
+            key += JoinGuildScript + ":";
+            key += LeaveGuildScript + ":";
+            key += ChangeRoleScript + ":";
             key += LogSetting + ":";
             return key;
         }
