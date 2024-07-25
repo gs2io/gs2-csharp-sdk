@@ -3657,6 +3657,9 @@ namespace Gs2.Gs2Schedule
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.IsInSchedule != null) {
+                    sessionRequest.AddQueryString("isInSchedule", $"{request.IsInSchedule}");
+                }
 
                 if (request.RequestId != null)
                 {
@@ -3766,6 +3769,9 @@ namespace Gs2.Gs2Schedule
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.IsInSchedule != null) {
+                    sessionRequest.AddQueryString("isInSchedule", $"{request.IsInSchedule}");
                 }
 
                 if (request.RequestId != null)
