@@ -28,6 +28,12 @@ namespace Gs2.Gs2Auth.Model
 {
     public static class StampAction
     {
+        public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
+            switch (action.Action) {
+            }
+            throw new ArgumentException($"unknown action {action.Action}");
+        }
+        
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
             }

@@ -628,37 +628,12 @@ namespace Gs2.Gs2Enchant.Domain
                 }
         }
 
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyRarityParameterStatusByUserIdRequest, VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdComplete = new UnityEvent<string, VerifyRarityParameterStatusByUserIdRequest, VerifyRarityParameterStatusByUserIdResult>();
-    #else
-        public static Action<string, VerifyRarityParameterStatusByUserIdRequest, VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdComplete;
-    #endif
-
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
                 string result
         ) {
-                switch (method) {
-                    case "VerifyRarityParameterStatusByUserId": {
-                        var requestModel = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyRarityParameterStatusByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                }
         }
 
         public void UpdateCacheFromJobResult(

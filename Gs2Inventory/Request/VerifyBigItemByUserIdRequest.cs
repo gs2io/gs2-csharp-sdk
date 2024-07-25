@@ -16,7 +16,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
@@ -159,6 +158,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += ItemName + ":";
             key += VerifyType + ":";
+            key += Count + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
             key += TimeOffsetToken + ":";
             return key;

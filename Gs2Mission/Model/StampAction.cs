@@ -42,6 +42,16 @@ namespace Gs2.Gs2Mission.Model
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
+        public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
+            switch (action.Action) {
+                case "Gs2Mission:VerifyCompleteByUserId":
+                    return VerifyCompleteByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Mission:VerifyCounterValueByUserId":
+                    return VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+            }
+            throw new ArgumentException($"unknown action {action.Action}");
+        }
+
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
                 case "Gs2Mission:RevertReceiveByUserId":

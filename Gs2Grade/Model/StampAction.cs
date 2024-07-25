@@ -40,6 +40,16 @@ namespace Gs2.Gs2Grade.Model
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
+        public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
+            switch (action.Action) {
+                case "Gs2Grade:VerifyGradeByUserId":
+                    return VerifyGradeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Grade:VerifyGradeUpMaterialByUserId":
+                    return VerifyGradeUpMaterialByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+            }
+            throw new ArgumentException($"unknown action {action.Action}");
+        }
+
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
                 case "Gs2Grade:AddGradeByUserId":

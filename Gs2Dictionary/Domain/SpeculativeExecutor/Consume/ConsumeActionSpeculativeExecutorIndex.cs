@@ -76,24 +76,6 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
-                if (VerifyEntryByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyEntryByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -122,17 +104,6 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await DeleteEntriesByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (VerifyEntryByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyEntryByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

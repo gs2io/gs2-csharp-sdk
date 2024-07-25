@@ -170,6 +170,7 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemName + ":";
             key += VerifyType + ":";
             key += ItemSetName + ":";
+            key += Count + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
             key += TimeOffsetToken + ":";
             return key;

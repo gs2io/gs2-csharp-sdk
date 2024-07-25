@@ -38,6 +38,14 @@ namespace Gs2.Gs2Dictionary.Model
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
+        public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
+            switch (action.Action) {
+                case "Gs2Dictionary:VerifyEntryByUserId":
+                    return VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+            }
+            throw new ArgumentException($"unknown action {action.Action}");
+        }
+
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
                 case "Gs2Dictionary:AddEntriesByUserId":

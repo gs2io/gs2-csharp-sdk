@@ -146,6 +146,7 @@ namespace Gs2.Gs2Inventory.Request
             key += UserId + ":";
             key += InventoryName + ":";
             key += VerifyType + ":";
+            key += CurrentInventoryMaxCapacity + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
             key += TimeOffsetToken + ":";
             return key;

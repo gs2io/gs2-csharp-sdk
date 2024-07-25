@@ -158,6 +158,7 @@ namespace Gs2.Gs2Inventory.Request
             key += UserId + ":";
             key += ItemName + ":";
             key += ItemSetName + ":";
+            key += ReferenceOf + ":";
             key += VerifyType + ":";
             key += TimeOffsetToken + ":";
             return key;

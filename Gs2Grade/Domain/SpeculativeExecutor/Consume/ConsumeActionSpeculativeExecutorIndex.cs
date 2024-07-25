@@ -76,42 +76,6 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
-                if (VerifyGradeByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyGradeByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyGradeByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (VerifyGradeUpMaterialByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyGradeUpMaterialByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyGradeUpMaterialByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -140,28 +104,6 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await SubGradeByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (VerifyGradeByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyGradeByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyGradeByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (VerifyGradeUpMaterialByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyGradeUpMaterialByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyGradeUpMaterialByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

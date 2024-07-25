@@ -744,27 +744,9 @@ namespace Gs2.Gs2Inventory.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyInventoryCurrentMaxCapacityByUserIdRequest, VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdComplete = new UnityEvent<string, VerifyInventoryCurrentMaxCapacityByUserIdRequest, VerifyInventoryCurrentMaxCapacityByUserIdResult>();
-    #else
-        public static Action<string, VerifyInventoryCurrentMaxCapacityByUserIdRequest, VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, ConsumeItemSetByUserIdRequest, ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdComplete = new UnityEvent<string, ConsumeItemSetByUserIdRequest, ConsumeItemSetByUserIdResult>();
     #else
         public static Action<string, ConsumeItemSetByUserIdRequest, ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyItemSetByUserIdRequest, VerifyItemSetByUserIdResult> VerifyItemSetByUserIdComplete = new UnityEvent<string, VerifyItemSetByUserIdRequest, VerifyItemSetByUserIdResult>();
-    #else
-        public static Action<string, VerifyItemSetByUserIdRequest, VerifyItemSetByUserIdResult> VerifyItemSetByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyReferenceOfByUserIdRequest, VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdComplete = new UnityEvent<string, VerifyReferenceOfByUserIdRequest, VerifyReferenceOfByUserIdResult>();
-    #else
-        public static Action<string, VerifyReferenceOfByUserIdRequest, VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdComplete;
     #endif
 
     #if UNITY_2017_1_OR_NEWER
@@ -774,21 +756,9 @@ namespace Gs2.Gs2Inventory.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifySimpleItemByUserIdRequest, VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdComplete = new UnityEvent<string, VerifySimpleItemByUserIdRequest, VerifySimpleItemByUserIdResult>();
-    #else
-        public static Action<string, VerifySimpleItemByUserIdRequest, VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdComplete = new UnityEvent<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult>();
     #else
         public static Action<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyBigItemByUserIdRequest, VerifyBigItemByUserIdResult> VerifyBigItemByUserIdComplete = new UnityEvent<string, VerifyBigItemByUserIdRequest, VerifyBigItemByUserIdResult>();
-    #else
-        public static Action<string, VerifyBigItemByUserIdRequest, VerifyBigItemByUserIdResult> VerifyBigItemByUserIdComplete;
     #endif
 
         public void UpdateCacheFromStampTask(
@@ -798,23 +768,6 @@ namespace Gs2.Gs2Inventory.Domain
                 string result
         ) {
                 switch (method) {
-                    case "VerifyInventoryCurrentMaxCapacityByUserId": {
-                        var requestModel = VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyInventoryCurrentMaxCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyInventoryCurrentMaxCapacityByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
                     case "ConsumeItemSetByUserId": {
                         var requestModel = ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ConsumeItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -826,40 +779,6 @@ namespace Gs2.Gs2Inventory.Domain
                         );
 
                         ConsumeItemSetByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyItemSetByUserId": {
-                        var requestModel = VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyItemSetByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyReferenceOfByUserId": {
-                        var requestModel = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyReferenceOfByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel
@@ -883,23 +802,6 @@ namespace Gs2.Gs2Inventory.Domain
                         );
                         break;
                     }
-                    case "VerifySimpleItemByUserId": {
-                        var requestModel = VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifySimpleItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifySimpleItemByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
                     case "ConsumeBigItemByUserId": {
                         var requestModel = ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ConsumeBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -911,23 +813,6 @@ namespace Gs2.Gs2Inventory.Domain
                         );
 
                         ConsumeBigItemByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyBigItemByUserId": {
-                        var requestModel = VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyBigItemByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

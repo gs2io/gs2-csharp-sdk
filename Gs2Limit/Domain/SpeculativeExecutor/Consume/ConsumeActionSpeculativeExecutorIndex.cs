@@ -76,24 +76,6 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
-                if (VerifyCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyCounterByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -122,17 +104,6 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await CountUpByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (VerifyCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyCounterByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

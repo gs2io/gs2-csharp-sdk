@@ -31,7 +31,6 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Enchant.Model.Transaction;
 using Gs2.Gs2Enchant.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -58,24 +57,6 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                if (VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -98,17 +79,6 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
-            if (VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
             return null;
         }
 #endif

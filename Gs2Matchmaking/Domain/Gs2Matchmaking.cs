@@ -511,37 +511,12 @@ namespace Gs2.Gs2Matchmaking.Domain
         ) {
         }
 
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyIncludeParticipantByUserIdRequest, VerifyIncludeParticipantByUserIdResult> VerifyIncludeParticipantByUserIdComplete = new UnityEvent<string, VerifyIncludeParticipantByUserIdRequest, VerifyIncludeParticipantByUserIdResult>();
-    #else
-        public static Action<string, VerifyIncludeParticipantByUserIdRequest, VerifyIncludeParticipantByUserIdResult> VerifyIncludeParticipantByUserIdComplete;
-    #endif
-
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
                 string result
         ) {
-                switch (method) {
-                    case "VerifyIncludeParticipantByUserId": {
-                        var requestModel = VerifyIncludeParticipantByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyIncludeParticipantByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyIncludeParticipantByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                }
         }
 
         public void UpdateCacheFromJobResult(

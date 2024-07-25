@@ -94,42 +94,6 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
-                if (VerifyRankByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyRankByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyRankByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (VerifyRankCapByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -169,28 +133,6 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await SubRankCapByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (VerifyRankByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyRankByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyRankByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (VerifyRankCapByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyRankCapByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

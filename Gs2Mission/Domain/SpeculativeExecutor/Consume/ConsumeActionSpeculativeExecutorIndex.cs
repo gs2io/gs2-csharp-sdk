@@ -76,48 +76,12 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
-                if (VerifyCompleteByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyCompleteByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyCompleteByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
                 if (DecreaseCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
                     if (rate != 1) {
                         request = request.Rate(rate);
                     }
                     var future = DecreaseCounterByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (VerifyCounterValueByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyCounterValueByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
                         request
@@ -163,34 +127,12 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                     request
                 );
             }
-            if (VerifyCompleteByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyCompleteByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyCompleteByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
             if (DecreaseCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
                 return await DecreaseCounterByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (VerifyCounterValueByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
-                var request = VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await VerifyCounterValueByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

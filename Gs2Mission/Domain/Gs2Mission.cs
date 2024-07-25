@@ -589,21 +589,9 @@ namespace Gs2.Gs2Mission.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyCompleteByUserIdRequest, VerifyCompleteByUserIdResult> VerifyCompleteByUserIdComplete = new UnityEvent<string, VerifyCompleteByUserIdRequest, VerifyCompleteByUserIdResult>();
-    #else
-        public static Action<string, VerifyCompleteByUserIdRequest, VerifyCompleteByUserIdResult> VerifyCompleteByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete = new UnityEvent<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult>();
     #else
         public static Action<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyCounterValueByUserIdRequest, VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdComplete = new UnityEvent<string, VerifyCounterValueByUserIdRequest, VerifyCounterValueByUserIdResult>();
-    #else
-        public static Action<string, VerifyCounterValueByUserIdRequest, VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdComplete;
     #endif
 
         public void UpdateCacheFromStampTask(
@@ -630,23 +618,6 @@ namespace Gs2.Gs2Mission.Domain
                         );
                         break;
                     }
-                    case "VerifyCompleteByUserId": {
-                        var requestModel = VerifyCompleteByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyCompleteByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyCompleteByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
                     case "DecreaseCounterByUserId": {
                         var requestModel = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DecreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -658,23 +629,6 @@ namespace Gs2.Gs2Mission.Domain
                         );
 
                         DecreaseCounterByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyCounterValueByUserId": {
-                        var requestModel = VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyCounterValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyCounterValueByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

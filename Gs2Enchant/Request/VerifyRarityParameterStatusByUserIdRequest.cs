@@ -165,6 +165,7 @@ namespace Gs2.Gs2Enchant.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
+            key += ParameterName + ":";
             key += UserId + ":";
             key += PropertyId + ":";
             key += VerifyType + ":";

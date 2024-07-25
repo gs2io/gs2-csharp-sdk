@@ -588,18 +588,6 @@ namespace Gs2.Gs2Grade.Domain
         public static Action<string, SubGradeByUserIdRequest, SubGradeByUserIdResult> SubGradeByUserIdComplete;
     #endif
 
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyGradeByUserIdRequest, VerifyGradeByUserIdResult> VerifyGradeByUserIdComplete = new UnityEvent<string, VerifyGradeByUserIdRequest, VerifyGradeByUserIdResult>();
-    #else
-        public static Action<string, VerifyGradeByUserIdRequest, VerifyGradeByUserIdResult> VerifyGradeByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyGradeUpMaterialByUserIdRequest, VerifyGradeUpMaterialByUserIdResult> VerifyGradeUpMaterialByUserIdComplete = new UnityEvent<string, VerifyGradeUpMaterialByUserIdRequest, VerifyGradeUpMaterialByUserIdResult>();
-    #else
-        public static Action<string, VerifyGradeUpMaterialByUserIdRequest, VerifyGradeUpMaterialByUserIdResult> VerifyGradeUpMaterialByUserIdComplete;
-    #endif
-
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
@@ -618,40 +606,6 @@ namespace Gs2.Gs2Grade.Domain
                         );
 
                         SubGradeByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyGradeByUserId": {
-                        var requestModel = VerifyGradeByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyGradeByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyGradeByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyGradeUpMaterialByUserId": {
-                        var requestModel = VerifyGradeUpMaterialByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyGradeUpMaterialByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyGradeUpMaterialByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

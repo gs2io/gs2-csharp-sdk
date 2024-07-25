@@ -38,6 +38,12 @@ namespace Gs2.Gs2Money.Model
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
+        public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
+            switch (action.Action) {
+            }
+            throw new ArgumentException($"unknown action {action.Action}");
+        }
+
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
                 case "Gs2Money:DepositByUserId":

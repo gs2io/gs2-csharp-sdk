@@ -50,6 +50,22 @@ namespace Gs2.Gs2Inventory.Model
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
+        public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
+            switch (action.Action) {
+                case "Gs2Inventory:VerifyInventoryCurrentMaxCapacityByUserId":
+                    return VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:VerifyItemSetByUserId":
+                    return VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:VerifyReferenceOfByUserId":
+                    return VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:VerifySimpleItemByUserId":
+                    return VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:VerifyBigItemByUserId":
+                    return VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+            }
+            throw new ArgumentException($"unknown action {action.Action}");
+        }
+
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
                 case "Gs2Inventory:AddCapacityByUserId":
