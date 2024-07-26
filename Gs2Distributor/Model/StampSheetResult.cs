@@ -34,8 +34,11 @@ namespace Gs2.Gs2Distributor.Model
         public string StampSheetResultId { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string TransactionId { set; get; } = null!;
+        public Gs2.Core.Model.VerifyAction[] VerifyTaskRequests { set; get; } = null!;
         public Gs2.Core.Model.ConsumeAction[] TaskRequests { set; get; } = null!;
         public Gs2.Core.Model.AcquireAction SheetRequest { set; get; } = null!;
+        public int[] VerifyTaskResultCodes { set; get; } = null!;
+        public string[] VerifyTaskResults { set; get; } = null!;
         public int[] TaskResultCodes { set; get; } = null!;
         public string[] TaskResults { set; get; } = null!;
         public int? SheetResultCode { set; get; } = null!;
@@ -55,12 +58,24 @@ namespace Gs2.Gs2Distributor.Model
             this.TransactionId = transactionId;
             return this;
         }
+        public StampSheetResult WithVerifyTaskRequests(Gs2.Core.Model.VerifyAction[] verifyTaskRequests) {
+            this.VerifyTaskRequests = verifyTaskRequests;
+            return this;
+        }
         public StampSheetResult WithTaskRequests(Gs2.Core.Model.ConsumeAction[] taskRequests) {
             this.TaskRequests = taskRequests;
             return this;
         }
         public StampSheetResult WithSheetRequest(Gs2.Core.Model.AcquireAction sheetRequest) {
             this.SheetRequest = sheetRequest;
+            return this;
+        }
+        public StampSheetResult WithVerifyTaskResultCodes(int[] verifyTaskResultCodes) {
+            this.VerifyTaskResultCodes = verifyTaskResultCodes;
+            return this;
+        }
+        public StampSheetResult WithVerifyTaskResults(string[] verifyTaskResults) {
+            this.VerifyTaskResults = verifyTaskResults;
             return this;
         }
         public StampSheetResult WithTaskResultCodes(int[] taskResultCodes) {
@@ -189,10 +204,19 @@ namespace Gs2.Gs2Distributor.Model
                 .WithStampSheetResultId(!data.Keys.Contains("stampSheetResultId") || data["stampSheetResultId"] == null ? null : data["stampSheetResultId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithVerifyTaskRequests(!data.Keys.Contains("verifyTaskRequests") || data["verifyTaskRequests"] == null || !data["verifyTaskRequests"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyTaskRequests"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithTaskRequests(!data.Keys.Contains("taskRequests") || data["taskRequests"] == null || !data["taskRequests"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["taskRequests"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
                 .WithSheetRequest(!data.Keys.Contains("sheetRequest") || data["sheetRequest"] == null ? null : Gs2.Core.Model.AcquireAction.FromJson(data["sheetRequest"]))
+                .WithVerifyTaskResultCodes(!data.Keys.Contains("verifyTaskResultCodes") || data["verifyTaskResultCodes"] == null || !data["verifyTaskResultCodes"].IsArray ? new int[]{} : data["verifyTaskResultCodes"].Cast<JsonData>().Select(v => {
+                    return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
+                }).ToArray())
+                .WithVerifyTaskResults(!data.Keys.Contains("verifyTaskResults") || data["verifyTaskResults"] == null || !data["verifyTaskResults"].IsArray ? new string[]{} : data["verifyTaskResults"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
                 .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? new int[]{} : data["taskResultCodes"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
@@ -208,6 +232,15 @@ namespace Gs2.Gs2Distributor.Model
 
         public JsonData ToJson()
         {
+            JsonData verifyTaskRequestsJsonData = null;
+            if (VerifyTaskRequests != null && VerifyTaskRequests.Length > 0)
+            {
+                verifyTaskRequestsJsonData = new JsonData();
+                foreach (var verifyTaskRequest in VerifyTaskRequests)
+                {
+                    verifyTaskRequestsJsonData.Add(verifyTaskRequest.ToJson());
+                }
+            }
             JsonData taskRequestsJsonData = null;
             if (TaskRequests != null && TaskRequests.Length > 0)
             {
@@ -215,6 +248,24 @@ namespace Gs2.Gs2Distributor.Model
                 foreach (var taskRequest in TaskRequests)
                 {
                     taskRequestsJsonData.Add(taskRequest.ToJson());
+                }
+            }
+            JsonData verifyTaskResultCodesJsonData = null;
+            if (VerifyTaskResultCodes != null && VerifyTaskResultCodes.Length > 0)
+            {
+                verifyTaskResultCodesJsonData = new JsonData();
+                foreach (var verifyTaskResultCode in VerifyTaskResultCodes)
+                {
+                    verifyTaskResultCodesJsonData.Add(verifyTaskResultCode);
+                }
+            }
+            JsonData verifyTaskResultsJsonData = null;
+            if (VerifyTaskResults != null && VerifyTaskResults.Length > 0)
+            {
+                verifyTaskResultsJsonData = new JsonData();
+                foreach (var verifyTaskResult in VerifyTaskResults)
+                {
+                    verifyTaskResultsJsonData.Add(verifyTaskResult);
                 }
             }
             JsonData taskResultCodesJsonData = null;
@@ -239,8 +290,11 @@ namespace Gs2.Gs2Distributor.Model
                 ["stampSheetResultId"] = StampSheetResultId,
                 ["userId"] = UserId,
                 ["transactionId"] = TransactionId,
+                ["verifyTaskRequests"] = verifyTaskRequestsJsonData,
                 ["taskRequests"] = taskRequestsJsonData,
                 ["sheetRequest"] = SheetRequest?.ToJson(),
+                ["verifyTaskResultCodes"] = verifyTaskResultCodesJsonData,
+                ["verifyTaskResults"] = verifyTaskResultsJsonData,
                 ["taskResultCodes"] = taskResultCodesJsonData,
                 ["taskResults"] = taskResultsJsonData,
                 ["sheetResultCode"] = SheetResultCode,
@@ -266,6 +320,17 @@ namespace Gs2.Gs2Distributor.Model
                 writer.WritePropertyName("transactionId");
                 writer.Write(TransactionId.ToString());
             }
+            if (VerifyTaskRequests != null) {
+                writer.WritePropertyName("verifyTaskRequests");
+                writer.WriteArrayStart();
+                foreach (var verifyTaskRequest in VerifyTaskRequests)
+                {
+                    if (verifyTaskRequest != null) {
+                        verifyTaskRequest.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (TaskRequests != null) {
                 writer.WritePropertyName("taskRequests");
                 writer.WriteArrayStart();
@@ -280,6 +345,26 @@ namespace Gs2.Gs2Distributor.Model
             if (SheetRequest != null) {
                 writer.WritePropertyName("sheetRequest");
                 SheetRequest.WriteJson(writer);
+            }
+            if (VerifyTaskResultCodes != null) {
+                writer.WritePropertyName("verifyTaskResultCodes");
+                writer.WriteArrayStart();
+                foreach (var verifyTaskResultCode in VerifyTaskResultCodes)
+                {
+                    writer.Write((verifyTaskResultCode.ToString().Contains(".") ? (int)double.Parse(verifyTaskResultCode.ToString()) : int.Parse(verifyTaskResultCode.ToString())));
+                }
+                writer.WriteArrayEnd();
+            }
+            if (VerifyTaskResults != null) {
+                writer.WritePropertyName("verifyTaskResults");
+                writer.WriteArrayStart();
+                foreach (var verifyTaskResult in VerifyTaskResults)
+                {
+                    if (verifyTaskResult != null) {
+                        writer.Write(verifyTaskResult.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (TaskResultCodes != null) {
                 writer.WritePropertyName("taskResultCodes");
@@ -352,6 +437,18 @@ namespace Gs2.Gs2Distributor.Model
             {
                 diff += TransactionId.CompareTo(other.TransactionId);
             }
+            if (VerifyTaskRequests == null && VerifyTaskRequests == other.VerifyTaskRequests)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += VerifyTaskRequests.Length - other.VerifyTaskRequests.Length;
+                for (var i = 0; i < VerifyTaskRequests.Length; i++)
+                {
+                    diff += VerifyTaskRequests[i].CompareTo(other.VerifyTaskRequests[i]);
+                }
+            }
             if (TaskRequests == null && TaskRequests == other.TaskRequests)
             {
                 // null and null
@@ -371,6 +468,30 @@ namespace Gs2.Gs2Distributor.Model
             else
             {
                 diff += SheetRequest.CompareTo(other.SheetRequest);
+            }
+            if (VerifyTaskResultCodes == null && VerifyTaskResultCodes == other.VerifyTaskResultCodes)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += VerifyTaskResultCodes.Length - other.VerifyTaskResultCodes.Length;
+                for (var i = 0; i < VerifyTaskResultCodes.Length; i++)
+                {
+                    diff += (int)(VerifyTaskResultCodes[i] - other.VerifyTaskResultCodes[i]);
+                }
+            }
+            if (VerifyTaskResults == null && VerifyTaskResults == other.VerifyTaskResults)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += VerifyTaskResults.Length - other.VerifyTaskResults.Length;
+                for (var i = 0; i < VerifyTaskResults.Length; i++)
+                {
+                    diff += VerifyTaskResults[i].CompareTo(other.VerifyTaskResults[i]);
+                }
             }
             if (TaskResultCodes == null && TaskResultCodes == other.TaskResultCodes)
             {
@@ -467,6 +588,13 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
+                if (VerifyTaskRequests.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.verifyTaskRequests.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (TaskRequests.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskRequests.error.tooMany"),
@@ -474,6 +602,20 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
+            }
+            {
+                if (VerifyTaskResultCodes.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.verifyTaskResultCodes.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (VerifyTaskResults.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.verifyTaskResults.error.tooMany"),
+                    });
+                }
             }
             {
                 if (TaskResultCodes.Length > 10) {
@@ -551,8 +693,11 @@ namespace Gs2.Gs2Distributor.Model
                 StampSheetResultId = StampSheetResultId,
                 UserId = UserId,
                 TransactionId = TransactionId,
+                VerifyTaskRequests = VerifyTaskRequests.Clone() as Gs2.Core.Model.VerifyAction[],
                 TaskRequests = TaskRequests.Clone() as Gs2.Core.Model.ConsumeAction[],
                 SheetRequest = SheetRequest.Clone() as Gs2.Core.Model.AcquireAction,
+                VerifyTaskResultCodes = VerifyTaskResultCodes.Clone() as int[],
+                VerifyTaskResults = VerifyTaskResults.Clone() as string[],
                 TaskResultCodes = TaskResultCodes.Clone() as int[],
                 TaskResults = TaskResults.Clone() as string[],
                 SheetResultCode = SheetResultCode,

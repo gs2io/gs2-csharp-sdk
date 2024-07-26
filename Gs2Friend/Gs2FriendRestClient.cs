@@ -248,10 +248,25 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("receiveRequestNotification");
                     request.ReceiveRequestNotification.WriteJson(jsonWriter);
                 }
+                if (request.CancelRequestNotification != null)
+                {
+                    jsonWriter.WritePropertyName("cancelRequestNotification");
+                    request.CancelRequestNotification.WriteJson(jsonWriter);
+                }
                 if (request.AcceptRequestNotification != null)
                 {
                     jsonWriter.WritePropertyName("acceptRequestNotification");
                     request.AcceptRequestNotification.WriteJson(jsonWriter);
+                }
+                if (request.RejectRequestNotification != null)
+                {
+                    jsonWriter.WritePropertyName("rejectRequestNotification");
+                    request.RejectRequestNotification.WriteJson(jsonWriter);
+                }
+                if (request.DeleteFriendNotification != null)
+                {
+                    jsonWriter.WritePropertyName("deleteFriendNotification");
+                    request.DeleteFriendNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -638,10 +653,25 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("receiveRequestNotification");
                     request.ReceiveRequestNotification.WriteJson(jsonWriter);
                 }
+                if (request.CancelRequestNotification != null)
+                {
+                    jsonWriter.WritePropertyName("cancelRequestNotification");
+                    request.CancelRequestNotification.WriteJson(jsonWriter);
+                }
                 if (request.AcceptRequestNotification != null)
                 {
                     jsonWriter.WritePropertyName("acceptRequestNotification");
                     request.AcceptRequestNotification.WriteJson(jsonWriter);
+                }
+                if (request.RejectRequestNotification != null)
+                {
+                    jsonWriter.WritePropertyName("rejectRequestNotification");
+                    request.RejectRequestNotification.WriteJson(jsonWriter);
+                }
+                if (request.DeleteFriendNotification != null)
+                {
+                    jsonWriter.WritePropertyName("deleteFriendNotification");
+                    request.DeleteFriendNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

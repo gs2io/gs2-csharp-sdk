@@ -37,6 +37,7 @@ namespace Gs2.Gs2SkillTree.Request
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
          public string Metadata { set; get; } = null!;
+         public Gs2.Core.Model.VerifyAction[] ReleaseVerifyActions { set; get; } = null!;
          public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; } = null!;
          public float? RestrainReturnRate { set; get; } = null!;
          public string[] PremiseNodeNames { set; get; } = null!;
@@ -54,6 +55,10 @@ namespace Gs2.Gs2SkillTree.Request
         }
         public CreateNodeModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public CreateNodeModelMasterRequest WithReleaseVerifyActions(Gs2.Core.Model.VerifyAction[] releaseVerifyActions) {
+            this.ReleaseVerifyActions = releaseVerifyActions;
             return this;
         }
         public CreateNodeModelMasterRequest WithReleaseConsumeActions(Gs2.Core.Model.ConsumeAction[] releaseConsumeActions) {
@@ -82,6 +87,9 @@ namespace Gs2.Gs2SkillTree.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithReleaseVerifyActions(!data.Keys.Contains("releaseVerifyActions") || data["releaseVerifyActions"] == null || !data["releaseVerifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["releaseVerifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithReleaseConsumeActions(!data.Keys.Contains("releaseConsumeActions") || data["releaseConsumeActions"] == null || !data["releaseConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["releaseConsumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -93,6 +101,15 @@ namespace Gs2.Gs2SkillTree.Request
 
         public override JsonData ToJson()
         {
+            JsonData releaseVerifyActionsJsonData = null;
+            if (ReleaseVerifyActions != null && ReleaseVerifyActions.Length > 0)
+            {
+                releaseVerifyActionsJsonData = new JsonData();
+                foreach (var releaseVerifyAction in ReleaseVerifyActions)
+                {
+                    releaseVerifyActionsJsonData.Add(releaseVerifyAction.ToJson());
+                }
+            }
             JsonData releaseConsumeActionsJsonData = null;
             if (ReleaseConsumeActions != null && ReleaseConsumeActions.Length > 0)
             {
@@ -116,6 +133,7 @@ namespace Gs2.Gs2SkillTree.Request
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
+                ["releaseVerifyActions"] = releaseVerifyActionsJsonData,
                 ["releaseConsumeActions"] = releaseConsumeActionsJsonData,
                 ["restrainReturnRate"] = RestrainReturnRate,
                 ["premiseNodeNames"] = premiseNodeNamesJsonData,
@@ -140,6 +158,17 @@ namespace Gs2.Gs2SkillTree.Request
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (ReleaseVerifyActions != null) {
+                writer.WritePropertyName("releaseVerifyActions");
+                writer.WriteArrayStart();
+                foreach (var releaseVerifyAction in ReleaseVerifyActions)
+                {
+                    if (releaseVerifyAction != null) {
+                        releaseVerifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (ReleaseConsumeActions != null) {
                 writer.WritePropertyName("releaseConsumeActions");
@@ -174,6 +203,7 @@ namespace Gs2.Gs2SkillTree.Request
             key += Name + ":";
             key += Description + ":";
             key += Metadata + ":";
+            key += ReleaseVerifyActions + ":";
             key += ReleaseConsumeActions + ":";
             key += RestrainReturnRate + ":";
             key += PremiseNodeNames + ":";

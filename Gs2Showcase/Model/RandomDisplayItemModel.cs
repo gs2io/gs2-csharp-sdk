@@ -33,6 +33,7 @@ namespace Gs2.Gs2Showcase.Model
 	{
         public string Name { set; get; } = null!;
         public string Metadata { set; get; } = null!;
+        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
         public int? Stock { set; get; } = null!;
@@ -43,6 +44,10 @@ namespace Gs2.Gs2Showcase.Model
         }
         public RandomDisplayItemModel WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public RandomDisplayItemModel WithVerifyActions(Gs2.Core.Model.VerifyAction[] verifyActions) {
+            this.VerifyActions = verifyActions;
             return this;
         }
         public RandomDisplayItemModel WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
@@ -73,6 +78,9 @@ namespace Gs2.Gs2Showcase.Model
             return new RandomDisplayItemModel()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithVerifyActions(!data.Keys.Contains("verifyActions") || data["verifyActions"] == null || !data["verifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null || !data["consumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -85,6 +93,15 @@ namespace Gs2.Gs2Showcase.Model
 
         public JsonData ToJson()
         {
+            JsonData verifyActionsJsonData = null;
+            if (VerifyActions != null && VerifyActions.Length > 0)
+            {
+                verifyActionsJsonData = new JsonData();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    verifyActionsJsonData.Add(verifyAction.ToJson());
+                }
+            }
             JsonData consumeActionsJsonData = null;
             if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
@@ -106,6 +123,7 @@ namespace Gs2.Gs2Showcase.Model
             return new JsonData {
                 ["name"] = Name,
                 ["metadata"] = Metadata,
+                ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
                 ["stock"] = Stock,
@@ -123,6 +141,17 @@ namespace Gs2.Gs2Showcase.Model
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (VerifyActions != null) {
+                writer.WritePropertyName("verifyActions");
+                writer.WriteArrayStart();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    if (verifyAction != null) {
+                        verifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
@@ -176,6 +205,18 @@ namespace Gs2.Gs2Showcase.Model
             else
             {
                 diff += Metadata.CompareTo(other.Metadata);
+            }
+            if (VerifyActions == null && VerifyActions == other.VerifyActions)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += VerifyActions.Length - other.VerifyActions.Length;
+                for (var i = 0; i < VerifyActions.Length; i++)
+                {
+                    diff += VerifyActions[i].CompareTo(other.VerifyActions[i]);
+                }
             }
             if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
             {
@@ -236,6 +277,13 @@ namespace Gs2.Gs2Showcase.Model
                 }
             }
             {
+                if (VerifyActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.verifyActions.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (ConsumeActions.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.consumeActions.error.tooMany"),
@@ -284,6 +332,7 @@ namespace Gs2.Gs2Showcase.Model
             return new RandomDisplayItemModel {
                 Name = Name,
                 Metadata = Metadata,
+                VerifyActions = VerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
                 ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
                 AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 Stock = Stock,

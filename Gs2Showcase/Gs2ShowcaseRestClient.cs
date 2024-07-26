@@ -1738,6 +1738,20 @@ namespace Gs2.Gs2Showcase
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("consumeActions");
@@ -1990,6 +2004,20 @@ namespace Gs2.Gs2Showcase
                 {
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
+                }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ConsumeActions != null)
                 {

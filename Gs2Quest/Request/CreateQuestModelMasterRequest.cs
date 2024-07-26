@@ -41,6 +41,7 @@ namespace Gs2.Gs2Quest.Request
          public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; } = null!;
          public string ChallengePeriodEventId { set; get; } = null!;
          public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; } = null!;
+         public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
          public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
          public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; } = null!;
          public string[] PremiseQuestNames { set; get; } = null!;
@@ -74,6 +75,10 @@ namespace Gs2.Gs2Quest.Request
         }
         public CreateQuestModelMasterRequest WithFirstCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] firstCompleteAcquireActions) {
             this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
+            return this;
+        }
+        public CreateQuestModelMasterRequest WithVerifyActions(Gs2.Core.Model.VerifyAction[] verifyActions) {
+            this.VerifyActions = verifyActions;
             return this;
         }
         public CreateQuestModelMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
@@ -110,6 +115,9 @@ namespace Gs2.Gs2Quest.Request
                 .WithFirstCompleteAcquireActions(!data.Keys.Contains("firstCompleteAcquireActions") || data["firstCompleteAcquireActions"] == null || !data["firstCompleteAcquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["firstCompleteAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
+                .WithVerifyActions(!data.Keys.Contains("verifyActions") || data["verifyActions"] == null || !data["verifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null || !data["consumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -139,6 +147,15 @@ namespace Gs2.Gs2Quest.Request
                 foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
                 {
                     firstCompleteAcquireActionsJsonData.Add(firstCompleteAcquireAction.ToJson());
+                }
+            }
+            JsonData verifyActionsJsonData = null;
+            if (VerifyActions != null && VerifyActions.Length > 0)
+            {
+                verifyActionsJsonData = new JsonData();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    verifyActionsJsonData.Add(verifyAction.ToJson());
                 }
             }
             JsonData consumeActionsJsonData = null;
@@ -177,6 +194,7 @@ namespace Gs2.Gs2Quest.Request
                 ["contents"] = contentsJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
                 ["firstCompleteAcquireActions"] = firstCompleteAcquireActionsJsonData,
+                ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["failedAcquireActions"] = failedAcquireActionsJsonData,
                 ["premiseQuestNames"] = premiseQuestNamesJsonData,
@@ -232,6 +250,17 @@ namespace Gs2.Gs2Quest.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (VerifyActions != null) {
+                writer.WritePropertyName("verifyActions");
+                writer.WriteArrayStart();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    if (verifyAction != null) {
+                        verifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
                 writer.WriteArrayStart();
@@ -276,6 +305,7 @@ namespace Gs2.Gs2Quest.Request
             key += Contents + ":";
             key += ChallengePeriodEventId + ":";
             key += FirstCompleteAcquireActions + ":";
+            key += VerifyActions + ":";
             key += ConsumeActions + ":";
             key += FailedAcquireActions + ":";
             key += PremiseQuestNames + ":";

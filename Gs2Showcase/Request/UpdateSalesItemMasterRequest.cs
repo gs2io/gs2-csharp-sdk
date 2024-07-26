@@ -37,6 +37,7 @@ namespace Gs2.Gs2Showcase.Request
          public string SalesItemName { set; get; } = null!;
          public string Description { set; get; } = null!;
          public string Metadata { set; get; } = null!;
+         public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
          public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
          public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
         public UpdateSalesItemMasterRequest WithNamespaceName(string namespaceName) {
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Showcase.Request
         }
         public UpdateSalesItemMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public UpdateSalesItemMasterRequest WithVerifyActions(Gs2.Core.Model.VerifyAction[] verifyActions) {
+            this.VerifyActions = verifyActions;
             return this;
         }
         public UpdateSalesItemMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
@@ -77,6 +82,9 @@ namespace Gs2.Gs2Showcase.Request
                 .WithSalesItemName(!data.Keys.Contains("salesItemName") || data["salesItemName"] == null ? null : data["salesItemName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithVerifyActions(!data.Keys.Contains("verifyActions") || data["verifyActions"] == null || !data["verifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null || !data["consumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -87,6 +95,15 @@ namespace Gs2.Gs2Showcase.Request
 
         public override JsonData ToJson()
         {
+            JsonData verifyActionsJsonData = null;
+            if (VerifyActions != null && VerifyActions.Length > 0)
+            {
+                verifyActionsJsonData = new JsonData();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    verifyActionsJsonData.Add(verifyAction.ToJson());
+                }
+            }
             JsonData consumeActionsJsonData = null;
             if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
@@ -110,6 +127,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["salesItemName"] = SalesItemName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
+                ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
             };
@@ -133,6 +151,17 @@ namespace Gs2.Gs2Showcase.Request
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (VerifyActions != null) {
+                writer.WritePropertyName("verifyActions");
+                writer.WriteArrayStart();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    if (verifyAction != null) {
+                        verifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
@@ -165,6 +194,7 @@ namespace Gs2.Gs2Showcase.Request
             key += SalesItemName + ":";
             key += Description + ":";
             key += Metadata + ":";
+            key += VerifyActions + ":";
             key += ConsumeActions + ":";
             key += AcquireActions + ":";
             return key;

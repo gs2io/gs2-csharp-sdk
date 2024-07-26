@@ -522,6 +522,38 @@ namespace Gs2.Gs2Friend.Domain
     #endif
     #if UNITY_2017_1_OR_NEWER
         [Serializable]
+        private class RejectRequestNotificationEvent : UnityEvent<RejectRequestNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private RejectRequestNotificationEvent onRejectRequestNotification = new RejectRequestNotificationEvent();
+
+        public event UnityAction<RejectRequestNotification> OnRejectRequestNotification
+        {
+            add => onRejectRequestNotification.AddListener(value);
+            remove => onRejectRequestNotification.RemoveListener(value);
+        }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
+        private class DeleteFriendNotificationEvent : UnityEvent<DeleteFriendNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private DeleteFriendNotificationEvent onDeleteFriendNotification = new DeleteFriendNotificationEvent();
+
+        public event UnityAction<DeleteFriendNotification> OnDeleteFriendNotification
+        {
+            add => onDeleteFriendNotification.AddListener(value);
+            remove => onDeleteFriendNotification.RemoveListener(value);
+        }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
         private class ReceiveRequestNotificationEvent : UnityEvent<ReceiveRequestNotification>
         {
 
@@ -534,6 +566,22 @@ namespace Gs2.Gs2Friend.Domain
         {
             add => onReceiveRequestNotification.AddListener(value);
             remove => onReceiveRequestNotification.RemoveListener(value);
+        }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
+        private class CancelRequestNotificationEvent : UnityEvent<CancelRequestNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private CancelRequestNotificationEvent onCancelRequestNotification = new CancelRequestNotificationEvent();
+
+        public event UnityAction<CancelRequestNotification> OnCancelRequestNotification
+        {
+            add => onCancelRequestNotification.AddListener(value);
+            remove => onCancelRequestNotification.RemoveListener(value);
         }
     #endif
 
@@ -555,9 +603,27 @@ namespace Gs2.Gs2Friend.Domain
     #endif
                     break;
                 }
+                case "RejectRequest": {
+    #if UNITY_2017_1_OR_NEWER
+                    onRejectRequestNotification.Invoke(RejectRequestNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
+                    break;
+                }
+                case "DeleteFriend": {
+    #if UNITY_2017_1_OR_NEWER
+                    onDeleteFriendNotification.Invoke(DeleteFriendNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
+                    break;
+                }
                 case "ReceiveRequest": {
     #if UNITY_2017_1_OR_NEWER
                     onReceiveRequestNotification.Invoke(ReceiveRequestNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
+                    break;
+                }
+                case "CancelRequest": {
+    #if UNITY_2017_1_OR_NEWER
+                    onCancelRequestNotification.Invoke(CancelRequestNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
                     break;
                 }

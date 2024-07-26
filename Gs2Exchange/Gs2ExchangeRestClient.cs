@@ -1997,6 +1997,16 @@ namespace Gs2.Gs2Exchange
                     }
                     jsonWriter.WriteArrayEnd();
                 }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("consumeActions");
@@ -2255,6 +2265,16 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("acquireActions");
                     jsonWriter.WriteArrayStart();
                     foreach(var item in request.AcquireActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
                     {
                         item.WriteJson(jsonWriter);
                     }

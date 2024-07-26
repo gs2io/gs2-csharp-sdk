@@ -1937,6 +1937,16 @@ namespace Gs2.Gs2SkillTree
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.ReleaseVerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("releaseVerifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ReleaseVerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ReleaseConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("releaseConsumeActions");
@@ -2194,6 +2204,16 @@ namespace Gs2.Gs2SkillTree
                 {
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
+                }
+                if (request.ReleaseVerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("releaseVerifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ReleaseVerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ReleaseConsumeActions != null)
                 {

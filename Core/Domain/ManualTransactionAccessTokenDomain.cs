@@ -116,8 +116,82 @@ namespace Gs2.Core.Domain
                 var stampSheetJson = JsonMapper.ToObject(_stampSheet);
                 var stampSheetPayload = stampSheetJson["body"].ToString();
                 var stampSheetPayloadJson = JsonMapper.ToObject(stampSheetPayload);
+                var verifyTasks = stampSheetPayloadJson["verifyTasks"];
                 var stampTasks = stampSheetPayloadJson["tasks"];
                 string contextStack = null;
+                for (var i = 0; i < verifyTasks.Count; i++)
+                {
+                    var verifyTask = verifyTasks[i].ToString();
+                    var verifyTaskJson = JsonMapper.ToObject(verifyTasks[i].ToString());
+                    var verifyTaskPayload = verifyTaskJson["body"].ToString();
+                    var verifyTaskPayloadJson = JsonMapper.ToObject(verifyTaskPayload);
+                    if (string.IsNullOrEmpty(Gs2.TransactionConfiguration?.NamespaceName))
+                    {
+                        var future = client.RunVerifyTaskWithoutNamespaceFuture(
+                            new RunVerifyTaskWithoutNamespaceRequest()
+                                    .WithContextStack(contextStack)
+                                    .WithVerifyTask(verifyTasks[i].ToString())
+                                    .WithKeyId(_stampSheetEncryptionKeyId)
+                        );
+                        yield return future;
+                        if (future.Error != null) {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                        var result = future.Result;
+                        contextStack = result.ContextStack;
+                        if (result.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                        }
+                        Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                            Gs2.Cache,
+                            stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            verifyTaskPayloadJson["action"].ToString(),
+                            verifyTaskPayloadJson["args"].ToString(),
+                            result.Result
+                        );
+                    }
+                    else
+                    {
+                        var future = client.RunVerifyTaskFuture(
+                            new RunVerifyTaskRequest()
+                                .WithContextStack(contextStack)
+                                .WithNamespaceName(Gs2.TransactionConfiguration?.NamespaceName)
+                                .WithVerifyTask(verifyTasks[i].ToString())
+                                .WithKeyId(_stampSheetEncryptionKeyId)
+                        );
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is NotFoundException) {
+                                if (Gs2.TransactionConfiguration != null) {
+                                    Gs2.TransactionConfiguration.NamespaceName = null;
+                                    var future2 = WaitFuture(all);
+                                    yield return future2;
+                                    if (future2.Error != null) {
+                                        self.OnError(future2.Error);
+                                        yield break;
+                                    }
+                                    self.OnComplete(future2.Result);
+                                    yield break;
+                                }
+                            }
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                        var result = future.Result;
+                        contextStack = result.ContextStack;
+                        if (result.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                        }
+                        Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                            Gs2.Cache,
+                            stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            verifyTaskPayloadJson["action"].ToString(),
+                            verifyTaskPayloadJson["args"].ToString(),
+                            result.Result
+                        );
+                    }
+                }
                 for (var i = 0; i < stampTasks.Count; i++)
                 {
                     var stampTask = stampTasks[i].ToString();
@@ -296,8 +370,51 @@ namespace Gs2.Core.Domain
             var stampSheetJson = JsonMapper.ToObject(_stampSheet);
             var stampSheetPayload = stampSheetJson["body"].ToString();
             var stampSheetPayloadJson = JsonMapper.ToObject(stampSheetPayload);
+            var verifyTasks = stampSheetPayloadJson["verifyTasks"];
             var stampTasks = stampSheetPayloadJson["tasks"];
             string contextStack = null;
+            for (var i = 0; i < verifyTasks.Count; i++)
+            {
+                var verifyTask = verifyTasks[i].ToString();
+                var verifyTaskJson = JsonMapper.ToObject(verifyTasks[i].ToString());
+                var verifyTaskPayload = verifyTaskJson["body"].ToString();
+                var verifyTaskPayloadJson = JsonMapper.ToObject(verifyTaskPayload);
+                if (string.IsNullOrEmpty(Gs2.TransactionConfiguration?.NamespaceName))
+                {
+                    var result = await client.RunVerifyTaskWithoutNamespaceAsync(
+                        new RunVerifyTaskWithoutNamespaceRequest()
+                                .WithContextStack(contextStack)
+                                .WithVerifyTask(verifyTasks[i].ToString())
+                                .WithKeyId(_stampSheetEncryptionKeyId)
+                    );
+                    contextStack = result.ContextStack;
+                    if (result.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                    }
+                }
+                else
+                {
+                    try {
+                        var result = await client.RunVerifyTaskAsync(
+                            new RunVerifyTaskRequest()
+                                .WithContextStack(contextStack)
+                                .WithNamespaceName(Gs2.TransactionConfiguration?.NamespaceName)
+                                .WithVerifyTask(verifyTasks[i].ToString())
+                                .WithKeyId(_stampSheetEncryptionKeyId)
+                        );
+                        contextStack = result.ContextStack;
+                        if (result.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                        }
+                    }
+                    catch (NotFoundException) {
+                        if (Gs2.TransactionConfiguration != null) {
+                            Gs2.TransactionConfiguration.NamespaceName = null;
+                            return await WaitAsync(all);
+                        }
+                    }
+                }
+            }
             for (var i = 0; i < stampTasks.Count; i++)
             {
                 var stampTask = stampTasks[i].ToString();

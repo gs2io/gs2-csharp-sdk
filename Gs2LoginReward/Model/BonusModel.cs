@@ -40,6 +40,7 @@ namespace Gs2.Gs2LoginReward.Model
         public string Repeat { set; get; } = null!;
         public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; } = null!;
         public string MissedReceiveRelief { set; get; } = null!;
+        public Gs2.Core.Model.VerifyAction[] MissedReceiveReliefVerifyActions { set; get; } = null!;
         public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; } = null!;
         public BonusModel WithBonusModelId(string bonusModelId) {
             this.BonusModelId = bonusModelId;
@@ -75,6 +76,10 @@ namespace Gs2.Gs2LoginReward.Model
         }
         public BonusModel WithMissedReceiveRelief(string missedReceiveRelief) {
             this.MissedReceiveRelief = missedReceiveRelief;
+            return this;
+        }
+        public BonusModel WithMissedReceiveReliefVerifyActions(Gs2.Core.Model.VerifyAction[] missedReceiveReliefVerifyActions) {
+            this.MissedReceiveReliefVerifyActions = missedReceiveReliefVerifyActions;
             return this;
         }
         public BonusModel WithMissedReceiveReliefConsumeActions(Gs2.Core.Model.ConsumeAction[] missedReceiveReliefConsumeActions) {
@@ -170,6 +175,9 @@ namespace Gs2.Gs2LoginReward.Model
                     return Gs2.Gs2LoginReward.Model.Reward.FromJson(v);
                 }).ToArray())
                 .WithMissedReceiveRelief(!data.Keys.Contains("missedReceiveRelief") || data["missedReceiveRelief"] == null ? null : data["missedReceiveRelief"].ToString())
+                .WithMissedReceiveReliefVerifyActions(!data.Keys.Contains("missedReceiveReliefVerifyActions") || data["missedReceiveReliefVerifyActions"] == null || !data["missedReceiveReliefVerifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["missedReceiveReliefVerifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithMissedReceiveReliefConsumeActions(!data.Keys.Contains("missedReceiveReliefConsumeActions") || data["missedReceiveReliefConsumeActions"] == null || !data["missedReceiveReliefConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["missedReceiveReliefConsumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray());
@@ -184,6 +192,15 @@ namespace Gs2.Gs2LoginReward.Model
                 foreach (var reward in Rewards)
                 {
                     rewardsJsonData.Add(reward.ToJson());
+                }
+            }
+            JsonData missedReceiveReliefVerifyActionsJsonData = null;
+            if (MissedReceiveReliefVerifyActions != null && MissedReceiveReliefVerifyActions.Length > 0)
+            {
+                missedReceiveReliefVerifyActionsJsonData = new JsonData();
+                foreach (var missedReceiveReliefVerifyAction in MissedReceiveReliefVerifyActions)
+                {
+                    missedReceiveReliefVerifyActionsJsonData.Add(missedReceiveReliefVerifyAction.ToJson());
                 }
             }
             JsonData missedReceiveReliefConsumeActionsJsonData = null;
@@ -205,6 +222,7 @@ namespace Gs2.Gs2LoginReward.Model
                 ["repeat"] = Repeat,
                 ["rewards"] = rewardsJsonData,
                 ["missedReceiveRelief"] = MissedReceiveRelief,
+                ["missedReceiveReliefVerifyActions"] = missedReceiveReliefVerifyActionsJsonData,
                 ["missedReceiveReliefConsumeActions"] = missedReceiveReliefConsumeActionsJsonData,
             };
         }
@@ -254,6 +272,17 @@ namespace Gs2.Gs2LoginReward.Model
             if (MissedReceiveRelief != null) {
                 writer.WritePropertyName("missedReceiveRelief");
                 writer.Write(MissedReceiveRelief.ToString());
+            }
+            if (MissedReceiveReliefVerifyActions != null) {
+                writer.WritePropertyName("missedReceiveReliefVerifyActions");
+                writer.WriteArrayStart();
+                foreach (var missedReceiveReliefVerifyAction in MissedReceiveReliefVerifyActions)
+                {
+                    if (missedReceiveReliefVerifyAction != null) {
+                        missedReceiveReliefVerifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (MissedReceiveReliefConsumeActions != null) {
                 writer.WritePropertyName("missedReceiveReliefConsumeActions");
@@ -348,6 +377,18 @@ namespace Gs2.Gs2LoginReward.Model
             else
             {
                 diff += MissedReceiveRelief.CompareTo(other.MissedReceiveRelief);
+            }
+            if (MissedReceiveReliefVerifyActions == null && MissedReceiveReliefVerifyActions == other.MissedReceiveReliefVerifyActions)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += MissedReceiveReliefVerifyActions.Length - other.MissedReceiveReliefVerifyActions.Length;
+                for (var i = 0; i < MissedReceiveReliefVerifyActions.Length; i++)
+                {
+                    diff += MissedReceiveReliefVerifyActions[i].CompareTo(other.MissedReceiveReliefVerifyActions[i]);
+                }
             }
             if (MissedReceiveReliefConsumeActions == null && MissedReceiveReliefConsumeActions == other.MissedReceiveReliefConsumeActions)
             {
@@ -446,6 +487,13 @@ namespace Gs2.Gs2LoginReward.Model
                 }
             }
             {
+                if (MissedReceiveReliefVerifyActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.missedReceiveReliefVerifyActions.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (MissedReceiveReliefConsumeActions.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("bonusModel", "loginReward.bonusModel.missedReceiveReliefConsumeActions.error.tooMany"),
@@ -465,6 +513,7 @@ namespace Gs2.Gs2LoginReward.Model
                 Repeat = Repeat,
                 Rewards = Rewards.Clone() as Gs2.Gs2LoginReward.Model.Reward[],
                 MissedReceiveRelief = MissedReceiveRelief,
+                MissedReceiveReliefVerifyActions = MissedReceiveReliefVerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
                 MissedReceiveReliefConsumeActions = MissedReceiveReliefConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
             };
         }

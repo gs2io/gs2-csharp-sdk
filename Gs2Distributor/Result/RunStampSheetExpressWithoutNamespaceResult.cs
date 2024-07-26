@@ -33,10 +33,22 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunStampSheetExpressWithoutNamespaceResult : IResult
 	{
+        public int[] VerifyTaskResultCodes { set; get; } = null!;
+        public string[] VerifyTaskResults { set; get; } = null!;
         public int[] TaskResultCodes { set; get; } = null!;
         public string[] TaskResults { set; get; } = null!;
         public int? SheetResultCode { set; get; } = null!;
         public string SheetResult { set; get; } = null!;
+
+        public RunStampSheetExpressWithoutNamespaceResult WithVerifyTaskResultCodes(int[] verifyTaskResultCodes) {
+            this.VerifyTaskResultCodes = verifyTaskResultCodes;
+            return this;
+        }
+
+        public RunStampSheetExpressWithoutNamespaceResult WithVerifyTaskResults(string[] verifyTaskResults) {
+            this.VerifyTaskResults = verifyTaskResults;
+            return this;
+        }
 
         public RunStampSheetExpressWithoutNamespaceResult WithTaskResultCodes(int[] taskResultCodes) {
             this.TaskResultCodes = taskResultCodes;
@@ -67,6 +79,12 @@ namespace Gs2.Gs2Distributor.Result
                 return null;
             }
             return new RunStampSheetExpressWithoutNamespaceResult()
+                .WithVerifyTaskResultCodes(!data.Keys.Contains("verifyTaskResultCodes") || data["verifyTaskResultCodes"] == null || !data["verifyTaskResultCodes"].IsArray ? new int[]{} : data["verifyTaskResultCodes"].Cast<JsonData>().Select(v => {
+                    return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
+                }).ToArray())
+                .WithVerifyTaskResults(!data.Keys.Contains("verifyTaskResults") || data["verifyTaskResults"] == null || !data["verifyTaskResults"].IsArray ? new string[]{} : data["verifyTaskResults"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
                 .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? new int[]{} : data["taskResultCodes"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
@@ -79,6 +97,24 @@ namespace Gs2.Gs2Distributor.Result
 
         public JsonData ToJson()
         {
+            JsonData verifyTaskResultCodesJsonData = null;
+            if (VerifyTaskResultCodes != null && VerifyTaskResultCodes.Length > 0)
+            {
+                verifyTaskResultCodesJsonData = new JsonData();
+                foreach (var verifyTaskResultCode in VerifyTaskResultCodes)
+                {
+                    verifyTaskResultCodesJsonData.Add(verifyTaskResultCode);
+                }
+            }
+            JsonData verifyTaskResultsJsonData = null;
+            if (VerifyTaskResults != null && VerifyTaskResults.Length > 0)
+            {
+                verifyTaskResultsJsonData = new JsonData();
+                foreach (var verifyTaskResult in VerifyTaskResults)
+                {
+                    verifyTaskResultsJsonData.Add(verifyTaskResult);
+                }
+            }
             JsonData taskResultCodesJsonData = null;
             if (TaskResultCodes != null && TaskResultCodes.Length > 0)
             {
@@ -98,6 +134,8 @@ namespace Gs2.Gs2Distributor.Result
                 }
             }
             return new JsonData {
+                ["verifyTaskResultCodes"] = verifyTaskResultCodesJsonData,
+                ["verifyTaskResults"] = verifyTaskResultsJsonData,
                 ["taskResultCodes"] = taskResultCodesJsonData,
                 ["taskResults"] = taskResultsJsonData,
                 ["sheetResultCode"] = SheetResultCode,
@@ -108,6 +146,26 @@ namespace Gs2.Gs2Distributor.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (VerifyTaskResultCodes != null) {
+                writer.WritePropertyName("verifyTaskResultCodes");
+                writer.WriteArrayStart();
+                foreach (var verifyTaskResultCode in VerifyTaskResultCodes)
+                {
+                    writer.Write((verifyTaskResultCode.ToString().Contains(".") ? (int)double.Parse(verifyTaskResultCode.ToString()) : int.Parse(verifyTaskResultCode.ToString())));
+                }
+                writer.WriteArrayEnd();
+            }
+            if (VerifyTaskResults != null) {
+                writer.WritePropertyName("verifyTaskResults");
+                writer.WriteArrayStart();
+                foreach (var verifyTaskResult in VerifyTaskResults)
+                {
+                    if (verifyTaskResult != null) {
+                        writer.Write(verifyTaskResult.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (TaskResultCodes != null) {
                 writer.WritePropertyName("taskResultCodes");
                 writer.WriteArrayStart();

@@ -1753,6 +1753,16 @@ namespace Gs2.Gs2LoginReward
                     jsonWriter.WritePropertyName("missedReceiveRelief");
                     jsonWriter.Write(request.MissedReceiveRelief);
                 }
+                if (request.MissedReceiveReliefVerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("missedReceiveReliefVerifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MissedReceiveReliefVerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.MissedReceiveReliefConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("missedReceiveReliefConsumeActions");
@@ -2030,6 +2040,16 @@ namespace Gs2.Gs2LoginReward
                 {
                     jsonWriter.WritePropertyName("missedReceiveRelief");
                     jsonWriter.Write(request.MissedReceiveRelief);
+                }
+                if (request.MissedReceiveReliefVerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("missedReceiveReliefVerifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MissedReceiveReliefVerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.MissedReceiveReliefConsumeActions != null)
                 {

@@ -2375,6 +2375,16 @@ namespace Gs2.Gs2Quest
                     }
                     jsonWriter.WriteArrayEnd();
                 }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ConsumeActions != null)
                 {
                     jsonWriter.WritePropertyName("consumeActions");
@@ -2660,6 +2670,16 @@ namespace Gs2.Gs2Quest
                     jsonWriter.WritePropertyName("firstCompleteAcquireActions");
                     jsonWriter.WriteArrayStart();
                     foreach(var item in request.FirstCompleteAcquireActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
                     {
                         item.WriteJson(jsonWriter);
                     }

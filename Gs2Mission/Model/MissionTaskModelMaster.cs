@@ -37,7 +37,7 @@ namespace Gs2.Gs2Mission.Model
         public string Description { set; get; } = null!;
         public string VerifyCompleteType { set; get; } = null!;
         public Gs2.Gs2Mission.Model.TargetCounterModel TargetCounter { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction[] VerifyCompleteConsumeActions { set; get; } = null!;
+        public Gs2.Core.Model.VerifyAction[] VerifyCompleteConsumeActions { set; get; } = null!;
         public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; } = null!;
         public string ChallengePeriodEventId { set; get; } = null!;
         public string PremiseMissionTaskName { set; get; } = null!;
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Mission.Model
             this.TargetCounter = targetCounter;
             return this;
         }
-        public MissionTaskModelMaster WithVerifyCompleteConsumeActions(Gs2.Core.Model.ConsumeAction[] verifyCompleteConsumeActions) {
+        public MissionTaskModelMaster WithVerifyCompleteConsumeActions(Gs2.Core.Model.VerifyAction[] verifyCompleteConsumeActions) {
             this.VerifyCompleteConsumeActions = verifyCompleteConsumeActions;
             return this;
         }
@@ -218,8 +218,8 @@ namespace Gs2.Gs2Mission.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithVerifyCompleteType(!data.Keys.Contains("verifyCompleteType") || data["verifyCompleteType"] == null ? null : data["verifyCompleteType"].ToString())
                 .WithTargetCounter(!data.Keys.Contains("targetCounter") || data["targetCounter"] == null ? null : Gs2.Gs2Mission.Model.TargetCounterModel.FromJson(data["targetCounter"]))
-                .WithVerifyCompleteConsumeActions(!data.Keys.Contains("verifyCompleteConsumeActions") || data["verifyCompleteConsumeActions"] == null || !data["verifyCompleteConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["verifyCompleteConsumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
+                .WithVerifyCompleteConsumeActions(!data.Keys.Contains("verifyCompleteConsumeActions") || data["verifyCompleteConsumeActions"] == null || !data["verifyCompleteConsumeActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyCompleteConsumeActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
                 }).ToArray())
                 .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null || !data["completeAcquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
@@ -530,7 +530,7 @@ namespace Gs2.Gs2Mission.Model
             {
                 switch (VerifyCompleteType) {
                     case "counter":
-                    case "consumeActions":
+                    case "verifyActions":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
@@ -614,7 +614,7 @@ namespace Gs2.Gs2Mission.Model
                 Description = Description,
                 VerifyCompleteType = VerifyCompleteType,
                 TargetCounter = TargetCounter.Clone() as Gs2.Gs2Mission.Model.TargetCounterModel,
-                VerifyCompleteConsumeActions = VerifyCompleteConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                VerifyCompleteConsumeActions = VerifyCompleteConsumeActions.Clone() as Gs2.Core.Model.VerifyAction[],
                 CompleteAcquireActions = CompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 ChallengePeriodEventId = ChallengePeriodEventId,
                 PremiseMissionTaskName = PremiseMissionTaskName,

@@ -34,6 +34,7 @@ namespace Gs2.Gs2SkillTree.Model
         public string NodeModelId { set; get; } = null!;
         public string Name { set; get; } = null!;
         public string Metadata { set; get; } = null!;
+        public Gs2.Core.Model.VerifyAction[] ReleaseVerifyActions { set; get; } = null!;
         public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; } = null!;
         public Gs2.Core.Model.AcquireAction[] ReturnAcquireActions { set; get; } = null!;
         public float? RestrainReturnRate { set; get; } = null!;
@@ -48,6 +49,10 @@ namespace Gs2.Gs2SkillTree.Model
         }
         public NodeModel WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public NodeModel WithReleaseVerifyActions(Gs2.Core.Model.VerifyAction[] releaseVerifyActions) {
+            this.ReleaseVerifyActions = releaseVerifyActions;
             return this;
         }
         public NodeModel WithReleaseConsumeActions(Gs2.Core.Model.ConsumeAction[] releaseConsumeActions) {
@@ -147,6 +152,9 @@ namespace Gs2.Gs2SkillTree.Model
                 .WithNodeModelId(!data.Keys.Contains("nodeModelId") || data["nodeModelId"] == null ? null : data["nodeModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithReleaseVerifyActions(!data.Keys.Contains("releaseVerifyActions") || data["releaseVerifyActions"] == null || !data["releaseVerifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["releaseVerifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithReleaseConsumeActions(!data.Keys.Contains("releaseConsumeActions") || data["releaseConsumeActions"] == null || !data["releaseConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["releaseConsumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -161,6 +169,15 @@ namespace Gs2.Gs2SkillTree.Model
 
         public JsonData ToJson()
         {
+            JsonData releaseVerifyActionsJsonData = null;
+            if (ReleaseVerifyActions != null && ReleaseVerifyActions.Length > 0)
+            {
+                releaseVerifyActionsJsonData = new JsonData();
+                foreach (var releaseVerifyAction in ReleaseVerifyActions)
+                {
+                    releaseVerifyActionsJsonData.Add(releaseVerifyAction.ToJson());
+                }
+            }
             JsonData releaseConsumeActionsJsonData = null;
             if (ReleaseConsumeActions != null && ReleaseConsumeActions.Length > 0)
             {
@@ -192,6 +209,7 @@ namespace Gs2.Gs2SkillTree.Model
                 ["nodeModelId"] = NodeModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
+                ["releaseVerifyActions"] = releaseVerifyActionsJsonData,
                 ["releaseConsumeActions"] = releaseConsumeActionsJsonData,
                 ["returnAcquireActions"] = returnAcquireActionsJsonData,
                 ["restrainReturnRate"] = RestrainReturnRate,
@@ -213,6 +231,17 @@ namespace Gs2.Gs2SkillTree.Model
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (ReleaseVerifyActions != null) {
+                writer.WritePropertyName("releaseVerifyActions");
+                writer.WriteArrayStart();
+                foreach (var releaseVerifyAction in ReleaseVerifyActions)
+                {
+                    if (releaseVerifyAction != null) {
+                        releaseVerifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (ReleaseConsumeActions != null) {
                 writer.WritePropertyName("releaseConsumeActions");
@@ -281,6 +310,18 @@ namespace Gs2.Gs2SkillTree.Model
             else
             {
                 diff += Metadata.CompareTo(other.Metadata);
+            }
+            if (ReleaseVerifyActions == null && ReleaseVerifyActions == other.ReleaseVerifyActions)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ReleaseVerifyActions.Length - other.ReleaseVerifyActions.Length;
+                for (var i = 0; i < ReleaseVerifyActions.Length; i++)
+                {
+                    diff += ReleaseVerifyActions[i].CompareTo(other.ReleaseVerifyActions[i]);
+                }
             }
             if (ReleaseConsumeActions == null && ReleaseConsumeActions == other.ReleaseConsumeActions)
             {
@@ -352,6 +393,13 @@ namespace Gs2.Gs2SkillTree.Model
                 }
             }
             {
+                if (ReleaseVerifyActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.releaseVerifyActions.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (ReleaseConsumeActions.Length < 1) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("nodeModel", "skillTree.nodeModel.releaseConsumeActions.error.tooFew"),
@@ -396,6 +444,7 @@ namespace Gs2.Gs2SkillTree.Model
                 NodeModelId = NodeModelId,
                 Name = Name,
                 Metadata = Metadata,
+                ReleaseVerifyActions = ReleaseVerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
                 ReleaseConsumeActions = ReleaseConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
                 ReturnAcquireActions = ReturnAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 RestrainReturnRate = RestrainReturnRate,

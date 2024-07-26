@@ -2291,6 +2291,133 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
+        public class RunVerifyTaskTask : Gs2RestSessionTask<RunVerifyTaskRequest, RunVerifyTaskResult>
+        {
+            public RunVerifyTaskTask(IGs2Session session, RestSessionRequestFactory factory, RunVerifyTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RunVerifyTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/distribute/stamp/verifyTask/run";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyTask != null)
+                {
+                    jsonWriter.WritePropertyName("verifyTask");
+                    jsonWriter.Write(request.VerifyTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RunVerifyTask(
+                Request.RunVerifyTaskRequest request,
+                UnityAction<AsyncResult<Result.RunVerifyTaskResult>> callback
+        )
+		{
+			var task = new RunVerifyTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunVerifyTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RunVerifyTaskResult> RunVerifyTaskFuture(
+                Request.RunVerifyTaskRequest request
+        )
+		{
+			return new RunVerifyTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RunVerifyTaskResult> RunVerifyTaskAsync(
+                Request.RunVerifyTaskRequest request
+        )
+		{
+            AsyncResult<Result.RunVerifyTaskResult> result = null;
+			await RunVerifyTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RunVerifyTaskTask RunVerifyTaskAsync(
+                Request.RunVerifyTaskRequest request
+        )
+		{
+			return new RunVerifyTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RunVerifyTaskResult> RunVerifyTaskAsync(
+                Request.RunVerifyTaskRequest request
+        )
+		{
+			var task = new RunVerifyTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class RunStampTaskTask : Gs2RestSessionTask<RunStampTaskRequest, RunStampTaskResult>
         {
             public RunStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, RunStampTaskRequest request) : base(session, factory, request)
@@ -2663,6 +2790,131 @@ namespace Gs2.Gs2Distributor
         )
 		{
 			var task = new RunStampSheetExpressTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RunVerifyTaskWithoutNamespaceTask : Gs2RestSessionTask<RunVerifyTaskWithoutNamespaceRequest, RunVerifyTaskWithoutNamespaceResult>
+        {
+            public RunVerifyTaskWithoutNamespaceTask(IGs2Session session, RestSessionRequestFactory factory, RunVerifyTaskWithoutNamespaceRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RunVerifyTaskWithoutNamespaceRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/verifyTask/run";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VerifyTask != null)
+                {
+                    jsonWriter.WritePropertyName("verifyTask");
+                    jsonWriter.Write(request.VerifyTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RunVerifyTaskWithoutNamespace(
+                Request.RunVerifyTaskWithoutNamespaceRequest request,
+                UnityAction<AsyncResult<Result.RunVerifyTaskWithoutNamespaceResult>> callback
+        )
+		{
+			var task = new RunVerifyTaskWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunVerifyTaskWithoutNamespaceResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RunVerifyTaskWithoutNamespaceResult> RunVerifyTaskWithoutNamespaceFuture(
+                Request.RunVerifyTaskWithoutNamespaceRequest request
+        )
+		{
+			return new RunVerifyTaskWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RunVerifyTaskWithoutNamespaceResult> RunVerifyTaskWithoutNamespaceAsync(
+                Request.RunVerifyTaskWithoutNamespaceRequest request
+        )
+		{
+            AsyncResult<Result.RunVerifyTaskWithoutNamespaceResult> result = null;
+			await RunVerifyTaskWithoutNamespace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RunVerifyTaskWithoutNamespaceTask RunVerifyTaskWithoutNamespaceAsync(
+                Request.RunVerifyTaskWithoutNamespaceRequest request
+        )
+		{
+			return new RunVerifyTaskWithoutNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RunVerifyTaskWithoutNamespaceResult> RunVerifyTaskWithoutNamespaceAsync(
+                Request.RunVerifyTaskWithoutNamespaceRequest request
+        )
+		{
+			var task = new RunVerifyTaskWithoutNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

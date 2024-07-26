@@ -43,6 +43,7 @@ namespace Gs2.Gs2LoginReward.Request
          public string Repeat { set; get; } = null!;
          public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; } = null!;
          public string MissedReceiveRelief { set; get; } = null!;
+         public Gs2.Core.Model.VerifyAction[] MissedReceiveReliefVerifyActions { set; get; } = null!;
          public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; } = null!;
         public CreateBonusModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -84,6 +85,10 @@ namespace Gs2.Gs2LoginReward.Request
             this.MissedReceiveRelief = missedReceiveRelief;
             return this;
         }
+        public CreateBonusModelMasterRequest WithMissedReceiveReliefVerifyActions(Gs2.Core.Model.VerifyAction[] missedReceiveReliefVerifyActions) {
+            this.MissedReceiveReliefVerifyActions = missedReceiveReliefVerifyActions;
+            return this;
+        }
         public CreateBonusModelMasterRequest WithMissedReceiveReliefConsumeActions(Gs2.Core.Model.ConsumeAction[] missedReceiveReliefConsumeActions) {
             this.MissedReceiveReliefConsumeActions = missedReceiveReliefConsumeActions;
             return this;
@@ -110,6 +115,9 @@ namespace Gs2.Gs2LoginReward.Request
                     return Gs2.Gs2LoginReward.Model.Reward.FromJson(v);
                 }).ToArray())
                 .WithMissedReceiveRelief(!data.Keys.Contains("missedReceiveRelief") || data["missedReceiveRelief"] == null ? null : data["missedReceiveRelief"].ToString())
+                .WithMissedReceiveReliefVerifyActions(!data.Keys.Contains("missedReceiveReliefVerifyActions") || data["missedReceiveReliefVerifyActions"] == null || !data["missedReceiveReliefVerifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["missedReceiveReliefVerifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithMissedReceiveReliefConsumeActions(!data.Keys.Contains("missedReceiveReliefConsumeActions") || data["missedReceiveReliefConsumeActions"] == null || !data["missedReceiveReliefConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["missedReceiveReliefConsumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray());
@@ -124,6 +132,15 @@ namespace Gs2.Gs2LoginReward.Request
                 foreach (var reward in Rewards)
                 {
                     rewardsJsonData.Add(reward.ToJson());
+                }
+            }
+            JsonData missedReceiveReliefVerifyActionsJsonData = null;
+            if (MissedReceiveReliefVerifyActions != null && MissedReceiveReliefVerifyActions.Length > 0)
+            {
+                missedReceiveReliefVerifyActionsJsonData = new JsonData();
+                foreach (var missedReceiveReliefVerifyAction in MissedReceiveReliefVerifyActions)
+                {
+                    missedReceiveReliefVerifyActionsJsonData.Add(missedReceiveReliefVerifyAction.ToJson());
                 }
             }
             JsonData missedReceiveReliefConsumeActionsJsonData = null;
@@ -146,6 +163,7 @@ namespace Gs2.Gs2LoginReward.Request
                 ["repeat"] = Repeat,
                 ["rewards"] = rewardsJsonData,
                 ["missedReceiveRelief"] = MissedReceiveRelief,
+                ["missedReceiveReliefVerifyActions"] = missedReceiveReliefVerifyActionsJsonData,
                 ["missedReceiveReliefConsumeActions"] = missedReceiveReliefConsumeActionsJsonData,
             };
         }
@@ -200,6 +218,17 @@ namespace Gs2.Gs2LoginReward.Request
                 writer.WritePropertyName("missedReceiveRelief");
                 writer.Write(MissedReceiveRelief.ToString());
             }
+            if (MissedReceiveReliefVerifyActions != null) {
+                writer.WritePropertyName("missedReceiveReliefVerifyActions");
+                writer.WriteArrayStart();
+                foreach (var missedReceiveReliefVerifyAction in MissedReceiveReliefVerifyActions)
+                {
+                    if (missedReceiveReliefVerifyAction != null) {
+                        missedReceiveReliefVerifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (MissedReceiveReliefConsumeActions != null) {
                 writer.WritePropertyName("missedReceiveReliefConsumeActions");
                 writer.WriteArrayStart();
@@ -226,6 +255,7 @@ namespace Gs2.Gs2LoginReward.Request
             key += Repeat + ":";
             key += Rewards + ":";
             key += MissedReceiveRelief + ":";
+            key += MissedReceiveReliefVerifyActions + ":";
             key += MissedReceiveReliefConsumeActions + ":";
             return key;
         }

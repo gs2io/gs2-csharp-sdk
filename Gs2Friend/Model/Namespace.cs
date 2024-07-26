@@ -44,7 +44,10 @@ namespace Gs2.Gs2Friend.Model
         public Gs2.Gs2Friend.Model.ScriptSetting UpdateProfileScript { set; get; } = null!;
         public Gs2.Gs2Friend.Model.NotificationSetting FollowNotification { set; get; } = null!;
         public Gs2.Gs2Friend.Model.NotificationSetting ReceiveRequestNotification { set; get; } = null!;
+        public Gs2.Gs2Friend.Model.NotificationSetting CancelRequestNotification { set; get; } = null!;
         public Gs2.Gs2Friend.Model.NotificationSetting AcceptRequestNotification { set; get; } = null!;
+        public Gs2.Gs2Friend.Model.NotificationSetting RejectRequestNotification { set; get; } = null!;
+        public Gs2.Gs2Friend.Model.NotificationSetting DeleteFriendNotification { set; get; } = null!;
         public Gs2.Gs2Friend.Model.LogSetting LogSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -101,8 +104,20 @@ namespace Gs2.Gs2Friend.Model
             this.ReceiveRequestNotification = receiveRequestNotification;
             return this;
         }
+        public Namespace WithCancelRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting cancelRequestNotification) {
+            this.CancelRequestNotification = cancelRequestNotification;
+            return this;
+        }
         public Namespace WithAcceptRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting acceptRequestNotification) {
             this.AcceptRequestNotification = acceptRequestNotification;
+            return this;
+        }
+        public Namespace WithRejectRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting rejectRequestNotification) {
+            this.RejectRequestNotification = rejectRequestNotification;
+            return this;
+        }
+        public Namespace WithDeleteFriendNotification(Gs2.Gs2Friend.Model.NotificationSetting deleteFriendNotification) {
+            this.DeleteFriendNotification = deleteFriendNotification;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Friend.Model.LogSetting logSetting) {
@@ -195,7 +210,10 @@ namespace Gs2.Gs2Friend.Model
                 .WithUpdateProfileScript(!data.Keys.Contains("updateProfileScript") || data["updateProfileScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["updateProfileScript"]))
                 .WithFollowNotification(!data.Keys.Contains("followNotification") || data["followNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["followNotification"]))
                 .WithReceiveRequestNotification(!data.Keys.Contains("receiveRequestNotification") || data["receiveRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["receiveRequestNotification"]))
+                .WithCancelRequestNotification(!data.Keys.Contains("cancelRequestNotification") || data["cancelRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["cancelRequestNotification"]))
                 .WithAcceptRequestNotification(!data.Keys.Contains("acceptRequestNotification") || data["acceptRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["acceptRequestNotification"]))
+                .WithRejectRequestNotification(!data.Keys.Contains("rejectRequestNotification") || data["rejectRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["rejectRequestNotification"]))
+                .WithDeleteFriendNotification(!data.Keys.Contains("deleteFriendNotification") || data["deleteFriendNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["deleteFriendNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Friend.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -218,7 +236,10 @@ namespace Gs2.Gs2Friend.Model
                 ["updateProfileScript"] = UpdateProfileScript?.ToJson(),
                 ["followNotification"] = FollowNotification?.ToJson(),
                 ["receiveRequestNotification"] = ReceiveRequestNotification?.ToJson(),
+                ["cancelRequestNotification"] = CancelRequestNotification?.ToJson(),
                 ["acceptRequestNotification"] = AcceptRequestNotification?.ToJson(),
+                ["rejectRequestNotification"] = RejectRequestNotification?.ToJson(),
+                ["deleteFriendNotification"] = DeleteFriendNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -281,9 +302,21 @@ namespace Gs2.Gs2Friend.Model
                 writer.WritePropertyName("receiveRequestNotification");
                 ReceiveRequestNotification.WriteJson(writer);
             }
+            if (CancelRequestNotification != null) {
+                writer.WritePropertyName("cancelRequestNotification");
+                CancelRequestNotification.WriteJson(writer);
+            }
             if (AcceptRequestNotification != null) {
                 writer.WritePropertyName("acceptRequestNotification");
                 AcceptRequestNotification.WriteJson(writer);
+            }
+            if (RejectRequestNotification != null) {
+                writer.WritePropertyName("rejectRequestNotification");
+                RejectRequestNotification.WriteJson(writer);
+            }
+            if (DeleteFriendNotification != null) {
+                writer.WritePropertyName("deleteFriendNotification");
+                DeleteFriendNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -412,6 +445,14 @@ namespace Gs2.Gs2Friend.Model
             {
                 diff += ReceiveRequestNotification.CompareTo(other.ReceiveRequestNotification);
             }
+            if (CancelRequestNotification == null && CancelRequestNotification == other.CancelRequestNotification)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += CancelRequestNotification.CompareTo(other.CancelRequestNotification);
+            }
             if (AcceptRequestNotification == null && AcceptRequestNotification == other.AcceptRequestNotification)
             {
                 // null and null
@@ -419,6 +460,22 @@ namespace Gs2.Gs2Friend.Model
             else
             {
                 diff += AcceptRequestNotification.CompareTo(other.AcceptRequestNotification);
+            }
+            if (RejectRequestNotification == null && RejectRequestNotification == other.RejectRequestNotification)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RejectRequestNotification.CompareTo(other.RejectRequestNotification);
+            }
+            if (DeleteFriendNotification == null && DeleteFriendNotification == other.DeleteFriendNotification)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += DeleteFriendNotification.CompareTo(other.DeleteFriendNotification);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
@@ -502,6 +559,12 @@ namespace Gs2.Gs2Friend.Model
             {
             }
             {
+            }
+            {
+            }
+            {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "friend.namespace.createdAt.error.invalid"),
@@ -554,7 +617,10 @@ namespace Gs2.Gs2Friend.Model
                 UpdateProfileScript = UpdateProfileScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
                 FollowNotification = FollowNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
                 ReceiveRequestNotification = ReceiveRequestNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
+                CancelRequestNotification = CancelRequestNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
                 AcceptRequestNotification = AcceptRequestNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
+                RejectRequestNotification = RejectRequestNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
+                DeleteFriendNotification = DeleteFriendNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Friend.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

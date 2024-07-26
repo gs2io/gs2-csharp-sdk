@@ -39,6 +39,7 @@ namespace Gs2.Gs2Quest.Model
         public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; } = null!;
         public string ChallengePeriodEventId { set; get; } = null!;
         public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; } = null!;
+        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
         public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; } = null!;
         public string[] PremiseQuestNames { set; get; } = null!;
@@ -75,6 +76,10 @@ namespace Gs2.Gs2Quest.Model
         }
         public QuestModelMaster WithFirstCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] firstCompleteAcquireActions) {
             this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
+            return this;
+        }
+        public QuestModelMaster WithVerifyActions(Gs2.Core.Model.VerifyAction[] verifyActions) {
+            this.VerifyActions = verifyActions;
             return this;
         }
         public QuestModelMaster WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
@@ -208,6 +213,9 @@ namespace Gs2.Gs2Quest.Model
                 .WithFirstCompleteAcquireActions(!data.Keys.Contains("firstCompleteAcquireActions") || data["firstCompleteAcquireActions"] == null || !data["firstCompleteAcquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["firstCompleteAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
+                .WithVerifyActions(!data.Keys.Contains("verifyActions") || data["verifyActions"] == null || !data["verifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null || !data["consumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -240,6 +248,15 @@ namespace Gs2.Gs2Quest.Model
                 foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
                 {
                     firstCompleteAcquireActionsJsonData.Add(firstCompleteAcquireAction.ToJson());
+                }
+            }
+            JsonData verifyActionsJsonData = null;
+            if (VerifyActions != null && VerifyActions.Length > 0)
+            {
+                verifyActionsJsonData = new JsonData();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    verifyActionsJsonData.Add(verifyAction.ToJson());
                 }
             }
             JsonData consumeActionsJsonData = null;
@@ -278,6 +295,7 @@ namespace Gs2.Gs2Quest.Model
                 ["contents"] = contentsJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
                 ["firstCompleteAcquireActions"] = firstCompleteAcquireActionsJsonData,
+                ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["failedAcquireActions"] = failedAcquireActionsJsonData,
                 ["premiseQuestNames"] = premiseQuestNamesJsonData,
@@ -332,6 +350,17 @@ namespace Gs2.Gs2Quest.Model
                 {
                     if (firstCompleteAcquireAction != null) {
                         firstCompleteAcquireAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            if (VerifyActions != null) {
+                writer.WritePropertyName("verifyActions");
+                writer.WriteArrayStart();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    if (verifyAction != null) {
+                        verifyAction.WriteJson(writer);
                     }
                 }
                 writer.WriteArrayEnd();
@@ -460,6 +489,18 @@ namespace Gs2.Gs2Quest.Model
                     diff += FirstCompleteAcquireActions[i].CompareTo(other.FirstCompleteAcquireActions[i]);
                 }
             }
+            if (VerifyActions == null && VerifyActions == other.VerifyActions)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += VerifyActions.Length - other.VerifyActions.Length;
+                for (var i = 0; i < VerifyActions.Length; i++)
+                {
+                    diff += VerifyActions[i].CompareTo(other.VerifyActions[i]);
+                }
+            }
             if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
             {
                 // null and null
@@ -586,6 +627,13 @@ namespace Gs2.Gs2Quest.Model
                 }
             }
             {
+                if (VerifyActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.verifyActions.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (ConsumeActions.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("questModelMaster", "quest.questModelMaster.consumeActions.error.tooMany"),
@@ -654,6 +702,7 @@ namespace Gs2.Gs2Quest.Model
                 Contents = Contents.Clone() as Gs2.Gs2Quest.Model.Contents[],
                 ChallengePeriodEventId = ChallengePeriodEventId,
                 FirstCompleteAcquireActions = FirstCompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                VerifyActions = VerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
                 ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
                 FailedAcquireActions = FailedAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 PremiseQuestNames = PremiseQuestNames.Clone() as string[],

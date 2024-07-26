@@ -45,7 +45,10 @@ namespace Gs2.Gs2Friend.Request
          public Gs2.Gs2Friend.Model.ScriptSetting UpdateProfileScript { set; get; } = null!;
          public Gs2.Gs2Friend.Model.NotificationSetting FollowNotification { set; get; } = null!;
          public Gs2.Gs2Friend.Model.NotificationSetting ReceiveRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.NotificationSetting CancelRequestNotification { set; get; } = null!;
          public Gs2.Gs2Friend.Model.NotificationSetting AcceptRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.NotificationSetting RejectRequestNotification { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.NotificationSetting DeleteFriendNotification { set; get; } = null!;
          public Gs2.Gs2Friend.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -95,8 +98,20 @@ namespace Gs2.Gs2Friend.Request
             this.ReceiveRequestNotification = receiveRequestNotification;
             return this;
         }
+        public UpdateNamespaceRequest WithCancelRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting cancelRequestNotification) {
+            this.CancelRequestNotification = cancelRequestNotification;
+            return this;
+        }
         public UpdateNamespaceRequest WithAcceptRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting acceptRequestNotification) {
             this.AcceptRequestNotification = acceptRequestNotification;
+            return this;
+        }
+        public UpdateNamespaceRequest WithRejectRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting rejectRequestNotification) {
+            this.RejectRequestNotification = rejectRequestNotification;
+            return this;
+        }
+        public UpdateNamespaceRequest WithDeleteFriendNotification(Gs2.Gs2Friend.Model.NotificationSetting deleteFriendNotification) {
+            this.DeleteFriendNotification = deleteFriendNotification;
             return this;
         }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Friend.Model.LogSetting logSetting) {
@@ -125,7 +140,10 @@ namespace Gs2.Gs2Friend.Request
                 .WithUpdateProfileScript(!data.Keys.Contains("updateProfileScript") || data["updateProfileScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["updateProfileScript"]))
                 .WithFollowNotification(!data.Keys.Contains("followNotification") || data["followNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["followNotification"]))
                 .WithReceiveRequestNotification(!data.Keys.Contains("receiveRequestNotification") || data["receiveRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["receiveRequestNotification"]))
+                .WithCancelRequestNotification(!data.Keys.Contains("cancelRequestNotification") || data["cancelRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["cancelRequestNotification"]))
                 .WithAcceptRequestNotification(!data.Keys.Contains("acceptRequestNotification") || data["acceptRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["acceptRequestNotification"]))
+                .WithRejectRequestNotification(!data.Keys.Contains("rejectRequestNotification") || data["rejectRequestNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["rejectRequestNotification"]))
+                .WithDeleteFriendNotification(!data.Keys.Contains("deleteFriendNotification") || data["deleteFriendNotification"] == null ? null : Gs2.Gs2Friend.Model.NotificationSetting.FromJson(data["deleteFriendNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Friend.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -144,7 +162,10 @@ namespace Gs2.Gs2Friend.Request
                 ["updateProfileScript"] = UpdateProfileScript?.ToJson(),
                 ["followNotification"] = FollowNotification?.ToJson(),
                 ["receiveRequestNotification"] = ReceiveRequestNotification?.ToJson(),
+                ["cancelRequestNotification"] = CancelRequestNotification?.ToJson(),
                 ["acceptRequestNotification"] = AcceptRequestNotification?.ToJson(),
+                ["rejectRequestNotification"] = RejectRequestNotification?.ToJson(),
+                ["deleteFriendNotification"] = DeleteFriendNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -190,8 +211,17 @@ namespace Gs2.Gs2Friend.Request
             if (ReceiveRequestNotification != null) {
                 ReceiveRequestNotification.WriteJson(writer);
             }
+            if (CancelRequestNotification != null) {
+                CancelRequestNotification.WriteJson(writer);
+            }
             if (AcceptRequestNotification != null) {
                 AcceptRequestNotification.WriteJson(writer);
+            }
+            if (RejectRequestNotification != null) {
+                RejectRequestNotification.WriteJson(writer);
+            }
+            if (DeleteFriendNotification != null) {
+                DeleteFriendNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
@@ -213,7 +243,10 @@ namespace Gs2.Gs2Friend.Request
             key += UpdateProfileScript + ":";
             key += FollowNotification + ":";
             key += ReceiveRequestNotification + ":";
+            key += CancelRequestNotification + ":";
             key += AcceptRequestNotification + ":";
+            key += RejectRequestNotification + ":";
+            key += DeleteFriendNotification + ":";
             key += LogSetting + ":";
             return key;
         }

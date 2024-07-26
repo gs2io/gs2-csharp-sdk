@@ -21,9 +21,14 @@ namespace Gs2.Gs2Friend.Model
 	public class FollowNotification
 	{
         public string NamespaceName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
         public string FromUserId { set; get; } = null!;
         public FollowNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public FollowNotification WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
         public FollowNotification WithFromUserId(string fromUserId) {
@@ -41,6 +46,7 @@ namespace Gs2.Gs2Friend.Model
             }
             return new FollowNotification()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString());
         }
     }

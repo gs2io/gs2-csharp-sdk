@@ -21,9 +21,14 @@ namespace Gs2.Gs2Friend.Model
 	public class AcceptRequestNotification
 	{
         public string NamespaceName { set; get; } = null!;
+        public string UserId { set; get; } = null!;
         public string TargetUserId { set; get; } = null!;
         public AcceptRequestNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public AcceptRequestNotification WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
         public AcceptRequestNotification WithTargetUserId(string targetUserId) {
@@ -41,6 +46,7 @@ namespace Gs2.Gs2Friend.Model
             }
             return new AcceptRequestNotification()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
         }
     }

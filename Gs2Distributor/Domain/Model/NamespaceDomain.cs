@@ -70,6 +70,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public string Result { get; set; } = null!;
         public string ContextStack { get; set; } = null!;
         public int? StatusCode { get; set; } = null!;
+        public int[] VerifyTaskResultCodes { get; set; } = null!;
+        public string[] VerifyTaskResults { get; set; } = null!;
         public int[] TaskResultCodes { get; set; } = null!;
         public string[] TaskResults { get; set; } = null!;
         public int? SheetResultCode { get; set; } = null!;

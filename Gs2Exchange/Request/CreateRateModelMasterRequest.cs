@@ -40,6 +40,7 @@ namespace Gs2.Gs2Exchange.Request
          public string TimingType { set; get; } = null!;
          public int? LockTime { set; get; } = null!;
          public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+         public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
          public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
         public CreateRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Exchange.Request
             this.AcquireActions = acquireActions;
             return this;
         }
+        public CreateRateModelMasterRequest WithVerifyActions(Gs2.Core.Model.VerifyAction[] verifyActions) {
+            this.VerifyActions = verifyActions;
+            return this;
+        }
         public CreateRateModelMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
@@ -92,6 +97,9 @@ namespace Gs2.Gs2Exchange.Request
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
+                .WithVerifyActions(!data.Keys.Contains("verifyActions") || data["verifyActions"] == null || !data["verifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray())
                 .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null || !data["consumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray());
@@ -106,6 +114,15 @@ namespace Gs2.Gs2Exchange.Request
                 foreach (var acquireAction in AcquireActions)
                 {
                     acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
+            JsonData verifyActionsJsonData = null;
+            if (VerifyActions != null && VerifyActions.Length > 0)
+            {
+                verifyActionsJsonData = new JsonData();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    verifyActionsJsonData.Add(verifyAction.ToJson());
                 }
             }
             JsonData consumeActionsJsonData = null;
@@ -125,6 +142,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["timingType"] = TimingType,
                 ["lockTime"] = LockTime,
                 ["acquireActions"] = acquireActionsJsonData,
+                ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
             };
         }
@@ -167,6 +185,17 @@ namespace Gs2.Gs2Exchange.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (VerifyActions != null) {
+                writer.WritePropertyName("verifyActions");
+                writer.WriteArrayStart();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    if (verifyAction != null) {
+                        verifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
                 writer.WriteArrayStart();
@@ -190,6 +219,7 @@ namespace Gs2.Gs2Exchange.Request
             key += TimingType + ":";
             key += LockTime + ":";
             key += AcquireActions + ":";
+            key += VerifyActions + ":";
             key += ConsumeActions + ":";
             return key;
         }
