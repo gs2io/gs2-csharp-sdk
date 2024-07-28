@@ -31,11 +31,11 @@ namespace Gs2.Gs2Distributor.Result
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class OrExpressionByUserByStampTaskResult : IResult
+	public class IfExpressionByStampTaskResult : IResult
 	{
         public string NewContextStack { set; get; } = null!;
 
-        public OrExpressionByUserByStampTaskResult WithNewContextStack(string newContextStack) {
+        public IfExpressionByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
             return this;
         }
@@ -43,12 +43,12 @@ namespace Gs2.Gs2Distributor.Result
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static OrExpressionByUserByStampTaskResult FromJson(JsonData data)
+        public static IfExpressionByStampTaskResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new OrExpressionByUserByStampTaskResult()
+            return new IfExpressionByStampTaskResult()
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
         }
 

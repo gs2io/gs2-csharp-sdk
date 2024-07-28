@@ -4015,13 +4015,13 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
-        public class IfExpressionByUserByStampTaskTask : Gs2RestSessionTask<IfExpressionByUserByStampTaskRequest, IfExpressionByUserByStampTaskResult>
+        public class IfExpressionByStampTaskTask : Gs2RestSessionTask<IfExpressionByStampTaskRequest, IfExpressionByStampTaskResult>
         {
-            public IfExpressionByUserByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, IfExpressionByUserByStampTaskRequest request) : base(session, factory, request)
+            public IfExpressionByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, IfExpressionByStampTaskRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(IfExpressionByUserByStampTaskRequest request)
+            protected override IGs2SessionRequest CreateRequest(IfExpressionByStampTaskRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
@@ -4072,25 +4072,25 @@ namespace Gs2.Gs2Distributor
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator IfExpressionByUserByStampTask(
-                Request.IfExpressionByUserByStampTaskRequest request,
-                UnityAction<AsyncResult<Result.IfExpressionByUserByStampTaskResult>> callback
+		public IEnumerator IfExpressionByStampTask(
+                Request.IfExpressionByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.IfExpressionByStampTaskResult>> callback
         )
 		{
-			var task = new IfExpressionByUserByStampTaskTask(
+			var task = new IfExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.IfExpressionByUserByStampTaskResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.IfExpressionByStampTaskResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.IfExpressionByUserByStampTaskResult> IfExpressionByUserByStampTaskFuture(
-                Request.IfExpressionByUserByStampTaskRequest request
+		public IFuture<Result.IfExpressionByStampTaskResult> IfExpressionByStampTaskFuture(
+                Request.IfExpressionByStampTaskRequest request
         )
 		{
-			return new IfExpressionByUserByStampTaskTask(
+			return new IfExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -4098,12 +4098,12 @@ namespace Gs2.Gs2Distributor
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.IfExpressionByUserByStampTaskResult> IfExpressionByUserByStampTaskAsync(
-                Request.IfExpressionByUserByStampTaskRequest request
+		public async UniTask<Result.IfExpressionByStampTaskResult> IfExpressionByStampTaskAsync(
+                Request.IfExpressionByStampTaskRequest request
         )
 		{
-            AsyncResult<Result.IfExpressionByUserByStampTaskResult> result = null;
-			await IfExpressionByUserByStampTask(
+            AsyncResult<Result.IfExpressionByStampTaskResult> result = null;
+			await IfExpressionByStampTask(
                 request,
                 r => result = r
             );
@@ -4114,11 +4114,11 @@ namespace Gs2.Gs2Distributor
             return result.Result;
         }
     #else
-		public IfExpressionByUserByStampTaskTask IfExpressionByUserByStampTaskAsync(
-                Request.IfExpressionByUserByStampTaskRequest request
+		public IfExpressionByStampTaskTask IfExpressionByStampTaskAsync(
+                Request.IfExpressionByStampTaskRequest request
         )
 		{
-			return new IfExpressionByUserByStampTaskTask(
+			return new IfExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -4126,11 +4126,11 @@ namespace Gs2.Gs2Distributor
         }
     #endif
 #else
-		public async Task<Result.IfExpressionByUserByStampTaskResult> IfExpressionByUserByStampTaskAsync(
-                Request.IfExpressionByUserByStampTaskRequest request
+		public async Task<Result.IfExpressionByStampTaskResult> IfExpressionByStampTaskAsync(
+                Request.IfExpressionByStampTaskRequest request
         )
 		{
-			var task = new IfExpressionByUserByStampTaskTask(
+			var task = new IfExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -4140,13 +4140,13 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
-        public class AndExpressionByUserByStampTaskTask : Gs2RestSessionTask<AndExpressionByUserByStampTaskRequest, AndExpressionByUserByStampTaskResult>
+        public class AndExpressionByStampTaskTask : Gs2RestSessionTask<AndExpressionByStampTaskRequest, AndExpressionByStampTaskResult>
         {
-            public AndExpressionByUserByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, AndExpressionByUserByStampTaskRequest request) : base(session, factory, request)
+            public AndExpressionByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, AndExpressionByStampTaskRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(AndExpressionByUserByStampTaskRequest request)
+            protected override IGs2SessionRequest CreateRequest(AndExpressionByStampTaskRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
@@ -4197,25 +4197,25 @@ namespace Gs2.Gs2Distributor
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator AndExpressionByUserByStampTask(
-                Request.AndExpressionByUserByStampTaskRequest request,
-                UnityAction<AsyncResult<Result.AndExpressionByUserByStampTaskResult>> callback
+		public IEnumerator AndExpressionByStampTask(
+                Request.AndExpressionByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.AndExpressionByStampTaskResult>> callback
         )
 		{
-			var task = new AndExpressionByUserByStampTaskTask(
+			var task = new AndExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.AndExpressionByUserByStampTaskResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.AndExpressionByStampTaskResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.AndExpressionByUserByStampTaskResult> AndExpressionByUserByStampTaskFuture(
-                Request.AndExpressionByUserByStampTaskRequest request
+		public IFuture<Result.AndExpressionByStampTaskResult> AndExpressionByStampTaskFuture(
+                Request.AndExpressionByStampTaskRequest request
         )
 		{
-			return new AndExpressionByUserByStampTaskTask(
+			return new AndExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -4223,12 +4223,12 @@ namespace Gs2.Gs2Distributor
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AndExpressionByUserByStampTaskResult> AndExpressionByUserByStampTaskAsync(
-                Request.AndExpressionByUserByStampTaskRequest request
+		public async UniTask<Result.AndExpressionByStampTaskResult> AndExpressionByStampTaskAsync(
+                Request.AndExpressionByStampTaskRequest request
         )
 		{
-            AsyncResult<Result.AndExpressionByUserByStampTaskResult> result = null;
-			await AndExpressionByUserByStampTask(
+            AsyncResult<Result.AndExpressionByStampTaskResult> result = null;
+			await AndExpressionByStampTask(
                 request,
                 r => result = r
             );
@@ -4239,11 +4239,11 @@ namespace Gs2.Gs2Distributor
             return result.Result;
         }
     #else
-		public AndExpressionByUserByStampTaskTask AndExpressionByUserByStampTaskAsync(
-                Request.AndExpressionByUserByStampTaskRequest request
+		public AndExpressionByStampTaskTask AndExpressionByStampTaskAsync(
+                Request.AndExpressionByStampTaskRequest request
         )
 		{
-			return new AndExpressionByUserByStampTaskTask(
+			return new AndExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -4251,11 +4251,11 @@ namespace Gs2.Gs2Distributor
         }
     #endif
 #else
-		public async Task<Result.AndExpressionByUserByStampTaskResult> AndExpressionByUserByStampTaskAsync(
-                Request.AndExpressionByUserByStampTaskRequest request
+		public async Task<Result.AndExpressionByStampTaskResult> AndExpressionByStampTaskAsync(
+                Request.AndExpressionByStampTaskRequest request
         )
 		{
-			var task = new AndExpressionByUserByStampTaskTask(
+			var task = new AndExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -4265,13 +4265,13 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
-        public class OrExpressionByUserByStampTaskTask : Gs2RestSessionTask<OrExpressionByUserByStampTaskRequest, OrExpressionByUserByStampTaskResult>
+        public class OrExpressionByStampTaskTask : Gs2RestSessionTask<OrExpressionByStampTaskRequest, OrExpressionByStampTaskResult>
         {
-            public OrExpressionByUserByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, OrExpressionByUserByStampTaskRequest request) : base(session, factory, request)
+            public OrExpressionByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, OrExpressionByStampTaskRequest request) : base(session, factory, request)
             {
             }
 
-            protected override IGs2SessionRequest CreateRequest(OrExpressionByUserByStampTaskRequest request)
+            protected override IGs2SessionRequest CreateRequest(OrExpressionByStampTaskRequest request)
             {
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "distributor")
@@ -4322,25 +4322,25 @@ namespace Gs2.Gs2Distributor
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator OrExpressionByUserByStampTask(
-                Request.OrExpressionByUserByStampTaskRequest request,
-                UnityAction<AsyncResult<Result.OrExpressionByUserByStampTaskResult>> callback
+		public IEnumerator OrExpressionByStampTask(
+                Request.OrExpressionByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.OrExpressionByStampTaskResult>> callback
         )
 		{
-			var task = new OrExpressionByUserByStampTaskTask(
+			var task = new OrExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
 			);
             yield return task;
-            callback.Invoke(new AsyncResult<Result.OrExpressionByUserByStampTaskResult>(task.Result, task.Error));
+            callback.Invoke(new AsyncResult<Result.OrExpressionByStampTaskResult>(task.Result, task.Error));
         }
 
-		public IFuture<Result.OrExpressionByUserByStampTaskResult> OrExpressionByUserByStampTaskFuture(
-                Request.OrExpressionByUserByStampTaskRequest request
+		public IFuture<Result.OrExpressionByStampTaskResult> OrExpressionByStampTaskFuture(
+                Request.OrExpressionByStampTaskRequest request
         )
 		{
-			return new OrExpressionByUserByStampTaskTask(
+			return new OrExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
@@ -4348,12 +4348,12 @@ namespace Gs2.Gs2Distributor
         }
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.OrExpressionByUserByStampTaskResult> OrExpressionByUserByStampTaskAsync(
-                Request.OrExpressionByUserByStampTaskRequest request
+		public async UniTask<Result.OrExpressionByStampTaskResult> OrExpressionByStampTaskAsync(
+                Request.OrExpressionByStampTaskRequest request
         )
 		{
-            AsyncResult<Result.OrExpressionByUserByStampTaskResult> result = null;
-			await OrExpressionByUserByStampTask(
+            AsyncResult<Result.OrExpressionByStampTaskResult> result = null;
+			await OrExpressionByStampTask(
                 request,
                 r => result = r
             );
@@ -4364,11 +4364,11 @@ namespace Gs2.Gs2Distributor
             return result.Result;
         }
     #else
-		public OrExpressionByUserByStampTaskTask OrExpressionByUserByStampTaskAsync(
-                Request.OrExpressionByUserByStampTaskRequest request
+		public OrExpressionByStampTaskTask OrExpressionByStampTaskAsync(
+                Request.OrExpressionByStampTaskRequest request
         )
 		{
-			return new OrExpressionByUserByStampTaskTask(
+			return new OrExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
 			    request
@@ -4376,11 +4376,11 @@ namespace Gs2.Gs2Distributor
         }
     #endif
 #else
-		public async Task<Result.OrExpressionByUserByStampTaskResult> OrExpressionByUserByStampTaskAsync(
-                Request.OrExpressionByUserByStampTaskRequest request
+		public async Task<Result.OrExpressionByStampTaskResult> OrExpressionByStampTaskAsync(
+                Request.OrExpressionByStampTaskRequest request
         )
 		{
-			var task = new OrExpressionByUserByStampTaskTask(
+			var task = new OrExpressionByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

@@ -31,15 +31,15 @@ namespace Gs2.Gs2Distributor.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class AndExpressionByUserByStampTaskRequest : Gs2Request<AndExpressionByUserByStampTaskRequest>
+	public class IfExpressionByStampTaskRequest : Gs2Request<IfExpressionByStampTaskRequest>
 	{
          public string StampTask { set; get; } = null!;
          public string KeyId { set; get; } = null!;
-        public AndExpressionByUserByStampTaskRequest WithStampTask(string stampTask) {
+        public IfExpressionByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-        public AndExpressionByUserByStampTaskRequest WithKeyId(string keyId) {
+        public IfExpressionByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;
         }
@@ -47,12 +47,12 @@ namespace Gs2.Gs2Distributor.Request
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static AndExpressionByUserByStampTaskRequest FromJson(JsonData data)
+        public static IfExpressionByStampTaskRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new AndExpressionByUserByStampTaskRequest()
+            return new IfExpressionByStampTaskRequest()
                 .WithStampTask(!data.Keys.Contains("stampTask") || data["stampTask"] == null ? null : data["stampTask"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
