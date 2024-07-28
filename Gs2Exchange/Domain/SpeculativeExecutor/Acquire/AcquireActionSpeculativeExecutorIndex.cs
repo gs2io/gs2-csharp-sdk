@@ -94,24 +94,6 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
-                if (UnlockIncrementalExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
-                    var request = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = UnlockIncrementalExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
                 if (CreateAwaitByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                     if (rate != 1) {
@@ -187,17 +169,6 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await IncrementalExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
-                    domain,
-                    accessToken,
-                    request
-                );
-            }
-            if (UnlockIncrementalExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
-                var request = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                if (rate != 1) {
-                    request = request.Rate(rate);
-                }
-                return await UnlockIncrementalExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

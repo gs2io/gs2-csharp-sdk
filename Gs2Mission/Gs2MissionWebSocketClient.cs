@@ -49,6 +49,144 @@ namespace Gs2.Gs2Mission
 		}
 
 
+        public class VerifyCompleteTask : Gs2WebSocketSessionTask<Request.VerifyCompleteRequest, Result.VerifyCompleteResult>
+        {
+	        public VerifyCompleteTask(IGs2Session session, Request.VerifyCompleteRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCompleteRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.MissionGroupName != null)
+                {
+                    jsonWriter.WritePropertyName("missionGroupName");
+                    jsonWriter.Write(request.MissionGroupName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.MissionTaskName != null)
+                {
+                    jsonWriter.WritePropertyName("missionTaskName");
+                    jsonWriter.Write(request.MissionTaskName.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "mission",
+                    "complete",
+                    "verifyComplete",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyComplete(
+                Request.VerifyCompleteRequest request,
+                UnityAction<AsyncResult<Result.VerifyCompleteResult>> callback
+        )
+		{
+			var task = new VerifyCompleteTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCompleteResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCompleteResult> VerifyCompleteFuture(
+                Request.VerifyCompleteRequest request
+        )
+		{
+			return new VerifyCompleteTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCompleteResult> VerifyCompleteAsync(
+            Request.VerifyCompleteRequest request
+        )
+		{
+		    var task = new VerifyCompleteTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCompleteTask VerifyCompleteAsync(
+                Request.VerifyCompleteRequest request
+        )
+		{
+			return new VerifyCompleteTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCompleteResult> VerifyCompleteAsync(
+            Request.VerifyCompleteRequest request
+        )
+		{
+		    var task = new VerifyCompleteTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class VerifyCompleteByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyCompleteByUserIdRequest, Result.VerifyCompleteByUserIdResult>
         {
 	        public VerifyCompleteByUserIdTask(IGs2Session session, Request.VerifyCompleteByUserIdRequest request) : base(session, request)

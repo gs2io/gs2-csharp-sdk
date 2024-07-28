@@ -2079,6 +2079,10 @@ namespace Gs2.Gs2Distributor
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -2207,6 +2211,10 @@ namespace Gs2.Gs2Distributor
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -3349,6 +3357,10 @@ namespace Gs2.Gs2Distributor
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -3476,6 +3488,10 @@ namespace Gs2.Gs2Distributor
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -3550,6 +3566,821 @@ namespace Gs2.Gs2Distributor
         )
 		{
 			var task = new SetTransactionDefaultConfigByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class IfExpressionByUserIdTask : Gs2RestSessionTask<IfExpressionByUserIdRequest, IfExpressionByUserIdResult>
+        {
+            public IfExpressionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IfExpressionByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IfExpressionByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/expression/if";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId);
+                }
+                if (request.Condition != null)
+                {
+                    jsonWriter.WritePropertyName("condition");
+                    request.Condition.WriteJson(jsonWriter);
+                }
+                if (request.TrueActions != null)
+                {
+                    jsonWriter.WritePropertyName("trueActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.TrueActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.FalseActions != null)
+                {
+                    jsonWriter.WritePropertyName("falseActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.FalseActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IfExpressionByUserId(
+                Request.IfExpressionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.IfExpressionByUserIdResult>> callback
+        )
+		{
+			var task = new IfExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IfExpressionByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IfExpressionByUserIdResult> IfExpressionByUserIdFuture(
+                Request.IfExpressionByUserIdRequest request
+        )
+		{
+			return new IfExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IfExpressionByUserIdResult> IfExpressionByUserIdAsync(
+                Request.IfExpressionByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.IfExpressionByUserIdResult> result = null;
+			await IfExpressionByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IfExpressionByUserIdTask IfExpressionByUserIdAsync(
+                Request.IfExpressionByUserIdRequest request
+        )
+		{
+			return new IfExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IfExpressionByUserIdResult> IfExpressionByUserIdAsync(
+                Request.IfExpressionByUserIdRequest request
+        )
+		{
+			var task = new IfExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AndExpressionByUserIdTask : Gs2RestSessionTask<AndExpressionByUserIdRequest, AndExpressionByUserIdResult>
+        {
+            public AndExpressionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, AndExpressionByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AndExpressionByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/expression/and";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId);
+                }
+                if (request.Actions != null)
+                {
+                    jsonWriter.WritePropertyName("actions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Actions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AndExpressionByUserId(
+                Request.AndExpressionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AndExpressionByUserIdResult>> callback
+        )
+		{
+			var task = new AndExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AndExpressionByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AndExpressionByUserIdResult> AndExpressionByUserIdFuture(
+                Request.AndExpressionByUserIdRequest request
+        )
+		{
+			return new AndExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AndExpressionByUserIdResult> AndExpressionByUserIdAsync(
+                Request.AndExpressionByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.AndExpressionByUserIdResult> result = null;
+			await AndExpressionByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AndExpressionByUserIdTask AndExpressionByUserIdAsync(
+                Request.AndExpressionByUserIdRequest request
+        )
+		{
+			return new AndExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AndExpressionByUserIdResult> AndExpressionByUserIdAsync(
+                Request.AndExpressionByUserIdRequest request
+        )
+		{
+			var task = new AndExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class OrExpressionByUserIdTask : Gs2RestSessionTask<OrExpressionByUserIdRequest, OrExpressionByUserIdResult>
+        {
+            public OrExpressionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, OrExpressionByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(OrExpressionByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/expression/or";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId);
+                }
+                if (request.Actions != null)
+                {
+                    jsonWriter.WritePropertyName("actions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Actions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator OrExpressionByUserId(
+                Request.OrExpressionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.OrExpressionByUserIdResult>> callback
+        )
+		{
+			var task = new OrExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.OrExpressionByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.OrExpressionByUserIdResult> OrExpressionByUserIdFuture(
+                Request.OrExpressionByUserIdRequest request
+        )
+		{
+			return new OrExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.OrExpressionByUserIdResult> OrExpressionByUserIdAsync(
+                Request.OrExpressionByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.OrExpressionByUserIdResult> result = null;
+			await OrExpressionByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public OrExpressionByUserIdTask OrExpressionByUserIdAsync(
+                Request.OrExpressionByUserIdRequest request
+        )
+		{
+			return new OrExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.OrExpressionByUserIdResult> OrExpressionByUserIdAsync(
+                Request.OrExpressionByUserIdRequest request
+        )
+		{
+			var task = new OrExpressionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class IfExpressionByUserByStampTaskTask : Gs2RestSessionTask<IfExpressionByUserByStampTaskRequest, IfExpressionByUserByStampTaskResult>
+        {
+            public IfExpressionByUserByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, IfExpressionByUserByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IfExpressionByUserByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/expression/if";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IfExpressionByUserByStampTask(
+                Request.IfExpressionByUserByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.IfExpressionByUserByStampTaskResult>> callback
+        )
+		{
+			var task = new IfExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IfExpressionByUserByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IfExpressionByUserByStampTaskResult> IfExpressionByUserByStampTaskFuture(
+                Request.IfExpressionByUserByStampTaskRequest request
+        )
+		{
+			return new IfExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IfExpressionByUserByStampTaskResult> IfExpressionByUserByStampTaskAsync(
+                Request.IfExpressionByUserByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.IfExpressionByUserByStampTaskResult> result = null;
+			await IfExpressionByUserByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IfExpressionByUserByStampTaskTask IfExpressionByUserByStampTaskAsync(
+                Request.IfExpressionByUserByStampTaskRequest request
+        )
+		{
+			return new IfExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IfExpressionByUserByStampTaskResult> IfExpressionByUserByStampTaskAsync(
+                Request.IfExpressionByUserByStampTaskRequest request
+        )
+		{
+			var task = new IfExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AndExpressionByUserByStampTaskTask : Gs2RestSessionTask<AndExpressionByUserByStampTaskRequest, AndExpressionByUserByStampTaskResult>
+        {
+            public AndExpressionByUserByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, AndExpressionByUserByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AndExpressionByUserByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/expression/and";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AndExpressionByUserByStampTask(
+                Request.AndExpressionByUserByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.AndExpressionByUserByStampTaskResult>> callback
+        )
+		{
+			var task = new AndExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AndExpressionByUserByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AndExpressionByUserByStampTaskResult> AndExpressionByUserByStampTaskFuture(
+                Request.AndExpressionByUserByStampTaskRequest request
+        )
+		{
+			return new AndExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AndExpressionByUserByStampTaskResult> AndExpressionByUserByStampTaskAsync(
+                Request.AndExpressionByUserByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.AndExpressionByUserByStampTaskResult> result = null;
+			await AndExpressionByUserByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AndExpressionByUserByStampTaskTask AndExpressionByUserByStampTaskAsync(
+                Request.AndExpressionByUserByStampTaskRequest request
+        )
+		{
+			return new AndExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AndExpressionByUserByStampTaskResult> AndExpressionByUserByStampTaskAsync(
+                Request.AndExpressionByUserByStampTaskRequest request
+        )
+		{
+			var task = new AndExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class OrExpressionByUserByStampTaskTask : Gs2RestSessionTask<OrExpressionByUserByStampTaskRequest, OrExpressionByUserByStampTaskResult>
+        {
+            public OrExpressionByUserByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, OrExpressionByUserByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(OrExpressionByUserByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/expression/or";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator OrExpressionByUserByStampTask(
+                Request.OrExpressionByUserByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.OrExpressionByUserByStampTaskResult>> callback
+        )
+		{
+			var task = new OrExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.OrExpressionByUserByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.OrExpressionByUserByStampTaskResult> OrExpressionByUserByStampTaskFuture(
+                Request.OrExpressionByUserByStampTaskRequest request
+        )
+		{
+			return new OrExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.OrExpressionByUserByStampTaskResult> OrExpressionByUserByStampTaskAsync(
+                Request.OrExpressionByUserByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.OrExpressionByUserByStampTaskResult> result = null;
+			await OrExpressionByUserByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public OrExpressionByUserByStampTaskTask OrExpressionByUserByStampTaskAsync(
+                Request.OrExpressionByUserByStampTaskRequest request
+        )
+		{
+			return new OrExpressionByUserByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.OrExpressionByUserByStampTaskResult> OrExpressionByUserByStampTaskAsync(
+                Request.OrExpressionByUserByStampTaskRequest request
+        )
+		{
+			var task = new OrExpressionByUserByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

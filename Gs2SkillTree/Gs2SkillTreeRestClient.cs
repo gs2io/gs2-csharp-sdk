@@ -2872,6 +2872,142 @@ namespace Gs2.Gs2SkillTree
 #endif
 
 
+        public class MarkRestrainTask : Gs2RestSessionTask<MarkRestrainRequest, MarkRestrainResult>
+        {
+            public MarkRestrainTask(IGs2Session session, RestSessionRequestFactory factory, MarkRestrainRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(MarkRestrainRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "skill-tree")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/{propertyId}/node/restrain/mark";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.NodeModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("nodeModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.NodeModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator MarkRestrain(
+                Request.MarkRestrainRequest request,
+                UnityAction<AsyncResult<Result.MarkRestrainResult>> callback
+        )
+		{
+			var task = new MarkRestrainTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.MarkRestrainResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.MarkRestrainResult> MarkRestrainFuture(
+                Request.MarkRestrainRequest request
+        )
+		{
+			return new MarkRestrainTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.MarkRestrainResult> MarkRestrainAsync(
+                Request.MarkRestrainRequest request
+        )
+		{
+            AsyncResult<Result.MarkRestrainResult> result = null;
+			await MarkRestrain(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public MarkRestrainTask MarkRestrainAsync(
+                Request.MarkRestrainRequest request
+        )
+		{
+			return new MarkRestrainTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.MarkRestrainResult> MarkRestrainAsync(
+                Request.MarkRestrainRequest request
+        )
+		{
+			var task = new MarkRestrainTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class MarkRestrainByUserIdTask : Gs2RestSessionTask<MarkRestrainByUserIdRequest, MarkRestrainByUserIdResult>
         {
             public MarkRestrainByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, MarkRestrainByUserIdRequest request) : base(session, factory, request)

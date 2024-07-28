@@ -83,5 +83,71 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this.ShowcaseName = showcaseName;
         }
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain> IncrementPurchaseCountFuture(
+            IncrementPurchaseCountRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithShowcaseName(this.ShowcaseName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.IncrementPurchaseCountFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.AccessToken,
+                    result?.Item?.ShowcaseName,
+                    request.DisplayItemName
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain> IncrementPurchaseCountAsync(
+            #else
+        public async Task<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain> IncrementPurchaseCountAsync(
+            #endif
+            IncrementPurchaseCountRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithShowcaseName(this.ShowcaseName)
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.IncrementPurchaseCountAsync(request)
+            );
+            var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                result?.Item?.ShowcaseName,
+                request.DisplayItemName
+            );
+
+            return domain;
+        }
+        #endif
+
     }
 }

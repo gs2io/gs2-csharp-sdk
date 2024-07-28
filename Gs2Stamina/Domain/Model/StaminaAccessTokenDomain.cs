@@ -189,6 +189,60 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> DecreaseMaxValueFuture(
+            DecreaseMaxValueRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithStaminaName(this.StaminaName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DecreaseMaxValueFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> DecreaseMaxValueAsync(
+            #else
+        public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> DecreaseMaxValueAsync(
+            #endif
+            DecreaseMaxValueRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithStaminaName(this.StaminaName)
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.DecreaseMaxValueAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetMaxValueByStatusFuture(
             SetMaxValueByStatusRequest request
         ) {

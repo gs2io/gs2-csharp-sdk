@@ -981,5 +981,409 @@ namespace Gs2.Gs2Distributor
 			return await task.Invoke();
         }
 #endif
+
+
+        public class IfExpressionByUserIdTask : Gs2WebSocketSessionTask<Request.IfExpressionByUserIdRequest, Result.IfExpressionByUserIdResult>
+        {
+	        public IfExpressionByUserIdTask(IGs2Session session, Request.IfExpressionByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.IfExpressionByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Condition != null)
+                {
+                    jsonWriter.WritePropertyName("condition");
+                    request.Condition.WriteJson(jsonWriter);
+                }
+                if (request.TrueActions != null)
+                {
+                    jsonWriter.WritePropertyName("trueActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.TrueActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.FalseActions != null)
+                {
+                    jsonWriter.WritePropertyName("falseActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.FalseActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "distributor",
+                    "distribute",
+                    "ifExpressionByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IfExpressionByUserId(
+                Request.IfExpressionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.IfExpressionByUserIdResult>> callback
+        )
+		{
+			var task = new IfExpressionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IfExpressionByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IfExpressionByUserIdResult> IfExpressionByUserIdFuture(
+                Request.IfExpressionByUserIdRequest request
+        )
+		{
+			return new IfExpressionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IfExpressionByUserIdResult> IfExpressionByUserIdAsync(
+            Request.IfExpressionByUserIdRequest request
+        )
+		{
+		    var task = new IfExpressionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public IfExpressionByUserIdTask IfExpressionByUserIdAsync(
+                Request.IfExpressionByUserIdRequest request
+        )
+		{
+			return new IfExpressionByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IfExpressionByUserIdResult> IfExpressionByUserIdAsync(
+            Request.IfExpressionByUserIdRequest request
+        )
+		{
+		    var task = new IfExpressionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AndExpressionByUserIdTask : Gs2WebSocketSessionTask<Request.AndExpressionByUserIdRequest, Result.AndExpressionByUserIdResult>
+        {
+	        public AndExpressionByUserIdTask(IGs2Session session, Request.AndExpressionByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AndExpressionByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Actions != null)
+                {
+                    jsonWriter.WritePropertyName("actions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Actions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "distributor",
+                    "distribute",
+                    "andExpressionByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AndExpressionByUserId(
+                Request.AndExpressionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AndExpressionByUserIdResult>> callback
+        )
+		{
+			var task = new AndExpressionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AndExpressionByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AndExpressionByUserIdResult> AndExpressionByUserIdFuture(
+                Request.AndExpressionByUserIdRequest request
+        )
+		{
+			return new AndExpressionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AndExpressionByUserIdResult> AndExpressionByUserIdAsync(
+            Request.AndExpressionByUserIdRequest request
+        )
+		{
+		    var task = new AndExpressionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AndExpressionByUserIdTask AndExpressionByUserIdAsync(
+                Request.AndExpressionByUserIdRequest request
+        )
+		{
+			return new AndExpressionByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AndExpressionByUserIdResult> AndExpressionByUserIdAsync(
+            Request.AndExpressionByUserIdRequest request
+        )
+		{
+		    var task = new AndExpressionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class OrExpressionByUserIdTask : Gs2WebSocketSessionTask<Request.OrExpressionByUserIdRequest, Result.OrExpressionByUserIdResult>
+        {
+	        public OrExpressionByUserIdTask(IGs2Session session, Request.OrExpressionByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.OrExpressionByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Actions != null)
+                {
+                    jsonWriter.WritePropertyName("actions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Actions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "distributor",
+                    "distribute",
+                    "orExpressionByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator OrExpressionByUserId(
+                Request.OrExpressionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.OrExpressionByUserIdResult>> callback
+        )
+		{
+			var task = new OrExpressionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.OrExpressionByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.OrExpressionByUserIdResult> OrExpressionByUserIdFuture(
+                Request.OrExpressionByUserIdRequest request
+        )
+		{
+			return new OrExpressionByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.OrExpressionByUserIdResult> OrExpressionByUserIdAsync(
+            Request.OrExpressionByUserIdRequest request
+        )
+		{
+		    var task = new OrExpressionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public OrExpressionByUserIdTask OrExpressionByUserIdAsync(
+                Request.OrExpressionByUserIdRequest request
+        )
+		{
+			return new OrExpressionByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.OrExpressionByUserIdResult> OrExpressionByUserIdAsync(
+            Request.OrExpressionByUserIdRequest request
+        )
+		{
+		    var task = new OrExpressionByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

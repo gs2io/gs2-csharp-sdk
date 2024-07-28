@@ -2215,6 +2215,119 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
+        public class DeleteJobTask : Gs2RestSessionTask<DeleteJobRequest, DeleteJobResult>
+        {
+            public DeleteJobTask(IGs2Session session, RestSessionRequestFactory factory, DeleteJobRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteJobRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "job-queue")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/job/{jobName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{jobName}", !string.IsNullOrEmpty(request.JobName) ? request.JobName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteJob(
+                Request.DeleteJobRequest request,
+                UnityAction<AsyncResult<Result.DeleteJobResult>> callback
+        )
+		{
+			var task = new DeleteJobTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteJobResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteJobResult> DeleteJobFuture(
+                Request.DeleteJobRequest request
+        )
+		{
+			return new DeleteJobTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteJobResult> DeleteJobAsync(
+                Request.DeleteJobRequest request
+        )
+		{
+            AsyncResult<Result.DeleteJobResult> result = null;
+			await DeleteJob(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteJobTask DeleteJobAsync(
+                Request.DeleteJobRequest request
+        )
+		{
+			return new DeleteJobTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteJobResult> DeleteJobAsync(
+                Request.DeleteJobRequest request
+        )
+		{
+			var task = new DeleteJobTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteJobByUserIdTask : Gs2RestSessionTask<DeleteJobByUserIdRequest, DeleteJobByUserIdResult>
         {
             public DeleteJobByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteJobByUserIdRequest request) : base(session, factory, request)

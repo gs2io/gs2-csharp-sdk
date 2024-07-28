@@ -1163,6 +1163,135 @@ namespace Gs2.Gs2Mission
 #endif
 
 
+        public class VerifyCompleteTask : Gs2RestSessionTask<VerifyCompleteRequest, VerifyCompleteResult>
+        {
+            public VerifyCompleteTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCompleteRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCompleteRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/complete/group/{missionGroupName}/task/{missionTaskName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{missionGroupName}", !string.IsNullOrEmpty(request.MissionGroupName) ? request.MissionGroupName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+                url = url.Replace("{missionTaskName}", !string.IsNullOrEmpty(request.MissionTaskName) ? request.MissionTaskName.ToString() : "null");
+                url = url.Replace("{multiplyValueSpecifyingQuantity}",request.MultiplyValueSpecifyingQuantity != null ? request.MultiplyValueSpecifyingQuantity.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyComplete(
+                Request.VerifyCompleteRequest request,
+                UnityAction<AsyncResult<Result.VerifyCompleteResult>> callback
+        )
+		{
+			var task = new VerifyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCompleteResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCompleteResult> VerifyCompleteFuture(
+                Request.VerifyCompleteRequest request
+        )
+		{
+			return new VerifyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCompleteResult> VerifyCompleteAsync(
+                Request.VerifyCompleteRequest request
+        )
+		{
+            AsyncResult<Result.VerifyCompleteResult> result = null;
+			await VerifyComplete(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyCompleteTask VerifyCompleteAsync(
+                Request.VerifyCompleteRequest request
+        )
+		{
+			return new VerifyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCompleteResult> VerifyCompleteAsync(
+                Request.VerifyCompleteRequest request
+        )
+		{
+			var task = new VerifyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class VerifyCompleteByUserIdTask : Gs2RestSessionTask<VerifyCompleteByUserIdRequest, VerifyCompleteByUserIdResult>
         {
             public VerifyCompleteByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCompleteByUserIdRequest request) : base(session, factory, request)
@@ -4978,6 +5107,147 @@ namespace Gs2.Gs2Mission
         )
 		{
 			var task = new SetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DecreaseCounterTask : Gs2RestSessionTask<DecreaseCounterRequest, DecreaseCounterResult>
+        {
+            public DecreaseCounterTask(IGs2Session session, RestSessionRequestFactory factory, DecreaseCounterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DecreaseCounterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/counter/{counterName}/decrease";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{counterName}", !string.IsNullOrEmpty(request.CounterName) ? request.CounterName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "counter.increase.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecreaseCounter(
+                Request.DecreaseCounterRequest request,
+                UnityAction<AsyncResult<Result.DecreaseCounterResult>> callback
+        )
+		{
+			var task = new DecreaseCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecreaseCounterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecreaseCounterResult> DecreaseCounterFuture(
+                Request.DecreaseCounterRequest request
+        )
+		{
+			return new DecreaseCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecreaseCounterResult> DecreaseCounterAsync(
+                Request.DecreaseCounterRequest request
+        )
+		{
+            AsyncResult<Result.DecreaseCounterResult> result = null;
+			await DecreaseCounter(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DecreaseCounterTask DecreaseCounterAsync(
+                Request.DecreaseCounterRequest request
+        )
+		{
+			return new DecreaseCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecreaseCounterResult> DecreaseCounterAsync(
+                Request.DecreaseCounterRequest request
+        )
+		{
+			var task = new DecreaseCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

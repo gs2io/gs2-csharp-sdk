@@ -4146,6 +4146,134 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
+        public class DecreaseMaxValueTask : Gs2WebSocketSessionTask<Request.DecreaseMaxValueRequest, Result.DecreaseMaxValueResult>
+        {
+	        public DecreaseMaxValueTask(IGs2Session session, Request.DecreaseMaxValueRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DecreaseMaxValueRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.DecreaseValue != null)
+                {
+                    jsonWriter.WritePropertyName("decreaseValue");
+                    jsonWriter.Write(request.DecreaseValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "decreaseMaxValue",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecreaseMaxValue(
+                Request.DecreaseMaxValueRequest request,
+                UnityAction<AsyncResult<Result.DecreaseMaxValueResult>> callback
+        )
+		{
+			var task = new DecreaseMaxValueTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecreaseMaxValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecreaseMaxValueResult> DecreaseMaxValueFuture(
+                Request.DecreaseMaxValueRequest request
+        )
+		{
+			return new DecreaseMaxValueTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecreaseMaxValueResult> DecreaseMaxValueAsync(
+            Request.DecreaseMaxValueRequest request
+        )
+		{
+		    var task = new DecreaseMaxValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DecreaseMaxValueTask DecreaseMaxValueAsync(
+                Request.DecreaseMaxValueRequest request
+        )
+		{
+			return new DecreaseMaxValueTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecreaseMaxValueResult> DecreaseMaxValueAsync(
+            Request.DecreaseMaxValueRequest request
+        )
+		{
+		    var task = new DecreaseMaxValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DecreaseMaxValueByUserIdTask : Gs2WebSocketSessionTask<Request.DecreaseMaxValueByUserIdRequest, Result.DecreaseMaxValueByUserIdResult>
         {
 	        public DecreaseMaxValueByUserIdTask(IGs2Session session, Request.DecreaseMaxValueByUserIdRequest request) : base(session, request)

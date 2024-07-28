@@ -3021,6 +3021,138 @@ namespace Gs2.Gs2Grade
 #endif
 
 
+        public class SubGradeTask : Gs2RestSessionTask<SubGradeRequest, SubGradeResult>
+        {
+            public SubGradeTask(IGs2Session session, RestSessionRequestFactory factory, SubGradeRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SubGradeRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "grade")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/model/{gradeName}/property/{propertyId}/sub";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{gradeName}", !string.IsNullOrEmpty(request.GradeName) ? request.GradeName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.GradeValue != null)
+                {
+                    jsonWriter.WritePropertyName("gradeValue");
+                    jsonWriter.Write(request.GradeValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubGrade(
+                Request.SubGradeRequest request,
+                UnityAction<AsyncResult<Result.SubGradeResult>> callback
+        )
+		{
+			var task = new SubGradeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubGradeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubGradeResult> SubGradeFuture(
+                Request.SubGradeRequest request
+        )
+		{
+			return new SubGradeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubGradeResult> SubGradeAsync(
+                Request.SubGradeRequest request
+        )
+		{
+            AsyncResult<Result.SubGradeResult> result = null;
+			await SubGrade(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SubGradeTask SubGradeAsync(
+                Request.SubGradeRequest request
+        )
+		{
+			return new SubGradeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubGradeResult> SubGradeAsync(
+                Request.SubGradeRequest request
+        )
+		{
+			var task = new SubGradeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SubGradeByUserIdTask : Gs2RestSessionTask<SubGradeByUserIdRequest, SubGradeByUserIdResult>
         {
             public SubGradeByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SubGradeByUserIdRequest request) : base(session, factory, request)

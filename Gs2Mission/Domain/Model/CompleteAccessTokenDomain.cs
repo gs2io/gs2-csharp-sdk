@@ -241,6 +241,58 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteAccessTokenDomain> VerifyFuture(
+            VerifyCompleteRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithMissionGroupName(this.MissionGroupName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyCompleteFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.CompleteAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Mission.Domain.Model.CompleteAccessTokenDomain> VerifyAsync(
+            #else
+        public async Task<Gs2.Gs2Mission.Domain.Model.CompleteAccessTokenDomain> VerifyAsync(
+            #endif
+            VerifyCompleteRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithMissionGroupName(this.MissionGroupName)
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyCompleteAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Model.Complete> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Complete> self)

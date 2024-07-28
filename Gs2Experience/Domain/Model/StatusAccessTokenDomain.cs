@@ -204,6 +204,118 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> SubExperienceFuture(
+            SubExperienceRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SubExperienceFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> SubExperienceAsync(
+            #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> SubExperienceAsync(
+            #endif
+            SubExperienceRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SubExperienceAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> SubRankCapFuture(
+            SubRankCapRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SubRankCapFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> SubRankCapAsync(
+            #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> SubRankCapAsync(
+            #endif
+            SubRankCapRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SubRankCapAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankFuture(
             VerifyRankRequest request
         ) {

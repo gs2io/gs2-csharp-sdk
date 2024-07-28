@@ -35,10 +35,11 @@ namespace Gs2.Gs2Enhance.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
-         public bool? EnableDirectEnhance { set; get; } = null!;
          public Gs2.Gs2Enhance.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Enhance.Model.ScriptSetting EnhanceScript { set; get; } = null!;
          public Gs2.Gs2Enhance.Model.LogSetting LogSetting { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
+         public bool? EnableDirectEnhance { set; get; } = null!;
         [Obsolete("This method is deprecated")]
          public string QueueNamespaceId { set; get; } = null!;
         [Obsolete("This method is deprecated")]
@@ -51,10 +52,6 @@ namespace Gs2.Gs2Enhance.Request
             this.Description = description;
             return this;
         }
-        public CreateNamespaceRequest WithEnableDirectEnhance(bool? enableDirectEnhance) {
-            this.EnableDirectEnhance = enableDirectEnhance;
-            return this;
-        }
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Enhance.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
@@ -65,6 +62,11 @@ namespace Gs2.Gs2Enhance.Request
         }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Enhance.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public CreateNamespaceRequest WithEnableDirectEnhance(bool? enableDirectEnhance) {
+            this.EnableDirectEnhance = enableDirectEnhance;
             return this;
         }
         [Obsolete("This method is deprecated")]
@@ -89,7 +91,6 @@ namespace Gs2.Gs2Enhance.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithEnableDirectEnhance(!data.Keys.Contains("enableDirectEnhance") || data["enableDirectEnhance"] == null ? null : (bool?)bool.Parse(data["enableDirectEnhance"].ToString()))
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Enhance.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEnhanceScript(!data.Keys.Contains("enhanceScript") || data["enhanceScript"] == null ? null : Gs2.Gs2Enhance.Model.ScriptSetting.FromJson(data["enhanceScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]));
@@ -100,7 +101,6 @@ namespace Gs2.Gs2Enhance.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
-                ["enableDirectEnhance"] = EnableDirectEnhance,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["enhanceScript"] = EnhanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
@@ -118,10 +118,6 @@ namespace Gs2.Gs2Enhance.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
-            if (EnableDirectEnhance != null) {
-                writer.WritePropertyName("enableDirectEnhance");
-                writer.Write(bool.Parse(EnableDirectEnhance.ToString()));
-            }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
             }
@@ -130,6 +126,10 @@ namespace Gs2.Gs2Enhance.Request
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
+            }
+            if (EnableDirectEnhance != null) {
+                writer.WritePropertyName("enableDirectEnhance");
+                writer.Write(bool.Parse(EnableDirectEnhance.ToString()));
             }
             if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
@@ -146,7 +146,6 @@ namespace Gs2.Gs2Enhance.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
-            key += EnableDirectEnhance + ":";
             key += TransactionSetting + ":";
             key += EnhanceScript + ":";
             key += LogSetting + ":";

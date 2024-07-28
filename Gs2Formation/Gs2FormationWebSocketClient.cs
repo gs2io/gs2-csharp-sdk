@@ -3421,6 +3421,134 @@ namespace Gs2.Gs2Formation
 #endif
 
 
+        public class SubMoldCapacityTask : Gs2WebSocketSessionTask<Request.SubMoldCapacityRequest, Result.SubMoldCapacityResult>
+        {
+	        public SubMoldCapacityTask(IGs2Session session, Request.SubMoldCapacityRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SubMoldCapacityRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.MoldModelName != null)
+                {
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
+                }
+                if (request.Capacity != null)
+                {
+                    jsonWriter.WritePropertyName("capacity");
+                    jsonWriter.Write(request.Capacity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "mold",
+                    "subMoldCapacity",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubMoldCapacity(
+                Request.SubMoldCapacityRequest request,
+                UnityAction<AsyncResult<Result.SubMoldCapacityResult>> callback
+        )
+		{
+			var task = new SubMoldCapacityTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubMoldCapacityResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubMoldCapacityResult> SubMoldCapacityFuture(
+                Request.SubMoldCapacityRequest request
+        )
+		{
+			return new SubMoldCapacityTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubMoldCapacityResult> SubMoldCapacityAsync(
+            Request.SubMoldCapacityRequest request
+        )
+		{
+		    var task = new SubMoldCapacityTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubMoldCapacityTask SubMoldCapacityAsync(
+                Request.SubMoldCapacityRequest request
+        )
+		{
+			return new SubMoldCapacityTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubMoldCapacityResult> SubMoldCapacityAsync(
+            Request.SubMoldCapacityRequest request
+        )
+		{
+		    var task = new SubMoldCapacityTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SubMoldCapacityByUserIdTask : Gs2WebSocketSessionTask<Request.SubMoldCapacityByUserIdRequest, Result.SubMoldCapacityByUserIdResult>
         {
 	        public SubMoldCapacityByUserIdTask(IGs2Session session, Request.SubMoldCapacityByUserIdRequest request) : base(session, request)

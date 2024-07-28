@@ -34,12 +34,13 @@ namespace Gs2.Gs2Enhance.Model
         public string NamespaceId { set; get; } = null!;
         public string Name { set; get; } = null!;
         public string Description { set; get; } = null!;
-        public bool? EnableDirectEnhance { set; get; } = null!;
         public Gs2.Gs2Enhance.Model.TransactionSetting TransactionSetting { set; get; } = null!;
         public Gs2.Gs2Enhance.Model.ScriptSetting EnhanceScript { set; get; } = null!;
         public Gs2.Gs2Enhance.Model.LogSetting LogSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
+        public bool? EnableDirectEnhance { set; get; } = null!;
         [Obsolete("This method is deprecated")]
         public string QueueNamespaceId { set; get; } = null!;
         [Obsolete("This method is deprecated")]
@@ -55,10 +56,6 @@ namespace Gs2.Gs2Enhance.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
-            return this;
-        }
-        public Namespace WithEnableDirectEnhance(bool? enableDirectEnhance) {
-            this.EnableDirectEnhance = enableDirectEnhance;
             return this;
         }
         public Namespace WithTransactionSetting(Gs2.Gs2Enhance.Model.TransactionSetting transactionSetting) {
@@ -79,6 +76,11 @@ namespace Gs2.Gs2Enhance.Model
         }
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public Namespace WithEnableDirectEnhance(bool? enableDirectEnhance) {
+            this.EnableDirectEnhance = enableDirectEnhance;
             return this;
         }
         [Obsolete("This method is deprecated")]
@@ -159,12 +161,12 @@ namespace Gs2.Gs2Enhance.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithEnableDirectEnhance(!data.Keys.Contains("enableDirectEnhance") || data["enableDirectEnhance"] == null ? null : (bool?)bool.Parse(data["enableDirectEnhance"].ToString()))
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Enhance.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEnhanceScript(!data.Keys.Contains("enhanceScript") || data["enhanceScript"] == null ? null : Gs2.Gs2Enhance.Model.ScriptSetting.FromJson(data["enhanceScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
+                .WithEnableDirectEnhance(!data.Keys.Contains("enableDirectEnhance") || data["enableDirectEnhance"] == null ? null : (bool?)bool.Parse(data["enableDirectEnhance"].ToString()))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -176,7 +178,6 @@ namespace Gs2.Gs2Enhance.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["enableDirectEnhance"] = EnableDirectEnhance,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["enhanceScript"] = EnhanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
@@ -201,10 +202,6 @@ namespace Gs2.Gs2Enhance.Model
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
-            if (EnableDirectEnhance != null) {
-                writer.WritePropertyName("enableDirectEnhance");
-                writer.Write(bool.Parse(EnableDirectEnhance.ToString()));
-            }
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
@@ -224,6 +221,10 @@ namespace Gs2.Gs2Enhance.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
+            }
+            if (EnableDirectEnhance != null) {
+                writer.WritePropertyName("enableDirectEnhance");
+                writer.Write(bool.Parse(EnableDirectEnhance.ToString()));
             }
             if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
@@ -268,14 +269,6 @@ namespace Gs2.Gs2Enhance.Model
             {
                 diff += Description.CompareTo(other.Description);
             }
-            if (EnableDirectEnhance == null && EnableDirectEnhance == other.EnableDirectEnhance)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableDirectEnhance == other.EnableDirectEnhance ? 0 : 1;
-            }
             if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
             {
                 // null and null
@@ -315,6 +308,14 @@ namespace Gs2.Gs2Enhance.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (EnableDirectEnhance == null && EnableDirectEnhance == other.EnableDirectEnhance)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += EnableDirectEnhance == other.EnableDirectEnhance ? 0 : 1;
             }
             if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
             {
@@ -372,8 +373,6 @@ namespace Gs2.Gs2Enhance.Model
             {
             }
             {
-            }
-            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "enhance.namespace.createdAt.error.invalid"),
@@ -416,12 +415,12 @@ namespace Gs2.Gs2Enhance.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
-                EnableDirectEnhance = EnableDirectEnhance,
                 TransactionSetting = TransactionSetting.Clone() as Gs2.Gs2Enhance.Model.TransactionSetting,
                 EnhanceScript = EnhanceScript.Clone() as Gs2.Gs2Enhance.Model.ScriptSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Enhance.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
+                EnableDirectEnhance = EnableDirectEnhance,
                 QueueNamespaceId = QueueNamespaceId,
                 KeyId = KeyId,
                 Revision = Revision,

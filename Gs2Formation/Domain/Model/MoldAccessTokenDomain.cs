@@ -137,6 +137,60 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain> SubCapacityFuture(
+            SubMoldCapacityRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithMoldModelName(this.MoldModelName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SubMoldCapacityFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain> SubCapacityAsync(
+            #else
+        public async Task<Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain> SubCapacityAsync(
+            #endif
+            SubMoldCapacityRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithMoldModelName(this.MoldModelName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SubMoldCapacityAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain> DeleteFuture(
             DeleteMoldRequest request
         ) {

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -128,6 +130,72 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
             var domain = this;
             return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain[]> DeleteEntriesFuture(
+            DeleteEntriesRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain[]> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteEntriesFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.AccessToken,
+                    v?.Name
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain>();
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain[]>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain[]> DeleteEntriesAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain[]> DeleteEntriesAsync(
+            #endif
+            DeleteEntriesRequest request
+        ) {
+            try {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteEntriesAsync(request)
+                );
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.AccessToken,
+                    v?.Name
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain>();
+                return domain;
+            }
+            catch (NotFoundException e) {}
+            return Array.Empty<EntryAccessTokenDomain>();
         }
         #endif
         #if UNITY_2017_1_OR_NEWER

@@ -516,12 +516,6 @@ namespace Gs2.Gs2Exchange.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, UnlockIncrementalExchangeByUserIdRequest, UnlockIncrementalExchangeByUserIdResult> UnlockIncrementalExchangeByUserIdComplete = new UnityEvent<string, UnlockIncrementalExchangeByUserIdRequest, UnlockIncrementalExchangeByUserIdResult>();
-    #else
-        public static Action<string, UnlockIncrementalExchangeByUserIdRequest, UnlockIncrementalExchangeByUserIdResult> UnlockIncrementalExchangeByUserIdComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, CreateAwaitByUserIdRequest, CreateAwaitByUserIdResult> CreateAwaitByUserIdComplete = new UnityEvent<string, CreateAwaitByUserIdRequest, CreateAwaitByUserIdResult>();
     #else
         public static Action<string, CreateAwaitByUserIdRequest, CreateAwaitByUserIdResult> CreateAwaitByUserIdComplete;
@@ -556,17 +550,6 @@ namespace Gs2.Gs2Exchange.Domain
                         var resultModel = IncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result));
 
                         IncrementalExchangeByUserIdComplete?.Invoke(
-                            transactionId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "UnlockIncrementalExchangeByUserId": {
-                        var requestModel = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = UnlockIncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        UnlockIncrementalExchangeByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -665,17 +648,6 @@ namespace Gs2.Gs2Exchange.Domain
                     var resultModel = IncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
 
                     IncrementalExchangeByUserIdComplete?.Invoke(
-                        job.JobId,
-                        requestModel,
-                        resultModel
-                    );
-                    break;
-                }
-                case "unlock_incremental_exchange_by_user_id": {
-                    var requestModel = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
-                    var resultModel = UnlockIncrementalExchangeByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-
-                    UnlockIncrementalExchangeByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

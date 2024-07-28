@@ -35,12 +35,18 @@ namespace Gs2.Gs2Distributor.Request
 	{
          public string AccessToken { set; get; } = null!;
          public Gs2.Gs2Distributor.Model.Config[] Config { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetTransactionDefaultConfigRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
         public SetTransactionDefaultConfigRequest WithConfig(Gs2.Gs2Distributor.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+
+        public SetTransactionDefaultConfigRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

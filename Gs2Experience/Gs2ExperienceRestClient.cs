@@ -4335,6 +4335,138 @@ namespace Gs2.Gs2Experience
 #endif
 
 
+        public class SubExperienceTask : Gs2RestSessionTask<SubExperienceRequest, SubExperienceResult>
+        {
+            public SubExperienceTask(IGs2Session session, RestSessionRequestFactory factory, SubExperienceRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SubExperienceRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/model/{experienceName}/property/{propertyId}/sub";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(request.ExperienceName) ? request.ExperienceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ExperienceValue != null)
+                {
+                    jsonWriter.WritePropertyName("experienceValue");
+                    jsonWriter.Write(request.ExperienceValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubExperience(
+                Request.SubExperienceRequest request,
+                UnityAction<AsyncResult<Result.SubExperienceResult>> callback
+        )
+		{
+			var task = new SubExperienceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubExperienceResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubExperienceResult> SubExperienceFuture(
+                Request.SubExperienceRequest request
+        )
+		{
+			return new SubExperienceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubExperienceResult> SubExperienceAsync(
+                Request.SubExperienceRequest request
+        )
+		{
+            AsyncResult<Result.SubExperienceResult> result = null;
+			await SubExperience(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SubExperienceTask SubExperienceAsync(
+                Request.SubExperienceRequest request
+        )
+		{
+			return new SubExperienceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubExperienceResult> SubExperienceAsync(
+                Request.SubExperienceRequest request
+        )
+		{
+			var task = new SubExperienceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SubExperienceByUserIdTask : Gs2RestSessionTask<SubExperienceByUserIdRequest, SubExperienceByUserIdResult>
         {
             public SubExperienceByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SubExperienceByUserIdRequest request) : base(session, factory, request)
@@ -4725,6 +4857,138 @@ namespace Gs2.Gs2Experience
         )
 		{
 			var task = new AddRankCapByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SubRankCapTask : Gs2RestSessionTask<SubRankCapRequest, SubRankCapResult>
+        {
+            public SubRankCapTask(IGs2Session session, RestSessionRequestFactory factory, SubRankCapRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SubRankCapRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/model/{experienceName}/property/{propertyId}/cap/sub";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(request.ExperienceName) ? request.ExperienceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.RankCapValue != null)
+                {
+                    jsonWriter.WritePropertyName("rankCapValue");
+                    jsonWriter.Write(request.RankCapValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubRankCap(
+                Request.SubRankCapRequest request,
+                UnityAction<AsyncResult<Result.SubRankCapResult>> callback
+        )
+		{
+			var task = new SubRankCapTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubRankCapResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubRankCapResult> SubRankCapFuture(
+                Request.SubRankCapRequest request
+        )
+		{
+			return new SubRankCapTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubRankCapResult> SubRankCapAsync(
+                Request.SubRankCapRequest request
+        )
+		{
+            AsyncResult<Result.SubRankCapResult> result = null;
+			await SubRankCap(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SubRankCapTask SubRankCapAsync(
+                Request.SubRankCapRequest request
+        )
+		{
+			return new SubRankCapTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubRankCapResult> SubRankCapAsync(
+                Request.SubRankCapRequest request
+        )
+		{
+			var task = new SubRankCapTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

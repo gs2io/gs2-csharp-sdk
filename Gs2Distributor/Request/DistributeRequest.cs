@@ -38,6 +38,7 @@ namespace Gs2.Gs2Distributor.Request
          public string UserId { set; get; } = null!;
          public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DistributeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -56,6 +57,11 @@ namespace Gs2.Gs2Distributor.Request
         }
         public DistributeRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
+
+        public DistributeRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -1538,6 +1538,139 @@ namespace Gs2.Gs2Grade
 #endif
 
 
+        public class SubGradeTask : Gs2WebSocketSessionTask<Request.SubGradeRequest, Result.SubGradeResult>
+        {
+	        public SubGradeTask(IGs2Session session, Request.SubGradeRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SubGradeRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.GradeName != null)
+                {
+                    jsonWriter.WritePropertyName("gradeName");
+                    jsonWriter.Write(request.GradeName.ToString());
+                }
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.GradeValue != null)
+                {
+                    jsonWriter.WritePropertyName("gradeValue");
+                    jsonWriter.Write(request.GradeValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "grade",
+                    "status",
+                    "subGrade",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubGrade(
+                Request.SubGradeRequest request,
+                UnityAction<AsyncResult<Result.SubGradeResult>> callback
+        )
+		{
+			var task = new SubGradeTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubGradeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubGradeResult> SubGradeFuture(
+                Request.SubGradeRequest request
+        )
+		{
+			return new SubGradeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubGradeResult> SubGradeAsync(
+            Request.SubGradeRequest request
+        )
+		{
+		    var task = new SubGradeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubGradeTask SubGradeAsync(
+                Request.SubGradeRequest request
+        )
+		{
+			return new SubGradeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubGradeResult> SubGradeAsync(
+            Request.SubGradeRequest request
+        )
+		{
+		    var task = new SubGradeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SubGradeByUserIdTask : Gs2WebSocketSessionTask<Request.SubGradeByUserIdRequest, Result.SubGradeByUserIdResult>
         {
 	        public SubGradeByUserIdTask(IGs2Session session, Request.SubGradeByUserIdRequest request) : base(session, request)

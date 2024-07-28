@@ -4698,6 +4698,137 @@ namespace Gs2.Gs2Guild
 #endif
 
 
+        public class DecreaseMaximumCurrentMaximumMemberCountTask : Gs2RestSessionTask<DecreaseMaximumCurrentMaximumMemberCountRequest, DecreaseMaximumCurrentMaximumMemberCountResult>
+        {
+            public DecreaseMaximumCurrentMaximumMemberCountTask(IGs2Session session, RestSessionRequestFactory factory, DecreaseMaximumCurrentMaximumMemberCountRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DecreaseMaximumCurrentMaximumMemberCountRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/currentMaximumMemberCount/decrease";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecreaseMaximumCurrentMaximumMemberCount(
+                Request.DecreaseMaximumCurrentMaximumMemberCountRequest request,
+                UnityAction<AsyncResult<Result.DecreaseMaximumCurrentMaximumMemberCountResult>> callback
+        )
+		{
+			var task = new DecreaseMaximumCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecreaseMaximumCurrentMaximumMemberCountResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecreaseMaximumCurrentMaximumMemberCountResult> DecreaseMaximumCurrentMaximumMemberCountFuture(
+                Request.DecreaseMaximumCurrentMaximumMemberCountRequest request
+        )
+		{
+			return new DecreaseMaximumCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecreaseMaximumCurrentMaximumMemberCountResult> DecreaseMaximumCurrentMaximumMemberCountAsync(
+                Request.DecreaseMaximumCurrentMaximumMemberCountRequest request
+        )
+		{
+            AsyncResult<Result.DecreaseMaximumCurrentMaximumMemberCountResult> result = null;
+			await DecreaseMaximumCurrentMaximumMemberCount(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DecreaseMaximumCurrentMaximumMemberCountTask DecreaseMaximumCurrentMaximumMemberCountAsync(
+                Request.DecreaseMaximumCurrentMaximumMemberCountRequest request
+        )
+		{
+			return new DecreaseMaximumCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecreaseMaximumCurrentMaximumMemberCountResult> DecreaseMaximumCurrentMaximumMemberCountAsync(
+                Request.DecreaseMaximumCurrentMaximumMemberCountRequest request
+        )
+		{
+			var task = new DecreaseMaximumCurrentMaximumMemberCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DecreaseMaximumCurrentMaximumMemberCountByGuildNameTask : Gs2RestSessionTask<DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest, DecreaseMaximumCurrentMaximumMemberCountByGuildNameResult>
         {
             public DecreaseMaximumCurrentMaximumMemberCountByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request) : base(session, factory, request)

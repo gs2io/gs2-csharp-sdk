@@ -198,11 +198,6 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
-                if (request.EnableDirectEnhance != null)
-                {
-                    jsonWriter.WritePropertyName("enableDirectEnhance");
-                    jsonWriter.Write(request.EnableDirectEnhance.ToString());
-                }
                 if (request.TransactionSetting != null)
                 {
                     jsonWriter.WritePropertyName("transactionSetting");
@@ -217,6 +212,11 @@ namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.EnableDirectEnhance != null)
+                {
+                    jsonWriter.WritePropertyName("enableDirectEnhance");
+                    jsonWriter.Write(request.EnableDirectEnhance.ToString());
                 }
                 if (request.QueueNamespaceId != null)
                 {
@@ -558,11 +558,6 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
-                if (request.EnableDirectEnhance != null)
-                {
-                    jsonWriter.WritePropertyName("enableDirectEnhance");
-                    jsonWriter.Write(request.EnableDirectEnhance.ToString());
-                }
                 if (request.TransactionSetting != null)
                 {
                     jsonWriter.WritePropertyName("transactionSetting");
@@ -577,6 +572,11 @@ namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("logSetting");
                     request.LogSetting.WriteJson(jsonWriter);
+                }
+                if (request.EnableDirectEnhance != null)
+                {
+                    jsonWriter.WritePropertyName("enableDirectEnhance");
+                    jsonWriter.Write(request.EnableDirectEnhance.ToString());
                 }
                 if (request.QueueNamespaceId != null)
                 {

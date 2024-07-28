@@ -36,6 +36,7 @@ namespace Gs2.Gs2Distributor.Request
          public string UserId { set; get; } = null!;
          public Gs2.Gs2Distributor.Model.Config[] Config { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public SetTransactionDefaultConfigByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Distributor.Request
         }
         public SetTransactionDefaultConfigByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
+
+        public SetTransactionDefaultConfigByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 
