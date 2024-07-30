@@ -37,25 +37,25 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2Distributor.Model.Cache
 {
-    public static partial class DistributeExt
+    public static partial class ExpressionExt
     {
         public static void PutCache(
-            this AndExpressionByStampTaskResult self,
+            this IfExpressionByUserIdResult self,
             CacheDatabase cache,
             string userId,
-            AndExpressionByStampTaskRequest request
+            IfExpressionByUserIdRequest request
         ) {
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<AndExpressionByStampTaskResult> InvokeFuture(
-            this AndExpressionByStampTaskRequest request,
+        public static IFuture<IfExpressionByUserIdResult> InvokeFuture(
+            this IfExpressionByUserIdRequest request,
             CacheDatabase cache,
             string userId,
-            Func<IFuture<AndExpressionByStampTaskResult>> invokeImpl
+            Func<IFuture<IfExpressionByUserIdResult>> invokeImpl
         )
         {
-            IEnumerator Impl(IFuture<AndExpressionByStampTaskResult> self)
+            IEnumerator Impl(IFuture<IfExpressionByUserIdResult> self)
             {
                 var future = invokeImpl();
                 yield return future;
@@ -72,23 +72,23 @@ namespace Gs2.Gs2Distributor.Model.Cache
 
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<AndExpressionByStampTaskResult>(Impl);
+            return new Gs2InlineFuture<IfExpressionByUserIdResult>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<AndExpressionByStampTaskResult> InvokeAsync(
+        public static async UniTask<IfExpressionByUserIdResult> InvokeAsync(
     #else
-        public static async Task<AndExpressionByStampTaskResult> InvokeAsync(
+        public static async Task<IfExpressionByUserIdResult> InvokeAsync(
     #endif
-            this AndExpressionByStampTaskRequest request,
+            this IfExpressionByUserIdRequest request,
             CacheDatabase cache,
             string userId,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<AndExpressionByStampTaskResult>> invokeImpl
+            Func<UniTask<IfExpressionByUserIdResult>> invokeImpl
     #else
-            Func<Task<AndExpressionByStampTaskResult>> invokeImpl
+            Func<Task<IfExpressionByUserIdResult>> invokeImpl
     #endif
         )
         {

@@ -37,7 +37,7 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2Distributor.Model.Cache
 {
-    public static partial class DistributeExt
+    public static partial class ExpressionExt
     {
         public static void PutCache(
             this OrExpressionByUserIdResult self,

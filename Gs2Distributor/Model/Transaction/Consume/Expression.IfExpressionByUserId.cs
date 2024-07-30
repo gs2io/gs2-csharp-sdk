@@ -30,21 +30,21 @@ namespace Gs2.Gs2Distributor.Model.Transaction
 {
     public static partial class DistributeExt
     {
-        public static OrExpressionByUserIdRequest Rate(
-            this OrExpressionByUserIdRequest request,
+        public static IfExpressionByUserIdRequest Rate(
+            this IfExpressionByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Distributor:OrExpressionByUserId");
+            throw new NotSupportedException($"not supported rate action Gs2Distributor:IfExpressionByUserId");
         }
     }
 
-    public static partial class OrExpressionByUserIdRequestExt
+    public static partial class IfExpressionByUserIdRequestExt
     {
-        public static OrExpressionByUserIdRequest Rate(
-            this OrExpressionByUserIdRequest request,
+        public static IfExpressionByUserIdRequest Rate(
+            this IfExpressionByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Distributor:OrExpressionByUserId");
+            throw new NotSupportedException($"not supported rate action Gs2Distributor:IfExpressionByUserId");
         }
     }
 }

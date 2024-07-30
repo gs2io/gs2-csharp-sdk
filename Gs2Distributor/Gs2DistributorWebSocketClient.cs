@@ -1060,7 +1060,7 @@ namespace Gs2.Gs2Distributor
                 AddHeader(
                     Session.Credential,
                     "distributor",
-                    "distribute",
+                    "expression",
                     "ifExpressionByUserId",
                     jsonWriter
                 );
@@ -1188,7 +1188,7 @@ namespace Gs2.Gs2Distributor
                 AddHeader(
                     Session.Credential,
                     "distributor",
-                    "distribute",
+                    "expression",
                     "andExpressionByUserId",
                     jsonWriter
                 );
@@ -1316,7 +1316,7 @@ namespace Gs2.Gs2Distributor
                 AddHeader(
                     Session.Credential,
                     "distributor",
-                    "distribute",
+                    "expression",
                     "orExpressionByUserId",
                     jsonWriter
                 );
