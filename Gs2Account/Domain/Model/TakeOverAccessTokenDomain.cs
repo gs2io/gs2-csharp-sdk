@@ -68,6 +68,8 @@ namespace Gs2.Gs2Account.Domain.Model
         public string UserId => this.AccessToken.UserId;
         public int? Type { get; } = null!;
         public string UserIdentifier { get; } = null!;
+        public string AuthorizationUrl { get; set; } = null!;
+        public string Payload { get; set; } = null!;
 
         public TakeOverAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -131,6 +133,60 @@ namespace Gs2.Gs2Account.Domain.Model
                 _gs2.Cache,
                 this.UserId,
                 () => this._client.CreateTakeOverAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateOpenIdConnectFuture(
+            CreateTakeOverOpenIdConnectRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithType(this.Type);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.CreateTakeOverOpenIdConnectFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateOpenIdConnectAsync(
+            #else
+        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateOpenIdConnectAsync(
+            #endif
+            CreateTakeOverOpenIdConnectRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithType(this.Type);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.CreateTakeOverOpenIdConnectAsync(request)
             );
             var domain = this;
 

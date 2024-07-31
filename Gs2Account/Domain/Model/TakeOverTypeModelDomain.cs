@@ -60,20 +60,15 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Account.Domain.Model
 {
 
-    public partial class TakeOverDomain {
+    public partial class TakeOverTypeModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
         public string NamespaceName { get; } = null!;
-        public string UserId { get; } = null!;
         public int? Type { get; } = null!;
-        public string UserIdentifier { get; } = null!;
-        public string AuthorizationUrl { get; set; } = null!;
-        public string Payload { get; set; } = null!;
 
-        public TakeOverDomain(
+        public TakeOverTypeModelDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            string userId,
             int? type
         ) {
             this._gs2 = gs2;
@@ -81,83 +76,27 @@ namespace Gs2.Gs2Account.Domain.Model
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.UserId = userId;
             this.Type = type;
         }
 
     }
 
-    public partial class TakeOverDomain {
+    public partial class TakeOverTypeModelDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> CreateFuture(
-            CreateTakeOverByUserIdRequest request
+        private IFuture<Gs2.Gs2Account.Model.TakeOverTypeModel> GetFuture(
+            GetTakeOverTypeModelRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOverTypeModel> self)
             {
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithType(this.Type);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
-                    this.UserId,
-                    () => this._client.CreateTakeOverByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverDomain> CreateAsync(
-            #else
-        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverDomain> CreateAsync(
-            #endif
-            CreateTakeOverByUserIdRequest request
-        ) {
-            request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithType(this.Type);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                this.UserId,
-                () => this._client.CreateTakeOverByUserIdAsync(request)
-            );
-            var domain = this;
-
-            return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        private IFuture<Gs2.Gs2Account.Model.TakeOver> GetFuture(
-            GetTakeOverByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOver> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithType(this.Type);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    () => this._client.GetTakeOverByUserIdFuture(request)
+                    null,
+                    () => this._client.GetTakeOverTypeModelFuture(request)
                 );
                 yield return future;
                 if (future.Error != null) {
@@ -167,112 +106,55 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = future.Result;
                 self.OnComplete(result?.Item);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOverTypeModel>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        private async UniTask<Gs2.Gs2Account.Model.TakeOver> GetAsync(
+        private async UniTask<Gs2.Gs2Account.Model.TakeOverTypeModel> GetAsync(
             #else
-        private async Task<Gs2.Gs2Account.Model.TakeOver> GetAsync(
+        private async Task<Gs2.Gs2Account.Model.TakeOverTypeModel> GetAsync(
             #endif
-            GetTakeOverByUserIdRequest request
+            GetTakeOverTypeModelRequest request
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithType(this.Type);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
-                this.UserId,
-                () => this._client.GetTakeOverByUserIdAsync(request)
+                null,
+                () => this._client.GetTakeOverTypeModelAsync(request)
             );
             return result?.Item;
         }
         #endif
 
-        #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> UpdateFuture(
-            UpdateTakeOverByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithType(this.Type);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    () => this._client.UpdateTakeOverByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverDomain> UpdateAsync(
-            #else
-        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverDomain> UpdateAsync(
-            #endif
-            UpdateTakeOverByUserIdRequest request
-        ) {
-            request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithType(this.Type);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                this.UserId,
-                () => this._client.UpdateTakeOverByUserIdAsync(request)
-            );
-            var domain = this;
-
-            return domain;
-        }
-        #endif
-
     }
 
-    public partial class TakeOverDomain {
+    public partial class TakeOverTypeModelDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Account.Model.TakeOver> ModelFuture()
+        public IFuture<Gs2.Gs2Account.Model.TakeOverTypeModel> ModelFuture()
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOver> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOverTypeModel> self)
             {
-                var (value, find) = (null as Gs2.Gs2Account.Model.TakeOver).GetCache(
+                var (value, find) = (null as Gs2.Gs2Account.Model.TakeOverTypeModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId,
                     this.Type ?? default
                 );
                 if (find) {
                     self.OnComplete(value);
                     yield break;
                 }
-                var future = (null as Gs2.Gs2Account.Model.TakeOver).FetchFuture(
+                var future = (null as Gs2.Gs2Account.Model.TakeOverTypeModel).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId,
                     this.Type ?? default,
                     () => this.GetFuture(
-                        new GetTakeOverByUserIdRequest()
+                        new GetTakeOverTypeModelRequest()
                     )
                 );
                 yield return future;
@@ -282,33 +164,31 @@ namespace Gs2.Gs2Account.Domain.Model
                 }
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOverTypeModel>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
+        public async UniTask<Gs2.Gs2Account.Model.TakeOverTypeModel> ModelAsync()
             #else
-        public async Task<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
+        public async Task<Gs2.Gs2Account.Model.TakeOverTypeModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Account.Model.TakeOver).GetCache(
+            var (value, find) = (null as Gs2.Gs2Account.Model.TakeOverTypeModel).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId,
                 this.Type ?? default
             );
             if (find) {
                 return value;
             }
-            return await (null as Gs2.Gs2Account.Model.TakeOver).FetchAsync(
+            return await (null as Gs2.Gs2Account.Model.TakeOverTypeModel).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId,
                 this.Type ?? default,
                 () => this.GetAsync(
-                    new GetTakeOverByUserIdRequest()
+                    new GetTakeOverTypeModelRequest()
                 )
             );
         }
@@ -317,20 +197,20 @@ namespace Gs2.Gs2Account.Domain.Model
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Account.Model.TakeOver> Model()
+        public async UniTask<Gs2.Gs2Account.Model.TakeOverTypeModel> Model()
         {
             return await ModelAsync();
         }
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Account.Model.TakeOver> Model()
+        public IFuture<Gs2.Gs2Account.Model.TakeOverTypeModel> Model()
         {
             return ModelFuture();
         }
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Account.Model.TakeOver> Model()
+        public async Task<Gs2.Gs2Account.Model.TakeOverTypeModel> Model()
         {
             return await ModelAsync();
         }
@@ -339,22 +219,20 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public void Invalidate()
         {
-            (null as Gs2.Gs2Account.Model.TakeOver).DeleteCache(
+            (null as Gs2.Gs2Account.Model.TakeOverTypeModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId,
                 this.Type ?? default
             );
         }
 
-        public ulong Subscribe(Action<Gs2.Gs2Account.Model.TakeOver> callback)
+        public ulong Subscribe(Action<Gs2.Gs2Account.Model.TakeOverTypeModel> callback)
         {
             return this._gs2.Cache.Subscribe(
-                (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
+                (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheParentKey(
+                    this.NamespaceName
                 ),
-                (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
+                (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheKey(
                     this.Type ?? default
                 ),
                 callback,
@@ -385,12 +263,11 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.TakeOver>(
-                (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.TakeOverTypeModel>(
+                (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheParentKey(
+                    this.NamespaceName
                 ),
-                (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
+                (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheKey(
                     this.Type ?? default
                 ),
                 callbackId
@@ -398,7 +275,7 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Account.Model.TakeOver> callback)
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Account.Model.TakeOverTypeModel> callback)
         {
             IEnumerator Impl(IFuture<ulong> self)
             {
@@ -419,9 +296,9 @@ namespace Gs2.Gs2Account.Domain.Model
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.TakeOver> callback)
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.TakeOverTypeModel> callback)
             #else
-        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.TakeOver> callback)
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.TakeOverTypeModel> callback)
             #endif
         {
             var item = await ModelAsync();

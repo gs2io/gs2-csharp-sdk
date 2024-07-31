@@ -3223,6 +3223,277 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class CreateTakeOverOpenIdConnectTask : Gs2RestSessionTask<CreateTakeOverOpenIdConnectRequest, CreateTakeOverOpenIdConnectResult>
+        {
+            public CreateTakeOverOpenIdConnectTask(IGs2Session session, RestSessionRequestFactory factory, CreateTakeOverOpenIdConnectRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateTakeOverOpenIdConnectRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/takeover/openIdConnect";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.IdToken != null)
+                {
+                    jsonWriter.WritePropertyName("idToken");
+                    jsonWriter.Write(request.IdToken);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateTakeOverOpenIdConnect(
+                Request.CreateTakeOverOpenIdConnectRequest request,
+                UnityAction<AsyncResult<Result.CreateTakeOverOpenIdConnectResult>> callback
+        )
+		{
+			var task = new CreateTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateTakeOverOpenIdConnectResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateTakeOverOpenIdConnectResult> CreateTakeOverOpenIdConnectFuture(
+                Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverOpenIdConnectResult> CreateTakeOverOpenIdConnectAsync(
+                Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+            AsyncResult<Result.CreateTakeOverOpenIdConnectResult> result = null;
+			await CreateTakeOverOpenIdConnect(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateTakeOverOpenIdConnectTask CreateTakeOverOpenIdConnectAsync(
+                Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateTakeOverOpenIdConnectResult> CreateTakeOverOpenIdConnectAsync(
+                Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+			var task = new CreateTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateTakeOverOpenIdConnectAndByUserIdTask : Gs2RestSessionTask<CreateTakeOverOpenIdConnectAndByUserIdRequest, CreateTakeOverOpenIdConnectAndByUserIdResult>
+        {
+            public CreateTakeOverOpenIdConnectAndByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CreateTakeOverOpenIdConnectAndByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateTakeOverOpenIdConnectAndByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/takeover/openIdConnect";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.IdToken != null)
+                {
+                    jsonWriter.WritePropertyName("idToken");
+                    jsonWriter.Write(request.IdToken);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateTakeOverOpenIdConnectAndByUserId(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CreateTakeOverOpenIdConnectAndByUserIdResult>> callback
+        )
+		{
+			var task = new CreateTakeOverOpenIdConnectAndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateTakeOverOpenIdConnectAndByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateTakeOverOpenIdConnectAndByUserIdResult> CreateTakeOverOpenIdConnectAndByUserIdFuture(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectAndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverOpenIdConnectAndByUserIdResult> CreateTakeOverOpenIdConnectAndByUserIdAsync(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CreateTakeOverOpenIdConnectAndByUserIdResult> result = null;
+			await CreateTakeOverOpenIdConnectAndByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateTakeOverOpenIdConnectAndByUserIdTask CreateTakeOverOpenIdConnectAndByUserIdAsync(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectAndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateTakeOverOpenIdConnectAndByUserIdResult> CreateTakeOverOpenIdConnectAndByUserIdAsync(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+			var task = new CreateTakeOverOpenIdConnectAndByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetTakeOverTask : Gs2RestSessionTask<GetTakeOverRequest, GetTakeOverResult>
         {
             public GetTakeOverTask(IGs2Session session, RestSessionRequestFactory factory, GetTakeOverRequest request) : base(session, factory, request)
@@ -4204,6 +4475,238 @@ namespace Gs2.Gs2Account
         )
 		{
 			var task = new DoTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DoTakeOverOpenIdConnectTask : Gs2RestSessionTask<DoTakeOverOpenIdConnectRequest, DoTakeOverOpenIdConnectResult>
+        {
+            public DoTakeOverOpenIdConnectTask(IGs2Session session, RestSessionRequestFactory factory, DoTakeOverOpenIdConnectRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DoTakeOverOpenIdConnectRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/takeover/type/{type}/openIdConnect";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.IdToken != null)
+                {
+                    jsonWriter.WritePropertyName("idToken");
+                    jsonWriter.Write(request.IdToken);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DoTakeOverOpenIdConnect(
+                Request.DoTakeOverOpenIdConnectRequest request,
+                UnityAction<AsyncResult<Result.DoTakeOverOpenIdConnectResult>> callback
+        )
+		{
+			var task = new DoTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DoTakeOverOpenIdConnectResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DoTakeOverOpenIdConnectResult> DoTakeOverOpenIdConnectFuture(
+                Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new DoTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoTakeOverOpenIdConnectResult> DoTakeOverOpenIdConnectAsync(
+                Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+            AsyncResult<Result.DoTakeOverOpenIdConnectResult> result = null;
+			await DoTakeOverOpenIdConnect(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DoTakeOverOpenIdConnectTask DoTakeOverOpenIdConnectAsync(
+                Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new DoTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DoTakeOverOpenIdConnectResult> DoTakeOverOpenIdConnectAsync(
+                Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+			var task = new DoTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetAuthorizationUrlTask : Gs2RestSessionTask<GetAuthorizationUrlRequest, GetAuthorizationUrlResult>
+        {
+            public GetAuthorizationUrlTask(IGs2Session session, RestSessionRequestFactory factory, GetAuthorizationUrlRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetAuthorizationUrlRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/type/{type}/authorization/url";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetAuthorizationUrl(
+                Request.GetAuthorizationUrlRequest request,
+                UnityAction<AsyncResult<Result.GetAuthorizationUrlResult>> callback
+        )
+		{
+			var task = new GetAuthorizationUrlTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetAuthorizationUrlResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetAuthorizationUrlResult> GetAuthorizationUrlFuture(
+                Request.GetAuthorizationUrlRequest request
+        )
+		{
+			return new GetAuthorizationUrlTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAuthorizationUrlResult> GetAuthorizationUrlAsync(
+                Request.GetAuthorizationUrlRequest request
+        )
+		{
+            AsyncResult<Result.GetAuthorizationUrlResult> result = null;
+			await GetAuthorizationUrl(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetAuthorizationUrlTask GetAuthorizationUrlAsync(
+                Request.GetAuthorizationUrlRequest request
+        )
+		{
+			return new GetAuthorizationUrlTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetAuthorizationUrlResult> GetAuthorizationUrlAsync(
+                Request.GetAuthorizationUrlRequest request
+        )
+		{
+			var task = new GetAuthorizationUrlTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -5714,6 +6217,1257 @@ namespace Gs2.Gs2Account
         )
 		{
 			var task = new DeleteDataOwnerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeTakeOverTypeModelsTask : Gs2RestSessionTask<DescribeTakeOverTypeModelsRequest, DescribeTakeOverTypeModelsResult>
+        {
+            public DescribeTakeOverTypeModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeTakeOverTypeModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeTakeOverTypeModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeTakeOverTypeModels(
+                Request.DescribeTakeOverTypeModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeTakeOverTypeModelsResult>> callback
+        )
+		{
+			var task = new DescribeTakeOverTypeModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeTakeOverTypeModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeTakeOverTypeModelsResult> DescribeTakeOverTypeModelsFuture(
+                Request.DescribeTakeOverTypeModelsRequest request
+        )
+		{
+			return new DescribeTakeOverTypeModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeTakeOverTypeModelsResult> DescribeTakeOverTypeModelsAsync(
+                Request.DescribeTakeOverTypeModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeTakeOverTypeModelsResult> result = null;
+			await DescribeTakeOverTypeModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeTakeOverTypeModelsTask DescribeTakeOverTypeModelsAsync(
+                Request.DescribeTakeOverTypeModelsRequest request
+        )
+		{
+			return new DescribeTakeOverTypeModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeTakeOverTypeModelsResult> DescribeTakeOverTypeModelsAsync(
+                Request.DescribeTakeOverTypeModelsRequest request
+        )
+		{
+			var task = new DescribeTakeOverTypeModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetTakeOverTypeModelTask : Gs2RestSessionTask<GetTakeOverTypeModelRequest, GetTakeOverTypeModelResult>
+        {
+            public GetTakeOverTypeModelTask(IGs2Session session, RestSessionRequestFactory factory, GetTakeOverTypeModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetTakeOverTypeModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/{type}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetTakeOverTypeModel(
+                Request.GetTakeOverTypeModelRequest request,
+                UnityAction<AsyncResult<Result.GetTakeOverTypeModelResult>> callback
+        )
+		{
+			var task = new GetTakeOverTypeModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetTakeOverTypeModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetTakeOverTypeModelResult> GetTakeOverTypeModelFuture(
+                Request.GetTakeOverTypeModelRequest request
+        )
+		{
+			return new GetTakeOverTypeModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverTypeModelResult> GetTakeOverTypeModelAsync(
+                Request.GetTakeOverTypeModelRequest request
+        )
+		{
+            AsyncResult<Result.GetTakeOverTypeModelResult> result = null;
+			await GetTakeOverTypeModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTakeOverTypeModelTask GetTakeOverTypeModelAsync(
+                Request.GetTakeOverTypeModelRequest request
+        )
+		{
+			return new GetTakeOverTypeModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetTakeOverTypeModelResult> GetTakeOverTypeModelAsync(
+                Request.GetTakeOverTypeModelRequest request
+        )
+		{
+			var task = new GetTakeOverTypeModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeTakeOverTypeModelMastersTask : Gs2RestSessionTask<DescribeTakeOverTypeModelMastersRequest, DescribeTakeOverTypeModelMastersResult>
+        {
+            public DescribeTakeOverTypeModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeTakeOverTypeModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeTakeOverTypeModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeTakeOverTypeModelMasters(
+                Request.DescribeTakeOverTypeModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeTakeOverTypeModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeTakeOverTypeModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeTakeOverTypeModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeTakeOverTypeModelMastersResult> DescribeTakeOverTypeModelMastersFuture(
+                Request.DescribeTakeOverTypeModelMastersRequest request
+        )
+		{
+			return new DescribeTakeOverTypeModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeTakeOverTypeModelMastersResult> DescribeTakeOverTypeModelMastersAsync(
+                Request.DescribeTakeOverTypeModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeTakeOverTypeModelMastersResult> result = null;
+			await DescribeTakeOverTypeModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeTakeOverTypeModelMastersTask DescribeTakeOverTypeModelMastersAsync(
+                Request.DescribeTakeOverTypeModelMastersRequest request
+        )
+		{
+			return new DescribeTakeOverTypeModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeTakeOverTypeModelMastersResult> DescribeTakeOverTypeModelMastersAsync(
+                Request.DescribeTakeOverTypeModelMastersRequest request
+        )
+		{
+			var task = new DescribeTakeOverTypeModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateTakeOverTypeModelMasterTask : Gs2RestSessionTask<CreateTakeOverTypeModelMasterRequest, CreateTakeOverTypeModelMasterResult>
+        {
+            public CreateTakeOverTypeModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateTakeOverTypeModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateTakeOverTypeModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.OpenIdConnectSetting != null)
+                {
+                    jsonWriter.WritePropertyName("openIdConnectSetting");
+                    request.OpenIdConnectSetting.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateTakeOverTypeModelMaster(
+                Request.CreateTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new CreateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateTakeOverTypeModelMasterResult> CreateTakeOverTypeModelMasterFuture(
+                Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new CreateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverTypeModelMasterResult> CreateTakeOverTypeModelMasterAsync(
+                Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateTakeOverTypeModelMasterResult> result = null;
+			await CreateTakeOverTypeModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateTakeOverTypeModelMasterTask CreateTakeOverTypeModelMasterAsync(
+                Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new CreateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateTakeOverTypeModelMasterResult> CreateTakeOverTypeModelMasterAsync(
+                Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+			var task = new CreateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetTakeOverTypeModelMasterTask : Gs2RestSessionTask<GetTakeOverTypeModelMasterRequest, GetTakeOverTypeModelMasterResult>
+        {
+            public GetTakeOverTypeModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetTakeOverTypeModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetTakeOverTypeModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/{type}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetTakeOverTypeModelMaster(
+                Request.GetTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new GetTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetTakeOverTypeModelMasterResult> GetTakeOverTypeModelMasterFuture(
+                Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new GetTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverTypeModelMasterResult> GetTakeOverTypeModelMasterAsync(
+                Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetTakeOverTypeModelMasterResult> result = null;
+			await GetTakeOverTypeModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTakeOverTypeModelMasterTask GetTakeOverTypeModelMasterAsync(
+                Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new GetTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetTakeOverTypeModelMasterResult> GetTakeOverTypeModelMasterAsync(
+                Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+			var task = new GetTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateTakeOverTypeModelMasterTask : Gs2RestSessionTask<UpdateTakeOverTypeModelMasterRequest, UpdateTakeOverTypeModelMasterResult>
+        {
+            public UpdateTakeOverTypeModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateTakeOverTypeModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateTakeOverTypeModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/{type}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.OpenIdConnectSetting != null)
+                {
+                    jsonWriter.WritePropertyName("openIdConnectSetting");
+                    request.OpenIdConnectSetting.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateTakeOverTypeModelMaster(
+                Request.UpdateTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateTakeOverTypeModelMasterResult> UpdateTakeOverTypeModelMasterFuture(
+                Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new UpdateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTakeOverTypeModelMasterResult> UpdateTakeOverTypeModelMasterAsync(
+                Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateTakeOverTypeModelMasterResult> result = null;
+			await UpdateTakeOverTypeModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateTakeOverTypeModelMasterTask UpdateTakeOverTypeModelMasterAsync(
+                Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new UpdateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateTakeOverTypeModelMasterResult> UpdateTakeOverTypeModelMasterAsync(
+                Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+			var task = new UpdateTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteTakeOverTypeModelMasterTask : Gs2RestSessionTask<DeleteTakeOverTypeModelMasterRequest, DeleteTakeOverTypeModelMasterResult>
+        {
+            public DeleteTakeOverTypeModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTakeOverTypeModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteTakeOverTypeModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/{type}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteTakeOverTypeModelMaster(
+                Request.DeleteTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteTakeOverTypeModelMasterResult> DeleteTakeOverTypeModelMasterFuture(
+                Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new DeleteTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverTypeModelMasterResult> DeleteTakeOverTypeModelMasterAsync(
+                Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteTakeOverTypeModelMasterResult> result = null;
+			await DeleteTakeOverTypeModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteTakeOverTypeModelMasterTask DeleteTakeOverTypeModelMasterAsync(
+                Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new DeleteTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteTakeOverTypeModelMasterResult> DeleteTakeOverTypeModelMasterAsync(
+                Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+			var task = new DeleteTakeOverTypeModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
+        {
+            public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ExportMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/export";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ExportMaster(
+                Request.ExportMasterRequest request,
+                UnityAction<AsyncResult<Result.ExportMasterResult>> callback
+        )
+		{
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+            AsyncResult<Result.ExportMasterResult> result = null;
+			await ExportMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ExportMasterTask ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetCurrentModelMasterTask : Gs2RestSessionTask<GetCurrentModelMasterRequest, GetCurrentModelMasterResult>
+        {
+            public GetCurrentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetCurrentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetCurrentModelMaster(
+                Request.GetCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetCurrentModelMasterResult>> callback
+        )
+		{
+			var task = new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCurrentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetCurrentModelMasterResult> GetCurrentModelMasterFuture(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+			return new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCurrentModelMasterResult> GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetCurrentModelMasterResult> result = null;
+			await GetCurrentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCurrentModelMasterTask GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+			return new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetCurrentModelMasterResult> GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+			var task = new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateCurrentModelMasterTask : Gs2RestSessionTask<UpdateCurrentModelMasterRequest, UpdateCurrentModelMasterResult>
+        {
+            public UpdateCurrentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Settings != null)
+                {
+                    jsonWriter.WritePropertyName("settings");
+                    jsonWriter.Write(request.Settings);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateCurrentModelMaster(
+                Request.UpdateCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterFuture(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentModelMasterResult> result = null;
+			await UpdateCurrentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentModelMasterTask UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+			var task = new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateCurrentModelMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentModelMasterFromGitHubRequest, UpdateCurrentModelMasterFromGitHubResult>
+        {
+            public UpdateCurrentModelMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentModelMasterFromGitHubRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentModelMasterFromGitHubRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/from_git_hub";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.CheckoutSetting != null)
+                {
+                    jsonWriter.WritePropertyName("checkoutSetting");
+                    request.CheckoutSetting.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateCurrentModelMasterFromGitHub(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult>> callback
+        )
+		{
+			var task = new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubFuture(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult> result = null;
+			await UpdateCurrentModelMasterFromGitHub(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentModelMasterFromGitHubTask UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+			var task = new UpdateCurrentModelMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

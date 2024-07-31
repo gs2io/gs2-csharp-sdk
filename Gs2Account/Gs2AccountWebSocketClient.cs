@@ -2286,6 +2286,262 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class CreateTakeOverOpenIdConnectTask : Gs2WebSocketSessionTask<Request.CreateTakeOverOpenIdConnectRequest, Result.CreateTakeOverOpenIdConnectResult>
+        {
+	        public CreateTakeOverOpenIdConnectTask(IGs2Session session, Request.CreateTakeOverOpenIdConnectRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateTakeOverOpenIdConnectRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.IdToken != null)
+                {
+                    jsonWriter.WritePropertyName("idToken");
+                    jsonWriter.Write(request.IdToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOver",
+                    "createTakeOverOpenIdConnect",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateTakeOverOpenIdConnect(
+                Request.CreateTakeOverOpenIdConnectRequest request,
+                UnityAction<AsyncResult<Result.CreateTakeOverOpenIdConnectResult>> callback
+        )
+		{
+			var task = new CreateTakeOverOpenIdConnectTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateTakeOverOpenIdConnectResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateTakeOverOpenIdConnectResult> CreateTakeOverOpenIdConnectFuture(
+                Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverOpenIdConnectResult> CreateTakeOverOpenIdConnectAsync(
+            Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+		    var task = new CreateTakeOverOpenIdConnectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateTakeOverOpenIdConnectTask CreateTakeOverOpenIdConnectAsync(
+                Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateTakeOverOpenIdConnectResult> CreateTakeOverOpenIdConnectAsync(
+            Request.CreateTakeOverOpenIdConnectRequest request
+        )
+		{
+		    var task = new CreateTakeOverOpenIdConnectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateTakeOverOpenIdConnectAndByUserIdTask : Gs2WebSocketSessionTask<Request.CreateTakeOverOpenIdConnectAndByUserIdRequest, Result.CreateTakeOverOpenIdConnectAndByUserIdResult>
+        {
+	        public CreateTakeOverOpenIdConnectAndByUserIdTask(IGs2Session session, Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.IdToken != null)
+                {
+                    jsonWriter.WritePropertyName("idToken");
+                    jsonWriter.Write(request.IdToken.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOver",
+                    "createTakeOverOpenIdConnectAndByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateTakeOverOpenIdConnectAndByUserId(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CreateTakeOverOpenIdConnectAndByUserIdResult>> callback
+        )
+		{
+			var task = new CreateTakeOverOpenIdConnectAndByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateTakeOverOpenIdConnectAndByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateTakeOverOpenIdConnectAndByUserIdResult> CreateTakeOverOpenIdConnectAndByUserIdFuture(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectAndByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverOpenIdConnectAndByUserIdResult> CreateTakeOverOpenIdConnectAndByUserIdAsync(
+            Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+		    var task = new CreateTakeOverOpenIdConnectAndByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateTakeOverOpenIdConnectAndByUserIdTask CreateTakeOverOpenIdConnectAndByUserIdAsync(
+                Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+			return new CreateTakeOverOpenIdConnectAndByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateTakeOverOpenIdConnectAndByUserIdResult> CreateTakeOverOpenIdConnectAndByUserIdAsync(
+            Request.CreateTakeOverOpenIdConnectAndByUserIdRequest request
+        )
+		{
+		    var task = new CreateTakeOverOpenIdConnectAndByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetTakeOverTask : Gs2WebSocketSessionTask<Request.GetTakeOverRequest, Result.GetTakeOverResult>
         {
 	        public GetTakeOverTask(IGs2Session session, Request.GetTakeOverRequest request) : base(session, request)
@@ -3297,6 +3553,237 @@ namespace Gs2.Gs2Account
         )
 		{
 		    var task = new DoTakeOverTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DoTakeOverOpenIdConnectTask : Gs2WebSocketSessionTask<Request.DoTakeOverOpenIdConnectRequest, Result.DoTakeOverOpenIdConnectResult>
+        {
+	        public DoTakeOverOpenIdConnectTask(IGs2Session session, Request.DoTakeOverOpenIdConnectRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DoTakeOverOpenIdConnectRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.IdToken != null)
+                {
+                    jsonWriter.WritePropertyName("idToken");
+                    jsonWriter.Write(request.IdToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOver",
+                    "doTakeOverOpenIdConnect",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DoTakeOverOpenIdConnect(
+                Request.DoTakeOverOpenIdConnectRequest request,
+                UnityAction<AsyncResult<Result.DoTakeOverOpenIdConnectResult>> callback
+        )
+		{
+			var task = new DoTakeOverOpenIdConnectTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DoTakeOverOpenIdConnectResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DoTakeOverOpenIdConnectResult> DoTakeOverOpenIdConnectFuture(
+                Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new DoTakeOverOpenIdConnectTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DoTakeOverOpenIdConnectResult> DoTakeOverOpenIdConnectAsync(
+            Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+		    var task = new DoTakeOverOpenIdConnectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DoTakeOverOpenIdConnectTask DoTakeOverOpenIdConnectAsync(
+                Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new DoTakeOverOpenIdConnectTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DoTakeOverOpenIdConnectResult> DoTakeOverOpenIdConnectAsync(
+            Request.DoTakeOverOpenIdConnectRequest request
+        )
+		{
+		    var task = new DoTakeOverOpenIdConnectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetAuthorizationUrlTask : Gs2WebSocketSessionTask<Request.GetAuthorizationUrlRequest, Result.GetAuthorizationUrlResult>
+        {
+	        public GetAuthorizationUrlTask(IGs2Session session, Request.GetAuthorizationUrlRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetAuthorizationUrlRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOver",
+                    "getAuthorizationUrl",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetAuthorizationUrl(
+                Request.GetAuthorizationUrlRequest request,
+                UnityAction<AsyncResult<Result.GetAuthorizationUrlResult>> callback
+        )
+		{
+			var task = new GetAuthorizationUrlTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetAuthorizationUrlResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetAuthorizationUrlResult> GetAuthorizationUrlFuture(
+                Request.GetAuthorizationUrlRequest request
+        )
+		{
+			return new GetAuthorizationUrlTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetAuthorizationUrlResult> GetAuthorizationUrlAsync(
+            Request.GetAuthorizationUrlRequest request
+        )
+		{
+		    var task = new GetAuthorizationUrlTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetAuthorizationUrlTask GetAuthorizationUrlAsync(
+                Request.GetAuthorizationUrlRequest request
+        )
+		{
+			return new GetAuthorizationUrlTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetAuthorizationUrlResult> GetAuthorizationUrlAsync(
+            Request.GetAuthorizationUrlRequest request
+        )
+		{
+		    var task = new GetAuthorizationUrlTask(
 		        Gs2WebSocketSession,
 		        request
             );
@@ -4645,6 +5132,576 @@ namespace Gs2.Gs2Account
         )
 		{
 		    var task = new DeleteDataOwnerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetTakeOverTypeModelTask : Gs2WebSocketSessionTask<Request.GetTakeOverTypeModelRequest, Result.GetTakeOverTypeModelResult>
+        {
+	        public GetTakeOverTypeModelTask(IGs2Session session, Request.GetTakeOverTypeModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetTakeOverTypeModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOverTypeModel",
+                    "getTakeOverTypeModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetTakeOverTypeModel(
+                Request.GetTakeOverTypeModelRequest request,
+                UnityAction<AsyncResult<Result.GetTakeOverTypeModelResult>> callback
+        )
+		{
+			var task = new GetTakeOverTypeModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetTakeOverTypeModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetTakeOverTypeModelResult> GetTakeOverTypeModelFuture(
+                Request.GetTakeOverTypeModelRequest request
+        )
+		{
+			return new GetTakeOverTypeModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverTypeModelResult> GetTakeOverTypeModelAsync(
+            Request.GetTakeOverTypeModelRequest request
+        )
+		{
+		    var task = new GetTakeOverTypeModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetTakeOverTypeModelTask GetTakeOverTypeModelAsync(
+                Request.GetTakeOverTypeModelRequest request
+        )
+		{
+			return new GetTakeOverTypeModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetTakeOverTypeModelResult> GetTakeOverTypeModelAsync(
+            Request.GetTakeOverTypeModelRequest request
+        )
+		{
+		    var task = new GetTakeOverTypeModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateTakeOverTypeModelMasterTask : Gs2WebSocketSessionTask<Request.CreateTakeOverTypeModelMasterRequest, Result.CreateTakeOverTypeModelMasterResult>
+        {
+	        public CreateTakeOverTypeModelMasterTask(IGs2Session session, Request.CreateTakeOverTypeModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateTakeOverTypeModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.OpenIdConnectSetting != null)
+                {
+                    jsonWriter.WritePropertyName("openIdConnectSetting");
+                    request.OpenIdConnectSetting.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOverTypeModelMaster",
+                    "createTakeOverTypeModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateTakeOverTypeModelMaster(
+                Request.CreateTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new CreateTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateTakeOverTypeModelMasterResult> CreateTakeOverTypeModelMasterFuture(
+                Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new CreateTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateTakeOverTypeModelMasterResult> CreateTakeOverTypeModelMasterAsync(
+            Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new CreateTakeOverTypeModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateTakeOverTypeModelMasterTask CreateTakeOverTypeModelMasterAsync(
+                Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new CreateTakeOverTypeModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateTakeOverTypeModelMasterResult> CreateTakeOverTypeModelMasterAsync(
+            Request.CreateTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new CreateTakeOverTypeModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetTakeOverTypeModelMasterTask : Gs2WebSocketSessionTask<Request.GetTakeOverTypeModelMasterRequest, Result.GetTakeOverTypeModelMasterResult>
+        {
+	        public GetTakeOverTypeModelMasterTask(IGs2Session session, Request.GetTakeOverTypeModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetTakeOverTypeModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOverTypeModelMaster",
+                    "getTakeOverTypeModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetTakeOverTypeModelMaster(
+                Request.GetTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new GetTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetTakeOverTypeModelMasterResult> GetTakeOverTypeModelMasterFuture(
+                Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new GetTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTakeOverTypeModelMasterResult> GetTakeOverTypeModelMasterAsync(
+            Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new GetTakeOverTypeModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetTakeOverTypeModelMasterTask GetTakeOverTypeModelMasterAsync(
+                Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new GetTakeOverTypeModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetTakeOverTypeModelMasterResult> GetTakeOverTypeModelMasterAsync(
+            Request.GetTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new GetTakeOverTypeModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateTakeOverTypeModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateTakeOverTypeModelMasterRequest, Result.UpdateTakeOverTypeModelMasterResult>
+        {
+	        public UpdateTakeOverTypeModelMasterTask(IGs2Session session, Request.UpdateTakeOverTypeModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateTakeOverTypeModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.OpenIdConnectSetting != null)
+                {
+                    jsonWriter.WritePropertyName("openIdConnectSetting");
+                    request.OpenIdConnectSetting.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOverTypeModelMaster",
+                    "updateTakeOverTypeModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateTakeOverTypeModelMaster(
+                Request.UpdateTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateTakeOverTypeModelMasterResult> UpdateTakeOverTypeModelMasterFuture(
+                Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new UpdateTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateTakeOverTypeModelMasterResult> UpdateTakeOverTypeModelMasterAsync(
+            Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new UpdateTakeOverTypeModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateTakeOverTypeModelMasterTask UpdateTakeOverTypeModelMasterAsync(
+                Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new UpdateTakeOverTypeModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateTakeOverTypeModelMasterResult> UpdateTakeOverTypeModelMasterAsync(
+            Request.UpdateTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new UpdateTakeOverTypeModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteTakeOverTypeModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteTakeOverTypeModelMasterRequest, Result.DeleteTakeOverTypeModelMasterResult>
+        {
+	        public DeleteTakeOverTypeModelMasterTask(IGs2Session session, Request.DeleteTakeOverTypeModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteTakeOverTypeModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOverTypeModelMaster",
+                    "deleteTakeOverTypeModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteTakeOverTypeModelMaster(
+                Request.DeleteTakeOverTypeModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteTakeOverTypeModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteTakeOverTypeModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteTakeOverTypeModelMasterResult> DeleteTakeOverTypeModelMasterFuture(
+                Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new DeleteTakeOverTypeModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverTypeModelMasterResult> DeleteTakeOverTypeModelMasterAsync(
+            Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new DeleteTakeOverTypeModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteTakeOverTypeModelMasterTask DeleteTakeOverTypeModelMasterAsync(
+                Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+			return new DeleteTakeOverTypeModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteTakeOverTypeModelMasterResult> DeleteTakeOverTypeModelMasterAsync(
+            Request.DeleteTakeOverTypeModelMasterRequest request
+        )
+		{
+		    var task = new DeleteTakeOverTypeModelMasterTask(
 		        Gs2WebSocketSession,
 		        request
             );
