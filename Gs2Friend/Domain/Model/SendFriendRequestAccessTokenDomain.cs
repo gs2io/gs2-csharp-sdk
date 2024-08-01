@@ -159,6 +159,18 @@ namespace Gs2.Gs2Friend.Domain.Model
                     }
                 }
                 var result = future.Result;
+                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                        this.NamespaceName,
+                        this.UserId
+                    )
+                );
+            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.TargetUserId
+                )
+            );
                 var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
                     this._gs2,
                     this.NamespaceName,
@@ -193,6 +205,18 @@ namespace Gs2.Gs2Friend.Domain.Model
                 );
             }
             catch (NotFoundException e) {}
+            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
+            );
+            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.TargetUserId
+                )
+            );
             var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
@@ -208,11 +232,17 @@ namespace Gs2.Gs2Friend.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.FriendRequest> self)
             {
-                var (value, find) = (null as Gs2.Gs2Friend.Model.FriendRequest).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.TargetUserId
+                if (this.UserId == null) {
+                    throw new NullReferenceException();
+                }
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                        this.NamespaceName,
+                        this.UserId
+                    ),
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                        this.TargetUserId
+                    )
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -245,11 +275,17 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.FriendRequest> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Friend.Model.FriendRequest).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.TargetUserId
+            if (this.UserId == null) {
+                throw new NullReferenceException();
+            }
+            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                    this.TargetUserId
+                )
             );
             if (find) {
                 return value;

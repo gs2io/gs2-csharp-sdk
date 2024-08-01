@@ -591,33 +591,76 @@ namespace Gs2.Gs2Friend.Domain
                 string payload
         ) {
             switch (action) {
-                case "Follow": {
+                case "FollowNotification": {
     #if UNITY_2017_1_OR_NEWER
                     onFollowNotification.Invoke(FollowNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
                     break;
                 }
-                case "AcceptRequest": {
+                case "AcceptRequestNotification": {
+                    var notification = AcceptRequestNotification.FromJson(JsonMapper.ToObject(payload));
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.Friend>(
+                        (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
     #if UNITY_2017_1_OR_NEWER
-                    onAcceptRequestNotification.Invoke(AcceptRequestNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onAcceptRequestNotification.Invoke(notification);
     #endif
                     break;
                 }
-                case "RejectRequest": {
+                case "RejectRequestNotification": {
+                    var notification = RejectRequestNotification.FromJson(JsonMapper.ToObject(payload));
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.Friend>(
+                        (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
     #if UNITY_2017_1_OR_NEWER
-                    onRejectRequestNotification.Invoke(RejectRequestNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onRejectRequestNotification.Invoke(notification);
     #endif
                     break;
                 }
-                case "DeleteFriend": {
-    #if UNITY_2017_1_OR_NEWER
-                    onDeleteFriendNotification.Invoke(DeleteFriendNotification.FromJson(JsonMapper.ToObject(payload)));
-    #endif
+                case "DeleteFriendNotification": {
+                    var notification = DeleteFriendNotification.FromJson(JsonMapper.ToObject(payload));
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.Friend>(
+                        (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
                     break;
                 }
-                case "ReceiveRequest": {
+                case "ReceiveRequestNotification": {
+                    var notification = ReceiveRequestNotification.FromJson(JsonMapper.ToObject(payload));
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
     #if UNITY_2017_1_OR_NEWER
-                    onReceiveRequestNotification.Invoke(ReceiveRequestNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onReceiveRequestNotification.Invoke(notification);
     #endif
                     break;
                 }

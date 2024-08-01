@@ -45,11 +45,19 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             GetReceiveRequestRequest request
         ) {
-            self.Item?.PutCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                self.Item.TargetUserId
+            if (userId == null) {
+                throw new NullReferenceException();
+            }
+            cache.Put(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                    request.NamespaceName,
+                    userId
+                ),
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                    self.Item.TargetUserId
+                ),
+                self.Item,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
         }
 

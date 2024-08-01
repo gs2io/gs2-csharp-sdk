@@ -109,7 +109,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Friend.Model.FriendRequest>
             (
-                    (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId
                     ),
@@ -147,17 +147,25 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        AccessToken?.UserId,
-                        item.TargetUserId
+                    if (item.UserId == null) {
+                        throw new NullReferenceException();
+                    }
+                    this._gs2.Cache.Put<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                            NamespaceName,
+                            AccessToken?.UserId
+                        ),
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                            item.TargetUserId
+                        ),
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.FriendRequest>(
-                        (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId
                         )

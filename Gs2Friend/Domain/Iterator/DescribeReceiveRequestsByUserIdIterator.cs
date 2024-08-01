@@ -111,14 +111,13 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             if (!isCacheChecked && this._gs2.Cache.TryGetList
                     <Gs2.Gs2Friend.Model.FriendRequest>
             (
-                    (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                    (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                         NamespaceName,
                         UserId
                     ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this.UserId == null || item.TargetUserId == this.UserId)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -146,22 +145,29 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this.UserId == null || item.TargetUserId == this.UserId)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        UserId,
-                        item.TargetUserId
+                    if (item.UserId == null) {
+                        throw new NullReferenceException();
+                    }
+                    this._gs2.Cache.Put<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                            NamespaceName,
+                            UserId
+                        ),
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                            item.TargetUserId
+                        ),
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.FriendRequest>(
-                        (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             UserId
                         )

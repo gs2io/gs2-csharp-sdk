@@ -45,11 +45,17 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             DeleteRequestRequest request
         ) {
-            (null as FriendRequest).DeleteCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                self.Item.TargetUserId
+            if (userId == null) {
+                throw new NullReferenceException();
+            }
+            cache.Delete<FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                    request.NamespaceName,
+                    userId
+                ),
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                    self.Item.TargetUserId
+                )
             );
         }
 
