@@ -1899,6 +1899,452 @@ namespace Gs2.Gs2Log
 #endif
 
 
+        public class QueryInGameLogTask : Gs2RestSessionTask<QueryInGameLogRequest, QueryInGameLogResult>
+        {
+            public QueryInGameLogTask(IGs2Session session, RestSessionRequestFactory factory, QueryInGameLogRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(QueryInGameLogRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/ingame/log";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId);
+                }
+                if (request.Tags != null)
+                {
+                    jsonWriter.WritePropertyName("tags");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Tags)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Begin != null)
+                {
+                    jsonWriter.WritePropertyName("begin");
+                    jsonWriter.Write(request.Begin.ToString());
+                }
+                if (request.End != null)
+                {
+                    jsonWriter.WritePropertyName("end");
+                    jsonWriter.Write(request.End.ToString());
+                }
+                if (request.LongTerm != null)
+                {
+                    jsonWriter.WritePropertyName("longTerm");
+                    jsonWriter.Write(request.LongTerm.ToString());
+                }
+                if (request.PageToken != null)
+                {
+                    jsonWriter.WritePropertyName("pageToken");
+                    jsonWriter.Write(request.PageToken);
+                }
+                if (request.Limit != null)
+                {
+                    jsonWriter.WritePropertyName("limit");
+                    jsonWriter.Write(request.Limit.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator QueryInGameLog(
+                Request.QueryInGameLogRequest request,
+                UnityAction<AsyncResult<Result.QueryInGameLogResult>> callback
+        )
+		{
+			var task = new QueryInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.QueryInGameLogResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.QueryInGameLogResult> QueryInGameLogFuture(
+                Request.QueryInGameLogRequest request
+        )
+		{
+			return new QueryInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryInGameLogResult> QueryInGameLogAsync(
+                Request.QueryInGameLogRequest request
+        )
+		{
+            AsyncResult<Result.QueryInGameLogResult> result = null;
+			await QueryInGameLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryInGameLogTask QueryInGameLogAsync(
+                Request.QueryInGameLogRequest request
+        )
+		{
+			return new QueryInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.QueryInGameLogResult> QueryInGameLogAsync(
+                Request.QueryInGameLogRequest request
+        )
+		{
+			var task = new QueryInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SendInGameLogTask : Gs2RestSessionTask<SendInGameLogRequest, SendInGameLogResult>
+        {
+            public SendInGameLogTask(IGs2Session session, RestSessionRequestFactory factory, SendInGameLogRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SendInGameLogRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/ingame/log/user/me/send";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Tags != null)
+                {
+                    jsonWriter.WritePropertyName("tags");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Tags)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Payload != null)
+                {
+                    jsonWriter.WritePropertyName("payload");
+                    jsonWriter.Write(request.Payload);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SendInGameLog(
+                Request.SendInGameLogRequest request,
+                UnityAction<AsyncResult<Result.SendInGameLogResult>> callback
+        )
+		{
+			var task = new SendInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SendInGameLogResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SendInGameLogResult> SendInGameLogFuture(
+                Request.SendInGameLogRequest request
+        )
+		{
+			return new SendInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SendInGameLogResult> SendInGameLogAsync(
+                Request.SendInGameLogRequest request
+        )
+		{
+            AsyncResult<Result.SendInGameLogResult> result = null;
+			await SendInGameLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SendInGameLogTask SendInGameLogAsync(
+                Request.SendInGameLogRequest request
+        )
+		{
+			return new SendInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SendInGameLogResult> SendInGameLogAsync(
+                Request.SendInGameLogRequest request
+        )
+		{
+			var task = new SendInGameLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SendInGameLogByUserIdTask : Gs2RestSessionTask<SendInGameLogByUserIdRequest, SendInGameLogByUserIdResult>
+        {
+            public SendInGameLogByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SendInGameLogByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SendInGameLogByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/ingame/log/user/{userId}/send";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Tags != null)
+                {
+                    jsonWriter.WritePropertyName("tags");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Tags)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Payload != null)
+                {
+                    jsonWriter.WritePropertyName("payload");
+                    jsonWriter.Write(request.Payload);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SendInGameLogByUserId(
+                Request.SendInGameLogByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SendInGameLogByUserIdResult>> callback
+        )
+		{
+			var task = new SendInGameLogByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SendInGameLogByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SendInGameLogByUserIdResult> SendInGameLogByUserIdFuture(
+                Request.SendInGameLogByUserIdRequest request
+        )
+		{
+			return new SendInGameLogByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SendInGameLogByUserIdResult> SendInGameLogByUserIdAsync(
+                Request.SendInGameLogByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SendInGameLogByUserIdResult> result = null;
+			await SendInGameLogByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SendInGameLogByUserIdTask SendInGameLogByUserIdAsync(
+                Request.SendInGameLogByUserIdRequest request
+        )
+		{
+			return new SendInGameLogByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SendInGameLogByUserIdResult> SendInGameLogByUserIdAsync(
+                Request.SendInGameLogByUserIdRequest request
+        )
+		{
+			var task = new SendInGameLogByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class QueryAccessLogWithTelemetryTask : Gs2RestSessionTask<QueryAccessLogWithTelemetryRequest, QueryAccessLogWithTelemetryResult>
         {
             public QueryAccessLogWithTelemetryTask(IGs2Session session, RestSessionRequestFactory factory, QueryAccessLogWithTelemetryRequest request) : base(session, factory, request)

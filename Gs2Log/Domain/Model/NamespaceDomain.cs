@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Log.Domain.Iterator;
+using Gs2.Gs2Log.Model;
 using Gs2.Gs2Log.Model.Cache;
 using Gs2.Gs2Log.Request;
 using Gs2.Gs2Log.Result;
@@ -47,12 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
-    #endif
+#endif
 #else
 using System.Collections.Generic;
 using System.Threading;
@@ -1191,14 +1192,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 this.NamespaceName
             );
         }
-
-        public Gs2.Gs2Log.Domain.Model.LogDomain Log(
-        ) {
-            return new Gs2.Gs2Log.Domain.Model.LogDomain(
-                this._gs2,
-                this.NamespaceName
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Log.Model.Insight> Insights(
         )
@@ -1279,6 +1272,145 @@ namespace Gs2.Gs2Log.Domain.Model
                 insightName
             );
         }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.AccessLogWithTelemetry> AccessLogWithTelemetry(
+            string? userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null,
+            string timeOffsetToken = null
+        )
+        {
+            return new QueryAccessLogWithTelemetryIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                userId,
+                begin,
+                end,
+                longTerm,
+                timeOffsetToken
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry> AccessLogWithTelemetryAsync(
+            #else
+        public QueryAccessLogWithTelemetryIterator AccessLogWithTelemetryAsync(
+            #endif
+            string? userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null,
+            string timeOffsetToken = null
+        )
+        {
+            return new QueryAccessLogWithTelemetryIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                userId,
+                begin,
+                end,
+                longTerm,
+                timeOffsetToken
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeAccessLogWithTelemetry(
+            Action<Gs2.Gs2Log.Model.AccessLogWithTelemetry[]> callback,
+            string userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
+                (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeAccessLogWithTelemetryWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.AccessLogWithTelemetry[]> callback,
+            string userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            var items = await AccessLogWithTelemetryAsync(
+                userId,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeAccessLogWithTelemetry(
+                callback,
+                userId,
+                begin,
+                end,
+                longTerm
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeAccessLogWithTelemetry(
+            ulong callbackId,
+            string userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
+                (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Log.Domain.Model.AccessLogWithTelemetryDomain AccessLogWithTelemetry(
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.AccessLogWithTelemetryDomain(
+                this._gs2,
+                this.NamespaceName
+            );
+        }
+
+        public Gs2.Gs2Log.Domain.Model.UserDomain User(
+            string userId
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.UserDomain(
+                this._gs2,
+                this.NamespaceName,
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                accessToken
+            );
+        }
+
     }
 
     public partial class NamespaceDomain {
@@ -1290,7 +1422,7 @@ namespace Gs2.Gs2Log.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -1711,5 +1843,109 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.InGameLog> InGameLog(
+            string userId = null,
+            InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null,
+            string timeOffsetToken = null
+        )
+        {
+            return new QueryInGameLogIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                userId,
+                tags,
+                begin,
+                end,
+                longTerm,
+                timeOffsetToken
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog> InGameLogAsync(
+            #else
+        public QueryInGameLogIterator InGameLogAsync(
+            #endif
+            string userId = null,
+            InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null,
+            string timeOffsetToken = null
+        )
+        {
+            return new QueryInGameLogIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                userId,
+                tags,
+                begin,
+                end,
+                longTerm,
+                timeOffsetToken
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeInGameLog(
+            Action<Gs2.Gs2Log.Model.InGameLog[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.InGameLog>(
+                (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeInGameLogWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.InGameLog[]> callback,
+            string userId = null,
+            InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            var items = await InGameLogAsync(
+                userId,
+                tags,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeInGameLog(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeInGameLog(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.InGameLog>(
+                (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
     }
 }

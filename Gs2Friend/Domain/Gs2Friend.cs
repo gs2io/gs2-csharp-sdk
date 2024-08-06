@@ -466,12 +466,37 @@ namespace Gs2.Gs2Friend.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, UpdateProfileByUserIdRequest, UpdateProfileByUserIdResult> UpdateProfileByUserIdComplete = new UnityEvent<string, UpdateProfileByUserIdRequest, UpdateProfileByUserIdResult>();
+    #else
+        public static Action<string, UpdateProfileByUserIdRequest, UpdateProfileByUserIdResult> UpdateProfileByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "UpdateProfileByUserId": {
+                        var requestModel = UpdateProfileByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = UpdateProfileByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        UpdateProfileByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public void UpdateCacheFromStampTask(
@@ -487,6 +512,25 @@ namespace Gs2.Gs2Friend.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
+            switch (method) {
+                case "update_profile_by_user_id": {
+                    var requestModel = UpdateProfileByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = UpdateProfileByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    UpdateProfileByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+            }
         }
     #if UNITY_2017_1_OR_NEWER
         [Serializable]

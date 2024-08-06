@@ -1317,6 +1317,114 @@ namespace Gs2.Gs2Friend
 #endif
 
 
+        public class UpdateProfileByStampSheetTask : Gs2WebSocketSessionTask<Request.UpdateProfileByStampSheetRequest, Result.UpdateProfileByStampSheetResult>
+        {
+	        public UpdateProfileByStampSheetTask(IGs2Session session, Request.UpdateProfileByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateProfileByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "friend",
+                    "profile",
+                    "updateProfileByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateProfileByStampSheet(
+                Request.UpdateProfileByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.UpdateProfileByStampSheetResult>> callback
+        )
+		{
+			var task = new UpdateProfileByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateProfileByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetFuture(
+                Request.UpdateProfileByStampSheetRequest request
+        )
+		{
+			return new UpdateProfileByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
+            Request.UpdateProfileByStampSheetRequest request
+        )
+		{
+		    var task = new UpdateProfileByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateProfileByStampSheetTask UpdateProfileByStampSheetAsync(
+                Request.UpdateProfileByStampSheetRequest request
+        )
+		{
+			return new UpdateProfileByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
+            Request.UpdateProfileByStampSheetRequest request
+        )
+		{
+		    var task = new UpdateProfileByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetFollowTask : Gs2WebSocketSessionTask<Request.GetFollowRequest, Result.GetFollowResult>
         {
 	        public GetFollowTask(IGs2Session session, Request.GetFollowRequest request) : base(session, request)

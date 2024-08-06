@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Friend.Model.Transaction;
 using Gs2.Gs2Friend.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -57,6 +58,24 @@ namespace Gs2.Gs2Friend.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
+                if (UpdateProfileByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = UpdateProfileByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = UpdateProfileByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -79,6 +98,17 @@ namespace Gs2.Gs2Friend.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
+            if (UpdateProfileByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = UpdateProfileByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await UpdateProfileByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
             return null;
         }
 #endif

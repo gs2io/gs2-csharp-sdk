@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -62,14 +64,15 @@ namespace Gs2.Gs2Log.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class QueryAccessLogWithTelemetryIterator : Gs2Iterator<Gs2.Gs2Log.Model.AccessLogWithTelemetry> {
+    public class QueryInGameLogIterator : Gs2Iterator<Gs2.Gs2Log.Model.InGameLog> {
     #else
-    public class QueryAccessLogWithTelemetryIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry> {
+    public class QueryInGameLogIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog> {
     #endif
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
+        public Gs2.Gs2Log.Model.InGameLogTag[] Tags { get; }
         public long? Begin { get; }
         public long? End { get; }
         public bool? LongTerm { get; }
@@ -77,15 +80,16 @@ namespace Gs2.Gs2Log.Domain.Iterator
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
-        private Gs2.Gs2Log.Model.AccessLogWithTelemetry[] _result;
+        private Gs2.Gs2Log.Model.InGameLog[] _result;
 
         int? fetchSize;
 
-        public QueryAccessLogWithTelemetryIterator(
+        public QueryInGameLogIterator(
             Gs2.Core.Domain.Gs2 gs2,
             Gs2LogRestClient client,
             string namespaceName,
             string userId = null,
+            Gs2.Gs2Log.Model.InGameLogTag[] tags = null,
             long? begin = null,
             long? end = null,
             bool? longTerm = null,
@@ -95,13 +99,14 @@ namespace Gs2.Gs2Log.Domain.Iterator
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
+            this.Tags = tags;
             this.Begin = begin;
             this.End = end;
             this.LongTerm = longTerm;
             this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
-            this._result = new Gs2.Gs2Log.Model.AccessLogWithTelemetry[]{};
+            this._result = new Gs2.Gs2Log.Model.InGameLog[]{};
 
             this.fetchSize = null;
         }
@@ -118,15 +123,15 @@ namespace Gs2.Gs2Log.Domain.Iterator
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
             if (!isCacheChecked && this._gs2.Cache.TryGetList
-                    <Gs2.Gs2Log.Model.AccessLogWithTelemetry>
+                    <Gs2.Gs2Log.Model.InGameLog>
             (
-                    (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
+                    (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
                         NamespaceName
                     ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this.UserId == null || item.UserId == this.UserId)
+                    .Where(item => this.Tags == null || item.Tags == this.Tags)
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)
                     .ToArray();
@@ -135,13 +140,14 @@ namespace Gs2.Gs2Log.Domain.Iterator
             } else {
 
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.QueryAccessLogWithTelemetryFuture(
+                var future = this._client.QueryInGameLogFuture(
                 #else
-                var r = await this._client.QueryAccessLogWithTelemetryAsync(
+                var r = await this._client.QueryInGameLogAsync(
                 #endif
-                    new Gs2.Gs2Log.Request.QueryAccessLogWithTelemetryRequest()
+                    new Gs2.Gs2Log.Request.QueryInGameLogRequest()
                         .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
+                        .WithUserId(this.UserId)
                         .WithBegin(this.Begin)
                         .WithEnd(this.End)
                         .WithLongTerm(this.LongTerm)
@@ -158,7 +164,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this.UserId == null || item.UserId == this.UserId)
+                    .Where(item => this.Tags == null || item.Tags == this.Tags)
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)
                     .ToArray();
@@ -167,13 +173,15 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 foreach (var item in r.Items) {
                     item.PutCache(
                         this._gs2.Cache,
-                        NamespaceName
+                        NamespaceName,
+                        UserId ?? default,
+                        item.RequestId
                     );
                 }
 
                 if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
-                        (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.InGameLog>(
+                        (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
                             NamespaceName
                         )
                     );
@@ -197,7 +205,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Log.Model.AccessLogWithTelemetry>> callback
+            Action<AsyncResult<Gs2.Gs2Log.Model.InGameLog>> callback
         )
         {
             Gs2Exception error = null;
@@ -224,7 +232,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                     }
                 }
             );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
+            callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
                 Current,
                 error
             ));
@@ -233,22 +241,22 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
         protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Log.Model.AccessLogWithTelemetry>> callback
+            Action<AsyncResult<Gs2.Gs2Log.Model.InGameLog>> callback
             #endif
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Log.Model.AccessLogWithTelemetry> GetAsyncEnumerator(
+        public async IAsyncEnumerator<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
         #endif
         )
         {
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(async (writer, token) =>
+            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Log.Model.InGameLog>(async (writer, token) =>
             {
             #endif
         #endif
@@ -265,7 +273,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     Current = null;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
                         Current,
                         Error
                     ));
@@ -288,7 +296,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 await writer.YieldAsync(ret);
             #else
                 Current = ret;
-                callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
+                callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
                     Current,
                     Error
                 ));
