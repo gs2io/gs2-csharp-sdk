@@ -36,6 +36,7 @@ namespace Gs2.Gs2Idle.Model
         public string UserId { set; get; } = null!;
         public long? RandomSeed { set; get; } = null!;
         public int? IdleMinutes { set; get; } = null!;
+        public long? NextRewardsAt { set; get; } = null!;
         public int? MaximumIdleMinutes { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -58,6 +59,10 @@ namespace Gs2.Gs2Idle.Model
         }
         public Status WithIdleMinutes(int? idleMinutes) {
             this.IdleMinutes = idleMinutes;
+            return this;
+        }
+        public Status WithNextRewardsAt(long? nextRewardsAt) {
+            this.NextRewardsAt = nextRewardsAt;
             return this;
         }
         public Status WithMaximumIdleMinutes(int? maximumIdleMinutes) {
@@ -176,6 +181,7 @@ namespace Gs2.Gs2Idle.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : (long?)(data["randomSeed"].ToString().Contains(".") ? (long)double.Parse(data["randomSeed"].ToString()) : long.Parse(data["randomSeed"].ToString())))
                 .WithIdleMinutes(!data.Keys.Contains("idleMinutes") || data["idleMinutes"] == null ? null : (int?)(data["idleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["idleMinutes"].ToString()) : int.Parse(data["idleMinutes"].ToString())))
+                .WithNextRewardsAt(!data.Keys.Contains("nextRewardsAt") || data["nextRewardsAt"] == null ? null : (long?)(data["nextRewardsAt"].ToString().Contains(".") ? (long)double.Parse(data["nextRewardsAt"].ToString()) : long.Parse(data["nextRewardsAt"].ToString())))
                 .WithMaximumIdleMinutes(!data.Keys.Contains("maximumIdleMinutes") || data["maximumIdleMinutes"] == null ? null : (int?)(data["maximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["maximumIdleMinutes"].ToString()) : int.Parse(data["maximumIdleMinutes"].ToString())))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -190,6 +196,7 @@ namespace Gs2.Gs2Idle.Model
                 ["userId"] = UserId,
                 ["randomSeed"] = RandomSeed,
                 ["idleMinutes"] = IdleMinutes,
+                ["nextRewardsAt"] = NextRewardsAt,
                 ["maximumIdleMinutes"] = MaximumIdleMinutes,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -219,6 +226,10 @@ namespace Gs2.Gs2Idle.Model
             if (IdleMinutes != null) {
                 writer.WritePropertyName("idleMinutes");
                 writer.Write((IdleMinutes.ToString().Contains(".") ? (int)double.Parse(IdleMinutes.ToString()) : int.Parse(IdleMinutes.ToString())));
+            }
+            if (NextRewardsAt != null) {
+                writer.WritePropertyName("nextRewardsAt");
+                writer.Write((NextRewardsAt.ToString().Contains(".") ? (long)double.Parse(NextRewardsAt.ToString()) : long.Parse(NextRewardsAt.ToString())));
             }
             if (MaximumIdleMinutes != null) {
                 writer.WritePropertyName("maximumIdleMinutes");
@@ -282,6 +293,14 @@ namespace Gs2.Gs2Idle.Model
             else
             {
                 diff += (int)(IdleMinutes - other.IdleMinutes);
+            }
+            if (NextRewardsAt == null && NextRewardsAt == other.NextRewardsAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(NextRewardsAt - other.NextRewardsAt);
             }
             if (MaximumIdleMinutes == null && MaximumIdleMinutes == other.MaximumIdleMinutes)
             {
@@ -365,6 +384,18 @@ namespace Gs2.Gs2Idle.Model
                 }
             }
             {
+                if (NextRewardsAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.nextRewardsAt.error.invalid"),
+                    });
+                }
+                if (NextRewardsAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.nextRewardsAt.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (MaximumIdleMinutes < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("status", "idle.status.maximumIdleMinutes.error.invalid"),
@@ -421,6 +452,7 @@ namespace Gs2.Gs2Idle.Model
                 UserId = UserId,
                 RandomSeed = RandomSeed,
                 IdleMinutes = IdleMinutes,
+                NextRewardsAt = NextRewardsAt,
                 MaximumIdleMinutes = MaximumIdleMinutes,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
