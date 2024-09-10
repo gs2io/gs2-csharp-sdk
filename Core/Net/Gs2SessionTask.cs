@@ -49,7 +49,7 @@ namespace Gs2.Core.Net
                 yield break;
             }
             
-            Telemetry.StartRequest(Request);
+            Telemetry.StartRequest(request.TaskId, Request);
 
             yield return this.Session.Send(request);
             var begin = DateTime.Now;
@@ -73,7 +73,7 @@ namespace Gs2.Core.Net
             
             var response = this.Session.MarkRead(request);
             
-            Telemetry.EndRequest(Request, response);
+            Telemetry.EndRequest(request.TaskId, Request, response);
 
             if (response.IsSuccess)
             {
@@ -107,6 +107,8 @@ namespace Gs2.Core.Net
                 throw new SessionNotOpenException("Session no longer open.");
             }
 
+            Telemetry.StartRequest(request.TaskId, Request);
+
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             this.Session.Send(request);
 #else
@@ -126,6 +128,9 @@ namespace Gs2.Core.Net
                 await Task.Delay(5);
             }
             var response = this.Session.MarkRead(request);
+            
+            Telemetry.EndRequest(request.TaskId, Request, response);
+
             if (response.IsSuccess) {
                 var transactionResult = TransactionResult.FromJson(response.Body);
                 if (transactionResult != null) {

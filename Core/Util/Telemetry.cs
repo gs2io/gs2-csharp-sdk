@@ -29,10 +29,10 @@ namespace Gs2.Core.Util
 {
     public static class Telemetry
     {
-        public delegate void StartRequestHandler(IRequest request);
+        public delegate void StartRequestHandler(Gs2SessionTaskId taskId, IRequest request);
         public static event StartRequestHandler OnStartRequest;
         
-        public delegate void EndRequestHandler(IRequest request, IGs2SessionResult result);
+        public delegate void EndRequestHandler(Gs2SessionTaskId taskId, IRequest request, IGs2SessionResult result);
         public static event EndRequestHandler OnEndRequest;
         
         public delegate void StartTransactionHandler(string transactionId, IRequest request);
@@ -53,12 +53,12 @@ namespace Gs2.Core.Util
         public delegate void HandleJobHandler(string jobName, JobResult result);
         public static event HandleJobHandler OnHandleJob;
 
-        internal static void StartRequest(IRequest request) {
-            OnStartRequest?.Invoke(request);
+        internal static void StartRequest(Gs2SessionTaskId taskId, IRequest request) {
+            OnStartRequest?.Invoke(taskId, request);
         }
         
-        internal static void EndRequest(IRequest request, IGs2SessionResult result) {
-            OnEndRequest?.Invoke(request, result);
+        internal static void EndRequest(Gs2SessionTaskId taskId, IRequest request, IGs2SessionResult result) {
+            OnEndRequest?.Invoke(taskId, request, result);
         }
         
         internal static void StartTransaction(string transactionId, IRequest request) {
