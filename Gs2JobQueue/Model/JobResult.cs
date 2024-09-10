@@ -12,12 +12,15 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
+using Gs2.Core.Util;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
@@ -182,7 +185,7 @@ namespace Gs2.Gs2JobQueue.Model
             if (data == null) {
                 return null;
             }
-            return new JobResult()
+            var result = new JobResult()
                 .WithJobResultId(!data.Keys.Contains("jobResultId") || data["jobResultId"] == null ? null : data["jobResultId"].ToString())
                 .WithJobId(!data.Keys.Contains("jobId") || data["jobId"] == null ? null : data["jobId"].ToString())
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
@@ -191,6 +194,12 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
                 .WithTryAt(!data.Keys.Contains("tryAt") || data["tryAt"] == null ? null : (long?)(data["tryAt"].ToString().Contains(".") ? (long)double.Parse(data["tryAt"].ToString()) : long.Parse(data["tryAt"].ToString())));
+
+            if (result != null) {
+                Telemetry.HandleJob(Job.GetJobNameFromGrn(result.JobId), result);
+            }
+
+            return result;
         }
 
         public JsonData ToJson()

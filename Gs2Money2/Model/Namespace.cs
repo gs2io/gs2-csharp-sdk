@@ -37,7 +37,8 @@ namespace Gs2.Gs2Money2.Model
         public string CurrencyUsagePriority { set; get; } = null!;
         public bool? SharedFreeCurrency { set; get; } = null!;
         public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.ScriptSetting ChangeBalanceScript { set; get; } = null!;
+        public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
+        public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; } = null!;
         public Gs2.Gs2Money2.Model.LogSetting LogSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -66,8 +67,12 @@ namespace Gs2.Gs2Money2.Model
             this.PlatformSetting = platformSetting;
             return this;
         }
-        public Namespace WithChangeBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting changeBalanceScript) {
-            this.ChangeBalanceScript = changeBalanceScript;
+        public Namespace WithDepositBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting depositBalanceScript) {
+            this.DepositBalanceScript = depositBalanceScript;
+            return this;
+        }
+        public Namespace WithWithdrawBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting withdrawBalanceScript) {
+            this.WithdrawBalanceScript = withdrawBalanceScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Money2.Model.LogSetting logSetting) {
@@ -153,7 +158,8 @@ namespace Gs2.Gs2Money2.Model
                 .WithCurrencyUsagePriority(!data.Keys.Contains("currencyUsagePriority") || data["currencyUsagePriority"] == null ? null : data["currencyUsagePriority"].ToString())
                 .WithSharedFreeCurrency(!data.Keys.Contains("sharedFreeCurrency") || data["sharedFreeCurrency"] == null ? null : (bool?)bool.Parse(data["sharedFreeCurrency"].ToString()))
                 .WithPlatformSetting(!data.Keys.Contains("platformSetting") || data["platformSetting"] == null ? null : Gs2.Gs2Money2.Model.PlatformSetting.FromJson(data["platformSetting"]))
-                .WithChangeBalanceScript(!data.Keys.Contains("changeBalanceScript") || data["changeBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["changeBalanceScript"]))
+                .WithDepositBalanceScript(!data.Keys.Contains("depositBalanceScript") || data["depositBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["depositBalanceScript"]))
+                .WithWithdrawBalanceScript(!data.Keys.Contains("withdrawBalanceScript") || data["withdrawBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["withdrawBalanceScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Money2.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -169,7 +175,8 @@ namespace Gs2.Gs2Money2.Model
                 ["currencyUsagePriority"] = CurrencyUsagePriority,
                 ["sharedFreeCurrency"] = SharedFreeCurrency,
                 ["platformSetting"] = PlatformSetting?.ToJson(),
-                ["changeBalanceScript"] = ChangeBalanceScript?.ToJson(),
+                ["depositBalanceScript"] = DepositBalanceScript?.ToJson(),
+                ["withdrawBalanceScript"] = WithdrawBalanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -204,9 +211,13 @@ namespace Gs2.Gs2Money2.Model
                 writer.WritePropertyName("platformSetting");
                 PlatformSetting.WriteJson(writer);
             }
-            if (ChangeBalanceScript != null) {
-                writer.WritePropertyName("changeBalanceScript");
-                ChangeBalanceScript.WriteJson(writer);
+            if (DepositBalanceScript != null) {
+                writer.WritePropertyName("depositBalanceScript");
+                DepositBalanceScript.WriteJson(writer);
+            }
+            if (WithdrawBalanceScript != null) {
+                writer.WritePropertyName("withdrawBalanceScript");
+                WithdrawBalanceScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -279,13 +290,21 @@ namespace Gs2.Gs2Money2.Model
             {
                 diff += PlatformSetting.CompareTo(other.PlatformSetting);
             }
-            if (ChangeBalanceScript == null && ChangeBalanceScript == other.ChangeBalanceScript)
+            if (DepositBalanceScript == null && DepositBalanceScript == other.DepositBalanceScript)
             {
                 // null and null
             }
             else
             {
-                diff += ChangeBalanceScript.CompareTo(other.ChangeBalanceScript);
+                diff += DepositBalanceScript.CompareTo(other.DepositBalanceScript);
+            }
+            if (WithdrawBalanceScript == null && WithdrawBalanceScript == other.WithdrawBalanceScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += WithdrawBalanceScript.CompareTo(other.WithdrawBalanceScript);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
@@ -364,6 +383,8 @@ namespace Gs2.Gs2Money2.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "money2.namespace.createdAt.error.invalid"),
@@ -409,7 +430,8 @@ namespace Gs2.Gs2Money2.Model
                 CurrencyUsagePriority = CurrencyUsagePriority,
                 SharedFreeCurrency = SharedFreeCurrency,
                 PlatformSetting = PlatformSetting.Clone() as Gs2.Gs2Money2.Model.PlatformSetting,
-                ChangeBalanceScript = ChangeBalanceScript.Clone() as Gs2.Gs2Money2.Model.ScriptSetting,
+                DepositBalanceScript = DepositBalanceScript.Clone() as Gs2.Gs2Money2.Model.ScriptSetting,
+                WithdrawBalanceScript = WithdrawBalanceScript.Clone() as Gs2.Gs2Money2.Model.ScriptSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Money2.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

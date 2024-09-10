@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Core.Util;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Util.LitJson;
 
@@ -48,8 +49,22 @@ namespace Gs2.Gs2Distributor.Result
             if (data == null) {
                 return null;
             }
-            return new GetStampSheetResultResult()
+            var result = new GetStampSheetResultResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Distributor.Model.StampSheetResult.FromJson(data["item"]));
+            
+            if (result != null) {
+                Telemetry.HandleTransaction(result.Item?.TransactionId, result.Item);
+                if (result.Item?.SheetRequest?.Action == "Gs2JobQueue:PushByUserId") {
+                    var pushResult = Gs2.Gs2JobQueue.Result.PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Item?.SheetResult));
+                    if (pushResult != null) {
+                        foreach (var item in pushResult.Items) {
+                            Telemetry.StartJob(item.Name);
+                        }
+                    }
+                }
+            }
+            
+            return result;
         }
 
         public JsonData ToJson()

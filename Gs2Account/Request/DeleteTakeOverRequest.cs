@@ -36,7 +36,6 @@ namespace Gs2.Gs2Account.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public int? Type { set; get; } = null!;
-         public string UserIdentifier { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public DeleteTakeOverRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -48,10 +47,6 @@ namespace Gs2.Gs2Account.Request
         }
         public DeleteTakeOverRequest WithType(int? type) {
             this.Type = type;
-            return this;
-        }
-        public DeleteTakeOverRequest WithUserIdentifier(string userIdentifier) {
-            this.UserIdentifier = userIdentifier;
             return this;
         }
 
@@ -71,8 +66,7 @@ namespace Gs2.Gs2Account.Request
             return new DeleteTakeOverRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
-                .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString());
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -81,7 +75,6 @@ namespace Gs2.Gs2Account.Request
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["type"] = Type,
-                ["userIdentifier"] = UserIdentifier,
             };
         }
 
@@ -100,10 +93,6 @@ namespace Gs2.Gs2Account.Request
                 writer.WritePropertyName("type");
                 writer.Write((Type.ToString().Contains(".") ? (int)double.Parse(Type.ToString()) : int.Parse(Type.ToString())));
             }
-            if (UserIdentifier != null) {
-                writer.WritePropertyName("userIdentifier");
-                writer.Write(UserIdentifier.ToString());
-            }
             writer.WriteObjectEnd();
         }
 
@@ -112,7 +101,6 @@ namespace Gs2.Gs2Account.Request
             key += NamespaceName + ":";
             key += AccessToken + ":";
             key += Type + ":";
-            key += UserIdentifier + ":";
             return key;
         }
     }

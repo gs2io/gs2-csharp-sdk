@@ -213,10 +213,15 @@ namespace Gs2.Gs2Money2
                     jsonWriter.WritePropertyName("platformSetting");
                     request.PlatformSetting.WriteJson(jsonWriter);
                 }
-                if (request.ChangeBalanceScript != null)
+                if (request.DepositBalanceScript != null)
                 {
-                    jsonWriter.WritePropertyName("changeBalanceScript");
-                    request.ChangeBalanceScript.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("depositBalanceScript");
+                    request.DepositBalanceScript.WriteJson(jsonWriter);
+                }
+                if (request.WithdrawBalanceScript != null)
+                {
+                    jsonWriter.WritePropertyName("withdrawBalanceScript");
+                    request.WithdrawBalanceScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -563,10 +568,15 @@ namespace Gs2.Gs2Money2
                     jsonWriter.WritePropertyName("platformSetting");
                     request.PlatformSetting.WriteJson(jsonWriter);
                 }
-                if (request.ChangeBalanceScript != null)
+                if (request.DepositBalanceScript != null)
                 {
-                    jsonWriter.WritePropertyName("changeBalanceScript");
-                    request.ChangeBalanceScript.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("depositBalanceScript");
+                    request.DepositBalanceScript.WriteJson(jsonWriter);
+                }
+                if (request.WithdrawBalanceScript != null)
+                {
+                    jsonWriter.WritePropertyName("withdrawBalanceScript");
+                    request.WithdrawBalanceScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

@@ -38,7 +38,8 @@ namespace Gs2.Gs2Money2.Request
          public string Description { set; get; } = null!;
          public bool? SharedFreeCurrency { set; get; } = null!;
          public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
-         public Gs2.Gs2Money2.Model.ScriptSetting ChangeBalanceScript { set; get; } = null!;
+         public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
+         public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; } = null!;
          public Gs2.Gs2Money2.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -60,8 +61,12 @@ namespace Gs2.Gs2Money2.Request
             this.PlatformSetting = platformSetting;
             return this;
         }
-        public CreateNamespaceRequest WithChangeBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting changeBalanceScript) {
-            this.ChangeBalanceScript = changeBalanceScript;
+        public CreateNamespaceRequest WithDepositBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting depositBalanceScript) {
+            this.DepositBalanceScript = depositBalanceScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithWithdrawBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting withdrawBalanceScript) {
+            this.WithdrawBalanceScript = withdrawBalanceScript;
             return this;
         }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Money2.Model.LogSetting logSetting) {
@@ -83,7 +88,8 @@ namespace Gs2.Gs2Money2.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithSharedFreeCurrency(!data.Keys.Contains("sharedFreeCurrency") || data["sharedFreeCurrency"] == null ? null : (bool?)bool.Parse(data["sharedFreeCurrency"].ToString()))
                 .WithPlatformSetting(!data.Keys.Contains("platformSetting") || data["platformSetting"] == null ? null : Gs2.Gs2Money2.Model.PlatformSetting.FromJson(data["platformSetting"]))
-                .WithChangeBalanceScript(!data.Keys.Contains("changeBalanceScript") || data["changeBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["changeBalanceScript"]))
+                .WithDepositBalanceScript(!data.Keys.Contains("depositBalanceScript") || data["depositBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["depositBalanceScript"]))
+                .WithWithdrawBalanceScript(!data.Keys.Contains("withdrawBalanceScript") || data["withdrawBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["withdrawBalanceScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Money2.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -95,7 +101,8 @@ namespace Gs2.Gs2Money2.Request
                 ["description"] = Description,
                 ["sharedFreeCurrency"] = SharedFreeCurrency,
                 ["platformSetting"] = PlatformSetting?.ToJson(),
-                ["changeBalanceScript"] = ChangeBalanceScript?.ToJson(),
+                ["depositBalanceScript"] = DepositBalanceScript?.ToJson(),
+                ["withdrawBalanceScript"] = WithdrawBalanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -122,8 +129,11 @@ namespace Gs2.Gs2Money2.Request
             if (PlatformSetting != null) {
                 PlatformSetting.WriteJson(writer);
             }
-            if (ChangeBalanceScript != null) {
-                ChangeBalanceScript.WriteJson(writer);
+            if (DepositBalanceScript != null) {
+                DepositBalanceScript.WriteJson(writer);
+            }
+            if (WithdrawBalanceScript != null) {
+                WithdrawBalanceScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
@@ -138,7 +148,8 @@ namespace Gs2.Gs2Money2.Request
             key += Description + ":";
             key += SharedFreeCurrency + ":";
             key += PlatformSetting + ":";
-            key += ChangeBalanceScript + ":";
+            key += DepositBalanceScript + ":";
+            key += WithdrawBalanceScript + ":";
             key += LogSetting + ":";
             return key;
         }

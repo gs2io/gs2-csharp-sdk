@@ -3,6 +3,10 @@ using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
+using Gs2.Core.Result;
+using Gs2.Core.Util;
+using Gs2.Gs2Distributor.Request;
+using Gs2.Gs2Distributor.Result;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using UnityEngine;
 #endif
@@ -44,6 +48,8 @@ namespace Gs2.Core.Net
                 OnError(new SessionNotOpenException("Session no longer open."));
                 yield break;
             }
+            
+            Telemetry.StartRequest(Request);
 
             yield return this.Session.Send(request);
             var begin = DateTime.Now;
@@ -61,12 +67,23 @@ namespace Gs2.Core.Net
                 }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.005f);
 #endif
             }
+            
             var response = this.Session.MarkRead(request);
+            
+            Telemetry.EndRequest(Request, response);
+
             if (response.IsSuccess)
             {
+                var transactionResult = TransactionResult.FromJson(response.Body);
+                if (transactionResult != null) {
+                    if (transactionResult.TransactionId != null && 
+                        (transactionResult.AutoRunStampSheet ?? false)) {
+                        Telemetry.StartTransaction(transactionResult.TransactionId, Request);
+                    }
+                }
                 OnComplete((TResult)typeof(TResult).GetMethod("FromJson")?.Invoke(null, new object[] { response.Body }));
             }
             else
@@ -106,11 +123,17 @@ namespace Gs2.Core.Net
                 {
                     throw new UserCancelException(Array.Empty<RequestError>());
                 }
-                await Task.Delay(50);
+                await Task.Delay(5);
             }
             var response = this.Session.MarkRead(request);
-            if (response.IsSuccess)
-            {
+            if (response.IsSuccess) {
+                var transactionResult = TransactionResult.FromJson(response.Body);
+                if (transactionResult != null) {
+                    if (transactionResult.TransactionId != null && 
+                        (transactionResult.AutoRunStampSheet ?? false)) {
+                        Telemetry.StartTransaction(transactionResult.TransactionId, Request);
+                    }
+                }
                 return (TResult)typeof(TResult).GetMethod("FromJson")?.Invoke(null, new object[] { response.Body });
             }
             else

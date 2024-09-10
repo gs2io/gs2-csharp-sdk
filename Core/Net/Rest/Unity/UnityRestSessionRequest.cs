@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine.Networking;
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 #endif
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

@@ -4027,9 +4027,6 @@ namespace Gs2.Gs2Account
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-                if (request.UserIdentifier != null) {
-                    sessionRequest.AddQueryString("userIdentifier", $"{request.UserIdentifier}");
-                }
 
                 if (request.RequestId != null)
                 {

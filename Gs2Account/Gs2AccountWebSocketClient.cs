@@ -3092,11 +3092,6 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("type");
                     jsonWriter.Write(request.Type.ToString());
                 }
-                if (request.UserIdentifier != null)
-                {
-                    jsonWriter.WritePropertyName("userIdentifier");
-                    jsonWriter.Write(request.UserIdentifier.ToString());
-                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

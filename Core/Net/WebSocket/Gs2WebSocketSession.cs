@@ -9,6 +9,9 @@ using Gs2.Core.Exception;
 using Gs2.Core.Model;
 using Gs2.Core.Model.Internal;
 using Gs2.Core.Result;
+using Gs2.Core.Util;
+using Gs2.Gs2Distributor.Model;
+using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.WebSocketSharp;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using Gs2.HybridWebSocket;
