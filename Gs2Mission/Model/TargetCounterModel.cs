@@ -32,14 +32,24 @@ namespace Gs2.Gs2Mission.Model
 	public class TargetCounterModel : IComparable
 	{
         public string CounterName { set; get; } = null!;
+        public string ScopeType { set; get; } = null!;
         public string ResetType { set; get; } = null!;
+        public string ConditionName { set; get; } = null!;
         public long? Value { set; get; } = null!;
         public TargetCounterModel WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
+        public TargetCounterModel WithScopeType(string scopeType) {
+            this.ScopeType = scopeType;
+            return this;
+        }
         public TargetCounterModel WithResetType(string resetType) {
             this.ResetType = resetType;
+            return this;
+        }
+        public TargetCounterModel WithConditionName(string conditionName) {
+            this.ConditionName = conditionName;
             return this;
         }
         public TargetCounterModel WithValue(long? value) {
@@ -57,7 +67,9 @@ namespace Gs2.Gs2Mission.Model
             }
             return new TargetCounterModel()
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
+                .WithScopeType(!data.Keys.Contains("scopeType") || data["scopeType"] == null ? null : data["scopeType"].ToString())
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithConditionName(!data.Keys.Contains("conditionName") || data["conditionName"] == null ? null : data["conditionName"].ToString())
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)(data["value"].ToString().Contains(".") ? (long)double.Parse(data["value"].ToString()) : long.Parse(data["value"].ToString())));
         }
 
@@ -65,7 +77,9 @@ namespace Gs2.Gs2Mission.Model
         {
             return new JsonData {
                 ["counterName"] = CounterName,
+                ["scopeType"] = ScopeType,
                 ["resetType"] = ResetType,
+                ["conditionName"] = ConditionName,
                 ["value"] = Value,
             };
         }
@@ -77,9 +91,17 @@ namespace Gs2.Gs2Mission.Model
                 writer.WritePropertyName("counterName");
                 writer.Write(CounterName.ToString());
             }
+            if (ScopeType != null) {
+                writer.WritePropertyName("scopeType");
+                writer.Write(ScopeType.ToString());
+            }
             if (ResetType != null) {
                 writer.WritePropertyName("resetType");
                 writer.Write(ResetType.ToString());
+            }
+            if (ConditionName != null) {
+                writer.WritePropertyName("conditionName");
+                writer.Write(ConditionName.ToString());
             }
             if (Value != null) {
                 writer.WritePropertyName("value");
@@ -100,6 +122,14 @@ namespace Gs2.Gs2Mission.Model
             {
                 diff += CounterName.CompareTo(other.CounterName);
             }
+            if (ScopeType == null && ScopeType == other.ScopeType)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ScopeType.CompareTo(other.ScopeType);
+            }
             if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
@@ -107,6 +137,14 @@ namespace Gs2.Gs2Mission.Model
             else
             {
                 diff += ResetType.CompareTo(other.ResetType);
+            }
+            if (ConditionName == null && ConditionName == other.ConditionName)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ConditionName.CompareTo(other.ConditionName);
             }
             if (Value == null && Value == other.Value)
             {
@@ -128,6 +166,17 @@ namespace Gs2.Gs2Mission.Model
                 }
             }
             {
+                switch (ScopeType) {
+                    case "resetTiming":
+                    case "verifyAction":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("targetCounterModel", "mission.targetCounterModel.scopeType.error.invalid"),
+                        });
+                }
+            }
+            {
                 switch (ResetType) {
                     case "notReset":
                     case "daily":
@@ -138,6 +187,13 @@ namespace Gs2.Gs2Mission.Model
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
                             new RequestError("targetCounterModel", "mission.targetCounterModel.resetType.error.invalid"),
                         });
+                }
+            }
+            if (ScopeType == "verifyAction") {
+                if (ConditionName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("targetCounterModel", "mission.targetCounterModel.conditionName.error.tooLong"),
+                    });
                 }
             }
             {
@@ -157,7 +213,9 @@ namespace Gs2.Gs2Mission.Model
         public object Clone() {
             return new TargetCounterModel {
                 CounterName = CounterName,
+                ScopeType = ScopeType,
                 ResetType = ResetType,
+                ConditionName = ConditionName,
                 Value = Value,
             };
         }

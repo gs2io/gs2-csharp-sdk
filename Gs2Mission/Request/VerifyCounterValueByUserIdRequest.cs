@@ -37,7 +37,9 @@ namespace Gs2.Gs2Mission.Request
          public string UserId { set; get; } = null!;
          public string CounterName { set; get; } = null!;
          public string VerifyType { set; get; } = null!;
+         public string ScopeType { set; get; } = null!;
          public string ResetType { set; get; } = null!;
+         public string ConditionName { set; get; } = null!;
          public long? Value { set; get; } = null!;
          public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
@@ -58,8 +60,16 @@ namespace Gs2.Gs2Mission.Request
             this.VerifyType = verifyType;
             return this;
         }
+        public VerifyCounterValueByUserIdRequest WithScopeType(string scopeType) {
+            this.ScopeType = scopeType;
+            return this;
+        }
         public VerifyCounterValueByUserIdRequest WithResetType(string resetType) {
             this.ResetType = resetType;
+            return this;
+        }
+        public VerifyCounterValueByUserIdRequest WithConditionName(string conditionName) {
+            this.ConditionName = conditionName;
             return this;
         }
         public VerifyCounterValueByUserIdRequest WithValue(long? value) {
@@ -93,7 +103,9 @@ namespace Gs2.Gs2Mission.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
+                .WithScopeType(!data.Keys.Contains("scopeType") || data["scopeType"] == null ? null : data["scopeType"].ToString())
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithConditionName(!data.Keys.Contains("conditionName") || data["conditionName"] == null ? null : data["conditionName"].ToString())
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)(data["value"].ToString().Contains(".") ? (long)double.Parse(data["value"].ToString()) : long.Parse(data["value"].ToString())))
                 .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
@@ -106,7 +118,9 @@ namespace Gs2.Gs2Mission.Request
                 ["userId"] = UserId,
                 ["counterName"] = CounterName,
                 ["verifyType"] = VerifyType,
+                ["scopeType"] = ScopeType,
                 ["resetType"] = ResetType,
+                ["conditionName"] = ConditionName,
                 ["value"] = Value,
                 ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
                 ["timeOffsetToken"] = TimeOffsetToken,
@@ -132,9 +146,17 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("verifyType");
                 writer.Write(VerifyType.ToString());
             }
+            if (ScopeType != null) {
+                writer.WritePropertyName("scopeType");
+                writer.Write(ScopeType.ToString());
+            }
             if (ResetType != null) {
                 writer.WritePropertyName("resetType");
                 writer.Write(ResetType.ToString());
+            }
+            if (ConditionName != null) {
+                writer.WritePropertyName("conditionName");
+                writer.Write(ConditionName.ToString());
             }
             if (Value != null) {
                 writer.WritePropertyName("value");
@@ -157,7 +179,9 @@ namespace Gs2.Gs2Mission.Request
             key += UserId + ":";
             key += CounterName + ":";
             key += VerifyType + ":";
+            key += ScopeType + ":";
             key += ResetType + ":";
+            key += ConditionName + ":";
             key += Value + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
             key += TimeOffsetToken + ":";

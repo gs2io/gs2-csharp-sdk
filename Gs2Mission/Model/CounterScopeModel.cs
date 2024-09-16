@@ -31,10 +31,17 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class CounterScopeModel : IComparable
 	{
+        public string ScopeType { set; get; } = null!;
         public string ResetType { set; get; } = null!;
         public int? ResetDayOfMonth { set; get; } = null!;
         public string ResetDayOfWeek { set; get; } = null!;
         public int? ResetHour { set; get; } = null!;
+        public string ConditionName { set; get; } = null!;
+        public Gs2.Core.Model.VerifyAction Condition { set; get; } = null!;
+        public CounterScopeModel WithScopeType(string scopeType) {
+            this.ScopeType = scopeType;
+            return this;
+        }
         public CounterScopeModel WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
@@ -51,6 +58,14 @@ namespace Gs2.Gs2Mission.Model
             this.ResetHour = resetHour;
             return this;
         }
+        public CounterScopeModel WithConditionName(string conditionName) {
+            this.ConditionName = conditionName;
+            return this;
+        }
+        public CounterScopeModel WithCondition(Gs2.Core.Model.VerifyAction condition) {
+            this.Condition = condition;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -61,25 +76,35 @@ namespace Gs2.Gs2Mission.Model
                 return null;
             }
             return new CounterScopeModel()
+                .WithScopeType(!data.Keys.Contains("scopeType") || data["scopeType"] == null ? null : data["scopeType"].ToString())
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
                 .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)(data["resetDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["resetDayOfMonth"].ToString()) : int.Parse(data["resetDayOfMonth"].ToString())))
                 .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
-                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)(data["resetHour"].ToString().Contains(".") ? (int)double.Parse(data["resetHour"].ToString()) : int.Parse(data["resetHour"].ToString())));
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)(data["resetHour"].ToString().Contains(".") ? (int)double.Parse(data["resetHour"].ToString()) : int.Parse(data["resetHour"].ToString())))
+                .WithConditionName(!data.Keys.Contains("conditionName") || data["conditionName"] == null ? null : data["conditionName"].ToString())
+                .WithCondition(!data.Keys.Contains("condition") || data["condition"] == null ? null : Gs2.Core.Model.VerifyAction.FromJson(data["condition"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["scopeType"] = ScopeType,
                 ["resetType"] = ResetType,
                 ["resetDayOfMonth"] = ResetDayOfMonth,
                 ["resetDayOfWeek"] = ResetDayOfWeek,
                 ["resetHour"] = ResetHour,
+                ["conditionName"] = ConditionName,
+                ["condition"] = Condition?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (ScopeType != null) {
+                writer.WritePropertyName("scopeType");
+                writer.Write(ScopeType.ToString());
+            }
             if (ResetType != null) {
                 writer.WritePropertyName("resetType");
                 writer.Write(ResetType.ToString());
@@ -96,6 +121,14 @@ namespace Gs2.Gs2Mission.Model
                 writer.WritePropertyName("resetHour");
                 writer.Write((ResetHour.ToString().Contains(".") ? (int)double.Parse(ResetHour.ToString()) : int.Parse(ResetHour.ToString())));
             }
+            if (ConditionName != null) {
+                writer.WritePropertyName("conditionName");
+                writer.Write(ConditionName.ToString());
+            }
+            if (Condition != null) {
+                writer.WritePropertyName("condition");
+                Condition.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
 
@@ -103,6 +136,14 @@ namespace Gs2.Gs2Mission.Model
         {
             var other = obj as CounterScopeModel;
             var diff = 0;
+            if (ScopeType == null && ScopeType == other.ScopeType)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ScopeType.CompareTo(other.ScopeType);
+            }
             if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
@@ -135,11 +176,38 @@ namespace Gs2.Gs2Mission.Model
             {
                 diff += (int)(ResetHour - other.ResetHour);
             }
+            if (ConditionName == null && ConditionName == other.ConditionName)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ConditionName.CompareTo(other.ConditionName);
+            }
+            if (Condition == null && Condition == other.Condition)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Condition.CompareTo(other.Condition);
+            }
             return diff;
         }
 
         public void Validate() {
             {
+                switch (ScopeType) {
+                    case "resetTiming":
+                    case "verifyAction":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("counterScopeModel", "mission.counterScopeModel.scopeType.error.invalid"),
+                        });
+                }
+            }
+            if (ScopeType == "resetTiming") {
                 switch (ResetType) {
                     case "notReset":
                     case "daily":
@@ -192,14 +260,26 @@ namespace Gs2.Gs2Mission.Model
                     });
                 }
             }
+            if (ScopeType == "verifyAction") {
+                if (ConditionName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.conditionName.error.tooLong"),
+                    });
+                }
+            }
+            if (ScopeType == "verifyAction") {
+            }
         }
 
         public object Clone() {
             return new CounterScopeModel {
+                ScopeType = ScopeType,
                 ResetType = ResetType,
                 ResetDayOfMonth = ResetDayOfMonth,
                 ResetDayOfWeek = ResetDayOfWeek,
                 ResetHour = ResetHour,
+                ConditionName = ConditionName,
+                Condition = Condition.Clone() as Gs2.Core.Model.VerifyAction,
             };
         }
     }

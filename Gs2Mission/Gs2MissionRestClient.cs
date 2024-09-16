@@ -5640,10 +5640,20 @@ namespace Gs2.Gs2Mission
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.ScopeType != null)
+                {
+                    jsonWriter.WritePropertyName("scopeType");
+                    jsonWriter.Write(request.ScopeType);
+                }
                 if (request.ResetType != null)
                 {
                     jsonWriter.WritePropertyName("resetType");
                     jsonWriter.Write(request.ResetType);
+                }
+                if (request.ConditionName != null)
+                {
+                    jsonWriter.WritePropertyName("conditionName");
+                    jsonWriter.Write(request.ConditionName);
                 }
                 if (request.Value != null)
                 {
@@ -5783,10 +5793,20 @@ namespace Gs2.Gs2Mission
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.ScopeType != null)
+                {
+                    jsonWriter.WritePropertyName("scopeType");
+                    jsonWriter.Write(request.ScopeType);
+                }
                 if (request.ResetType != null)
                 {
                     jsonWriter.WritePropertyName("resetType");
                     jsonWriter.Write(request.ResetType);
+                }
+                if (request.ConditionName != null)
+                {
+                    jsonWriter.WritePropertyName("conditionName");
+                    jsonWriter.Write(request.ConditionName);
                 }
                 if (request.Value != null)
                 {

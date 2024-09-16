@@ -275,7 +275,7 @@ namespace Gs2.Gs2Mission.Model
                         new RequestError("counterModel", "mission.counterModel.scopes.error.tooFew"),
                     });
                 }
-                if (Scopes.Length > 100) {
+                if (Scopes.Length > 20) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("counterModel", "mission.counterModel.scopes.error.tooMany"),
                     });

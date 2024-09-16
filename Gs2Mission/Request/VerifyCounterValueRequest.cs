@@ -37,7 +37,9 @@ namespace Gs2.Gs2Mission.Request
          public string AccessToken { set; get; } = null!;
          public string CounterName { set; get; } = null!;
          public string VerifyType { set; get; } = null!;
+         public string ScopeType { set; get; } = null!;
          public string ResetType { set; get; } = null!;
+         public string ConditionName { set; get; } = null!;
          public long? Value { set; get; } = null!;
          public bool? MultiplyValueSpecifyingQuantity { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
@@ -57,8 +59,16 @@ namespace Gs2.Gs2Mission.Request
             this.VerifyType = verifyType;
             return this;
         }
+        public VerifyCounterValueRequest WithScopeType(string scopeType) {
+            this.ScopeType = scopeType;
+            return this;
+        }
         public VerifyCounterValueRequest WithResetType(string resetType) {
             this.ResetType = resetType;
+            return this;
+        }
+        public VerifyCounterValueRequest WithConditionName(string conditionName) {
+            this.ConditionName = conditionName;
             return this;
         }
         public VerifyCounterValueRequest WithValue(long? value) {
@@ -88,7 +98,9 @@ namespace Gs2.Gs2Mission.Request
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
+                .WithScopeType(!data.Keys.Contains("scopeType") || data["scopeType"] == null ? null : data["scopeType"].ToString())
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithConditionName(!data.Keys.Contains("conditionName") || data["conditionName"] == null ? null : data["conditionName"].ToString())
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)(data["value"].ToString().Contains(".") ? (long)double.Parse(data["value"].ToString()) : long.Parse(data["value"].ToString())))
                 .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
@@ -100,7 +112,9 @@ namespace Gs2.Gs2Mission.Request
                 ["accessToken"] = AccessToken,
                 ["counterName"] = CounterName,
                 ["verifyType"] = VerifyType,
+                ["scopeType"] = ScopeType,
                 ["resetType"] = ResetType,
+                ["conditionName"] = ConditionName,
                 ["value"] = Value,
                 ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
             };
@@ -125,9 +139,17 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("verifyType");
                 writer.Write(VerifyType.ToString());
             }
+            if (ScopeType != null) {
+                writer.WritePropertyName("scopeType");
+                writer.Write(ScopeType.ToString());
+            }
             if (ResetType != null) {
                 writer.WritePropertyName("resetType");
                 writer.Write(ResetType.ToString());
+            }
+            if (ConditionName != null) {
+                writer.WritePropertyName("conditionName");
+                writer.Write(ConditionName.ToString());
             }
             if (Value != null) {
                 writer.WritePropertyName("value");
@@ -146,7 +168,9 @@ namespace Gs2.Gs2Mission.Request
             key += AccessToken + ":";
             key += CounterName + ":";
             key += VerifyType + ":";
+            key += ScopeType + ":";
             key += ResetType + ":";
+            key += ConditionName + ":";
             key += Value + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
             return key;

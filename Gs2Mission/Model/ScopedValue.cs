@@ -31,12 +31,22 @@ namespace Gs2.Gs2Mission.Model
 #endif
 	public class ScopedValue : IComparable
 	{
+        public string ScopeType { set; get; } = null!;
         public string ResetType { set; get; } = null!;
+        public string ConditionName { set; get; } = null!;
         public long? Value { set; get; } = null!;
         public long? NextResetAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
+        public ScopedValue WithScopeType(string scopeType) {
+            this.ScopeType = scopeType;
+            return this;
+        }
         public ScopedValue WithResetType(string resetType) {
             this.ResetType = resetType;
+            return this;
+        }
+        public ScopedValue WithConditionName(string conditionName) {
+            this.ConditionName = conditionName;
             return this;
         }
         public ScopedValue WithValue(long? value) {
@@ -61,7 +71,9 @@ namespace Gs2.Gs2Mission.Model
                 return null;
             }
             return new ScopedValue()
+                .WithScopeType(!data.Keys.Contains("scopeType") || data["scopeType"] == null ? null : data["scopeType"].ToString())
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
+                .WithConditionName(!data.Keys.Contains("conditionName") || data["conditionName"] == null ? null : data["conditionName"].ToString())
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)(data["value"].ToString().Contains(".") ? (long)double.Parse(data["value"].ToString()) : long.Parse(data["value"].ToString())))
                 .WithNextResetAt(!data.Keys.Contains("nextResetAt") || data["nextResetAt"] == null ? null : (long?)(data["nextResetAt"].ToString().Contains(".") ? (long)double.Parse(data["nextResetAt"].ToString()) : long.Parse(data["nextResetAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
@@ -70,7 +82,9 @@ namespace Gs2.Gs2Mission.Model
         public JsonData ToJson()
         {
             return new JsonData {
+                ["scopeType"] = ScopeType,
                 ["resetType"] = ResetType,
+                ["conditionName"] = ConditionName,
                 ["value"] = Value,
                 ["nextResetAt"] = NextResetAt,
                 ["updatedAt"] = UpdatedAt,
@@ -80,9 +94,17 @@ namespace Gs2.Gs2Mission.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (ScopeType != null) {
+                writer.WritePropertyName("scopeType");
+                writer.Write(ScopeType.ToString());
+            }
             if (ResetType != null) {
                 writer.WritePropertyName("resetType");
                 writer.Write(ResetType.ToString());
+            }
+            if (ConditionName != null) {
+                writer.WritePropertyName("conditionName");
+                writer.Write(ConditionName.ToString());
             }
             if (Value != null) {
                 writer.WritePropertyName("value");
@@ -103,6 +125,14 @@ namespace Gs2.Gs2Mission.Model
         {
             var other = obj as ScopedValue;
             var diff = 0;
+            if (ScopeType == null && ScopeType == other.ScopeType)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ScopeType.CompareTo(other.ScopeType);
+            }
             if (ResetType == null && ResetType == other.ResetType)
             {
                 // null and null
@@ -110,6 +140,14 @@ namespace Gs2.Gs2Mission.Model
             else
             {
                 diff += ResetType.CompareTo(other.ResetType);
+            }
+            if (ConditionName == null && ConditionName == other.ConditionName)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ConditionName.CompareTo(other.ConditionName);
             }
             if (Value == null && Value == other.Value)
             {
@@ -140,6 +178,17 @@ namespace Gs2.Gs2Mission.Model
 
         public void Validate() {
             {
+                switch (ScopeType) {
+                    case "resetTiming":
+                    case "verifyAction":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("scopedValue", "mission.scopedValue.scopeType.error.invalid"),
+                        });
+                }
+            }
+            if (ScopeType == "resetTiming") {
                 switch (ResetType) {
                     case "notReset":
                     case "daily":
@@ -150,6 +199,13 @@ namespace Gs2.Gs2Mission.Model
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
                             new RequestError("scopedValue", "mission.scopedValue.resetType.error.invalid"),
                         });
+                }
+            }
+            if (ScopeType == "verifyAction") {
+                if (ConditionName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scopedValue", "mission.scopedValue.conditionName.error.tooLong"),
+                    });
                 }
             }
             {
@@ -192,7 +248,9 @@ namespace Gs2.Gs2Mission.Model
 
         public object Clone() {
             return new ScopedValue {
+                ScopeType = ScopeType,
                 ResetType = ResetType,
+                ConditionName = ConditionName,
                 Value = Value,
                 NextResetAt = NextResetAt,
                 UpdatedAt = UpdatedAt,
