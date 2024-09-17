@@ -160,5 +160,78 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	        }
         }
 #endif
+	    
+#if UNITY_2017_1_OR_NEWER
+	    public Gs2Future<byte[]> DownloadFuture(
+		    string dataObjectId
+		)
+	    {
+		    IEnumerator Impl(Gs2Future<byte[]> self) {
+			    string fileUrl;
+			    {
+				    var task = PrepareDownloadFuture(
+					    new PrepareDownloadRequest()
+			        		.WithDataObjectId(dataObjectId)
+				    );
+				    yield return task;
+				    if (task.Error != null) {
+					    self.OnError(task.Error);
+					    yield break;
+				    }
+
+				    fileUrl = task.Result.FileUrl;
+			    }
+			    {
+				    using var request = UnityWebRequest.Get(fileUrl);
+				    request.downloadHandler = new DownloadHandlerBuffer();
+				    yield return request.SendWebRequest();
+				    if (request.responseCode != 200) {
+					    self.OnError(new UnknownException(Array.Empty<RequestError>()));
+					    yield break;
+				    }
+				    self.OnComplete(request.downloadHandler.data);
+			    }
+		    }
+
+		    return new Gs2InlineFuture<byte[]>(Impl);
+	    }
+#endif
+
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<byte[]> DownloadAsync(
+	        string dataObjectId
+	    )
+        {
+	        var result = await this.PrepareDownloadAsync(
+		        new PrepareDownloadRequest()
+			        .WithDataObjectId(dataObjectId)
+	        );
+	        using var request = UnityWebRequest.Get(result.FileUrl);
+	        request.downloadHandler = new DownloadHandlerBuffer();
+	        await request.SendWebRequest();
+	        if (request.responseCode != 200) {
+		        throw new UnknownException(Array.Empty<RequestError>());
+	        }
+	        return request.downloadHandler.data;
+        }
+#endif
+	    
+#if !UNITY_2017_1_OR_NEWER
+        public async Task<byte[]> DownloadAsync(
+	        string dataObjectId
+	    )
+        {
+	        var result = await this.PrepareDownloadAsync(
+		        new PrepareDownloadRequest()
+			        .WithDataObjectId(dataObjectId)
+	        );
+	        var response = await new HttpClient().GetAsync(result.FileUrl);
+	        if (response.StatusCode != HttpStatusCode.OK)
+	        {
+		        throw new UnknownException(Array.Empty<RequestError>());
+	        }
+	        return await response.Content.ReadAsByteArrayAsync();
+        }
+#endif
     }
 }

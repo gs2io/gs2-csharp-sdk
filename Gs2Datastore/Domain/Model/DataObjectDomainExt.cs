@@ -22,14 +22,14 @@ namespace Gs2.Gs2Datastore.Domain.Model
 {
     public partial class DataObjectDomain
     {
+	    
 #if UNITY_2017_1_OR_NEWER
-
         public Gs2Future<byte[]> DownloadFuture()
         {
 	        IEnumerator Impl(Gs2Future<byte[]> self) {
 		        string fileUrl;
 		        {
-			        var task = PrepareDownloadByUserIdAndNameFuture(
+			        var task = PrepareDownloadByUserIdAndDataObjectNameFuture(
 				        new PrepareDownloadByUserIdAndDataObjectNameRequest()
 			        );
 			        yield return task;
@@ -54,13 +54,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	        }
 	        return new Gs2InlineFuture<byte[]>(Impl);
         }
+		
 	#if GS2_ENABLE_UNITASK
-
 	    public async UniTask<byte[]> DownloadAsync()
 	    {
 		    string fileUrl;
 		    {
-			    var result = await PrepareDownloadByUserIdAndNameAsync(
+			    var result = await PrepareDownloadByUserIdAndDataObjectNameAsync(
 				    new PrepareDownloadByUserIdAndDataObjectNameRequest()
 			    );
 			    fileUrl = result.FileUrl;
@@ -80,12 +80,11 @@ namespace Gs2.Gs2Datastore.Domain.Model
 #endif
 	    
 #if !UNITY_2017_1_OR_NEWER
-
 	    public async Task<byte[]> DownloadAsync()
 	    {
 		    string fileUrl;
 		    {
-			    var result = await PrepareDownloadByUserIdAndNameAsync(
+			    var result = await PrepareDownloadByUserIdAndDataObjectNameAsync(
 				    new PrepareDownloadByUserIdAndDataObjectNameRequest()
 			    );
 			    fileUrl = result.FileUrl;
@@ -100,7 +99,84 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		    }
 	    }
 #endif
+
+#if UNITY_2017_1_OR_NEWER
+        public Gs2Future<byte[]> DownloadByUserIdAndDataObjectNameFuture()
+        {
+	        IEnumerator Impl(Gs2Future<byte[]> self) {
+		        string fileUrl;
+		        {
+			        var task = PrepareDownloadByUserIdAndDataObjectNameFuture(
+				        new PrepareDownloadByUserIdAndDataObjectNameRequest()
+			        );
+			        yield return task;
+			        if (task.Error != null)
+			        {
+				        self.OnError(task.Error);
+				        yield break;
+			        }
+
+			        fileUrl = task.Result.FileUrl;
+		        }
+		        {
+			        using var request = UnityWebRequest.Get(fileUrl);
+			        request.downloadHandler = new DownloadHandlerBuffer();
+			        yield return request.SendWebRequest();
+			        if (request.responseCode != 200)
+			        {
+				        self.OnError(new UnknownException(Array.Empty<RequestError>()));
+			        }
+			        self.OnComplete(request.downloadHandler.data);
+		        }
+	        }
+	        return new Gs2InlineFuture<byte[]>(Impl);
+        }
+#endif
+
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+	    public async UniTask<byte[]> DownloadByUserIdAndDataObjectNameAsync()
+	    {
+		    string fileUrl;
+		    {
+			    var result = await PrepareDownloadByUserIdAndDataObjectNameAsync(
+				    new PrepareDownloadByUserIdAndDataObjectNameRequest()
+			    );
+			    fileUrl = result.FileUrl;
+		    }
+		    {
+			    using var request = UnityWebRequest.Get(fileUrl);
+			    request.downloadHandler = new DownloadHandlerBuffer();
+			    await request.SendWebRequest();
+			    if (request.responseCode != 200)
+			    {
+				    throw new UnknownException(Array.Empty<RequestError>());
+			    }
+			    return request.downloadHandler.data;
+		    }
+	    }
+#endif
 	    
+#if !UNITY_2017_1_OR_NEWER
+	    public async Task<byte[]> DownloadByUserIdAndDataObjectNameAsync()
+	    {
+		    string fileUrl;
+		    {
+			    var result = await PrepareDownloadByUserIdAndDataObjectNameAsync(
+				    new PrepareDownloadByUserIdAndDataObjectNameRequest()
+			    );
+			    fileUrl = result.FileUrl;
+		    }
+		    {
+		        var response = await new HttpClient().GetAsync(fileUrl);
+		        if (response.StatusCode != HttpStatusCode.OK)
+		        {
+			        throw new UnknownException(Array.Empty<RequestError>());
+		        }
+		        return await response.Content.ReadAsByteArrayAsync();
+		    }
+	    }
+#endif
+
 #if UNITY_2017_1_OR_NEWER
 	    
 	    public Gs2Future<DataObject> ReUploadFuture(
