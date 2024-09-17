@@ -3190,6 +3190,271 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
+        public class VerifyTriggerTask : Gs2RestSessionTask<VerifyTriggerRequest, VerifyTriggerResult>
+        {
+            public VerifyTriggerTask(IGs2Session session, RestSessionRequestFactory factory, VerifyTriggerRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyTriggerRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "schedule")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/trigger/{triggerName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{triggerName}", !string.IsNullOrEmpty(request.TriggerName) ? request.TriggerName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ElapsedMinutes != null)
+                {
+                    jsonWriter.WritePropertyName("elapsedMinutes");
+                    jsonWriter.Write(request.ElapsedMinutes.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyTrigger(
+                Request.VerifyTriggerRequest request,
+                UnityAction<AsyncResult<Result.VerifyTriggerResult>> callback
+        )
+		{
+			var task = new VerifyTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyTriggerResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyTriggerResult> VerifyTriggerFuture(
+                Request.VerifyTriggerRequest request
+        )
+		{
+			return new VerifyTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyTriggerResult> VerifyTriggerAsync(
+                Request.VerifyTriggerRequest request
+        )
+		{
+            AsyncResult<Result.VerifyTriggerResult> result = null;
+			await VerifyTrigger(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyTriggerTask VerifyTriggerAsync(
+                Request.VerifyTriggerRequest request
+        )
+		{
+			return new VerifyTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyTriggerResult> VerifyTriggerAsync(
+                Request.VerifyTriggerRequest request
+        )
+		{
+			var task = new VerifyTriggerTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyTriggerByUserIdTask : Gs2RestSessionTask<VerifyTriggerByUserIdRequest, VerifyTriggerByUserIdResult>
+        {
+            public VerifyTriggerByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyTriggerByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyTriggerByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "schedule")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/trigger/{triggerName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{triggerName}", !string.IsNullOrEmpty(request.TriggerName) ? request.TriggerName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ElapsedMinutes != null)
+                {
+                    jsonWriter.WritePropertyName("elapsedMinutes");
+                    jsonWriter.Write(request.ElapsedMinutes.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyTriggerByUserId(
+                Request.VerifyTriggerByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyTriggerByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyTriggerByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyTriggerByUserIdResult> VerifyTriggerByUserIdFuture(
+                Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+			return new VerifyTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyTriggerByUserIdResult> VerifyTriggerByUserIdAsync(
+                Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyTriggerByUserIdResult> result = null;
+			await VerifyTriggerByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyTriggerByUserIdTask VerifyTriggerByUserIdAsync(
+                Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+			return new VerifyTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyTriggerByUserIdResult> VerifyTriggerByUserIdAsync(
+                Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+			var task = new VerifyTriggerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteTriggerByStampTaskTask : Gs2RestSessionTask<DeleteTriggerByStampTaskRequest, DeleteTriggerByStampTaskResult>
         {
             public DeleteTriggerByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTriggerByStampTaskRequest request) : base(session, factory, request)
@@ -3306,6 +3571,131 @@ namespace Gs2.Gs2Schedule
         )
 		{
 			var task = new DeleteTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyTriggerByStampTaskTask : Gs2RestSessionTask<VerifyTriggerByStampTaskRequest, VerifyTriggerByStampTaskResult>
+        {
+            public VerifyTriggerByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyTriggerByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyTriggerByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "schedule")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/trigger/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyTriggerByStampTask(
+                Request.VerifyTriggerByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyTriggerByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyTriggerByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyTriggerByStampTaskResult> VerifyTriggerByStampTaskFuture(
+                Request.VerifyTriggerByStampTaskRequest request
+        )
+		{
+			return new VerifyTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyTriggerByStampTaskResult> VerifyTriggerByStampTaskAsync(
+                Request.VerifyTriggerByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyTriggerByStampTaskResult> result = null;
+			await VerifyTriggerByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyTriggerByStampTaskTask VerifyTriggerByStampTaskAsync(
+                Request.VerifyTriggerByStampTaskRequest request
+        )
+		{
+			return new VerifyTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyTriggerByStampTaskResult> VerifyTriggerByStampTaskAsync(
+                Request.VerifyTriggerByStampTaskRequest request
+        )
+		{
+			var task = new VerifyTriggerByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

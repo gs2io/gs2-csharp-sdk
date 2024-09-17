@@ -2434,6 +2434,272 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
+        public class VerifyTriggerTask : Gs2WebSocketSessionTask<Request.VerifyTriggerRequest, Result.VerifyTriggerResult>
+        {
+	        public VerifyTriggerTask(IGs2Session session, Request.VerifyTriggerRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyTriggerRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.TriggerName != null)
+                {
+                    jsonWriter.WritePropertyName("triggerName");
+                    jsonWriter.Write(request.TriggerName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ElapsedMinutes != null)
+                {
+                    jsonWriter.WritePropertyName("elapsedMinutes");
+                    jsonWriter.Write(request.ElapsedMinutes.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "schedule",
+                    "trigger",
+                    "verifyTrigger",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyTrigger(
+                Request.VerifyTriggerRequest request,
+                UnityAction<AsyncResult<Result.VerifyTriggerResult>> callback
+        )
+		{
+			var task = new VerifyTriggerTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyTriggerResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyTriggerResult> VerifyTriggerFuture(
+                Request.VerifyTriggerRequest request
+        )
+		{
+			return new VerifyTriggerTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyTriggerResult> VerifyTriggerAsync(
+            Request.VerifyTriggerRequest request
+        )
+		{
+		    var task = new VerifyTriggerTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyTriggerTask VerifyTriggerAsync(
+                Request.VerifyTriggerRequest request
+        )
+		{
+			return new VerifyTriggerTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyTriggerResult> VerifyTriggerAsync(
+            Request.VerifyTriggerRequest request
+        )
+		{
+		    var task = new VerifyTriggerTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyTriggerByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyTriggerByUserIdRequest, Result.VerifyTriggerByUserIdResult>
+        {
+	        public VerifyTriggerByUserIdTask(IGs2Session session, Request.VerifyTriggerByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyTriggerByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TriggerName != null)
+                {
+                    jsonWriter.WritePropertyName("triggerName");
+                    jsonWriter.Write(request.TriggerName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ElapsedMinutes != null)
+                {
+                    jsonWriter.WritePropertyName("elapsedMinutes");
+                    jsonWriter.Write(request.ElapsedMinutes.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "schedule",
+                    "trigger",
+                    "verifyTriggerByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyTriggerByUserId(
+                Request.VerifyTriggerByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyTriggerByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyTriggerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyTriggerByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyTriggerByUserIdResult> VerifyTriggerByUserIdFuture(
+                Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+			return new VerifyTriggerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyTriggerByUserIdResult> VerifyTriggerByUserIdAsync(
+            Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+		    var task = new VerifyTriggerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyTriggerByUserIdTask VerifyTriggerByUserIdAsync(
+                Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+			return new VerifyTriggerByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyTriggerByUserIdResult> VerifyTriggerByUserIdAsync(
+            Request.VerifyTriggerByUserIdRequest request
+        )
+		{
+		    var task = new VerifyTriggerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetEventTask : Gs2WebSocketSessionTask<Request.GetEventRequest, Result.GetEventResult>
         {
 	        public GetEventTask(IGs2Session session, Request.GetEventRequest request) : base(session, request)

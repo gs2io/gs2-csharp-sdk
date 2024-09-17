@@ -248,6 +248,58 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> VerifyFuture(
+            VerifyTriggerByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithTriggerName(this.TriggerName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyTriggerByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> VerifyAsync(
+            #else
+        public async Task<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> VerifyAsync(
+            #endif
+            VerifyTriggerByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithTriggerName(this.TriggerName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyTriggerByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
     }
 
     public partial class TriggerDomain {

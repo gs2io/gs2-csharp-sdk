@@ -32,6 +32,8 @@ namespace Gs2.Gs2Schedule.Model
             switch (action.Action) {
                 case "Gs2Schedule:DeleteTriggerByUserId":
                     return DeleteTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Schedule:VerifyTriggerByUserId":
+                    return VerifyTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Schedule:VerifyEventByUserId":
                     return VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
@@ -40,6 +42,8 @@ namespace Gs2.Gs2Schedule.Model
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2Schedule:VerifyTriggerByUserId":
+                    return VerifyTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Schedule:VerifyEventByUserId":
                     return VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

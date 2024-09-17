@@ -58,6 +58,24 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
+                if (VerifyTriggerByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                    var request = VerifyTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifyTriggerByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 if (VerifyEventByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
                     var request = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
                     if (rate != 1) {
@@ -98,6 +116,17 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyTriggerByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyTriggerByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
             if (VerifyEventByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
                 var request = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
                 if (rate != 1) {
