@@ -29,13 +29,16 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Mission.Request;
-using Gs2.Core.Model;
+using Gs2.Gs2Mission.Model;
+using ConsumeAction = Gs2.Core.Model.ConsumeAction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -47,46 +50,49 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor
 {
-    public static class CompleteByUserIdSpeculativeExecutor {
+    public static class BatchCompleteByUserIdSpeculativeExecutor {
 
         public static string Action() {
-            return "Gs2Mission:CompleteByUserId";
+            return "Gs2Mission:BatchCompleteByUserId";
         }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            CompleteByUserIdRequest request
+            BatchCompleteByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = domain.Mission.Namespace(
-                    request.NamespaceName
-                ).MissionGroupModel(
-                    request.MissionGroupName
-                ).MissionTaskModel(
-                    request.MissionTaskName
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
+                var acquireActions = new List<Gs2.Core.Model.AcquireAction>();
+                foreach (var missionTaskName in request.MissionTaskNames) {
+                    var future = domain.Mission.Namespace(
+                        request.NamespaceName
+                    ).MissionGroupModel(
+                        request.MissionGroupName
+                    ).MissionTaskModel(
+                        missionTaskName
+                    ).ModelFuture();
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    acquireActions.AddRange(future.Result.CompleteAcquireActions);
                 }
-                var item = future.Result;
 
                 var future2 = new Core.SpeculativeExecutor.SpeculativeExecutor(
                     new ConsumeAction[] {
                         new ConsumeAction {
-                            Action = "Gs2Mission:ReceiveByUserId",
-                            Request = new ReceiveByUserIdRequest {
+                            Action = "Gs2Mission:BatchReceiveByUserId",
+                            Request = new BatchReceiveByUserIdRequest {
                                 NamespaceName = request.NamespaceName,
                                 MissionGroupName = request.MissionGroupName,
-                                MissionTaskName = request.MissionTaskName,
+                                MissionTaskNames = request.MissionTaskNames,
                                 UserId = request.UserId,
                             }.ToJson().ToJson()
                         }
                     },
-                    item.CompleteAcquireActions,
+                    acquireActions.ToArray(),
                     1.0
                 ).ExecuteFuture(
                     domain,
@@ -119,29 +125,33 @@ namespace Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor
     #endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            CompleteByUserIdRequest request
+            BatchCompleteByUserIdRequest request
         ) {
-            var item = await domain.Mission.Namespace(
-                request.NamespaceName
-            ).MissionGroupModel(
-                request.MissionGroupName
-            ).MissionTaskModel(
-                request.MissionTaskName
-            ).ModelAsync();
+            var acquireActions = new List<Gs2.Core.Model.AcquireAction>();
+            foreach (var missionTaskName in request.MissionTaskNames) {
+                var item = await domain.Mission.Namespace(
+                    request.NamespaceName
+                ).MissionGroupModel(
+                    request.MissionGroupName
+                ).MissionTaskModel(
+                    missionTaskName
+                ).ModelAsync();
+                acquireActions.AddRange(item.CompleteAcquireActions);
+            }
 
             var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
                 new ConsumeAction[] {
                     new ConsumeAction {
-                        Action = "Gs2Mission:ReceiveByUserId",
-                        Request = new ReceiveByUserIdRequest {
+                        Action = "Gs2Mission:BatchReceiveByUserId",
+                        Request = new BatchReceiveByUserIdRequest {
                             NamespaceName = request.NamespaceName,
                             MissionGroupName = request.MissionGroupName,
-                            MissionTaskName = request.MissionTaskName,
+                            MissionTaskNames = request.MissionTaskNames,
                             UserId = request.UserId,
                         }.ToJson().ToJson()
                     }
                 },
-                item.CompleteAcquireActions,
+                acquireActions.ToArray(),
                 1.0
             ).ExecuteAsync(
                 domain,

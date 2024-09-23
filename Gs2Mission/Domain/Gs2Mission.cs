@@ -589,6 +589,12 @@ namespace Gs2.Gs2Mission.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, BatchReceiveByUserIdRequest, BatchReceiveByUserIdResult> BatchReceiveByUserIdComplete = new UnityEvent<string, BatchReceiveByUserIdRequest, BatchReceiveByUserIdResult>();
+    #else
+        public static Action<string, BatchReceiveByUserIdRequest, BatchReceiveByUserIdResult> BatchReceiveByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete = new UnityEvent<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult>();
     #else
         public static Action<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete;
@@ -612,6 +618,23 @@ namespace Gs2.Gs2Mission.Domain
                         );
 
                         ReceiveByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "BatchReceiveByUserId": {
+                        var requestModel = BatchReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = BatchReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        BatchReceiveByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

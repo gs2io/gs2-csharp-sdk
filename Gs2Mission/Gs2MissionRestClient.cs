@@ -574,6 +574,307 @@ namespace Gs2.Gs2Mission
 #endif
 
 
+        public class BatchCompleteTask : Gs2RestSessionTask<BatchCompleteRequest, BatchCompleteResult>
+        {
+            public BatchCompleteTask(IGs2Session session, RestSessionRequestFactory factory, BatchCompleteRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchCompleteRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/complete/group/{missionGroupName}/task/any/batch";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{missionGroupName}", !string.IsNullOrEmpty(request.MissionGroupName) ? request.MissionGroupName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MissionTaskNames != null)
+                {
+                    jsonWriter.WritePropertyName("missionTaskNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MissionTaskNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchComplete(
+                Request.BatchCompleteRequest request,
+                UnityAction<AsyncResult<Result.BatchCompleteResult>> callback
+        )
+		{
+			var task = new BatchCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchCompleteResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchCompleteResult> BatchCompleteFuture(
+                Request.BatchCompleteRequest request
+        )
+		{
+			return new BatchCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchCompleteResult> BatchCompleteAsync(
+                Request.BatchCompleteRequest request
+        )
+		{
+            AsyncResult<Result.BatchCompleteResult> result = null;
+			await BatchComplete(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchCompleteTask BatchCompleteAsync(
+                Request.BatchCompleteRequest request
+        )
+		{
+			return new BatchCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchCompleteResult> BatchCompleteAsync(
+                Request.BatchCompleteRequest request
+        )
+		{
+			var task = new BatchCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class BatchCompleteByUserIdTask : Gs2RestSessionTask<BatchCompleteByUserIdRequest, BatchCompleteByUserIdResult>
+        {
+            public BatchCompleteByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, BatchCompleteByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchCompleteByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/complete/group/{missionGroupName}/task/any/batch";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{missionGroupName}", !string.IsNullOrEmpty(request.MissionGroupName) ? request.MissionGroupName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MissionTaskNames != null)
+                {
+                    jsonWriter.WritePropertyName("missionTaskNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MissionTaskNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchCompleteByUserId(
+                Request.BatchCompleteByUserIdRequest request,
+                UnityAction<AsyncResult<Result.BatchCompleteByUserIdResult>> callback
+        )
+		{
+			var task = new BatchCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchCompleteByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdFuture(
+                Request.BatchCompleteByUserIdRequest request
+        )
+		{
+			return new BatchCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdAsync(
+                Request.BatchCompleteByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.BatchCompleteByUserIdResult> result = null;
+			await BatchCompleteByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchCompleteByUserIdTask BatchCompleteByUserIdAsync(
+                Request.BatchCompleteByUserIdRequest request
+        )
+		{
+			return new BatchCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdAsync(
+                Request.BatchCompleteByUserIdRequest request
+        )
+		{
+			var task = new BatchCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ReceiveByUserIdTask : Gs2RestSessionTask<ReceiveByUserIdRequest, ReceiveByUserIdResult>
         {
             public ReceiveByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ReceiveByUserIdRequest request) : base(session, factory, request)
@@ -693,6 +994,143 @@ namespace Gs2.Gs2Mission
         )
 		{
 			var task = new ReceiveByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class BatchReceiveByUserIdTask : Gs2RestSessionTask<BatchReceiveByUserIdRequest, BatchReceiveByUserIdResult>
+        {
+            public BatchReceiveByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, BatchReceiveByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchReceiveByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/complete/group/{missionGroupName}/task/any/receive/batch";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{missionGroupName}", !string.IsNullOrEmpty(request.MissionGroupName) ? request.MissionGroupName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MissionTaskNames != null)
+                {
+                    jsonWriter.WritePropertyName("missionTaskNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MissionTaskNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchReceiveByUserId(
+                Request.BatchReceiveByUserIdRequest request,
+                UnityAction<AsyncResult<Result.BatchReceiveByUserIdResult>> callback
+        )
+		{
+			var task = new BatchReceiveByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchReceiveByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdFuture(
+                Request.BatchReceiveByUserIdRequest request
+        )
+		{
+			return new BatchReceiveByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdAsync(
+                Request.BatchReceiveByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.BatchReceiveByUserIdResult> result = null;
+			await BatchReceiveByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchReceiveByUserIdTask BatchReceiveByUserIdAsync(
+                Request.BatchReceiveByUserIdRequest request
+        )
+		{
+			return new BatchReceiveByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdAsync(
+                Request.BatchReceiveByUserIdRequest request
+        )
+		{
+			var task = new BatchReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -1538,6 +1976,131 @@ namespace Gs2.Gs2Mission
         )
 		{
 			var task = new ReceiveByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class BatchReceiveByStampTaskTask : Gs2RestSessionTask<BatchReceiveByStampTaskRequest, BatchReceiveByStampTaskResult>
+        {
+            public BatchReceiveByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, BatchReceiveByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchReceiveByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/receive";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchReceiveByStampTask(
+                Request.BatchReceiveByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.BatchReceiveByStampTaskResult>> callback
+        )
+		{
+			var task = new BatchReceiveByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchReceiveByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskFuture(
+                Request.BatchReceiveByStampTaskRequest request
+        )
+		{
+			return new BatchReceiveByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskAsync(
+                Request.BatchReceiveByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.BatchReceiveByStampTaskResult> result = null;
+			await BatchReceiveByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchReceiveByStampTaskTask BatchReceiveByStampTaskAsync(
+                Request.BatchReceiveByStampTaskRequest request
+        )
+		{
+			return new BatchReceiveByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskAsync(
+                Request.BatchReceiveByStampTaskRequest request
+        )
+		{
+			var task = new BatchReceiveByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

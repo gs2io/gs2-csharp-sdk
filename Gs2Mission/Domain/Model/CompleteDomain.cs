@@ -167,6 +167,84 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Core.Domain.TransactionDomain> BatchFuture(
+            BatchCompleteByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithMissionGroupName(this.MissionGroupName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.BatchCompleteByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                    this._gs2,
+                    this.UserId,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+                );
+                if (result.StampSheet != null) {
+                    var future2 = transaction.WaitFuture(true);
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+                self.OnComplete(transaction);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> BatchAsync(
+            #else
+        public async Task<Gs2.Core.Domain.TransactionDomain> BatchAsync(
+            #endif
+            BatchCompleteByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithMissionGroupName(this.MissionGroupName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.BatchCompleteByUserIdAsync(request)
+            );
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                this._gs2,
+                this.UserId,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId
+            );
+            if (result.StampSheet != null) {
+                await transaction.WaitAsync(true);
+            }
+            return transaction;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> ReceiveFuture(
             ReceiveByUserIdRequest request
         ) {
@@ -213,6 +291,60 @@ namespace Gs2.Gs2Mission.Domain.Model
                 _gs2.Cache,
                 this.UserId,
                 () => this._client.ReceiveByUserIdAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> BatchReceiveFuture(
+            BatchReceiveByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithMissionGroupName(this.MissionGroupName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.BatchReceiveByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Mission.Domain.Model.CompleteDomain> BatchReceiveAsync(
+            #else
+        public async Task<Gs2.Gs2Mission.Domain.Model.CompleteDomain> BatchReceiveAsync(
+            #endif
+            BatchReceiveByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithMissionGroupName(this.MissionGroupName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.BatchReceiveByUserIdAsync(request)
             );
             var domain = this;
 

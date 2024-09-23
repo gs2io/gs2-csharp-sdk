@@ -32,6 +32,8 @@ namespace Gs2.Gs2Mission.Model
             switch (action.Action) {
                 case "Gs2Mission:ReceiveByUserId":
                     return ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Mission:BatchReceiveByUserId":
+                    return BatchReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Mission:VerifyCompleteByUserId":
                     return VerifyCompleteByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Mission:DecreaseCounterByUserId":
