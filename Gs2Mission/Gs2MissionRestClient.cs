@@ -1996,7 +1996,7 @@ namespace Gs2.Gs2Mission
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "mission")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/stamp/receive";
+                    + "/stamp/receive/batch";
 
                 var sessionRequest = Factory.Post(url);
 
