@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -62,9 +64,9 @@ namespace Gs2.Gs2Chat.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeMessagesIterator : Gs2Iterator<Gs2.Gs2Chat.Model.Message> {
+    public class DescribeLatestMessagesIterator : Gs2Iterator<Gs2.Gs2Chat.Model.Message> {
     #else
-    public class DescribeMessagesIterator : IAsyncEnumerable<Gs2.Gs2Chat.Model.Message> {
+    public class DescribeLatestMessagesIterator : IAsyncEnumerable<Gs2.Gs2Chat.Model.Message> {
     #endif
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
@@ -80,7 +82,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
 
         int? fetchSize;
 
-        public DescribeMessagesIterator(
+        public DescribeLatestMessagesIterator(
             Gs2.Core.Domain.Gs2 gs2,
             Gs2ChatRestClient client,
             string namespaceName,
@@ -144,17 +146,16 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             } else {
 
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeMessagesFuture(
+                var future = this._client.DescribeLatestMessagesFuture(
                 #else
-                var r = await this._client.DescribeMessagesAsync(
+                var r = await this._client.DescribeLatestMessagesAsync(
                 #endif
-                    new Gs2.Gs2Chat.Request.DescribeMessagesRequest()
+                    new Gs2.Gs2Chat.Request.DescribeLatestMessagesRequest()
                         .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithRoomName(this.RoomName)
                         .WithPassword(this.Password)
                         .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                        .WithStartAt(this._startAt)
                         .WithLimit(this.fetchSize)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

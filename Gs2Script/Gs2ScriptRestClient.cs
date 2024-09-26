@@ -894,6 +894,11 @@ namespace Gs2.Gs2Script
                     jsonWriter.WritePropertyName("script");
                     jsonWriter.Write(request.Script);
                 }
+                if (request.DisableStringNumberToNumber != null)
+                {
+                    jsonWriter.WritePropertyName("disableStringNumberToNumber");
+                    jsonWriter.Write(request.DisableStringNumberToNumber.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1025,6 +1030,11 @@ namespace Gs2.Gs2Script
                 {
                     jsonWriter.WritePropertyName("checkoutSetting");
                     request.CheckoutSetting.WriteJson(jsonWriter);
+                }
+                if (request.DisableStringNumberToNumber != null)
+                {
+                    jsonWriter.WritePropertyName("disableStringNumberToNumber");
+                    jsonWriter.Write(request.DisableStringNumberToNumber.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1259,6 +1269,11 @@ namespace Gs2.Gs2Script
                     jsonWriter.WritePropertyName("script");
                     jsonWriter.Write(request.Script);
                 }
+                if (request.DisableStringNumberToNumber != null)
+                {
+                    jsonWriter.WritePropertyName("disableStringNumberToNumber");
+                    jsonWriter.Write(request.DisableStringNumberToNumber.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1386,6 +1401,11 @@ namespace Gs2.Gs2Script
                 {
                     jsonWriter.WritePropertyName("checkoutSetting");
                     request.CheckoutSetting.WriteJson(jsonWriter);
+                }
+                if (request.DisableStringNumberToNumber != null)
+                {
+                    jsonWriter.WritePropertyName("disableStringNumberToNumber");
+                    jsonWriter.Write(request.DisableStringNumberToNumber.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1760,6 +1780,11 @@ namespace Gs2.Gs2Script
                 {
                     jsonWriter.WritePropertyName("randomStatus");
                     request.RandomStatus.WriteJson(jsonWriter);
+                }
+                if (request.DisableStringNumberToNumber != null)
+                {
+                    jsonWriter.WritePropertyName("disableStringNumberToNumber");
+                    jsonWriter.Write(request.DisableStringNumberToNumber.ToString());
                 }
                 if (request.ContextStack != null)
                 {

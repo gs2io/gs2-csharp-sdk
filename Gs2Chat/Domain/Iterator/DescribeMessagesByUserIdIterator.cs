@@ -85,8 +85,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             Gs2ChatRestClient client,
             string namespaceName,
             string roomName,
+            string userId,
             string password = null,
-            string userId = null,
             string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             (
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
-                        UserId ?? default,
+                        UserId,
                         RoomName
                     ),
                     out var list,
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            UserId ?? default,
+                            UserId,
                             RoomName
                         )
                     );
@@ -179,7 +179,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     item.PutCache(
                         this._gs2.Cache,
                         NamespaceName,
-                        UserId ?? default,
+                        UserId,
                         RoomName,
                         item.Name
                     );
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            UserId ?? default,
+                            UserId,
                             RoomName
                         ),
                         this._startAt

@@ -328,8 +328,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.RoomName,
-                this.Password,
-                this.AccessToken
+                this.AccessToken,
+                this.Password
             );
         }
         #endif
@@ -347,8 +347,46 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.RoomName,
-                this.Password,
-                this.AccessToken
+                this.AccessToken,
+                this.Password
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+        
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Chat.Model.Message> LatestMessages(
+        )
+        {
+            return new DescribeLatestMessagesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.RoomName,
+                this.AccessToken,
+                this.Password
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Message> LatestMessagesAsync(
+            #else
+        public DescribeLatestMessagesIterator LatestMessagesAsync(
+            #endif
+        )
+        {
+            return new DescribeLatestMessagesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.RoomName,
+                this.AccessToken,
+                this.Password
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

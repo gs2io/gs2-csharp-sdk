@@ -203,6 +203,11 @@ namespace Gs2.Gs2Chat
                     jsonWriter.WritePropertyName("allowCreateRoom");
                     jsonWriter.Write(request.AllowCreateRoom.ToString());
                 }
+                if (request.MessageLifeTimeDays != null)
+                {
+                    jsonWriter.WritePropertyName("messageLifeTimeDays");
+                    jsonWriter.Write(request.MessageLifeTimeDays.ToString());
+                }
                 if (request.PostMessageScript != null)
                 {
                     jsonWriter.WritePropertyName("postMessageScript");
@@ -572,6 +577,11 @@ namespace Gs2.Gs2Chat
                 {
                     jsonWriter.WritePropertyName("allowCreateRoom");
                     jsonWriter.Write(request.AllowCreateRoom.ToString());
+                }
+                if (request.MessageLifeTimeDays != null)
+                {
+                    jsonWriter.WritePropertyName("messageLifeTimeDays");
+                    jsonWriter.Write(request.MessageLifeTimeDays.ToString());
                 }
                 if (request.PostMessageScript != null)
                 {
@@ -2961,6 +2971,271 @@ namespace Gs2.Gs2Chat
         )
 		{
 			var task = new DescribeMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeLatestMessagesTask : Gs2RestSessionTask<DescribeLatestMessagesRequest, DescribeLatestMessagesResult>
+        {
+            public DescribeLatestMessagesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLatestMessagesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeLatestMessagesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/room/{roomName}/message/latest";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{roomName}", !string.IsNullOrEmpty(request.RoomName) ? request.RoomName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Password != null) {
+                    sessionRequest.AddQueryString("password", $"{request.Password}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
+                    base.OnError(new Exception.NoAccessPrivilegesException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
+                    base.OnError(new Exception.PasswordRequiredException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeLatestMessages(
+                Request.DescribeLatestMessagesRequest request,
+                UnityAction<AsyncResult<Result.DescribeLatestMessagesResult>> callback
+        )
+		{
+			var task = new DescribeLatestMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeLatestMessagesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeLatestMessagesResult> DescribeLatestMessagesFuture(
+                Request.DescribeLatestMessagesRequest request
+        )
+		{
+			return new DescribeLatestMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeLatestMessagesResult> DescribeLatestMessagesAsync(
+                Request.DescribeLatestMessagesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeLatestMessagesResult> result = null;
+			await DescribeLatestMessages(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeLatestMessagesTask DescribeLatestMessagesAsync(
+                Request.DescribeLatestMessagesRequest request
+        )
+		{
+			return new DescribeLatestMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeLatestMessagesResult> DescribeLatestMessagesAsync(
+                Request.DescribeLatestMessagesRequest request
+        )
+		{
+			var task = new DescribeLatestMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeLatestMessagesByUserIdTask : Gs2RestSessionTask<DescribeLatestMessagesByUserIdRequest, DescribeLatestMessagesByUserIdResult>
+        {
+            public DescribeLatestMessagesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLatestMessagesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeLatestMessagesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/room/{roomName}/message/latest/get";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{roomName}", !string.IsNullOrEmpty(request.RoomName) ? request.RoomName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Password != null) {
+                    sessionRequest.AddQueryString("password", $"{request.Password}");
+                }
+                if (request.UserId != null) {
+                    sessionRequest.AddQueryString("userId", $"{request.UserId}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
+                    base.OnError(new Exception.NoAccessPrivilegesException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
+                    base.OnError(new Exception.PasswordRequiredException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
+                    base.OnError(new Exception.PasswordIncorrectException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeLatestMessagesByUserId(
+                Request.DescribeLatestMessagesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeLatestMessagesByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeLatestMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeLatestMessagesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeLatestMessagesByUserIdResult> DescribeLatestMessagesByUserIdFuture(
+                Request.DescribeLatestMessagesByUserIdRequest request
+        )
+		{
+			return new DescribeLatestMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeLatestMessagesByUserIdResult> DescribeLatestMessagesByUserIdAsync(
+                Request.DescribeLatestMessagesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeLatestMessagesByUserIdResult> result = null;
+			await DescribeLatestMessagesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeLatestMessagesByUserIdTask DescribeLatestMessagesByUserIdAsync(
+                Request.DescribeLatestMessagesByUserIdRequest request
+        )
+		{
+			return new DescribeLatestMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeLatestMessagesByUserIdResult> DescribeLatestMessagesByUserIdAsync(
+                Request.DescribeLatestMessagesByUserIdRequest request
+        )
+		{
+			var task = new DescribeLatestMessagesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

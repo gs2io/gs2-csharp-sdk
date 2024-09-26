@@ -36,6 +36,7 @@ namespace Gs2.Gs2Chat.Request
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
          public bool? AllowCreateRoom { set; get; } = null!;
+         public int? MessageLifeTimeDays { set; get; } = null!;
          public Gs2.Gs2Chat.Model.ScriptSetting PostMessageScript { set; get; } = null!;
          public Gs2.Gs2Chat.Model.ScriptSetting CreateRoomScript { set; get; } = null!;
          public Gs2.Gs2Chat.Model.ScriptSetting DeleteRoomScript { set; get; } = null!;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Chat.Request
         }
         public UpdateNamespaceRequest WithAllowCreateRoom(bool? allowCreateRoom) {
             this.AllowCreateRoom = allowCreateRoom;
+            return this;
+        }
+        public UpdateNamespaceRequest WithMessageLifeTimeDays(int? messageLifeTimeDays) {
+            this.MessageLifeTimeDays = messageLifeTimeDays;
             return this;
         }
         public UpdateNamespaceRequest WithPostMessageScript(Gs2.Gs2Chat.Model.ScriptSetting postMessageScript) {
@@ -96,6 +101,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithAllowCreateRoom(!data.Keys.Contains("allowCreateRoom") || data["allowCreateRoom"] == null ? null : (bool?)bool.Parse(data["allowCreateRoom"].ToString()))
+                .WithMessageLifeTimeDays(!data.Keys.Contains("messageLifeTimeDays") || data["messageLifeTimeDays"] == null ? null : (int?)(data["messageLifeTimeDays"].ToString().Contains(".") ? (int)double.Parse(data["messageLifeTimeDays"].ToString()) : int.Parse(data["messageLifeTimeDays"].ToString())))
                 .WithPostMessageScript(!data.Keys.Contains("postMessageScript") || data["postMessageScript"] == null ? null : Gs2.Gs2Chat.Model.ScriptSetting.FromJson(data["postMessageScript"]))
                 .WithCreateRoomScript(!data.Keys.Contains("createRoomScript") || data["createRoomScript"] == null ? null : Gs2.Gs2Chat.Model.ScriptSetting.FromJson(data["createRoomScript"]))
                 .WithDeleteRoomScript(!data.Keys.Contains("deleteRoomScript") || data["deleteRoomScript"] == null ? null : Gs2.Gs2Chat.Model.ScriptSetting.FromJson(data["deleteRoomScript"]))
@@ -111,6 +117,7 @@ namespace Gs2.Gs2Chat.Request
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["allowCreateRoom"] = AllowCreateRoom,
+                ["messageLifeTimeDays"] = MessageLifeTimeDays,
                 ["postMessageScript"] = PostMessageScript?.ToJson(),
                 ["createRoomScript"] = CreateRoomScript?.ToJson(),
                 ["deleteRoomScript"] = DeleteRoomScript?.ToJson(),
@@ -135,6 +142,10 @@ namespace Gs2.Gs2Chat.Request
             if (AllowCreateRoom != null) {
                 writer.WritePropertyName("allowCreateRoom");
                 writer.Write(bool.Parse(AllowCreateRoom.ToString()));
+            }
+            if (MessageLifeTimeDays != null) {
+                writer.WritePropertyName("messageLifeTimeDays");
+                writer.Write((MessageLifeTimeDays.ToString().Contains(".") ? (int)double.Parse(MessageLifeTimeDays.ToString()) : int.Parse(MessageLifeTimeDays.ToString())));
             }
             if (PostMessageScript != null) {
                 PostMessageScript.WriteJson(writer);
@@ -165,6 +176,7 @@ namespace Gs2.Gs2Chat.Request
             key += NamespaceName + ":";
             key += Description + ":";
             key += AllowCreateRoom + ":";
+            key += MessageLifeTimeDays + ":";
             key += PostMessageScript + ":";
             key += CreateRoomScript + ":";
             key += DeleteRoomScript + ":";

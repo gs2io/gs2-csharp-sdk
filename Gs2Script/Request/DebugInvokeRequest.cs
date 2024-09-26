@@ -36,6 +36,7 @@ namespace Gs2.Gs2Script.Request
          public string Script { set; get; } = null!;
          public string Args { set; get; } = null!;
          public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; } = null!;
+         public bool? DisableStringNumberToNumber { set; get; } = null!;
         public DebugInvokeRequest WithScript(string script) {
             this.Script = script;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Script.Request
         }
         public DebugInvokeRequest WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
             this.RandomStatus = randomStatus;
+            return this;
+        }
+        public DebugInvokeRequest WithDisableStringNumberToNumber(bool? disableStringNumberToNumber) {
+            this.DisableStringNumberToNumber = disableStringNumberToNumber;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Script.Request
             return new DebugInvokeRequest()
                 .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]));
+                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
+                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : (bool?)bool.Parse(data["disableStringNumberToNumber"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Script.Request
                 ["script"] = Script,
                 ["args"] = Args,
                 ["randomStatus"] = RandomStatus?.ToJson(),
+                ["disableStringNumberToNumber"] = DisableStringNumberToNumber,
             };
         }
 
@@ -86,6 +93,10 @@ namespace Gs2.Gs2Script.Request
             if (RandomStatus != null) {
                 RandomStatus.WriteJson(writer);
             }
+            if (DisableStringNumberToNumber != null) {
+                writer.WritePropertyName("disableStringNumberToNumber");
+                writer.Write(bool.Parse(DisableStringNumberToNumber.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -94,6 +105,7 @@ namespace Gs2.Gs2Script.Request
             key += Script + ":";
             key += Args + ":";
             key += RandomStatus + ":";
+            key += DisableStringNumberToNumber + ":";
             return key;
         }
     }

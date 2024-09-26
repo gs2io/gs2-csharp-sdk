@@ -37,6 +37,7 @@ namespace Gs2.Gs2Script.Request
          public string ScriptName { set; get; } = null!;
          public string Description { set; get; } = null!;
          public Gs2.Gs2Script.Model.GitHubCheckoutSetting CheckoutSetting { set; get; } = null!;
+         public bool? DisableStringNumberToNumber { set; get; } = null!;
         public UpdateScriptFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Script.Request
             this.CheckoutSetting = checkoutSetting;
             return this;
         }
+        public UpdateScriptFromGitHubRequest WithDisableStringNumberToNumber(bool? disableStringNumberToNumber) {
+            this.DisableStringNumberToNumber = disableStringNumberToNumber;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Script.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithScriptName(!data.Keys.Contains("scriptName") || data["scriptName"] == null ? null : data["scriptName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Script.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]));
+                .WithCheckoutSetting(!data.Keys.Contains("checkoutSetting") || data["checkoutSetting"] == null ? null : Gs2.Gs2Script.Model.GitHubCheckoutSetting.FromJson(data["checkoutSetting"]))
+                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : (bool?)bool.Parse(data["disableStringNumberToNumber"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Script.Request
                 ["scriptName"] = ScriptName,
                 ["description"] = Description,
                 ["checkoutSetting"] = CheckoutSetting?.ToJson(),
+                ["disableStringNumberToNumber"] = DisableStringNumberToNumber,
             };
         }
 
@@ -97,6 +104,10 @@ namespace Gs2.Gs2Script.Request
             if (CheckoutSetting != null) {
                 CheckoutSetting.WriteJson(writer);
             }
+            if (DisableStringNumberToNumber != null) {
+                writer.WritePropertyName("disableStringNumberToNumber");
+                writer.Write(bool.Parse(DisableStringNumberToNumber.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -106,6 +117,7 @@ namespace Gs2.Gs2Script.Request
             key += ScriptName + ":";
             key += Description + ":";
             key += CheckoutSetting + ":";
+            key += DisableStringNumberToNumber + ":";
             return key;
         }
     }

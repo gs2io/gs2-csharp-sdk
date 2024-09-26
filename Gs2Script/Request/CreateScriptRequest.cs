@@ -37,6 +37,7 @@ namespace Gs2.Gs2Script.Request
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
          public string Script { set; get; } = null!;
+         public bool? DisableStringNumberToNumber { set; get; } = null!;
         public CreateScriptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Script.Request
             this.Script = script;
             return this;
         }
+        public CreateScriptRequest WithDisableStringNumberToNumber(bool? disableStringNumberToNumber) {
+            this.DisableStringNumberToNumber = disableStringNumberToNumber;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Script.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString());
+                .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString())
+                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : (bool?)bool.Parse(data["disableStringNumberToNumber"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Script.Request
                 ["name"] = Name,
                 ["description"] = Description,
                 ["script"] = Script,
+                ["disableStringNumberToNumber"] = DisableStringNumberToNumber,
             };
         }
 
@@ -98,6 +105,10 @@ namespace Gs2.Gs2Script.Request
                 writer.WritePropertyName("script");
                 writer.Write(Script.ToString());
             }
+            if (DisableStringNumberToNumber != null) {
+                writer.WritePropertyName("disableStringNumberToNumber");
+                writer.Write(bool.Parse(DisableStringNumberToNumber.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -107,6 +118,7 @@ namespace Gs2.Gs2Script.Request
             key += Name + ":";
             key += Description + ":";
             key += Script + ":";
+            key += DisableStringNumberToNumber + ":";
             return key;
         }
     }

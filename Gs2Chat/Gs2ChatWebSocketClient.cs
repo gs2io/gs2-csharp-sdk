@@ -77,6 +77,11 @@ namespace Gs2.Gs2Chat
                     jsonWriter.WritePropertyName("allowCreateRoom");
                     jsonWriter.Write(request.AllowCreateRoom.ToString());
                 }
+                if (request.MessageLifeTimeDays != null)
+                {
+                    jsonWriter.WritePropertyName("messageLifeTimeDays");
+                    jsonWriter.Write(request.MessageLifeTimeDays.ToString());
+                }
                 if (request.PostMessageScript != null)
                 {
                     jsonWriter.WritePropertyName("postMessageScript");
@@ -327,6 +332,11 @@ namespace Gs2.Gs2Chat
                 {
                     jsonWriter.WritePropertyName("allowCreateRoom");
                     jsonWriter.Write(request.AllowCreateRoom.ToString());
+                }
+                if (request.MessageLifeTimeDays != null)
+                {
+                    jsonWriter.WritePropertyName("messageLifeTimeDays");
+                    jsonWriter.Write(request.MessageLifeTimeDays.ToString());
                 }
                 if (request.PostMessageScript != null)
                 {

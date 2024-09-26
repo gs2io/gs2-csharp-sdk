@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -62,17 +64,17 @@ namespace Gs2.Gs2Chat.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeMessagesIterator : Gs2Iterator<Gs2.Gs2Chat.Model.Message> {
+    public class DescribeLatestMessagesByUserIdIterator : Gs2Iterator<Gs2.Gs2Chat.Model.Message> {
     #else
-    public class DescribeMessagesIterator : IAsyncEnumerable<Gs2.Gs2Chat.Model.Message> {
+    public class DescribeLatestMessagesByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Chat.Model.Message> {
     #endif
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
         public string NamespaceName { get; }
         public string RoomName { get; }
         public string Password { get; }
-        public AccessToken AccessToken { get; }
-        public string UserId => AccessToken?.UserId;
+        public string UserId { get; }
+        public string TimeOffsetToken { get; }
         private long? _startAt;
         private bool _isCacheChecked;
         private bool _last;
@@ -80,20 +82,22 @@ namespace Gs2.Gs2Chat.Domain.Iterator
 
         int? fetchSize;
 
-        public DescribeMessagesIterator(
+        public DescribeLatestMessagesByUserIdIterator(
             Gs2.Core.Domain.Gs2 gs2,
             Gs2ChatRestClient client,
             string namespaceName,
             string roomName,
-            AccessToken accessToken,
-            string password = null
+            string userId,
+            string password = null,
+            string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.RoomName = roomName;
             this.Password = password;
-            this.AccessToken = accessToken;
+            this.UserId = userId;
+            this.TimeOffsetToken = timeOffsetToken;
             this._startAt = null;
             this._last = false;
             this._result = new Gs2.Gs2Chat.Model.Message[]{};
@@ -117,7 +121,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             (
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId,
+                        UserId,
                         RoomName
                     ),
                     out var list,
@@ -136,7 +140,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
+                            UserId,
                             RoomName
                         )
                     );
@@ -144,17 +148,16 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             } else {
 
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeMessagesFuture(
+                var future = this._client.DescribeLatestMessagesByUserIdFuture(
                 #else
-                var r = await this._client.DescribeMessagesAsync(
+                var r = await this._client.DescribeLatestMessagesByUserIdAsync(
                 #endif
-                    new Gs2.Gs2Chat.Request.DescribeMessagesRequest()
+                    new Gs2.Gs2Chat.Request.DescribeLatestMessagesByUserIdRequest()
                         .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithRoomName(this.RoomName)
                         .WithPassword(this.Password)
-                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                        .WithStartAt(this._startAt)
+                        .WithUserId(this.UserId)
                         .WithLimit(this.fetchSize)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -177,7 +180,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     item.PutCache(
                         this._gs2.Cache,
                         NamespaceName,
-                        AccessToken?.UserId,
+                        UserId,
                         RoomName,
                         item.Name
                     );
@@ -187,7 +190,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
+                            UserId,
                             RoomName
                         ),
                         this._startAt

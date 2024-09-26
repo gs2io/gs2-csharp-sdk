@@ -35,6 +35,7 @@ namespace Gs2.Gs2Script.Model
         public string Name { set; get; } = null!;
         public string Description { set; get; } = null!;
         public string Value { set; get; } = null!;
+        public bool? DisableStringNumberToNumber { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Script.Model
         }
         public Script WithValue(string value) {
             this.Value = value;
+            return this;
+        }
+        public Script WithDisableStringNumberToNumber(bool? disableStringNumberToNumber) {
+            this.DisableStringNumberToNumber = disableStringNumberToNumber;
             return this;
         }
         public Script WithCreatedAt(long? createdAt) {
@@ -148,6 +153,7 @@ namespace Gs2.Gs2Script.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithValue(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString())
+                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : (bool?)bool.Parse(data["disableStringNumberToNumber"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -160,6 +166,7 @@ namespace Gs2.Gs2Script.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["script"] = Value,
+                ["disableStringNumberToNumber"] = DisableStringNumberToNumber,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -184,6 +191,10 @@ namespace Gs2.Gs2Script.Model
             if (Value != null) {
                 writer.WritePropertyName("value");
                 writer.Write(Value.ToString());
+            }
+            if (DisableStringNumberToNumber != null) {
+                writer.WritePropertyName("disableStringNumberToNumber");
+                writer.Write(bool.Parse(DisableStringNumberToNumber.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -235,6 +246,14 @@ namespace Gs2.Gs2Script.Model
             else
             {
                 diff += Value.CompareTo(other.Value);
+            }
+            if (DisableStringNumberToNumber == null && DisableStringNumberToNumber == other.DisableStringNumberToNumber)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += DisableStringNumberToNumber == other.DisableStringNumberToNumber ? 0 : 1;
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -293,6 +312,8 @@ namespace Gs2.Gs2Script.Model
                 }
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("script", "script.script.createdAt.error.invalid"),
@@ -336,6 +357,7 @@ namespace Gs2.Gs2Script.Model
                 Name = Name,
                 Description = Description,
                 Value = Value,
+                DisableStringNumberToNumber = DisableStringNumberToNumber,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,
