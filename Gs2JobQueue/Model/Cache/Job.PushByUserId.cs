@@ -55,6 +55,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     request.UserId,
                     item.Name
                 );
+                Telemetry.StartJob(item.Name);
             }
         }
 
@@ -109,11 +110,6 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 userId,
                 request
             );
-
-            foreach (var item in result.Items) {
-                Telemetry.StartJob(item.Name);
-            }
-            
             return result;
         }
 #endif
