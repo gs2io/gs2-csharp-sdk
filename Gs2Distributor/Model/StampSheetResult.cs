@@ -12,12 +12,16 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
+using Gs2.Core.Util;
+using Gs2.Gs2JobQueue.Model;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
@@ -200,7 +204,7 @@ namespace Gs2.Gs2Distributor.Model
             if (data == null) {
                 return null;
             }
-            return new StampSheetResult()
+            var result = new StampSheetResult()
                 .WithStampSheetResultId(!data.Keys.Contains("stampSheetResultId") || data["stampSheetResultId"] == null ? null : data["stampSheetResultId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
@@ -228,6 +232,12 @@ namespace Gs2.Gs2Distributor.Model
                 .WithNextTransactionId(!data.Keys.Contains("nextTransactionId") || data["nextTransactionId"] == null ? null : data["nextTransactionId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+            
+            if (result != null) {
+                Telemetry.HandleTransaction(result.TransactionId, result);
+            }
+
+            return result;
         }
 
         public JsonData ToJson()

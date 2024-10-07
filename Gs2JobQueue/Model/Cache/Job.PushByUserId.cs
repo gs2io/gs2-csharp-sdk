@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -107,6 +109,11 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 userId,
                 request
             );
+
+            foreach (var item in result.Items) {
+                Telemetry.StartJob(item.Name);
+            }
+            
             return result;
         }
 #endif
