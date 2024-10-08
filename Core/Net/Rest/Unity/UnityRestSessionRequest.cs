@@ -51,6 +51,7 @@ namespace Gs2.Core.Net
         public UnityRestSessionRequest(CertificateHandler certificateHandler = null)
         {
             this._certificateHandler = certificateHandler;
+            this._checkCertificateRevocation = true;
         }
         
         public override async Task<RestResult> Invoke()
