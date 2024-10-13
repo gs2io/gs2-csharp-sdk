@@ -48,7 +48,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             (null as EntryModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.EntryName
+                default
             );
         }
 

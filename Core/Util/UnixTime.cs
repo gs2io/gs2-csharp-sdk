@@ -78,5 +78,10 @@ namespace Gs2.Core.Util
 			// unix epochからunixTime秒だけ経過した時刻を求める
 			return UnixEpoch.AddMilliseconds(unixTime);
 		}
+		
+		public static DateTime ToLocalTime(this long unixTime)
+		{
+			return UnixEpoch.AddMilliseconds(unixTime).ToLocalTime();
+		}
 	}
 }

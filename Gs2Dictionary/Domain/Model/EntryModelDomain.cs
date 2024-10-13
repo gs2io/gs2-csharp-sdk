@@ -64,19 +64,19 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
         public string NamespaceName { get; } = null!;
-        public string EntryName { get; } = null!;
+        public string EntryModelName { get; } = null!;
 
         public EntryModelDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            string entryName
+            string entryModelName
         ) {
             this._gs2 = gs2;
             this._client = new Gs2DictionaryRestClient(
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.EntryName = entryName;
+            this.EntryModelName = entryModelName;
         }
 
     }
@@ -91,8 +91,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             {
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithEntryName(this.EntryName);
+                    .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
@@ -120,8 +119,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                .WithNamespaceName(this.NamespaceName)
-                .WithEntryName(this.EntryName);
+                .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
@@ -143,7 +141,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.EntryName
+                    this.EntryModelName
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -152,7 +150,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = (null as Gs2.Gs2Dictionary.Model.EntryModel).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.EntryName,
+                    this.EntryModelName,
                     () => this.GetFuture(
                         new GetEntryModelRequest()
                     )
@@ -178,7 +176,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModel).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.EntryName
+                this.EntryModelName
             );
             if (find) {
                 return value;
@@ -186,7 +184,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return await (null as Gs2.Gs2Dictionary.Model.EntryModel).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.EntryName,
+                this.EntryModelName,
                 () => this.GetAsync(
                     new GetEntryModelRequest()
                 )
@@ -222,7 +220,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             (null as Gs2.Gs2Dictionary.Model.EntryModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.EntryName
+                this.EntryModelName
             );
         }
 
@@ -233,7 +231,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Dictionary.Model.EntryModel).CacheKey(
-                    this.EntryName
+                    this.EntryModelName
                 ),
                 callback,
                 () =>
@@ -268,7 +266,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Dictionary.Model.EntryModel).CacheKey(
-                    this.EntryName
+                    this.EntryModelName
                 ),
                 callbackId
             );

@@ -44,6 +44,7 @@ namespace Gs2.Gs2Guild.Request
          public int[] Attributes5 { set; get; } = null!;
          public string[] JoinPolicies { set; get; } = null!;
          public bool? IncludeFullMembersGuild { set; get; } = null!;
+         public string OrderBy { set; get; } = null!;
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
@@ -89,6 +90,10 @@ namespace Gs2.Gs2Guild.Request
         }
         public SearchGuildsRequest WithIncludeFullMembersGuild(bool? includeFullMembersGuild) {
             this.IncludeFullMembersGuild = includeFullMembersGuild;
+            return this;
+        }
+        public SearchGuildsRequest WithOrderBy(string orderBy) {
+            this.OrderBy = orderBy;
             return this;
         }
         public SearchGuildsRequest WithPageToken(string pageToken) {
@@ -137,6 +142,7 @@ namespace Gs2.Gs2Guild.Request
                     return v.ToString();
                 }).ToArray())
                 .WithIncludeFullMembersGuild(!data.Keys.Contains("includeFullMembersGuild") || data["includeFullMembersGuild"] == null ? null : (bool?)bool.Parse(data["includeFullMembersGuild"].ToString()))
+                .WithOrderBy(!data.Keys.Contains("orderBy") || data["orderBy"] == null ? null : data["orderBy"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
@@ -209,6 +215,7 @@ namespace Gs2.Gs2Guild.Request
                 ["attributes5"] = attributes5JsonData,
                 ["joinPolicies"] = joinPoliciesJsonData,
                 ["includeFullMembersGuild"] = IncludeFullMembersGuild,
+                ["orderBy"] = OrderBy,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
@@ -291,6 +298,10 @@ namespace Gs2.Gs2Guild.Request
                 writer.WritePropertyName("includeFullMembersGuild");
                 writer.Write(bool.Parse(IncludeFullMembersGuild.ToString()));
             }
+            if (OrderBy != null) {
+                writer.WritePropertyName("orderBy");
+                writer.Write(OrderBy.ToString());
+            }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
                 writer.Write(PageToken.ToString());
@@ -315,6 +326,7 @@ namespace Gs2.Gs2Guild.Request
             key += Attributes5 + ":";
             key += JoinPolicies + ":";
             key += IncludeFullMembersGuild + ":";
+            key += OrderBy + ":";
             key += PageToken + ":";
             key += Limit + ":";
             return key;

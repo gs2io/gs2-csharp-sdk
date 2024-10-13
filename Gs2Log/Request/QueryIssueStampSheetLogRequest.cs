@@ -44,7 +44,6 @@ namespace Gs2.Gs2Log.Request
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public QueryIssueStampSheetLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -87,11 +86,6 @@ namespace Gs2.Gs2Log.Request
         }
         public QueryIssueStampSheetLogRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public QueryIssueStampSheetLogRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

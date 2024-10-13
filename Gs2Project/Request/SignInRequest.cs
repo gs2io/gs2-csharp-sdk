@@ -35,12 +35,17 @@ namespace Gs2.Gs2Project.Request
 	{
          public string Email { set; get; } = null!;
          public string Password { set; get; } = null!;
+         public string Otp { set; get; } = null!;
         public SignInRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
         public SignInRequest WithPassword(string password) {
             this.Password = password;
+            return this;
+        }
+        public SignInRequest WithOtp(string otp) {
+            this.Otp = otp;
             return this;
         }
 
@@ -54,7 +59,8 @@ namespace Gs2.Gs2Project.Request
             }
             return new SignInRequest()
                 .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString())
-                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithOtp(!data.Keys.Contains("otp") || data["otp"] == null ? null : data["otp"].ToString());
         }
 
         public override JsonData ToJson()
@@ -62,6 +68,7 @@ namespace Gs2.Gs2Project.Request
             return new JsonData {
                 ["email"] = Email,
                 ["password"] = Password,
+                ["otp"] = Otp,
             };
         }
 
@@ -76,6 +83,10 @@ namespace Gs2.Gs2Project.Request
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
             }
+            if (Otp != null) {
+                writer.WritePropertyName("otp");
+                writer.Write(Otp.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -83,6 +94,7 @@ namespace Gs2.Gs2Project.Request
             var key = "";
             key += Email + ":";
             key += Password + ":";
+            key += Otp + ":";
             return key;
         }
     }

@@ -24,6 +24,7 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Grade.Request;
 using Gs2.Gs2Grade.Result;
+using Gs2.Gs2Key.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
     #if GS2_ENABLE_UNITASK

@@ -1483,6 +1483,119 @@ namespace Gs2.Gs2SerialKey
 #endif
 
 
+        public class IssueOnceTask : Gs2WebSocketSessionTask<Request.IssueOnceRequest, Result.IssueOnceResult>
+        {
+	        public IssueOnceTask(IGs2Session session, Request.IssueOnceRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.IssueOnceRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.CampaignModelName != null)
+                {
+                    jsonWriter.WritePropertyName("campaignModelName");
+                    jsonWriter.Write(request.CampaignModelName.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "issueOnce",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IssueOnce(
+                Request.IssueOnceRequest request,
+                UnityAction<AsyncResult<Result.IssueOnceResult>> callback
+        )
+		{
+			var task = new IssueOnceTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IssueOnceResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IssueOnceResult> IssueOnceFuture(
+                Request.IssueOnceRequest request
+        )
+		{
+			return new IssueOnceTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IssueOnceResult> IssueOnceAsync(
+            Request.IssueOnceRequest request
+        )
+		{
+		    var task = new IssueOnceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public IssueOnceTask IssueOnceAsync(
+                Request.IssueOnceRequest request
+        )
+		{
+			return new IssueOnceTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IssueOnceResult> IssueOnceAsync(
+            Request.IssueOnceRequest request
+        )
+		{
+		    var task = new IssueOnceTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetSerialKeyTask : Gs2WebSocketSessionTask<Request.GetSerialKeyRequest, Result.GetSerialKeyResult>
         {
 	        public GetSerialKeyTask(IGs2Session session, Request.GetSerialKeyRequest request) : base(session, request)
@@ -1583,6 +1696,262 @@ namespace Gs2.Gs2SerialKey
         )
 		{
 		    var task = new GetSerialKeyTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCodeTask : Gs2WebSocketSessionTask<Request.VerifyCodeRequest, Result.VerifyCodeResult>
+        {
+	        public VerifyCodeTask(IGs2Session session, Request.VerifyCodeRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCodeRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Code != null)
+                {
+                    jsonWriter.WritePropertyName("code");
+                    jsonWriter.Write(request.Code.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "verifyCode",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCode(
+                Request.VerifyCodeRequest request,
+                UnityAction<AsyncResult<Result.VerifyCodeResult>> callback
+        )
+		{
+			var task = new VerifyCodeTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCodeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCodeResult> VerifyCodeFuture(
+                Request.VerifyCodeRequest request
+        )
+		{
+			return new VerifyCodeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCodeResult> VerifyCodeAsync(
+            Request.VerifyCodeRequest request
+        )
+		{
+		    var task = new VerifyCodeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCodeTask VerifyCodeAsync(
+                Request.VerifyCodeRequest request
+        )
+		{
+			return new VerifyCodeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCodeResult> VerifyCodeAsync(
+            Request.VerifyCodeRequest request
+        )
+		{
+		    var task = new VerifyCodeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCodeByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyCodeByUserIdRequest, Result.VerifyCodeByUserIdResult>
+        {
+	        public VerifyCodeByUserIdTask(IGs2Session session, Request.VerifyCodeByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCodeByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Code != null)
+                {
+                    jsonWriter.WritePropertyName("code");
+                    jsonWriter.Write(request.Code.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "verifyCodeByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCodeByUserId(
+                Request.VerifyCodeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyCodeByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyCodeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCodeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCodeByUserIdResult> VerifyCodeByUserIdFuture(
+                Request.VerifyCodeByUserIdRequest request
+        )
+		{
+			return new VerifyCodeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCodeByUserIdResult> VerifyCodeByUserIdAsync(
+            Request.VerifyCodeByUserIdRequest request
+        )
+		{
+		    var task = new VerifyCodeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCodeByUserIdTask VerifyCodeByUserIdAsync(
+                Request.VerifyCodeByUserIdRequest request
+        )
+		{
+			return new VerifyCodeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCodeByUserIdResult> VerifyCodeByUserIdAsync(
+            Request.VerifyCodeByUserIdRequest request
+        )
+		{
+		    var task = new VerifyCodeByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Project.Request
          public string ProjectName { set; get; } = null!;
          public string UserName { set; get; } = null!;
          public string Password { set; get; } = null!;
+         public string Otp { set; get; } = null!;
         public GetProjectTokenByIdentifierRequest WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Project.Request
             this.Password = password;
             return this;
         }
+        public GetProjectTokenByIdentifierRequest WithOtp(string otp) {
+            this.Otp = otp;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Project.Request
                 .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString())
                 .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
                 .WithUserName(!data.Keys.Contains("userName") || data["userName"] == null ? null : data["userName"].ToString())
-                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
+                .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithOtp(!data.Keys.Contains("otp") || data["otp"] == null ? null : data["otp"].ToString());
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Project.Request
                 ["projectName"] = ProjectName,
                 ["userName"] = UserName,
                 ["password"] = Password,
+                ["otp"] = Otp,
             };
         }
 
@@ -98,6 +105,10 @@ namespace Gs2.Gs2Project.Request
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
             }
+            if (Otp != null) {
+                writer.WritePropertyName("otp");
+                writer.Write(Otp.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -107,6 +118,7 @@ namespace Gs2.Gs2Project.Request
             key += ProjectName + ":";
             key += UserName + ":";
             key += Password + ":";
+            key += Otp + ":";
             return key;
         }
     }

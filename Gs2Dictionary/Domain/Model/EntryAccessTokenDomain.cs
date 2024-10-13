@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -66,7 +68,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string EntryName { get; } = null!;
+        public string EntryModelName { get; } = null!;
         public string Body { get; set; } = null!;
         public string Signature { get; set; } = null!;
 
@@ -74,7 +76,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
-            string entryName
+            string entryModelName
         ) {
             this._gs2 = gs2;
             this._client = new Gs2DictionaryRestClient(
@@ -82,7 +84,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
-            this.EntryName = entryName;
+            this.EntryModelName = entryModelName;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -95,7 +97,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
-                    .WithEntryModelName(this.EntryName);
+                    .WithEntryModelName(this.EntryModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -125,7 +127,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
-                .WithEntryModelName(this.EntryName);
+                .WithEntryModelName(this.EntryModelName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -145,7 +147,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
-                    .WithEntryModelName(this.EntryName);
+                    .WithEntryModelName(this.EntryModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -179,7 +181,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
-                .WithEntryModelName(this.EntryName);
+                .WithEntryModelName(this.EntryModelName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -194,6 +196,58 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain> VerifyFuture(
+            VerifyEntryRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithEntryModelName(this.EntryModelName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyEntryFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain> VerifyAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain> VerifyAsync(
+            #endif
+            VerifyEntryRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithEntryModelName(this.EntryModelName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyEntryAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Dictionary.Model.Entry> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.Entry> self)
@@ -202,7 +256,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.EntryName
+                    this.EntryModelName
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -212,7 +266,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.EntryName,
+                    this.EntryModelName,
                     () => this.GetFuture(
                         new GetEntryRequest()
                     )
@@ -239,7 +293,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EntryName
+                this.EntryModelName
             );
             if (find) {
                 return value;
@@ -248,7 +302,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EntryName,
+                this.EntryModelName,
                 () => this.GetAsync(
                     new GetEntryRequest()
                 )
@@ -285,7 +339,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EntryName
+                this.EntryModelName
             );
         }
 
@@ -297,7 +351,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheKey(
-                    this.EntryName
+                    this.EntryModelName
                 ),
                 callback,
                 () =>
@@ -333,7 +387,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheKey(
-                    this.EntryName
+                    this.EntryModelName
                 ),
                 callbackId
             );

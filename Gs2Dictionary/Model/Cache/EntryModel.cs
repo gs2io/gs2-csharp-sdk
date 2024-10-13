@@ -51,11 +51,11 @@ namespace Gs2.Gs2Dictionary.Model.Cache
 
         public static string CacheKey(
             this EntryModel self,
-            string entryName
+            string entryModelName
         ) {
             return string.Join(
                 ":",
-                entryName
+                entryModelName
             );
         }
 
@@ -64,7 +64,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this EntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string entryName,
+            string entryModelName,
             Func<IFuture<EntryModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<EntryModel> self)
@@ -78,7 +78,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                         (null as EntryModel).PutCache(
                             cache,
                             namespaceName,
-                            entryName
+                            entryModelName
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "entryModel") {
                             self.OnComplete(default);
@@ -92,7 +92,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    entryName
+                    entryModelName
                 );
                 self.OnComplete(item);
             }
@@ -109,7 +109,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this EntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string entryName,
+            string entryModelName,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<EntryModel>> fetchImpl
     #else
@@ -121,7 +121,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                             namespaceName
                        ),
                        self.CacheKey(
-                            entryName
+                            entryModelName
                        )
                    ).LockAsync()) {
                 try {
@@ -129,7 +129,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     item.PutCache(
                         cache,
                         namespaceName,
-                        entryName
+                        entryModelName
                     );
                     return item;
                 }
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     (null as EntryModel).PutCache(
                         cache,
                         namespaceName,
-                        entryName
+                        entryModelName
                     );
                     if (e.errors.Length == 0 || e.errors[0].component != "entryModel") {
                         throw;
@@ -152,14 +152,14 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this EntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string entryName
+            string entryModelName
         ) {
             return cache.Get<EntryModel>(
                 self.CacheParentKey(
                     namespaceName
                 ),
                 self.CacheKey(
-                    entryName
+                    entryModelName
                 )
             );
         }
@@ -168,14 +168,14 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this EntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string entryName
+            string entryModelName
         ) {
             cache.Put(
                 self.CacheParentKey(
                     namespaceName
                 ),
                 self.CacheKey(
-                    entryName
+                    entryModelName
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -186,14 +186,14 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this EntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string entryName
+            string entryModelName
         ) {
             cache.Delete<EntryModel>(
                 self.CacheParentKey(
                     namespaceName
                 ),
                 self.CacheKey(
-                    entryName
+                    entryModelName
                 )
             );
         }

@@ -53,7 +53,7 @@ namespace Gs2.Gs2Dictionary.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -70,7 +70,7 @@ namespace Gs2.Gs2Dictionary.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -87,7 +87,7 @@ namespace Gs2.Gs2Dictionary.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -104,7 +104,7 @@ namespace Gs2.Gs2Dictionary.Model
         }
 
         private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -120,21 +120,21 @@ namespace Gs2.Gs2Dictionary.Model
             return match.Groups["userId"].Value;
         }
 
-        private static System.Text.RegularExpressions.Regex _entryNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryName>.+)",
+        private static System.Text.RegularExpressions.Regex _entryModelNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):dictionary:(?<namespaceName>.+):user:(?<userId>.+):entry:(?<entryModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
-        public static string GetEntryNameFromGrn(
+        public static string GetEntryModelNameFromGrn(
             string grn
         )
         {
-            var match = _entryNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["entryName"].Success)
+            var match = _entryModelNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["entryModelName"].Success)
             {
                 return null;
             }
-            return match.Groups["entryName"].Value;
+            return match.Groups["entryModelName"].Value;
         }
 
 #if UNITY_2017_1_OR_NEWER

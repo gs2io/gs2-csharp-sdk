@@ -53,11 +53,11 @@ namespace Gs2.Gs2Dictionary.Model.Cache
 
         public static string CacheKey(
             this Entry self,
-            string entryName
+            string entryModelName
         ) {
             return string.Join(
                 ":",
-                entryName
+                entryModelName
             );
         }
 
@@ -67,7 +67,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string entryName,
+            string entryModelName,
             Func<IFuture<Entry>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Entry> self)
@@ -82,7 +82,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            entryName
+                            entryModelName
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "entry") {
                             self.OnComplete(default);
@@ -97,7 +97,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    entryName
+                    entryModelName
                 );
                 self.OnComplete(item);
             }
@@ -115,7 +115,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string entryName,
+            string entryModelName,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Entry>> fetchImpl
     #else
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                             userId
                        ),
                        self.CacheKey(
-                            entryName
+                            entryModelName
                        )
                    ).LockAsync()) {
                 try {
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                         cache,
                         namespaceName,
                         userId,
-                        entryName
+                        entryModelName
                     );
                     return item;
                 }
@@ -146,7 +146,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                         cache,
                         namespaceName,
                         userId,
-                        entryName
+                        entryModelName
                     );
                     if (e.errors.Length == 0 || e.errors[0].component != "entry") {
                         throw;
@@ -162,7 +162,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string entryName
+            string entryModelName
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -173,7 +173,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     userId
                 ),
                 self.CacheKey(
-                    entryName
+                    entryModelName
                 )
             );
         }
@@ -183,7 +183,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string entryName
+            string entryModelName
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +194,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     userId
                 ),
                 self.CacheKey(
-                    entryName
+                    entryModelName
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -206,7 +206,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string entryName
+            string entryModelName
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +217,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     userId
                 ),
                 self.CacheKey(
-                    entryName
+                    entryModelName
                 )
             );
         }

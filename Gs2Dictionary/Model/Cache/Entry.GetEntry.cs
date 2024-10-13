@@ -49,7 +49,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.Name
+                request.EntryModelName
             );
         }
 

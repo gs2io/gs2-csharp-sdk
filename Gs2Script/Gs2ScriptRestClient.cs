@@ -1665,6 +1665,10 @@ namespace Gs2.Gs2Script
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -1874,6 +1878,131 @@ namespace Gs2.Gs2Script
         )
 		{
 			var task = new DebugInvokeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class InvokeByStampSheetTask : Gs2RestSessionTask<InvokeByStampSheetRequest, InvokeByStampSheetResult>
+        {
+            public InvokeByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, InvokeByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(InvokeByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "script")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/script/invoke";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator InvokeByStampSheet(
+                Request.InvokeByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.InvokeByStampSheetResult>> callback
+        )
+		{
+			var task = new InvokeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.InvokeByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.InvokeByStampSheetResult> InvokeByStampSheetFuture(
+                Request.InvokeByStampSheetRequest request
+        )
+		{
+			return new InvokeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.InvokeByStampSheetResult> InvokeByStampSheetAsync(
+                Request.InvokeByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.InvokeByStampSheetResult> result = null;
+			await InvokeByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public InvokeByStampSheetTask InvokeByStampSheetAsync(
+                Request.InvokeByStampSheetRequest request
+        )
+		{
+			return new InvokeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.InvokeByStampSheetResult> InvokeByStampSheetAsync(
+                Request.InvokeByStampSheetRequest request
+        )
+		{
+			var task = new InvokeByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

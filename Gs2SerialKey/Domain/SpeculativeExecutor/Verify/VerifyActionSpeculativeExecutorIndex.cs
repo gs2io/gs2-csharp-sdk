@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2SerialKey.Model.Transaction;
 using Gs2.Gs2SerialKey.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -57,6 +58,24 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
+                if (VerifyCodeByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                    var request = VerifyCodeByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifyCodeByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -79,6 +98,17 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyCodeByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyCodeByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyCodeByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
             return null;
         }
 #endif

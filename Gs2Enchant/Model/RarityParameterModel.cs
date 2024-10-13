@@ -340,7 +340,7 @@ namespace Gs2.Gs2Enchant.Model
                         new RequestError("rarityParameterModel", "enchant.rarityParameterModel.parameters.error.tooFew"),
                     });
                 }
-                if (Parameters.Length > 10) {
+                if (Parameters.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("rarityParameterModel", "enchant.rarityParameterModel.parameters.error.tooMany"),
                     });

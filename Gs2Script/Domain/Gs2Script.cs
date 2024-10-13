@@ -198,12 +198,37 @@ namespace Gs2.Gs2Script.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, InvokeScriptRequest, InvokeScriptResult> InvokeScriptComplete = new UnityEvent<string, InvokeScriptRequest, InvokeScriptResult>();
+    #else
+        public static Action<string, InvokeScriptRequest, InvokeScriptResult> InvokeScriptComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "InvokeScript": {
+                        var requestModel = InvokeScriptRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = InvokeScriptResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        InvokeScriptComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public void UpdateCacheFromStampTask(
@@ -219,6 +244,25 @@ namespace Gs2.Gs2Script.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
+            switch (method) {
+                case "invoke_script": {
+                    var requestModel = InvokeScriptRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = InvokeScriptResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    InvokeScriptComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+            }
         }
 
         public void HandleNotification(

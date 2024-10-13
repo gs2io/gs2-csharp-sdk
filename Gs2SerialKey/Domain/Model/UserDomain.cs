@@ -237,6 +237,128 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> IssueOnceFuture(
+            IssueOnceRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.IssueOnceFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.UserId,
+                    result?.Item?.Code
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> IssueOnceAsync(
+            #else
+        public async Task<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> IssueOnceAsync(
+            #endif
+            IssueOnceRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.IssueOnceAsync(request)
+            );
+            var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                result?.Item?.Code
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> VerifyCodeFuture(
+            VerifyCodeByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyCodeByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    request.UserId,
+                    result?.Item?.Code
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> VerifyCodeAsync(
+            #else
+        public async Task<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> VerifyCodeAsync(
+            #endif
+            VerifyCodeByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyCodeByUserIdAsync(request)
+            );
+            var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
+                this._gs2,
+                this.NamespaceName,
+                request.UserId,
+                result?.Item?.Code
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> RevertUseFuture(
             RevertUseByUserIdRequest request
         ) {

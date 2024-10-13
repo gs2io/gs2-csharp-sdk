@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -160,12 +162,12 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
 
         public Gs2.Gs2Dictionary.Domain.Model.EntryModelDomain EntryModel(
-            string entryName
+            string entryModelName
         ) {
             return new Gs2.Gs2Dictionary.Domain.Model.EntryModelDomain(
                 this._gs2,
                 this.NamespaceName,
-                entryName
+                entryModelName
             );
         }
 
@@ -260,12 +262,12 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
 
         public Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain EntryModelMaster(
-            string entryName
+            string entryModelName
         ) {
             return new Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain(
                 this._gs2,
                 this.NamespaceName,
-                entryName
+                entryModelName
             );
         }
 
@@ -527,6 +529,172 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 result?.Item?.Name
             );
 
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> GetEntryModelMasterFuture(
+            GetEntryModelMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetEntryModelMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Model.EntryModelMaster> GetEntryModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Model.EntryModelMaster> GetEntryModelMasterAsync(
+            #endif
+            GetEntryModelMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetEntryModelMasterAsync(request)
+            );
+            return result?.Item;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> UpdateEntryModelMasterFuture(
+            UpdateEntryModelMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateEntryModelMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> UpdateEntryModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> UpdateEntryModelMasterAsync(
+            #endif
+            UpdateEntryModelMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateEntryModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> DeleteEntryModelMasterFuture(
+            DeleteEntryModelMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteEntryModelMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> DeleteEntryModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> DeleteEntryModelMasterAsync(
+            #endif
+            DeleteEntryModelMasterRequest request
+        ) {
+            try {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteEntryModelMasterAsync(request)
+                );
+            }
+            catch (NotFoundException e) {}
+            var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                request?.EntryName
+            );
             return domain;
         }
         #endif

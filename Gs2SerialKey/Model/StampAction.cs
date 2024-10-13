@@ -32,6 +32,8 @@ namespace Gs2.Gs2SerialKey.Model
             switch (action.Action) {
                 case "Gs2SerialKey:UseByUserId":
                     return UseByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2SerialKey:VerifyCodeByUserId":
+                    return VerifyCodeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

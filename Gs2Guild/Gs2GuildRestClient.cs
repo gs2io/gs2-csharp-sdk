@@ -2603,6 +2603,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("includeFullMembersGuild");
                     jsonWriter.Write(request.IncludeFullMembersGuild.ToString());
                 }
+                if (request.OrderBy != null)
+                {
+                    jsonWriter.WritePropertyName("orderBy");
+                    jsonWriter.Write(request.OrderBy);
+                }
                 if (request.PageToken != null)
                 {
                     jsonWriter.WritePropertyName("pageToken");
@@ -2809,6 +2814,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("includeFullMembersGuild");
                     jsonWriter.Write(request.IncludeFullMembersGuild.ToString());
+                }
+                if (request.OrderBy != null)
+                {
+                    jsonWriter.WritePropertyName("orderBy");
+                    jsonWriter.Write(request.OrderBy);
                 }
                 if (request.PageToken != null)
                 {

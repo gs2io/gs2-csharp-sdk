@@ -36,6 +36,8 @@ namespace Gs2.Gs2Project.Model
         public string Email { set; get; } = null!;
         public string FullName { set; get; } = null!;
         public string CompanyName { set; get; } = null!;
+        public string EnableTwoFactorAuthentication { set; get; } = null!;
+        public Gs2.Gs2Project.Model.TwoFactorAuthenticationSetting TwoFactorAuthenticationSetting { set; get; } = null!;
         public string Status { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -57,6 +59,14 @@ namespace Gs2.Gs2Project.Model
         }
         public Account WithCompanyName(string companyName) {
             this.CompanyName = companyName;
+            return this;
+        }
+        public Account WithEnableTwoFactorAuthentication(string enableTwoFactorAuthentication) {
+            this.EnableTwoFactorAuthentication = enableTwoFactorAuthentication;
+            return this;
+        }
+        public Account WithTwoFactorAuthenticationSetting(Gs2.Gs2Project.Model.TwoFactorAuthenticationSetting twoFactorAuthenticationSetting) {
+            this.TwoFactorAuthenticationSetting = twoFactorAuthenticationSetting;
             return this;
         }
         public Account WithStatus(string status) {
@@ -103,6 +113,8 @@ namespace Gs2.Gs2Project.Model
                 .WithEmail(!data.Keys.Contains("email") || data["email"] == null ? null : data["email"].ToString())
                 .WithFullName(!data.Keys.Contains("fullName") || data["fullName"] == null ? null : data["fullName"].ToString())
                 .WithCompanyName(!data.Keys.Contains("companyName") || data["companyName"] == null ? null : data["companyName"].ToString())
+                .WithEnableTwoFactorAuthentication(!data.Keys.Contains("enableTwoFactorAuthentication") || data["enableTwoFactorAuthentication"] == null ? null : data["enableTwoFactorAuthentication"].ToString())
+                .WithTwoFactorAuthenticationSetting(!data.Keys.Contains("twoFactorAuthenticationSetting") || data["twoFactorAuthenticationSetting"] == null ? null : Gs2.Gs2Project.Model.TwoFactorAuthenticationSetting.FromJson(data["twoFactorAuthenticationSetting"]))
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
@@ -116,6 +128,8 @@ namespace Gs2.Gs2Project.Model
                 ["email"] = Email,
                 ["fullName"] = FullName,
                 ["companyName"] = CompanyName,
+                ["enableTwoFactorAuthentication"] = EnableTwoFactorAuthentication,
+                ["twoFactorAuthenticationSetting"] = TwoFactorAuthenticationSetting?.ToJson(),
                 ["status"] = Status,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -144,6 +158,14 @@ namespace Gs2.Gs2Project.Model
             if (CompanyName != null) {
                 writer.WritePropertyName("companyName");
                 writer.Write(CompanyName.ToString());
+            }
+            if (EnableTwoFactorAuthentication != null) {
+                writer.WritePropertyName("enableTwoFactorAuthentication");
+                writer.Write(EnableTwoFactorAuthentication.ToString());
+            }
+            if (TwoFactorAuthenticationSetting != null) {
+                writer.WritePropertyName("twoFactorAuthenticationSetting");
+                TwoFactorAuthenticationSetting.WriteJson(writer);
             }
             if (Status != null) {
                 writer.WritePropertyName("status");
@@ -203,6 +225,22 @@ namespace Gs2.Gs2Project.Model
             else
             {
                 diff += CompanyName.CompareTo(other.CompanyName);
+            }
+            if (EnableTwoFactorAuthentication == null && EnableTwoFactorAuthentication == other.EnableTwoFactorAuthentication)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += EnableTwoFactorAuthentication.CompareTo(other.EnableTwoFactorAuthentication);
+            }
+            if (TwoFactorAuthenticationSetting == null && TwoFactorAuthenticationSetting == other.TwoFactorAuthenticationSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TwoFactorAuthenticationSetting.CompareTo(other.TwoFactorAuthenticationSetting);
             }
             if (Status == null && Status == other.Status)
             {
@@ -273,6 +311,19 @@ namespace Gs2.Gs2Project.Model
                 }
             }
             {
+                switch (EnableTwoFactorAuthentication) {
+                    case "RFC6238":
+                    case "Disable":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("account", "project.account.enableTwoFactorAuthentication.error.invalid"),
+                        });
+                }
+            }
+            {
+            }
+            {
                 switch (Status) {
                     case "VERIFYING":
                     case "ACTIVE":
@@ -317,6 +368,8 @@ namespace Gs2.Gs2Project.Model
                 Email = Email,
                 FullName = FullName,
                 CompanyName = CompanyName,
+                EnableTwoFactorAuthentication = EnableTwoFactorAuthentication,
+                TwoFactorAuthenticationSetting = TwoFactorAuthenticationSetting.Clone() as Gs2.Gs2Project.Model.TwoFactorAuthenticationSetting,
                 Status = Status,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

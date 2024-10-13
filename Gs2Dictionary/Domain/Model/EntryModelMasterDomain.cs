@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -348,21 +350,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 {
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-                    async UniTask Impl() {
+                    ModelAsync().Forget();
             #else
-                    async Task Impl() {
-            #endif
-                        try {
-                            await ModelAsync();
-                        }
-                        catch (System.Exception) {
-                            // ignored
-                        }
-                    }
-            #if GS2_ENABLE_UNITASK
-                    Impl().Forget();
-            #else
-                    Impl();
+                    ModelAsync();
             #endif
         #endif
                 }

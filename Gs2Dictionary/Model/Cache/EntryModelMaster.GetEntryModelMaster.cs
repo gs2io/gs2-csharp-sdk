@@ -48,7 +48,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.EntryName
+                self.Item.Name
             );
         }
 
