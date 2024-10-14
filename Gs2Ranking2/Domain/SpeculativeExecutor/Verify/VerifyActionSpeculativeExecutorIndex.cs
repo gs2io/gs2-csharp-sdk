@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Ranking2.Model.Transaction;
 using Gs2.Gs2Ranking2.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -57,6 +58,60 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
+                if (VerifyGlobalRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                    var request = VerifyGlobalRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifyGlobalRankingScoreByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
+                if (VerifyClusterRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                    var request = VerifyClusterRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifyClusterRankingScoreByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
+                if (VerifySubscribeRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                    var request = VerifySubscribeRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = VerifySubscribeRankingScoreByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -79,6 +134,39 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyGlobalRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyGlobalRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyGlobalRankingScoreByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyClusterRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyClusterRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyClusterRankingScoreByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifySubscribeRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifySubscribeRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifySubscribeRankingScoreByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
             return null;
         }
 #endif

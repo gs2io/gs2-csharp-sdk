@@ -30,16 +30,28 @@ namespace Gs2.Gs2Ranking2.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Ranking2:VerifyGlobalRankingScoreByUserId":
+                    return VerifyGlobalRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Ranking2:CreateGlobalRankingReceivedRewardByUserId":
                     return CreateGlobalRankingReceivedRewardByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Ranking2:VerifyClusterRankingScoreByUserId":
+                    return VerifyClusterRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Ranking2:CreateClusterRankingReceivedRewardByUserId":
                     return CreateClusterRankingReceivedRewardByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Ranking2:VerifySubscribeRankingScoreByUserId":
+                    return VerifySubscribeRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2Ranking2:VerifyGlobalRankingScoreByUserId":
+                    return VerifyGlobalRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Ranking2:VerifyClusterRankingScoreByUserId":
+                    return VerifyClusterRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Ranking2:VerifySubscribeRankingScoreByUserId":
+                    return VerifySubscribeRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

@@ -1789,6 +1789,292 @@ namespace Gs2.Gs2Ranking2
 #endif
 
 
+        public class VerifyGlobalRankingScoreTask : Gs2WebSocketSessionTask<Request.VerifyGlobalRankingScoreRequest, Result.VerifyGlobalRankingScoreResult>
+        {
+	        public VerifyGlobalRankingScoreTask(IGs2Session session, Request.VerifyGlobalRankingScoreRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyGlobalRankingScoreRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.RankingName != null)
+                {
+                    jsonWriter.WritePropertyName("rankingName");
+                    jsonWriter.Write(request.RankingName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.Score != null)
+                {
+                    jsonWriter.WritePropertyName("score");
+                    jsonWriter.Write(request.Score.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking2",
+                    "globalRankingScore",
+                    "verifyGlobalRankingScore",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyGlobalRankingScore(
+                Request.VerifyGlobalRankingScoreRequest request,
+                UnityAction<AsyncResult<Result.VerifyGlobalRankingScoreResult>> callback
+        )
+		{
+			var task = new VerifyGlobalRankingScoreTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyGlobalRankingScoreResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreFuture(
+                Request.VerifyGlobalRankingScoreRequest request
+        )
+		{
+			return new VerifyGlobalRankingScoreTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreAsync(
+            Request.VerifyGlobalRankingScoreRequest request
+        )
+		{
+		    var task = new VerifyGlobalRankingScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyGlobalRankingScoreTask VerifyGlobalRankingScoreAsync(
+                Request.VerifyGlobalRankingScoreRequest request
+        )
+		{
+			return new VerifyGlobalRankingScoreTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreAsync(
+            Request.VerifyGlobalRankingScoreRequest request
+        )
+		{
+		    var task = new VerifyGlobalRankingScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyGlobalRankingScoreByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyGlobalRankingScoreByUserIdRequest, Result.VerifyGlobalRankingScoreByUserIdResult>
+        {
+	        public VerifyGlobalRankingScoreByUserIdTask(IGs2Session session, Request.VerifyGlobalRankingScoreByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyGlobalRankingScoreByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.RankingName != null)
+                {
+                    jsonWriter.WritePropertyName("rankingName");
+                    jsonWriter.Write(request.RankingName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.Score != null)
+                {
+                    jsonWriter.WritePropertyName("score");
+                    jsonWriter.Write(request.Score.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking2",
+                    "globalRankingScore",
+                    "verifyGlobalRankingScoreByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyGlobalRankingScoreByUserId(
+                Request.VerifyGlobalRankingScoreByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyGlobalRankingScoreByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyGlobalRankingScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyGlobalRankingScoreByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdFuture(
+                Request.VerifyGlobalRankingScoreByUserIdRequest request
+        )
+		{
+			return new VerifyGlobalRankingScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdAsync(
+            Request.VerifyGlobalRankingScoreByUserIdRequest request
+        )
+		{
+		    var task = new VerifyGlobalRankingScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyGlobalRankingScoreByUserIdTask VerifyGlobalRankingScoreByUserIdAsync(
+                Request.VerifyGlobalRankingScoreByUserIdRequest request
+        )
+		{
+			return new VerifyGlobalRankingScoreByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdAsync(
+            Request.VerifyGlobalRankingScoreByUserIdRequest request
+        )
+		{
+		    var task = new VerifyGlobalRankingScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class CreateGlobalRankingReceivedRewardTask : Gs2WebSocketSessionTask<Request.CreateGlobalRankingReceivedRewardRequest, Result.CreateGlobalRankingReceivedRewardResult>
         {
 	        public CreateGlobalRankingReceivedRewardTask(IGs2Session session, Request.CreateGlobalRankingReceivedRewardRequest request) : base(session, request)
@@ -3322,6 +3608,302 @@ namespace Gs2.Gs2Ranking2
         )
 		{
 		    var task = new DeleteClusterRankingScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyClusterRankingScoreTask : Gs2WebSocketSessionTask<Request.VerifyClusterRankingScoreRequest, Result.VerifyClusterRankingScoreResult>
+        {
+	        public VerifyClusterRankingScoreTask(IGs2Session session, Request.VerifyClusterRankingScoreRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyClusterRankingScoreRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.RankingName != null)
+                {
+                    jsonWriter.WritePropertyName("rankingName");
+                    jsonWriter.Write(request.RankingName.ToString());
+                }
+                if (request.ClusterName != null)
+                {
+                    jsonWriter.WritePropertyName("clusterName");
+                    jsonWriter.Write(request.ClusterName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.Score != null)
+                {
+                    jsonWriter.WritePropertyName("score");
+                    jsonWriter.Write(request.Score.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking2",
+                    "clusterRankingScore",
+                    "verifyClusterRankingScore",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyClusterRankingScore(
+                Request.VerifyClusterRankingScoreRequest request,
+                UnityAction<AsyncResult<Result.VerifyClusterRankingScoreResult>> callback
+        )
+		{
+			var task = new VerifyClusterRankingScoreTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyClusterRankingScoreResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreFuture(
+                Request.VerifyClusterRankingScoreRequest request
+        )
+		{
+			return new VerifyClusterRankingScoreTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreAsync(
+            Request.VerifyClusterRankingScoreRequest request
+        )
+		{
+		    var task = new VerifyClusterRankingScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyClusterRankingScoreTask VerifyClusterRankingScoreAsync(
+                Request.VerifyClusterRankingScoreRequest request
+        )
+		{
+			return new VerifyClusterRankingScoreTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreAsync(
+            Request.VerifyClusterRankingScoreRequest request
+        )
+		{
+		    var task = new VerifyClusterRankingScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyClusterRankingScoreByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyClusterRankingScoreByUserIdRequest, Result.VerifyClusterRankingScoreByUserIdResult>
+        {
+	        public VerifyClusterRankingScoreByUserIdTask(IGs2Session session, Request.VerifyClusterRankingScoreByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyClusterRankingScoreByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.RankingName != null)
+                {
+                    jsonWriter.WritePropertyName("rankingName");
+                    jsonWriter.Write(request.RankingName.ToString());
+                }
+                if (request.ClusterName != null)
+                {
+                    jsonWriter.WritePropertyName("clusterName");
+                    jsonWriter.Write(request.ClusterName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.Score != null)
+                {
+                    jsonWriter.WritePropertyName("score");
+                    jsonWriter.Write(request.Score.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking2",
+                    "clusterRankingScore",
+                    "verifyClusterRankingScoreByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyClusterRankingScoreByUserId(
+                Request.VerifyClusterRankingScoreByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyClusterRankingScoreByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyClusterRankingScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyClusterRankingScoreByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdFuture(
+                Request.VerifyClusterRankingScoreByUserIdRequest request
+        )
+		{
+			return new VerifyClusterRankingScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdAsync(
+            Request.VerifyClusterRankingScoreByUserIdRequest request
+        )
+		{
+		    var task = new VerifyClusterRankingScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyClusterRankingScoreByUserIdTask VerifyClusterRankingScoreByUserIdAsync(
+                Request.VerifyClusterRankingScoreByUserIdRequest request
+        )
+		{
+			return new VerifyClusterRankingScoreByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdAsync(
+            Request.VerifyClusterRankingScoreByUserIdRequest request
+        )
+		{
+		    var task = new VerifyClusterRankingScoreByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );
@@ -5759,6 +6341,292 @@ namespace Gs2.Gs2Ranking2
         )
 		{
 		    var task = new DeleteSubscribeRankingScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifySubscribeRankingScoreTask : Gs2WebSocketSessionTask<Request.VerifySubscribeRankingScoreRequest, Result.VerifySubscribeRankingScoreResult>
+        {
+	        public VerifySubscribeRankingScoreTask(IGs2Session session, Request.VerifySubscribeRankingScoreRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifySubscribeRankingScoreRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.RankingName != null)
+                {
+                    jsonWriter.WritePropertyName("rankingName");
+                    jsonWriter.Write(request.RankingName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.Score != null)
+                {
+                    jsonWriter.WritePropertyName("score");
+                    jsonWriter.Write(request.Score.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking2",
+                    "subscribeRankingScore",
+                    "verifySubscribeRankingScore",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifySubscribeRankingScore(
+                Request.VerifySubscribeRankingScoreRequest request,
+                UnityAction<AsyncResult<Result.VerifySubscribeRankingScoreResult>> callback
+        )
+		{
+			var task = new VerifySubscribeRankingScoreTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifySubscribeRankingScoreResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreFuture(
+                Request.VerifySubscribeRankingScoreRequest request
+        )
+		{
+			return new VerifySubscribeRankingScoreTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreAsync(
+            Request.VerifySubscribeRankingScoreRequest request
+        )
+		{
+		    var task = new VerifySubscribeRankingScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifySubscribeRankingScoreTask VerifySubscribeRankingScoreAsync(
+                Request.VerifySubscribeRankingScoreRequest request
+        )
+		{
+			return new VerifySubscribeRankingScoreTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreAsync(
+            Request.VerifySubscribeRankingScoreRequest request
+        )
+		{
+		    var task = new VerifySubscribeRankingScoreTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifySubscribeRankingScoreByUserIdTask : Gs2WebSocketSessionTask<Request.VerifySubscribeRankingScoreByUserIdRequest, Result.VerifySubscribeRankingScoreByUserIdResult>
+        {
+	        public VerifySubscribeRankingScoreByUserIdTask(IGs2Session session, Request.VerifySubscribeRankingScoreByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifySubscribeRankingScoreByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.RankingName != null)
+                {
+                    jsonWriter.WritePropertyName("rankingName");
+                    jsonWriter.Write(request.RankingName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Season != null)
+                {
+                    jsonWriter.WritePropertyName("season");
+                    jsonWriter.Write(request.Season.ToString());
+                }
+                if (request.Score != null)
+                {
+                    jsonWriter.WritePropertyName("score");
+                    jsonWriter.Write(request.Score.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "ranking2",
+                    "subscribeRankingScore",
+                    "verifySubscribeRankingScoreByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifySubscribeRankingScoreByUserId(
+                Request.VerifySubscribeRankingScoreByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifySubscribeRankingScoreByUserIdResult>> callback
+        )
+		{
+			var task = new VerifySubscribeRankingScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifySubscribeRankingScoreByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdFuture(
+                Request.VerifySubscribeRankingScoreByUserIdRequest request
+        )
+		{
+			return new VerifySubscribeRankingScoreByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdAsync(
+            Request.VerifySubscribeRankingScoreByUserIdRequest request
+        )
+		{
+		    var task = new VerifySubscribeRankingScoreByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifySubscribeRankingScoreByUserIdTask VerifySubscribeRankingScoreByUserIdAsync(
+                Request.VerifySubscribeRankingScoreByUserIdRequest request
+        )
+		{
+			return new VerifySubscribeRankingScoreByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdAsync(
+            Request.VerifySubscribeRankingScoreByUserIdRequest request
+        )
+		{
+		    var task = new VerifySubscribeRankingScoreByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );
