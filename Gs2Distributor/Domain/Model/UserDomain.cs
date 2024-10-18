@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -97,6 +99,68 @@ namespace Gs2.Gs2Distributor.Domain.Model
     }
 
     public partial class UserDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Core.Domain.Gs2> FreezeMasterDataFuture(
+            FreezeMasterDataByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.Gs2> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.FreezeMasterDataByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                var newGs2 =  new Core.Domain.Gs2(
+                    this._gs2.RestSession,
+                    this._gs2.WebSocketSession,
+                    this._gs2.DistributorNamespaceName
+                );
+                newGs2.DefaultContextStack = result?.NewContextStack;
+                self.OnComplete(newGs2);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.Gs2>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.Gs2> FreezeMasterDataAsync(
+            #else
+        public async Task<Gs2.Core.Domain.Gs2> FreezeMasterDataAsync(
+            #endif
+            FreezeMasterDataByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.FreezeMasterDataByUserIdAsync(request)
+            );
+            var domain = this;
+            var newGs2 =  new Core.Domain.Gs2(
+                this._gs2.RestSession,
+                this._gs2.WebSocketSession,
+                this._gs2.DistributorNamespaceName
+            );
+            newGs2.DefaultContextStack = result?.NewContextStack;
+            return newGs2;
+        }
+        #endif
 
     }
 }

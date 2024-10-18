@@ -107,7 +107,13 @@ namespace Gs2.Gs2Buff.Domain.Model
                 }
                 var result = future.Result;
                 this.BuffEntryModels = result?.Items;
-                self.OnComplete(_gs2);
+                var newGs2 =  new Core.Domain.Gs2(
+                    this._gs2.RestSession,
+                    this._gs2.WebSocketSession,
+                    this._gs2.DistributorNamespaceName
+                );
+                newGs2.DefaultContextStack = result?.NewContextStack;
+                self.OnComplete(newGs2);
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.Gs2>(Impl);
         }
