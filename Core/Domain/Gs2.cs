@@ -54,6 +54,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Friend.Domain.Gs2Friend Friend;
         public readonly Gs2Gateway.Domain.Gs2Gateway Gateway;
         public readonly Gs2Grade.Domain.Gs2Grade Grade;
+        public readonly Gs2Guard.Domain.Gs2Guard Guard;
         public readonly Gs2Guild.Domain.Gs2Guild Guild;
         public readonly Gs2Identifier.Domain.Gs2Identifier Identifier;
         public readonly Gs2Idle.Domain.Gs2Idle Idle;
@@ -122,6 +123,7 @@ namespace Gs2.Core.Domain
             this.Friend = new Gs2Friend.Domain.Gs2Friend(this);
             this.Gateway = new Gs2Gateway.Domain.Gs2Gateway(this);
             this.Grade = new Gs2Grade.Domain.Gs2Grade(this);
+            this.Guard = new Gs2Guard.Domain.Gs2Guard(this);
             this.Guild = new Gs2Guild.Domain.Gs2Guild(this);
             this.Identifier = new Gs2Identifier.Domain.Gs2Identifier(this);
             this.Idle = new Gs2Idle.Domain.Gs2Idle(this);
@@ -214,6 +216,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Grade":
                                 this.Grade.HandleNotification(this._cache, method, message.payload);
+                                break;
+                            case "Gs2Guard":
+                                this.Guard.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Guild":
                                 this.Guild.HandleNotification(this._cache, method, message.payload);
@@ -576,6 +581,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Grade":
                         this.Grade.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
+                    case "Gs2Guard":
+                        this.Guard.UpdateCacheFromStampSheet(transactionId, method, request, result);
+                        break;
                     case "Gs2Guild":
                         this.Guild.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
@@ -737,6 +745,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Grade":
                         this.Grade.UpdateCacheFromStampTask(taskId, method, request, result);
+                        break;
+                    case "Gs2Guard":
+                        this.Guard.UpdateCacheFromStampTask(taskId, method, request, result);
                         break;
                     case "Gs2Guild":
                         this.Guild.UpdateCacheFromStampTask(taskId, method, request, result);
@@ -909,6 +920,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "grade":
                                 this.Grade.UpdateCacheFromJobResult(method, job, result);
+                                break;
+                            case "guard":
+                                this.Guard.UpdateCacheFromJobResult(method, job, result);
                                 break;
                             case "guild":
                                 this.Guild.UpdateCacheFromJobResult(method, job, result);

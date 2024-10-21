@@ -184,7 +184,13 @@ namespace Gs2.Core.Domain
                     goto RETRY;
                 }
 
-                var transaction = HandleResult(result);
+                TransactionDomain transaction;
+                try {
+                    transaction = HandleResult(result);
+                } catch (Gs2Exception e) {
+                    self.OnError(e);
+                    yield break;
+                }
                 if (all && transaction != null) {
                     var future3 = transaction.WaitFuture(true);
                     yield return future3;
