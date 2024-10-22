@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -147,6 +149,41 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 callbackId
             );
         }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<string> AttachedGuards(
+            string clientId = null
+        )
+        {
+            return new DescribeAttachedGuardsIterator(
+                this._gs2,
+                this._client,
+                this.UserName,
+                clientId
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<string> AttachedGuardsAsync(
+            #else
+        public DescribeAttachedGuardsIterator AttachedGuardsAsync(
+            #endif
+            string clientId = null
+        )
+        {
+            return new DescribeAttachedGuardsIterator(
+                this._gs2,
+                this._client,
+                this.UserName,
+                clientId
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
 
         public Gs2.Gs2Identifier.Domain.Model.IdentifierDomain Identifier(
             string clientId

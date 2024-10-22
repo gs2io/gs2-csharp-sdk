@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -38,7 +40,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
-using Gs2.Gs2Lock.Model.Cache;
+using Gs2.Gs2Identifier.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -58,41 +60,36 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Lock.Domain.Iterator
+namespace Gs2.Gs2Identifier.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeMutexesByUserIdIterator : Gs2Iterator<Gs2.Gs2Lock.Model.Mutex> {
+    public class DescribeAttachedGuardsIterator : Gs2Iterator<string> {
     #else
-    public class DescribeMutexesByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Lock.Model.Mutex> {
+    public class DescribeAttachedGuardsIterator : IAsyncEnumerable<string> {
     #endif
         private readonly Gs2.Core.Domain.Gs2 _gs2;
-        private readonly Gs2LockRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string TimeOffsetToken { get; }
-        private string _pageToken;
+        private readonly Gs2IdentifierRestClient _client;
+        public string ClientId { get; }
+        public string UserName { get; }
         private bool _isCacheChecked;
         private bool _last;
-        private Gs2.Gs2Lock.Model.Mutex[] _result;
+        private string[] _result;
 
         int? fetchSize;
 
-        public DescribeMutexesByUserIdIterator(
+        public DescribeAttachedGuardsIterator(
             Gs2.Core.Domain.Gs2 gs2,
-            Gs2LockRestClient client,
-            string namespaceName,
-            string userId,
-            string timeOffsetToken = null
+            Gs2IdentifierRestClient client,
+            string userName,
+            string clientId = null
         ) {
             this._gs2 = gs2;
             this._client = client;
-            this.NamespaceName = namespaceName;
-            this.UserId = userId;
-            this.TimeOffsetToken = timeOffsetToken;
-            this._pageToken = null;
+            this.ClientId = clientId;
+            this.UserName = userName;
             this._last = false;
-            this._result = new Gs2.Gs2Lock.Model.Mutex[]{};
+            this._result = new string[]{};
 
             this.fetchSize = null;
         }
@@ -109,31 +106,27 @@ namespace Gs2.Gs2Lock.Domain.Iterator
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
             if (!isCacheChecked && this._gs2.Cache.TryGetList
-                    <Gs2.Gs2Lock.Model.Mutex>
+                    <string>
             (
-                    (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
-                        NamespaceName,
-                        UserId
+                    (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
+                        UserName
                     ),
                     out var list
             )) {
                 this._result = list
                     .ToArray();
-                this._pageToken = null;
                 this._last = true;
             } else {
 
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeMutexesByUserIdFuture(
+                var future = this._client.DescribeAttachedGuardsFuture(
                 #else
-                var r = await this._client.DescribeMutexesByUserIdAsync(
+                var r = await this._client.DescribeAttachedGuardsAsync(
                 #endif
-                    new Gs2.Gs2Lock.Request.DescribeMutexesByUserIdRequest()
+                    new Gs2.Gs2Identifier.Request.DescribeAttachedGuardsRequest()
                         .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithUserId(this.UserId)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(this.fetchSize)
+                        .WithClientId(this.ClientId)
+                        .WithUserName(this.UserName)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -146,22 +139,12 @@ namespace Gs2.Gs2Lock.Domain.Iterator
                 #endif
                 this._result = r.Items
                     .ToArray();
-                this._pageToken = r.NextPageToken;
-                this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        UserId,
-                        item.PropertyId
-                    );
-                }
+                this._last = true;
 
                 if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Lock.Model.Mutex>(
-                        (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
-                            NamespaceName,
-                            UserId
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Identifier.Model.Identifier>(
+                        (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
+                            UserName
                         )
                     );
                 }
@@ -184,7 +167,7 @@ namespace Gs2.Gs2Lock.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Lock.Model.Mutex>> callback
+            Action<AsyncResult<string>> callback
         )
         {
             Gs2Exception error = null;
@@ -211,7 +194,7 @@ namespace Gs2.Gs2Lock.Domain.Iterator
                     }
                 }
             );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Lock.Model.Mutex>(
+            callback.Invoke(new AsyncResult<string>(
                 Current,
                 error
             ));
@@ -220,22 +203,22 @@ namespace Gs2.Gs2Lock.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lock.Model.Mutex> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerable<string> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
         protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Lock.Model.Mutex>> callback
+            Action<AsyncResult<string>> callback
             #endif
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Lock.Model.Mutex> GetAsyncEnumerator(
+        public async IAsyncEnumerator<string> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
         #endif
         )
         {
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Lock.Model.Mutex>(async (writer, token) =>
+            return UniTaskAsyncEnumerable.Create<string>(async (writer, token) =>
             {
             #endif
         #endif
@@ -252,7 +235,7 @@ namespace Gs2.Gs2Lock.Domain.Iterator
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     Current = null;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Lock.Model.Mutex>(
+                    callback.Invoke(new AsyncResult<string>(
                         Current,
                         Error
                     ));
@@ -275,7 +258,7 @@ namespace Gs2.Gs2Lock.Domain.Iterator
                 await writer.YieldAsync(ret);
             #else
                 Current = ret;
-                callback.Invoke(new AsyncResult<Gs2.Gs2Lock.Model.Mutex>(
+                callback.Invoke(new AsyncResult<string>(
                     Current,
                     Error
                 ));

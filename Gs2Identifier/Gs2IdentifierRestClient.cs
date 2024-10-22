@@ -1745,6 +1745,340 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
+        public class DescribeAttachedGuardsTask : Gs2RestSessionTask<DescribeAttachedGuardsRequest, DescribeAttachedGuardsResult>
+        {
+            public DescribeAttachedGuardsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeAttachedGuardsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeAttachedGuardsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "identifier")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/{userName}/identifier/{clientId}/guard";
+
+                url = url.Replace("{clientId}", !string.IsNullOrEmpty(request.ClientId) ? request.ClientId.ToString() : "null");
+                url = url.Replace("{userName}", !string.IsNullOrEmpty(request.UserName) ? request.UserName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeAttachedGuards(
+                Request.DescribeAttachedGuardsRequest request,
+                UnityAction<AsyncResult<Result.DescribeAttachedGuardsResult>> callback
+        )
+		{
+			var task = new DescribeAttachedGuardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeAttachedGuardsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeAttachedGuardsResult> DescribeAttachedGuardsFuture(
+                Request.DescribeAttachedGuardsRequest request
+        )
+		{
+			return new DescribeAttachedGuardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeAttachedGuardsResult> DescribeAttachedGuardsAsync(
+                Request.DescribeAttachedGuardsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeAttachedGuardsResult> result = null;
+			await DescribeAttachedGuards(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeAttachedGuardsTask DescribeAttachedGuardsAsync(
+                Request.DescribeAttachedGuardsRequest request
+        )
+		{
+			return new DescribeAttachedGuardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeAttachedGuardsResult> DescribeAttachedGuardsAsync(
+                Request.DescribeAttachedGuardsRequest request
+        )
+		{
+			var task = new DescribeAttachedGuardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AttachGuardTask : Gs2RestSessionTask<AttachGuardRequest, AttachGuardResult>
+        {
+            public AttachGuardTask(IGs2Session session, RestSessionRequestFactory factory, AttachGuardRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AttachGuardRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "identifier")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/{userName}/identifier/{clientId}/guard";
+
+                url = url.Replace("{userName}", !string.IsNullOrEmpty(request.UserName) ? request.UserName.ToString() : "null");
+                url = url.Replace("{clientId}", !string.IsNullOrEmpty(request.ClientId) ? request.ClientId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.GuardNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("guardNamespaceId");
+                    jsonWriter.Write(request.GuardNamespaceId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AttachGuard(
+                Request.AttachGuardRequest request,
+                UnityAction<AsyncResult<Result.AttachGuardResult>> callback
+        )
+		{
+			var task = new AttachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AttachGuardResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AttachGuardResult> AttachGuardFuture(
+                Request.AttachGuardRequest request
+        )
+		{
+			return new AttachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AttachGuardResult> AttachGuardAsync(
+                Request.AttachGuardRequest request
+        )
+		{
+            AsyncResult<Result.AttachGuardResult> result = null;
+			await AttachGuard(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AttachGuardTask AttachGuardAsync(
+                Request.AttachGuardRequest request
+        )
+		{
+			return new AttachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AttachGuardResult> AttachGuardAsync(
+                Request.AttachGuardRequest request
+        )
+		{
+			var task = new AttachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DetachGuardTask : Gs2RestSessionTask<DetachGuardRequest, DetachGuardResult>
+        {
+            public DetachGuardTask(IGs2Session session, RestSessionRequestFactory factory, DetachGuardRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DetachGuardRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "identifier")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/{userName}/identifier/{clientId}/guard/{guardNamespaceId}";
+
+                url = url.Replace("{userName}", !string.IsNullOrEmpty(request.UserName) ? request.UserName.ToString() : "null");
+                url = url.Replace("{clientId}", !string.IsNullOrEmpty(request.ClientId) ? request.ClientId.ToString() : "null");
+                url = url.Replace("{guardNamespaceId}", !string.IsNullOrEmpty(request.GuardNamespaceId) ? request.GuardNamespaceId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DetachGuard(
+                Request.DetachGuardRequest request,
+                UnityAction<AsyncResult<Result.DetachGuardResult>> callback
+        )
+		{
+			var task = new DetachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DetachGuardResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DetachGuardResult> DetachGuardFuture(
+                Request.DetachGuardRequest request
+        )
+		{
+			return new DetachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DetachGuardResult> DetachGuardAsync(
+                Request.DetachGuardRequest request
+        )
+		{
+            AsyncResult<Result.DetachGuardResult> result = null;
+			await DetachGuard(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DetachGuardTask DetachGuardAsync(
+                Request.DetachGuardRequest request
+        )
+		{
+			return new DetachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DetachGuardResult> DetachGuardAsync(
+                Request.DetachGuardRequest request
+        )
+		{
+			var task = new DetachGuardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribePasswordsTask : Gs2RestSessionTask<DescribePasswordsRequest, DescribePasswordsResult>
         {
             public DescribePasswordsTask(IGs2Session session, RestSessionRequestFactory factory, DescribePasswordsRequest request) : base(session, factory, request)

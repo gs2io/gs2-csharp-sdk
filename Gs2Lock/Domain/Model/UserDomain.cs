@@ -65,7 +65,6 @@ namespace Gs2.Gs2Lock.Domain.Model
         private readonly Gs2LockRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
-        public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -78,84 +77,6 @@ namespace Gs2.Gs2Lock.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.UserId = userId;
-        }
-        #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<Gs2.Gs2Lock.Model.Mutex> Mutexes(
-            string timeOffsetToken = null
-        )
-        {
-            return new DescribeMutexesByUserIdIterator(
-                this._gs2,
-                this._client,
-                this.NamespaceName,
-                this.UserId,
-                timeOffsetToken
-            );
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lock.Model.Mutex> MutexesAsync(
-            #else
-        public DescribeMutexesByUserIdIterator MutexesAsync(
-            #endif
-            string timeOffsetToken = null
-        )
-        {
-            return new DescribeMutexesByUserIdIterator(
-                this._gs2,
-                this._client,
-                this.NamespaceName,
-                this.UserId,
-                timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        }
-        #endif
-
-        public ulong SubscribeMutexes(
-            Action<Gs2.Gs2Lock.Model.Mutex[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lock.Model.Mutex>(
-                (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeMutexesWithInitialCallAsync(
-            Action<Gs2.Gs2Lock.Model.Mutex[]> callback
-        )
-        {
-            var items = await MutexesAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeMutexes(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeMutexes(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lock.Model.Mutex>(
-                (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                ),
-                callbackId
-            );
         }
 
         public Gs2.Gs2Lock.Domain.Model.MutexDomain Mutex(

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -185,6 +187,122 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             catch (NotFoundException e) {}
             var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> AttachGuardFuture(
+            AttachGuardRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithUserName(this.UserName)
+                    .WithClientId(this.ClientId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.AttachGuardFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
+                    this._gs2,
+                    this.UserName,
+                    this.ClientId
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain>();
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> AttachGuardAsync(
+            #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> AttachGuardAsync(
+            #endif
+            AttachGuardRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithUserName(this.UserName)
+                .WithClientId(this.ClientId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.AttachGuardAsync(request)
+            );
+            var domain = result?.Items?.Select(v => new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
+                this._gs2,
+                this.UserName,
+                this.ClientId
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain>();
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> DetachGuardFuture(
+            DetachGuardRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithUserName(this.UserName)
+                    .WithClientId(this.ClientId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DetachGuardFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
+                    this._gs2,
+                    this.UserName,
+                    this.ClientId
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain>();
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> DetachGuardAsync(
+            #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain[]> DetachGuardAsync(
+            #endif
+            DetachGuardRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithUserName(this.UserName)
+                .WithClientId(this.ClientId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.DetachGuardAsync(request)
+            );
+            var domain = result?.Items?.Select(v => new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
+                this._gs2,
+                this.UserName,
+                this.ClientId
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain>();
             return domain;
         }
         #endif
