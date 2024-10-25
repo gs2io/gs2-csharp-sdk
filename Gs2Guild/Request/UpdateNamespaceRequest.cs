@@ -35,12 +35,14 @@ namespace Gs2.Gs2Guild.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.NotificationSetting ChangeNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting ChangeMemberNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting ReceiveRequestNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting RemoveRequestNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting CreateGuildScript { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.ScriptSetting UpdateGuildScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting JoinGuildScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting LeaveGuildScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting ChangeRoleScript { set; get; } = null!;
@@ -51,6 +53,10 @@ namespace Gs2.Gs2Guild.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithChangeNotification(Gs2.Gs2Guild.Model.NotificationSetting changeNotification) {
+            this.ChangeNotification = changeNotification;
             return this;
         }
         public UpdateNamespaceRequest WithJoinNotification(Gs2.Gs2Guild.Model.NotificationSetting joinNotification) {
@@ -75,6 +81,10 @@ namespace Gs2.Gs2Guild.Request
         }
         public UpdateNamespaceRequest WithCreateGuildScript(Gs2.Gs2Guild.Model.ScriptSetting createGuildScript) {
             this.CreateGuildScript = createGuildScript;
+            return this;
+        }
+        public UpdateNamespaceRequest WithUpdateGuildScript(Gs2.Gs2Guild.Model.ScriptSetting updateGuildScript) {
+            this.UpdateGuildScript = updateGuildScript;
             return this;
         }
         public UpdateNamespaceRequest WithJoinGuildScript(Gs2.Gs2Guild.Model.ScriptSetting joinGuildScript) {
@@ -105,12 +115,14 @@ namespace Gs2.Gs2Guild.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithChangeNotification(!data.Keys.Contains("changeNotification") || data["changeNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeNotification"]))
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["leaveNotification"]))
                 .WithChangeMemberNotification(!data.Keys.Contains("changeMemberNotification") || data["changeMemberNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeMemberNotification"]))
                 .WithReceiveRequestNotification(!data.Keys.Contains("receiveRequestNotification") || data["receiveRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["receiveRequestNotification"]))
                 .WithRemoveRequestNotification(!data.Keys.Contains("removeRequestNotification") || data["removeRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["removeRequestNotification"]))
                 .WithCreateGuildScript(!data.Keys.Contains("createGuildScript") || data["createGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["createGuildScript"]))
+                .WithUpdateGuildScript(!data.Keys.Contains("updateGuildScript") || data["updateGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["updateGuildScript"]))
                 .WithJoinGuildScript(!data.Keys.Contains("joinGuildScript") || data["joinGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["joinGuildScript"]))
                 .WithLeaveGuildScript(!data.Keys.Contains("leaveGuildScript") || data["leaveGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["leaveGuildScript"]))
                 .WithChangeRoleScript(!data.Keys.Contains("changeRoleScript") || data["changeRoleScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["changeRoleScript"]))
@@ -122,12 +134,14 @@ namespace Gs2.Gs2Guild.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["changeNotification"] = ChangeNotification?.ToJson(),
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
                 ["changeMemberNotification"] = ChangeMemberNotification?.ToJson(),
                 ["receiveRequestNotification"] = ReceiveRequestNotification?.ToJson(),
                 ["removeRequestNotification"] = RemoveRequestNotification?.ToJson(),
                 ["createGuildScript"] = CreateGuildScript?.ToJson(),
+                ["updateGuildScript"] = UpdateGuildScript?.ToJson(),
                 ["joinGuildScript"] = JoinGuildScript?.ToJson(),
                 ["leaveGuildScript"] = LeaveGuildScript?.ToJson(),
                 ["changeRoleScript"] = ChangeRoleScript?.ToJson(),
@@ -146,6 +160,9 @@ namespace Gs2.Gs2Guild.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (ChangeNotification != null) {
+                ChangeNotification.WriteJson(writer);
+            }
             if (JoinNotification != null) {
                 JoinNotification.WriteJson(writer);
             }
@@ -163,6 +180,9 @@ namespace Gs2.Gs2Guild.Request
             }
             if (CreateGuildScript != null) {
                 CreateGuildScript.WriteJson(writer);
+            }
+            if (UpdateGuildScript != null) {
+                UpdateGuildScript.WriteJson(writer);
             }
             if (JoinGuildScript != null) {
                 JoinGuildScript.WriteJson(writer);
@@ -183,12 +203,14 @@ namespace Gs2.Gs2Guild.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += ChangeNotification + ":";
             key += JoinNotification + ":";
             key += LeaveNotification + ":";
             key += ChangeMemberNotification + ":";
             key += ReceiveRequestNotification + ":";
             key += RemoveRequestNotification + ":";
             key += CreateGuildScript + ":";
+            key += UpdateGuildScript + ":";
             key += JoinGuildScript + ":";
             key += LeaveGuildScript + ":";
             key += ChangeRoleScript + ":";

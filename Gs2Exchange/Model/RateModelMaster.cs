@@ -484,7 +484,7 @@ namespace Gs2.Gs2Exchange.Model
                         new RequestError("rateModelMaster", "exchange.rateModelMaster.lockTime.error.invalid"),
                     });
                 }
-                if (LockTime > 525600) {
+                if (LockTime > 538214400) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("rateModelMaster", "exchange.rateModelMaster.lockTime.error.invalid"),
                     });

@@ -198,6 +198,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.ChangeNotification != null)
+                {
+                    jsonWriter.WritePropertyName("changeNotification");
+                    request.ChangeNotification.WriteJson(jsonWriter);
+                }
                 if (request.JoinNotification != null)
                 {
                     jsonWriter.WritePropertyName("joinNotification");
@@ -227,6 +232,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("createGuildScript");
                     request.CreateGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.UpdateGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("updateGuildScript");
+                    request.UpdateGuildScript.WriteJson(jsonWriter);
                 }
                 if (request.JoinGuildScript != null)
                 {
@@ -578,6 +588,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.ChangeNotification != null)
+                {
+                    jsonWriter.WritePropertyName("changeNotification");
+                    request.ChangeNotification.WriteJson(jsonWriter);
+                }
                 if (request.JoinNotification != null)
                 {
                     jsonWriter.WritePropertyName("joinNotification");
@@ -607,6 +622,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("createGuildScript");
                     request.CreateGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.UpdateGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("updateGuildScript");
+                    request.UpdateGuildScript.WriteJson(jsonWriter);
                 }
                 if (request.JoinGuildScript != null)
                 {

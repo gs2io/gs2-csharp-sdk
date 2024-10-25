@@ -67,9 +67,9 @@ namespace Gs2.Gs2Guild.Domain
     public class Gs2Guild {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
-        public string Url { get; set; }
-        public string UploadToken { get; set; }
-        public string UploadUrl { get; set; }
+        public string Url { get; set; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public Gs2Guild(
             Gs2.Core.Domain.Gs2 gs2
@@ -567,18 +567,6 @@ namespace Gs2.Gs2Guild.Domain
         public static Action<string, DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest, DecreaseMaximumCurrentMaximumMemberCountByGuildNameResult> DecreaseMaximumCurrentMaximumMemberCountByGuildNameComplete;
     #endif
 
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyCurrentMaximumMemberCountByGuildNameRequest, VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameComplete = new UnityEvent<string, VerifyCurrentMaximumMemberCountByGuildNameRequest, VerifyCurrentMaximumMemberCountByGuildNameResult>();
-    #else
-        public static Action<string, VerifyCurrentMaximumMemberCountByGuildNameRequest, VerifyCurrentMaximumMemberCountByGuildNameResult> VerifyCurrentMaximumMemberCountByGuildNameComplete;
-    #endif
-
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, VerifyIncludeMemberByUserIdRequest, VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdComplete = new UnityEvent<string, VerifyIncludeMemberByUserIdRequest, VerifyIncludeMemberByUserIdResult>();
-    #else
-        public static Action<string, VerifyIncludeMemberByUserIdRequest, VerifyIncludeMemberByUserIdResult> VerifyIncludeMemberByUserIdComplete;
-    #endif
-
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
@@ -597,40 +585,6 @@ namespace Gs2.Gs2Guild.Domain
                         );
 
                         DecreaseMaximumCurrentMaximumMemberCountByGuildNameComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyCurrentMaximumMemberCountByGuildName": {
-                        var requestModel = VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyCurrentMaximumMemberCountByGuildNameResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.GuildName,
-                            requestModel
-                        );
-
-                        VerifyCurrentMaximumMemberCountByGuildNameComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                    case "VerifyIncludeMemberByUserId": {
-                        var requestModel = VerifyIncludeMemberByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = VerifyIncludeMemberByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        resultModel.PutCache(
-                            _gs2.Cache,
-                            requestModel.UserId,
-                            requestModel
-                        );
-
-                        VerifyIncludeMemberByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel
@@ -712,6 +666,22 @@ namespace Gs2.Gs2Guild.Domain
         {
             add => onRemoveRequestNotification.AddListener(value);
             remove => onRemoveRequestNotification.RemoveListener(value);
+        }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
+        private class ChangeNotificationEvent : UnityEvent<ChangeNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeNotificationEvent onChangeNotification = new ChangeNotificationEvent();
+
+        public event UnityAction<ChangeNotification> OnChangeNotification
+        {
+            add => onChangeNotification.AddListener(value);
+            remove => onChangeNotification.RemoveListener(value);
         }
     #endif
     #if UNITY_2017_1_OR_NEWER
@@ -815,6 +785,12 @@ namespace Gs2.Gs2Guild.Domain
                     );
     #if UNITY_2017_1_OR_NEWER
                     onRemoveRequestNotification.Invoke(notification);
+    #endif
+                    break;
+                }
+                case "ChangeNotification": {
+    #if UNITY_2017_1_OR_NEWER
+                    onChangeNotification.Invoke(ChangeNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
                     break;
                 }
