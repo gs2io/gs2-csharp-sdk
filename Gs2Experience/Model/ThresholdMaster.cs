@@ -337,7 +337,7 @@ namespace Gs2.Gs2Experience.Model
                         new RequestError("thresholdMaster", "experience.thresholdMaster.values.error.tooFew"),
                     });
                 }
-                if (Values.Length > 1024) {
+                if (Values.Length > 10000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("thresholdMaster", "experience.thresholdMaster.values.error.tooMany"),
                     });

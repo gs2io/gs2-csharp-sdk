@@ -37,6 +37,7 @@ namespace Gs2.Gs2Account.Model
         public string AppleTeamId { set; get; } = null!;
         public string AppleKeyId { set; get; } = null!;
         public string ApplePrivateKeyPem { set; get; } = null!;
+        public string DoneEndpointUrl { set; get; } = null!;
         public OpenIdConnectSetting WithConfigurationPath(string configurationPath) {
             this.ConfigurationPath = configurationPath;
             return this;
@@ -61,6 +62,10 @@ namespace Gs2.Gs2Account.Model
             this.ApplePrivateKeyPem = applePrivateKeyPem;
             return this;
         }
+        public OpenIdConnectSetting WithDoneEndpointUrl(string doneEndpointUrl) {
+            this.DoneEndpointUrl = doneEndpointUrl;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -76,7 +81,8 @@ namespace Gs2.Gs2Account.Model
                 .WithClientSecret(!data.Keys.Contains("clientSecret") || data["clientSecret"] == null ? null : data["clientSecret"].ToString())
                 .WithAppleTeamId(!data.Keys.Contains("appleTeamId") || data["appleTeamId"] == null ? null : data["appleTeamId"].ToString())
                 .WithAppleKeyId(!data.Keys.Contains("appleKeyId") || data["appleKeyId"] == null ? null : data["appleKeyId"].ToString())
-                .WithApplePrivateKeyPem(!data.Keys.Contains("applePrivateKeyPem") || data["applePrivateKeyPem"] == null ? null : data["applePrivateKeyPem"].ToString());
+                .WithApplePrivateKeyPem(!data.Keys.Contains("applePrivateKeyPem") || data["applePrivateKeyPem"] == null ? null : data["applePrivateKeyPem"].ToString())
+                .WithDoneEndpointUrl(!data.Keys.Contains("doneEndpointUrl") || data["doneEndpointUrl"] == null ? null : data["doneEndpointUrl"].ToString());
         }
 
         public JsonData ToJson()
@@ -88,6 +94,7 @@ namespace Gs2.Gs2Account.Model
                 ["appleTeamId"] = AppleTeamId,
                 ["appleKeyId"] = AppleKeyId,
                 ["applePrivateKeyPem"] = ApplePrivateKeyPem,
+                ["doneEndpointUrl"] = DoneEndpointUrl,
             };
         }
 
@@ -117,6 +124,10 @@ namespace Gs2.Gs2Account.Model
             if (ApplePrivateKeyPem != null) {
                 writer.WritePropertyName("applePrivateKeyPem");
                 writer.Write(ApplePrivateKeyPem.ToString());
+            }
+            if (DoneEndpointUrl != null) {
+                writer.WritePropertyName("doneEndpointUrl");
+                writer.Write(DoneEndpointUrl.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -173,6 +184,14 @@ namespace Gs2.Gs2Account.Model
             {
                 diff += ApplePrivateKeyPem.CompareTo(other.ApplePrivateKeyPem);
             }
+            if (DoneEndpointUrl == null && DoneEndpointUrl == other.DoneEndpointUrl)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += DoneEndpointUrl.CompareTo(other.DoneEndpointUrl);
+            }
             return diff;
         }
 
@@ -219,6 +238,13 @@ namespace Gs2.Gs2Account.Model
                     });
                 }
             }
+            {
+                if (DoneEndpointUrl.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("openIdConnectSetting", "account.openIdConnectSetting.doneEndpointUrl.error.tooLong"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -229,6 +255,7 @@ namespace Gs2.Gs2Account.Model
                 AppleTeamId = AppleTeamId,
                 AppleKeyId = AppleKeyId,
                 ApplePrivateKeyPem = ApplePrivateKeyPem,
+                DoneEndpointUrl = DoneEndpointUrl,
             };
         }
     }

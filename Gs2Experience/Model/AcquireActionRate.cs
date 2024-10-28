@@ -205,7 +205,7 @@ namespace Gs2.Gs2Experience.Model
                         new RequestError("acquireActionRate", "experience.acquireActionRate.rates.error.tooFew"),
                     });
                 }
-                if (Rates.Length > 1000) {
+                if (Rates.Length > 10000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("acquireActionRate", "experience.acquireActionRate.rates.error.tooMany"),
                     });
@@ -217,7 +217,7 @@ namespace Gs2.Gs2Experience.Model
                         new RequestError("acquireActionRate", "experience.acquireActionRate.bigRates.error.tooFew"),
                     });
                 }
-                if (BigRates.Length > 1000) {
+                if (BigRates.Length > 10000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("acquireActionRate", "experience.acquireActionRate.bigRates.error.tooMany"),
                     });
