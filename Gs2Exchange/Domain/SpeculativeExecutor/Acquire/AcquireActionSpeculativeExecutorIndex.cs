@@ -112,6 +112,24 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (AcquireForceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AcquireForceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = AcquireForceByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 if (SkipByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SkipByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                     if (rate != 1) {
@@ -180,6 +198,17 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await CreateAwaitByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (AcquireForceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AcquireForceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await AcquireForceByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

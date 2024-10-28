@@ -522,6 +522,12 @@ namespace Gs2.Gs2Exchange.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, AcquireForceByUserIdRequest, AcquireForceByUserIdResult> AcquireForceByUserIdComplete = new UnityEvent<string, AcquireForceByUserIdRequest, AcquireForceByUserIdResult>();
+    #else
+        public static Action<string, AcquireForceByUserIdRequest, AcquireForceByUserIdResult> AcquireForceByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, SkipByUserIdRequest, SkipByUserIdResult> SkipByUserIdComplete = new UnityEvent<string, SkipByUserIdRequest, SkipByUserIdResult>();
     #else
         public static Action<string, SkipByUserIdRequest, SkipByUserIdResult> SkipByUserIdComplete;
@@ -567,6 +573,23 @@ namespace Gs2.Gs2Exchange.Domain
                         );
 
                         CreateAwaitByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "AcquireForceByUserId": {
+                        var requestModel = AcquireForceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AcquireForceByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        AcquireForceByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -665,6 +688,23 @@ namespace Gs2.Gs2Exchange.Domain
                     );
 
                     CreateAwaitByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "acquire_force_by_user_id": {
+                    var requestModel = AcquireForceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AcquireForceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    AcquireForceByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

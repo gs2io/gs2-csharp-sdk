@@ -50,6 +50,8 @@ namespace Gs2.Gs2Exchange.Model
                     return IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Exchange:CreateAwaitByUserId":
                     return CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Exchange:AcquireForceByUserId":
+                    return AcquireForceByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Exchange:SkipByUserId":
                     return SkipByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
