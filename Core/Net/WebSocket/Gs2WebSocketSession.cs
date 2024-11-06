@@ -100,7 +100,7 @@ namespace Gs2.Core.Net
             };
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            this._session.OnMessage += (_) =>
+            this._session.OnMessage += (message) =>
 			{
                 var gs2WebSocketResponse = new WebSocketResult(message);
                 if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
