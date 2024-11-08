@@ -39,6 +39,7 @@ namespace Gs2.Gs2Experience.Request
          public string PropertyId { set; get; } = null!;
          public string RateName { set; get; } = null!;
          public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+         public float? BaseRate { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public MultiplyAcquireActionsByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -63,6 +64,10 @@ namespace Gs2.Gs2Experience.Request
         }
         public MultiplyAcquireActionsByUserIdRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
+            return this;
+        }
+        public MultiplyAcquireActionsByUserIdRequest WithBaseRate(float? baseRate) {
+            this.BaseRate = baseRate;
             return this;
         }
         public MultiplyAcquireActionsByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -92,6 +97,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
+                .WithBaseRate(!data.Keys.Contains("baseRate") || data["baseRate"] == null ? null : (float?)float.Parse(data["baseRate"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -113,6 +119,7 @@ namespace Gs2.Gs2Experience.Request
                 ["propertyId"] = PropertyId,
                 ["rateName"] = RateName,
                 ["acquireActions"] = acquireActionsJsonData,
+                ["baseRate"] = BaseRate,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -150,6 +157,10 @@ namespace Gs2.Gs2Experience.Request
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (BaseRate != null) {
+                writer.WritePropertyName("baseRate");
+                writer.Write(float.Parse(BaseRate.ToString()));
             }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");

@@ -42,6 +42,8 @@ namespace Gs2.Gs2Distributor.Model
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2Distributor:IfExpressionByUserId":
+                    return IfExpressionByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Distributor:AndExpressionByUserId":
                     return AndExpressionByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Distributor:OrExpressionByUserId":

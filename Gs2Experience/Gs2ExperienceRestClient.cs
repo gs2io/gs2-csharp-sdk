@@ -6733,6 +6733,11 @@ namespace Gs2.Gs2Experience
                     }
                     jsonWriter.WriteArrayEnd();
                 }
+                if (request.BaseRate != null)
+                {
+                    jsonWriter.WritePropertyName("baseRate");
+                    jsonWriter.Write(request.BaseRate.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

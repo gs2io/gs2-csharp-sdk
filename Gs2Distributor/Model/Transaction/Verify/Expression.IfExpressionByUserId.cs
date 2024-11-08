@@ -24,15 +24,15 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
-using Gs2.Gs2Experience.Request;
+using Gs2.Gs2Distributor.Request;
 
-namespace Gs2.Gs2Experience.Model.Transaction
+namespace Gs2.Gs2Distributor.Model.Transaction
 {
-    public static partial class StatusExt
+    public static partial class ExpressionExt
     {
         public static bool IsExecutable(
-            this Status self,
-            MultiplyAcquireActionsByUserIdRequest request
+            this Namespace self,
+            IfExpressionByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
             try {
@@ -44,34 +44,27 @@ namespace Gs2.Gs2Experience.Model.Transaction
             }
         }
 
-        public static Status SpeculativeExecution(
-            this Status self,
-            MultiplyAcquireActionsByUserIdRequest request
+        public static Namespace SpeculativeExecution(
+            this Namespace self,
+            IfExpressionByUserIdRequest request
         ) {
 #if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Experience:MultiplyAcquireActionsByUserId");
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Distributor:IfExpressionByUserId");
 #else
-            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Experience:MultiplyAcquireActionsByUserId");
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Distributor:IfExpressionByUserId");
 #endif
-            return self.Clone() as Status;
+            return self.Clone() as Namespace;
         }
 
-        public static MultiplyAcquireActionsByUserIdRequest Rate(
-            this MultiplyAcquireActionsByUserIdRequest request,
+        public static IfExpressionByUserIdRequest Rate(
+            this IfExpressionByUserIdRequest request,
             double rate
         ) {
-            request.BaseRate = (float?) (request.BaseRate * rate);
-            return request;
+            throw new NotSupportedException($"not supported rate action Gs2Distributor:IfExpressionByUserId");
         }
     }
 
-    public static partial class MultiplyAcquireActionsByUserIdRequestExt
+    public static partial class IfExpressionByUserIdRequestExt
     {
-        public static MultiplyAcquireActionsByUserIdRequest Rate(
-            this MultiplyAcquireActionsByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

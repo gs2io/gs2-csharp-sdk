@@ -161,7 +161,7 @@ namespace Gs2.Gs2Exchange.Model
 
         public void Validate() {
             {
-                if (Base < 2) {
+                if (Base < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("logCost", "exchange.logCost.base.error.invalid"),
                     });
@@ -178,14 +178,14 @@ namespace Gs2.Gs2Exchange.Model
                         new RequestError("logCost", "exchange.logCost.adds.error.tooFew"),
                     });
                 }
-                if (Adds.Length > 100) {
+                if (Adds.Length > 10000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("logCost", "exchange.logCost.adds.error.tooMany"),
                     });
                 }
             }
             {
-                if (Subs.Length > 100) {
+                if (Subs.Length > 10000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("logCost", "exchange.logCost.subs.error.tooMany"),
                     });
