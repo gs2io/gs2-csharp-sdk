@@ -1732,6 +1732,11 @@ namespace Gs2.Gs2SerialKey
                     jsonWriter.WritePropertyName("code");
                     jsonWriter.Write(request.Code.ToString());
                 }
+                if (request.CampaignModelName != null)
+                {
+                    jsonWriter.WritePropertyName("campaignModelName");
+                    jsonWriter.Write(request.CampaignModelName.ToString());
+                }
                 if (request.VerifyType != null)
                 {
                     jsonWriter.WritePropertyName("verifyType");
@@ -1859,6 +1864,11 @@ namespace Gs2.Gs2SerialKey
                 {
                     jsonWriter.WritePropertyName("code");
                     jsonWriter.Write(request.Code.ToString());
+                }
+                if (request.CampaignModelName != null)
+                {
+                    jsonWriter.WritePropertyName("campaignModelName");
+                    jsonWriter.Write(request.CampaignModelName.ToString());
                 }
                 if (request.VerifyType != null)
                 {
@@ -2442,6 +2452,114 @@ namespace Gs2.Gs2SerialKey
         )
 		{
 		    var task = new RevertUseByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class IssueOnceByStampSheetTask : Gs2WebSocketSessionTask<Request.IssueOnceByStampSheetRequest, Result.IssueOnceByStampSheetResult>
+        {
+	        public IssueOnceByStampSheetTask(IGs2Session session, Request.IssueOnceByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.IssueOnceByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "issueOnceByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IssueOnceByStampSheet(
+                Request.IssueOnceByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.IssueOnceByStampSheetResult>> callback
+        )
+		{
+			var task = new IssueOnceByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IssueOnceByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IssueOnceByStampSheetResult> IssueOnceByStampSheetFuture(
+                Request.IssueOnceByStampSheetRequest request
+        )
+		{
+			return new IssueOnceByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IssueOnceByStampSheetResult> IssueOnceByStampSheetAsync(
+            Request.IssueOnceByStampSheetRequest request
+        )
+		{
+		    var task = new IssueOnceByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public IssueOnceByStampSheetTask IssueOnceByStampSheetAsync(
+                Request.IssueOnceByStampSheetRequest request
+        )
+		{
+			return new IssueOnceByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IssueOnceByStampSheetResult> IssueOnceByStampSheetAsync(
+            Request.IssueOnceByStampSheetRequest request
+        )
+		{
+		    var task = new IssueOnceByStampSheetTask(
 		        Gs2WebSocketSession,
 		        request
             );

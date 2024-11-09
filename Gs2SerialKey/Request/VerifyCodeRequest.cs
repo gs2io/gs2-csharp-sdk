@@ -36,6 +36,7 @@ namespace Gs2.Gs2SerialKey.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public string Code { set; get; } = null!;
+         public string CampaignModelName { set; get; } = null!;
          public string VerifyType { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public VerifyCodeRequest WithNamespaceName(string namespaceName) {
@@ -48,6 +49,10 @@ namespace Gs2.Gs2SerialKey.Request
         }
         public VerifyCodeRequest WithCode(string code) {
             this.Code = code;
+            return this;
+        }
+        public VerifyCodeRequest WithCampaignModelName(string campaignModelName) {
+            this.CampaignModelName = campaignModelName;
             return this;
         }
         public VerifyCodeRequest WithVerifyType(string verifyType) {
@@ -72,6 +77,7 @@ namespace Gs2.Gs2SerialKey.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : data["code"].ToString())
+                .WithCampaignModelName(!data.Keys.Contains("campaignModelName") || data["campaignModelName"] == null ? null : data["campaignModelName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString());
         }
 
@@ -81,6 +87,7 @@ namespace Gs2.Gs2SerialKey.Request
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["code"] = Code,
+                ["campaignModelName"] = CampaignModelName,
                 ["verifyType"] = VerifyType,
             };
         }
@@ -100,6 +107,10 @@ namespace Gs2.Gs2SerialKey.Request
                 writer.WritePropertyName("code");
                 writer.Write(Code.ToString());
             }
+            if (CampaignModelName != null) {
+                writer.WritePropertyName("campaignModelName");
+                writer.Write(CampaignModelName.ToString());
+            }
             if (VerifyType != null) {
                 writer.WritePropertyName("verifyType");
                 writer.Write(VerifyType.ToString());
@@ -112,6 +123,7 @@ namespace Gs2.Gs2SerialKey.Request
             key += NamespaceName + ":";
             key += AccessToken + ":";
             key += Code + ":";
+            key += CampaignModelName + ":";
             key += VerifyType + ":";
             return key;
         }

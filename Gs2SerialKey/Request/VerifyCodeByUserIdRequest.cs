@@ -36,6 +36,7 @@ namespace Gs2.Gs2SerialKey.Request
          public string NamespaceName { set; get; } = null!;
          public string UserId { set; get; } = null!;
          public string Code { set; get; } = null!;
+         public string CampaignModelName { set; get; } = null!;
          public string VerifyType { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
@@ -49,6 +50,10 @@ namespace Gs2.Gs2SerialKey.Request
         }
         public VerifyCodeByUserIdRequest WithCode(string code) {
             this.Code = code;
+            return this;
+        }
+        public VerifyCodeByUserIdRequest WithCampaignModelName(string campaignModelName) {
+            this.CampaignModelName = campaignModelName;
             return this;
         }
         public VerifyCodeByUserIdRequest WithVerifyType(string verifyType) {
@@ -77,6 +82,7 @@ namespace Gs2.Gs2SerialKey.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : data["code"].ToString())
+                .WithCampaignModelName(!data.Keys.Contains("campaignModelName") || data["campaignModelName"] == null ? null : data["campaignModelName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
@@ -87,6 +93,7 @@ namespace Gs2.Gs2SerialKey.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["code"] = Code,
+                ["campaignModelName"] = CampaignModelName,
                 ["verifyType"] = VerifyType,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
@@ -107,6 +114,10 @@ namespace Gs2.Gs2SerialKey.Request
                 writer.WritePropertyName("code");
                 writer.Write(Code.ToString());
             }
+            if (CampaignModelName != null) {
+                writer.WritePropertyName("campaignModelName");
+                writer.Write(CampaignModelName.ToString());
+            }
             if (VerifyType != null) {
                 writer.WritePropertyName("verifyType");
                 writer.Write(VerifyType.ToString());
@@ -123,6 +134,7 @@ namespace Gs2.Gs2SerialKey.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += Code + ":";
+            key += CampaignModelName + ":";
             key += VerifyType + ":";
             key += TimeOffsetToken + ":";
             return key;

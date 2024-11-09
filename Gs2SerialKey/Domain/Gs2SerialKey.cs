@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -509,6 +511,12 @@ namespace Gs2.Gs2SerialKey.Domain
         public static Action<string, RevertUseByUserIdRequest, RevertUseByUserIdResult> RevertUseByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, IssueOnceRequest, IssueOnceResult> IssueOnceComplete = new UnityEvent<string, IssueOnceRequest, IssueOnceResult>();
+    #else
+        public static Action<string, IssueOnceRequest, IssueOnceResult> IssueOnceComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
@@ -527,6 +535,17 @@ namespace Gs2.Gs2SerialKey.Domain
                         );
 
                         RevertUseByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "IssueOnce": {
+                        var requestModel = IssueOnceRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = IssueOnceResult.FromJson(JsonMapper.ToObject(result));
+
+                        IssueOnceComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -586,6 +605,17 @@ namespace Gs2.Gs2SerialKey.Domain
                     );
 
                     RevertUseByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "issue_once": {
+                    var requestModel = IssueOnceRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = IssueOnceResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    IssueOnceComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel
