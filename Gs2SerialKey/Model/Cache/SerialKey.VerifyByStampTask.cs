@@ -51,6 +51,11 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                 userId,
                 self.Item.Code
             );
+            self.CampaignModel?.PutCache(
+                cache,
+                default,
+                self.Item.CampaignModelName
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

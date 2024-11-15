@@ -42,6 +42,8 @@ namespace Gs2.Gs2Guild.Model
         public string GuildMasterRole { set; get; } = null!;
         public string GuildMemberDefaultRole { set; get; } = null!;
         public int? RejoinCoolTimeMinutes { set; get; } = null!;
+        public int? MaxConcurrentJoinGuilds { set; get; } = null!;
+        public int? MaxConcurrentGuildMasterCount { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -87,6 +89,14 @@ namespace Gs2.Gs2Guild.Model
         }
         public GuildModelMaster WithRejoinCoolTimeMinutes(int? rejoinCoolTimeMinutes) {
             this.RejoinCoolTimeMinutes = rejoinCoolTimeMinutes;
+            return this;
+        }
+        public GuildModelMaster WithMaxConcurrentJoinGuilds(int? maxConcurrentJoinGuilds) {
+            this.MaxConcurrentJoinGuilds = maxConcurrentJoinGuilds;
+            return this;
+        }
+        public GuildModelMaster WithMaxConcurrentGuildMasterCount(int? maxConcurrentGuildMasterCount) {
+            this.MaxConcurrentGuildMasterCount = maxConcurrentGuildMasterCount;
             return this;
         }
         public GuildModelMaster WithCreatedAt(long? createdAt) {
@@ -192,6 +202,8 @@ namespace Gs2.Gs2Guild.Model
                 .WithGuildMasterRole(!data.Keys.Contains("guildMasterRole") || data["guildMasterRole"] == null ? null : data["guildMasterRole"].ToString())
                 .WithGuildMemberDefaultRole(!data.Keys.Contains("guildMemberDefaultRole") || data["guildMemberDefaultRole"] == null ? null : data["guildMemberDefaultRole"].ToString())
                 .WithRejoinCoolTimeMinutes(!data.Keys.Contains("rejoinCoolTimeMinutes") || data["rejoinCoolTimeMinutes"] == null ? null : (int?)(data["rejoinCoolTimeMinutes"].ToString().Contains(".") ? (int)double.Parse(data["rejoinCoolTimeMinutes"].ToString()) : int.Parse(data["rejoinCoolTimeMinutes"].ToString())))
+                .WithMaxConcurrentJoinGuilds(!data.Keys.Contains("maxConcurrentJoinGuilds") || data["maxConcurrentJoinGuilds"] == null ? null : (int?)(data["maxConcurrentJoinGuilds"].ToString().Contains(".") ? (int)double.Parse(data["maxConcurrentJoinGuilds"].ToString()) : int.Parse(data["maxConcurrentJoinGuilds"].ToString())))
+                .WithMaxConcurrentGuildMasterCount(!data.Keys.Contains("maxConcurrentGuildMasterCount") || data["maxConcurrentGuildMasterCount"] == null ? null : (int?)(data["maxConcurrentGuildMasterCount"].ToString().Contains(".") ? (int)double.Parse(data["maxConcurrentGuildMasterCount"].ToString()) : int.Parse(data["maxConcurrentGuildMasterCount"].ToString())))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -220,6 +232,8 @@ namespace Gs2.Gs2Guild.Model
                 ["guildMasterRole"] = GuildMasterRole,
                 ["guildMemberDefaultRole"] = GuildMemberDefaultRole,
                 ["rejoinCoolTimeMinutes"] = RejoinCoolTimeMinutes,
+                ["maxConcurrentJoinGuilds"] = MaxConcurrentJoinGuilds,
+                ["maxConcurrentGuildMasterCount"] = MaxConcurrentGuildMasterCount,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -279,6 +293,14 @@ namespace Gs2.Gs2Guild.Model
             if (RejoinCoolTimeMinutes != null) {
                 writer.WritePropertyName("rejoinCoolTimeMinutes");
                 writer.Write((RejoinCoolTimeMinutes.ToString().Contains(".") ? (int)double.Parse(RejoinCoolTimeMinutes.ToString()) : int.Parse(RejoinCoolTimeMinutes.ToString())));
+            }
+            if (MaxConcurrentJoinGuilds != null) {
+                writer.WritePropertyName("maxConcurrentJoinGuilds");
+                writer.Write((MaxConcurrentJoinGuilds.ToString().Contains(".") ? (int)double.Parse(MaxConcurrentJoinGuilds.ToString()) : int.Parse(MaxConcurrentJoinGuilds.ToString())));
+            }
+            if (MaxConcurrentGuildMasterCount != null) {
+                writer.WritePropertyName("maxConcurrentGuildMasterCount");
+                writer.Write((MaxConcurrentGuildMasterCount.ToString().Contains(".") ? (int)double.Parse(MaxConcurrentGuildMasterCount.ToString()) : int.Parse(MaxConcurrentGuildMasterCount.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -390,6 +412,22 @@ namespace Gs2.Gs2Guild.Model
             else
             {
                 diff += (int)(RejoinCoolTimeMinutes - other.RejoinCoolTimeMinutes);
+            }
+            if (MaxConcurrentJoinGuilds == null && MaxConcurrentJoinGuilds == other.MaxConcurrentJoinGuilds)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(MaxConcurrentJoinGuilds - other.MaxConcurrentJoinGuilds);
+            }
+            if (MaxConcurrentGuildMasterCount == null && MaxConcurrentGuildMasterCount == other.MaxConcurrentGuildMasterCount)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(MaxConcurrentGuildMasterCount - other.MaxConcurrentGuildMasterCount);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -522,6 +560,30 @@ namespace Gs2.Gs2Guild.Model
                 }
             }
             {
+                if (MaxConcurrentJoinGuilds < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("guildModelMaster", "guild.guildModelMaster.maxConcurrentJoinGuilds.error.invalid"),
+                    });
+                }
+                if (MaxConcurrentJoinGuilds > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("guildModelMaster", "guild.guildModelMaster.maxConcurrentJoinGuilds.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxConcurrentGuildMasterCount < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("guildModelMaster", "guild.guildModelMaster.maxConcurrentGuildMasterCount.error.invalid"),
+                    });
+                }
+                if (MaxConcurrentGuildMasterCount > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("guildModelMaster", "guild.guildModelMaster.maxConcurrentGuildMasterCount.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("guildModelMaster", "guild.guildModelMaster.createdAt.error.invalid"),
@@ -572,6 +634,8 @@ namespace Gs2.Gs2Guild.Model
                 GuildMasterRole = GuildMasterRole,
                 GuildMemberDefaultRole = GuildMemberDefaultRole,
                 RejoinCoolTimeMinutes = RejoinCoolTimeMinutes,
+                MaxConcurrentJoinGuilds = MaxConcurrentJoinGuilds,
+                MaxConcurrentGuildMasterCount = MaxConcurrentGuildMasterCount,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

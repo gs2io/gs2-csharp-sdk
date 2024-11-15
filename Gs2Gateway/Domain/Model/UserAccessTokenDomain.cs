@@ -68,6 +68,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string Protocol { get; set; } = null!;
+        public string[] SendConnectionIds { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public UserAccessTokenDomain(

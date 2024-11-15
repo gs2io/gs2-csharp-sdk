@@ -34,10 +34,16 @@ namespace Gs2.Gs2SerialKey.Result
 	public class VerifyByStampTaskResult : IResult
 	{
         public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; } = null!;
+        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; } = null!;
         public string NewContextStack { set; get; } = null!;
 
         public VerifyByStampTaskResult WithItem(Gs2.Gs2SerialKey.Model.SerialKey item) {
             this.Item = item;
+            return this;
+        }
+
+        public VerifyByStampTaskResult WithCampaignModel(Gs2.Gs2SerialKey.Model.CampaignModel campaignModel) {
+            this.CampaignModel = campaignModel;
             return this;
         }
 
@@ -56,6 +62,7 @@ namespace Gs2.Gs2SerialKey.Result
             }
             return new VerifyByStampTaskResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2SerialKey.Model.SerialKey.FromJson(data["item"]))
+                .WithCampaignModel(!data.Keys.Contains("campaignModel") || data["campaignModel"] == null ? null : Gs2.Gs2SerialKey.Model.CampaignModel.FromJson(data["campaignModel"]))
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
         }
 
@@ -63,6 +70,7 @@ namespace Gs2.Gs2SerialKey.Result
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["campaignModel"] = CampaignModel?.ToJson(),
                 ["newContextStack"] = NewContextStack,
             };
         }
@@ -72,6 +80,9 @@ namespace Gs2.Gs2SerialKey.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (CampaignModel != null) {
+                CampaignModel.WriteJson(writer);
             }
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");

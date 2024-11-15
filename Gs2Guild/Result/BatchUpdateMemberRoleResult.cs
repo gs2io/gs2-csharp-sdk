@@ -18,52 +18,44 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
-using Gs2.Gs2SerialKey.Model;
+using Gs2.Gs2Guild.Model;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
 #endif
 
-namespace Gs2.Gs2SerialKey.Result
+namespace Gs2.Gs2Guild.Result
 {
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class VerifyCodeByUserIdResult : IResult
+	public class BatchUpdateMemberRoleResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; } = null!;
-        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; } = null!;
+        public Gs2.Gs2Guild.Model.Guild Item { set; get; } = null!;
 
-        public VerifyCodeByUserIdResult WithItem(Gs2.Gs2SerialKey.Model.SerialKey item) {
+        public BatchUpdateMemberRoleResult WithItem(Gs2.Gs2Guild.Model.Guild item) {
             this.Item = item;
-            return this;
-        }
-
-        public VerifyCodeByUserIdResult WithCampaignModel(Gs2.Gs2SerialKey.Model.CampaignModel campaignModel) {
-            this.CampaignModel = campaignModel;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static VerifyCodeByUserIdResult FromJson(JsonData data)
+        public static BatchUpdateMemberRoleResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new VerifyCodeByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2SerialKey.Model.SerialKey.FromJson(data["item"]))
-                .WithCampaignModel(!data.Keys.Contains("campaignModel") || data["campaignModel"] == null ? null : Gs2.Gs2SerialKey.Model.CampaignModel.FromJson(data["campaignModel"]));
+            return new BatchUpdateMemberRoleResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Guild.Model.Guild.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
-                ["campaignModel"] = CampaignModel?.ToJson(),
             };
         }
 
@@ -72,9 +64,6 @@ namespace Gs2.Gs2SerialKey.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
-            }
-            if (CampaignModel != null) {
-                CampaignModel.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

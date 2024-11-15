@@ -67,6 +67,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public string Protocol { get; set; } = null!;
+        public string[] SendConnectionIds { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
@@ -208,6 +209,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var result = future.Result;
                 var domain = this;
                 this.Protocol = domain.Protocol = result?.Protocol;
+                this.SendConnectionIds = domain.SendConnectionIds = result?.SendConnectionIds;
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Gateway.Domain.Model.UserDomain>(Impl);
@@ -233,6 +235,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             );
             var domain = this;
             this.Protocol = domain.Protocol = result?.Protocol;
+            this.SendConnectionIds = domain.SendConnectionIds = result?.SendConnectionIds;
             return domain;
         }
         #endif

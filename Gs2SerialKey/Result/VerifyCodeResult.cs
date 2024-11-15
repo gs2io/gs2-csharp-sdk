@@ -34,9 +34,15 @@ namespace Gs2.Gs2SerialKey.Result
 	public class VerifyCodeResult : IResult
 	{
         public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; } = null!;
+        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; } = null!;
 
         public VerifyCodeResult WithItem(Gs2.Gs2SerialKey.Model.SerialKey item) {
             this.Item = item;
+            return this;
+        }
+
+        public VerifyCodeResult WithCampaignModel(Gs2.Gs2SerialKey.Model.CampaignModel campaignModel) {
+            this.CampaignModel = campaignModel;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2SerialKey.Result
                 return null;
             }
             return new VerifyCodeResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2SerialKey.Model.SerialKey.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2SerialKey.Model.SerialKey.FromJson(data["item"]))
+                .WithCampaignModel(!data.Keys.Contains("campaignModel") || data["campaignModel"] == null ? null : Gs2.Gs2SerialKey.Model.CampaignModel.FromJson(data["campaignModel"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["campaignModel"] = CampaignModel?.ToJson(),
             };
         }
 
@@ -64,6 +72,9 @@ namespace Gs2.Gs2SerialKey.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (CampaignModel != null) {
+                CampaignModel.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

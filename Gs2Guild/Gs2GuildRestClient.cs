@@ -1848,6 +1848,16 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("rejoinCoolTimeMinutes");
                     jsonWriter.Write(request.RejoinCoolTimeMinutes.ToString());
                 }
+                if (request.MaxConcurrentJoinGuilds != null)
+                {
+                    jsonWriter.WritePropertyName("maxConcurrentJoinGuilds");
+                    jsonWriter.Write(request.MaxConcurrentJoinGuilds.ToString());
+                }
+                if (request.MaxConcurrentGuildMasterCount != null)
+                {
+                    jsonWriter.WritePropertyName("maxConcurrentGuildMasterCount");
+                    jsonWriter.Write(request.MaxConcurrentGuildMasterCount.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2120,6 +2130,16 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("rejoinCoolTimeMinutes");
                     jsonWriter.Write(request.RejoinCoolTimeMinutes.ToString());
+                }
+                if (request.MaxConcurrentJoinGuilds != null)
+                {
+                    jsonWriter.WritePropertyName("maxConcurrentJoinGuilds");
+                    jsonWriter.Write(request.MaxConcurrentJoinGuilds.ToString());
+                }
+                if (request.MaxConcurrentGuildMasterCount != null)
+                {
+                    jsonWriter.WritePropertyName("maxConcurrentGuildMasterCount");
+                    jsonWriter.Write(request.MaxConcurrentGuildMasterCount.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -4368,6 +4388,275 @@ namespace Gs2.Gs2Guild
         )
 		{
 			var task = new UpdateMemberRoleByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class BatchUpdateMemberRoleTask : Gs2RestSessionTask<BatchUpdateMemberRoleRequest, BatchUpdateMemberRoleResult>
+        {
+            public BatchUpdateMemberRoleTask(IGs2Session session, RestSessionRequestFactory factory, BatchUpdateMemberRoleRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchUpdateMemberRoleRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/me/batch/member/role";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Members != null)
+                {
+                    jsonWriter.WritePropertyName("members");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Members)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchUpdateMemberRole(
+                Request.BatchUpdateMemberRoleRequest request,
+                UnityAction<AsyncResult<Result.BatchUpdateMemberRoleResult>> callback
+        )
+		{
+			var task = new BatchUpdateMemberRoleTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchUpdateMemberRoleResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchUpdateMemberRoleResult> BatchUpdateMemberRoleFuture(
+                Request.BatchUpdateMemberRoleRequest request
+        )
+		{
+			return new BatchUpdateMemberRoleTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchUpdateMemberRoleResult> BatchUpdateMemberRoleAsync(
+                Request.BatchUpdateMemberRoleRequest request
+        )
+		{
+            AsyncResult<Result.BatchUpdateMemberRoleResult> result = null;
+			await BatchUpdateMemberRole(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchUpdateMemberRoleTask BatchUpdateMemberRoleAsync(
+                Request.BatchUpdateMemberRoleRequest request
+        )
+		{
+			return new BatchUpdateMemberRoleTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchUpdateMemberRoleResult> BatchUpdateMemberRoleAsync(
+                Request.BatchUpdateMemberRoleRequest request
+        )
+		{
+			var task = new BatchUpdateMemberRoleTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class BatchUpdateMemberRoleByGuildNameTask : Gs2RestSessionTask<BatchUpdateMemberRoleByGuildNameRequest, BatchUpdateMemberRoleByGuildNameResult>
+        {
+            public BatchUpdateMemberRoleByGuildNameTask(IGs2Session session, RestSessionRequestFactory factory, BatchUpdateMemberRoleByGuildNameRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchUpdateMemberRoleByGuildNameRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/{guildName}/batch/member/role";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Members != null)
+                {
+                    jsonWriter.WritePropertyName("members");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Members)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchUpdateMemberRoleByGuildName(
+                Request.BatchUpdateMemberRoleByGuildNameRequest request,
+                UnityAction<AsyncResult<Result.BatchUpdateMemberRoleByGuildNameResult>> callback
+        )
+		{
+			var task = new BatchUpdateMemberRoleByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchUpdateMemberRoleByGuildNameResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchUpdateMemberRoleByGuildNameResult> BatchUpdateMemberRoleByGuildNameFuture(
+                Request.BatchUpdateMemberRoleByGuildNameRequest request
+        )
+		{
+			return new BatchUpdateMemberRoleByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchUpdateMemberRoleByGuildNameResult> BatchUpdateMemberRoleByGuildNameAsync(
+                Request.BatchUpdateMemberRoleByGuildNameRequest request
+        )
+		{
+            AsyncResult<Result.BatchUpdateMemberRoleByGuildNameResult> result = null;
+			await BatchUpdateMemberRoleByGuildName(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchUpdateMemberRoleByGuildNameTask BatchUpdateMemberRoleByGuildNameAsync(
+                Request.BatchUpdateMemberRoleByGuildNameRequest request
+        )
+		{
+			return new BatchUpdateMemberRoleByGuildNameTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchUpdateMemberRoleByGuildNameResult> BatchUpdateMemberRoleByGuildNameAsync(
+                Request.BatchUpdateMemberRoleByGuildNameRequest request
+        )
+		{
+			var task = new BatchUpdateMemberRoleByGuildNameTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

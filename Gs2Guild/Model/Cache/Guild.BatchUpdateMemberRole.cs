@@ -22,8 +22,8 @@ using System;
 using Gs2.Core.Domain;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
-using Gs2.Gs2SerialKey.Request;
-using Gs2.Gs2SerialKey.Result;
+using Gs2.Gs2Guild.Request;
+using Gs2.Gs2Guild.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -35,38 +35,33 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2SerialKey.Model.Cache
+namespace Gs2.Gs2Guild.Model.Cache
 {
-    public static partial class SerialKeyExt
+    public static partial class GuildExt
     {
         public static void PutCache(
-            this VerifyCodeResult self,
+            this BatchUpdateMemberRoleResult self,
             CacheDatabase cache,
             string userId,
-            VerifyCodeRequest request
+            BatchUpdateMemberRoleRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                userId,
-                self.Item.Code
-            );
-            self.CampaignModel?.PutCache(
-                cache,
-                request.NamespaceName,
-                self.Item.CampaignModelName
+                self.Item.GuildModelName,
+                self.Item.Name
             );
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<VerifyCodeResult> InvokeFuture(
-            this VerifyCodeRequest request,
+        public static IFuture<BatchUpdateMemberRoleResult> InvokeFuture(
+            this BatchUpdateMemberRoleRequest request,
             CacheDatabase cache,
             string userId,
-            Func<IFuture<VerifyCodeResult>> invokeImpl
+            Func<IFuture<BatchUpdateMemberRoleResult>> invokeImpl
         )
         {
-            IEnumerator Impl(IFuture<VerifyCodeResult> self)
+            IEnumerator Impl(IFuture<BatchUpdateMemberRoleResult> self)
             {
                 var future = invokeImpl();
                 yield return future;
@@ -83,23 +78,23 @@ namespace Gs2.Gs2SerialKey.Model.Cache
 
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<VerifyCodeResult>(Impl);
+            return new Gs2InlineFuture<BatchUpdateMemberRoleResult>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<VerifyCodeResult> InvokeAsync(
+        public static async UniTask<BatchUpdateMemberRoleResult> InvokeAsync(
     #else
-        public static async Task<VerifyCodeResult> InvokeAsync(
+        public static async Task<BatchUpdateMemberRoleResult> InvokeAsync(
     #endif
-            this VerifyCodeRequest request,
+            this BatchUpdateMemberRoleRequest request,
             CacheDatabase cache,
             string userId,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<VerifyCodeResult>> invokeImpl
+            Func<UniTask<BatchUpdateMemberRoleResult>> invokeImpl
     #else
-            Func<Task<VerifyCodeResult>> invokeImpl
+            Func<Task<BatchUpdateMemberRoleResult>> invokeImpl
     #endif
         )
         {

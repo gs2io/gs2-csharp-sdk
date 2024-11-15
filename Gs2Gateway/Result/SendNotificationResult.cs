@@ -34,9 +34,15 @@ namespace Gs2.Gs2Gateway.Result
 	public class SendNotificationResult : IResult
 	{
         public string Protocol { set; get; } = null!;
+        public string[] SendConnectionIds { set; get; } = null!;
 
         public SendNotificationResult WithProtocol(string protocol) {
             this.Protocol = protocol;
+            return this;
+        }
+
+        public SendNotificationResult WithSendConnectionIds(string[] sendConnectionIds) {
+            this.SendConnectionIds = sendConnectionIds;
             return this;
         }
 
@@ -49,13 +55,26 @@ namespace Gs2.Gs2Gateway.Result
                 return null;
             }
             return new SendNotificationResult()
-                .WithProtocol(!data.Keys.Contains("protocol") || data["protocol"] == null ? null : data["protocol"].ToString());
+                .WithProtocol(!data.Keys.Contains("protocol") || data["protocol"] == null ? null : data["protocol"].ToString())
+                .WithSendConnectionIds(!data.Keys.Contains("sendConnectionIds") || data["sendConnectionIds"] == null || !data["sendConnectionIds"].IsArray ? new string[]{} : data["sendConnectionIds"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
         }
 
         public JsonData ToJson()
         {
+            JsonData sendConnectionIdsJsonData = null;
+            if (SendConnectionIds != null && SendConnectionIds.Length > 0)
+            {
+                sendConnectionIdsJsonData = new JsonData();
+                foreach (var sendConnectionId in SendConnectionIds)
+                {
+                    sendConnectionIdsJsonData.Add(sendConnectionId);
+                }
+            }
             return new JsonData {
                 ["protocol"] = Protocol,
+                ["sendConnectionIds"] = sendConnectionIdsJsonData,
             };
         }
 
@@ -65,6 +84,17 @@ namespace Gs2.Gs2Gateway.Result
             if (Protocol != null) {
                 writer.WritePropertyName("protocol");
                 writer.Write(Protocol.ToString());
+            }
+            if (SendConnectionIds != null) {
+                writer.WritePropertyName("sendConnectionIds");
+                writer.WriteArrayStart();
+                foreach (var sendConnectionId in SendConnectionIds)
+                {
+                    if (sendConnectionId != null) {
+                        writer.Write(sendConnectionId.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
