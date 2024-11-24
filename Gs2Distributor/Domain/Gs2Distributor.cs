@@ -255,6 +255,15 @@ namespace Gs2.Gs2Distributor.Domain
                     lock (_completedStampSheets)
                     {
                         var notification = AutoRunStampSheetNotification.FromJson(JsonMapper.ToObject(payload));
+                        _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
+                            (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheParentKey(
+                                notification.NamespaceName,
+                                notification.UserId
+                            ),
+                            (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheKey(
+                                notification.TransactionId
+                            )
+                        );
                         _completedStampSheets.Add(notification);
     #if UNITY_2017_1_OR_NEWER
                         onAutoRunStampSheetNotification.Invoke(notification);
