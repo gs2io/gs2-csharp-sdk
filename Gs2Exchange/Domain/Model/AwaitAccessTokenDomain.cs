@@ -67,8 +67,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string AwaitName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public AwaitAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -149,7 +147,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     .WithAwaitName(this.AwaitName);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.AcquireByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor.AcquireByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         AcquireByUserIdRequest.FromJson(request.ToJson())
@@ -213,7 +211,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 .WithAwaitName(this.AwaitName);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.AcquireByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor.AcquireByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     AcquireByUserIdRequest.FromJson(request.ToJson())

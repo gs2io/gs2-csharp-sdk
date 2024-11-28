@@ -49,7 +49,7 @@ namespace Gs2.Gs2Exchange.Result
                 return null;
             }
             return new DescribeIncrementalRateModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Exchange.Model.IncrementalRateModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.IncrementalRateModel.FromJson(v);
                 }).ToArray());
         }

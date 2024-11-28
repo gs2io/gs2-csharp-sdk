@@ -168,14 +168,14 @@ namespace Gs2.Gs2SkillTree.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithReleaseVerifyActions(!data.Keys.Contains("releaseVerifyActions") || data["releaseVerifyActions"] == null || !data["releaseVerifyActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["releaseVerifyActions"].Cast<JsonData>().Select(v => {
+                .WithReleaseVerifyActions(!data.Keys.Contains("releaseVerifyActions") || data["releaseVerifyActions"] == null || !data["releaseVerifyActions"].IsArray ? null : data["releaseVerifyActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.VerifyAction.FromJson(v);
                 }).ToArray())
-                .WithReleaseConsumeActions(!data.Keys.Contains("releaseConsumeActions") || data["releaseConsumeActions"] == null || !data["releaseConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["releaseConsumeActions"].Cast<JsonData>().Select(v => {
+                .WithReleaseConsumeActions(!data.Keys.Contains("releaseConsumeActions") || data["releaseConsumeActions"] == null || !data["releaseConsumeActions"].IsArray ? null : data["releaseConsumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
                 .WithRestrainReturnRate(!data.Keys.Contains("restrainReturnRate") || data["restrainReturnRate"] == null ? null : (float?)float.Parse(data["restrainReturnRate"].ToString()))
-                .WithPremiseNodeNames(!data.Keys.Contains("premiseNodeNames") || data["premiseNodeNames"] == null || !data["premiseNodeNames"].IsArray ? new string[]{} : data["premiseNodeNames"].Cast<JsonData>().Select(v => {
+                .WithPremiseNodeNames(!data.Keys.Contains("premiseNodeNames") || data["premiseNodeNames"] == null || !data["premiseNodeNames"].IsArray ? null : data["premiseNodeNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

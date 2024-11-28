@@ -132,7 +132,7 @@ namespace Gs2.Gs2Formation.Model
                 .WithFormModelId(!data.Keys.Contains("formModelId") || data["formModelId"] == null ? null : data["formModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null || !data["slots"].IsArray ? new Gs2.Gs2Formation.Model.SlotModel[]{} : data["slots"].Cast<JsonData>().Select(v => {
+                .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null || !data["slots"].IsArray ? null : data["slots"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Formation.Model.SlotModel.FromJson(v);
                 }).ToArray());
         }

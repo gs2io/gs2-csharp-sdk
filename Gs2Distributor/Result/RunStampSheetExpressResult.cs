@@ -79,16 +79,16 @@ namespace Gs2.Gs2Distributor.Result
                 return null;
             }
             return new RunStampSheetExpressResult()
-                .WithVerifyTaskResultCodes(!data.Keys.Contains("verifyTaskResultCodes") || data["verifyTaskResultCodes"] == null || !data["verifyTaskResultCodes"].IsArray ? new int[]{} : data["verifyTaskResultCodes"].Cast<JsonData>().Select(v => {
+                .WithVerifyTaskResultCodes(!data.Keys.Contains("verifyTaskResultCodes") || data["verifyTaskResultCodes"] == null || !data["verifyTaskResultCodes"].IsArray ? null : data["verifyTaskResultCodes"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithVerifyTaskResults(!data.Keys.Contains("verifyTaskResults") || data["verifyTaskResults"] == null || !data["verifyTaskResults"].IsArray ? new string[]{} : data["verifyTaskResults"].Cast<JsonData>().Select(v => {
+                .WithVerifyTaskResults(!data.Keys.Contains("verifyTaskResults") || data["verifyTaskResults"] == null || !data["verifyTaskResults"].IsArray ? null : data["verifyTaskResults"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? new int[]{} : data["taskResultCodes"].Cast<JsonData>().Select(v => {
+                .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? null : data["taskResultCodes"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
+                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? null : data["taskResults"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithSheetResultCode(!data.Keys.Contains("sheetResultCode") || data["sheetResultCode"] == null ? null : (int?)(data["sheetResultCode"].ToString().Contains(".") ? (int)double.Parse(data["sheetResultCode"].ToString()) : int.Parse(data["sheetResultCode"].ToString())))

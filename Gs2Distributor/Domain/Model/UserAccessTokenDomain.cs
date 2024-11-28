@@ -94,11 +94,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 transactionId
             );
         }
-
-    }
     
-    public partial class UserAccessTokenDomain {
-
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.Gs2> FreezeMasterDataFuture(
             FreezeMasterDataRequest request
@@ -160,6 +156,17 @@ namespace Gs2.Gs2Distributor.Domain.Model
             return newGs2;
         }
         #endif
+
+        public Gs2.Gs2Distributor.Domain.Model.TransactionResultAccessTokenDomain TransactionResult(
+            string transactionId
+        ) {
+            return new Gs2.Gs2Distributor.Domain.Model.TransactionResultAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                transactionId
+            );
+        }
 
     }
 }

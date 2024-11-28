@@ -57,7 +57,7 @@ namespace Gs2.Gs2Money2.Model
             }
             return new WithdrawEvent()
                 .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)(data["slot"].ToString().Contains(".") ? (int)double.Parse(data["slot"].ToString()) : int.Parse(data["slot"].ToString())))
-                .WithWithdrawDetails(!data.Keys.Contains("withdrawDetails") || data["withdrawDetails"] == null || !data["withdrawDetails"].IsArray ? new Gs2.Gs2Money2.Model.DepositTransaction[]{} : data["withdrawDetails"].Cast<JsonData>().Select(v => {
+                .WithWithdrawDetails(!data.Keys.Contains("withdrawDetails") || data["withdrawDetails"] == null || !data["withdrawDetails"].IsArray ? null : data["withdrawDetails"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money2.Model.DepositTransaction.FromJson(v);
                 }).ToArray())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : Gs2.Gs2Money2.Model.WalletSummary.FromJson(data["status"]));

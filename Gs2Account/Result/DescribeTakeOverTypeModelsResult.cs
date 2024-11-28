@@ -49,7 +49,7 @@ namespace Gs2.Gs2Account.Result
                 return null;
             }
             return new DescribeTakeOverTypeModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Account.Model.TakeOverTypeModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Account.Model.TakeOverTypeModel.FromJson(v);
                 }).ToArray());
         }

@@ -71,7 +71,7 @@ namespace Gs2.Gs2SeasonRating.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithBallotBody(!data.Keys.Contains("ballotBody") || data["ballotBody"] == null ? null : data["ballotBody"].ToString())
                 .WithBallotSignature(!data.Keys.Contains("ballotSignature") || data["ballotSignature"] == null ? null : data["ballotSignature"].ToString())
-                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? new Gs2.Gs2SeasonRating.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? null : data["gameResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.GameResult.FromJson(v);
                 }).ToArray())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());

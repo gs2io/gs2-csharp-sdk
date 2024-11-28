@@ -66,8 +66,6 @@ namespace Gs2.Gs2Idle.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public string CategoryName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public StatusDomain(
             Gs2.Core.Domain.Gs2 gs2,

@@ -62,7 +62,7 @@ namespace Gs2.Gs2Money2.Result
             }
             return new WithdrawByStampTaskResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Money2.Model.Wallet.FromJson(data["item"]))
-                .WithWithdrawTransactions(!data.Keys.Contains("withdrawTransactions") || data["withdrawTransactions"] == null || !data["withdrawTransactions"].IsArray ? new Gs2.Gs2Money2.Model.DepositTransaction[]{} : data["withdrawTransactions"].Cast<JsonData>().Select(v => {
+                .WithWithdrawTransactions(!data.Keys.Contains("withdrawTransactions") || data["withdrawTransactions"] == null || !data["withdrawTransactions"].IsArray ? null : data["withdrawTransactions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money2.Model.DepositTransaction.FromJson(v);
                 }).ToArray())
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());

@@ -77,7 +77,7 @@ namespace Gs2.Gs2Mission.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? new Gs2.Gs2Mission.Model.ScopedValue[]{} : data["values"].Cast<JsonData>().Select(v => {
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? null : data["values"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.ScopedValue.FromJson(v);
                 }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());

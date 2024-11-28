@@ -182,7 +182,7 @@ namespace Gs2.Gs2Exchange.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
                 .WithSkipSeconds(!data.Keys.Contains("skipSeconds") || data["skipSeconds"] == null ? null : (int?)(data["skipSeconds"].ToString().Contains(".") ? (int)double.Parse(data["skipSeconds"].ToString()) : int.Parse(data["skipSeconds"].ToString())))
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Exchange.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.Config.FromJson(v);
                 }).ToArray())
                 .WithAcquirableAt(!data.Keys.Contains("acquirableAt") || data["acquirableAt"] == null ? null : (long?)(data["acquirableAt"].ToString().Contains(".") ? (long)double.Parse(data["acquirableAt"].ToString()) : long.Parse(data["acquirableAt"].ToString())))

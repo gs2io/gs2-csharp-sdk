@@ -36,6 +36,7 @@ namespace Gs2.Gs2Distributor.Model
         public string Description { set; get; } = null!;
         public string AssumeUserId { set; get; } = null!;
         public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunStampSheetNotification { set; get; } = null!;
+        public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunTransactionNotification { set; get; } = null!;
         public Gs2.Gs2Distributor.Model.LogSetting LogSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -58,6 +59,10 @@ namespace Gs2.Gs2Distributor.Model
         }
         public Namespace WithAutoRunStampSheetNotification(Gs2.Gs2Distributor.Model.NotificationSetting autoRunStampSheetNotification) {
             this.AutoRunStampSheetNotification = autoRunStampSheetNotification;
+            return this;
+        }
+        public Namespace WithAutoRunTransactionNotification(Gs2.Gs2Distributor.Model.NotificationSetting autoRunTransactionNotification) {
+            this.AutoRunTransactionNotification = autoRunTransactionNotification;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Distributor.Model.LogSetting logSetting) {
@@ -142,6 +147,7 @@ namespace Gs2.Gs2Distributor.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
                 .WithAutoRunStampSheetNotification(!data.Keys.Contains("autoRunStampSheetNotification") || data["autoRunStampSheetNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunStampSheetNotification"]))
+                .WithAutoRunTransactionNotification(!data.Keys.Contains("autoRunTransactionNotification") || data["autoRunTransactionNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunTransactionNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Distributor.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -156,6 +162,7 @@ namespace Gs2.Gs2Distributor.Model
                 ["description"] = Description,
                 ["assumeUserId"] = AssumeUserId,
                 ["autoRunStampSheetNotification"] = AutoRunStampSheetNotification?.ToJson(),
+                ["autoRunTransactionNotification"] = AutoRunTransactionNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -185,6 +192,10 @@ namespace Gs2.Gs2Distributor.Model
             if (AutoRunStampSheetNotification != null) {
                 writer.WritePropertyName("autoRunStampSheetNotification");
                 AutoRunStampSheetNotification.WriteJson(writer);
+            }
+            if (AutoRunTransactionNotification != null) {
+                writer.WritePropertyName("autoRunTransactionNotification");
+                AutoRunTransactionNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -248,6 +259,14 @@ namespace Gs2.Gs2Distributor.Model
             else
             {
                 diff += AutoRunStampSheetNotification.CompareTo(other.AutoRunStampSheetNotification);
+            }
+            if (AutoRunTransactionNotification == null && AutoRunTransactionNotification == other.AutoRunTransactionNotification)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AutoRunTransactionNotification.CompareTo(other.AutoRunTransactionNotification);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
@@ -318,6 +337,8 @@ namespace Gs2.Gs2Distributor.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "distributor.namespace.createdAt.error.invalid"),
@@ -362,6 +383,7 @@ namespace Gs2.Gs2Distributor.Model
                 Description = Description,
                 AssumeUserId = AssumeUserId,
                 AutoRunStampSheetNotification = AutoRunStampSheetNotification.Clone() as Gs2.Gs2Distributor.Model.NotificationSetting,
+                AutoRunTransactionNotification = AutoRunTransactionNotification.Clone() as Gs2.Gs2Distributor.Model.NotificationSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Distributor.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

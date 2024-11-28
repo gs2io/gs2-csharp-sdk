@@ -64,10 +64,10 @@ namespace Gs2.Gs2SeasonRating.Request
             }
             return new VoteMultipleRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithSignedBallots(!data.Keys.Contains("signedBallots") || data["signedBallots"] == null || !data["signedBallots"].IsArray ? new Gs2.Gs2SeasonRating.Model.SignedBallot[]{} : data["signedBallots"].Cast<JsonData>().Select(v => {
+                .WithSignedBallots(!data.Keys.Contains("signedBallots") || data["signedBallots"] == null || !data["signedBallots"].IsArray ? null : data["signedBallots"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.SignedBallot.FromJson(v);
                 }).ToArray())
-                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? new Gs2.Gs2SeasonRating.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? null : data["gameResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.GameResult.FromJson(v);
                 }).ToArray())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());

@@ -208,6 +208,11 @@ namespace Gs2.Gs2Distributor
                     jsonWriter.WritePropertyName("autoRunStampSheetNotification");
                     request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
                 }
+                if (request.AutoRunTransactionNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunTransactionNotification");
+                    request.AutoRunTransactionNotification.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -552,6 +557,11 @@ namespace Gs2.Gs2Distributor
                 {
                     jsonWriter.WritePropertyName("autoRunStampSheetNotification");
                     request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
+                }
+                if (request.AutoRunTransactionNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunTransactionNotification");
+                    request.AutoRunTransactionNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -4851,6 +4861,357 @@ namespace Gs2.Gs2Distributor
         )
 		{
 			var task = new GetStampSheetResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RunTransactionTask : Gs2RestSessionTask<RunTransactionRequest, RunTransactionResult>
+        {
+            public RunTransactionTask(IGs2Session session, RestSessionRequestFactory factory, RunTransactionRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RunTransactionRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/system/{ownerId}/{namespaceName}/user/{userId}/transaction/run";
+
+                url = url.Replace("{ownerId}", !string.IsNullOrEmpty(request.OwnerId) ? request.OwnerId.ToString() : "null");
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Transaction != null)
+                {
+                    jsonWriter.WritePropertyName("transaction");
+                    jsonWriter.Write(request.Transaction);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RunTransaction(
+                Request.RunTransactionRequest request,
+                UnityAction<AsyncResult<Result.RunTransactionResult>> callback
+        )
+		{
+			var task = new RunTransactionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RunTransactionResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RunTransactionResult> RunTransactionFuture(
+                Request.RunTransactionRequest request
+        )
+		{
+			return new RunTransactionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RunTransactionResult> RunTransactionAsync(
+                Request.RunTransactionRequest request
+        )
+		{
+            AsyncResult<Result.RunTransactionResult> result = null;
+			await RunTransaction(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RunTransactionTask RunTransactionAsync(
+                Request.RunTransactionRequest request
+        )
+		{
+			return new RunTransactionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RunTransactionResult> RunTransactionAsync(
+                Request.RunTransactionRequest request
+        )
+		{
+			var task = new RunTransactionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetTransactionResultTask : Gs2RestSessionTask<GetTransactionResultRequest, GetTransactionResultResult>
+        {
+            public GetTransactionResultTask(IGs2Session session, RestSessionRequestFactory factory, GetTransactionResultRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetTransactionResultRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/transaction/{transactionId}/result";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetTransactionResult(
+                Request.GetTransactionResultRequest request,
+                UnityAction<AsyncResult<Result.GetTransactionResultResult>> callback
+        )
+		{
+			var task = new GetTransactionResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetTransactionResultResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetTransactionResultResult> GetTransactionResultFuture(
+                Request.GetTransactionResultRequest request
+        )
+		{
+			return new GetTransactionResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTransactionResultResult> GetTransactionResultAsync(
+                Request.GetTransactionResultRequest request
+        )
+		{
+            AsyncResult<Result.GetTransactionResultResult> result = null;
+			await GetTransactionResult(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTransactionResultTask GetTransactionResultAsync(
+                Request.GetTransactionResultRequest request
+        )
+		{
+			return new GetTransactionResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetTransactionResultResult> GetTransactionResultAsync(
+                Request.GetTransactionResultRequest request
+        )
+		{
+			var task = new GetTransactionResultTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetTransactionResultByUserIdTask : Gs2RestSessionTask<GetTransactionResultByUserIdRequest, GetTransactionResultByUserIdResult>
+        {
+            public GetTransactionResultByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetTransactionResultByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetTransactionResultByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/transaction/{transactionId}/result";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetTransactionResultByUserId(
+                Request.GetTransactionResultByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetTransactionResultByUserIdResult>> callback
+        )
+		{
+			var task = new GetTransactionResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetTransactionResultByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetTransactionResultByUserIdResult> GetTransactionResultByUserIdFuture(
+                Request.GetTransactionResultByUserIdRequest request
+        )
+		{
+			return new GetTransactionResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTransactionResultByUserIdResult> GetTransactionResultByUserIdAsync(
+                Request.GetTransactionResultByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetTransactionResultByUserIdResult> result = null;
+			await GetTransactionResultByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTransactionResultByUserIdTask GetTransactionResultByUserIdAsync(
+                Request.GetTransactionResultByUserIdRequest request
+        )
+		{
+			return new GetTransactionResultByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetTransactionResultByUserIdResult> GetTransactionResultByUserIdAsync(
+                Request.GetTransactionResultByUserIdRequest request
+        )
+		{
+			var task = new GetTransactionResultByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

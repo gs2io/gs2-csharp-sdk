@@ -197,10 +197,10 @@ namespace Gs2.Gs2Mission.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithVerifyCompleteType(!data.Keys.Contains("verifyCompleteType") || data["verifyCompleteType"] == null ? null : data["verifyCompleteType"].ToString())
                 .WithTargetCounter(!data.Keys.Contains("targetCounter") || data["targetCounter"] == null ? null : Gs2.Gs2Mission.Model.TargetCounterModel.FromJson(data["targetCounter"]))
-                .WithVerifyCompleteConsumeActions(!data.Keys.Contains("verifyCompleteConsumeActions") || data["verifyCompleteConsumeActions"] == null || !data["verifyCompleteConsumeActions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyCompleteConsumeActions"].Cast<JsonData>().Select(v => {
+                .WithVerifyCompleteConsumeActions(!data.Keys.Contains("verifyCompleteConsumeActions") || data["verifyCompleteConsumeActions"] == null || !data["verifyCompleteConsumeActions"].IsArray ? null : data["verifyCompleteConsumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.VerifyAction.FromJson(v);
                 }).ToArray())
-                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null || !data["completeAcquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
+                .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null || !data["completeAcquireActions"].IsArray ? null : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())

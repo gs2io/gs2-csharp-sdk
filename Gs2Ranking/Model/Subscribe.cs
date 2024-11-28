@@ -164,10 +164,10 @@ namespace Gs2.Gs2Ranking.Model
                 .WithSubscribeId(!data.Keys.Contains("subscribeId") || data["subscribeId"] == null ? null : data["subscribeId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTargetUserIds(!data.Keys.Contains("targetUserIds") || data["targetUserIds"] == null || !data["targetUserIds"].IsArray ? new string[]{} : data["targetUserIds"].Cast<JsonData>().Select(v => {
+                .WithTargetUserIds(!data.Keys.Contains("targetUserIds") || data["targetUserIds"] == null || !data["targetUserIds"].IsArray ? null : data["targetUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithSubscribedUserIds(!data.Keys.Contains("subscribedUserIds") || data["subscribedUserIds"] == null || !data["subscribedUserIds"].IsArray ? new string[]{} : data["subscribedUserIds"].Cast<JsonData>().Select(v => {
+                .WithSubscribedUserIds(!data.Keys.Contains("subscribedUserIds") || data["subscribedUserIds"] == null || !data["subscribedUserIds"].IsArray ? null : data["subscribedUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

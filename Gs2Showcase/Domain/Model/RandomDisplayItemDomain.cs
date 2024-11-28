@@ -67,8 +67,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public string UserId { get; } = null!;
         public string ShowcaseName { get; } = null!;
         public string DisplayItemName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public RandomDisplayItemDomain(
             Gs2.Core.Domain.Gs2 gs2,

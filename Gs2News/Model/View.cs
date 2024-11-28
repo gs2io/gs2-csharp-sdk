@@ -51,10 +51,10 @@ namespace Gs2.Gs2News.Model
                 return null;
             }
             return new View()
-                .WithContents(!data.Keys.Contains("contents") || data["contents"] == null || !data["contents"].IsArray ? new Gs2.Gs2News.Model.Content[]{} : data["contents"].Cast<JsonData>().Select(v => {
+                .WithContents(!data.Keys.Contains("contents") || data["contents"] == null || !data["contents"].IsArray ? null : data["contents"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2News.Model.Content.FromJson(v);
                 }).ToArray())
-                .WithRemoveContents(!data.Keys.Contains("removeContents") || data["removeContents"] == null || !data["removeContents"].IsArray ? new Gs2.Gs2News.Model.Content[]{} : data["removeContents"].Cast<JsonData>().Select(v => {
+                .WithRemoveContents(!data.Keys.Contains("removeContents") || data["removeContents"] == null || !data["removeContents"].IsArray ? null : data["removeContents"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2News.Model.Content.FromJson(v);
                 }).ToArray());
         }

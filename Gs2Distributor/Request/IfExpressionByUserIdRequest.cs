@@ -87,10 +87,10 @@ namespace Gs2.Gs2Distributor.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCondition(!data.Keys.Contains("condition") || data["condition"] == null ? null : Gs2.Core.Model.VerifyAction.FromJson(data["condition"]))
-                .WithTrueActions(!data.Keys.Contains("trueActions") || data["trueActions"] == null || !data["trueActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["trueActions"].Cast<JsonData>().Select(v => {
+                .WithTrueActions(!data.Keys.Contains("trueActions") || data["trueActions"] == null || !data["trueActions"].IsArray ? null : data["trueActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
-                .WithFalseActions(!data.Keys.Contains("falseActions") || data["falseActions"] == null || !data["falseActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["falseActions"].Cast<JsonData>().Select(v => {
+                .WithFalseActions(!data.Keys.Contains("falseActions") || data["falseActions"] == null || !data["falseActions"].IsArray ? null : data["falseActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
                 .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()))

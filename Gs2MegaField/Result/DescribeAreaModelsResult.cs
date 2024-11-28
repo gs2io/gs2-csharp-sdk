@@ -49,7 +49,7 @@ namespace Gs2.Gs2MegaField.Result
                 return null;
             }
             return new DescribeAreaModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2MegaField.Model.AreaModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2MegaField.Model.AreaModel.FromJson(v);
                 }).ToArray());
         }

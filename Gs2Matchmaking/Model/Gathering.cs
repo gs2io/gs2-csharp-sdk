@@ -161,13 +161,13 @@ namespace Gs2.Gs2Matchmaking.Model
             return new Gathering()
                 .WithGatheringId(!data.Keys.Contains("gatheringId") || data["gatheringId"] == null ? null : data["gatheringId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithAttributeRanges(!data.Keys.Contains("attributeRanges") || data["attributeRanges"] == null || !data["attributeRanges"].IsArray ? new Gs2.Gs2Matchmaking.Model.AttributeRange[]{} : data["attributeRanges"].Cast<JsonData>().Select(v => {
+                .WithAttributeRanges(!data.Keys.Contains("attributeRanges") || data["attributeRanges"] == null || !data["attributeRanges"].IsArray ? null : data["attributeRanges"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.AttributeRange.FromJson(v);
                 }).ToArray())
-                .WithCapacityOfRoles(!data.Keys.Contains("capacityOfRoles") || data["capacityOfRoles"] == null || !data["capacityOfRoles"].IsArray ? new Gs2.Gs2Matchmaking.Model.CapacityOfRole[]{} : data["capacityOfRoles"].Cast<JsonData>().Select(v => {
+                .WithCapacityOfRoles(!data.Keys.Contains("capacityOfRoles") || data["capacityOfRoles"] == null || !data["capacityOfRoles"].IsArray ? null : data["capacityOfRoles"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.CapacityOfRole.FromJson(v);
                 }).ToArray())
-                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? null : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())

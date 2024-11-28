@@ -74,10 +74,10 @@ namespace Gs2.Gs2Ranking.Model
                 .WithUniqueByUserId(!data.Keys.Contains("uniqueByUserId") || data["uniqueByUserId"] == null ? null : (bool?)bool.Parse(data["uniqueByUserId"].ToString()))
                 .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)(data["calculateIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["calculateIntervalMinutes"].ToString()) : int.Parse(data["calculateIntervalMinutes"].ToString())))
                 .WithCalculateFixedTiming(!data.Keys.Contains("calculateFixedTiming") || data["calculateFixedTiming"] == null ? null : Gs2.Gs2Ranking.Model.FixedTiming.FromJson(data["calculateFixedTiming"]))
-                .WithAdditionalScopes(!data.Keys.Contains("additionalScopes") || data["additionalScopes"] == null || !data["additionalScopes"].IsArray ? new Gs2.Gs2Ranking.Model.Scope[]{} : data["additionalScopes"].Cast<JsonData>().Select(v => {
+                .WithAdditionalScopes(!data.Keys.Contains("additionalScopes") || data["additionalScopes"] == null || !data["additionalScopes"].IsArray ? null : data["additionalScopes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking.Model.Scope.FromJson(v);
                 }).ToArray())
-                .WithIgnoreUserIds(!data.Keys.Contains("ignoreUserIds") || data["ignoreUserIds"] == null || !data["ignoreUserIds"].IsArray ? new string[]{} : data["ignoreUserIds"].Cast<JsonData>().Select(v => {
+                .WithIgnoreUserIds(!data.Keys.Contains("ignoreUserIds") || data["ignoreUserIds"] == null || !data["ignoreUserIds"].IsArray ? null : data["ignoreUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString());

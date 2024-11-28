@@ -145,7 +145,7 @@ namespace Gs2.Gs2Project.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithPlan(!data.Keys.Contains("plan") || data["plan"] == null ? null : data["plan"].ToString())
-                .WithRegions(!data.Keys.Contains("regions") || data["regions"] == null || !data["regions"].IsArray ? new Gs2.Gs2Project.Model.Gs2Region[]{} : data["regions"].Cast<JsonData>().Select(v => {
+                .WithRegions(!data.Keys.Contains("regions") || data["regions"] == null || !data["regions"].IsArray ? null : data["regions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Project.Model.Gs2Region.FromJson(v);
                 }).ToArray())
                 .WithBillingMethodName(!data.Keys.Contains("billingMethodName") || data["billingMethodName"] == null ? null : data["billingMethodName"].ToString())

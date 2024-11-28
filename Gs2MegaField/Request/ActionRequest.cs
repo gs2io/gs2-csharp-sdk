@@ -84,7 +84,7 @@ namespace Gs2.Gs2MegaField.Request
                 .WithAreaModelName(!data.Keys.Contains("areaModelName") || data["areaModelName"] == null ? null : data["areaModelName"].ToString())
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
                 .WithPosition(!data.Keys.Contains("position") || data["position"] == null ? null : Gs2.Gs2MegaField.Model.MyPosition.FromJson(data["position"]))
-                .WithScopes(!data.Keys.Contains("scopes") || data["scopes"] == null || !data["scopes"].IsArray ? new Gs2.Gs2MegaField.Model.Scope[]{} : data["scopes"].Cast<JsonData>().Select(v => {
+                .WithScopes(!data.Keys.Contains("scopes") || data["scopes"] == null || !data["scopes"].IsArray ? null : data["scopes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2MegaField.Model.Scope.FromJson(v);
                 }).ToArray());
         }

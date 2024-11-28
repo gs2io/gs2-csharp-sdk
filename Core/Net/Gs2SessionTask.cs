@@ -77,7 +77,7 @@ namespace Gs2.Core.Net
 
             if (response.IsSuccess)
             {
-                var transactionResult = TransactionResult.FromJson(response.Body);
+                var transactionResult = Gs2.Core.Result.TransactionResult.FromJson(response.Body);
                 if (transactionResult != null) {
                     if (transactionResult.TransactionId != null && 
                         (transactionResult.AutoRunStampSheet ?? false)) {
@@ -132,7 +132,7 @@ namespace Gs2.Core.Net
             Telemetry.EndRequest(request.TaskId, Request, response);
 
             if (response.IsSuccess) {
-                var transactionResult = TransactionResult.FromJson(response.Body);
+                var transactionResult = Gs2.Core.Result.TransactionResult.FromJson(response.Body);
                 if (transactionResult != null) {
                     if (transactionResult.TransactionId != null && 
                         (transactionResult.AutoRunStampSheet ?? false)) {

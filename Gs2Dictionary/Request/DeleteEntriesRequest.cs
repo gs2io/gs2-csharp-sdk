@@ -66,7 +66,7 @@ namespace Gs2.Gs2Dictionary.Request
             return new DeleteEntriesRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithEntryModelNames(!data.Keys.Contains("entryModelNames") || data["entryModelNames"] == null || !data["entryModelNames"].IsArray ? new string[]{} : data["entryModelNames"].Cast<JsonData>().Select(v => {
+                .WithEntryModelNames(!data.Keys.Contains("entryModelNames") || data["entryModelNames"] == null || !data["entryModelNames"].IsArray ? null : data["entryModelNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

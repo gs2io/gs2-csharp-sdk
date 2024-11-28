@@ -72,7 +72,7 @@ namespace Gs2.Gs2Lottery.Request
                 .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithPrizes(!data.Keys.Contains("prizes") || data["prizes"] == null || !data["prizes"].IsArray ? new Gs2.Gs2Lottery.Model.Prize[]{} : data["prizes"].Cast<JsonData>().Select(v => {
+                .WithPrizes(!data.Keys.Contains("prizes") || data["prizes"] == null || !data["prizes"].IsArray ? null : data["prizes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.Prize.FromJson(v);
                 }).ToArray());
         }

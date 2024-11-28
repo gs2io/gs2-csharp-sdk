@@ -185,7 +185,7 @@ namespace Gs2.Gs2Datastore.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
-                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? null : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())

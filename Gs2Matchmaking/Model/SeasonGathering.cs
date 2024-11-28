@@ -205,7 +205,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithSeason(!data.Keys.Contains("season") || data["season"] == null ? null : (long?)(data["season"].ToString().Contains(".") ? (long)double.Parse(data["season"].ToString()) : long.Parse(data["season"].ToString())))
                 .WithTier(!data.Keys.Contains("tier") || data["tier"] == null ? null : (long?)(data["tier"].ToString().Contains(".") ? (long)double.Parse(data["tier"].ToString()) : long.Parse(data["tier"].ToString())))
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithParticipants(!data.Keys.Contains("participants") || data["participants"] == null || !data["participants"].IsArray ? new string[]{} : data["participants"].Cast<JsonData>().Select(v => {
+                .WithParticipants(!data.Keys.Contains("participants") || data["participants"] == null || !data["participants"].IsArray ? null : data["participants"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

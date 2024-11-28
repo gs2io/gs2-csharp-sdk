@@ -46,7 +46,7 @@ namespace Gs2.Gs2AdReward.Model
                 return null;
             }
             return new AdMob()
-                .WithAllowAdUnitIds(!data.Keys.Contains("allowAdUnitIds") || data["allowAdUnitIds"] == null || !data["allowAdUnitIds"].IsArray ? new string[]{} : data["allowAdUnitIds"].Cast<JsonData>().Select(v => {
+                .WithAllowAdUnitIds(!data.Keys.Contains("allowAdUnitIds") || data["allowAdUnitIds"] == null || !data["allowAdUnitIds"].IsArray ? null : data["allowAdUnitIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

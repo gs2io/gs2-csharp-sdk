@@ -66,8 +66,6 @@ namespace Gs2.Gs2Grade.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public string ExperienceNamespaceName { get; set; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public UserDomain(

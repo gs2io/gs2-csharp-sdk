@@ -65,8 +65,6 @@ namespace Gs2.Gs2Idle.Domain.Model
         private readonly Gs2IdleRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public UserDomain(

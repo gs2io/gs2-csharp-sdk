@@ -128,22 +128,22 @@ namespace Gs2.Gs2Guild.Request
                 .WithGuildModelName(!data.Keys.Contains("guildModelName") || data["guildModelName"] == null ? null : data["guildModelName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithDisplayName(!data.Keys.Contains("displayName") || data["displayName"] == null ? null : data["displayName"].ToString())
-                .WithAttributes1(!data.Keys.Contains("attributes1") || data["attributes1"] == null || !data["attributes1"].IsArray ? new int[]{} : data["attributes1"].Cast<JsonData>().Select(v => {
+                .WithAttributes1(!data.Keys.Contains("attributes1") || data["attributes1"] == null || !data["attributes1"].IsArray ? null : data["attributes1"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithAttributes2(!data.Keys.Contains("attributes2") || data["attributes2"] == null || !data["attributes2"].IsArray ? new int[]{} : data["attributes2"].Cast<JsonData>().Select(v => {
+                .WithAttributes2(!data.Keys.Contains("attributes2") || data["attributes2"] == null || !data["attributes2"].IsArray ? null : data["attributes2"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithAttributes3(!data.Keys.Contains("attributes3") || data["attributes3"] == null || !data["attributes3"].IsArray ? new int[]{} : data["attributes3"].Cast<JsonData>().Select(v => {
+                .WithAttributes3(!data.Keys.Contains("attributes3") || data["attributes3"] == null || !data["attributes3"].IsArray ? null : data["attributes3"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithAttributes4(!data.Keys.Contains("attributes4") || data["attributes4"] == null || !data["attributes4"].IsArray ? new int[]{} : data["attributes4"].Cast<JsonData>().Select(v => {
+                .WithAttributes4(!data.Keys.Contains("attributes4") || data["attributes4"] == null || !data["attributes4"].IsArray ? null : data["attributes4"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithAttributes5(!data.Keys.Contains("attributes5") || data["attributes5"] == null || !data["attributes5"].IsArray ? new int[]{} : data["attributes5"].Cast<JsonData>().Select(v => {
+                .WithAttributes5(!data.Keys.Contains("attributes5") || data["attributes5"] == null || !data["attributes5"].IsArray ? null : data["attributes5"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithJoinPolicies(!data.Keys.Contains("joinPolicies") || data["joinPolicies"] == null || !data["joinPolicies"].IsArray ? new string[]{} : data["joinPolicies"].Cast<JsonData>().Select(v => {
+                .WithJoinPolicies(!data.Keys.Contains("joinPolicies") || data["joinPolicies"] == null || !data["joinPolicies"].IsArray ? null : data["joinPolicies"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithIncludeFullMembersGuild(!data.Keys.Contains("includeFullMembersGuild") || data["includeFullMembersGuild"] == null ? null : (bool?)bool.Parse(data["includeFullMembersGuild"].ToString()))

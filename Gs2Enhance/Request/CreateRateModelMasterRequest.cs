@@ -100,11 +100,11 @@ namespace Gs2.Gs2Enhance.Request
                 .WithTargetInventoryModelId(!data.Keys.Contains("targetInventoryModelId") || data["targetInventoryModelId"] == null ? null : data["targetInventoryModelId"].ToString())
                 .WithAcquireExperienceSuffix(!data.Keys.Contains("acquireExperienceSuffix") || data["acquireExperienceSuffix"] == null ? null : data["acquireExperienceSuffix"].ToString())
                 .WithMaterialInventoryModelId(!data.Keys.Contains("materialInventoryModelId") || data["materialInventoryModelId"] == null ? null : data["materialInventoryModelId"].ToString())
-                .WithAcquireExperienceHierarchy(!data.Keys.Contains("acquireExperienceHierarchy") || data["acquireExperienceHierarchy"] == null || !data["acquireExperienceHierarchy"].IsArray ? new string[]{} : data["acquireExperienceHierarchy"].Cast<JsonData>().Select(v => {
+                .WithAcquireExperienceHierarchy(!data.Keys.Contains("acquireExperienceHierarchy") || data["acquireExperienceHierarchy"] == null || !data["acquireExperienceHierarchy"].IsArray ? null : data["acquireExperienceHierarchy"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
-                .WithBonusRates(!data.Keys.Contains("bonusRates") || data["bonusRates"] == null || !data["bonusRates"].IsArray ? new Gs2.Gs2Enhance.Model.BonusRate[]{} : data["bonusRates"].Cast<JsonData>().Select(v => {
+                .WithBonusRates(!data.Keys.Contains("bonusRates") || data["bonusRates"] == null || !data["bonusRates"].IsArray ? null : data["bonusRates"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.BonusRate.FromJson(v);
                 }).ToArray());
         }

@@ -174,7 +174,7 @@ namespace Gs2.Gs2Showcase.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithMaximumNumberOfChoice(!data.Keys.Contains("maximumNumberOfChoice") || data["maximumNumberOfChoice"] == null ? null : (int?)(data["maximumNumberOfChoice"].ToString().Contains(".") ? (int)double.Parse(data["maximumNumberOfChoice"].ToString()) : int.Parse(data["maximumNumberOfChoice"].ToString())))
-                .WithDisplayItems(!data.Keys.Contains("displayItems") || data["displayItems"] == null || !data["displayItems"].IsArray ? new Gs2.Gs2Showcase.Model.RandomDisplayItemModel[]{} : data["displayItems"].Cast<JsonData>().Select(v => {
+                .WithDisplayItems(!data.Keys.Contains("displayItems") || data["displayItems"] == null || !data["displayItems"].IsArray ? null : data["displayItems"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.RandomDisplayItemModel.FromJson(v);
                 }).ToArray())
                 .WithBaseTimestamp(!data.Keys.Contains("baseTimestamp") || data["baseTimestamp"] == null ? null : (long?)(data["baseTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["baseTimestamp"].ToString()) : long.Parse(data["baseTimestamp"].ToString())))

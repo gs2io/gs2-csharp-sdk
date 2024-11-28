@@ -171,7 +171,7 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithResult(!data.Keys.Contains("result") || data["result"] == null || !data["result"].IsArray ? new Gs2.Gs2JobQueue.Model.JobResultBody[]{} : data["result"].Cast<JsonData>().Select(v => {
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null || !data["result"].IsArray ? null : data["result"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2JobQueue.Model.JobResultBody.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

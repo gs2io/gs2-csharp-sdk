@@ -78,7 +78,7 @@ namespace Gs2.Gs2Lottery.Model
             return new Prize()
                 .WithPrizeId(!data.Keys.Contains("prizeId") || data["prizeId"] == null ? null : data["prizeId"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithDrawnLimit(!data.Keys.Contains("drawnLimit") || data["drawnLimit"] == null ? null : (int?)(data["drawnLimit"].ToString().Contains(".") ? (int)double.Parse(data["drawnLimit"].ToString()) : int.Parse(data["drawnLimit"].ToString())))

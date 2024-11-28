@@ -49,7 +49,7 @@ namespace Gs2.Gs2Ranking2.Result
                 return null;
             }
             return new DescribeSubscribeRankingModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Ranking2.Model.SubscribeRankingModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking2.Model.SubscribeRankingModel.FromJson(v);
                 }).ToArray());
         }

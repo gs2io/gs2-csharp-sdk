@@ -164,7 +164,7 @@ namespace Gs2.Gs2Quest.Model
                 .WithCompletedQuestListId(!data.Keys.Contains("completedQuestListId") || data["completedQuestListId"] == null ? null : data["completedQuestListId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithQuestGroupName(!data.Keys.Contains("questGroupName") || data["questGroupName"] == null ? null : data["questGroupName"].ToString())
-                .WithCompleteQuestNames(!data.Keys.Contains("completeQuestNames") || data["completeQuestNames"] == null || !data["completeQuestNames"].IsArray ? new string[]{} : data["completeQuestNames"].Cast<JsonData>().Select(v => {
+                .WithCompleteQuestNames(!data.Keys.Contains("completeQuestNames") || data["completeQuestNames"] == null || !data["completeQuestNames"].IsArray ? null : data["completeQuestNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

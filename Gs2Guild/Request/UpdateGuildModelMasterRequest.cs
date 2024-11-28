@@ -115,7 +115,7 @@ namespace Gs2.Gs2Guild.Request
                 .WithDefaultMaximumMemberCount(!data.Keys.Contains("defaultMaximumMemberCount") || data["defaultMaximumMemberCount"] == null ? null : (int?)(data["defaultMaximumMemberCount"].ToString().Contains(".") ? (int)double.Parse(data["defaultMaximumMemberCount"].ToString()) : int.Parse(data["defaultMaximumMemberCount"].ToString())))
                 .WithMaximumMemberCount(!data.Keys.Contains("maximumMemberCount") || data["maximumMemberCount"] == null ? null : (int?)(data["maximumMemberCount"].ToString().Contains(".") ? (int)double.Parse(data["maximumMemberCount"].ToString()) : int.Parse(data["maximumMemberCount"].ToString())))
                 .WithInactivityPeriodDays(!data.Keys.Contains("inactivityPeriodDays") || data["inactivityPeriodDays"] == null ? null : (int?)(data["inactivityPeriodDays"].ToString().Contains(".") ? (int)double.Parse(data["inactivityPeriodDays"].ToString()) : int.Parse(data["inactivityPeriodDays"].ToString())))
-                .WithRoles(!data.Keys.Contains("roles") || data["roles"] == null || !data["roles"].IsArray ? new Gs2.Gs2Guild.Model.RoleModel[]{} : data["roles"].Cast<JsonData>().Select(v => {
+                .WithRoles(!data.Keys.Contains("roles") || data["roles"] == null || !data["roles"].IsArray ? null : data["roles"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.RoleModel.FromJson(v);
                 }).ToArray())
                 .WithGuildMasterRole(!data.Keys.Contains("guildMasterRole") || data["guildMasterRole"] == null ? null : data["guildMasterRole"].ToString())

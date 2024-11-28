@@ -169,7 +169,7 @@ namespace Gs2.Gs2LoginReward.Model
                 .WithReceiveStatusId(!data.Keys.Contains("receiveStatusId") || data["receiveStatusId"] == null ? null : data["receiveStatusId"].ToString())
                 .WithBonusModelName(!data.Keys.Contains("bonusModelName") || data["bonusModelName"] == null ? null : data["bonusModelName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithReceivedSteps(!data.Keys.Contains("receivedSteps") || data["receivedSteps"] == null || !data["receivedSteps"].IsArray ? new bool[]{} : data["receivedSteps"].Cast<JsonData>().Select(v => {
+                .WithReceivedSteps(!data.Keys.Contains("receivedSteps") || data["receivedSteps"] == null || !data["receivedSteps"].IsArray ? null : data["receivedSteps"].Cast<JsonData>().Select(v => {
                     return bool.Parse(v.ToString());
                 }).ToArray())
                 .WithLastReceivedAt(!data.Keys.Contains("lastReceivedAt") || data["lastReceivedAt"] == null ? null : (long?)(data["lastReceivedAt"].ToString().Contains(".") ? (long)double.Parse(data["lastReceivedAt"].ToString()) : long.Parse(data["lastReceivedAt"].ToString())))

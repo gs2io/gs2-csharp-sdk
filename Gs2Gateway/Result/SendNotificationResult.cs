@@ -56,7 +56,7 @@ namespace Gs2.Gs2Gateway.Result
             }
             return new SendNotificationResult()
                 .WithProtocol(!data.Keys.Contains("protocol") || data["protocol"] == null ? null : data["protocol"].ToString())
-                .WithSendConnectionIds(!data.Keys.Contains("sendConnectionIds") || data["sendConnectionIds"] == null || !data["sendConnectionIds"].IsArray ? new string[]{} : data["sendConnectionIds"].Cast<JsonData>().Select(v => {
+                .WithSendConnectionIds(!data.Keys.Contains("sendConnectionIds") || data["sendConnectionIds"] == null || !data["sendConnectionIds"].IsArray ? null : data["sendConnectionIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

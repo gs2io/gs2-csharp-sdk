@@ -52,7 +52,7 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return new RandomStatus()
                 .WithSeed(!data.Keys.Contains("seed") || data["seed"] == null ? null : (long?)(data["seed"].ToString().Contains(".") ? (long)double.Parse(data["seed"].ToString()) : long.Parse(data["seed"].ToString())))
-                .WithUsed(!data.Keys.Contains("used") || data["used"] == null || !data["used"].IsArray ? new Gs2.Gs2StateMachine.Model.RandomUsed[]{} : data["used"].Cast<JsonData>().Select(v => {
+                .WithUsed(!data.Keys.Contains("used") || data["used"] == null || !data["used"].IsArray ? null : data["used"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.RandomUsed.FromJson(v);
                 }).ToArray());
         }

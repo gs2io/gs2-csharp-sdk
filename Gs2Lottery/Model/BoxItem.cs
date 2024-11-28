@@ -62,7 +62,7 @@ namespace Gs2.Gs2Lottery.Model
             }
             return new BoxItem()
                 .WithPrizeId(!data.Keys.Contains("prizeId") || data["prizeId"] == null ? null : data["prizeId"].ToString())
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithRemaining(!data.Keys.Contains("remaining") || data["remaining"] == null ? null : (int?)(data["remaining"].ToString().Contains(".") ? (int)double.Parse(data["remaining"].ToString()) : int.Parse(data["remaining"].ToString())))

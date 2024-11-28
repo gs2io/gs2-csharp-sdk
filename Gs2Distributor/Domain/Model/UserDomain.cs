@@ -92,9 +92,16 @@ namespace Gs2.Gs2Distributor.Domain.Model
             );
         }
 
-    }
-
-    public partial class UserDomain {
+        public Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain TransactionResult(
+            string transactionId
+        ) {
+            return new Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                transactionId
+            );
+        }
 
     }
 
@@ -161,6 +168,72 @@ namespace Gs2.Gs2Distributor.Domain.Model
             return newGs2;
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> RunTransactionFuture(
+            RunTransactionRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.RunTransactionFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.TransactionId
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> RunTransactionAsync(
+            #else
+        public async Task<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> RunTransactionAsync(
+            #endif
+            RunTransactionRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.RunTransactionAsync(request)
+            );
+            var domain = new Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.UserId,
+                result?.Item?.TransactionId
+            );
+
+            return domain;
+        }
+        #endif
+
+    }
+
+    public partial class UserDomain {
 
     }
 }

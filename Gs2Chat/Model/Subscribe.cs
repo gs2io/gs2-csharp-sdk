@@ -159,7 +159,7 @@ namespace Gs2.Gs2Chat.Model
                 .WithSubscribeId(!data.Keys.Contains("subscribeId") || data["subscribeId"] == null ? null : data["subscribeId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
-                .WithNotificationTypes(!data.Keys.Contains("notificationTypes") || data["notificationTypes"] == null || !data["notificationTypes"].IsArray ? new Gs2.Gs2Chat.Model.NotificationType[]{} : data["notificationTypes"].Cast<JsonData>().Select(v => {
+                .WithNotificationTypes(!data.Keys.Contains("notificationTypes") || data["notificationTypes"] == null || !data["notificationTypes"].IsArray ? null : data["notificationTypes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Chat.Model.NotificationType.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

@@ -91,7 +91,7 @@ namespace Gs2.Gs2AdReward.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithAdmob(!data.Keys.Contains("admob") || data["admob"] == null ? null : Gs2.Gs2AdReward.Model.AdMob.FromJson(data["admob"]))
                 .WithUnityAd(!data.Keys.Contains("unityAd") || data["unityAd"] == null ? null : Gs2.Gs2AdReward.Model.UnityAd.FromJson(data["unityAd"]))
-                .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? new Gs2.Gs2AdReward.Model.AppLovinMax[]{} : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
+                .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? null : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2AdReward.Model.AppLovinMax.FromJson(v);
                 }).ToArray())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())

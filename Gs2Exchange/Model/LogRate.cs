@@ -52,7 +52,7 @@ namespace Gs2.Gs2Exchange.Model
             }
             return new LogRate()
                 .WithBase(!data.Keys.Contains("base") || data["base"] == null ? null : (double?)double.Parse(data["base"].ToString()))
-                .WithLogs(!data.Keys.Contains("logs") || data["logs"] == null || !data["logs"].IsArray ? new double[]{} : data["logs"].Cast<JsonData>().Select(v => {
+                .WithLogs(!data.Keys.Contains("logs") || data["logs"] == null || !data["logs"].IsArray ? null : data["logs"].Cast<JsonData>().Select(v => {
                     return double.Parse(v.ToString());
                 }).ToArray());
         }

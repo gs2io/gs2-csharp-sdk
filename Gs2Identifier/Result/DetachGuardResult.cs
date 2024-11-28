@@ -49,7 +49,7 @@ namespace Gs2.Gs2Identifier.Result
                 return null;
             }
             return new DetachGuardResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new string[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

@@ -67,8 +67,6 @@ namespace Gs2.Gs2Grade.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string ExperienceNamespaceName { get; set; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public UserAccessTokenDomain(

@@ -52,7 +52,7 @@ namespace Gs2.Gs2SeasonRating.Model
             }
             return new WrittenBallot()
                 .WithBallot(!data.Keys.Contains("ballot") || data["ballot"] == null ? null : Gs2.Gs2SeasonRating.Model.Ballot.FromJson(data["ballot"]))
-                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? new Gs2.Gs2SeasonRating.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? null : data["gameResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.GameResult.FromJson(v);
                 }).ToArray());
         }

@@ -77,7 +77,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCounts(!data.Keys.Contains("counts") || data["counts"] == null || !data["counts"].IsArray ? new Gs2.Gs2Inventory.Model.HeldCount[]{} : data["counts"].Cast<JsonData>().Select(v => {
+                .WithCounts(!data.Keys.Contains("counts") || data["counts"] == null || !data["counts"].IsArray ? null : data["counts"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.HeldCount.FromJson(v);
                 }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());

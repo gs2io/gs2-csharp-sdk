@@ -72,7 +72,7 @@ namespace Gs2.Gs2StateMachine.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithStatusName(!data.Keys.Contains("statusName") || data["statusName"] == null ? null : data["statusName"].ToString())
-                .WithEvents(!data.Keys.Contains("events") || data["events"] == null || !data["events"].IsArray ? new Gs2.Gs2StateMachine.Model.Event[]{} : data["events"].Cast<JsonData>().Select(v => {
+                .WithEvents(!data.Keys.Contains("events") || data["events"] == null || !data["events"].IsArray ? null : data["events"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.Event.FromJson(v);
                 }).ToArray());
         }

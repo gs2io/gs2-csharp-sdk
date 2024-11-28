@@ -63,10 +63,10 @@ namespace Gs2.Gs2Grade.Model
             return new AcquireActionRate()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
-                .WithRates(!data.Keys.Contains("rates") || data["rates"] == null || !data["rates"].IsArray ? new double[]{} : data["rates"].Cast<JsonData>().Select(v => {
+                .WithRates(!data.Keys.Contains("rates") || data["rates"] == null || !data["rates"].IsArray ? null : data["rates"].Cast<JsonData>().Select(v => {
                     return double.Parse(v.ToString());
                 }).ToArray())
-                .WithBigRates(!data.Keys.Contains("bigRates") || data["bigRates"] == null || !data["bigRates"].IsArray ? new string[]{} : data["bigRates"].Cast<JsonData>().Select(v => {
+                .WithBigRates(!data.Keys.Contains("bigRates") || data["bigRates"] == null || !data["bigRates"].IsArray ? null : data["bigRates"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

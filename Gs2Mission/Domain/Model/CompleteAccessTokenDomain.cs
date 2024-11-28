@@ -67,8 +67,6 @@ namespace Gs2.Gs2Mission.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string MissionGroupName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public CompleteAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -99,7 +97,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         CompleteByUserIdRequest.FromJson(request.ToJson())
@@ -163,7 +161,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     CompleteByUserIdRequest.FromJson(request.ToJson())
@@ -204,7 +202,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.BatchCompleteByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor.BatchCompleteByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         BatchCompleteByUserIdRequest.FromJson(request.ToJson())
@@ -268,7 +266,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.BatchCompleteByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor.BatchCompleteByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     BatchCompleteByUserIdRequest.FromJson(request.ToJson())

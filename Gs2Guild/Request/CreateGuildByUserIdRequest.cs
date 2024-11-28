@@ -124,7 +124,7 @@ namespace Gs2.Gs2Guild.Request
                 .WithAttribute4(!data.Keys.Contains("attribute4") || data["attribute4"] == null ? null : (int?)(data["attribute4"].ToString().Contains(".") ? (int)double.Parse(data["attribute4"].ToString()) : int.Parse(data["attribute4"].ToString())))
                 .WithAttribute5(!data.Keys.Contains("attribute5") || data["attribute5"] == null ? null : (int?)(data["attribute5"].ToString().Contains(".") ? (int)double.Parse(data["attribute5"].ToString()) : int.Parse(data["attribute5"].ToString())))
                 .WithJoinPolicy(!data.Keys.Contains("joinPolicy") || data["joinPolicy"] == null ? null : data["joinPolicy"].ToString())
-                .WithCustomRoles(!data.Keys.Contains("customRoles") || data["customRoles"] == null || !data["customRoles"].IsArray ? new Gs2.Gs2Guild.Model.RoleModel[]{} : data["customRoles"].Cast<JsonData>().Select(v => {
+                .WithCustomRoles(!data.Keys.Contains("customRoles") || data["customRoles"] == null || !data["customRoles"].IsArray ? null : data["customRoles"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.RoleModel.FromJson(v);
                 }).ToArray())
                 .WithGuildMemberDefaultRole(!data.Keys.Contains("guildMemberDefaultRole") || data["guildMemberDefaultRole"] == null ? null : data["guildMemberDefaultRole"].ToString())

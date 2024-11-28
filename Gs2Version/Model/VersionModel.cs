@@ -33,17 +33,17 @@ namespace Gs2.Gs2Version.Model
 #endif
 	public class VersionModel : IComparable
 	{
-        public string VersionModelId { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Scope { set; get; }
-        public string Type { set; get; }
-        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
-        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
-        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
-        public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
-        public bool? NeedSignature { set; get; }
-        public string SignatureKeyId { set; get; }
+        public string VersionModelId { set; get; } = null!;
+        public string Name { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
+        public string Scope { set; get; } = null!;
+        public string Type { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; } = null!;
+        public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; } = null!;
+        public bool? NeedSignature { set; get; } = null!;
+        public string SignatureKeyId { set; get; } = null!;
         public VersionModel WithVersionModelId(string versionModelId) {
             this.VersionModelId = versionModelId;
             return this;
@@ -174,7 +174,7 @@ namespace Gs2.Gs2Version.Model
                 .WithCurrentVersion(!data.Keys.Contains("currentVersion") || data["currentVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["currentVersion"]))
                 .WithWarningVersion(!data.Keys.Contains("warningVersion") || data["warningVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["warningVersion"]))
                 .WithErrorVersion(!data.Keys.Contains("errorVersion") || data["errorVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["errorVersion"]))
-                .WithScheduleVersions(!data.Keys.Contains("scheduleVersions") || data["scheduleVersions"] == null || !data["scheduleVersions"].IsArray ? new Gs2.Gs2Version.Model.ScheduleVersion[]{} : data["scheduleVersions"].Cast<JsonData>().Select(v => {
+                .WithScheduleVersions(!data.Keys.Contains("scheduleVersions") || data["scheduleVersions"] == null || !data["scheduleVersions"].IsArray ? null : data["scheduleVersions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.ScheduleVersion.FromJson(v);
                 }).ToArray())
                 .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))

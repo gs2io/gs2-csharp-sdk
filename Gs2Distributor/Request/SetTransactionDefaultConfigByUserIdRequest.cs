@@ -65,7 +65,7 @@ namespace Gs2.Gs2Distributor.Request
             }
             return new SetTransactionDefaultConfigByUserIdRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Distributor.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Distributor.Model.Config.FromJson(v);
                 }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());

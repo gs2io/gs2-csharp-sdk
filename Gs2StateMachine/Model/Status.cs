@@ -203,10 +203,10 @@ namespace Gs2.Gs2StateMachine.Model
                 .WithEnableSpeculativeExecution(!data.Keys.Contains("enableSpeculativeExecution") || data["enableSpeculativeExecution"] == null ? null : data["enableSpeculativeExecution"].ToString())
                 .WithStateMachineDefinition(!data.Keys.Contains("stateMachineDefinition") || data["stateMachineDefinition"] == null ? null : data["stateMachineDefinition"].ToString())
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2StateMachine.Model.RandomStatus.FromJson(data["randomStatus"]))
-                .WithStacks(!data.Keys.Contains("stacks") || data["stacks"] == null || !data["stacks"].IsArray ? new Gs2.Gs2StateMachine.Model.StackEntry[]{} : data["stacks"].Cast<JsonData>().Select(v => {
+                .WithStacks(!data.Keys.Contains("stacks") || data["stacks"] == null || !data["stacks"].IsArray ? null : data["stacks"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.StackEntry.FromJson(v);
                 }).ToArray())
-                .WithVariables(!data.Keys.Contains("variables") || data["variables"] == null || !data["variables"].IsArray ? new Gs2.Gs2StateMachine.Model.Variable[]{} : data["variables"].Cast<JsonData>().Select(v => {
+                .WithVariables(!data.Keys.Contains("variables") || data["variables"] == null || !data["variables"].IsArray ? null : data["variables"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.Variable.FromJson(v);
                 }).ToArray())
                 .WithValue(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())

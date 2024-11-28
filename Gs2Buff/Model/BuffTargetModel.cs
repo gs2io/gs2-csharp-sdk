@@ -63,7 +63,7 @@ namespace Gs2.Gs2Buff.Model
             return new BuffTargetModel()
                 .WithTargetModelName(!data.Keys.Contains("targetModelName") || data["targetModelName"] == null ? null : data["targetModelName"].ToString())
                 .WithTargetFieldName(!data.Keys.Contains("targetFieldName") || data["targetFieldName"] == null ? null : data["targetFieldName"].ToString())
-                .WithConditionGrns(!data.Keys.Contains("conditionGrns") || data["conditionGrns"] == null || !data["conditionGrns"].IsArray ? new Gs2.Gs2Buff.Model.BuffTargetGrn[]{} : data["conditionGrns"].Cast<JsonData>().Select(v => {
+                .WithConditionGrns(!data.Keys.Contains("conditionGrns") || data["conditionGrns"] == null || !data["conditionGrns"].IsArray ? null : data["conditionGrns"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Buff.Model.BuffTargetGrn.FromJson(v);
                 }).ToArray())
                 .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()));

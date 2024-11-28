@@ -69,8 +69,6 @@ namespace Gs2.Gs2Grade.Domain.Model
         public string GradeName { get; } = null!;
         public string PropertyId { get; } = null!;
         public string ExperienceNamespaceName { get; set; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public StatusAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

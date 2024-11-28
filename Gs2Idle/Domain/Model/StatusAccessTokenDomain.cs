@@ -67,8 +67,6 @@ namespace Gs2.Gs2Idle.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string CategoryName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public StatusAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -199,7 +197,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     .WithCategoryName(this.CategoryName);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         ReceiveByUserIdRequest.FromJson(request.ToJson())
@@ -263,7 +261,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 .WithCategoryName(this.CategoryName);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     ReceiveByUserIdRequest.FromJson(request.ToJson())

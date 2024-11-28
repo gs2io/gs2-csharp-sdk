@@ -153,7 +153,7 @@ namespace Gs2.Gs2Showcase.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithSalesItemNames(!data.Keys.Contains("salesItemNames") || data["salesItemNames"] == null || !data["salesItemNames"].IsArray ? new string[]{} : data["salesItemNames"].Cast<JsonData>().Select(v => {
+                .WithSalesItemNames(!data.Keys.Contains("salesItemNames") || data["salesItemNames"] == null || !data["salesItemNames"].IsArray ? null : data["salesItemNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

@@ -164,7 +164,7 @@ namespace Gs2.Gs2Guild.Model
                 .WithSendBoxId(!data.Keys.Contains("sendBoxId") || data["sendBoxId"] == null ? null : data["sendBoxId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithGuildModelName(!data.Keys.Contains("guildModelName") || data["guildModelName"] == null ? null : data["guildModelName"].ToString())
-                .WithTargetGuildNames(!data.Keys.Contains("targetGuildNames") || data["targetGuildNames"] == null || !data["targetGuildNames"].IsArray ? new string[]{} : data["targetGuildNames"].Cast<JsonData>().Select(v => {
+                .WithTargetGuildNames(!data.Keys.Contains("targetGuildNames") || data["targetGuildNames"] == null || !data["targetGuildNames"].IsArray ? null : data["targetGuildNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

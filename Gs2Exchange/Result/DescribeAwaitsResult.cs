@@ -55,7 +55,7 @@ namespace Gs2.Gs2Exchange.Result
                 return null;
             }
             return new DescribeAwaitsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Exchange.Model.Await[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.Await.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());

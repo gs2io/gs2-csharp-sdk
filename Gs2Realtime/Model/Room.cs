@@ -159,7 +159,7 @@ namespace Gs2.Gs2Realtime.Model
                 .WithIpAddress(!data.Keys.Contains("ipAddress") || data["ipAddress"] == null ? null : data["ipAddress"].ToString())
                 .WithPort(!data.Keys.Contains("port") || data["port"] == null ? null : (int?)(data["port"].ToString().Contains(".") ? (int)double.Parse(data["port"].ToString()) : int.Parse(data["port"].ToString())))
                 .WithEncryptionKey(!data.Keys.Contains("encryptionKey") || data["encryptionKey"] == null ? null : data["encryptionKey"].ToString())
-                .WithNotificationUserIds(!data.Keys.Contains("notificationUserIds") || data["notificationUserIds"] == null || !data["notificationUserIds"].IsArray ? new string[]{} : data["notificationUserIds"].Cast<JsonData>().Select(v => {
+                .WithNotificationUserIds(!data.Keys.Contains("notificationUserIds") || data["notificationUserIds"] == null || !data["notificationUserIds"].IsArray ? null : data["notificationUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

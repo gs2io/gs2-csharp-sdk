@@ -67,8 +67,6 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string PropertyId { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public StatusAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -100,7 +98,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithPropertyId(this.PropertyId);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         ReleaseByUserIdRequest.FromJson(request.ToJson())
@@ -164,7 +162,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 .WithPropertyId(this.PropertyId);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     ReleaseByUserIdRequest.FromJson(request.ToJson())
@@ -259,7 +257,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithPropertyId(this.PropertyId);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         RestrainByUserIdRequest.FromJson(request.ToJson())
@@ -323,7 +321,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 .WithPropertyId(this.PropertyId);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     RestrainByUserIdRequest.FromJson(request.ToJson())
@@ -414,7 +412,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithPropertyId(this.PropertyId);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         ResetByUserIdRequest.FromJson(request.ToJson())
@@ -478,7 +476,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 .WithPropertyId(this.PropertyId);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     ResetByUserIdRequest.FromJson(request.ToJson())

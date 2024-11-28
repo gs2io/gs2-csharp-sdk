@@ -150,7 +150,7 @@ namespace Gs2.Gs2Enhance.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithTargetInventoryModelId(!data.Keys.Contains("targetInventoryModelId") || data["targetInventoryModelId"] == null ? null : data["targetInventoryModelId"].ToString())
                 .WithGradeModelId(!data.Keys.Contains("gradeModelId") || data["gradeModelId"] == null ? null : data["gradeModelId"].ToString())
-                .WithGradeEntries(!data.Keys.Contains("gradeEntries") || data["gradeEntries"] == null || !data["gradeEntries"].IsArray ? new Gs2.Gs2Enhance.Model.UnleashRateEntryModel[]{} : data["gradeEntries"].Cast<JsonData>().Select(v => {
+                .WithGradeEntries(!data.Keys.Contains("gradeEntries") || data["gradeEntries"] == null || !data["gradeEntries"].IsArray ? null : data["gradeEntries"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.UnleashRateEntryModel.FromJson(v);
                 }).ToArray());
         }

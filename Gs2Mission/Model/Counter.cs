@@ -164,7 +164,7 @@ namespace Gs2.Gs2Mission.Model
                 .WithCounterId(!data.Keys.Contains("counterId") || data["counterId"] == null ? null : data["counterId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? new Gs2.Gs2Mission.Model.ScopedValue[]{} : data["values"].Cast<JsonData>().Select(v => {
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? null : data["values"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.ScopedValue.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

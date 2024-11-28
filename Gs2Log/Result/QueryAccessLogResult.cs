@@ -67,7 +67,7 @@ namespace Gs2.Gs2Log.Result
                 return null;
             }
             return new QueryAccessLogResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Log.Model.AccessLog[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.AccessLog.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())

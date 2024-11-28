@@ -137,7 +137,7 @@ namespace Gs2.Gs2Quest.Model
                 .WithQuestGroupModelId(!data.Keys.Contains("questGroupModelId") || data["questGroupModelId"] == null ? null : data["questGroupModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithQuests(!data.Keys.Contains("quests") || data["quests"] == null || !data["quests"].IsArray ? new Gs2.Gs2Quest.Model.QuestModel[]{} : data["quests"].Cast<JsonData>().Select(v => {
+                .WithQuests(!data.Keys.Contains("quests") || data["quests"] == null || !data["quests"].IsArray ? null : data["quests"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.QuestModel.FromJson(v);
                 }).ToArray())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString());

@@ -163,7 +163,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTiers(!data.Keys.Contains("tiers") || data["tiers"] == null || !data["tiers"].IsArray ? new Gs2.Gs2SeasonRating.Model.TierModel[]{} : data["tiers"].Cast<JsonData>().Select(v => {
+                .WithTiers(!data.Keys.Contains("tiers") || data["tiers"] == null || !data["tiers"].IsArray ? null : data["tiers"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.TierModel.FromJson(v);
                 }).ToArray())
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())

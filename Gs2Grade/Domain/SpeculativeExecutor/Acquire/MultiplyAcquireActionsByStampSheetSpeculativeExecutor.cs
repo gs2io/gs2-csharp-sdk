@@ -61,7 +61,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             MultiplyAcquireActionsByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = Transaction.SpeculativeExecutor.MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteFuture(
+                var future = Gs2.Gs2Grade.Domain.Transaction.SpeculativeExecutor.MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteFuture(
                     domain,
                     accessToken,
                     request
@@ -95,7 +95,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             AccessToken accessToken,
             MultiplyAcquireActionsByUserIdRequest request
         ) {
-            var commit = await Transaction.SpeculativeExecutor.MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteAsync(
+            var commit = await Gs2.Gs2Grade.Domain.Transaction.SpeculativeExecutor.MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteAsync(
                 domain,
                 accessToken,
                 request

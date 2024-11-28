@@ -96,7 +96,7 @@ namespace Gs2.Gs2Identifier.Model
             }
             return new AttachSecurityPolicy()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithSecurityPolicyIds(!data.Keys.Contains("securityPolicyIds") || data["securityPolicyIds"] == null || !data["securityPolicyIds"].IsArray ? new string[]{} : data["securityPolicyIds"].Cast<JsonData>().Select(v => {
+                .WithSecurityPolicyIds(!data.Keys.Contains("securityPolicyIds") || data["securityPolicyIds"] == null || !data["securityPolicyIds"].IsArray ? null : data["securityPolicyIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithAttachedAt(!data.Keys.Contains("attachedAt") || data["attachedAt"] == null ? null : (long?)(data["attachedAt"].ToString().Contains(".") ? (long)double.Parse(data["attachedAt"].ToString()) : long.Parse(data["attachedAt"].ToString())))

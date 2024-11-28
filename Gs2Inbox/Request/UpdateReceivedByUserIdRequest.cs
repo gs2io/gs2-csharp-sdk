@@ -71,7 +71,7 @@ namespace Gs2.Gs2Inbox.Request
             return new UpdateReceivedByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithReceivedGlobalMessageNames(!data.Keys.Contains("receivedGlobalMessageNames") || data["receivedGlobalMessageNames"] == null || !data["receivedGlobalMessageNames"].IsArray ? new string[]{} : data["receivedGlobalMessageNames"].Cast<JsonData>().Select(v => {
+                .WithReceivedGlobalMessageNames(!data.Keys.Contains("receivedGlobalMessageNames") || data["receivedGlobalMessageNames"] == null || !data["receivedGlobalMessageNames"].IsArray ? null : data["receivedGlobalMessageNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());

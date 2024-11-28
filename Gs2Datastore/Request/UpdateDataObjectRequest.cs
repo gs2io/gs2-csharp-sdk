@@ -78,7 +78,7 @@ namespace Gs2.Gs2Datastore.Request
                 .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
-                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? null : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

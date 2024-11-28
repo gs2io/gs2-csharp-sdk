@@ -71,7 +71,7 @@ namespace Gs2.Gs2JobQueue.Request
             return new PushByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithJobs(!data.Keys.Contains("jobs") || data["jobs"] == null || !data["jobs"].IsArray ? new Gs2.Gs2JobQueue.Model.JobEntry[]{} : data["jobs"].Cast<JsonData>().Select(v => {
+                .WithJobs(!data.Keys.Contains("jobs") || data["jobs"] == null || !data["jobs"].IsArray ? null : data["jobs"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2JobQueue.Model.JobEntry.FromJson(v);
                 }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());

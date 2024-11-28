@@ -49,7 +49,7 @@ namespace Gs2.Gs2Mission.Result
                 return null;
             }
             return new DescribeMissionTaskModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Mission.Model.MissionTaskModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.MissionTaskModel.FromJson(v);
                 }).ToArray());
         }

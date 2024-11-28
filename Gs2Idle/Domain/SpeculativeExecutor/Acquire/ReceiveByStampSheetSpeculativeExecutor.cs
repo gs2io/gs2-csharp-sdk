@@ -61,7 +61,7 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             ReceiveByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
+                var future = Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
                     domain,
                     accessToken,
                     request
@@ -95,7 +95,7 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ReceiveByUserIdRequest request
         ) {
-            var commit = await Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
+            var commit = await Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                 domain,
                 accessToken,
                 request

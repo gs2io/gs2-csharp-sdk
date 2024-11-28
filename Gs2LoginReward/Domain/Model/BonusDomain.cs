@@ -65,8 +65,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         private readonly Gs2LoginRewardRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public BonusDomain(
             Gs2.Core.Domain.Gs2 gs2,

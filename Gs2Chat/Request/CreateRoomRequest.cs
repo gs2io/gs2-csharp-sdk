@@ -84,7 +84,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithWhiteListUserIds(!data.Keys.Contains("whiteListUserIds") || data["whiteListUserIds"] == null || !data["whiteListUserIds"].IsArray ? new string[]{} : data["whiteListUserIds"].Cast<JsonData>().Select(v => {
+                .WithWhiteListUserIds(!data.Keys.Contains("whiteListUserIds") || data["whiteListUserIds"] == null || !data["whiteListUserIds"].IsArray ? null : data["whiteListUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

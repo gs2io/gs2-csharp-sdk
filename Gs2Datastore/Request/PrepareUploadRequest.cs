@@ -89,7 +89,7 @@ namespace Gs2.Gs2Datastore.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithContentType(!data.Keys.Contains("contentType") || data["contentType"] == null ? null : data["contentType"].ToString())
                 .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
-                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
+                .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? null : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithUpdateIfExists(!data.Keys.Contains("updateIfExists") || data["updateIfExists"] == null ? null : (bool?)bool.Parse(data["updateIfExists"].ToString()));

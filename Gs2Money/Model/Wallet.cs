@@ -181,7 +181,7 @@ namespace Gs2.Gs2Money.Model
                 .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)(data["slot"].ToString().Contains(".") ? (int)double.Parse(data["slot"].ToString()) : int.Parse(data["slot"].ToString())))
                 .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : (int?)(data["paid"].ToString().Contains(".") ? (int)double.Parse(data["paid"].ToString()) : int.Parse(data["paid"].ToString())))
                 .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : (int?)(data["free"].ToString().Contains(".") ? (int)double.Parse(data["free"].ToString()) : int.Parse(data["free"].ToString())))
-                .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null || !data["detail"].IsArray ? new Gs2.Gs2Money.Model.WalletDetail[]{} : data["detail"].Cast<JsonData>().Select(v => {
+                .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null || !data["detail"].IsArray ? null : data["detail"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money.Model.WalletDetail.FromJson(v);
                 }).ToArray())
                 .WithShareFree(!data.Keys.Contains("shareFree") || data["shareFree"] == null ? null : (bool?)bool.Parse(data["shareFree"].ToString()))

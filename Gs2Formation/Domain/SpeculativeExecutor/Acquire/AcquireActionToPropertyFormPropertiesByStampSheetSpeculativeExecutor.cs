@@ -61,7 +61,7 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             AcquireActionsToPropertyFormPropertiesRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = Transaction.SpeculativeExecutor.AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteFuture(
+                var future = Gs2.Gs2Formation.Domain.Transaction.SpeculativeExecutor.AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteFuture(
                     domain,
                     accessToken,
                     request
@@ -95,7 +95,7 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             AccessToken accessToken,
             AcquireActionsToPropertyFormPropertiesRequest request
         ) {
-            var commit = await Transaction.SpeculativeExecutor.AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteAsync(
+            var commit = await Gs2.Gs2Formation.Domain.Transaction.SpeculativeExecutor.AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteAsync(
                 domain,
                 accessToken,
                 request

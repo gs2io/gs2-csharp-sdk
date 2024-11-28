@@ -149,7 +149,7 @@ namespace Gs2.Gs2Lottery.Model
                 .WithBoxId(!data.Keys.Contains("boxId") || data["boxId"] == null ? null : data["boxId"].ToString())
                 .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Lottery.Model.BoxItem[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.BoxItem.FromJson(v);
                 }).ToArray());
         }

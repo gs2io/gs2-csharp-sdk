@@ -135,7 +135,7 @@ namespace Gs2.Gs2Ranking.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithLastCalculatedAts(!data.Keys.Contains("lastCalculatedAts") || data["lastCalculatedAts"] == null || !data["lastCalculatedAts"].IsArray ? new Gs2.Gs2Ranking.Model.CalculatedAt[]{} : data["lastCalculatedAts"].Cast<JsonData>().Select(v => {
+                .WithLastCalculatedAts(!data.Keys.Contains("lastCalculatedAts") || data["lastCalculatedAts"] == null || !data["lastCalculatedAts"].IsArray ? null : data["lastCalculatedAts"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking.Model.CalculatedAt.FromJson(v);
                 }).ToArray())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Ranking.Model.LogSetting.FromJson(data["logSetting"]))

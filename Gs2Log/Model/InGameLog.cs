@@ -69,7 +69,7 @@ namespace Gs2.Gs2Log.Model
                 .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())))
                 .WithRequestId(!data.Keys.Contains("requestId") || data["requestId"] == null ? null : data["requestId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTags(!data.Keys.Contains("tags") || data["tags"] == null || !data["tags"].IsArray ? new Gs2.Gs2Log.Model.InGameLogTag[]{} : data["tags"].Cast<JsonData>().Select(v => {
+                .WithTags(!data.Keys.Contains("tags") || data["tags"] == null || !data["tags"].IsArray ? null : data["tags"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.InGameLogTag.FromJson(v);
                 }).ToArray())
                 .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString());

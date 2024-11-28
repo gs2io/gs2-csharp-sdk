@@ -49,7 +49,7 @@ namespace Gs2.Gs2Money2.Result
                 return null;
             }
             return new DescribeStoreContentModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Money2.Model.StoreContentModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money2.Model.StoreContentModel.FromJson(v);
                 }).ToArray());
         }

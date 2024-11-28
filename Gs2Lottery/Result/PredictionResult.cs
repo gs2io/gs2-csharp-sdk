@@ -49,7 +49,7 @@ namespace Gs2.Gs2Lottery.Result
                 return null;
             }
             return new PredictionResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Lottery.Model.DrawnPrize[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.DrawnPrize.FromJson(v);
                 }).ToArray());
         }

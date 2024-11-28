@@ -147,14 +147,14 @@ namespace Gs2.Gs2Grade.Model
                 .WithGradeModelId(!data.Keys.Contains("gradeModelId") || data["gradeModelId"] == null ? null : data["gradeModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithDefaultGrades(!data.Keys.Contains("defaultGrades") || data["defaultGrades"] == null || !data["defaultGrades"].IsArray ? new Gs2.Gs2Grade.Model.DefaultGradeModel[]{} : data["defaultGrades"].Cast<JsonData>().Select(v => {
+                .WithDefaultGrades(!data.Keys.Contains("defaultGrades") || data["defaultGrades"] == null || !data["defaultGrades"].IsArray ? null : data["defaultGrades"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Grade.Model.DefaultGradeModel.FromJson(v);
                 }).ToArray())
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
-                .WithGradeEntries(!data.Keys.Contains("gradeEntries") || data["gradeEntries"] == null || !data["gradeEntries"].IsArray ? new Gs2.Gs2Grade.Model.GradeEntryModel[]{} : data["gradeEntries"].Cast<JsonData>().Select(v => {
+                .WithGradeEntries(!data.Keys.Contains("gradeEntries") || data["gradeEntries"] == null || !data["gradeEntries"].IsArray ? null : data["gradeEntries"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Grade.Model.GradeEntryModel.FromJson(v);
                 }).ToArray())
-                .WithAcquireActionRates(!data.Keys.Contains("acquireActionRates") || data["acquireActionRates"] == null || !data["acquireActionRates"].IsArray ? new Gs2.Gs2Grade.Model.AcquireActionRate[]{} : data["acquireActionRates"].Cast<JsonData>().Select(v => {
+                .WithAcquireActionRates(!data.Keys.Contains("acquireActionRates") || data["acquireActionRates"] == null || !data["acquireActionRates"].IsArray ? null : data["acquireActionRates"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Grade.Model.AcquireActionRate.FromJson(v);
                 }).ToArray());
         }

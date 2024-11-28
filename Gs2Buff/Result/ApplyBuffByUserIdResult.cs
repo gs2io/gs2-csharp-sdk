@@ -55,7 +55,7 @@ namespace Gs2.Gs2Buff.Result
                 return null;
             }
             return new ApplyBuffByUserIdResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Buff.Model.BuffEntryModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Buff.Model.BuffEntryModel.FromJson(v);
                 }).ToArray())
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());

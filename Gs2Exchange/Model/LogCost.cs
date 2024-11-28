@@ -57,10 +57,10 @@ namespace Gs2.Gs2Exchange.Model
             }
             return new LogCost()
                 .WithBase(!data.Keys.Contains("base") || data["base"] == null ? null : (double?)double.Parse(data["base"].ToString()))
-                .WithAdds(!data.Keys.Contains("adds") || data["adds"] == null || !data["adds"].IsArray ? new double[]{} : data["adds"].Cast<JsonData>().Select(v => {
+                .WithAdds(!data.Keys.Contains("adds") || data["adds"] == null || !data["adds"].IsArray ? null : data["adds"].Cast<JsonData>().Select(v => {
                     return double.Parse(v.ToString());
                 }).ToArray())
-                .WithSubs(!data.Keys.Contains("subs") || data["subs"] == null || !data["subs"].IsArray ? new double[]{} : data["subs"].Cast<JsonData>().Select(v => {
+                .WithSubs(!data.Keys.Contains("subs") || data["subs"] == null || !data["subs"].IsArray ? null : data["subs"].Cast<JsonData>().Select(v => {
                     return double.Parse(v.ToString());
                 }).ToArray());
         }

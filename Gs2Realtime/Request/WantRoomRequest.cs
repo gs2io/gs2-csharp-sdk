@@ -60,7 +60,7 @@ namespace Gs2.Gs2Realtime.Request
             return new WantRoomRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithNotificationUserIds(!data.Keys.Contains("notificationUserIds") || data["notificationUserIds"] == null || !data["notificationUserIds"].IsArray ? new string[]{} : data["notificationUserIds"].Cast<JsonData>().Select(v => {
+                .WithNotificationUserIds(!data.Keys.Contains("notificationUserIds") || data["notificationUserIds"] == null || !data["notificationUserIds"].IsArray ? null : data["notificationUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

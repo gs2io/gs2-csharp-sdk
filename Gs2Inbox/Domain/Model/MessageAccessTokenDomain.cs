@@ -67,8 +67,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string MessageName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public MessageAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -203,7 +201,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     .WithMessageName(this.MessageName);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReadMessageByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor.ReadMessageByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         ReadMessageByUserIdRequest.FromJson(request.ToJson())
@@ -267,7 +265,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 .WithMessageName(this.MessageName);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ReadMessageByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor.ReadMessageByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     ReadMessageByUserIdRequest.FromJson(request.ToJson())

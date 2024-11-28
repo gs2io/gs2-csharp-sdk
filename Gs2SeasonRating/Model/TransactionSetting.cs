@@ -31,8 +31,23 @@ namespace Gs2.Gs2SeasonRating.Model
 #endif
 	public class TransactionSetting : IComparable
 	{
+        public bool? EnableAtomicCommit { set; get; } = null!;
+        public bool? TransactionUseDistributor { set; get; } = null!;
+        public bool? AcquireActionUseJobQueue { set; get; } = null!;
         public string DistributorNamespaceId { set; get; } = null!;
         public string QueueNamespaceId { set; get; } = null!;
+        public TransactionSetting WithEnableAtomicCommit(bool? enableAtomicCommit) {
+            this.EnableAtomicCommit = enableAtomicCommit;
+            return this;
+        }
+        public TransactionSetting WithTransactionUseDistributor(bool? transactionUseDistributor) {
+            this.TransactionUseDistributor = transactionUseDistributor;
+            return this;
+        }
+        public TransactionSetting WithAcquireActionUseJobQueue(bool? acquireActionUseJobQueue) {
+            this.AcquireActionUseJobQueue = acquireActionUseJobQueue;
+            return this;
+        }
         public TransactionSetting WithDistributorNamespaceId(string distributorNamespaceId) {
             this.DistributorNamespaceId = distributorNamespaceId;
             return this;
@@ -51,6 +66,9 @@ namespace Gs2.Gs2SeasonRating.Model
                 return null;
             }
             return new TransactionSetting()
+                .WithEnableAtomicCommit(!data.Keys.Contains("enableAtomicCommit") || data["enableAtomicCommit"] == null ? null : (bool?)bool.Parse(data["enableAtomicCommit"].ToString()))
+                .WithTransactionUseDistributor(!data.Keys.Contains("transactionUseDistributor") || data["transactionUseDistributor"] == null ? null : (bool?)bool.Parse(data["transactionUseDistributor"].ToString()))
+                .WithAcquireActionUseJobQueue(!data.Keys.Contains("acquireActionUseJobQueue") || data["acquireActionUseJobQueue"] == null ? null : (bool?)bool.Parse(data["acquireActionUseJobQueue"].ToString()))
                 .WithDistributorNamespaceId(!data.Keys.Contains("distributorNamespaceId") || data["distributorNamespaceId"] == null ? null : data["distributorNamespaceId"].ToString())
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString());
         }
@@ -58,6 +76,9 @@ namespace Gs2.Gs2SeasonRating.Model
         public JsonData ToJson()
         {
             return new JsonData {
+                ["enableAtomicCommit"] = EnableAtomicCommit,
+                ["transactionUseDistributor"] = TransactionUseDistributor,
+                ["acquireActionUseJobQueue"] = AcquireActionUseJobQueue,
                 ["distributorNamespaceId"] = DistributorNamespaceId,
                 ["queueNamespaceId"] = QueueNamespaceId,
             };
@@ -66,6 +87,18 @@ namespace Gs2.Gs2SeasonRating.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (EnableAtomicCommit != null) {
+                writer.WritePropertyName("enableAtomicCommit");
+                writer.Write(bool.Parse(EnableAtomicCommit.ToString()));
+            }
+            if (TransactionUseDistributor != null) {
+                writer.WritePropertyName("transactionUseDistributor");
+                writer.Write(bool.Parse(TransactionUseDistributor.ToString()));
+            }
+            if (AcquireActionUseJobQueue != null) {
+                writer.WritePropertyName("acquireActionUseJobQueue");
+                writer.Write(bool.Parse(AcquireActionUseJobQueue.ToString()));
+            }
             if (DistributorNamespaceId != null) {
                 writer.WritePropertyName("distributorNamespaceId");
                 writer.Write(DistributorNamespaceId.ToString());
@@ -81,6 +114,30 @@ namespace Gs2.Gs2SeasonRating.Model
         {
             var other = obj as TransactionSetting;
             var diff = 0;
+            if (EnableAtomicCommit == null && EnableAtomicCommit == other.EnableAtomicCommit)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += EnableAtomicCommit == other.EnableAtomicCommit ? 0 : 1;
+            }
+            if (TransactionUseDistributor == null && TransactionUseDistributor == other.TransactionUseDistributor)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionUseDistributor == other.TransactionUseDistributor ? 0 : 1;
+            }
+            if (AcquireActionUseJobQueue == null && AcquireActionUseJobQueue == other.AcquireActionUseJobQueue)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AcquireActionUseJobQueue == other.AcquireActionUseJobQueue ? 0 : 1;
+            }
             if (DistributorNamespaceId == null && DistributorNamespaceId == other.DistributorNamespaceId)
             {
                 // null and null
@@ -102,6 +159,12 @@ namespace Gs2.Gs2SeasonRating.Model
 
         public void Validate() {
             {
+            }
+            if (EnableAtomicCommit == true) {
+            }
+            if (EnableAtomicCommit == true) {
+            }
+            {
                 if (DistributorNamespaceId.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("transactionSetting", "seasonRating.transactionSetting.distributorNamespaceId.error.tooLong"),
@@ -119,6 +182,9 @@ namespace Gs2.Gs2SeasonRating.Model
 
         public object Clone() {
             return new TransactionSetting {
+                EnableAtomicCommit = EnableAtomicCommit,
+                TransactionUseDistributor = TransactionUseDistributor,
+                AcquireActionUseJobQueue = AcquireActionUseJobQueue,
                 DistributorNamespaceId = DistributorNamespaceId,
                 QueueNamespaceId = QueueNamespaceId,
             };

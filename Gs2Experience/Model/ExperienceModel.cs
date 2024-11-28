@@ -156,7 +156,7 @@ namespace Gs2.Gs2Experience.Model
                 .WithDefaultRankCap(!data.Keys.Contains("defaultRankCap") || data["defaultRankCap"] == null ? null : (long?)(data["defaultRankCap"].ToString().Contains(".") ? (long)double.Parse(data["defaultRankCap"].ToString()) : long.Parse(data["defaultRankCap"].ToString())))
                 .WithMaxRankCap(!data.Keys.Contains("maxRankCap") || data["maxRankCap"] == null ? null : (long?)(data["maxRankCap"].ToString().Contains(".") ? (long)double.Parse(data["maxRankCap"].ToString()) : long.Parse(data["maxRankCap"].ToString())))
                 .WithRankThreshold(!data.Keys.Contains("rankThreshold") || data["rankThreshold"] == null ? null : Gs2.Gs2Experience.Model.Threshold.FromJson(data["rankThreshold"]))
-                .WithAcquireActionRates(!data.Keys.Contains("acquireActionRates") || data["acquireActionRates"] == null || !data["acquireActionRates"].IsArray ? new Gs2.Gs2Experience.Model.AcquireActionRate[]{} : data["acquireActionRates"].Cast<JsonData>().Select(v => {
+                .WithAcquireActionRates(!data.Keys.Contains("acquireActionRates") || data["acquireActionRates"] == null || !data["acquireActionRates"].IsArray ? null : data["acquireActionRates"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Experience.Model.AcquireActionRate.FromJson(v);
                 }).ToArray());
         }

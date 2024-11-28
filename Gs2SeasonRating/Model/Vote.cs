@@ -164,7 +164,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 .WithVoteId(!data.Keys.Contains("voteId") || data["voteId"] == null ? null : data["voteId"].ToString())
                 .WithSeasonName(!data.Keys.Contains("seasonName") || data["seasonName"] == null ? null : data["seasonName"].ToString())
                 .WithSessionName(!data.Keys.Contains("sessionName") || data["sessionName"] == null ? null : data["sessionName"].ToString())
-                .WithWrittenBallots(!data.Keys.Contains("writtenBallots") || data["writtenBallots"] == null || !data["writtenBallots"].IsArray ? new Gs2.Gs2SeasonRating.Model.WrittenBallot[]{} : data["writtenBallots"].Cast<JsonData>().Select(v => {
+                .WithWrittenBallots(!data.Keys.Contains("writtenBallots") || data["writtenBallots"] == null || !data["writtenBallots"].IsArray ? null : data["writtenBallots"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.WrittenBallot.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

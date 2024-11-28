@@ -66,8 +66,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public UserAccessTokenDomain(

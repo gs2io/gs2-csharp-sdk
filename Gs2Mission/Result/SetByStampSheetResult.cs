@@ -63,7 +63,7 @@ namespace Gs2.Gs2Mission.Result
             return new SetByStampSheetResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.Counter.FromJson(data["item"]))
                 .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Mission.Model.Counter.FromJson(data["old"]))
-                .WithChangedCompletes(!data.Keys.Contains("changedCompletes") || data["changedCompletes"] == null || !data["changedCompletes"].IsArray ? new Gs2.Gs2Mission.Model.Complete[]{} : data["changedCompletes"].Cast<JsonData>().Select(v => {
+                .WithChangedCompletes(!data.Keys.Contains("changedCompletes") || data["changedCompletes"] == null || !data["changedCompletes"].IsArray ? null : data["changedCompletes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.Complete.FromJson(v);
                 }).ToArray());
         }

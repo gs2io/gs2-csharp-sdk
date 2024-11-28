@@ -38,6 +38,9 @@ namespace Gs2.Gs2Enhance.Result
         public string StampSheet { set; get; } = null!;
         public string StampSheetEncryptionKeyId { set; get; } = null!;
         public bool? AutoRunStampSheet { set; get; } = null!;
+        public bool? AtomicCommit { set; get; } = null!;
+        public string Transaction { set; get; } = null!;
+        public Gs2.Core.Model.TransactionResult TransactionResult { set; get; } = null!;
         public long? AcquireExperience { set; get; } = null!;
         public float? BonusRate { set; get; } = null!;
 
@@ -66,6 +69,21 @@ namespace Gs2.Gs2Enhance.Result
             return this;
         }
 
+        public EndResult WithAtomicCommit(bool? atomicCommit) {
+            this.AtomicCommit = atomicCommit;
+            return this;
+        }
+
+        public EndResult WithTransaction(string transaction) {
+            this.Transaction = transaction;
+            return this;
+        }
+
+        public EndResult WithTransactionResult(Gs2.Core.Model.TransactionResult transactionResult) {
+            this.TransactionResult = transactionResult;
+            return this;
+        }
+
         public EndResult WithAcquireExperience(long? acquireExperience) {
             this.AcquireExperience = acquireExperience;
             return this;
@@ -90,6 +108,9 @@ namespace Gs2.Gs2Enhance.Result
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
                 .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
                 .WithAutoRunStampSheet(!data.Keys.Contains("autoRunStampSheet") || data["autoRunStampSheet"] == null ? null : (bool?)bool.Parse(data["autoRunStampSheet"].ToString()))
+                .WithAtomicCommit(!data.Keys.Contains("atomicCommit") || data["atomicCommit"] == null ? null : (bool?)bool.Parse(data["atomicCommit"].ToString()))
+                .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : data["transaction"].ToString())
+                .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Gs2.Core.Model.TransactionResult.FromJson(data["transactionResult"]))
                 .WithAcquireExperience(!data.Keys.Contains("acquireExperience") || data["acquireExperience"] == null ? null : (long?)(data["acquireExperience"].ToString().Contains(".") ? (long)double.Parse(data["acquireExperience"].ToString()) : long.Parse(data["acquireExperience"].ToString())))
                 .WithBonusRate(!data.Keys.Contains("bonusRate") || data["bonusRate"] == null ? null : (float?)float.Parse(data["bonusRate"].ToString()));
         }
@@ -102,6 +123,9 @@ namespace Gs2.Gs2Enhance.Result
                 ["stampSheet"] = StampSheet,
                 ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
                 ["autoRunStampSheet"] = AutoRunStampSheet,
+                ["atomicCommit"] = AtomicCommit,
+                ["transaction"] = Transaction,
+                ["transactionResult"] = TransactionResult?.ToJson(),
                 ["acquireExperience"] = AcquireExperience,
                 ["bonusRate"] = BonusRate,
             };
@@ -128,6 +152,17 @@ namespace Gs2.Gs2Enhance.Result
             if (AutoRunStampSheet != null) {
                 writer.WritePropertyName("autoRunStampSheet");
                 writer.Write(bool.Parse(AutoRunStampSheet.ToString()));
+            }
+            if (AtomicCommit != null) {
+                writer.WritePropertyName("atomicCommit");
+                writer.Write(bool.Parse(AtomicCommit.ToString()));
+            }
+            if (Transaction != null) {
+                writer.WritePropertyName("transaction");
+                writer.Write(Transaction.ToString());
+            }
+            if (TransactionResult != null) {
+                TransactionResult.WriteJson(writer);
             }
             if (AcquireExperience != null) {
                 writer.WritePropertyName("acquireExperience");

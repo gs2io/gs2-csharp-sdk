@@ -69,8 +69,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         public string PropertyId { get; } = null!;
         public string Body { get; set; } = null!;
         public string Signature { get; set; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public PropertyFormDomain(
             Gs2.Core.Domain.Gs2 gs2,

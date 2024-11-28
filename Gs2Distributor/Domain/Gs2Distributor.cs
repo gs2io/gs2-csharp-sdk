@@ -67,6 +67,7 @@ namespace Gs2.Gs2Distributor.Domain
     public class Gs2Distributor {
 
         private static readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
+        private static readonly List<AutoRunTransactionNotification> _completedTransactions = new List<AutoRunTransactionNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
 
@@ -127,7 +128,6 @@ namespace Gs2.Gs2Distributor.Domain
         }
         #endif
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Distributor.Model.Namespace> Namespaces(
         )
         {
@@ -136,29 +136,26 @@ namespace Gs2.Gs2Distributor.Domain
                 this._client
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Distributor.Model.Namespace> NamespacesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Distributor.Model.Namespace> Namespaces(
-            #endif
-        #else
         public DescribeNamespacesIterator NamespacesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeNamespacesIterator(
                 this._gs2,
                 this._client
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeNamespaces(
             Action<Gs2.Gs2Distributor.Model.Namespace[]> callback
@@ -214,12 +211,31 @@ namespace Gs2.Gs2Distributor.Domain
         ) {
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, IfExpressionByUserIdRequest, IfExpressionByUserIdResult> IfExpressionByUserIdComplete = new UnityEvent<string, IfExpressionByUserIdRequest, IfExpressionByUserIdResult>();
+    #else
+        public static Action<string, IfExpressionByUserIdRequest, IfExpressionByUserIdResult> IfExpressionByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "IfExpressionByUserId": {
+                        var requestModel = IfExpressionByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = IfExpressionByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        IfExpressionByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public void UpdateCacheFromJobResult(
@@ -242,6 +258,22 @@ namespace Gs2.Gs2Distributor.Domain
         {
             add => onAutoRunStampSheetNotification.AddListener(value);
             remove => onAutoRunStampSheetNotification.RemoveListener(value);
+        }
+    #endif
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
+        private class AutoRunTransactionNotificationEvent : UnityEvent<AutoRunTransactionNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private AutoRunTransactionNotificationEvent onAutoRunTransactionNotification = new AutoRunTransactionNotificationEvent();
+
+        public event UnityAction<AutoRunTransactionNotification> OnAutoRunTransactionNotification
+        {
+            add => onAutoRunTransactionNotification.AddListener(value);
+            remove => onAutoRunTransactionNotification.RemoveListener(value);
         }
     #endif
 
@@ -271,8 +303,29 @@ namespace Gs2.Gs2Distributor.Domain
                     }
                     break;
                 }
+                case "AutoRunTransactionNotification": {
+                    lock (_completedStampSheets)
+                    {
+                        var notification = AutoRunTransactionNotification.FromJson(JsonMapper.ToObject(payload));
+                        _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.TransactionResult>(
+                            (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheParentKey(
+                                notification.NamespaceName,
+                                notification.UserId
+                            ),
+                            (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheKey(
+                                notification.TransactionId
+                            )
+                        );
+                        _completedTransactions.Add(notification);
+    #if UNITY_2017_1_OR_NEWER
+                        onAutoRunTransactionNotification.Invoke(notification);
+    #endif
+                    }
+                    break;
+                }
             }
         }
+        
 
     #if UNITY_2017_1_OR_NEWER
         public Gs2Future DispatchFuture(
@@ -459,6 +512,48 @@ namespace Gs2.Gs2Distributor.Domain
                 {
                 }
             }
+            
+            AutoRunTransactionNotification[] copiedCompletedTransactions;
+
+            lock (_completedTransactions)
+            {
+                if (_completedTransactions.Count == 0)
+                {
+                    return;
+                }
+
+                copiedCompletedTransactions = new AutoRunTransactionNotification[_completedTransactions.Count];
+                _completedTransactions.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedTransactions);
+                foreach (var copiedCompletedTransaction in copiedCompletedTransactions) {
+                    _completedTransactions.Remove(copiedCompletedTransaction);
+                }
+            }
+
+            foreach (var completedTransaction in copiedCompletedTransactions) {
+                if (completedTransaction == null) continue;
+                var autoRun = new AutoTransactionAccessTokenDomain(
+                    _gs2,
+                    accessToken,
+                    completedTransaction.TransactionId
+                );
+                try
+                {
+                    for (var i = 0; i < 3; i++) {
+                        var item = await _gs2.Distributor.Namespace(
+                            completedTransaction.NamespaceName
+                        ).AccessToken(
+                            accessToken
+                        ).TransactionResult(
+                            completedTransaction.TransactionId
+                        ).ModelNoCacheAsync();
+                        if (item != null) break;
+                    }
+                    await autoRun.WaitAsync();
+                }
+                catch (NotFoundException)
+                {
+                }
+            }
         }
         
         #if UNITY_2017_1_OR_NEWER
@@ -500,6 +595,45 @@ namespace Gs2.Gs2Distributor.Domain
                         userId
                     ).StampSheetResult(
                         completedStampSheet.TransactionId
+                    ).ModelNoCacheAsync();
+                    await autoRun.WaitAsync();
+                }
+                catch (NotFoundException)
+                {
+                }
+            }
+            
+            AutoRunTransactionNotification[] copiedCompletedTransactions;
+
+            lock (_completedTransactions)
+            {
+                if (_completedTransactions.Count == 0)
+                {
+                    return;
+                }
+
+                copiedCompletedTransactions = new AutoRunTransactionNotification[_completedTransactions.Count];
+                _completedTransactions.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedTransactions);
+                foreach (var copiedCompletedTransaction in copiedCompletedTransactions) {
+                    _completedTransactions.Remove(copiedCompletedTransaction);
+                }
+            }
+
+            foreach (var completedTransaction in copiedCompletedTransactions) {
+                if (completedTransaction == null) continue;
+                var autoRun = new AutoTransactionDomain(
+                    _gs2,
+                    userId,
+                    completedTransaction.TransactionId
+                );
+                try
+                {
+                    await _gs2.Distributor.Namespace(
+                        completedTransaction.NamespaceName
+                    ).User(
+                        userId
+                    ).TransactionResult(
+                        completedTransaction.TransactionId
                     ).ModelNoCacheAsync();
                     await autoRun.WaitAsync();
                 }

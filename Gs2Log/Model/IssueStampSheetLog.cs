@@ -88,7 +88,7 @@ namespace Gs2.Gs2Log.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithTasks(!data.Keys.Contains("tasks") || data["tasks"] == null || !data["tasks"].IsArray ? new string[]{} : data["tasks"].Cast<JsonData>().Select(v => {
+                .WithTasks(!data.Keys.Contains("tasks") || data["tasks"] == null || !data["tasks"].IsArray ? null : data["tasks"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

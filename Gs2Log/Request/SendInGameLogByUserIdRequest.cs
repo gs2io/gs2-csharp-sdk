@@ -76,7 +76,7 @@ namespace Gs2.Gs2Log.Request
             return new SendInGameLogByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTags(!data.Keys.Contains("tags") || data["tags"] == null || !data["tags"].IsArray ? new Gs2.Gs2Log.Model.InGameLogTag[]{} : data["tags"].Cast<JsonData>().Select(v => {
+                .WithTags(!data.Keys.Contains("tags") || data["tags"] == null || !data["tags"].IsArray ? null : data["tags"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.InGameLogTag.FromJson(v);
                 }).ToArray())
                 .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString())

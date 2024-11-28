@@ -49,7 +49,7 @@ namespace Gs2.Gs2Formation.Result
                 return null;
             }
             return new DescribePropertyFormModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Formation.Model.PropertyFormModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Formation.Model.PropertyFormModel.FromJson(v);
                 }).ToArray());
         }

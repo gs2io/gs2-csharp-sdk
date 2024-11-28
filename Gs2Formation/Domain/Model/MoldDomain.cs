@@ -66,8 +66,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public string MoldModelName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public MoldDomain(

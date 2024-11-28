@@ -60,7 +60,7 @@ namespace Gs2.Gs2Matchmaking.Request
             return new PutResultRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
-                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? new Gs2.Gs2Matchmaking.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? null : data["gameResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.GameResult.FromJson(v);
                 }).ToArray());
         }

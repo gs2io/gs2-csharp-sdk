@@ -71,7 +71,7 @@ namespace Gs2.Gs2Distributor.Request
             return new AndExpressionByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithActions(!data.Keys.Contains("actions") || data["actions"] == null || !data["actions"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["actions"].Cast<JsonData>().Select(v => {
+                .WithActions(!data.Keys.Contains("actions") || data["actions"] == null || !data["actions"].IsArray ? null : data["actions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.VerifyAction.FromJson(v);
                 }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());

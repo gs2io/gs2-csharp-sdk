@@ -55,7 +55,7 @@ namespace Gs2.Gs2Account.Result
                 return null;
             }
             return new DescribePlatformIdsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Account.Model.PlatformId[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Account.Model.PlatformId.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());

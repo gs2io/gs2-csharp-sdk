@@ -49,7 +49,7 @@ namespace Gs2.Gs2LoginReward.Result
                 return null;
             }
             return new DescribeBonusModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2LoginReward.Model.BonusModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2LoginReward.Model.BonusModel.FromJson(v);
                 }).ToArray());
         }

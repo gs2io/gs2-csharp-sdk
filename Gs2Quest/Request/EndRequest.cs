@@ -76,11 +76,11 @@ namespace Gs2.Gs2Quest.Request
             return new EndRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithRewards(!data.Keys.Contains("rewards") || data["rewards"] == null || !data["rewards"].IsArray ? new Gs2.Gs2Quest.Model.Reward[]{} : data["rewards"].Cast<JsonData>().Select(v => {
+                .WithRewards(!data.Keys.Contains("rewards") || data["rewards"] == null || !data["rewards"].IsArray ? null : data["rewards"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.Reward.FromJson(v);
                 }).ToArray())
                 .WithIsComplete(!data.Keys.Contains("isComplete") || data["isComplete"] == null ? null : (bool?)bool.Parse(data["isComplete"].ToString()))
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Quest.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.Config.FromJson(v);
                 }).ToArray());
         }

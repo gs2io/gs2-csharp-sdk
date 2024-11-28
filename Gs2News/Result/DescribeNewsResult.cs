@@ -61,7 +61,7 @@ namespace Gs2.Gs2News.Result
                 return null;
             }
             return new DescribeNewsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2News.Model.News[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2News.Model.News.FromJson(v);
                 }).ToArray())
                 .WithContentHash(!data.Keys.Contains("contentHash") || data["contentHash"] == null ? null : data["contentHash"].ToString())

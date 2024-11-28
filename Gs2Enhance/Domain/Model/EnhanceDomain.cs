@@ -65,8 +65,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
         private readonly Gs2EnhanceRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
         public long? AcquireExperience { get; set; } = null!;
         public float? BonusRate { get; set; } = null!;
 

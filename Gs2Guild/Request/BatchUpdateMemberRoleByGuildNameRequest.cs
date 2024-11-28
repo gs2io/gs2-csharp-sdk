@@ -72,7 +72,7 @@ namespace Gs2.Gs2Guild.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithGuildModelName(!data.Keys.Contains("guildModelName") || data["guildModelName"] == null ? null : data["guildModelName"].ToString())
                 .WithGuildName(!data.Keys.Contains("guildName") || data["guildName"] == null ? null : data["guildName"].ToString())
-                .WithMembers(!data.Keys.Contains("members") || data["members"] == null || !data["members"].IsArray ? new Gs2.Gs2Guild.Model.Member[]{} : data["members"].Cast<JsonData>().Select(v => {
+                .WithMembers(!data.Keys.Contains("members") || data["members"] == null || !data["members"].IsArray ? null : data["members"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.Member.FromJson(v);
                 }).ToArray());
         }

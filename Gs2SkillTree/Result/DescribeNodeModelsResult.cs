@@ -49,7 +49,7 @@ namespace Gs2.Gs2SkillTree.Result
                 return null;
             }
             return new DescribeNodeModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2SkillTree.Model.NodeModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SkillTree.Model.NodeModel.FromJson(v);
                 }).ToArray());
         }

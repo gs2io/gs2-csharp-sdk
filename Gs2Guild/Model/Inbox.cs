@@ -158,7 +158,7 @@ namespace Gs2.Gs2Guild.Model
             return new Inbox()
                 .WithInboxId(!data.Keys.Contains("inboxId") || data["inboxId"] == null ? null : data["inboxId"].ToString())
                 .WithGuildName(!data.Keys.Contains("guildName") || data["guildName"] == null ? null : data["guildName"].ToString())
-                .WithFromUserIds(!data.Keys.Contains("fromUserIds") || data["fromUserIds"] == null || !data["fromUserIds"].IsArray ? new string[]{} : data["fromUserIds"].Cast<JsonData>().Select(v => {
+                .WithFromUserIds(!data.Keys.Contains("fromUserIds") || data["fromUserIds"] == null || !data["fromUserIds"].IsArray ? null : data["fromUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))

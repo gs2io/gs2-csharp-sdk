@@ -67,7 +67,7 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new DescribeReferenceOfByUserIdResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new string[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithItemSet(!data.Keys.Contains("itemSet") || data["itemSet"] == null ? null : Gs2.Gs2Inventory.Model.ItemSet.FromJson(data["itemSet"]))

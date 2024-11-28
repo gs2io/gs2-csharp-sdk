@@ -64,7 +64,7 @@ namespace Gs2.Gs2Stamina.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
-                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? new int[]{} : data["values"].Cast<JsonData>().Select(v => {
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? null : data["values"].Cast<JsonData>().Select(v => {
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray());
         }

@@ -39,6 +39,9 @@ namespace Gs2.Gs2Lottery.Result
         public string StampSheet { set; get; } = null!;
         public string StampSheetEncryptionKeyId { set; get; } = null!;
         public bool? AutoRunStampSheet { set; get; } = null!;
+        public bool? AtomicCommit { set; get; } = null!;
+        public string Transaction { set; get; } = null!;
+        public Gs2.Core.Model.TransactionResult TransactionResult { set; get; } = null!;
 
         public DrawByStampSheetResult WithItems(Gs2.Gs2Lottery.Model.DrawnPrize[] items) {
             this.Items = items;
@@ -70,6 +73,21 @@ namespace Gs2.Gs2Lottery.Result
             return this;
         }
 
+        public DrawByStampSheetResult WithAtomicCommit(bool? atomicCommit) {
+            this.AtomicCommit = atomicCommit;
+            return this;
+        }
+
+        public DrawByStampSheetResult WithTransaction(string transaction) {
+            this.Transaction = transaction;
+            return this;
+        }
+
+        public DrawByStampSheetResult WithTransactionResult(Gs2.Core.Model.TransactionResult transactionResult) {
+            this.TransactionResult = transactionResult;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -79,14 +97,17 @@ namespace Gs2.Gs2Lottery.Result
                 return null;
             }
             return new DrawByStampSheetResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Lottery.Model.DrawnPrize[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.DrawnPrize.FromJson(v);
                 }).ToArray())
                 .WithBoxItems(!data.Keys.Contains("boxItems") || data["boxItems"] == null ? null : Gs2.Gs2Lottery.Model.BoxItems.FromJson(data["boxItems"]))
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
                 .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
-                .WithAutoRunStampSheet(!data.Keys.Contains("autoRunStampSheet") || data["autoRunStampSheet"] == null ? null : (bool?)bool.Parse(data["autoRunStampSheet"].ToString()));
+                .WithAutoRunStampSheet(!data.Keys.Contains("autoRunStampSheet") || data["autoRunStampSheet"] == null ? null : (bool?)bool.Parse(data["autoRunStampSheet"].ToString()))
+                .WithAtomicCommit(!data.Keys.Contains("atomicCommit") || data["atomicCommit"] == null ? null : (bool?)bool.Parse(data["atomicCommit"].ToString()))
+                .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : data["transaction"].ToString())
+                .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Gs2.Core.Model.TransactionResult.FromJson(data["transactionResult"]));
         }
 
         public JsonData ToJson()
@@ -107,6 +128,9 @@ namespace Gs2.Gs2Lottery.Result
                 ["stampSheet"] = StampSheet,
                 ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
                 ["autoRunStampSheet"] = AutoRunStampSheet,
+                ["atomicCommit"] = AtomicCommit,
+                ["transaction"] = Transaction,
+                ["transactionResult"] = TransactionResult?.ToJson(),
             };
         }
 
@@ -142,6 +166,17 @@ namespace Gs2.Gs2Lottery.Result
             if (AutoRunStampSheet != null) {
                 writer.WritePropertyName("autoRunStampSheet");
                 writer.Write(bool.Parse(AutoRunStampSheet.ToString()));
+            }
+            if (AtomicCommit != null) {
+                writer.WritePropertyName("atomicCommit");
+                writer.Write(bool.Parse(AtomicCommit.ToString()));
+            }
+            if (Transaction != null) {
+                writer.WritePropertyName("transaction");
+                writer.Write(Transaction.ToString());
+            }
+            if (TransactionResult != null) {
+                TransactionResult.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

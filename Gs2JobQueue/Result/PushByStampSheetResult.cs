@@ -55,7 +55,7 @@ namespace Gs2.Gs2JobQueue.Result
                 return null;
             }
             return new PushByStampSheetResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2JobQueue.Model.Job[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2JobQueue.Model.Job.FromJson(v);
                 }).ToArray())
                 .WithAutoRun(!data.Keys.Contains("autoRun") || data["autoRun"] == null ? null : (bool?)bool.Parse(data["autoRun"].ToString()));

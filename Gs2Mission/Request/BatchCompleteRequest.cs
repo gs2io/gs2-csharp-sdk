@@ -77,10 +77,10 @@ namespace Gs2.Gs2Mission.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithMissionTaskNames(!data.Keys.Contains("missionTaskNames") || data["missionTaskNames"] == null || !data["missionTaskNames"].IsArray ? new string[]{} : data["missionTaskNames"].Cast<JsonData>().Select(v => {
+                .WithMissionTaskNames(!data.Keys.Contains("missionTaskNames") || data["missionTaskNames"] == null || !data["missionTaskNames"].IsArray ? null : data["missionTaskNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Mission.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.Config.FromJson(v);
                 }).ToArray());
         }

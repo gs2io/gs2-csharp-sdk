@@ -82,6 +82,11 @@ namespace Gs2.Gs2Distributor
                     jsonWriter.WritePropertyName("autoRunStampSheetNotification");
                     request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
                 }
+                if (request.AutoRunTransactionNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunTransactionNotification");
+                    request.AutoRunTransactionNotification.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -307,6 +312,11 @@ namespace Gs2.Gs2Distributor
                 {
                     jsonWriter.WritePropertyName("autoRunStampSheetNotification");
                     request.AutoRunStampSheetNotification.WriteJson(jsonWriter);
+                }
+                if (request.AutoRunTransactionNotification != null)
+                {
+                    jsonWriter.WritePropertyName("autoRunTransactionNotification");
+                    request.AutoRunTransactionNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

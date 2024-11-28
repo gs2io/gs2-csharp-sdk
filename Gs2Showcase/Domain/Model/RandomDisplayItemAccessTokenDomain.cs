@@ -68,8 +68,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public string UserId => this.AccessToken.UserId;
         public string ShowcaseName { get; } = null!;
         public string DisplayItemName { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public RandomDisplayItemAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -155,7 +153,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.RandomShowcaseBuyByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor.RandomShowcaseBuyByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         RandomShowcaseBuyByUserIdRequest.FromJson(request.ToJson())
@@ -220,7 +218,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.RandomShowcaseBuyByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor.RandomShowcaseBuyByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     RandomShowcaseBuyByUserIdRequest.FromJson(request.ToJson())

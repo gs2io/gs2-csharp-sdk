@@ -61,7 +61,7 @@ namespace Gs2.Gs2News.Result
                 return null;
             }
             return new WantGrantByUserIdResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2News.Model.SetCookieRequestEntry[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2News.Model.SetCookieRequestEntry.FromJson(v);
                 }).ToArray())
                 .WithBrowserUrl(!data.Keys.Contains("browserUrl") || data["browserUrl"] == null ? null : data["browserUrl"].ToString())
