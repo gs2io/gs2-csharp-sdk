@@ -70,8 +70,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public string UserId => this.AccessToken.UserId;
         public string ShowcaseName { get; } = null!;
         public string DisplayItemId { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public DisplayItemAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -100,12 +98,12 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithShowcaseName(this.ShowcaseName)
-                    .WithDisplayItemId(this.DisplayItemId);
+                    .WithDisplayItemId(this.DisplayItemId)
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.BuyByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor.BuyByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         BuyByUserIdRequest.FromJson(request.ToJson())
@@ -136,7 +134,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
                     result.StampSheet,
-                    result.StampSheetEncryptionKeyId
+                    result.StampSheetEncryptionKeyId,
+                    result.AtomicCommit,
+                    result.TransactionResult
                 );
                 if (result.StampSheet != null) {
                     var future2 = transaction.WaitFuture(true);
@@ -165,12 +165,12 @@ namespace Gs2.Gs2Showcase.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithShowcaseName(this.ShowcaseName)
-                .WithDisplayItemId(this.DisplayItemId);
+                .WithDisplayItemId(this.DisplayItemId)
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.BuyByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor.BuyByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     BuyByUserIdRequest.FromJson(request.ToJson())
@@ -188,7 +188,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
                 result.StampSheet,
-                result.StampSheetEncryptionKeyId
+                result.StampSheetEncryptionKeyId,
+                result.AtomicCommit,
+                result.TransactionResult
             );
             if (result.StampSheet != null) {
                 await transaction.WaitAsync(true);

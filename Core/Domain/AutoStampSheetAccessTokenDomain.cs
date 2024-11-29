@@ -46,12 +46,12 @@ using System.Threading.Tasks;
 
 namespace Gs2.Core.Domain
 {
-    public partial class AutoTransactionAccessTokenDomain : TransactionAccessTokenDomain
+    public partial class AutoStampSheetAccessTokenDomain : TransactionAccessTokenDomain
     {
         private static Dictionary<string, long> _handled = new Dictionary<string, long>();
         private readonly string _transactionId;
 
-        public AutoTransactionAccessTokenDomain(
+        public AutoStampSheetAccessTokenDomain(
             Gs2 gs2,
             AccessToken accessToken,
             string transactionId
@@ -64,7 +64,7 @@ namespace Gs2.Core.Domain
         }
 
         private TransactionAccessTokenDomain HandleResult(
-            Gs2Distributor.Model.TransactionResult result
+            Gs2Distributor.Model.StampSheetResult result
         ) {
             var skipCallback = false;
             lock (_handled) {
@@ -79,70 +79,70 @@ namespace Gs2.Core.Domain
                 }
             }
             
-            if (result.ConsumeResults != null) {
-                for (var i = 0; i < result.ConsumeResults.Length; i++) {
-                    var consumeActionResult = result.ConsumeResults[i];
-                    if (consumeActionResult.StatusCode / 100 != 2) {
-                        throw Gs2Exception.ExtractError(consumeActionResult.ConsumeResult, consumeActionResult.StatusCode ?? 999);
-                    }
-                    if (!skipCallback) {
-                        Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
-                            Gs2.Cache,
-                            this._transactionId + "[" + i + "]",
-                            consumeActionResult.Action,
-                            consumeActionResult.ConsumeRequest,
-                            consumeActionResult.ConsumeResult
-                        );
+            if (result.TaskRequests != null) {
+                for (var i = 0; i < result.TaskRequests.Length; i++) {
+                    var stampTask = result.TaskRequests[i];
+                    if (i < result.TaskResults.Length) {
+                        if (result.TaskResultCodes[i] / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.TaskResults[i], result.TaskResultCodes[i]);
+                        }
+                        if (!skipCallback) {
+                            Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
+                                Gs2.Cache,
+                                this._transactionId + "[" + i + "]",
+                                stampTask.Action,
+                                stampTask.Request,
+                                result.TaskResults[i]
+                            );
+                        }
                     }
                 }
             }
 
-            if (result.AcquireResults != null) {
-                for (var i = 0; i < result.AcquireResults.Length; i++) {
-                    var acquireResult = result.AcquireResults[i];
-                    if (acquireResult.StatusCode / 100 != 2) {
-                        throw Gs2Exception.ExtractError(acquireResult.AcquireResult, acquireResult.StatusCode ?? 999);
-                    }
+            if (result.SheetResult != null) {
+                if (result.SheetResultCode / 100 != 2) {
+                    throw Gs2Exception.ExtractError(result.SheetResult, result.SheetResultCode ?? 999);
+                }
+                
+                if (!skipCallback) {
+                    Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(
+                        Gs2.Cache,
+                        this._transactionId,
+                        result.SheetRequest.Action,
+                        result.SheetRequest.Request,
+                        result.SheetResult
+                    );
+                }
 
-                    if (!skipCallback) {
-                        Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(
-                            Gs2.Cache,
-                            this._transactionId,
-                            acquireResult.Action,
-                            acquireResult.AcquireRequest,
-                            acquireResult.AcquireResult
-                        );
-                    }
+                var nextTransactions = new List<TransactionAccessTokenDomain>();
+                if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
+                {
+                    nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
+                        Gs2,
+                        AccessToken,
+                        PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult))
+                    ));
+                }
 
-                    var nextTransactions = new List<TransactionAccessTokenDomain>();
-                    if (acquireResult.Action == "Gs2JobQueue:PushByUserId") {
-                        nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
-                            Gs2,
-                            AccessToken,
-                            PushByUserIdResult.FromJson(JsonMapper.ToObject(acquireResult.AcquireResult))
-                        ));
-                    }
-
-                    var resultJson = JsonMapper.ToObject(acquireResult.AcquireResult);
-                    if (resultJson.ContainsKey("autoRunStampSheet")) {
-                        nextTransactions.Add(TransactionDomainFactory.ToTransaction(
-                            Gs2,
-                            AccessToken,
-                            resultJson.ContainsKey("autoRunStampSheet") && bool.Parse(resultJson["autoRunStampSheet"]?.ToString() ?? "false"),
-                            resultJson.ContainsKey("transactionId") ? resultJson["transactionId"]?.ToString() : null,
-                            resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
-                            resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
-                            resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
-                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToString())) : null
-                        ));
-                    }
-                    if (nextTransactions.Count > 0) {
-                        return new TransactionAccessTokenDomain(
-                            Gs2,
-                            AccessToken,
-                            nextTransactions
-                        );
-                    }
+                var resultJson = JsonMapper.ToObject(result.SheetResult);
+                if (resultJson.ContainsKey("autoRunStampSheet")) {
+                    nextTransactions.Add(TransactionDomainFactory.ToTransaction(
+                        Gs2,
+                        AccessToken,
+                        resultJson.ContainsKey("autoRunStampSheet") && bool.Parse(resultJson["autoRunStampSheet"]?.ToString() ?? "false"),
+                        resultJson.ContainsKey("transactionId") ? resultJson["transactionId"]?.ToString() : null,
+                        resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
+                        resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
+                        resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
+                        resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToString())) : null
+                    ));
+                }
+                if (nextTransactions.Count > 0) {
+                    return new TransactionAccessTokenDomain(
+                        Gs2,
+                        AccessToken,
+                        nextTransactions
+                    );
                 }
             }
             return null;
@@ -164,7 +164,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration.NamespaceName
                 ).AccessToken(
                     AccessToken
-                ).TransactionResult(
+                ).StampSheetResult(
                     this._transactionId
                 );
                 var future = domain.ModelFuture();
@@ -236,7 +236,7 @@ namespace Gs2.Core.Domain
                 Gs2.TransactionConfiguration.NamespaceName
             ).AccessToken(
                 AccessToken
-            ).TransactionResult(
+            ).StampSheetResult(
                 this._transactionId
             );
             try {

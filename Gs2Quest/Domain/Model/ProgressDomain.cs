@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -67,8 +65,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         private readonly Gs2QuestRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
+        public string TransactionId { get; } = null!;
 
         public ProgressDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -162,7 +159,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
                     result.StampSheet,
-                    result.StampSheetEncryptionKeyId
+                    result.StampSheetEncryptionKeyId,
+                    result.AtomicCommit,
+                    result.TransactionResult
                 );
                 if (result.StampSheet != null) {
                     var future2 = transaction.WaitFuture(true);
@@ -202,7 +201,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
                 result.StampSheet,
-                result.StampSheetEncryptionKeyId
+                result.StampSheetEncryptionKeyId,
+                result.AtomicCommit,
+                result.TransactionResult
             );
             if (result.StampSheet != null) {
                 await transaction.WaitAsync(true);

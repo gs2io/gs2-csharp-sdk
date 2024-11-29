@@ -184,7 +184,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
                     result.StampSheet,
-                    result.StampSheetEncryptionKeyId
+                    result.StampSheetEncryptionKeyId,
+                    result.AtomicCommit,
+                    result.TransactionResult
                 );
                 if (result.StampSheet != null) {
                     var future2 = transaction.WaitFuture(true);
@@ -236,7 +238,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
                 result.StampSheet,
-                result.StampSheetEncryptionKeyId
+                result.StampSheetEncryptionKeyId,
+                result.AtomicCommit,
+                result.TransactionResult
             );
             if (result.StampSheet != null) {
                 await transaction.WaitAsync(true);

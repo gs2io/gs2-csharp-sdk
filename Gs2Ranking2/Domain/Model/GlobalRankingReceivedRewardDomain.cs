@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -70,8 +68,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public string RankingName { get; } = null!;
         public long? Season { get; } = null!;
         public Gs2.Core.Model.AcquireAction[] AcquireActions { get; set; } = null!;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
 
         public GlobalRankingReceivedRewardDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -103,8 +99,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRankingName(this.RankingName)
+                    .WithUserId(this.UserId)
                     .WithSeason(this.Season);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -136,8 +132,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithRankingName(this.RankingName)
+                .WithUserId(this.UserId)
                 .WithSeason(this.Season);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -179,7 +175,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
                     result.StampSheet,
-                    result.StampSheetEncryptionKeyId
+                    result.StampSheetEncryptionKeyId,
+                    result.AtomicCommit,
+                    result.TransactionResult
                 );
                 if (result.StampSheet != null) {
                     var future2 = transaction.WaitFuture(true);
@@ -221,7 +219,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
                 result.StampSheet,
-                result.StampSheetEncryptionKeyId
+                result.StampSheetEncryptionKeyId,
+                result.AtomicCommit,
+                result.TransactionResult
             );
             if (result.StampSheet != null) {
                 await transaction.WaitAsync(true);
@@ -239,8 +239,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRankingName(this.RankingName)
+                    .WithUserId(this.UserId)
                     .WithSeason(this.Season);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -270,8 +270,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithRankingName(this.RankingName)
+                .WithUserId(this.UserId)
                 .WithSeason(this.Season);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -291,8 +291,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRankingName(this.RankingName)
+                    .WithUserId(this.UserId)
                     .WithSeason(this.Season);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -327,8 +327,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRankingName(this.RankingName)
+                    .WithUserId(this.UserId)
                     .WithSeason(this.Season);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -356,7 +356,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -367,7 +367,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.Season,
+                    this.Season ?? default,
                     () => this.GetFuture(
                         new GetGlobalRankingReceivedRewardByUserIdRequest()
                     )
@@ -395,7 +395,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RankingName,
-                this.Season
+                this.Season ?? default
             );
             if (find) {
                 return value;
@@ -405,7 +405,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RankingName,
-                this.Season,
+                this.Season ?? default,
                 () => this.GetAsync(
                     new GetGlobalRankingReceivedRewardByUserIdRequest()
                 )
@@ -443,7 +443,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RankingName,
-                this.Season
+                this.Season ?? default
             );
         }
 
@@ -456,7 +456,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheKey(
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callback,
                 () =>
@@ -493,7 +493,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheKey(
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callbackId
             );

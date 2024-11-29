@@ -28,6 +28,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
@@ -47,13 +48,13 @@ using System.Threading.Tasks;
 
 namespace Gs2.Core.Domain
 {
-    public partial class ManualTransactionAccessTokenDomain : TransactionAccessTokenDomain
+    public partial class ManualStampSheetAccessTokenDomain : TransactionAccessTokenDomain
     {
         private readonly string _transactionId;
         private readonly string _stampSheet;
         private readonly string _stampSheetEncryptionKeyId;
 
-        public ManualTransactionAccessTokenDomain(
+        public ManualStampSheetAccessTokenDomain(
             Gs2 gs2,
             AccessToken AccessToken,
             string transactionId,
@@ -90,7 +91,9 @@ namespace Gs2.Core.Domain
                     resultJson.ContainsKey("autoRunStampSheet") && bool.Parse(resultJson["autoRunStampSheet"]?.ToString() ?? "false"),
                     resultJson.ContainsKey("transactionId") ? resultJson["transactionId"]?.ToString() : null,
                     resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
-                    resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null
+                    resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
+                    resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
+                    resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToString())) : null
                 ));
             }
 
@@ -143,13 +146,6 @@ namespace Gs2.Core.Domain
                         if (result.StatusCode / 100 != 2) {
                             throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                         }
-                        Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
-                            Gs2.Cache,
-                            stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
-                            verifyTaskPayloadJson["action"].ToString(),
-                            verifyTaskPayloadJson["args"].ToString(),
-                            result.Result
-                        );
                     }
                     else
                     {
@@ -183,7 +179,7 @@ namespace Gs2.Core.Domain
                         if (result.StatusCode / 100 != 2) {
                             throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                         }
-                        Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                        Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             verifyTaskPayloadJson["action"].ToString(),
@@ -216,7 +212,7 @@ namespace Gs2.Core.Domain
                         if (result.StatusCode / 100 != 2) {
                             throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                         }
-                        Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                        Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             stampTaskPayloadJson["action"].ToString(),
@@ -256,7 +252,7 @@ namespace Gs2.Core.Domain
                         if (result.StatusCode / 100 != 2) {
                             throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                         }
-                        Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                        Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             stampTaskPayloadJson["action"].ToString(),
@@ -285,7 +281,7 @@ namespace Gs2.Core.Domain
                     if (result.StatusCode / 100 != 2) {
                         throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                     }
-                    Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
+                    Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
                         stampSheetPayloadJson["action"].ToString(),
@@ -326,7 +322,7 @@ namespace Gs2.Core.Domain
                     if (result.StatusCode / 100 != 2) {
                         throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                     }
-                    Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
+                    Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
                         stampSheetPayloadJson["action"].ToString(),
@@ -433,7 +429,7 @@ namespace Gs2.Core.Domain
                     if (result.StatusCode / 100 != 2) {
                         throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                     }
-                    Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                    Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                         stampTaskPayloadJson["action"].ToString(),
@@ -455,7 +451,7 @@ namespace Gs2.Core.Domain
                         if (result.StatusCode / 100 != 2) {
                             throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                         }
-                        Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                        Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             stampTaskPayloadJson["action"].ToString(),
@@ -485,7 +481,7 @@ namespace Gs2.Core.Domain
                 if (result.StatusCode / 100 != 2) {
                     throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                 }
-                Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
+                Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                     Gs2.Cache,
                     stampSheetPayloadJson["transactionId"].ToString(),
                     stampSheetPayloadJson["action"].ToString(),
@@ -508,7 +504,7 @@ namespace Gs2.Core.Domain
                     if (result.StatusCode / 100 != 2) {
                         throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                     }
-                    Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
+                    Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
                         stampSheetPayloadJson["action"].ToString(),

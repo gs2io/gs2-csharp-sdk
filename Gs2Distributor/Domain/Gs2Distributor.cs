@@ -374,7 +374,7 @@ namespace Gs2.Gs2Distributor.Domain
                         }
                     }
                     {
-                        var autoRun = new AutoTransactionAccessTokenDomain(
+                        var autoRun = new AutoStampSheetAccessTokenDomain(
                             _gs2,
                             accessToken,
                             completedStampSheet.TransactionId
@@ -439,7 +439,7 @@ namespace Gs2.Gs2Distributor.Domain
                         }
                     }
                     {
-                        var autoRun = new AutoTransactionDomain(
+                        var autoRun = new AutoStampSheetDomain(
                             _gs2,
                             userId,
                             completedStampSheet.TransactionId
@@ -489,7 +489,7 @@ namespace Gs2.Gs2Distributor.Domain
 
             foreach (var completedStampSheet in copiedCompletedStampSheets) {
                 if (completedStampSheet == null) continue;
-                var autoRun = new AutoTransactionAccessTokenDomain(
+                var autoRun = new AutoStampSheetAccessTokenDomain(
                     _gs2,
                     accessToken,
                     completedStampSheet.TransactionId
@@ -531,7 +531,7 @@ namespace Gs2.Gs2Distributor.Domain
 
             foreach (var completedTransaction in copiedCompletedTransactions) {
                 if (completedTransaction == null) continue;
-                var autoRun = new AutoTransactionAccessTokenDomain(
+                var autoRun = new AutoStampSheetAccessTokenDomain(
                     _gs2,
                     accessToken,
                     completedTransaction.TransactionId
@@ -582,7 +582,7 @@ namespace Gs2.Gs2Distributor.Domain
 
             foreach (var completedStampSheet in copiedCompletedStampSheets) {
                 if (completedStampSheet == null) continue;
-                var autoRun = new AutoTransactionDomain(
+                var autoRun = new AutoStampSheetDomain(
                     _gs2,
                     userId,
                     completedStampSheet.TransactionId
@@ -621,7 +621,7 @@ namespace Gs2.Gs2Distributor.Domain
 
             foreach (var completedTransaction in copiedCompletedTransactions) {
                 if (completedTransaction == null) continue;
-                var autoRun = new AutoTransactionDomain(
+                var autoRun = new AutoStampSheetDomain(
                     _gs2,
                     userId,
                     completedTransaction.TransactionId

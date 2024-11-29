@@ -98,8 +98,8 @@ namespace Gs2.Core.Domain
         {
             this._sheetConfiguration = TransactionConfiguration.Builder()
                 .WithNamespaceName(distributorNamespaceName)
-                .WithStampTaskEventHandler(UpdateCacheFromStampTask)
-                .WithStampSheetEventHandler(UpdateCacheFromStampSheet)
+                .WithConsumeActionEventHandler(UpdateCacheFromConsumeAction)
+                .WithAcquireActionEventHandler(UpdateCacheFromAcquireAction)
                 .Build();
             this._restSession = session;
             this._webSocketSession = wssession;
@@ -511,7 +511,7 @@ namespace Gs2.Core.Domain
         }
 #endif
 
-        public void UpdateCacheFromStampSheet(
+        public void UpdateCacheFromAcquireAction(
             CacheDatabase cache,
             string transactionId,
             string action,
@@ -681,7 +681,7 @@ namespace Gs2.Core.Domain
             }
         }
 
-        public void UpdateCacheFromStampTask(
+        public void UpdateCacheFromConsumeAction(
             CacheDatabase cache,
             string taskId,
             string action,

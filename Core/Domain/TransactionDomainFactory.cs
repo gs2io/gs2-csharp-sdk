@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor;
@@ -23,17 +24,33 @@ namespace Gs2.Core.Domain
             bool autoRun,
             string transactionId,
             string stampSheet,
-            string stampSheetEncryptionKeyId
+            string stampSheetEncryptionKeyId,
+            bool? atomicCommit,
+            TransactionResult transactionResult
         ) {
             if (autoRun) {
-                return new AutoTransactionAccessTokenDomain(
+                if (atomicCommit ?? false) {
+                    if (transactionResult != null) {
+                        return new RanTransactionAccessTokenDomain(
+                            gs2,
+                            transactionId,
+                            transactionResult
+                        );
+                    }
+                    return new AutoTransactionAccessTokenDomain(
+                        gs2,
+                        accessToken,
+                        transactionId
+                    );
+                }
+                return new AutoStampSheetAccessTokenDomain(
                     gs2,
                     accessToken,
                     transactionId
                 );
             }
             else {
-                return new ManualTransactionAccessTokenDomain(
+                return new ManualStampSheetAccessTokenDomain(
                     gs2,
                     accessToken,
                     transactionId,
@@ -49,17 +66,33 @@ namespace Gs2.Core.Domain
             bool autoRun,
             string transactionId,
             string stampSheet,
-            string stampSheetEncryptionKeyId
+            string stampSheetEncryptionKeyId,
+            bool? atomicCommit,
+            TransactionResult transactionResult
         ) {
             if (autoRun) {
-                return new AutoTransactionDomain(
+                if (atomicCommit ?? false) {
+                    if (transactionResult != null) {
+                        return new RanTransactionDomain(
+                            gs2,
+                            transactionId,
+                            transactionResult
+                        );
+                    }
+                    return new AutoTransactionDomain(
+                        gs2,
+                        userId,
+                        transactionId
+                    );
+                }
+                return new AutoStampSheetDomain(
                     gs2,
                     userId,
                     transactionId
                 );
             }
             else {
-                return new ManualTransactionDomain(
+                return new ManualStampSheetDomain(
                     gs2,
                     userId,
                     transactionId,

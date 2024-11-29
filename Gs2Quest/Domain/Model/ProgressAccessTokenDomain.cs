@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -68,8 +66,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string TransactionId { get; set; } = null!;
-        public bool? AutoRunStampSheet { get; set; } = null!;
+        public string TransactionId { get; } = null!;
 
         public ProgressAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -145,7 +142,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.EndByUserIdSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Gs2.Gs2Quest.Domain.Transaction.SpeculativeExecutor.EndByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
                         EndByUserIdRequest.FromJson(request.ToJson())
@@ -176,7 +173,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
                     result.StampSheet,
-                    result.StampSheetEncryptionKeyId
+                    result.StampSheetEncryptionKeyId,
+                    result.AtomicCommit,
+                    result.TransactionResult
                 );
                 if (result.StampSheet != null) {
                     var future2 = transaction.WaitFuture(true);
@@ -208,7 +207,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.EndByUserIdSpeculativeExecutor.ExecuteAsync(
+                var commit = await Gs2.Gs2Quest.Domain.Transaction.SpeculativeExecutor.EndByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
                     EndByUserIdRequest.FromJson(request.ToJson())
@@ -226,7 +225,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
                 result.StampSheet,
-                result.StampSheetEncryptionKeyId
+                result.StampSheetEncryptionKeyId,
+                result.AtomicCommit,
+                result.TransactionResult
             );
             if (result.StampSheet != null) {
                 await transaction.WaitAsync(true);
