@@ -34,6 +34,7 @@ namespace Gs2.Core.Domain
                         return new RanTransactionAccessTokenDomain(
                             gs2,
                             transactionId,
+                            accessToken,
                             transactionResult
                         );
                     }
@@ -76,6 +77,7 @@ namespace Gs2.Core.Domain
                         return new RanTransactionDomain(
                             gs2,
                             transactionId,
+                            userId,
                             transactionResult
                         );
                     }

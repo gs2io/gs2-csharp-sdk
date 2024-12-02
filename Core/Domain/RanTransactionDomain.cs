@@ -49,21 +49,23 @@ namespace Gs2.Core.Domain
     public partial class RanTransactionDomain : TransactionDomain
     {
         private readonly string _transactionId;
+        private readonly List<TransactionDomain> _nextTransactions = new();
 
         public RanTransactionDomain(
             Gs2 gs2,
             string transactionId,
+            string userId,
             TransactionResult result
         ): base(
             gs2,
-            null,
+            userId,
             null
         ) {
             this._transactionId = transactionId;
             HandleResult(result);
         }
 
-        private TransactionDomain HandleResult(
+        private void HandleResult(
             TransactionResult result
         ) {
             if (result.ConsumeResults != null) {
@@ -97,9 +99,8 @@ namespace Gs2.Core.Domain
                         acquireResult.AcquireResult
                     );
 
-                    var nextTransactions = new List<TransactionDomain>();
                     if (acquireResult.Action == "Gs2JobQueue:PushByUserId") {
-                        nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
+                        this._nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
                             Gs2,
                             UserId,
                             PushByUserIdResult.FromJson(JsonMapper.ToObject(acquireResult.AcquireResult))
@@ -108,7 +109,7 @@ namespace Gs2.Core.Domain
 
                     var resultJson = JsonMapper.ToObject(acquireResult.AcquireResult);
                     if (resultJson.ContainsKey("autoRunStampSheet")) {
-                        nextTransactions.Add(TransactionDomainFactory.ToTransaction(
+                        this._nextTransactions.Add(TransactionDomainFactory.ToTransaction(
                             Gs2,
                             UserId,
                             resultJson.ContainsKey("autoRunStampSheet") && bool.Parse(resultJson["autoRunStampSheet"]?.ToString() ?? "false"),
@@ -116,19 +117,11 @@ namespace Gs2.Core.Domain
                             resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
                             resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
                             resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
-                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToString())) : null
+                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToJson())) : null
                         ));
-                    }
-                    if (nextTransactions.Count > 0) {
-                        return new TransactionDomain(
-                            Gs2,
-                            UserId,
-                            nextTransactions
-                        );
                     }
                 }
             }
-            return null;
         }
 
 
@@ -137,7 +130,27 @@ namespace Gs2.Core.Domain
             bool all = false
         ) {
             IEnumerator Impl(IFuture<TransactionDomain> self) {
-                yield return null;
+                var nextTransactions = new List<TransactionDomain>();
+                foreach (var transaction in _nextTransactions) {
+                    var future = transaction.WaitFuture(all);
+                    yield return future;
+                    if (future.Error != null) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                    if (future.Result != null) {
+                        nextTransactions.Add(future.Result);
+                    }
+                }
+                if (nextTransactions.Count == 0) {
+                    self.OnComplete(null);
+                    yield break;
+                }
+                self.OnComplete(new TransactionDomain(
+                    Gs2,
+                    UserId,
+                    nextTransactions
+                ));
             }
             return new Gs2InlineFuture<TransactionDomain>(Impl);
         }
@@ -152,7 +165,21 @@ namespace Gs2.Core.Domain
     #endif
             bool all = false
         ) {
-            return null;
+            var nextTransactions = new List<TransactionDomain>();
+            foreach (var transaction in _nextTransactions) {
+                var nextTransaction = await transaction.WaitAsync(all);
+                if (nextTransaction != null) {
+                    nextTransactions.Add(nextTransaction);
+                }
+            }
+            if (nextTransactions.Count == 0) {
+                return null;
+            }
+            return new TransactionDomain(
+                Gs2,
+                UserId,
+                nextTransactions
+            );
         }
 #endif
     }

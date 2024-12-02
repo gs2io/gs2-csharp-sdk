@@ -49,21 +49,23 @@ namespace Gs2.Core.Domain
     public partial class RanTransactionAccessTokenDomain : TransactionAccessTokenDomain
     {
         private readonly string _transactionId;
+        private readonly List<TransactionAccessTokenDomain> _nextTransactions = new();
 
         public RanTransactionAccessTokenDomain(
             Gs2 gs2,
             string transactionId,
+            AccessToken accessToken,
             TransactionResult result
         ): base(
             gs2,
-            null,
+            accessToken,
             null
         ) {
             this._transactionId = transactionId;
             HandleResult(result);
         }
 
-        private TransactionAccessTokenDomain HandleResult(
+        private void HandleResult(
             TransactionResult result
         ) {
             if (result.ConsumeResults != null) {
@@ -97,9 +99,8 @@ namespace Gs2.Core.Domain
                         acquireResult.AcquireResult
                     );
 
-                    var nextTransactions = new List<TransactionAccessTokenDomain>();
                     if (acquireResult.Action == "Gs2JobQueue:PushByUserId") {
-                        nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
+                        this._nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
                             Gs2,
                             AccessToken,
                             PushByUserIdResult.FromJson(JsonMapper.ToObject(acquireResult.AcquireResult))
@@ -108,7 +109,7 @@ namespace Gs2.Core.Domain
 
                     var resultJson = JsonMapper.ToObject(acquireResult.AcquireResult);
                     if (resultJson.ContainsKey("autoRunStampSheet")) {
-                        nextTransactions.Add(TransactionDomainFactory.ToTransaction(
+                        this._nextTransactions.Add(TransactionDomainFactory.ToTransaction(
                             Gs2,
                             AccessToken,
                             resultJson.ContainsKey("autoRunStampSheet") && bool.Parse(resultJson["autoRunStampSheet"]?.ToString() ?? "false"),
@@ -116,19 +117,11 @@ namespace Gs2.Core.Domain
                             resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
                             resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
                             resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
-                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToString())) : null
+                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToJson())) : null
                         ));
-                    }
-                    if (nextTransactions.Count > 0) {
-                        return new TransactionAccessTokenDomain(
-                            Gs2,
-                            AccessToken,
-                            nextTransactions
-                        );
                     }
                 }
             }
-            return null;
         }
 
 
@@ -137,7 +130,27 @@ namespace Gs2.Core.Domain
             bool all = false
         ) {
             IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
-                yield return null;
+                var nextTransactions = new List<TransactionAccessTokenDomain>();
+                foreach (var transaction in _nextTransactions) {
+                    var future = transaction.WaitFuture(all);
+                    yield return future;
+                    if (future.Error != null) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                    if (future.Result != null) {
+                        nextTransactions.Add(future.Result);
+                    }
+                }
+                if (nextTransactions.Count == 0) {
+                    self.OnComplete(null);
+                    yield break;
+                }
+                self.OnComplete(new TransactionAccessTokenDomain(
+                    Gs2,
+                    AccessToken,
+                    nextTransactions
+                ));
             }
             return new Gs2InlineFuture<TransactionAccessTokenDomain>(Impl);
         }
@@ -152,7 +165,21 @@ namespace Gs2.Core.Domain
     #endif
             bool all = false
         ) {
-            return null;
+            var nextTransactions = new List<TransactionAccessTokenDomain>();
+            foreach (var transaction in _nextTransactions) {
+                var nextTransaction = await transaction.WaitAsync(all);
+                if (nextTransaction != null) {
+                    nextTransactions.Add(nextTransaction);
+                }
+            }
+            if (nextTransactions.Count == 0) {
+                return null;
+            }
+            return new TransactionAccessTokenDomain(
+                Gs2,
+                AccessToken,
+                nextTransactions
+            );
         }
 #endif
     }

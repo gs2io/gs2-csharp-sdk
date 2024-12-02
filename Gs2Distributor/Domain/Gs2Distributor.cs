@@ -304,7 +304,7 @@ namespace Gs2.Gs2Distributor.Domain
                     break;
                 }
                 case "AutoRunTransactionNotification": {
-                    lock (_completedStampSheets)
+                    lock (_completedTransactions)
                     {
                         var notification = AutoRunTransactionNotification.FromJson(JsonMapper.ToObject(payload));
                         _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.TransactionResult>(
@@ -391,6 +391,64 @@ namespace Gs2.Gs2Distributor.Domain
                         }
                     }
                 }
+                
+                AutoRunTransactionNotification[] copiedCompletedTransactions;
+
+                lock (_completedTransactions)
+                {
+                    if (_completedTransactions.Count == 0)
+                    {
+                        yield break;
+                    }
+
+                    copiedCompletedTransactions = new AutoRunTransactionNotification[_completedTransactions.Count];
+                    _completedTransactions.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedTransactions);
+                    foreach (var copiedCompletedTransaction in copiedCompletedTransactions) {
+                        _completedTransactions.Remove(copiedCompletedTransaction);
+                    }
+                }
+
+                foreach (var completedTransaction in copiedCompletedTransactions) {
+                    if (completedTransaction == null) continue;
+                    {
+                        for (var i = 0; i < 3; i++) {
+                            var future = _gs2.Distributor.Namespace(
+                                completedTransaction.NamespaceName
+                            ).AccessToken(
+                                accessToken
+                            ).TransactionResult(
+                                completedTransaction.TransactionId
+                            ).ModelNoCacheFuture();
+                            yield return future;
+                            if (future.Error != null) {
+                                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                                }
+                                else {
+                                    self.OnError(future.Error);
+                                }
+                                yield break;
+                            }
+                            if (future.Result != null) break;
+                        }
+                    }
+                    {
+                        var autoRun = new AutoTransactionAccessTokenDomain(
+                            _gs2,
+                            accessToken,
+                            completedTransaction.TransactionId
+                        );
+                        var future = autoRun.WaitFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                            }
+                            yield break;
+                        }
+                    }
+                }
             }
 
             return new Gs2InlineFuture(Impl);
@@ -400,10 +458,10 @@ namespace Gs2.Gs2Distributor.Domain
             string userId
         )
         {
-            AutoRunStampSheetNotification[] copiedCompletedStampSheets;
-
             IEnumerator Impl(Gs2Future self)
             {
+                AutoRunStampSheetNotification[] copiedCompletedStampSheets;
+
                 lock (_completedStampSheets)
                 {
                     if (_completedStampSheets.Count == 0)
@@ -443,6 +501,61 @@ namespace Gs2.Gs2Distributor.Domain
                             _gs2,
                             userId,
                             completedStampSheet.TransactionId
+                        );
+                        var future = autoRun.WaitFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                            }
+                            yield break;
+                        }
+                    }
+                }
+                
+                AutoRunTransactionNotification[] copiedCompletedTransactions;
+
+                lock (_completedTransactions)
+                {
+                    if (_completedTransactions.Count == 0)
+                    {
+                        yield break;
+                    }
+
+                    copiedCompletedTransactions = new AutoRunTransactionNotification[_completedTransactions.Count];
+                    _completedTransactions.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedTransactions);
+                    foreach (var copiedCompletedTransaction in copiedCompletedTransactions) {
+                        _completedTransactions.Remove(copiedCompletedTransaction);
+                    }
+                }
+
+                foreach (var completedTransaction in copiedCompletedTransactions) {
+                    if (completedTransaction == null) continue;
+                    {
+                        var future = _gs2.Distributor.Namespace(
+                            completedTransaction.NamespaceName
+                        ).User(
+                            userId
+                        ).TransactionResult(
+                            completedTransaction.TransactionId
+                        ).ModelNoCacheFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                                yield break;
+                            }
+                        }
+                    }
+                    {
+                        var autoRun = new AutoTransactionDomain(
+                            _gs2,
+                            userId,
+                            completedTransaction.TransactionId
                         );
                         var future = autoRun.WaitFuture();
                         yield return future;
@@ -531,7 +644,7 @@ namespace Gs2.Gs2Distributor.Domain
 
             foreach (var completedTransaction in copiedCompletedTransactions) {
                 if (completedTransaction == null) continue;
-                var autoRun = new AutoStampSheetAccessTokenDomain(
+                var autoRun = new AutoTransactionAccessTokenDomain(
                     _gs2,
                     accessToken,
                     completedTransaction.TransactionId
@@ -621,7 +734,7 @@ namespace Gs2.Gs2Distributor.Domain
 
             foreach (var completedTransaction in copiedCompletedTransactions) {
                 if (completedTransaction == null) continue;
-                var autoRun = new AutoStampSheetDomain(
+                var autoRun = new AutoTransactionDomain(
                     _gs2,
                     userId,
                     completedTransaction.TransactionId
