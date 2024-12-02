@@ -21,23 +21,21 @@ namespace Gs2.Core.Control
 {
 	public abstract class Gs2Request<T> : Gs2Request, IRequest where T : class
 	{
-	    /** GS2リクエストID */
-	    public string RequestId { set; get; }
+		public string ContextStack { set; get; }
 
-	    public T WithRequestId(string requestId)
-	    {
-		    this.RequestId = requestId;
-		    return this as T;
-	    }
-        
-	    /** コンテキストスタック */
-	    public string ContextStack { set; get; }
+		public T WithContextStack(string contextStack)
+		{
+			this.ContextStack = contextStack;
+			return this as T;
+		}
+		
+		public bool DryRun { set; get; }
 
-	    public T WithContextStack(string contextStack)
-	    {
-		    this.ContextStack = contextStack;
-		    return this as T;
-	    }
+		public T WithDryRun(bool dryRun)
+		{
+			this.DryRun = dryRun;
+			return this as T;
+		}
 	}
 	
 	public abstract class Gs2Request

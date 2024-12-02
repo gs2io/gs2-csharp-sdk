@@ -118,10 +118,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -238,10 +237,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -368,10 +366,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -493,10 +490,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -613,10 +609,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -753,10 +748,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -873,10 +867,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -998,10 +991,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1103,10 +1095,9 @@ namespace Gs2.Gs2Project
                 if (request.AccountToken != null) {
                     sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1208,10 +1199,9 @@ namespace Gs2.Gs2Project
                 if (request.AccountToken != null) {
                     sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1319,10 +1309,9 @@ namespace Gs2.Gs2Project
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1484,10 +1473,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1591,10 +1579,9 @@ namespace Gs2.Gs2Project
                 if (request.AccountToken != null) {
                     sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1713,10 +1700,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1842,10 +1828,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -1994,10 +1979,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2117,10 +2101,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2235,10 +2218,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2342,10 +2324,9 @@ namespace Gs2.Gs2Project
                 if (request.AccountToken != null) {
                     sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2453,10 +2434,9 @@ namespace Gs2.Gs2Project
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2593,10 +2573,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2700,10 +2679,9 @@ namespace Gs2.Gs2Project
                 if (request.AccountToken != null) {
                     sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2827,10 +2805,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -2934,10 +2911,9 @@ namespace Gs2.Gs2Project
                 if (request.AccountToken != null) {
                     sessionRequest.AddQueryString("accountToken", $"{request.AccountToken}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3045,10 +3021,9 @@ namespace Gs2.Gs2Project
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3160,10 +3135,9 @@ namespace Gs2.Gs2Project
                 if (request.Service != null) {
                     sessionRequest.AddQueryString("service", $"{request.Service}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3268,10 +3242,9 @@ namespace Gs2.Gs2Project
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3372,10 +3345,9 @@ namespace Gs2.Gs2Project
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3499,11 +3471,6 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
@@ -3511,6 +3478,10 @@ namespace Gs2.Gs2Project
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3624,10 +3595,9 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3741,11 +3711,6 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
@@ -3753,6 +3718,10 @@ namespace Gs2.Gs2Project
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3853,10 +3822,9 @@ namespace Gs2.Gs2Project
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -3961,10 +3929,9 @@ namespace Gs2.Gs2Project
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4065,10 +4032,9 @@ namespace Gs2.Gs2Project
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4192,11 +4158,6 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
@@ -4204,6 +4165,10 @@ namespace Gs2.Gs2Project
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4317,11 +4282,6 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
@@ -4329,6 +4289,10 @@ namespace Gs2.Gs2Project
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4433,10 +4397,9 @@ namespace Gs2.Gs2Project
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4537,10 +4500,9 @@ namespace Gs2.Gs2Project
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4664,11 +4626,6 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
@@ -4676,6 +4633,10 @@ namespace Gs2.Gs2Project
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4789,11 +4750,6 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
@@ -4801,6 +4757,10 @@ namespace Gs2.Gs2Project
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -4919,11 +4879,6 @@ namespace Gs2.Gs2Project
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
@@ -4931,6 +4886,10 @@ namespace Gs2.Gs2Project
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -5037,10 +4996,9 @@ namespace Gs2.Gs2Project
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -5142,10 +5100,9 @@ namespace Gs2.Gs2Project
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(

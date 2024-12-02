@@ -102,10 +102,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -205,10 +205,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -338,10 +338,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -441,10 +441,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -549,10 +549,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -657,10 +657,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -765,10 +765,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -873,10 +873,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -986,10 +986,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1099,10 +1099,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1207,10 +1207,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1335,10 +1335,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1443,10 +1443,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1571,10 +1571,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1679,10 +1679,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1787,10 +1787,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -1920,10 +1920,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2028,10 +2028,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2161,10 +2161,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2269,10 +2269,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2377,10 +2377,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2505,10 +2505,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2613,10 +2613,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2741,10 +2741,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2849,10 +2849,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -2962,15 +2962,15 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
                 if (request.AccessToken != null)
                 {
                     jsonWriter.WritePropertyName("xGs2AccessToken");
                     jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3085,10 +3085,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3208,15 +3208,15 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
                     jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3336,15 +3336,15 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
                     jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3459,11 +3459,6 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
                 if (request.AccessToken != null)
                 {
                     jsonWriter.WritePropertyName("xGs2AccessToken");
@@ -3473,6 +3468,11 @@ namespace Gs2.Gs2Formation
                 {
                     jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
                     jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3592,15 +3592,15 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
                     jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3710,11 +3710,6 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
                 if (request.AccessToken != null)
                 {
                     jsonWriter.WritePropertyName("xGs2AccessToken");
@@ -3724,6 +3719,11 @@ namespace Gs2.Gs2Formation
                 {
                     jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
                     jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3838,15 +3838,15 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
-                }
                 if (request.DuplicationAvoider != null)
                 {
                     jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
                     jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -3951,10 +3951,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(
@@ -4059,10 +4059,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
                 }
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    jsonWriter.WritePropertyName("xGs2RequestId");
-                    jsonWriter.Write(request.RequestId);
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
                 }
 
                 AddHeader(

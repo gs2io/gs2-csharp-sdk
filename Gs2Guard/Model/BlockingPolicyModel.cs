@@ -111,12 +111,12 @@ namespace Gs2.Gs2Guard.Model
                 return null;
             }
             return new BlockingPolicyModel()
-                .WithPassServices(!data.Keys.Contains("passServices") || data["passServices"] == null || !data["passServices"].IsArray ? new string[]{} : data["passServices"].Cast<JsonData>().Select(v => {
+                .WithPassServices(!data.Keys.Contains("passServices") || data["passServices"] == null || !data["passServices"].IsArray ? null : data["passServices"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithDefaultRestriction(!data.Keys.Contains("defaultRestriction") || data["defaultRestriction"] == null ? null : data["defaultRestriction"].ToString())
                 .WithLocationDetection(!data.Keys.Contains("locationDetection") || data["locationDetection"] == null ? null : data["locationDetection"].ToString())
-                .WithLocations(!data.Keys.Contains("locations") || data["locations"] == null || !data["locations"].IsArray ? new string[]{} : data["locations"].Cast<JsonData>().Select(v => {
+                .WithLocations(!data.Keys.Contains("locations") || data["locations"] == null || !data["locations"].IsArray ? null : data["locations"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithLocationRestriction(!data.Keys.Contains("locationRestriction") || data["locationRestriction"] == null ? null : data["locationRestriction"].ToString())
@@ -127,7 +127,7 @@ namespace Gs2.Gs2Guard.Model
                 .WithReputationIpDetection(!data.Keys.Contains("reputationIpDetection") || data["reputationIpDetection"] == null ? null : data["reputationIpDetection"].ToString())
                 .WithReputationIpRestriction(!data.Keys.Contains("reputationIpRestriction") || data["reputationIpRestriction"] == null ? null : data["reputationIpRestriction"].ToString())
                 .WithIpAddressesDetection(!data.Keys.Contains("ipAddressesDetection") || data["ipAddressesDetection"] == null ? null : data["ipAddressesDetection"].ToString())
-                .WithIpAddresses(!data.Keys.Contains("ipAddresses") || data["ipAddresses"] == null || !data["ipAddresses"].IsArray ? new string[]{} : data["ipAddresses"].Cast<JsonData>().Select(v => {
+                .WithIpAddresses(!data.Keys.Contains("ipAddresses") || data["ipAddresses"] == null || !data["ipAddresses"].IsArray ? null : data["ipAddresses"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithIpAddressRestriction(!data.Keys.Contains("ipAddressRestriction") || data["ipAddressRestriction"] == null ? null : data["ipAddressRestriction"].ToString());

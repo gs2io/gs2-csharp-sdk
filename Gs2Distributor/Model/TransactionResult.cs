@@ -393,14 +393,14 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
-                if (VerifyResults.Length > 10) {
+                if (VerifyResults.Length > 100) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("transactionResult", "distributor.transactionResult.verifyResults.error.tooMany"),
                     });
                 }
             }
             {
-                if (ConsumeResults.Length > 10) {
+                if (ConsumeResults.Length > 100) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("transactionResult", "distributor.transactionResult.consumeResults.error.tooMany"),
                     });

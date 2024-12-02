@@ -103,14 +103,13 @@ namespace Gs2.Gs2Auth
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -237,10 +236,9 @@ namespace Gs2.Gs2Auth
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
+                if (request.DryRun)
                 {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -372,14 +370,13 @@ namespace Gs2.Gs2Auth
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
@@ -501,14 +498,13 @@ namespace Gs2.Gs2Auth
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
                 }
 
                 AddHeader(
