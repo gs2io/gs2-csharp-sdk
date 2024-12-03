@@ -174,16 +174,5 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
 
-        public Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobAccessTokenDomain DeadLetterJob(
-            string deadLetterJobName
-        ) {
-            return new Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.AccessToken,
-                deadLetterJobName
-            );
-        }
-
     }
 }
