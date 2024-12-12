@@ -45,6 +45,7 @@ namespace Gs2.Gs2Version.Request
          public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; } = null!;
          public bool? NeedSignature { set; get; } = null!;
          public string SignatureKeyId { set; get; } = null!;
+         public string ApproveRequirement { set; get; } = null!;
         public UpdateVersionModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -93,6 +94,10 @@ namespace Gs2.Gs2Version.Request
             this.SignatureKeyId = signatureKeyId;
             return this;
         }
+        public UpdateVersionModelMasterRequest WithApproveRequirement(string approveRequirement) {
+            this.ApproveRequirement = approveRequirement;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -116,7 +121,8 @@ namespace Gs2.Gs2Version.Request
                     return Gs2.Gs2Version.Model.ScheduleVersion.FromJson(v);
                 }).ToArray())
                 .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))
-                .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString());
+                .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString())
+                .WithApproveRequirement(!data.Keys.Contains("approveRequirement") || data["approveRequirement"] == null ? null : data["approveRequirement"].ToString());
         }
 
         public override JsonData ToJson()
@@ -143,6 +149,7 @@ namespace Gs2.Gs2Version.Request
                 ["scheduleVersions"] = scheduleVersionsJsonData,
                 ["needSignature"] = NeedSignature,
                 ["signatureKeyId"] = SignatureKeyId,
+                ["approveRequirement"] = ApproveRequirement,
             };
         }
 
@@ -201,6 +208,10 @@ namespace Gs2.Gs2Version.Request
                 writer.WritePropertyName("signatureKeyId");
                 writer.Write(SignatureKeyId.ToString());
             }
+            if (ApproveRequirement != null) {
+                writer.WritePropertyName("approveRequirement");
+                writer.Write(ApproveRequirement.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -218,6 +229,7 @@ namespace Gs2.Gs2Version.Request
             key += ScheduleVersions + ":";
             key += NeedSignature + ":";
             key += SignatureKeyId + ":";
+            key += ApproveRequirement + ":";
             return key;
         }
     }

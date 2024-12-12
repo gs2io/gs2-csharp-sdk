@@ -4150,6 +4150,1211 @@ namespace Gs2.Gs2Dictionary
 #endif
 
 
+        public class DescribeLikesTask : Gs2RestSessionTask<DescribeLikesRequest, DescribeLikesResult>
+        {
+            public DescribeLikesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLikesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeLikesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/like";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeLikes(
+                Request.DescribeLikesRequest request,
+                UnityAction<AsyncResult<Result.DescribeLikesResult>> callback
+        )
+		{
+			var task = new DescribeLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeLikesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeLikesResult> DescribeLikesFuture(
+                Request.DescribeLikesRequest request
+        )
+		{
+			return new DescribeLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeLikesResult> DescribeLikesAsync(
+                Request.DescribeLikesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeLikesResult> result = null;
+			await DescribeLikes(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeLikesTask DescribeLikesAsync(
+                Request.DescribeLikesRequest request
+        )
+		{
+			return new DescribeLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeLikesResult> DescribeLikesAsync(
+                Request.DescribeLikesRequest request
+        )
+		{
+			var task = new DescribeLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeLikesByUserIdTask : Gs2RestSessionTask<DescribeLikesByUserIdRequest, DescribeLikesByUserIdResult>
+        {
+            public DescribeLikesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLikesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeLikesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/like";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeLikesByUserId(
+                Request.DescribeLikesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeLikesByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeLikesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeLikesByUserIdResult> DescribeLikesByUserIdFuture(
+                Request.DescribeLikesByUserIdRequest request
+        )
+		{
+			return new DescribeLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeLikesByUserIdResult> DescribeLikesByUserIdAsync(
+                Request.DescribeLikesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeLikesByUserIdResult> result = null;
+			await DescribeLikesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeLikesByUserIdTask DescribeLikesByUserIdAsync(
+                Request.DescribeLikesByUserIdRequest request
+        )
+		{
+			return new DescribeLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeLikesByUserIdResult> DescribeLikesByUserIdAsync(
+                Request.DescribeLikesByUserIdRequest request
+        )
+		{
+			var task = new DescribeLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AddLikesTask : Gs2RestSessionTask<AddLikesRequest, AddLikesResult>
+        {
+            public AddLikesTask(IGs2Session session, RestSessionRequestFactory factory, AddLikesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AddLikesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/like";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.EntryModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.EntryModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddLikes(
+                Request.AddLikesRequest request,
+                UnityAction<AsyncResult<Result.AddLikesResult>> callback
+        )
+		{
+			var task = new AddLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddLikesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddLikesResult> AddLikesFuture(
+                Request.AddLikesRequest request
+        )
+		{
+			return new AddLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddLikesResult> AddLikesAsync(
+                Request.AddLikesRequest request
+        )
+		{
+            AsyncResult<Result.AddLikesResult> result = null;
+			await AddLikes(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AddLikesTask AddLikesAsync(
+                Request.AddLikesRequest request
+        )
+		{
+			return new AddLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddLikesResult> AddLikesAsync(
+                Request.AddLikesRequest request
+        )
+		{
+			var task = new AddLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AddLikesByUserIdTask : Gs2RestSessionTask<AddLikesByUserIdRequest, AddLikesByUserIdResult>
+        {
+            public AddLikesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, AddLikesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AddLikesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/like";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.EntryModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.EntryModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddLikesByUserId(
+                Request.AddLikesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AddLikesByUserIdResult>> callback
+        )
+		{
+			var task = new AddLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddLikesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddLikesByUserIdResult> AddLikesByUserIdFuture(
+                Request.AddLikesByUserIdRequest request
+        )
+		{
+			return new AddLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddLikesByUserIdResult> AddLikesByUserIdAsync(
+                Request.AddLikesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.AddLikesByUserIdResult> result = null;
+			await AddLikesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AddLikesByUserIdTask AddLikesByUserIdAsync(
+                Request.AddLikesByUserIdRequest request
+        )
+		{
+			return new AddLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddLikesByUserIdResult> AddLikesByUserIdAsync(
+                Request.AddLikesByUserIdRequest request
+        )
+		{
+			var task = new AddLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetLikeTask : Gs2RestSessionTask<GetLikeRequest, GetLikeResult>
+        {
+            public GetLikeTask(IGs2Session session, RestSessionRequestFactory factory, GetLikeRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetLikeRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/like/{entryModelName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{entryModelName}", !string.IsNullOrEmpty(request.EntryModelName) ? request.EntryModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetLike(
+                Request.GetLikeRequest request,
+                UnityAction<AsyncResult<Result.GetLikeResult>> callback
+        )
+		{
+			var task = new GetLikeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetLikeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetLikeResult> GetLikeFuture(
+                Request.GetLikeRequest request
+        )
+		{
+			return new GetLikeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLikeResult> GetLikeAsync(
+                Request.GetLikeRequest request
+        )
+		{
+            AsyncResult<Result.GetLikeResult> result = null;
+			await GetLike(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetLikeTask GetLikeAsync(
+                Request.GetLikeRequest request
+        )
+		{
+			return new GetLikeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetLikeResult> GetLikeAsync(
+                Request.GetLikeRequest request
+        )
+		{
+			var task = new GetLikeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetLikeByUserIdTask : Gs2RestSessionTask<GetLikeByUserIdRequest, GetLikeByUserIdResult>
+        {
+            public GetLikeByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetLikeByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetLikeByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/like/{entryModelName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{entryModelName}", !string.IsNullOrEmpty(request.EntryModelName) ? request.EntryModelName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetLikeByUserId(
+                Request.GetLikeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetLikeByUserIdResult>> callback
+        )
+		{
+			var task = new GetLikeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetLikeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetLikeByUserIdResult> GetLikeByUserIdFuture(
+                Request.GetLikeByUserIdRequest request
+        )
+		{
+			return new GetLikeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLikeByUserIdResult> GetLikeByUserIdAsync(
+                Request.GetLikeByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetLikeByUserIdResult> result = null;
+			await GetLikeByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetLikeByUserIdTask GetLikeByUserIdAsync(
+                Request.GetLikeByUserIdRequest request
+        )
+		{
+			return new GetLikeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetLikeByUserIdResult> GetLikeByUserIdAsync(
+                Request.GetLikeByUserIdRequest request
+        )
+		{
+			var task = new GetLikeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetLikesTask : Gs2RestSessionTask<ResetLikesRequest, ResetLikesResult>
+        {
+            public ResetLikesTask(IGs2Session session, RestSessionRequestFactory factory, ResetLikesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetLikesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/like";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetLikes(
+                Request.ResetLikesRequest request,
+                UnityAction<AsyncResult<Result.ResetLikesResult>> callback
+        )
+		{
+			var task = new ResetLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetLikesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetLikesResult> ResetLikesFuture(
+                Request.ResetLikesRequest request
+        )
+		{
+			return new ResetLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetLikesResult> ResetLikesAsync(
+                Request.ResetLikesRequest request
+        )
+		{
+            AsyncResult<Result.ResetLikesResult> result = null;
+			await ResetLikes(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetLikesTask ResetLikesAsync(
+                Request.ResetLikesRequest request
+        )
+		{
+			return new ResetLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetLikesResult> ResetLikesAsync(
+                Request.ResetLikesRequest request
+        )
+		{
+			var task = new ResetLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetLikesByUserIdTask : Gs2RestSessionTask<ResetLikesByUserIdRequest, ResetLikesByUserIdResult>
+        {
+            public ResetLikesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ResetLikesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetLikesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/like";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetLikesByUserId(
+                Request.ResetLikesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ResetLikesByUserIdResult>> callback
+        )
+		{
+			var task = new ResetLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetLikesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetLikesByUserIdResult> ResetLikesByUserIdFuture(
+                Request.ResetLikesByUserIdRequest request
+        )
+		{
+			return new ResetLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetLikesByUserIdResult> ResetLikesByUserIdAsync(
+                Request.ResetLikesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.ResetLikesByUserIdResult> result = null;
+			await ResetLikesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetLikesByUserIdTask ResetLikesByUserIdAsync(
+                Request.ResetLikesByUserIdRequest request
+        )
+		{
+			return new ResetLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetLikesByUserIdResult> ResetLikesByUserIdAsync(
+                Request.ResetLikesByUserIdRequest request
+        )
+		{
+			var task = new ResetLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteLikesTask : Gs2RestSessionTask<DeleteLikesRequest, DeleteLikesResult>
+        {
+            public DeleteLikesTask(IGs2Session session, RestSessionRequestFactory factory, DeleteLikesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteLikesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/like/delete";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.EntryModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.EntryModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteLikes(
+                Request.DeleteLikesRequest request,
+                UnityAction<AsyncResult<Result.DeleteLikesResult>> callback
+        )
+		{
+			var task = new DeleteLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteLikesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteLikesResult> DeleteLikesFuture(
+                Request.DeleteLikesRequest request
+        )
+		{
+			return new DeleteLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteLikesResult> DeleteLikesAsync(
+                Request.DeleteLikesRequest request
+        )
+		{
+            AsyncResult<Result.DeleteLikesResult> result = null;
+			await DeleteLikes(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteLikesTask DeleteLikesAsync(
+                Request.DeleteLikesRequest request
+        )
+		{
+			return new DeleteLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteLikesResult> DeleteLikesAsync(
+                Request.DeleteLikesRequest request
+        )
+		{
+			var task = new DeleteLikesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteLikesByUserIdTask : Gs2RestSessionTask<DeleteLikesByUserIdRequest, DeleteLikesByUserIdResult>
+        {
+            public DeleteLikesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteLikesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteLikesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/like/delete";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.EntryModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.EntryModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteLikesByUserId(
+                Request.DeleteLikesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteLikesByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteLikesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteLikesByUserIdResult> DeleteLikesByUserIdFuture(
+                Request.DeleteLikesByUserIdRequest request
+        )
+		{
+			return new DeleteLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteLikesByUserIdResult> DeleteLikesByUserIdAsync(
+                Request.DeleteLikesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteLikesByUserIdResult> result = null;
+			await DeleteLikesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteLikesByUserIdTask DeleteLikesByUserIdAsync(
+                Request.DeleteLikesByUserIdRequest request
+        )
+		{
+			return new DeleteLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteLikesByUserIdResult> DeleteLikesByUserIdAsync(
+                Request.DeleteLikesByUserIdRequest request
+        )
+		{
+			var task = new DeleteLikesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
             public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)

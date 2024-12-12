@@ -1247,6 +1247,11 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("signatureKeyId");
                     jsonWriter.Write(request.SignatureKeyId.ToString());
                 }
+                if (request.ApproveRequirement != null)
+                {
+                    jsonWriter.WritePropertyName("approveRequirement");
+                    jsonWriter.Write(request.ApproveRequirement.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1517,6 +1522,11 @@ namespace Gs2.Gs2Version
                 {
                     jsonWriter.WritePropertyName("signatureKeyId");
                     jsonWriter.Write(request.SignatureKeyId.ToString());
+                }
+                if (request.ApproveRequirement != null)
+                {
+                    jsonWriter.WritePropertyName("approveRequirement");
+                    jsonWriter.Write(request.ApproveRequirement.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2087,6 +2097,282 @@ namespace Gs2.Gs2Version
         )
 		{
 		    var task = new AcceptByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RejectTask : Gs2WebSocketSessionTask<Request.RejectRequest, Result.RejectResult>
+        {
+	        public RejectTask(IGs2Session session, Request.RejectRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RejectRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.VersionName != null)
+                {
+                    jsonWriter.WritePropertyName("versionName");
+                    jsonWriter.Write(request.VersionName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "version",
+                    "acceptVersion",
+                    "reject",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Reject(
+                Request.RejectRequest request,
+                UnityAction<AsyncResult<Result.RejectResult>> callback
+        )
+		{
+			var task = new RejectTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RejectResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RejectResult> RejectFuture(
+                Request.RejectRequest request
+        )
+		{
+			return new RejectTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RejectResult> RejectAsync(
+            Request.RejectRequest request
+        )
+		{
+		    var task = new RejectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RejectTask RejectAsync(
+                Request.RejectRequest request
+        )
+		{
+			return new RejectTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RejectResult> RejectAsync(
+            Request.RejectRequest request
+        )
+		{
+		    var task = new RejectTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RejectByUserIdTask : Gs2WebSocketSessionTask<Request.RejectByUserIdRequest, Result.RejectByUserIdResult>
+        {
+	        public RejectByUserIdTask(IGs2Session session, Request.RejectByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RejectByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.VersionName != null)
+                {
+                    jsonWriter.WritePropertyName("versionName");
+                    jsonWriter.Write(request.VersionName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "version",
+                    "acceptVersion",
+                    "rejectByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RejectByUserId(
+                Request.RejectByUserIdRequest request,
+                UnityAction<AsyncResult<Result.RejectByUserIdResult>> callback
+        )
+		{
+			var task = new RejectByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RejectByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RejectByUserIdResult> RejectByUserIdFuture(
+                Request.RejectByUserIdRequest request
+        )
+		{
+			return new RejectByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RejectByUserIdResult> RejectByUserIdAsync(
+            Request.RejectByUserIdRequest request
+        )
+		{
+		    var task = new RejectByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RejectByUserIdTask RejectByUserIdAsync(
+                Request.RejectByUserIdRequest request
+        )
+		{
+			return new RejectByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RejectByUserIdResult> RejectByUserIdAsync(
+            Request.RejectByUserIdRequest request
+        )
+		{
+		    var task = new RejectByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );

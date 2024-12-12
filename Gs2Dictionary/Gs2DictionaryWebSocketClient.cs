@@ -2327,5 +2327,477 @@ namespace Gs2.Gs2Dictionary
 			return await task.Invoke();
         }
 #endif
+
+
+        public class GetLikeTask : Gs2WebSocketSessionTask<Request.GetLikeRequest, Result.GetLikeResult>
+        {
+	        public GetLikeTask(IGs2Session session, Request.GetLikeRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetLikeRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.EntryModelName != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelName");
+                    jsonWriter.Write(request.EntryModelName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "dictionary",
+                    "like",
+                    "getLike",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetLike(
+                Request.GetLikeRequest request,
+                UnityAction<AsyncResult<Result.GetLikeResult>> callback
+        )
+		{
+			var task = new GetLikeTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetLikeResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetLikeResult> GetLikeFuture(
+                Request.GetLikeRequest request
+        )
+		{
+			return new GetLikeTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLikeResult> GetLikeAsync(
+            Request.GetLikeRequest request
+        )
+		{
+		    var task = new GetLikeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetLikeTask GetLikeAsync(
+                Request.GetLikeRequest request
+        )
+		{
+			return new GetLikeTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetLikeResult> GetLikeAsync(
+            Request.GetLikeRequest request
+        )
+		{
+		    var task = new GetLikeTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetLikeByUserIdTask : Gs2WebSocketSessionTask<Request.GetLikeByUserIdRequest, Result.GetLikeByUserIdResult>
+        {
+	        public GetLikeByUserIdTask(IGs2Session session, Request.GetLikeByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetLikeByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.EntryModelName != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelName");
+                    jsonWriter.Write(request.EntryModelName.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "dictionary",
+                    "like",
+                    "getLikeByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetLikeByUserId(
+                Request.GetLikeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetLikeByUserIdResult>> callback
+        )
+		{
+			var task = new GetLikeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetLikeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetLikeByUserIdResult> GetLikeByUserIdFuture(
+                Request.GetLikeByUserIdRequest request
+        )
+		{
+			return new GetLikeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLikeByUserIdResult> GetLikeByUserIdAsync(
+            Request.GetLikeByUserIdRequest request
+        )
+		{
+		    var task = new GetLikeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetLikeByUserIdTask GetLikeByUserIdAsync(
+                Request.GetLikeByUserIdRequest request
+        )
+		{
+			return new GetLikeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetLikeByUserIdResult> GetLikeByUserIdAsync(
+            Request.GetLikeByUserIdRequest request
+        )
+		{
+		    var task = new GetLikeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetLikesTask : Gs2WebSocketSessionTask<Request.ResetLikesRequest, Result.ResetLikesResult>
+        {
+	        public ResetLikesTask(IGs2Session session, Request.ResetLikesRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetLikesRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "dictionary",
+                    "like",
+                    "resetLikes",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetLikes(
+                Request.ResetLikesRequest request,
+                UnityAction<AsyncResult<Result.ResetLikesResult>> callback
+        )
+		{
+			var task = new ResetLikesTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetLikesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetLikesResult> ResetLikesFuture(
+                Request.ResetLikesRequest request
+        )
+		{
+			return new ResetLikesTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetLikesResult> ResetLikesAsync(
+            Request.ResetLikesRequest request
+        )
+		{
+		    var task = new ResetLikesTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetLikesTask ResetLikesAsync(
+                Request.ResetLikesRequest request
+        )
+		{
+			return new ResetLikesTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetLikesResult> ResetLikesAsync(
+            Request.ResetLikesRequest request
+        )
+		{
+		    var task = new ResetLikesTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetLikesByUserIdTask : Gs2WebSocketSessionTask<Request.ResetLikesByUserIdRequest, Result.ResetLikesByUserIdResult>
+        {
+	        public ResetLikesByUserIdTask(IGs2Session session, Request.ResetLikesByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetLikesByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "dictionary",
+                    "like",
+                    "resetLikesByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetLikesByUserId(
+                Request.ResetLikesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ResetLikesByUserIdResult>> callback
+        )
+		{
+			var task = new ResetLikesByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetLikesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetLikesByUserIdResult> ResetLikesByUserIdFuture(
+                Request.ResetLikesByUserIdRequest request
+        )
+		{
+			return new ResetLikesByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetLikesByUserIdResult> ResetLikesByUserIdAsync(
+            Request.ResetLikesByUserIdRequest request
+        )
+		{
+		    var task = new ResetLikesByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetLikesByUserIdTask ResetLikesByUserIdAsync(
+                Request.ResetLikesByUserIdRequest request
+        )
+		{
+			return new ResetLikesByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetLikesByUserIdResult> ResetLikesByUserIdAsync(
+            Request.ResetLikesByUserIdRequest request
+        )
+		{
+		    var task = new ResetLikesByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

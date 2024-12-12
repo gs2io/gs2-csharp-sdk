@@ -35,6 +35,7 @@ namespace Gs2.Gs2Version.Model
         public string VersionName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public Gs2.Gs2Version.Model.Version_ Version { set; get; } = null!;
+        public string Status { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Version.Model
         }
         public AcceptVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
             this.Version = version;
+            return this;
+        }
+        public AcceptVersion WithStatus(string status) {
+            this.Status = status;
             return this;
         }
         public AcceptVersion WithCreatedAt(long? createdAt) {
@@ -165,6 +170,7 @@ namespace Gs2.Gs2Version.Model
                 .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]))
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -177,6 +183,7 @@ namespace Gs2.Gs2Version.Model
                 ["versionName"] = VersionName,
                 ["userId"] = UserId,
                 ["version"] = Version?.ToJson(),
+                ["status"] = Status,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -201,6 +208,10 @@ namespace Gs2.Gs2Version.Model
             if (Version != null) {
                 writer.WritePropertyName("version");
                 Version.WriteJson(writer);
+            }
+            if (Status != null) {
+                writer.WritePropertyName("status");
+                writer.Write(Status.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -252,6 +263,14 @@ namespace Gs2.Gs2Version.Model
             else
             {
                 diff += Version.CompareTo(other.Version);
+            }
+            if (Status == null && Status == other.Status)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Status.CompareTo(other.Status);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -305,6 +324,17 @@ namespace Gs2.Gs2Version.Model
             {
             }
             {
+                switch (Status) {
+                    case "accept":
+                    case "reject":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("acceptVersion", "version.acceptVersion.status.error.invalid"),
+                        });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("acceptVersion", "version.acceptVersion.createdAt.error.invalid"),
@@ -348,6 +378,7 @@ namespace Gs2.Gs2Version.Model
                 VersionName = VersionName,
                 UserId = UserId,
                 Version = Version.Clone() as Gs2.Gs2Version.Model.Version_,
+                Status = Status,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

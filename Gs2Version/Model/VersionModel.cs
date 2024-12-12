@@ -44,6 +44,7 @@ namespace Gs2.Gs2Version.Model
         public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; } = null!;
         public bool? NeedSignature { set; get; } = null!;
         public string SignatureKeyId { set; get; } = null!;
+        public string ApproveRequirement { set; get; } = null!;
         public VersionModel WithVersionModelId(string versionModelId) {
             this.VersionModelId = versionModelId;
             return this;
@@ -86,6 +87,10 @@ namespace Gs2.Gs2Version.Model
         }
         public VersionModel WithSignatureKeyId(string signatureKeyId) {
             this.SignatureKeyId = signatureKeyId;
+            return this;
+        }
+        public VersionModel WithApproveRequirement(string approveRequirement) {
+            this.ApproveRequirement = approveRequirement;
             return this;
         }
 
@@ -178,7 +183,8 @@ namespace Gs2.Gs2Version.Model
                     return Gs2.Gs2Version.Model.ScheduleVersion.FromJson(v);
                 }).ToArray())
                 .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))
-                .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString());
+                .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString())
+                .WithApproveRequirement(!data.Keys.Contains("approveRequirement") || data["approveRequirement"] == null ? null : data["approveRequirement"].ToString());
         }
 
         public JsonData ToJson()
@@ -204,6 +210,7 @@ namespace Gs2.Gs2Version.Model
                 ["scheduleVersions"] = scheduleVersionsJsonData,
                 ["needSignature"] = NeedSignature,
                 ["signatureKeyId"] = SignatureKeyId,
+                ["approveRequirement"] = ApproveRequirement,
             };
         }
 
@@ -260,6 +267,10 @@ namespace Gs2.Gs2Version.Model
             if (SignatureKeyId != null) {
                 writer.WritePropertyName("signatureKeyId");
                 writer.Write(SignatureKeyId.ToString());
+            }
+            if (ApproveRequirement != null) {
+                writer.WritePropertyName("approveRequirement");
+                writer.Write(ApproveRequirement.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -360,6 +371,14 @@ namespace Gs2.Gs2Version.Model
             {
                 diff += SignatureKeyId.CompareTo(other.SignatureKeyId);
             }
+            if (ApproveRequirement == null && ApproveRequirement == other.ApproveRequirement)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ApproveRequirement.CompareTo(other.ApproveRequirement);
+            }
             return diff;
         }
 
@@ -429,6 +448,17 @@ namespace Gs2.Gs2Version.Model
                     });
                 }
             }
+            if (Scope == "active") {
+                switch (ApproveRequirement) {
+                    case "required":
+                    case "optional":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("versionModel", "version.versionModel.approveRequirement.error.invalid"),
+                        });
+                }
+            }
         }
 
         public object Clone() {
@@ -444,6 +474,7 @@ namespace Gs2.Gs2Version.Model
                 ScheduleVersions = ScheduleVersions.Clone() as Gs2.Gs2Version.Model.ScheduleVersion[],
                 NeedSignature = NeedSignature,
                 SignatureKeyId = SignatureKeyId,
+                ApproveRequirement = ApproveRequirement,
             };
         }
     }

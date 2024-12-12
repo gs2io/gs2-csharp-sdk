@@ -1759,6 +1759,11 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("signatureKeyId");
                     jsonWriter.Write(request.SignatureKeyId);
                 }
+                if (request.ApproveRequirement != null)
+                {
+                    jsonWriter.WritePropertyName("approveRequirement");
+                    jsonWriter.Write(request.ApproveRequirement);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2034,6 +2039,11 @@ namespace Gs2.Gs2Version
                 {
                     jsonWriter.WritePropertyName("signatureKeyId");
                     jsonWriter.Write(request.SignatureKeyId);
+                }
+                if (request.ApproveRequirement != null)
+                {
+                    jsonWriter.WritePropertyName("approveRequirement");
+                    jsonWriter.Write(request.ApproveRequirement);
                 }
                 if (request.ContextStack != null)
                 {
@@ -2951,6 +2961,295 @@ namespace Gs2.Gs2Version
         )
 		{
 			var task = new AcceptByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RejectTask : Gs2RestSessionTask<RejectRequest, RejectResult>
+        {
+            public RejectTask(IGs2Session session, RestSessionRequestFactory factory, RejectRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RejectRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "version")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/acceptVersion/reject";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VersionName != null)
+                {
+                    jsonWriter.WritePropertyName("versionName");
+                    jsonWriter.Write(request.VersionName);
+                }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Reject(
+                Request.RejectRequest request,
+                UnityAction<AsyncResult<Result.RejectResult>> callback
+        )
+		{
+			var task = new RejectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RejectResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RejectResult> RejectFuture(
+                Request.RejectRequest request
+        )
+		{
+			return new RejectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RejectResult> RejectAsync(
+                Request.RejectRequest request
+        )
+		{
+            AsyncResult<Result.RejectResult> result = null;
+			await Reject(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RejectTask RejectAsync(
+                Request.RejectRequest request
+        )
+		{
+			return new RejectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RejectResult> RejectAsync(
+                Request.RejectRequest request
+        )
+		{
+			var task = new RejectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RejectByUserIdTask : Gs2RestSessionTask<RejectByUserIdRequest, RejectByUserIdResult>
+        {
+            public RejectByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, RejectByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RejectByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "version")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/acceptVersion/reject";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.VersionName != null)
+                {
+                    jsonWriter.WritePropertyName("versionName");
+                    jsonWriter.Write(request.VersionName);
+                }
+                if (request.Version != null)
+                {
+                    jsonWriter.WritePropertyName("version");
+                    request.Version.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
+                    base.OnError(new Exception.AcceptVersionInvalidException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RejectByUserId(
+                Request.RejectByUserIdRequest request,
+                UnityAction<AsyncResult<Result.RejectByUserIdResult>> callback
+        )
+		{
+			var task = new RejectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RejectByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RejectByUserIdResult> RejectByUserIdFuture(
+                Request.RejectByUserIdRequest request
+        )
+		{
+			return new RejectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RejectByUserIdResult> RejectByUserIdAsync(
+                Request.RejectByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.RejectByUserIdResult> result = null;
+			await RejectByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RejectByUserIdTask RejectByUserIdAsync(
+                Request.RejectByUserIdRequest request
+        )
+		{
+			return new RejectByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RejectByUserIdResult> RejectByUserIdAsync(
+                Request.RejectByUserIdRequest request
+        )
+		{
+			var task = new RejectByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
