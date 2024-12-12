@@ -199,7 +199,7 @@ namespace Gs2.Gs2Stamina.Model
                 Name = Name,
                 Metadata = Metadata,
                 ExperienceModelId = ExperienceModelId,
-                Values = Values.Clone() as int[],
+                Values = Values?.Clone() as int[],
             };
         }
     }

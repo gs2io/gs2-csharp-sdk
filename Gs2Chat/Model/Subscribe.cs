@@ -343,7 +343,7 @@ namespace Gs2.Gs2Chat.Model
                 SubscribeId = SubscribeId,
                 UserId = UserId,
                 RoomName = RoomName,
-                NotificationTypes = NotificationTypes.Clone() as Gs2.Gs2Chat.Model.NotificationType[],
+                NotificationTypes = NotificationTypes?.Clone() as Gs2.Gs2Chat.Model.NotificationType[],
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

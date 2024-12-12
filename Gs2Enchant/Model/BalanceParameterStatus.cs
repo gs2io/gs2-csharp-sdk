@@ -423,7 +423,7 @@ namespace Gs2.Gs2Enchant.Model
                 UserId = UserId,
                 ParameterName = ParameterName,
                 PropertyId = PropertyId,
-                ParameterValues = ParameterValues.Clone() as Gs2.Gs2Enchant.Model.BalanceParameterValue[],
+                ParameterValues = ParameterValues?.Clone() as Gs2.Gs2Enchant.Model.BalanceParameterValue[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

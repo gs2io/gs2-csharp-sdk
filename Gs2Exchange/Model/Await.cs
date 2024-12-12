@@ -465,7 +465,7 @@ namespace Gs2.Gs2Exchange.Model
                 Name = Name,
                 Count = Count,
                 SkipSeconds = SkipSeconds,
-                Config = Config.Clone() as Gs2.Gs2Exchange.Model.Config[],
+                Config = Config?.Clone() as Gs2.Gs2Exchange.Model.Config[],
                 AcquirableAt = AcquirableAt,
                 ExchangedAt = ExchangedAt,
                 Revision = Revision,

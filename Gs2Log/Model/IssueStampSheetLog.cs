@@ -309,7 +309,7 @@ namespace Gs2.Gs2Log.Model
                 UserId = UserId,
                 Action = Action,
                 Args = Args,
-                Tasks = Tasks.Clone() as string[],
+                Tasks = Tasks?.Clone() as string[],
             };
         }
     }

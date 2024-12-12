@@ -391,8 +391,8 @@ namespace Gs2.Gs2Ranking.Model
                 SubscribeId = SubscribeId,
                 CategoryName = CategoryName,
                 UserId = UserId,
-                TargetUserIds = TargetUserIds.Clone() as string[],
-                SubscribedUserIds = SubscribedUserIds.Clone() as string[],
+                TargetUserIds = TargetUserIds?.Clone() as string[],
+                SubscribedUserIds = SubscribedUserIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

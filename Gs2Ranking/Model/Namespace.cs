@@ -361,7 +361,7 @@ namespace Gs2.Gs2Ranking.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
-                LastCalculatedAts = LastCalculatedAts.Clone() as Gs2.Gs2Ranking.Model.CalculatedAt[],
+                LastCalculatedAts = LastCalculatedAts?.Clone() as Gs2.Gs2Ranking.Model.CalculatedAt[],
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Ranking.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

@@ -468,7 +468,7 @@ namespace Gs2.Gs2Exchange.Model
                 CalculateScriptId = CalculateScriptId,
                 ExchangeCountId = ExchangeCountId,
                 MaximumExchangeCount = MaximumExchangeCount,
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
             };
         }
     }

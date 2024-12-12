@@ -269,7 +269,7 @@ namespace Gs2.Gs2Formation.Model
                 FormModelId = FormModelId,
                 Name = Name,
                 Metadata = Metadata,
-                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
+                Slots = Slots?.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
             };
         }
     }

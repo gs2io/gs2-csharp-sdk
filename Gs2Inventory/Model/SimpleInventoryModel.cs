@@ -269,7 +269,7 @@ namespace Gs2.Gs2Inventory.Model
                 InventoryModelId = InventoryModelId,
                 Name = Name,
                 Metadata = Metadata,
-                SimpleItemModels = SimpleItemModels.Clone() as Gs2.Gs2Inventory.Model.SimpleItemModel[],
+                SimpleItemModels = SimpleItemModels?.Clone() as Gs2.Gs2Inventory.Model.SimpleItemModel[],
             };
         }
     }

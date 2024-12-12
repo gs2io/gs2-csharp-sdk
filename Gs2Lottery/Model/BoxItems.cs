@@ -281,7 +281,7 @@ namespace Gs2.Gs2Lottery.Model
                 BoxId = BoxId,
                 PrizeTableName = PrizeTableName,
                 UserId = UserId,
-                Items = Items.Clone() as Gs2.Gs2Lottery.Model.BoxItem[],
+                Items = Items?.Clone() as Gs2.Gs2Lottery.Model.BoxItem[],
             };
         }
     }

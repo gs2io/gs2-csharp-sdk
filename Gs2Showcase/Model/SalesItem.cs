@@ -270,9 +270,9 @@ namespace Gs2.Gs2Showcase.Model
             return new SalesItem {
                 Name = Name,
                 Metadata = Metadata,
-                VerifyActions = VerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
-                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                VerifyActions = VerifyActions?.Clone() as Gs2.Core.Model.VerifyAction[],
+                ConsumeActions = ConsumeActions?.Clone() as Gs2.Core.Model.ConsumeAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
             };
         }
     }

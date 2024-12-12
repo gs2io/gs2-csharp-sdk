@@ -150,7 +150,7 @@ namespace Gs2.Gs2Exchange.Model
         public object Clone() {
             return new LogRate {
                 Base = Base,
-                Logs = Logs.Clone() as double[],
+                Logs = Logs?.Clone() as double[],
             };
         }
     }

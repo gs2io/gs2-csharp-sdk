@@ -418,7 +418,7 @@ namespace Gs2.Gs2Formation.Model
                 UserId = UserId,
                 Name = Name,
                 PropertyId = PropertyId,
-                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.Slot[],
+                Slots = Slots?.Clone() as Gs2.Gs2Formation.Model.Slot[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

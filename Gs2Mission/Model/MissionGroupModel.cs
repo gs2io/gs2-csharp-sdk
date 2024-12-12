@@ -419,7 +419,7 @@ namespace Gs2.Gs2Mission.Model
                 MissionGroupId = MissionGroupId,
                 Name = Name,
                 Metadata = Metadata,
-                Tasks = Tasks.Clone() as Gs2.Gs2Mission.Model.MissionTaskModel[],
+                Tasks = Tasks?.Clone() as Gs2.Gs2Mission.Model.MissionTaskModel[],
                 ResetType = ResetType,
                 ResetDayOfMonth = ResetDayOfMonth,
                 ResetDayOfWeek = ResetDayOfWeek,

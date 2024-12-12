@@ -416,7 +416,7 @@ namespace Gs2.Gs2Showcase.Model
                 Description = Description,
                 Metadata = Metadata,
                 SalesPeriodEventId = SalesPeriodEventId,
-                DisplayItems = DisplayItems.Clone() as Gs2.Gs2Showcase.Model.DisplayItemMaster[],
+                DisplayItems = DisplayItems?.Clone() as Gs2.Gs2Showcase.Model.DisplayItemMaster[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

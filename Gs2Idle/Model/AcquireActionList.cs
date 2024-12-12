@@ -115,7 +115,7 @@ namespace Gs2.Gs2Idle.Model
 
         public object Clone() {
             return new AcquireActionList {
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
             };
         }
     }

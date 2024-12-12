@@ -265,8 +265,8 @@ namespace Gs2.Gs2Ranking.Model
                 UniqueByUserId = UniqueByUserId,
                 CalculateIntervalMinutes = CalculateIntervalMinutes,
                 CalculateFixedTiming = CalculateFixedTiming.Clone() as Gs2.Gs2Ranking.Model.FixedTiming,
-                AdditionalScopes = AdditionalScopes.Clone() as Gs2.Gs2Ranking.Model.Scope[],
-                IgnoreUserIds = IgnoreUserIds.Clone() as string[],
+                AdditionalScopes = AdditionalScopes?.Clone() as Gs2.Gs2Ranking.Model.Scope[],
+                IgnoreUserIds = IgnoreUserIds?.Clone() as string[],
                 Generation = Generation,
             };
         }

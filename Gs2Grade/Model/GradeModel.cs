@@ -391,10 +391,10 @@ namespace Gs2.Gs2Grade.Model
                 GradeModelId = GradeModelId,
                 Name = Name,
                 Metadata = Metadata,
-                DefaultGrades = DefaultGrades.Clone() as Gs2.Gs2Grade.Model.DefaultGradeModel[],
+                DefaultGrades = DefaultGrades?.Clone() as Gs2.Gs2Grade.Model.DefaultGradeModel[],
                 ExperienceModelId = ExperienceModelId,
-                GradeEntries = GradeEntries.Clone() as Gs2.Gs2Grade.Model.GradeEntryModel[],
-                AcquireActionRates = AcquireActionRates.Clone() as Gs2.Gs2Grade.Model.AcquireActionRate[],
+                GradeEntries = GradeEntries?.Clone() as Gs2.Gs2Grade.Model.GradeEntryModel[],
+                AcquireActionRates = AcquireActionRates?.Clone() as Gs2.Gs2Grade.Model.AcquireActionRate[],
             };
         }
     }

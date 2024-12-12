@@ -147,7 +147,7 @@ namespace Gs2.Gs2StateMachine.Model
         public object Clone() {
             return new RandomStatus {
                 Seed = Seed,
-                Used = Used.Clone() as Gs2.Gs2StateMachine.Model.RandomUsed[],
+                Used = Used?.Clone() as Gs2.Gs2StateMachine.Model.RandomUsed[],
             };
         }
     }

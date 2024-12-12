@@ -482,8 +482,8 @@ namespace Gs2.Gs2Deploy.Model
                 Response = Response,
                 RollbackContext = RollbackContext,
                 RollbackRequest = RollbackRequest,
-                RollbackAfter = RollbackAfter.Clone() as string[],
-                OutputFields = OutputFields.Clone() as Gs2.Gs2Deploy.Model.OutputField[],
+                RollbackAfter = RollbackAfter?.Clone() as string[],
+                OutputFields = OutputFields?.Clone() as Gs2.Gs2Deploy.Model.OutputField[],
                 WorkId = WorkId,
                 CreatedAt = CreatedAt,
             };

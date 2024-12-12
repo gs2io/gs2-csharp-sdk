@@ -296,7 +296,7 @@ namespace Gs2.Gs2Showcase.Model
                 Name = Name,
                 Metadata = Metadata,
                 SalesPeriodEventId = SalesPeriodEventId,
-                DisplayItems = DisplayItems.Clone() as Gs2.Gs2Showcase.Model.DisplayItem[],
+                DisplayItems = DisplayItems?.Clone() as Gs2.Gs2Showcase.Model.DisplayItem[],
             };
         }
     }

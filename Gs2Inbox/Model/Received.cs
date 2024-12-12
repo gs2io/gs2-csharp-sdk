@@ -330,7 +330,7 @@ namespace Gs2.Gs2Inbox.Model
             return new Received {
                 ReceivedId = ReceivedId,
                 UserId = UserId,
-                ReceivedGlobalMessageNames = ReceivedGlobalMessageNames.Clone() as string[],
+                ReceivedGlobalMessageNames = ReceivedGlobalMessageNames?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

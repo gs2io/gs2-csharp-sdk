@@ -173,7 +173,7 @@ namespace Gs2.Gs2Quest.Model
         public object Clone() {
             return new Contents {
                 Metadata = Metadata,
-                CompleteAcquireActions = CompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                CompleteAcquireActions = CompleteAcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
                 Weight = Weight,
             };
         }

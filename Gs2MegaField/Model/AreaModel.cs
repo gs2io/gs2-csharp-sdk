@@ -264,7 +264,7 @@ namespace Gs2.Gs2MegaField.Model
                 AreaModelId = AreaModelId,
                 Name = Name,
                 Metadata = Metadata,
-                LayerModels = LayerModels.Clone() as Gs2.Gs2MegaField.Model.LayerModel[],
+                LayerModels = LayerModels?.Clone() as Gs2.Gs2MegaField.Model.LayerModel[],
             };
         }
     }

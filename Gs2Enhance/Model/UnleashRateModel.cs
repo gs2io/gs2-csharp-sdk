@@ -350,7 +350,7 @@ namespace Gs2.Gs2Enhance.Model
                 Metadata = Metadata,
                 TargetInventoryModelId = TargetInventoryModelId,
                 GradeModelId = GradeModelId,
-                GradeEntries = GradeEntries.Clone() as Gs2.Gs2Enhance.Model.UnleashRateEntryModel[],
+                GradeEntries = GradeEntries?.Clone() as Gs2.Gs2Enhance.Model.UnleashRateEntryModel[],
             };
         }
     }

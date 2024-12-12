@@ -120,7 +120,7 @@ namespace Gs2.Gs2LoginReward.Model
 
         public object Clone() {
             return new Reward {
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
             };
         }
     }

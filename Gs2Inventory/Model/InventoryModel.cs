@@ -355,7 +355,7 @@ namespace Gs2.Gs2Inventory.Model
                 InitialCapacity = InitialCapacity,
                 MaxCapacity = MaxCapacity,
                 ProtectReferencedItem = ProtectReferencedItem,
-                ItemModels = ItemModels.Clone() as Gs2.Gs2Inventory.Model.ItemModel[],
+                ItemModels = ItemModels?.Clone() as Gs2.Gs2Inventory.Model.ItemModel[],
             };
         }
     }

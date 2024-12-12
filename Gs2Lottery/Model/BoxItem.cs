@@ -204,7 +204,7 @@ namespace Gs2.Gs2Lottery.Model
         public object Clone() {
             return new BoxItem {
                 PrizeId = PrizeId,
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
                 Remaining = Remaining,
                 Initial = Initial,
             };

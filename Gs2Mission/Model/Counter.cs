@@ -374,7 +374,7 @@ namespace Gs2.Gs2Mission.Model
                 CounterId = CounterId,
                 UserId = UserId,
                 Name = Name,
-                Values = Values.Clone() as Gs2.Gs2Mission.Model.ScopedValue[],
+                Values = Values?.Clone() as Gs2.Gs2Mission.Model.ScopedValue[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

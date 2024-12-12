@@ -389,7 +389,7 @@ namespace Gs2.Gs2Showcase.Model
                 Name = Name,
                 Metadata = Metadata,
                 MaximumNumberOfChoice = MaximumNumberOfChoice,
-                DisplayItems = DisplayItems.Clone() as Gs2.Gs2Showcase.Model.RandomDisplayItemModel[],
+                DisplayItems = DisplayItems?.Clone() as Gs2.Gs2Showcase.Model.RandomDisplayItemModel[],
                 BaseTimestamp = BaseTimestamp,
                 ResetIntervalHours = ResetIntervalHours,
                 SalesPeriodEventId = SalesPeriodEventId,

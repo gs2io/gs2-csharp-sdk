@@ -468,7 +468,7 @@ namespace Gs2.Gs2AdReward.Model
                 Description = Description,
                 Admob = Admob.Clone() as Gs2.Gs2AdReward.Model.AdMob,
                 UnityAd = UnityAd.Clone() as Gs2.Gs2AdReward.Model.UnityAd,
-                AppLovinMaxes = AppLovinMaxes.Clone() as Gs2.Gs2AdReward.Model.AppLovinMax[],
+                AppLovinMaxes = AppLovinMaxes?.Clone() as Gs2.Gs2AdReward.Model.AppLovinMax[],
                 AcquirePointScript = AcquirePointScript.Clone() as Gs2.Gs2AdReward.Model.ScriptSetting,
                 ConsumePointScript = ConsumePointScript.Clone() as Gs2.Gs2AdReward.Model.ScriptSetting,
                 ChangePointNotification = ChangePointNotification.Clone() as Gs2.Gs2AdReward.Model.NotificationSetting,

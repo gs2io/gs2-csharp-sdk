@@ -488,9 +488,9 @@ namespace Gs2.Gs2Matchmaking.Model
             return new Gathering {
                 GatheringId = GatheringId,
                 Name = Name,
-                AttributeRanges = AttributeRanges.Clone() as Gs2.Gs2Matchmaking.Model.AttributeRange[],
-                CapacityOfRoles = CapacityOfRoles.Clone() as Gs2.Gs2Matchmaking.Model.CapacityOfRole[],
-                AllowUserIds = AllowUserIds.Clone() as string[],
+                AttributeRanges = AttributeRanges?.Clone() as Gs2.Gs2Matchmaking.Model.AttributeRange[],
+                CapacityOfRoles = CapacityOfRoles?.Clone() as Gs2.Gs2Matchmaking.Model.CapacityOfRole[],
+                AllowUserIds = AllowUserIds?.Clone() as string[],
                 Metadata = Metadata,
                 ExpiresAt = ExpiresAt,
                 CreatedAt = CreatedAt,

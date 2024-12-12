@@ -174,7 +174,7 @@ namespace Gs2.Gs2Ranking2.Model
             return new RankingReward {
                 ThresholdRank = ThresholdRank,
                 Metadata = Metadata,
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
             };
         }
     }

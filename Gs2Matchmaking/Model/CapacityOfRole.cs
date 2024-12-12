@@ -221,9 +221,9 @@ namespace Gs2.Gs2Matchmaking.Model
         public object Clone() {
             return new CapacityOfRole {
                 RoleName = RoleName,
-                RoleAliases = RoleAliases.Clone() as string[],
+                RoleAliases = RoleAliases?.Clone() as string[],
                 Capacity = Capacity,
-                Participants = Participants.Clone() as Gs2.Gs2Matchmaking.Model.Player[],
+                Participants = Participants?.Clone() as Gs2.Gs2Matchmaking.Model.Player[],
             };
         }
     }

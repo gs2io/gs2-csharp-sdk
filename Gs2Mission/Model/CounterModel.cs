@@ -295,7 +295,7 @@ namespace Gs2.Gs2Mission.Model
                 CounterId = CounterId,
                 Name = Name,
                 Metadata = Metadata,
-                Scopes = Scopes.Clone() as Gs2.Gs2Mission.Model.CounterScopeModel[],
+                Scopes = Scopes?.Clone() as Gs2.Gs2Mission.Model.CounterScopeModel[],
                 ChallengePeriodEventId = ChallengePeriodEventId,
             };
         }

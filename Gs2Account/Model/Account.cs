@@ -410,7 +410,7 @@ namespace Gs2.Gs2Account.Model
                 UserId = UserId,
                 Password = Password,
                 TimeOffset = TimeOffset,
-                BanStatuses = BanStatuses.Clone() as Gs2.Gs2Account.Model.BanStatus[],
+                BanStatuses = BanStatuses?.Clone() as Gs2.Gs2Account.Model.BanStatus[],
                 Banned = Banned,
                 LastAuthenticatedAt = LastAuthenticatedAt,
                 CreatedAt = CreatedAt,

@@ -489,7 +489,7 @@ namespace Gs2.Gs2Datastore.Model
                 Name = Name,
                 UserId = UserId,
                 Scope = Scope,
-                AllowUserIds = AllowUserIds.Clone() as string[],
+                AllowUserIds = AllowUserIds?.Clone() as string[],
                 Status = Status,
                 Generation = Generation,
                 PreviousGeneration = PreviousGeneration,

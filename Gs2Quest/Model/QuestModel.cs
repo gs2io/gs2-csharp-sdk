@@ -552,13 +552,13 @@ namespace Gs2.Gs2Quest.Model
                 QuestModelId = QuestModelId,
                 Name = Name,
                 Metadata = Metadata,
-                Contents = Contents.Clone() as Gs2.Gs2Quest.Model.Contents[],
+                Contents = Contents?.Clone() as Gs2.Gs2Quest.Model.Contents[],
                 ChallengePeriodEventId = ChallengePeriodEventId,
-                FirstCompleteAcquireActions = FirstCompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
-                VerifyActions = VerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
-                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
-                FailedAcquireActions = FailedAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
-                PremiseQuestNames = PremiseQuestNames.Clone() as string[],
+                FirstCompleteAcquireActions = FirstCompleteAcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
+                VerifyActions = VerifyActions?.Clone() as Gs2.Core.Model.VerifyAction[],
+                ConsumeActions = ConsumeActions?.Clone() as Gs2.Core.Model.ConsumeAction[],
+                FailedAcquireActions = FailedAcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
+                PremiseQuestNames = PremiseQuestNames?.Clone() as string[],
             };
         }
     }

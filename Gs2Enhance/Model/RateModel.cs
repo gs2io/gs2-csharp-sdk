@@ -446,9 +446,9 @@ namespace Gs2.Gs2Enhance.Model
                 TargetInventoryModelId = TargetInventoryModelId,
                 AcquireExperienceSuffix = AcquireExperienceSuffix,
                 MaterialInventoryModelId = MaterialInventoryModelId,
-                AcquireExperienceHierarchy = AcquireExperienceHierarchy.Clone() as string[],
+                AcquireExperienceHierarchy = AcquireExperienceHierarchy?.Clone() as string[],
                 ExperienceModelId = ExperienceModelId,
-                BonusRates = BonusRates.Clone() as Gs2.Gs2Enhance.Model.BonusRate[],
+                BonusRates = BonusRates?.Clone() as Gs2.Gs2Enhance.Model.BonusRate[],
             };
         }
     }

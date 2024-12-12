@@ -374,7 +374,7 @@ namespace Gs2.Gs2Quest.Model
                 CompletedQuestListId = CompletedQuestListId,
                 UserId = UserId,
                 QuestGroupName = QuestGroupName,
-                CompleteQuestNames = CompleteQuestNames.Clone() as string[],
+                CompleteQuestNames = CompleteQuestNames?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

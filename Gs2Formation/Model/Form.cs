@@ -396,7 +396,7 @@ namespace Gs2.Gs2Formation.Model
                 FormId = FormId,
                 Name = Name,
                 Index = Index,
-                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.Slot[],
+                Slots = Slots?.Clone() as Gs2.Gs2Formation.Model.Slot[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

@@ -434,7 +434,7 @@ namespace Gs2.Gs2Ranking2.Model
                 Sum = Sum,
                 OrderDirection = OrderDirection,
                 EntryPeriodEventId = EntryPeriodEventId,
-                RankingRewards = RankingRewards.Clone() as Gs2.Gs2Ranking2.Model.RankingReward[],
+                RankingRewards = RankingRewards?.Clone() as Gs2.Gs2Ranking2.Model.RankingReward[],
                 AccessPeriodEventId = AccessPeriodEventId,
             };
         }

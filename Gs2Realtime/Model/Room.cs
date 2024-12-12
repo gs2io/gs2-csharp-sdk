@@ -416,7 +416,7 @@ namespace Gs2.Gs2Realtime.Model
                 IpAddress = IpAddress,
                 Port = Port,
                 EncryptionKey = EncryptionKey,
-                NotificationUserIds = NotificationUserIds.Clone() as string[],
+                NotificationUserIds = NotificationUserIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

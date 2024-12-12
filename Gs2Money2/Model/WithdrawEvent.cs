@@ -168,7 +168,7 @@ namespace Gs2.Gs2Money2.Model
         public object Clone() {
             return new WithdrawEvent {
                 Slot = Slot,
-                WithdrawDetails = WithdrawDetails.Clone() as Gs2.Gs2Money2.Model.DepositTransaction[],
+                WithdrawDetails = WithdrawDetails?.Clone() as Gs2.Gs2Money2.Model.DepositTransaction[],
                 Status = Status.Clone() as Gs2.Gs2Money2.Model.WalletSummary,
             };
         }

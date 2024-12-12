@@ -525,7 +525,7 @@ namespace Gs2.Gs2Inventory.Model
                 UserId = UserId,
                 ItemName = ItemName,
                 Count = Count,
-                ReferenceOf = ReferenceOf.Clone() as string[],
+                ReferenceOf = ReferenceOf?.Clone() as string[],
                 SortValue = SortValue,
                 ExpiresAt = ExpiresAt,
                 CreatedAt = CreatedAt,

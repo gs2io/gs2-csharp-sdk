@@ -330,7 +330,7 @@ namespace Gs2.Gs2Friend.Model
             return new Inbox {
                 InboxId = InboxId,
                 UserId = UserId,
-                FromUserIds = FromUserIds.Clone() as string[],
+                FromUserIds = FromUserIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

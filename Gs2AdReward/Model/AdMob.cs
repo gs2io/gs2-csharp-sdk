@@ -120,7 +120,7 @@ namespace Gs2.Gs2AdReward.Model
 
         public object Clone() {
             return new AdMob {
-                AllowAdUnitIds = AllowAdUnitIds.Clone() as string[],
+                AllowAdUnitIds = AllowAdUnitIds?.Clone() as string[],
             };
         }
     }

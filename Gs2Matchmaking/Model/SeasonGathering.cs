@@ -441,7 +441,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 Season = Season,
                 Tier = Tier,
                 Name = Name,
-                Participants = Participants.Clone() as string[],
+                Participants = Participants?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

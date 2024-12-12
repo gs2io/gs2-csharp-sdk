@@ -205,7 +205,7 @@ namespace Gs2.Gs2Buff.Model
             return new BuffTargetAction {
                 TargetActionName = TargetActionName,
                 TargetFieldName = TargetFieldName,
-                ConditionGrns = ConditionGrns.Clone() as Gs2.Gs2Buff.Model.BuffTargetGrn[],
+                ConditionGrns = ConditionGrns?.Clone() as Gs2.Gs2Buff.Model.BuffTargetGrn[],
                 Rate = Rate,
             };
         }

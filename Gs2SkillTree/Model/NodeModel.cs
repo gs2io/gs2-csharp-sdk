@@ -444,11 +444,11 @@ namespace Gs2.Gs2SkillTree.Model
                 NodeModelId = NodeModelId,
                 Name = Name,
                 Metadata = Metadata,
-                ReleaseVerifyActions = ReleaseVerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
-                ReleaseConsumeActions = ReleaseConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
-                ReturnAcquireActions = ReturnAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ReleaseVerifyActions = ReleaseVerifyActions?.Clone() as Gs2.Core.Model.VerifyAction[],
+                ReleaseConsumeActions = ReleaseConsumeActions?.Clone() as Gs2.Core.Model.ConsumeAction[],
+                ReturnAcquireActions = ReturnAcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
                 RestrainReturnRate = RestrainReturnRate,
-                PremiseNodeNames = PremiseNodeNames.Clone() as string[],
+                PremiseNodeNames = PremiseNodeNames?.Clone() as string[],
             };
         }
     }

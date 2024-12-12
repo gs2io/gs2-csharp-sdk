@@ -464,7 +464,7 @@ namespace Gs2.Gs2Money.Model
                 Slot = Slot,
                 Paid = Paid,
                 Free = Free,
-                Detail = Detail.Clone() as Gs2.Gs2Money.Model.WalletDetail[],
+                Detail = Detail?.Clone() as Gs2.Gs2Money.Model.WalletDetail[],
                 ShareFree = ShareFree,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

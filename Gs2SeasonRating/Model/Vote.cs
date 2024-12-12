@@ -374,7 +374,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 VoteId = VoteId,
                 SeasonName = SeasonName,
                 SessionName = SessionName,
-                WrittenBallots = WrittenBallots.Clone() as Gs2.Gs2SeasonRating.Model.WrittenBallot[],
+                WrittenBallots = WrittenBallots?.Clone() as Gs2.Gs2SeasonRating.Model.WrittenBallot[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

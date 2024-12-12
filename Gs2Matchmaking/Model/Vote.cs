@@ -343,7 +343,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 VoteId = VoteId,
                 RatingName = RatingName,
                 GatheringName = GatheringName,
-                WrittenBallots = WrittenBallots.Clone() as Gs2.Gs2Matchmaking.Model.WrittenBallot[],
+                WrittenBallots = WrittenBallots?.Clone() as Gs2.Gs2Matchmaking.Model.WrittenBallot[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
             };

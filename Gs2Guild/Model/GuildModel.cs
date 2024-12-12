@@ -510,7 +510,7 @@ namespace Gs2.Gs2Guild.Model
                 DefaultMaximumMemberCount = DefaultMaximumMemberCount,
                 MaximumMemberCount = MaximumMemberCount,
                 InactivityPeriodDays = InactivityPeriodDays,
-                Roles = Roles.Clone() as Gs2.Gs2Guild.Model.RoleModel[],
+                Roles = Roles?.Clone() as Gs2.Gs2Guild.Model.RoleModel[],
                 GuildMasterRole = GuildMasterRole,
                 GuildMemberDefaultRole = GuildMemberDefaultRole,
                 RejoinCoolTimeMinutes = RejoinCoolTimeMinutes,

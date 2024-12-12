@@ -497,7 +497,7 @@ namespace Gs2.Gs2Project.Model
                 Name = Name,
                 Description = Description,
                 Plan = Plan,
-                Regions = Regions.Clone() as Gs2.Gs2Project.Model.Gs2Region[],
+                Regions = Regions?.Clone() as Gs2.Gs2Project.Model.Gs2Region[],
                 BillingMethodName = BillingMethodName,
                 EnableEventBridge = EnableEventBridge,
                 Currency = Currency,

@@ -227,7 +227,7 @@ namespace Gs2.Gs2Log.Model
                 Timestamp = Timestamp,
                 RequestId = RequestId,
                 UserId = UserId,
-                Tags = Tags.Clone() as Gs2.Gs2Log.Model.InGameLogTag[],
+                Tags = Tags?.Clone() as Gs2.Gs2Log.Model.InGameLogTag[],
                 Payload = Payload,
             };
         }

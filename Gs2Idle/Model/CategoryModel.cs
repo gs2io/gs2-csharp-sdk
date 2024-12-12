@@ -385,7 +385,7 @@ namespace Gs2.Gs2Idle.Model
                 Metadata = Metadata,
                 RewardIntervalMinutes = RewardIntervalMinutes,
                 DefaultMaximumIdleMinutes = DefaultMaximumIdleMinutes,
-                AcquireActions = AcquireActions.Clone() as Gs2.Gs2Idle.Model.AcquireActionList[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Gs2Idle.Model.AcquireActionList[],
                 IdlePeriodScheduleId = IdlePeriodScheduleId,
                 ReceivePeriodScheduleId = ReceivePeriodScheduleId,
             };

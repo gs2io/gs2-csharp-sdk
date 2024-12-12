@@ -238,7 +238,7 @@ namespace Gs2.Gs2Identifier.Model
         public object Clone() {
             return new AttachSecurityPolicy {
                 UserId = UserId,
-                SecurityPolicyIds = SecurityPolicyIds.Clone() as string[],
+                SecurityPolicyIds = SecurityPolicyIds?.Clone() as string[],
                 AttachedAt = AttachedAt,
                 Revision = Revision,
             };

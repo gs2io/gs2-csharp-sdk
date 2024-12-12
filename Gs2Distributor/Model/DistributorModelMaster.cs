@@ -411,7 +411,7 @@ namespace Gs2.Gs2Distributor.Model
                 Description = Description,
                 Metadata = Metadata,
                 InboxNamespaceId = InboxNamespaceId,
-                WhiteListTargetIds = WhiteListTargetIds.Clone() as string[],
+                WhiteListTargetIds = WhiteListTargetIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

@@ -269,7 +269,7 @@ namespace Gs2.Gs2Lottery.Model
                 PrizeTableId = PrizeTableId,
                 Name = Name,
                 Metadata = Metadata,
-                Prizes = Prizes.Clone() as Gs2.Gs2Lottery.Model.Prize[],
+                Prizes = Prizes?.Clone() as Gs2.Gs2Lottery.Model.Prize[],
             };
         }
     }

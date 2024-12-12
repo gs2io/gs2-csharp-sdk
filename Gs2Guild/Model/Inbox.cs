@@ -347,7 +347,7 @@ namespace Gs2.Gs2Guild.Model
             return new Inbox {
                 InboxId = InboxId,
                 GuildName = GuildName,
-                FromUserIds = FromUserIds.Clone() as string[],
+                FromUserIds = FromUserIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

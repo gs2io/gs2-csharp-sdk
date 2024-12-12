@@ -247,9 +247,9 @@ namespace Gs2.Gs2Matchmaking.Model
         public object Clone() {
             return new Player {
                 UserId = UserId,
-                Attributes = Attributes.Clone() as Gs2.Gs2Matchmaking.Model.Attribute_[],
+                Attributes = Attributes?.Clone() as Gs2.Gs2Matchmaking.Model.Attribute_[],
                 RoleName = RoleName,
-                DenyUserIds = DenyUserIds.Clone() as string[],
+                DenyUserIds = DenyUserIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
             };
         }

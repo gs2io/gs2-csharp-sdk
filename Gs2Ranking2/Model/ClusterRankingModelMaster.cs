@@ -618,7 +618,7 @@ namespace Gs2.Gs2Ranking2.Model
                 ScoreTtlDays = ScoreTtlDays,
                 OrderDirection = OrderDirection,
                 EntryPeriodEventId = EntryPeriodEventId,
-                RankingRewards = RankingRewards.Clone() as Gs2.Gs2Ranking2.Model.RankingReward[],
+                RankingRewards = RankingRewards?.Clone() as Gs2.Gs2Ranking2.Model.RankingReward[],
                 AccessPeriodEventId = AccessPeriodEventId,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

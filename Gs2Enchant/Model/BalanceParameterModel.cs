@@ -332,7 +332,7 @@ namespace Gs2.Gs2Enchant.Model
                 Metadata = Metadata,
                 TotalValue = TotalValue,
                 InitialValueStrategy = InitialValueStrategy,
-                Parameters = Parameters.Clone() as Gs2.Gs2Enchant.Model.BalanceParameterValueModel[],
+                Parameters = Parameters?.Clone() as Gs2.Gs2Enchant.Model.BalanceParameterValueModel[],
             };
         }
     }

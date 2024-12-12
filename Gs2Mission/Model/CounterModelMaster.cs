@@ -415,7 +415,7 @@ namespace Gs2.Gs2Mission.Model
                 Name = Name,
                 Metadata = Metadata,
                 Description = Description,
-                Scopes = Scopes.Clone() as Gs2.Gs2Mission.Model.CounterScopeModel[],
+                Scopes = Scopes?.Clone() as Gs2.Gs2Mission.Model.CounterScopeModel[],
                 ChallengePeriodEventId = ChallengePeriodEventId,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

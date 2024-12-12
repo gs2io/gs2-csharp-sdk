@@ -115,7 +115,7 @@ namespace Gs2.Gs2AdReward.Model
 
         public object Clone() {
             return new UnityAd {
-                Keys = Keys.Clone() as string[],
+                Keys = Keys?.Clone() as string[],
             };
         }
     }

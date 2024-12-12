@@ -137,7 +137,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public object Clone() {
             return new WrittenBallot {
                 Ballot = Ballot.Clone() as Gs2.Gs2Matchmaking.Model.Ballot,
-                GameResults = GameResults.Clone() as Gs2.Gs2Matchmaking.Model.GameResult[],
+                GameResults = GameResults?.Clone() as Gs2.Gs2Matchmaking.Model.GameResult[],
             };
         }
     }

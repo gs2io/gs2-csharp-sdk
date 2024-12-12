@@ -229,8 +229,8 @@ namespace Gs2.Gs2Grade.Model
             return new AcquireActionRate {
                 Name = Name,
                 Mode = Mode,
-                Rates = Rates.Clone() as double[],
-                BigRates = BigRates.Clone() as string[],
+                Rates = Rates?.Clone() as double[],
+                BigRates = BigRates?.Clone() as string[],
             };
         }
     }

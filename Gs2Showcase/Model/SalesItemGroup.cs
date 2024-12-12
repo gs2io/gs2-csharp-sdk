@@ -174,7 +174,7 @@ namespace Gs2.Gs2Showcase.Model
             return new SalesItemGroup {
                 Name = Name,
                 Metadata = Metadata,
-                SalesItems = SalesItems.Clone() as Gs2.Gs2Showcase.Model.SalesItem[],
+                SalesItems = SalesItems?.Clone() as Gs2.Gs2Showcase.Model.SalesItem[],
             };
         }
     }

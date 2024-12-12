@@ -414,7 +414,7 @@ namespace Gs2.Gs2Stamina.Model
                 Metadata = Metadata,
                 Description = Description,
                 ExperienceModelId = ExperienceModelId,
-                Values = Values.Clone() as int[],
+                Values = Values?.Clone() as int[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

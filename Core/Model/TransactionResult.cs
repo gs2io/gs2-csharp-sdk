@@ -243,9 +243,9 @@ namespace Gs2.Core.Model
         public object Clone() {
             return new TransactionResult {
                 TransactionId = TransactionId,
-                VerifyResults = VerifyResults.Clone() as Gs2.Core.Model.VerifyActionResult[],
-                ConsumeResults = ConsumeResults.Clone() as Gs2.Core.Model.ConsumeActionResult[],
-                AcquireResults = AcquireResults.Clone() as Gs2.Core.Model.AcquireActionResult[],
+                VerifyResults = VerifyResults?.Clone() as Gs2.Core.Model.VerifyActionResult[],
+                ConsumeResults = ConsumeResults?.Clone() as Gs2.Core.Model.ConsumeActionResult[],
+                AcquireResults = AcquireResults?.Clone() as Gs2.Core.Model.AcquireActionResult[],
             };
         }
     }

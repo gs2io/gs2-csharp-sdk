@@ -418,7 +418,7 @@ namespace Gs2.Gs2Enchant.Model
                 UserId = UserId,
                 ParameterName = ParameterName,
                 PropertyId = PropertyId,
-                ParameterValues = ParameterValues.Clone() as Gs2.Gs2Enchant.Model.RarityParameterValue[],
+                ParameterValues = ParameterValues?.Clone() as Gs2.Gs2Enchant.Model.RarityParameterValue[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

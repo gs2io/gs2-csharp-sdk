@@ -354,8 +354,8 @@ namespace Gs2.Gs2Enchant.Model
                 Name = Name,
                 Metadata = Metadata,
                 MaximumParameterCount = MaximumParameterCount,
-                ParameterCounts = ParameterCounts.Clone() as Gs2.Gs2Enchant.Model.RarityParameterCountModel[],
-                Parameters = Parameters.Clone() as Gs2.Gs2Enchant.Model.RarityParameterValueModel[],
+                ParameterCounts = ParameterCounts?.Clone() as Gs2.Gs2Enchant.Model.RarityParameterCountModel[],
+                Parameters = Parameters?.Clone() as Gs2.Gs2Enchant.Model.RarityParameterValueModel[],
             };
         }
     }

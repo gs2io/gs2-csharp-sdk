@@ -163,8 +163,8 @@ namespace Gs2.Gs2News.Model
 
         public object Clone() {
             return new View {
-                Contents = Contents.Clone() as Gs2.Gs2News.Model.Content[],
-                RemoveContents = RemoveContents.Clone() as Gs2.Gs2News.Model.Content[],
+                Contents = Contents?.Clone() as Gs2.Gs2News.Model.Content[],
+                RemoveContents = RemoveContents?.Clone() as Gs2.Gs2News.Model.Content[],
             };
         }
     }

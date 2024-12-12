@@ -387,7 +387,7 @@ namespace Gs2.Gs2Experience.Model
                 Name = Name,
                 Description = Description,
                 Metadata = Metadata,
-                Values = Values.Clone() as long[],
+                Values = Values?.Clone() as long[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

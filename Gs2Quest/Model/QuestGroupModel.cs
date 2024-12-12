@@ -290,7 +290,7 @@ namespace Gs2.Gs2Quest.Model
                 QuestGroupModelId = QuestGroupModelId,
                 Name = Name,
                 Metadata = Metadata,
-                Quests = Quests.Clone() as Gs2.Gs2Quest.Model.QuestModel[],
+                Quests = Quests?.Clone() as Gs2.Gs2Quest.Model.QuestModel[],
                 ChallengePeriodEventId = ChallengePeriodEventId,
             };
         }

@@ -374,7 +374,7 @@ namespace Gs2.Gs2SkillTree.Model
                 StatusId = StatusId,
                 UserId = UserId,
                 PropertyId = PropertyId,
-                ReleasedNodeNames = ReleasedNodeNames.Clone() as string[],
+                ReleasedNodeNames = ReleasedNodeNames?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

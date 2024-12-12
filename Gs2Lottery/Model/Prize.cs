@@ -292,7 +292,7 @@ namespace Gs2.Gs2Lottery.Model
             return new Prize {
                 PrizeId = PrizeId,
                 Type = Type,
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
                 DrawnLimit = DrawnLimit,
                 LimitFailOverPrizeId = LimitFailOverPrizeId,
                 PrizeTableName = PrizeTableName,

@@ -196,8 +196,8 @@ namespace Gs2.Gs2Exchange.Model
         public object Clone() {
             return new LogCost {
                 Base = Base,
-                Adds = Adds.Clone() as double[],
-                Subs = Subs.Clone() as double[],
+                Adds = Adds?.Clone() as double[],
+                Subs = Subs?.Clone() as double[],
             };
         }
     }

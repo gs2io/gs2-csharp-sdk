@@ -411,7 +411,7 @@ namespace Gs2.Gs2Chat.Model
                 UserId = UserId,
                 Metadata = Metadata,
                 Password = Password,
-                WhiteListUserIds = WhiteListUserIds.Clone() as string[],
+                WhiteListUserIds = WhiteListUserIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

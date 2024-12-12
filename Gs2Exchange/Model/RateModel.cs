@@ -421,11 +421,11 @@ namespace Gs2.Gs2Exchange.Model
                 RateModelId = RateModelId,
                 Name = Name,
                 Metadata = Metadata,
-                VerifyActions = VerifyActions.Clone() as Gs2.Core.Model.VerifyAction[],
-                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                VerifyActions = VerifyActions?.Clone() as Gs2.Core.Model.VerifyAction[],
+                ConsumeActions = ConsumeActions?.Clone() as Gs2.Core.Model.ConsumeAction[],
                 TimingType = TimingType,
                 LockTime = LockTime,
-                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
             };
         }
     }

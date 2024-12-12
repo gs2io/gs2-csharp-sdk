@@ -145,7 +145,7 @@ namespace Gs2.Gs2Experience.Model
         public object Clone() {
             return new Threshold {
                 Metadata = Metadata,
-                Values = Values.Clone() as long[],
+                Values = Values?.Clone() as long[],
             };
         }
     }

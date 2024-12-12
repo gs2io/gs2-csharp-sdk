@@ -507,7 +507,7 @@ namespace Gs2.Gs2Experience.Model
                 DefaultRankCap = DefaultRankCap,
                 MaxRankCap = MaxRankCap,
                 RankThresholdName = RankThresholdName,
-                AcquireActionRates = AcquireActionRates.Clone() as Gs2.Gs2Experience.Model.AcquireActionRate[],
+                AcquireActionRates = AcquireActionRates?.Clone() as Gs2.Gs2Experience.Model.AcquireActionRate[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

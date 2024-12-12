@@ -374,7 +374,7 @@ namespace Gs2.Gs2Guild.Model
                 SendBoxId = SendBoxId,
                 UserId = UserId,
                 GuildModelName = GuildModelName,
-                TargetGuildNames = TargetGuildNames.Clone() as string[],
+                TargetGuildNames = TargetGuildNames?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

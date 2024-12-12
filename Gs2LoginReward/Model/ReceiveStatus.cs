@@ -403,7 +403,7 @@ namespace Gs2.Gs2LoginReward.Model
                 ReceiveStatusId = ReceiveStatusId,
                 BonusModelName = BonusModelName,
                 UserId = UserId,
-                ReceivedSteps = ReceivedSteps.Clone() as bool[],
+                ReceivedSteps = ReceivedSteps?.Clone() as bool[],
                 LastReceivedAt = LastReceivedAt,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

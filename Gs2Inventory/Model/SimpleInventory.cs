@@ -374,7 +374,7 @@ namespace Gs2.Gs2Inventory.Model
                 InventoryId = InventoryId,
                 InventoryName = InventoryName,
                 UserId = UserId,
-                SimpleItems = SimpleItems.Clone() as Gs2.Gs2Inventory.Model.SimpleItem[],
+                SimpleItems = SimpleItems?.Clone() as Gs2.Gs2Inventory.Model.SimpleItem[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

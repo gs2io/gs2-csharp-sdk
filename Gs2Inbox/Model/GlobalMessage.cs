@@ -331,7 +331,7 @@ namespace Gs2.Gs2Inbox.Model
                 GlobalMessageId = GlobalMessageId,
                 Name = Name,
                 Metadata = Metadata,
-                ReadAcquireActions = ReadAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ReadAcquireActions = ReadAcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
                 ExpiresTimeSpan = ExpiresTimeSpan.Clone() as Gs2.Gs2Inbox.Model.TimeSpan_,
                 ExpiresAt = ExpiresAt,
                 MessageReceptionPeriodEventId = MessageReceptionPeriodEventId,

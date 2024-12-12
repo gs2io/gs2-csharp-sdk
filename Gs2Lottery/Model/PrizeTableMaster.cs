@@ -389,7 +389,7 @@ namespace Gs2.Gs2Lottery.Model
                 Name = Name,
                 Metadata = Metadata,
                 Description = Description,
-                Prizes = Prizes.Clone() as Gs2.Gs2Lottery.Model.Prize[],
+                Prizes = Prizes?.Clone() as Gs2.Gs2Lottery.Model.Prize[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

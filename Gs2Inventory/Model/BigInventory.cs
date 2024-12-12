@@ -343,7 +343,7 @@ namespace Gs2.Gs2Inventory.Model
                 InventoryId = InventoryId,
                 InventoryName = InventoryName,
                 UserId = UserId,
-                BigItems = BigItems.Clone() as Gs2.Gs2Inventory.Model.BigItem[],
+                BigItems = BigItems?.Clone() as Gs2.Gs2Inventory.Model.BigItem[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
             };

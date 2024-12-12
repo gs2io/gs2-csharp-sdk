@@ -444,9 +444,9 @@ namespace Gs2.Gs2Distributor.Model
                 TransactionResultId = TransactionResultId,
                 UserId = UserId,
                 TransactionId = TransactionId,
-                VerifyResults = VerifyResults.Clone() as Gs2.Gs2Distributor.Model.VerifyActionResult[],
-                ConsumeResults = ConsumeResults.Clone() as Gs2.Gs2Distributor.Model.ConsumeActionResult[],
-                AcquireResults = AcquireResults.Clone() as Gs2.Gs2Distributor.Model.AcquireActionResult[],
+                VerifyResults = VerifyResults?.Clone() as Gs2.Gs2Distributor.Model.VerifyActionResult[],
+                ConsumeResults = ConsumeResults?.Clone() as Gs2.Gs2Distributor.Model.ConsumeActionResult[],
+                AcquireResults = AcquireResults?.Clone() as Gs2.Gs2Distributor.Model.AcquireActionResult[],
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

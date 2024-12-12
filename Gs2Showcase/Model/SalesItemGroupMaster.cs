@@ -389,7 +389,7 @@ namespace Gs2.Gs2Showcase.Model
                 Name = Name,
                 Description = Description,
                 Metadata = Metadata,
-                SalesItemNames = SalesItemNames.Clone() as string[],
+                SalesItemNames = SalesItemNames?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

@@ -330,7 +330,7 @@ namespace Gs2.Gs2Friend.Model
             return new Friend {
                 FriendId = FriendId,
                 UserId = UserId,
-                TargetUserIds = TargetUserIds.Clone() as string[],
+                TargetUserIds = TargetUserIds?.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

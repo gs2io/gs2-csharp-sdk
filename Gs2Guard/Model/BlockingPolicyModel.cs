@@ -548,10 +548,10 @@ namespace Gs2.Gs2Guard.Model
 
         public object Clone() {
             return new BlockingPolicyModel {
-                PassServices = PassServices.Clone() as string[],
+                PassServices = PassServices?.Clone() as string[],
                 DefaultRestriction = DefaultRestriction,
                 LocationDetection = LocationDetection,
-                Locations = Locations.Clone() as string[],
+                Locations = Locations?.Clone() as string[],
                 LocationRestriction = LocationRestriction,
                 AnonymousIpDetection = AnonymousIpDetection,
                 AnonymousIpRestriction = AnonymousIpRestriction,
@@ -560,7 +560,7 @@ namespace Gs2.Gs2Guard.Model
                 ReputationIpDetection = ReputationIpDetection,
                 ReputationIpRestriction = ReputationIpRestriction,
                 IpAddressesDetection = IpAddressesDetection,
-                IpAddresses = IpAddresses.Clone() as string[],
+                IpAddresses = IpAddresses?.Clone() as string[],
                 IpAddressRestriction = IpAddressRestriction,
             };
         }

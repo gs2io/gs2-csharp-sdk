@@ -389,7 +389,7 @@ namespace Gs2.Gs2Formation.Model
                 Name = Name,
                 Description = Description,
                 Metadata = Metadata,
-                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
+                Slots = Slots?.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

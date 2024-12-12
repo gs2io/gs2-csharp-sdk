@@ -291,7 +291,7 @@ namespace Gs2.Gs2Distributor.Model
                 Name = Name,
                 Metadata = Metadata,
                 InboxNamespaceId = InboxNamespaceId,
-                WhiteListTargetIds = WhiteListTargetIds.Clone() as string[],
+                WhiteListTargetIds = WhiteListTargetIds?.Clone() as string[],
             };
         }
     }

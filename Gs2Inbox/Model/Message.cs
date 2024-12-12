@@ -454,7 +454,7 @@ namespace Gs2.Gs2Inbox.Model
                 UserId = UserId,
                 Metadata = Metadata,
                 IsRead = IsRead,
-                ReadAcquireActions = ReadAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ReadAcquireActions = ReadAcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
                 ReceivedAt = ReceivedAt,
                 ReadAt = ReadAt,
                 ExpiresAt = ExpiresAt,

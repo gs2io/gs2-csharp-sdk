@@ -321,7 +321,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 SeasonModelId = SeasonModelId,
                 Name = Name,
                 Metadata = Metadata,
-                Tiers = Tiers.Clone() as Gs2.Gs2SeasonRating.Model.TierModel[],
+                Tiers = Tiers?.Clone() as Gs2.Gs2SeasonRating.Model.TierModel[],
                 ExperienceModelId = ExperienceModelId,
                 ChallengePeriodEventId = ChallengePeriodEventId,
             };
