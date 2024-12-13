@@ -58,7 +58,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 cache,
                 request.NamespaceName,
                 request.GuildModelName,
-                default
+                self.Guild.Name
             );
         }
 

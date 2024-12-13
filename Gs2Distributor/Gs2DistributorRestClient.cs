@@ -3805,6 +3805,271 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
+        public class SignFreezeMasterDataTimestampTask : Gs2RestSessionTask<SignFreezeMasterDataTimestampRequest, SignFreezeMasterDataTimestampResult>
+        {
+            public SignFreezeMasterDataTimestampTask(IGs2Session session, RestSessionRequestFactory factory, SignFreezeMasterDataTimestampRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SignFreezeMasterDataTimestampRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/masterdata/freeze/timestamp";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Timestamp != null)
+                {
+                    jsonWriter.WritePropertyName("timestamp");
+                    jsonWriter.Write(request.Timestamp.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SignFreezeMasterDataTimestamp(
+                Request.SignFreezeMasterDataTimestampRequest request,
+                UnityAction<AsyncResult<Result.SignFreezeMasterDataTimestampResult>> callback
+        )
+		{
+			var task = new SignFreezeMasterDataTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SignFreezeMasterDataTimestampResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SignFreezeMasterDataTimestampResult> SignFreezeMasterDataTimestampFuture(
+                Request.SignFreezeMasterDataTimestampRequest request
+        )
+		{
+			return new SignFreezeMasterDataTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SignFreezeMasterDataTimestampResult> SignFreezeMasterDataTimestampAsync(
+                Request.SignFreezeMasterDataTimestampRequest request
+        )
+		{
+            AsyncResult<Result.SignFreezeMasterDataTimestampResult> result = null;
+			await SignFreezeMasterDataTimestamp(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SignFreezeMasterDataTimestampTask SignFreezeMasterDataTimestampAsync(
+                Request.SignFreezeMasterDataTimestampRequest request
+        )
+		{
+			return new SignFreezeMasterDataTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SignFreezeMasterDataTimestampResult> SignFreezeMasterDataTimestampAsync(
+                Request.SignFreezeMasterDataTimestampRequest request
+        )
+		{
+			var task = new SignFreezeMasterDataTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class FreezeMasterDataBySignedTimestampTask : Gs2RestSessionTask<FreezeMasterDataBySignedTimestampRequest, FreezeMasterDataBySignedTimestampResult>
+        {
+            public FreezeMasterDataBySignedTimestampTask(IGs2Session session, RestSessionRequestFactory factory, FreezeMasterDataBySignedTimestampRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(FreezeMasterDataBySignedTimestampRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/masterdata/freeze/timestamp";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Body != null)
+                {
+                    jsonWriter.WritePropertyName("body");
+                    jsonWriter.Write(request.Body);
+                }
+                if (request.Signature != null)
+                {
+                    jsonWriter.WritePropertyName("signature");
+                    jsonWriter.Write(request.Signature);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator FreezeMasterDataBySignedTimestamp(
+                Request.FreezeMasterDataBySignedTimestampRequest request,
+                UnityAction<AsyncResult<Result.FreezeMasterDataBySignedTimestampResult>> callback
+        )
+		{
+			var task = new FreezeMasterDataBySignedTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.FreezeMasterDataBySignedTimestampResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.FreezeMasterDataBySignedTimestampResult> FreezeMasterDataBySignedTimestampFuture(
+                Request.FreezeMasterDataBySignedTimestampRequest request
+        )
+		{
+			return new FreezeMasterDataBySignedTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.FreezeMasterDataBySignedTimestampResult> FreezeMasterDataBySignedTimestampAsync(
+                Request.FreezeMasterDataBySignedTimestampRequest request
+        )
+		{
+            AsyncResult<Result.FreezeMasterDataBySignedTimestampResult> result = null;
+			await FreezeMasterDataBySignedTimestamp(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public FreezeMasterDataBySignedTimestampTask FreezeMasterDataBySignedTimestampAsync(
+                Request.FreezeMasterDataBySignedTimestampRequest request
+        )
+		{
+			return new FreezeMasterDataBySignedTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.FreezeMasterDataBySignedTimestampResult> FreezeMasterDataBySignedTimestampAsync(
+                Request.FreezeMasterDataBySignedTimestampRequest request
+        )
+		{
+			var task = new FreezeMasterDataBySignedTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class IfExpressionByUserIdTask : Gs2RestSessionTask<IfExpressionByUserIdRequest, IfExpressionByUserIdResult>
         {
             public IfExpressionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IfExpressionByUserIdRequest request) : base(session, factory, request)
