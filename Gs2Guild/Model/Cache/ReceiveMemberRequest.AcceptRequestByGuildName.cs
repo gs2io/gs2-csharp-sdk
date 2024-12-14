@@ -54,7 +54,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 request.GuildName,
                 request.FromUserId
             );
-            (null as Guild).DeleteCache(
+            self.Guild.DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.GuildModelName,
