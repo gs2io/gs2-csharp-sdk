@@ -1931,6 +1931,11 @@ namespace Gs2.Gs2Ranking2
                     }
                     jsonWriter.WriteArrayEnd();
                 }
+                if (request.RewardCalculationIndex != null)
+                {
+                    jsonWriter.WritePropertyName("rewardCalculationIndex");
+                    jsonWriter.Write(request.RewardCalculationIndex);
+                }
                 if (request.EntryPeriodEventId != null)
                 {
                     jsonWriter.WritePropertyName("entryPeriodEventId");
@@ -2201,6 +2206,11 @@ namespace Gs2.Gs2Ranking2
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.RewardCalculationIndex != null)
+                {
+                    jsonWriter.WritePropertyName("rewardCalculationIndex");
+                    jsonWriter.Write(request.RewardCalculationIndex);
                 }
                 if (request.EntryPeriodEventId != null)
                 {
@@ -5747,6 +5757,11 @@ namespace Gs2.Gs2Ranking2
                     }
                     jsonWriter.WriteArrayEnd();
                 }
+                if (request.RewardCalculationIndex != null)
+                {
+                    jsonWriter.WritePropertyName("rewardCalculationIndex");
+                    jsonWriter.Write(request.RewardCalculationIndex);
+                }
                 if (request.EntryPeriodEventId != null)
                 {
                     jsonWriter.WritePropertyName("entryPeriodEventId");
@@ -6027,6 +6042,11 @@ namespace Gs2.Gs2Ranking2
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.RewardCalculationIndex != null)
+                {
+                    jsonWriter.WritePropertyName("rewardCalculationIndex");
+                    jsonWriter.Write(request.RewardCalculationIndex);
                 }
                 if (request.EntryPeriodEventId != null)
                 {

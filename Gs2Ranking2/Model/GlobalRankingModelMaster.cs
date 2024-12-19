@@ -42,6 +42,7 @@ namespace Gs2.Gs2Ranking2.Model
         public string EntryPeriodEventId { set; get; } = null!;
         public Gs2.Gs2Ranking2.Model.RankingReward[] RankingRewards { set; get; } = null!;
         public string AccessPeriodEventId { set; get; } = null!;
+        public string RewardCalculationIndex { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -87,6 +88,10 @@ namespace Gs2.Gs2Ranking2.Model
         }
         public GlobalRankingModelMaster WithAccessPeriodEventId(string accessPeriodEventId) {
             this.AccessPeriodEventId = accessPeriodEventId;
+            return this;
+        }
+        public GlobalRankingModelMaster WithRewardCalculationIndex(string rewardCalculationIndex) {
+            this.RewardCalculationIndex = rewardCalculationIndex;
             return this;
         }
         public GlobalRankingModelMaster WithCreatedAt(long? createdAt) {
@@ -192,6 +197,7 @@ namespace Gs2.Gs2Ranking2.Model
                     return Gs2.Gs2Ranking2.Model.RankingReward.FromJson(v);
                 }).ToArray())
                 .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
+                .WithRewardCalculationIndex(!data.Keys.Contains("rewardCalculationIndex") || data["rewardCalculationIndex"] == null ? null : data["rewardCalculationIndex"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -220,6 +226,7 @@ namespace Gs2.Gs2Ranking2.Model
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["rankingRewards"] = rankingRewardsJsonData,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
+                ["rewardCalculationIndex"] = RewardCalculationIndex,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -279,6 +286,10 @@ namespace Gs2.Gs2Ranking2.Model
             if (AccessPeriodEventId != null) {
                 writer.WritePropertyName("accessPeriodEventId");
                 writer.Write(AccessPeriodEventId.ToString());
+            }
+            if (RewardCalculationIndex != null) {
+                writer.WritePropertyName("rewardCalculationIndex");
+                writer.Write(RewardCalculationIndex.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -390,6 +401,14 @@ namespace Gs2.Gs2Ranking2.Model
             else
             {
                 diff += AccessPeriodEventId.CompareTo(other.AccessPeriodEventId);
+            }
+            if (RewardCalculationIndex == null && RewardCalculationIndex == other.RewardCalculationIndex)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RewardCalculationIndex.CompareTo(other.RewardCalculationIndex);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -506,6 +525,17 @@ namespace Gs2.Gs2Ranking2.Model
                 }
             }
             {
+                switch (RewardCalculationIndex) {
+                    case "rank":
+                    case "index":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("globalRankingModelMaster", "ranking2.globalRankingModelMaster.rewardCalculationIndex.error.invalid"),
+                        });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("globalRankingModelMaster", "ranking2.globalRankingModelMaster.createdAt.error.invalid"),
@@ -556,6 +586,7 @@ namespace Gs2.Gs2Ranking2.Model
                 EntryPeriodEventId = EntryPeriodEventId,
                 RankingRewards = RankingRewards?.Clone() as Gs2.Gs2Ranking2.Model.RankingReward[],
                 AccessPeriodEventId = AccessPeriodEventId,
+                RewardCalculationIndex = RewardCalculationIndex,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

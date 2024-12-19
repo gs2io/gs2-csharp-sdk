@@ -4070,6 +4070,130 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
+        public class BatchExecuteApiTask : Gs2RestSessionTask<BatchExecuteApiRequest, BatchExecuteApiResult>
+        {
+            public BatchExecuteApiTask(IGs2Session session, RestSessionRequestFactory factory, BatchExecuteApiRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchExecuteApiRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/batch/execute";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.RequestPayloads != null)
+                {
+                    jsonWriter.WritePropertyName("requestPayloads");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.RequestPayloads)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchExecuteApi(
+                Request.BatchExecuteApiRequest request,
+                UnityAction<AsyncResult<Result.BatchExecuteApiResult>> callback
+        )
+		{
+			var task = new BatchExecuteApiTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchExecuteApiResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchExecuteApiResult> BatchExecuteApiFuture(
+                Request.BatchExecuteApiRequest request
+        )
+		{
+			return new BatchExecuteApiTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchExecuteApiResult> BatchExecuteApiAsync(
+                Request.BatchExecuteApiRequest request
+        )
+		{
+            AsyncResult<Result.BatchExecuteApiResult> result = null;
+			await BatchExecuteApi(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchExecuteApiTask BatchExecuteApiAsync(
+                Request.BatchExecuteApiRequest request
+        )
+		{
+			return new BatchExecuteApiTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchExecuteApiResult> BatchExecuteApiAsync(
+                Request.BatchExecuteApiRequest request
+        )
+		{
+			var task = new BatchExecuteApiTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class IfExpressionByUserIdTask : Gs2RestSessionTask<IfExpressionByUserIdRequest, IfExpressionByUserIdResult>
         {
             public IfExpressionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IfExpressionByUserIdRequest request) : base(session, factory, request)

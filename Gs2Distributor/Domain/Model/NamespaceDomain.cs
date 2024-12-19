@@ -535,6 +535,48 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> BatchExecuteApiFuture(
+            BatchExecuteApiRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> self)
+            {
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.BatchExecuteApiFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> BatchExecuteApiAsync(
+            #else
+        public async Task<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> BatchExecuteApiAsync(
+            #endif
+            BatchExecuteApiRequest request
+        ) {
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.BatchExecuteApiAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> CreateDistributorModelMasterFuture(
             CreateDistributorModelMasterRequest request
         ) {

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Ranking2.Model
         public int? Rank { set; get; } = null!;
         public long? Score { set; get; } = null!;
         public string Metadata { set; get; } = null!;
+        public long? InvertCreatedAt { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -72,6 +73,10 @@ namespace Gs2.Gs2Ranking2.Model
         }
         public GlobalRankingData WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public GlobalRankingData WithInvertCreatedAt(long? invertCreatedAt) {
+            this.InvertCreatedAt = invertCreatedAt;
             return this;
         }
         public GlobalRankingData WithCreatedAt(long? createdAt) {
@@ -206,6 +211,7 @@ namespace Gs2.Gs2Ranking2.Model
                 .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (int?)(data["rank"].ToString().Contains(".") ? (int)double.Parse(data["rank"].ToString()) : int.Parse(data["rank"].ToString())))
                 .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)(data["score"].ToString().Contains(".") ? (long)double.Parse(data["score"].ToString()) : long.Parse(data["score"].ToString())))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithInvertCreatedAt(!data.Keys.Contains("invertCreatedAt") || data["invertCreatedAt"] == null ? null : (long?)(data["invertCreatedAt"].ToString().Contains(".") ? (long)double.Parse(data["invertCreatedAt"].ToString()) : long.Parse(data["invertCreatedAt"].ToString())))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -222,6 +228,7 @@ namespace Gs2.Gs2Ranking2.Model
                 ["rank"] = Rank,
                 ["score"] = Score,
                 ["metadata"] = Metadata,
+                ["invertCreatedAt"] = InvertCreatedAt,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -262,6 +269,10 @@ namespace Gs2.Gs2Ranking2.Model
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (InvertCreatedAt != null) {
+                writer.WritePropertyName("invertCreatedAt");
+                writer.Write((InvertCreatedAt.ToString().Contains(".") ? (long)double.Parse(InvertCreatedAt.ToString()) : long.Parse(InvertCreatedAt.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -345,6 +356,14 @@ namespace Gs2.Gs2Ranking2.Model
             else
             {
                 diff += Metadata.CompareTo(other.Metadata);
+            }
+            if (InvertCreatedAt == null && InvertCreatedAt == other.InvertCreatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(InvertCreatedAt - other.InvertCreatedAt);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -451,6 +470,18 @@ namespace Gs2.Gs2Ranking2.Model
                 }
             }
             {
+                if (InvertCreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalRankingData", "ranking2.globalRankingData.invertCreatedAt.error.invalid"),
+                    });
+                }
+                if (InvertCreatedAt > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalRankingData", "ranking2.globalRankingData.invertCreatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("globalRankingData", "ranking2.globalRankingData.createdAt.error.invalid"),
@@ -498,6 +529,7 @@ namespace Gs2.Gs2Ranking2.Model
                 Rank = Rank,
                 Score = Score,
                 Metadata = Metadata,
+                InvertCreatedAt = InvertCreatedAt,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

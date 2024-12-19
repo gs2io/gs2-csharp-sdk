@@ -42,6 +42,7 @@ namespace Gs2.Gs2Ranking2.Model
         public string EntryPeriodEventId { set; get; } = null!;
         public Gs2.Gs2Ranking2.Model.RankingReward[] RankingRewards { set; get; } = null!;
         public string AccessPeriodEventId { set; get; } = null!;
+        public string RewardCalculationIndex { set; get; } = null!;
         public ClusterRankingModel WithClusterRankingModelId(string clusterRankingModelId) {
             this.ClusterRankingModelId = clusterRankingModelId;
             return this;
@@ -84,6 +85,10 @@ namespace Gs2.Gs2Ranking2.Model
         }
         public ClusterRankingModel WithAccessPeriodEventId(string accessPeriodEventId) {
             this.AccessPeriodEventId = accessPeriodEventId;
+            return this;
+        }
+        public ClusterRankingModel WithRewardCalculationIndex(string rewardCalculationIndex) {
+            this.RewardCalculationIndex = rewardCalculationIndex;
             return this;
         }
 
@@ -176,7 +181,8 @@ namespace Gs2.Gs2Ranking2.Model
                 .WithRankingRewards(!data.Keys.Contains("rankingRewards") || data["rankingRewards"] == null || !data["rankingRewards"].IsArray ? null : data["rankingRewards"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking2.Model.RankingReward.FromJson(v);
                 }).ToArray())
-                .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString());
+                .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString())
+                .WithRewardCalculationIndex(!data.Keys.Contains("rewardCalculationIndex") || data["rewardCalculationIndex"] == null ? null : data["rewardCalculationIndex"].ToString());
         }
 
         public JsonData ToJson()
@@ -202,6 +208,7 @@ namespace Gs2.Gs2Ranking2.Model
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["rankingRewards"] = rankingRewardsJsonData,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
+                ["rewardCalculationIndex"] = RewardCalculationIndex,
             };
         }
 
@@ -258,6 +265,10 @@ namespace Gs2.Gs2Ranking2.Model
             if (AccessPeriodEventId != null) {
                 writer.WritePropertyName("accessPeriodEventId");
                 writer.Write(AccessPeriodEventId.ToString());
+            }
+            if (RewardCalculationIndex != null) {
+                writer.WritePropertyName("rewardCalculationIndex");
+                writer.Write(RewardCalculationIndex.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -358,6 +369,14 @@ namespace Gs2.Gs2Ranking2.Model
             {
                 diff += AccessPeriodEventId.CompareTo(other.AccessPeriodEventId);
             }
+            if (RewardCalculationIndex == null && RewardCalculationIndex == other.RewardCalculationIndex)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RewardCalculationIndex.CompareTo(other.RewardCalculationIndex);
+            }
             return diff;
         }
 
@@ -453,6 +472,17 @@ namespace Gs2.Gs2Ranking2.Model
                     });
                 }
             }
+            {
+                switch (RewardCalculationIndex) {
+                    case "rank":
+                    case "index":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("clusterRankingModel", "ranking2.clusterRankingModel.rewardCalculationIndex.error.invalid"),
+                        });
+                }
+            }
         }
 
         public object Clone() {
@@ -468,6 +498,7 @@ namespace Gs2.Gs2Ranking2.Model
                 EntryPeriodEventId = EntryPeriodEventId,
                 RankingRewards = RankingRewards?.Clone() as Gs2.Gs2Ranking2.Model.RankingReward[],
                 AccessPeriodEventId = AccessPeriodEventId,
+                RewardCalculationIndex = RewardCalculationIndex,
             };
         }
     }

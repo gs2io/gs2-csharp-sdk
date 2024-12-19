@@ -42,6 +42,7 @@ namespace Gs2.Gs2Ranking2.Request
          public bool? Sum { set; get; } = null!;
          public string OrderDirection { set; get; } = null!;
          public Gs2.Gs2Ranking2.Model.RankingReward[] RankingRewards { set; get; } = null!;
+         public string RewardCalculationIndex { set; get; } = null!;
          public string EntryPeriodEventId { set; get; } = null!;
          public string AccessPeriodEventId { set; get; } = null!;
         public UpdateGlobalRankingModelMasterRequest WithNamespaceName(string namespaceName) {
@@ -80,6 +81,10 @@ namespace Gs2.Gs2Ranking2.Request
             this.RankingRewards = rankingRewards;
             return this;
         }
+        public UpdateGlobalRankingModelMasterRequest WithRewardCalculationIndex(string rewardCalculationIndex) {
+            this.RewardCalculationIndex = rewardCalculationIndex;
+            return this;
+        }
         public UpdateGlobalRankingModelMasterRequest WithEntryPeriodEventId(string entryPeriodEventId) {
             this.EntryPeriodEventId = entryPeriodEventId;
             return this;
@@ -109,6 +114,7 @@ namespace Gs2.Gs2Ranking2.Request
                 .WithRankingRewards(!data.Keys.Contains("rankingRewards") || data["rankingRewards"] == null || !data["rankingRewards"].IsArray ? null : data["rankingRewards"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking2.Model.RankingReward.FromJson(v);
                 }).ToArray())
+                .WithRewardCalculationIndex(!data.Keys.Contains("rewardCalculationIndex") || data["rewardCalculationIndex"] == null ? null : data["rewardCalculationIndex"].ToString())
                 .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
                 .WithAccessPeriodEventId(!data.Keys.Contains("accessPeriodEventId") || data["accessPeriodEventId"] == null ? null : data["accessPeriodEventId"].ToString());
         }
@@ -134,6 +140,7 @@ namespace Gs2.Gs2Ranking2.Request
                 ["sum"] = Sum,
                 ["orderDirection"] = OrderDirection,
                 ["rankingRewards"] = rankingRewardsJsonData,
+                ["rewardCalculationIndex"] = RewardCalculationIndex,
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
             };
@@ -185,6 +192,10 @@ namespace Gs2.Gs2Ranking2.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (RewardCalculationIndex != null) {
+                writer.WritePropertyName("rewardCalculationIndex");
+                writer.Write(RewardCalculationIndex.ToString());
+            }
             if (EntryPeriodEventId != null) {
                 writer.WritePropertyName("entryPeriodEventId");
                 writer.Write(EntryPeriodEventId.ToString());
@@ -207,6 +218,7 @@ namespace Gs2.Gs2Ranking2.Request
             key += Sum + ":";
             key += OrderDirection + ":";
             key += RankingRewards + ":";
+            key += RewardCalculationIndex + ":";
             key += EntryPeriodEventId + ":";
             key += AccessPeriodEventId + ":";
             return key;
