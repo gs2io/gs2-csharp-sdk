@@ -33,7 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class ArchiveDumpUserDataRequest : Gs2Request<ArchiveDumpUserDataRequest>
 	{
+         public string OwnerId { set; get; } = null!;
          public string TransactionId { set; get; } = null!;
+        public ArchiveDumpUserDataRequest WithOwnerId(string ownerId) {
+            this.OwnerId = ownerId;
+            return this;
+        }
         public ArchiveDumpUserDataRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
@@ -48,12 +53,14 @@ namespace Gs2.Gs2Project.Request
                 return null;
             }
             return new ArchiveDumpUserDataRequest()
+                .WithOwnerId(!data.Keys.Contains("ownerId") || data["ownerId"] == null ? null : data["ownerId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
+                ["ownerId"] = OwnerId,
                 ["transactionId"] = TransactionId,
             };
         }
@@ -61,6 +68,10 @@ namespace Gs2.Gs2Project.Request
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (OwnerId != null) {
+                writer.WritePropertyName("ownerId");
+                writer.Write(OwnerId.ToString());
+            }
             if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
                 writer.Write(TransactionId.ToString());
@@ -70,6 +81,7 @@ namespace Gs2.Gs2Project.Request
 
         public override string UniqueKey() {
             var key = "";
+            key += OwnerId + ":";
             key += TransactionId + ":";
             return key;
         }

@@ -3439,8 +3439,9 @@ namespace Gs2.Gs2Project
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/account/me/project/dump/progress/{transactionId}/wait";
+                    + "/system/{ownerId}/project/dump/progress/{transactionId}/wait";
 
+                url = url.Replace("{ownerId}", !string.IsNullOrEmpty(request.OwnerId) ? request.OwnerId.ToString() : "null");
                 url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
@@ -3573,8 +3574,9 @@ namespace Gs2.Gs2Project
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/account/me/project/dump/progress/{transactionId}/archive";
+                    + "/system/{ownerId}/project/dump/progress/{transactionId}/archive";
 
+                url = url.Replace("{ownerId}", !string.IsNullOrEmpty(request.OwnerId) ? request.OwnerId.ToString() : "null");
                 url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);

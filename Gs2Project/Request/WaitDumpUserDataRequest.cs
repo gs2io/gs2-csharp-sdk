@@ -33,11 +33,16 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class WaitDumpUserDataRequest : Gs2Request<WaitDumpUserDataRequest>
 	{
+         public string OwnerId { set; get; } = null!;
          public string TransactionId { set; get; } = null!;
          public string UserId { set; get; } = null!;
          public string MicroserviceName { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
+        public WaitDumpUserDataRequest WithOwnerId(string ownerId) {
+            this.OwnerId = ownerId;
+            return this;
+        }
         public WaitDumpUserDataRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
@@ -69,6 +74,7 @@ namespace Gs2.Gs2Project.Request
                 return null;
             }
             return new WaitDumpUserDataRequest()
+                .WithOwnerId(!data.Keys.Contains("ownerId") || data["ownerId"] == null ? null : data["ownerId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithMicroserviceName(!data.Keys.Contains("microserviceName") || data["microserviceName"] == null ? null : data["microserviceName"].ToString())
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Project.Request
         public override JsonData ToJson()
         {
             return new JsonData {
+                ["ownerId"] = OwnerId,
                 ["transactionId"] = TransactionId,
                 ["userId"] = UserId,
                 ["microserviceName"] = MicroserviceName,
@@ -88,6 +95,10 @@ namespace Gs2.Gs2Project.Request
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (OwnerId != null) {
+                writer.WritePropertyName("ownerId");
+                writer.Write(OwnerId.ToString());
+            }
             if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
                 writer.Write(TransactionId.ToString());
@@ -109,6 +120,7 @@ namespace Gs2.Gs2Project.Request
 
         public override string UniqueKey() {
             var key = "";
+            key += OwnerId + ":";
             key += TransactionId + ":";
             key += UserId + ":";
             key += MicroserviceName + ":";

@@ -2558,6 +2558,11 @@ namespace Gs2.Gs2Project
 
                 jsonWriter.WriteObjectStart();
 
+                if (request.OwnerId != null)
+                {
+                    jsonWriter.WritePropertyName("ownerId");
+                    jsonWriter.Write(request.OwnerId.ToString());
+                }
                 if (request.TransactionId != null)
                 {
                     jsonWriter.WritePropertyName("transactionId");
@@ -2681,6 +2686,11 @@ namespace Gs2.Gs2Project
 
                 jsonWriter.WriteObjectStart();
 
+                if (request.OwnerId != null)
+                {
+                    jsonWriter.WritePropertyName("ownerId");
+                    jsonWriter.Write(request.OwnerId.ToString());
+                }
                 if (request.TransactionId != null)
                 {
                     jsonWriter.WritePropertyName("transactionId");
