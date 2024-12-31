@@ -80,7 +80,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingSeasonDomain GlobalRankingSeason(
-            long? season
+            long? season = null
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingSeasonDomain(
                 this._gs2,

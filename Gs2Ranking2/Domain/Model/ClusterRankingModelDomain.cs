@@ -81,7 +81,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingSeasonDomain ClusterRankingSeason(
             string clusterName,
-            long? season
+            long? season = null
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingSeasonDomain(
                 this._gs2,
