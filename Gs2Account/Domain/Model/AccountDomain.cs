@@ -262,15 +262,13 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         public Gs2.Gs2Account.Domain.Model.PlatformIdDomain PlatformId(
-            int? type,
-            string userIdentifier
+            int? type
         ) {
             return new Gs2.Gs2Account.Domain.Model.PlatformIdDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.UserId,
-                type,
-                userIdentifier
+                type
             );
         }
 
@@ -937,8 +935,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2,
                     this.NamespaceName,
                     result?.Item?.UserId,
-                    result?.Item?.Type,
-                    result?.Item?.UserIdentifier
+                    result?.Item?.Type
                 );
 
                 self.OnComplete(domain);
@@ -969,8 +966,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2,
                     this.NamespaceName,
                     result?.Item?.UserId,
-                    result?.Item?.Type,
-                    result?.Item?.UserIdentifier
+                    result?.Item?.Type
                 );
                 return domain;
             }

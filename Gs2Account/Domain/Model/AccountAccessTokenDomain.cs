@@ -308,15 +308,13 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         public Gs2.Gs2Account.Domain.Model.PlatformIdAccessTokenDomain PlatformId(
-            int? type,
-            string userIdentifier
+            int? type
         ) {
             return new Gs2.Gs2Account.Domain.Model.PlatformIdAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.AccessToken,
-                type,
-                userIdentifier
+                type
             );
         }
 

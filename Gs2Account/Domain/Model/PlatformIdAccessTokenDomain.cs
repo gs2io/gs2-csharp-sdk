@@ -69,14 +69,12 @@ namespace Gs2.Gs2Account.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public int? Type { get; } = null!;
-        public string UserIdentifier { get; } = null!;
 
         public PlatformIdAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
-            int? type,
-            string userIdentifier
+            int? type
         ) {
             this._gs2 = gs2;
             this._client = new Gs2AccountRestClient(
@@ -85,7 +83,6 @@ namespace Gs2.Gs2Account.Domain.Model
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
             this.Type = type;
-            this.UserIdentifier = userIdentifier;
         }
 
         #if UNITY_2017_1_OR_NEWER

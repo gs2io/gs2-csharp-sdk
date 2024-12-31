@@ -745,8 +745,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2,
                     this.NamespaceName,
                     result?.Item?.UserId,
-                    result?.Item?.Type,
-                    result?.Item?.UserIdentifier
+                    result?.Item?.Type
                 );
 
                 self.OnComplete(domain);
@@ -776,8 +775,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2,
                     this.NamespaceName,
                     result?.Item?.UserId,
-                    result?.Item?.Type,
-                    result?.Item?.UserIdentifier
+                    result?.Item?.Type
                 );
                 return domain;
             }

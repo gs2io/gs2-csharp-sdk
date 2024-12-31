@@ -68,14 +68,12 @@ namespace Gs2.Gs2Account.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public int? Type { get; } = null!;
-        public string UserIdentifier { get; } = null!;
 
         public PlatformIdDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
-            int? type,
-            string userIdentifier
+            int? type
         ) {
             this._gs2 = gs2;
             this._client = new Gs2AccountRestClient(
@@ -84,7 +82,6 @@ namespace Gs2.Gs2Account.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.Type = type;
-            this.UserIdentifier = userIdentifier;
         }
 
     }
@@ -153,8 +150,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
-                    .WithType(this.Type)
-                    .WithUserIdentifier(this.UserIdentifier);
+                    .WithType(this.Type);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -186,8 +182,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithType(this.Type)
-                .WithUserIdentifier(this.UserIdentifier);
+                .WithType(this.Type);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -209,8 +204,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
-                    .WithType(this.Type)
-                    .WithUserIdentifier(this.UserIdentifier);
+                    .WithType(this.Type);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -241,8 +235,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithType(this.Type)
-                .WithUserIdentifier(this.UserIdentifier);
+                .WithType(this.Type);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
