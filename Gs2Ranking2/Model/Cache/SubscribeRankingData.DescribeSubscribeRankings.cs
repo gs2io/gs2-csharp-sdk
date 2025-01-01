@@ -54,7 +54,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     request.NamespaceName,
                     userId,
                     request.RankingName,
-                    request.Season,
+                    item.Season,
+                    item.ScorerUserId
+                );
+                item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.RankingName,
+                    null,
                     item.ScorerUserId
                 );
             }

@@ -128,6 +128,17 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
+        public void InvalidateGlobalRankings()
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.Season
+                )
+            );
+        }
+        
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingData> GlobalRankings(
             AccessToken accessToken
@@ -229,7 +240,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataAccessTokenDomain GlobalRankingData(
-             AccessToken accessToken
+            AccessToken accessToken
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataAccessTokenDomain(
                 this._gs2,
@@ -237,6 +248,30 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.RankingName,
                 this.Season,
                 accessToken
+            );
+        }
+
+        public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreDomain GlobalRankingScore(
+            string userId
+        ) {
+            return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreDomain(
+                this._gs2,
+                this.NamespaceName,
+                userId,
+                this.RankingName,
+                this.Season
+            );
+        }
+
+        public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain GlobalRankingScore(
+            AccessToken accessToken
+        ) {
+            return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                accessToken,
+                this.RankingName,
+                this.Season
             );
         }
 

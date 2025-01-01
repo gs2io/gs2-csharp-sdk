@@ -54,7 +54,16 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     request.NamespaceName,
                     userId,
                     request.SeasonName,
-                    request.Season,
+                    item.Season,
+                    item.Tier,
+                    item.Name
+                );
+                item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.SeasonName,
+                    null,
                     item.Tier,
                     item.Name
                 );

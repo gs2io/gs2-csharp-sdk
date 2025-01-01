@@ -259,6 +259,22 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
+            cache.Put(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    clusterName,
+                    null
+                ),
+                self.CacheKey(
+                    rankingName,
+                    clusterName,
+                    null
+                ),
+                self,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
         }
 
         public static void DeleteCache(
@@ -287,6 +303,20 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     season
                 )
             );
+            cache.Delete<ClusterRankingScore>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    clusterName,
+                    null
+                ),
+                self.CacheKey(
+                    rankingName,
+                    clusterName,
+                    null
+                )
+            );
         }
 
         public static void ListSubscribe(
@@ -309,6 +339,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 ),
                 callback
             );
+            cache.ListSubscribe<ClusterRankingScore>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    clusterName,
+                    null
+                ),
+                callback
+            );
         }
 
         public static void ListUnsubscribe(
@@ -328,6 +368,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season
+                ),
+                callbackId
+            );
+            cache.ListUnsubscribe<ClusterRankingScore>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    clusterName,
+                    null
                 ),
                 callbackId
             );

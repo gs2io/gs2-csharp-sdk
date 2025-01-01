@@ -53,7 +53,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.Item.UserId,
                 self.Item.RankingName,
                 self.Item.ClusterName,
-                request.Season
+                self.Item.Season
+            );
+            (null as ClusterRankingReceivedReward).DeleteCache(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                self.Item.RankingName,
+                self.Item.ClusterName,
+                null
             );
         }
 

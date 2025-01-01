@@ -31,6 +31,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core;
@@ -46,7 +47,6 @@ using UnityEngine;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using System.Threading;
-using System.Collections.Generic;
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
@@ -171,6 +171,14 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         Season ?? default,
                         item.UserId
                     );
+                    item.PutCache(
+                        this._gs2.Cache,
+                        NamespaceName,
+                        RankingName,
+                        ClusterName,
+                        null,
+                        item.UserId
+                    );
                 }
 
                 if (this._last) {
@@ -180,6 +188,14 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                             RankingName,
                             ClusterName,
                             Season ?? default
+                        )
+                    );
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingData>(
+                        (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheParentKey(
+                            NamespaceName,
+                            RankingName,
+                            ClusterName,
+                            null
                         )
                     );
                 }

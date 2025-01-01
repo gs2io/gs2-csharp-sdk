@@ -241,6 +241,19 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
+            cache.Put(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
+                ),
+                self.CacheKey(
+                    scorerUserId
+                ),
+                self,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
         }
 
         public static void DeleteCache(
@@ -266,6 +279,17 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     scorerUserId
                 )
             );
+            cache.Delete<SubscribeRankingData>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
+                ),
+                self.CacheKey(
+                    scorerUserId
+                )
+            );
         }
 
         public static void ListSubscribe(
@@ -286,6 +310,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 ),
                 callback
             );
+            cache.ListSubscribe<SubscribeRankingData>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
+                ),
+                callback
+            );
         }
 
         public static void ListUnsubscribe(
@@ -303,6 +336,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     userId,
                     rankingName,
                     season
+                ),
+                callbackId
+            );
+            cache.ListUnsubscribe<SubscribeRankingData>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
                 ),
                 callbackId
             );

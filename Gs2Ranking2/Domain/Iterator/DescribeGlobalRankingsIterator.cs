@@ -31,6 +31,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core;
@@ -46,7 +47,6 @@ using UnityEngine;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using System.Threading;
-using System.Collections.Generic;
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
 
             this.fetchSize = null;
         }
-
+        
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         private async UniTask _load() {
@@ -165,6 +165,13 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         Season ?? default,
                         item.UserId
                     );
+                    item.PutCache(
+                        this._gs2.Cache,
+                        NamespaceName,
+                        RankingName,
+                        null,
+                        item.UserId
+                    );
                 }
 
                 if (this._last) {
@@ -173,6 +180,13 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                             NamespaceName,
                             RankingName,
                             Season ?? default
+                        )
+                    );
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
+                        (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                            NamespaceName,
+                            RankingName,
+                            null
                         )
                     );
                 }

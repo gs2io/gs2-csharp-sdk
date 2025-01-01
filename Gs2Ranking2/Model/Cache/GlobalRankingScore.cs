@@ -233,6 +233,19 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
+            cache.Put(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName
+                ),
+                self.CacheKey(
+                    rankingName,
+                    null
+                ),
+                self,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
         }
 
         public static void DeleteCache(
@@ -255,6 +268,17 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheKey(
                     rankingName,
                     season
+                )
+            );
+            cache.Delete<GlobalRankingScore>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName
+                ),
+                self.CacheKey(
+                    rankingName,
+                    null
                 )
             );
         }

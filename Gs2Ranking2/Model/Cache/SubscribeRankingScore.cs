@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -223,6 +225,18 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
+            cache.Put(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
+                ),
+                self.CacheKey(
+                ),
+                self,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
         }
 
         public static void DeleteCache(
@@ -242,6 +256,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     userId,
                     rankingName,
                     season
+                ),
+                self.CacheKey(
+                )
+            );
+            cache.Delete<SubscribeRankingScore>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
                 ),
                 self.CacheKey(
                 )
@@ -266,6 +290,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 ),
                 callback
             );
+            cache.ListSubscribe<SubscribeRankingScore>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
+                ),
+                callback
+            );
         }
 
         public static void ListUnsubscribe(
@@ -283,6 +316,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     userId,
                     rankingName,
                     season
+                ),
+                callbackId
+            );
+            cache.ListUnsubscribe<SubscribeRankingScore>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    null
                 ),
                 callbackId
             );

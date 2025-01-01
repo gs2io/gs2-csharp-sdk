@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -29,6 +31,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core;
@@ -44,7 +47,6 @@ using UnityEngine;
 using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using System.Threading;
-using System.Collections.Generic;
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
@@ -125,7 +127,6 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this.UserId == null || item.UserId == this.UserId)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -155,7 +156,6 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this.UserId == null || item.UserId == this.UserId)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
@@ -164,7 +164,14 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         this._gs2.Cache,
                         NamespaceName,
                         RankingName,
-                        this.Season,
+                        item.Season,
+                        item.UserId
+                    );
+                    item.PutCache(
+                        this._gs2.Cache,
+                        NamespaceName,
+                        RankingName,
+                        null,
                         item.UserId
                     );
                 }
@@ -175,6 +182,13 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                             NamespaceName,
                             RankingName,
                             this.Season
+                        )
+                    );
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
+                        (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                            NamespaceName,
+                            RankingName,
+                            null
                         )
                     );
                 }

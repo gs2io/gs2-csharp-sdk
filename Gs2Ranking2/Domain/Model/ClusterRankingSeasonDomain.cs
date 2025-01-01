@@ -133,6 +133,18 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
+        public void InvalidateClusterRankings()
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.ClusterRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.ClusterName,
+                    this.Season
+                )
+            );
+        }
+
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.ClusterRankingData> ClusterRankings(
             AccessToken accessToken
@@ -248,6 +260,32 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.ClusterName,
                 this.Season,
                 accessToken
+            );
+        }
+
+        public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreDomain ClusterRankingScore(
+            string userId
+        ) {
+            return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreDomain(
+                this._gs2,
+                this.NamespaceName,
+                userId,
+                this.RankingName,
+                this.ClusterName,
+                this.Season
+            );
+        }
+
+        public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain ClusterRankingScore(
+            AccessToken accessToken
+        ) {
+            return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                accessToken,
+                this.RankingName,
+                this.ClusterName,
+                this.Season
             );
         }
 
