@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -91,7 +93,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             {
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithEntryName(this.EntryModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
@@ -119,7 +122,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                .WithNamespaceName(this.NamespaceName);
+                .WithNamespaceName(this.NamespaceName)
+                .WithEntryName(this.EntryModelName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
