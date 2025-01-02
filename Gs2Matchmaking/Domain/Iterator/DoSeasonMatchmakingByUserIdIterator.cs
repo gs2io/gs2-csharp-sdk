@@ -77,7 +77,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Matchmaking.Model.SeasonGathering[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DoSeasonMatchmakingByUserIdIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -96,8 +96,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             this._matchmakingContextToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Matchmaking.Model.SeasonGathering[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

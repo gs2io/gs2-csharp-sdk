@@ -77,7 +77,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Experience.Model.Status[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeStatusesByUserIdIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -96,8 +96,6 @@ namespace Gs2.Gs2Experience.Domain.Iterator
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Experience.Model.Status[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -137,7 +135,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
                         .WithNamespaceName(this.NamespaceName)
                         .WithUserId(this.UserId)
                         .WithPageToken(this._pageToken)
-                        .WithLimit(this.fetchSize)
+                        .WithLimit(fetchSize)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;

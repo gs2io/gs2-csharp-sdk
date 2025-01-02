@@ -81,7 +81,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private bool _last;
         private string[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeReferenceOfByUserIdIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -103,8 +103,6 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             this.TimeOffsetToken = timeOffsetToken;
             this._last = false;
             this._result = new string[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

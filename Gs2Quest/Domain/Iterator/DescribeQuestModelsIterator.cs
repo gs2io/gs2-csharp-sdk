@@ -74,7 +74,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Quest.Model.QuestModel[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeQuestModelsIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -88,8 +88,6 @@ namespace Gs2.Gs2Quest.Domain.Iterator
             this.QuestGroupName = questGroupName;
             this._last = false;
             this._result = new Gs2.Gs2Quest.Model.QuestModel[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

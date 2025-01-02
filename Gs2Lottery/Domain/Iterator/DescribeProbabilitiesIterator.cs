@@ -78,7 +78,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Lottery.Model.Probability[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeProbabilitiesIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -94,8 +94,6 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
             this.AccessToken = accessToken;
             this._last = false;
             this._result = new Gs2.Gs2Lottery.Model.Probability[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

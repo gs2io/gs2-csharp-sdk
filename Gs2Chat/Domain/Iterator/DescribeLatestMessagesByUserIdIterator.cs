@@ -80,7 +80,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Chat.Model.Message[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeLatestMessagesByUserIdIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -101,8 +101,6 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             this._startAt = null;
             this._last = false;
             this._result = new Gs2.Gs2Chat.Model.Message[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -158,7 +156,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         .WithRoomName(this.RoomName)
                         .WithPassword(this.Password)
                         .WithUserId(this.UserId)
-                        .WithLimit(this.fetchSize)
+                        .WithLimit(fetchSize)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;

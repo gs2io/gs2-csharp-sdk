@@ -79,7 +79,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Money.Model.Receipt[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeReceiptsIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -102,8 +102,6 @@ namespace Gs2.Gs2Money.Domain.Iterator
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Money.Model.Receipt[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -147,7 +145,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
                         .WithBegin(this.Begin)
                         .WithEnd(this.End)
                         .WithPageToken(this._pageToken)
-                        .WithLimit(this.fetchSize)
+                        .WithLimit(fetchSize)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;

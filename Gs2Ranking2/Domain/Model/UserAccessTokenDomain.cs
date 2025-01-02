@@ -300,7 +300,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain GlobalRankingScore(
             string rankingName,
-            long? season
+            long? season = null
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain(
                 this._gs2,
@@ -313,7 +313,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         public Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingSeasonAccessTokenDomain SubscribeRankingSeason(
             string rankingName,
-            long? season
+            long? season = null
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingSeasonAccessTokenDomain(
                 this._gs2,
@@ -514,7 +514,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingReceivedRewardAccessTokenDomain GlobalRankingReceivedReward(
             string rankingName,
-            long? season
+            long? season = null
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingReceivedRewardAccessTokenDomain(
                 this._gs2,
@@ -629,7 +629,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardAccessTokenDomain ClusterRankingReceivedReward(
             string rankingName,
             string clusterName,
-            long? season
+            long? season = null
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardAccessTokenDomain(
                 this._gs2,
@@ -751,7 +751,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain ClusterRankingScore(
             string rankingName,
             string clusterName,
-            long? season
+            long? season = null
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain(
                 this._gs2,

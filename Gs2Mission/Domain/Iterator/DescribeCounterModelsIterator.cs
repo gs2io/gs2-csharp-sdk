@@ -73,7 +73,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Mission.Model.CounterModel[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeCounterModelsIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -85,8 +85,6 @@ namespace Gs2.Gs2Mission.Domain.Iterator
             this.NamespaceName = namespaceName;
             this._last = false;
             this._result = new Gs2.Gs2Mission.Model.CounterModel[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

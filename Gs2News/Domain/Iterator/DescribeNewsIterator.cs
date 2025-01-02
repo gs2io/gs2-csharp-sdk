@@ -75,7 +75,7 @@ namespace Gs2.Gs2News.Domain.Iterator
         private bool _last;
         private Gs2.Gs2News.Model.News[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeNewsIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -89,8 +89,6 @@ namespace Gs2.Gs2News.Domain.Iterator
             this.AccessToken = accessToken;
             this._last = false;
             this._result = new Gs2.Gs2News.Model.News[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

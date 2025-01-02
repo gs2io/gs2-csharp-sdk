@@ -75,7 +75,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Schedule.Model.Event[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeEventsByUserIdIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -91,8 +91,6 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
             this.TimeOffsetToken = timeOffsetToken;
             this._last = false;
             this._result = new Gs2.Gs2Schedule.Model.Event[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

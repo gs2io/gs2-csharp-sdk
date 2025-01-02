@@ -82,7 +82,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Log.Model.InGameLog[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public QueryInGameLogIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -107,8 +107,6 @@ namespace Gs2.Gs2Log.Domain.Iterator
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Log.Model.InGameLog[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -152,7 +150,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                         .WithEnd(this.End)
                         .WithLongTerm(this.LongTerm)
                         .WithPageToken(this._pageToken)
-                        .WithLimit(this.fetchSize)
+                        .WithLimit(fetchSize)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;

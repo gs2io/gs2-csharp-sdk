@@ -91,8 +91,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             {
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithEntryName(this.EntryModelName);
+                    .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
@@ -120,8 +119,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                .WithNamespaceName(this.NamespaceName)
-                .WithEntryName(this.EntryModelName);
+                .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,

@@ -73,7 +73,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Ranking2.Model.SubscribeRankingModel[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeSubscribeRankingModelsIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -85,8 +85,6 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             this.NamespaceName = namespaceName;
             this._last = false;
             this._result = new Gs2.Gs2Ranking2.Model.SubscribeRankingModel[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

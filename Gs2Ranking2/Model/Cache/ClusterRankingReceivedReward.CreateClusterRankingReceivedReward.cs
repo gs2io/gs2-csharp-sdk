@@ -53,7 +53,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 userId,
                 self.Item.RankingName,
                 self.Item.ClusterName,
-                self.Item.Season ?? default
+                self.Item.Season
             );
             self.Item?.PutCache(
                 cache,

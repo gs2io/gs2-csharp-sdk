@@ -81,7 +81,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private bool _last;
         private string[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeReferenceOfIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -101,8 +101,6 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             this.ItemSetName = itemSetName;
             this._last = false;
             this._result = new string[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

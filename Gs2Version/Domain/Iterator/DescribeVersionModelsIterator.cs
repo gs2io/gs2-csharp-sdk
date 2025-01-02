@@ -73,7 +73,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
         private bool _last;
         private Gs2.Gs2Version.Model.VersionModel[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeVersionModelsIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -85,8 +85,6 @@ namespace Gs2.Gs2Version.Domain.Iterator
             this.NamespaceName = namespaceName;
             this._last = false;
             this._result = new Gs2.Gs2Version.Model.VersionModel[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER

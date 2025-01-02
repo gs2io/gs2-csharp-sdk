@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -444,6 +446,13 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.UserId,
                 this.RankingName,
                 this.Season ?? default
+            );
+            (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.RankingName,
+                null
             );
         }
 

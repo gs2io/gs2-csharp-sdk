@@ -66,8 +66,8 @@ namespace Gs2.Gs2Distributor.Domain
 
     public class Gs2Distributor {
 
-        private static readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
-        private static readonly List<AutoRunTransactionNotification> _completedTransactions = new List<AutoRunTransactionNotification>();
+        private readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
+        private readonly List<AutoRunTransactionNotification> _completedTransactions = new List<AutoRunTransactionNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
 

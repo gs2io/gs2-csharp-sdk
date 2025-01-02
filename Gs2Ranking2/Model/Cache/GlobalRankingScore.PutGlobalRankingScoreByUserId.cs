@@ -52,7 +52,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 self.Item.RankingName,
-                self.Item.Season ?? default
+                self.Item.Season
             );
             self.Item?.PutCache(
                 cache,

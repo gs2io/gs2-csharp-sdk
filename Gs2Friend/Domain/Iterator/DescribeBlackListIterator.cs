@@ -79,7 +79,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         private bool _last;
         private string[] _result;
 
-        int? fetchSize;
+        public static int? fetchSize;
 
         public DescribeBlackListIterator(
             Gs2.Core.Domain.Gs2 gs2,
@@ -94,8 +94,6 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             this._pageToken = null;
             this._last = false;
             this._result = new string[]{};
-
-            this.fetchSize = null;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -133,7 +131,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         .WithNamespaceName(this.NamespaceName)
                         .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
                         .WithPageToken(this._pageToken)
-                        .WithLimit(this.fetchSize)
+                        .WithLimit(fetchSize)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
