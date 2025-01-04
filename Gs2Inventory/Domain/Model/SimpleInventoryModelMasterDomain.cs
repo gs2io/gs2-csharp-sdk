@@ -122,7 +122,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.InventoryName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SimpleItemModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -151,6 +167,17 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.InventoryName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSimpleItemModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
+                (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).CacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName
+                )
             );
         }
 

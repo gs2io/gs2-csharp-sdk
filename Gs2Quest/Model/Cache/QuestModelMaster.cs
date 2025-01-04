@@ -237,7 +237,8 @@ namespace Gs2.Gs2Quest.Model.Cache
                     namespaceName,
                     questGroupName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

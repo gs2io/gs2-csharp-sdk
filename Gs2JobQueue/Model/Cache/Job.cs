@@ -234,7 +234,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

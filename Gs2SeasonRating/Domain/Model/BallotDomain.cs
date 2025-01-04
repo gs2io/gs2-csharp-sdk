@@ -281,7 +281,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

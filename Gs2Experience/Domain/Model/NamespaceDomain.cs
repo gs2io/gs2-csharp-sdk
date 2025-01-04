@@ -128,7 +128,23 @@ namespace Gs2.Gs2Experience.Domain.Model
                 (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ExperienceModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateExperienceModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Experience.Model.ExperienceModel>(
+                (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Experience.Domain.Model
                 (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ThresholdMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateThresholdMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Experience.Model.ThresholdMaster>(
+                (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Experience.Domain.Model
                 (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ExperienceModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateExperienceModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
+                (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

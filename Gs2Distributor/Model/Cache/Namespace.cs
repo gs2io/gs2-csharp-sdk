@@ -201,7 +201,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             cache.ListSubscribe<Namespace>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

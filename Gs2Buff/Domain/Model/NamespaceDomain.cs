@@ -128,7 +128,23 @@ namespace Gs2.Gs2Buff.Domain.Model
                 (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BuffEntryModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Buff.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBuffEntryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Buff.Model.BuffEntryModelMaster>(
+                (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Buff.Domain.Model
                 (null as Gs2.Gs2Buff.Model.BuffEntryModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BuffEntryModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Buff.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBuffEntryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Buff.Model.BuffEntryModel>(
+                (null as Gs2.Gs2Buff.Model.BuffEntryModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

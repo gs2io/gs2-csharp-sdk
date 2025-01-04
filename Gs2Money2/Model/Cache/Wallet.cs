@@ -256,7 +256,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

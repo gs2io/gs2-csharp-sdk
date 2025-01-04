@@ -191,7 +191,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

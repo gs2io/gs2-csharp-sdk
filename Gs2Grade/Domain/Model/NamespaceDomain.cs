@@ -128,7 +128,23 @@ namespace Gs2.Gs2Grade.Domain.Model
                 (null as Gs2.Gs2Grade.Model.GradeModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await GradeModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateGradeModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Grade.Model.GradeModel>(
+                (null as Gs2.Gs2Grade.Model.GradeModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Grade.Domain.Model
                 (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await GradeModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateGradeModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Grade.Model.GradeModelMaster>(
+                (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

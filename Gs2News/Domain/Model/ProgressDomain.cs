@@ -122,7 +122,23 @@ namespace Gs2.Gs2News.Domain.Model
                     this.NamespaceName,
                     this.UploadToken
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await OutputsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -151,6 +167,17 @@ namespace Gs2.Gs2News.Domain.Model
                     this.UploadToken
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateOutputs(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2News.Model.Output>(
+                (null as Gs2.Gs2News.Model.Output).CacheParentKey(
+                    this.NamespaceName,
+                    this.UploadToken
+                )
             );
         }
 

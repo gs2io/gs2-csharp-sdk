@@ -308,7 +308,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     clusterName,
                     season
                 ),
-                callback
+                callback,
+                () => {}
             );
             cache.ListSubscribe<ClusterRankingData>(
                 self.CacheParentKey(
@@ -317,7 +318,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     clusterName,
                     null
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

@@ -207,7 +207,23 @@ namespace Gs2.Gs2Identifier.Domain
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.User>(
                 (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await UsersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -234,6 +250,15 @@ namespace Gs2.Gs2Identifier.Domain
                 (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateUsers(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.User>(
+                (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                )
             );
         }
 
@@ -282,7 +307,23 @@ namespace Gs2.Gs2Identifier.Domain
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SecurityPoliciesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -309,6 +350,15 @@ namespace Gs2.Gs2Identifier.Domain
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSecurityPolicies(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -348,7 +398,23 @@ namespace Gs2.Gs2Identifier.Domain
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CommonSecurityPoliciesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -375,6 +441,15 @@ namespace Gs2.Gs2Identifier.Domain
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCommonSecurityPolicies(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                )
             );
         }
 

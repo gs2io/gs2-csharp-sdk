@@ -208,7 +208,8 @@ namespace Gs2.Gs2Project.Model.Cache
                 self.CacheParentKey(
                     accountName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

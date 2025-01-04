@@ -255,7 +255,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     projectName,
                     transactionId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

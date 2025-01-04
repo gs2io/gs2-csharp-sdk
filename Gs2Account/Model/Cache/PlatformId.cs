@@ -246,7 +246,8 @@ namespace Gs2.Gs2Account.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

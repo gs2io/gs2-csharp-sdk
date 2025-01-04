@@ -208,7 +208,8 @@ namespace Gs2.Gs2Quest.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

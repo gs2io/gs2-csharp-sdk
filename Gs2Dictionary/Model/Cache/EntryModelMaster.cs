@@ -219,7 +219,8 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

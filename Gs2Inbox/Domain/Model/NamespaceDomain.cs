@@ -148,7 +148,23 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 (null as Gs2.Gs2Inbox.Model.GlobalMessage).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await GlobalMessagesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -176,6 +192,16 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateGlobalMessages(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.GlobalMessage>(
+                (null as Gs2.Gs2Inbox.Model.GlobalMessage).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 (null as Gs2.Gs2Inbox.Model.GlobalMessageMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await GlobalMessageMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateGlobalMessageMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+                (null as Gs2.Gs2Inbox.Model.GlobalMessageMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

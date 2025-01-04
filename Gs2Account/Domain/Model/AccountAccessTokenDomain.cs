@@ -181,7 +181,22 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await TakeOversAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -210,6 +225,17 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateTakeOvers(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.TakeOver>(
+                (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -275,7 +301,22 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await PlatformIdsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -304,6 +345,17 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidatePlatformIds(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.PlatformId>(
+                (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -401,24 +453,17 @@ namespace Gs2.Gs2Account.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
                     async UniTask Impl() {
-            #else
-                    async Task Impl() {
-            #endif
                         try {
+                            await UniTask.SwitchToMainThread();
                             await ModelAsync();
                         }
                         catch (System.Exception) {
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
         #endif
                 }
             );

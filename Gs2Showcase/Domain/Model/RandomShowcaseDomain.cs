@@ -131,7 +131,23 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.UserId,
                     this.ShowcaseName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RandomDisplayItemsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -161,6 +177,18 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.ShowcaseName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRandomDisplayItems(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName
+                )
             );
         }
 

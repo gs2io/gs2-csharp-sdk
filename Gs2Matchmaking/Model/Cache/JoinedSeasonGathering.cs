@@ -251,7 +251,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     seasonName,
                     season
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

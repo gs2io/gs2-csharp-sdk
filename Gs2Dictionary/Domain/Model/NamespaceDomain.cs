@@ -130,7 +130,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 (null as Gs2.Gs2Dictionary.Model.EntryModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await EntryModelsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -158,6 +173,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateEntryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.EntryModel>(
+                (null as Gs2.Gs2Dictionary.Model.EntryModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -230,7 +255,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await EntryModelMastersAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -258,6 +298,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateEntryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -800,7 +850,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

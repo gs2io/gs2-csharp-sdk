@@ -128,7 +128,23 @@ namespace Gs2.Gs2Mission.Domain.Model
                 (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MissionGroupModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMissionGroupModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Mission.Model.MissionGroupModel>(
+                (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Mission.Domain.Model
                 (null as Gs2.Gs2Mission.Model.CounterModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CounterModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCounterModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Mission.Model.CounterModel>(
+                (null as Gs2.Gs2Mission.Model.CounterModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Mission.Domain.Model
                 (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CounterModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCounterModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -388,7 +466,23 @@ namespace Gs2.Gs2Mission.Domain.Model
                 (null as Gs2.Gs2Mission.Model.MissionGroupModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MissionGroupModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -416,6 +510,16 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMissionGroupModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                (null as Gs2.Gs2Mission.Model.MissionGroupModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

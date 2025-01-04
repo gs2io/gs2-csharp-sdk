@@ -149,7 +149,25 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ScoresAsync(
+                                categoryName,
+                                scorerUserId
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -186,6 +204,19 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateScores(
+            string categoryName,
+            string scorerUserId
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking.Model.Score>(
+                (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

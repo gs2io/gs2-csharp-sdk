@@ -125,7 +125,23 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 (null as Gs2.Gs2MegaField.Model.AreaModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await AreaModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -153,6 +169,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateAreaModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2MegaField.Model.AreaModel>(
+                (null as Gs2.Gs2MegaField.Model.AreaModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -225,7 +251,23 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 (null as Gs2.Gs2MegaField.Model.AreaModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await AreaModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -253,6 +295,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateAreaModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                (null as Gs2.Gs2MegaField.Model.AreaModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

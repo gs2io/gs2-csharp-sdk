@@ -128,7 +128,23 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.PrizeTable).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await PrizeTablesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidatePrizeTables(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.PrizeTable>(
+                (null as Gs2.Gs2Lottery.Model.PrizeTable).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.LotteryModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LotteryModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateLotteryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.LotteryModel>(
+                (null as Gs2.Gs2Lottery.Model.LotteryModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.PrizeTableMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await PrizeTableMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidatePrizeTableMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
+                (null as Gs2.Gs2Lottery.Model.PrizeTableMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -388,7 +466,23 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LotteryModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -416,6 +510,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateLotteryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
+                (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

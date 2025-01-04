@@ -65,10 +65,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
     public partial class GlobalRankingSeasonDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
-        public string NamespaceName { get; }
-        public string RankingName { get; }
-        public long? Season { get; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string RankingName { get; } = null!;
+        public long? Season { get; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public GlobalRankingSeasonDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -128,17 +128,18 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
-        public void InvalidateGlobalRankings()
+        public void InvalidateGlobalRankings(
+        )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 )
             );
         }
-        
+
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingData> GlobalRankings(
             AccessToken accessToken
@@ -178,54 +179,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             #endif
         }
         #endif
-
-        public ulong SubscribeGlobalRankings(
-            Action<Gs2.Gs2Ranking2.Model.GlobalRankingData[]> callback,
-            string userId
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
-                (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
-                    this.NamespaceName,
-                    this.RankingName,
-                    this.Season
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeGlobalRankingsWithInitialCallAsync(
-            Action<Gs2.Gs2Ranking2.Model.GlobalRankingData[]> callback,
-            string userId
-        )
-        {
-            var items = await GlobalRankingsAsync(
-                userId
-            ).ToArrayAsync();
-            var callbackId = SubscribeGlobalRankings(
-                callback,
-                userId
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeGlobalRankings(
-            ulong callbackId,
-            string userId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
-                (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
-                    this.NamespaceName,
-                    this.RankingName,
-                    this.Season
-                ),
-                callbackId
-            );
-        }
 
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain GlobalRankingData(
             string userId

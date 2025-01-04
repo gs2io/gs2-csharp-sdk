@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -466,7 +464,23 @@ namespace Gs2.Gs2Guild.Domain
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.Namespace>(
                 (null as Gs2.Gs2Guild.Model.Namespace).CacheParentKey(
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await NamespacesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -493,6 +507,15 @@ namespace Gs2.Gs2Guild.Domain
                 (null as Gs2.Gs2Guild.Model.Namespace).CacheParentKey(
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateNamespaces(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.Namespace>(
+                (null as Gs2.Gs2Guild.Model.Namespace).CacheParentKey(
+                )
             );
         }
 

@@ -291,7 +291,23 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.UserId,
                     this.MoldModelName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await FormsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -321,6 +337,18 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.MoldModelName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateForms(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.Form>(
+                (null as Gs2.Gs2Formation.Model.Form).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.MoldModelName
+                )
             );
         }
 

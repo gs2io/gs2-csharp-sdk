@@ -65,9 +65,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
-        public string NamespaceName { get; }
-        public string UserId { get; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -128,7 +128,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await EntriesAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -160,14 +175,140 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
         }
 
+        public void InvalidateEntries(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.Entry>(
+                (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
+            );
+        }
+
         public Gs2.Gs2Dictionary.Domain.Model.EntryDomain Entry(
-            string entryName
+            string entryModelName
         ) {
             return new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.UserId,
-                entryName
+                entryModelName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Dictionary.Model.Like> Likes(
+            string timeOffsetToken = null
+        )
+        {
+            return new DescribeLikesByUserIdIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.UserId,
+                timeOffsetToken
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Dictionary.Model.Like> LikesAsync(
+            #else
+        public DescribeLikesByUserIdIterator LikesAsync(
+            #endif
+            string timeOffsetToken = null
+        )
+        {
+            return new DescribeLikesByUserIdIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.UserId,
+                timeOffsetToken
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeLikes(
+            Action<Gs2.Gs2Dictionary.Model.Like[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.Like>(
+                (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LikesAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeLikesWithInitialCallAsync(
+            Action<Gs2.Gs2Dictionary.Model.Like[]> callback
+        )
+        {
+            var items = await LikesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeLikes(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeLikes(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.Like>(
+                (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateLikes(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.Like>(
+                (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
+            );
+        }
+
+        public Gs2.Gs2Dictionary.Domain.Model.LikeDomain Like(
+            string entryModelName
+        ) {
+            return new Gs2.Gs2Dictionary.Domain.Model.LikeDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                entryModelName
             );
         }
 
@@ -182,7 +323,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -217,7 +358,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             AddEntriesByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -242,7 +383,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -272,7 +413,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             ResetByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -286,63 +427,13 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntryFuture(
-            VerifyEntryByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> self)
-            {
-                request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    () => this._client.VerifyEntryByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntryAsync(
-            #else
-        public async Task<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntryAsync(
-            #endif
-            VerifyEntryByUserIdRequest request
-        ) {
-            request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                this.UserId,
-                () => this._client.VerifyEntryByUserIdAsync(request)
-            );
-            var domain = this;
-            return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> DeleteEntriesFuture(
             DeleteEntriesByUserIdRequest request
         ) {
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -381,7 +472,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             Gs2.Gs2Dictionary.Model.Entry[] items = null;
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var result = await request.InvokeAsync(
@@ -389,17 +480,192 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.UserId,
                     () => this._client.DeleteEntriesByUserIdAsync(request)
                 );
-                items = result?.Items;
+                items = result.Items;
             }
-            catch (NotFoundException e) {
-                
-            }
+            catch (NotFoundException e) {}
             var domain = items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
                 this._gs2,
                 this.NamespaceName,
                 v?.UserId,
                 v?.Name
             )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.EntryDomain>();
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> AddLikesFuture(
+            AddLikesByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.AddLikesByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.LikeDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    v?.UserId,
+                    v?.Name
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.LikeDomain>();
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> AddLikesAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> AddLikesAsync(
+            #endif
+            AddLikesByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.AddLikesByUserIdAsync(request)
+            );
+            var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.LikeDomain(
+                this._gs2,
+                this.NamespaceName,
+                v?.UserId,
+                v?.Name
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.LikeDomain>();
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> ResetLikesFuture(
+            ResetLikesByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ResetLikesByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.UserDomain> ResetLikesAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.UserDomain> ResetLikesAsync(
+            #endif
+            ResetLikesByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ResetLikesByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> DeleteLikesFuture(
+            DeleteLikesByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteLikesByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.LikeDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    v?.UserId,
+                    v?.Name
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.LikeDomain>();
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> DeleteLikesAsync(
+            #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> DeleteLikesAsync(
+            #endif
+            DeleteLikesByUserIdRequest request
+        ) {
+            Gs2.Gs2Dictionary.Model.Like[] items = null;
+            try {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteLikesByUserIdAsync(request)
+                );
+                items = result?.Items;
+            }
+            catch (NotFoundException e) {}
+            var domain = items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.LikeDomain(
+                this._gs2,
+                this.NamespaceName,
+                v?.UserId,
+                v?.Name
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.LikeDomain>();
             return domain;
         }
         #endif

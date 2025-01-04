@@ -178,7 +178,23 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.UserId,
                     this.LotteryName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ProbabilitiesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -208,6 +224,18 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.LotteryName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateProbabilities(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.Probability>(
+                (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LotteryName
+                )
             );
         }
 

@@ -191,7 +191,8 @@ namespace Gs2.Gs2Account.Model.Cache
             cache.ListSubscribe<BanStatus>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

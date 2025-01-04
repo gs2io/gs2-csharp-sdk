@@ -295,7 +295,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     itemName,
                     itemSetName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

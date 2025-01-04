@@ -128,7 +128,23 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 (null as Gs2.Gs2SkillTree.Model.NodeModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await NodeModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateNodeModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2SkillTree.Model.NodeModel>(
+                (null as Gs2.Gs2SkillTree.Model.NodeModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await NodeModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateNodeModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
+                (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

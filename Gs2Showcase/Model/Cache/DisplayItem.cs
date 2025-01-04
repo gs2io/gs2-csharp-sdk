@@ -251,7 +251,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     userId,
                     showcaseName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

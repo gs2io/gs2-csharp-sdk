@@ -191,7 +191,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
             cache.ListSubscribe<SecurityPolicy>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

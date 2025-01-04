@@ -148,7 +148,23 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await EventMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -176,6 +192,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateEventMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.EventMaster>(
+                (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

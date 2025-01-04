@@ -120,7 +120,23 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 (null as Gs2.Gs2Exchange.Model.RateModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RateModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -148,6 +164,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRateModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                (null as Gs2.Gs2Exchange.Model.RateModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 (null as Gs2.Gs2Exchange.Model.RateModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RateModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRateModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Exchange.Model.RateModel>(
+                (null as Gs2.Gs2Exchange.Model.RateModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await IncrementalRateModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateIncrementalRateModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
+                (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -388,7 +466,23 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await IncrementalRateModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -416,6 +510,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateIncrementalRateModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
+                (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

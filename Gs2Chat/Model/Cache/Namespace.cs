@@ -201,7 +201,8 @@ namespace Gs2.Gs2Chat.Model.Cache
             cache.ListSubscribe<Namespace>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

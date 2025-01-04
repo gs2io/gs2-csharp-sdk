@@ -288,7 +288,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     season
                 ),
-                callback
+                callback,
+                () => {}
             );
             cache.ListSubscribe<GlobalRankingData>(
                 self.CacheParentKey(
@@ -296,7 +297,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     null
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

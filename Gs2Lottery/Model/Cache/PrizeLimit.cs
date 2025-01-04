@@ -237,7 +237,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                     namespaceName,
                     prizeTableName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

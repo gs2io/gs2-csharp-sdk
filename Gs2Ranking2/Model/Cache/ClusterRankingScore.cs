@@ -303,20 +303,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     season
                 )
             );
-            cache.Delete<ClusterRankingScore>(
-                self.CacheParentKey(
-                    namespaceName,
-                    userId,
-                    rankingName,
-                    clusterName,
-                    null
-                ),
-                self.CacheKey(
-                    rankingName,
-                    clusterName,
-                    null
-                )
-            );
         }
 
         public static void ListSubscribe(
@@ -337,17 +323,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     clusterName,
                     season
                 ),
-                callback
-            );
-            cache.ListSubscribe<ClusterRankingScore>(
-                self.CacheParentKey(
-                    namespaceName,
-                    userId,
-                    rankingName,
-                    clusterName,
-                    null
-                ),
-                callback
+                callback,
+                () => {}
             );
         }
 
@@ -368,16 +345,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season
-                ),
-                callbackId
-            );
-            cache.ListUnsubscribe<ClusterRankingScore>(
-                self.CacheParentKey(
-                    namespaceName,
-                    userId,
-                    rankingName,
-                    clusterName,
-                    null
                 ),
                 callbackId
             );

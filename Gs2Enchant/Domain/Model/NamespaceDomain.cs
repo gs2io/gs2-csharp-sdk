@@ -128,7 +128,23 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BalanceParameterModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBalanceParameterModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
+                (null as Gs2.Gs2Enchant.Model.BalanceParameterModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BalanceParameterModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBalanceParameterModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -288,7 +340,23 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RarityParameterModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -316,6 +384,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRarityParameterModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Enchant.Model.RarityParameterModel>(
+                (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -368,7 +446,23 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RarityParameterModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -396,6 +490,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRarityParameterModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
+                (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

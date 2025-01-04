@@ -48,6 +48,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                 ":",
                 "money2",
                 namespaceName,
+                userId,
                 "Event"
             );
         }
@@ -241,7 +242,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

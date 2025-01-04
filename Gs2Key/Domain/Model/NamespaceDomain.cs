@@ -117,7 +117,23 @@ namespace Gs2.Gs2Key.Domain.Model
                 (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await KeysAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -145,6 +161,16 @@ namespace Gs2.Gs2Key.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateKeys(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Key.Model.Key>(
+                (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -197,7 +223,23 @@ namespace Gs2.Gs2Key.Domain.Model
                 (null as Gs2.Gs2Key.Model.GitHubApiKey).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await GitHubApiKeysAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -225,6 +267,16 @@ namespace Gs2.Gs2Key.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateGitHubApiKeys(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Key.Model.GitHubApiKey>(
+                (null as Gs2.Gs2Key.Model.GitHubApiKey).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

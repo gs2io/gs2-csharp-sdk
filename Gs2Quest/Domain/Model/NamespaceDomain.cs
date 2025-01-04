@@ -128,7 +128,23 @@ namespace Gs2.Gs2Quest.Domain.Model
                 (null as Gs2.Gs2Quest.Model.QuestGroupModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await QuestGroupModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateQuestGroupModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.QuestGroupModel>(
+                (null as Gs2.Gs2Quest.Model.QuestGroupModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Quest.Domain.Model
                 (null as Gs2.Gs2Quest.Model.QuestGroupModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await QuestGroupModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateQuestGroupModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+                (null as Gs2.Gs2Quest.Model.QuestGroupModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

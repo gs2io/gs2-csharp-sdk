@@ -191,7 +191,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DoMatchmakingAsync(
+                                player
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -224,6 +241,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDoMatchmaking(
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -280,7 +309,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RatingsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -309,6 +354,17 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRatings(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Rating>(
+                (null as Gs2.Gs2Matchmaking.Model.Rating).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

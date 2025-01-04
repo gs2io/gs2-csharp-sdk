@@ -111,7 +111,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
         

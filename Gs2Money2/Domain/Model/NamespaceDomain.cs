@@ -135,7 +135,26 @@ namespace Gs2.Gs2Money2.Domain.Model
                 (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DailyTransactionHistoriesByCurrencyAsync(
+                                currency,
+                                year,
+                                month
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -175,6 +194,19 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDailyTransactionHistoriesByCurrency(
+            string currency,
+            int? year,
+            int? month = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -232,7 +264,26 @@ namespace Gs2.Gs2Money2.Domain.Model
                 (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DailyTransactionHistoriesAsync(
+                                year,
+                                month,
+                                day
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -272,6 +323,19 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDailyTransactionHistories(
+            int? year,
+            int? month = null,
+            int? day = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -358,7 +422,23 @@ namespace Gs2.Gs2Money2.Domain.Model
                 (null as Gs2.Gs2Money2.Model.StoreContentModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StoreContentModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -386,6 +466,16 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateStoreContentModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.StoreContentModel>(
+                (null as Gs2.Gs2Money2.Model.StoreContentModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -438,7 +528,23 @@ namespace Gs2.Gs2Money2.Domain.Model
                 (null as Gs2.Gs2Money2.Model.UnusedBalance).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await UnusedBalancesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -466,6 +572,16 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateUnusedBalances(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.UnusedBalance>(
+                (null as Gs2.Gs2Money2.Model.UnusedBalance).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -518,7 +634,23 @@ namespace Gs2.Gs2Money2.Domain.Model
                 (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StoreContentModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -546,6 +678,16 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateStoreContentModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.StoreContentModelMaster>(
+                (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

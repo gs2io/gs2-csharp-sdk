@@ -191,7 +191,8 @@ namespace Gs2.Gs2Project.Model.Cache
             cache.ListSubscribe<Account>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

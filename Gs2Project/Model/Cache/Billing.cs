@@ -240,7 +240,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     accountName,
                     projectName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

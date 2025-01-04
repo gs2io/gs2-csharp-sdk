@@ -191,7 +191,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

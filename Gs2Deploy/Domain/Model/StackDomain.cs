@@ -119,7 +119,22 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 (null as Gs2.Gs2Deploy.Model.Resource).CacheParentKey(
                     this.StackName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ResourcesAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -147,6 +162,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     this.StackName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateResources(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Deploy.Model.Resource>(
+                (null as Gs2.Gs2Deploy.Model.Resource).CacheParentKey(
+                    this.StackName
+                )
             );
         }
 
@@ -199,7 +224,22 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 (null as Gs2.Gs2Deploy.Model.Event).CacheParentKey(
                     this.StackName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await EventsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -227,6 +267,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     this.StackName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateEvents(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Deploy.Model.Event>(
+                (null as Gs2.Gs2Deploy.Model.Event).CacheParentKey(
+                    this.StackName
+                )
             );
         }
 
@@ -279,7 +329,22 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 (null as Gs2.Gs2Deploy.Model.Output).CacheParentKey(
                     this.StackName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await OutputsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -307,6 +372,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     this.StackName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateOutputs(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Deploy.Model.Output>(
+                (null as Gs2.Gs2Deploy.Model.Output).CacheParentKey(
+                    this.StackName
+                )
             );
         }
 
@@ -477,7 +552,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithStackName(this.StackName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -881,7 +956,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

@@ -470,7 +470,23 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     this.UserId,
                     this.DataObjectName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DataObjectHistoriesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -500,6 +516,18 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     this.DataObjectName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDataObjectHistories(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName
+                )
             );
         }
 

@@ -128,7 +128,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.InventoryModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await InventoryModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateInventoryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.InventoryModel>(
+                (null as Gs2.Gs2Inventory.Model.InventoryModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SimpleInventoryModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSimpleInventoryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster>(
+                (null as Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.SimpleInventoryModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SimpleInventoryModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSimpleInventoryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.SimpleInventoryModel>(
+                (null as Gs2.Gs2Inventory.Model.SimpleInventoryModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -388,7 +466,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.BigInventoryModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BigInventoryModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -416,6 +510,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBigInventoryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.BigInventoryModel>(
+                (null as Gs2.Gs2Inventory.Model.BigInventoryModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -468,7 +572,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BigInventoryModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -496,6 +616,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBigInventoryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -548,7 +678,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.InventoryModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await InventoryModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -576,6 +722,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateInventoryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+                (null as Gs2.Gs2Inventory.Model.InventoryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

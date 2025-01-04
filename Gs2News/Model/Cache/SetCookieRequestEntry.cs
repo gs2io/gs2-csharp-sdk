@@ -249,7 +249,8 @@ namespace Gs2.Gs2News.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

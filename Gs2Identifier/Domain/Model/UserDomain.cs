@@ -119,7 +119,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
                     this.UserName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await IdentifiersAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -147,6 +162,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     this.UserName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateIdentifiers(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.Identifier>(
+                (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
+                    this.UserName
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -526,7 +551,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

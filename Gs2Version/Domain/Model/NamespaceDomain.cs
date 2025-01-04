@@ -128,7 +128,23 @@ namespace Gs2.Gs2Version.Domain.Model
                 (null as Gs2.Gs2Version.Model.VersionModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await VersionModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Version.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateVersionModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Version.Model.VersionModel>(
+                (null as Gs2.Gs2Version.Model.VersionModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Version.Domain.Model
                 (null as Gs2.Gs2Version.Model.VersionModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await VersionModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Version.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateVersionModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Version.Model.VersionModelMaster>(
+                (null as Gs2.Gs2Version.Model.VersionModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

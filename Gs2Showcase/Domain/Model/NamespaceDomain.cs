@@ -128,7 +128,23 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SalesItemMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSalesItemMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.SalesItemMaster>(
+                (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.SalesItemGroupMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SalesItemGroupMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSalesItemGroupMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
+                (null as Gs2.Gs2Showcase.Model.SalesItemGroupMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ShowcaseMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateShowcaseMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
+                (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -388,7 +466,23 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RandomShowcaseMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -416,6 +510,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRandomShowcaseMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
+                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

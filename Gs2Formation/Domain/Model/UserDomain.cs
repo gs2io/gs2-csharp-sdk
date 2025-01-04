@@ -126,7 +126,23 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MoldsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -155,6 +171,17 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMolds(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.Mold>(
+                (null as Gs2.Gs2Formation.Model.Mold).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -220,7 +247,24 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await PropertyFormsAsync(
+                                propertyFormModelName
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -253,6 +297,18 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidatePropertyForms(
+            string propertyFormModelName
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.PropertyForm>(
+                (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

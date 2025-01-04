@@ -283,7 +283,22 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SubscribeUsersAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -314,6 +329,19 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.AdditionalScopeName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSubscribeUsers(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName
+                )
             );
         }
 
@@ -378,7 +406,22 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RankingsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -409,6 +452,19 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.AdditionalScopeName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRankings(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking.Model.Ranking>(
+                (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName
+                )
             );
         }
 

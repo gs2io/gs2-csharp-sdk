@@ -246,7 +246,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

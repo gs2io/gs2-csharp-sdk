@@ -207,7 +207,24 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId,
                     withProfile
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await FriendsAsync(
+                                withProfile
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -241,6 +258,19 @@ namespace Gs2.Gs2Friend.Domain.Model
                     withProfile
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateFriends(
+            bool? withProfile = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    withProfile
+                )
             );
         }
 
@@ -301,7 +331,23 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SendRequestsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -330,6 +376,17 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSendRequests(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -390,7 +447,23 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ReceiveRequestsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -419,6 +492,17 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateReceiveRequests(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

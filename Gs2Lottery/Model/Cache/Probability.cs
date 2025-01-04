@@ -251,7 +251,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                     userId,
                     lotteryName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

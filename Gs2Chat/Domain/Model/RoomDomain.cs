@@ -136,7 +136,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.RoomName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MessagesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -166,6 +182,18 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.RoomName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMessages(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
+                (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -220,7 +248,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.RoomName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LatestMessagesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -250,6 +294,18 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.RoomName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateLatestMessages(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
+                (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName
+                )
             );
         }
 

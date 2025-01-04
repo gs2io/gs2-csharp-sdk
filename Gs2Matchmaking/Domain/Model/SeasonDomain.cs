@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -138,9 +136,26 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SeasonGatheringsAsync(
+                                tier
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -172,9 +187,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSeasonGatherings(
+            long? tier = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.SeasonGathering>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonGathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.SeasonName,
+                    this.Season ?? default
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -227,9 +256,26 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MatchmakingSeasonGatheringsAsync(
+                                tier
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -261,9 +307,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMatchmakingSeasonGatherings(
+            long? tier = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.SeasonGathering>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonGathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.SeasonName,
+                    this.Season ?? default
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -315,9 +375,25 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DoSeasonMatchmakingAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -345,9 +421,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDoSeasonMatchmaking(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.SeasonGathering>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonGathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.SeasonName,
+                    this.Season ?? default
+                )
             );
         }
 
@@ -414,9 +503,25 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await JoinedSeasonGatheringsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -444,9 +549,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateJoinedSeasonGatherings(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering>(
+                (null as Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.SeasonName,
+                    this.Season ?? default
+                )
             );
         }
 

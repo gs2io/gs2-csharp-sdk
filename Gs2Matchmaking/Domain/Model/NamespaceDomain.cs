@@ -148,7 +148,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 (null as Gs2.Gs2Matchmaking.Model.RatingModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RatingModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -176,6 +192,16 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRatingModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.RatingModel>(
+                (null as Gs2.Gs2Matchmaking.Model.RatingModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RatingModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRatingModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+                (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -320,7 +372,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 (null as Gs2.Gs2Matchmaking.Model.SeasonModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SeasonModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -348,6 +416,16 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSeasonModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.SeasonModel>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -400,7 +478,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SeasonModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -428,6 +522,16 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSeasonModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.SeasonModelMaster>(
+                (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

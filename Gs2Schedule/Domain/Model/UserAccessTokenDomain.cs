@@ -123,7 +123,23 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await TriggersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -152,6 +168,17 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateTriggers(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Trigger>(
+                (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -208,7 +235,23 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await EventsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -237,6 +280,17 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateEvents(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
+                (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

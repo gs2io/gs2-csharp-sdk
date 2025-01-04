@@ -128,7 +128,23 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.MoldModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MoldModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMoldModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.MoldModel>(
+                (null as Gs2.Gs2Formation.Model.MoldModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.PropertyFormModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await PropertyFormModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidatePropertyFormModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.PropertyFormModel>(
+                (null as Gs2.Gs2Formation.Model.PropertyFormModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await PropertyFormModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidatePropertyFormModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
+                (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -388,7 +466,23 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.FormModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await FormModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -416,6 +510,16 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateFormModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.FormModelMaster>(
+                (null as Gs2.Gs2Formation.Model.FormModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -468,7 +572,23 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.MoldModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MoldModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -496,6 +616,16 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMoldModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.MoldModelMaster>(
+                (null as Gs2.Gs2Formation.Model.MoldModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

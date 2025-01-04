@@ -118,7 +118,23 @@ namespace Gs2.Gs2Realtime.Domain.Model
                 (null as Gs2.Gs2Realtime.Model.Room).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RoomsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -146,6 +162,16 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRooms(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Realtime.Model.Room>(
+                (null as Gs2.Gs2Realtime.Model.Room).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

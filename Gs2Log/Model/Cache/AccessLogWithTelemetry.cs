@@ -191,7 +191,9 @@ namespace Gs2.Gs2Log.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                
+                callback,
+                () => {}
             );
         }
 

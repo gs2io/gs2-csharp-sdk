@@ -264,7 +264,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     userId,
                     inventoryName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

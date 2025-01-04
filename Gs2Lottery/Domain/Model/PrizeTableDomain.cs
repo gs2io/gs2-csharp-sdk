@@ -122,7 +122,23 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName,
                     this.PrizeTableName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await PrizeLimitsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -151,6 +167,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.PrizeTableName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidatePrizeLimits(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
+                    this.NamespaceName,
+                    this.PrizeTableName
+                )
             );
         }
 

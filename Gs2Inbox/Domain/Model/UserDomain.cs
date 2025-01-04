@@ -131,7 +131,24 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MessagesAsync(
+                                isRead
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -164,6 +181,18 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMessages(
+            bool? isRead = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
+                (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

@@ -283,7 +283,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     categoryName,
                     additionalScopeName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

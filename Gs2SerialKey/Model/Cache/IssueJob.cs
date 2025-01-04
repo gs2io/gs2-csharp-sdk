@@ -237,7 +237,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                     namespaceName,
                     campaignModelName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

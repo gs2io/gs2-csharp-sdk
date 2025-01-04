@@ -193,7 +193,23 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId,
                     this.WithProfile ?? default
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await FollowsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -223,6 +239,18 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.WithProfile ?? default
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateFollows(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FollowUser>(
+                (null as Gs2.Gs2Friend.Model.FollowUser).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile ?? default
+                )
             );
         }
 

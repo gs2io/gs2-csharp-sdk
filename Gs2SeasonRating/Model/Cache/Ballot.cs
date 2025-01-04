@@ -251,7 +251,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

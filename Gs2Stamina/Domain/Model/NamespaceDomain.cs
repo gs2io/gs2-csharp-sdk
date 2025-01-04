@@ -128,7 +128,23 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MaxStaminaTableMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMaxStaminaTableMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
+                (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StaminaModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateStaminaModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.StaminaModel>(
+                (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RecoverIntervalTableMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRecoverIntervalTableMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
+                (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -388,7 +466,23 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RecoverValueTableMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -416,6 +510,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRecoverValueTableMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
+                (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -468,7 +572,23 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StaminaModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -496,6 +616,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateStaminaModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
+                (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

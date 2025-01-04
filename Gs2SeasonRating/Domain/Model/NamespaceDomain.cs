@@ -128,7 +128,23 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 (null as Gs2.Gs2SeasonRating.Model.SeasonModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SeasonModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSeasonModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2SeasonRating.Model.SeasonModel>(
+                (null as Gs2.Gs2SeasonRating.Model.SeasonModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -208,7 +234,23 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SeasonModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -236,6 +278,16 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSeasonModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2SeasonRating.Model.SeasonModelMaster>(
+                (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -308,7 +360,23 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 (null as Gs2.Gs2SeasonRating.Model.MatchSession).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MatchSessionsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +404,16 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateMatchSessions(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2SeasonRating.Model.MatchSession>(
+                (null as Gs2.Gs2SeasonRating.Model.MatchSession).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

@@ -208,7 +208,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

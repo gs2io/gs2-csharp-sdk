@@ -122,7 +122,23 @@ namespace Gs2.Gs2Script.Domain.Model
                 (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ScriptsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -150,6 +166,16 @@ namespace Gs2.Gs2Script.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateScripts(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Script.Model.Script>(
+                (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

@@ -246,7 +246,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

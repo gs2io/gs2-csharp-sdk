@@ -69,9 +69,9 @@ namespace Gs2.Gs2JobQueue.Domain
         private static readonly List<RunNotification> _completedJobs = new List<RunNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        public string Url { get; set; }
-        public string UploadToken { get; set; }
-        public string UploadUrl { get; set; }
+        public string Url { get; set; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public Gs2JobQueue(
             Gs2.Core.Domain.Gs2 gs2
@@ -468,7 +468,22 @@ namespace Gs2.Gs2JobQueue.Domain
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2JobQueue.Model.Namespace>(
                 (null as Gs2.Gs2JobQueue.Model.Namespace).CacheParentKey(
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await NamespacesAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -495,6 +510,15 @@ namespace Gs2.Gs2JobQueue.Domain
                 (null as Gs2.Gs2JobQueue.Model.Namespace).CacheParentKey(
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateNamespaces(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2JobQueue.Model.Namespace>(
+                (null as Gs2.Gs2JobQueue.Model.Namespace).CacheParentKey(
+                )
             );
         }
 
@@ -636,10 +660,11 @@ namespace Gs2.Gs2JobQueue.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Push": {
+    #if UNITY_2017_1_OR_NEWER
                     onPushNotification.Invoke(PushNotification.FromJson(JsonMapper.ToObject(payload)));
+    #endif
                     break;
                 }
                 case "RunNotification": {
@@ -647,12 +672,13 @@ namespace Gs2.Gs2JobQueue.Domain
                     {
                         var notification = RunNotification.FromJson(JsonMapper.ToObject(payload));
                         _completedJobs.Add(notification);
+    #if UNITY_2017_1_OR_NEWER
                         onRunNotification.Invoke(notification);
+    #endif
                     }
                     break;
                 }
             }
-    #endif
         }
         
 #if UNITY_2017_1_OR_NEWER

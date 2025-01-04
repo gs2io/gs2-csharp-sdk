@@ -298,7 +298,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     userId,
                     rankingName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

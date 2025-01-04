@@ -251,7 +251,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

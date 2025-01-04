@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -97,9 +95,9 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithRoomName(this.RoomName)
-                    .WithPassword(this.Password);
+                    .WithPassword(this.Password)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -130,9 +128,9 @@ namespace Gs2.Gs2Chat.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithRoomName(this.RoomName)
-                .WithPassword(this.Password);
+                .WithPassword(this.Password)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -153,8 +151,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithRoomName(this.RoomName);
+                    .WithRoomName(this.RoomName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -188,8 +186,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithRoomName(this.RoomName);
+                    .WithRoomName(this.RoomName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
@@ -211,8 +209,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithRoomName(this.RoomName)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithPassword(this.Password);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -251,8 +249,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithRoomName(this.RoomName)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithPassword(this.Password);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -356,7 +354,77 @@ namespace Gs2.Gs2Chat.Domain.Model
             #endif
         }
         #endif
-        
+
+        public ulong SubscribeMessages(
+            Action<Gs2.Gs2Chat.Model.Message[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Message>(
+                (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MessagesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMessagesWithInitialCallAsync(
+            Action<Gs2.Gs2Chat.Model.Message[]> callback
+        )
+        {
+            var items = await MessagesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMessages(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMessages(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Message>(
+                (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateMessages(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
+                (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName
+                )
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Chat.Model.Message> LatestMessages(
         )
@@ -395,7 +463,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #endif
 
-        public ulong SubscribeMessages(
+        public ulong SubscribeLatestMessages(
             Action<Gs2.Gs2Chat.Model.Message[]> callback
         )
         {
@@ -405,18 +473,34 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.RoomName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LatestMessagesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeMessagesWithInitialCallAsync(
+        public async UniTask<ulong> SubscribeLatestMessagesWithInitialCallAsync(
             Action<Gs2.Gs2Chat.Model.Message[]> callback
         )
         {
-            var items = await MessagesAsync(
+            var items = await LatestMessagesAsync(
             ).ToArrayAsync();
-            var callbackId = SubscribeMessages(
+            var callbackId = SubscribeLatestMessages(
                 callback
             );
             callback.Invoke(items);
@@ -424,7 +508,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #endif
 
-        public void UnsubscribeMessages(
+        public void UnsubscribeLatestMessages(
             ulong callbackId
         )
         {
@@ -435,6 +519,18 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.RoomName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateLatestMessages(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
+                (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName
+                )
             );
         }
 

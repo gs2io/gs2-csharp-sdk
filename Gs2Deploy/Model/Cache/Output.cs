@@ -208,7 +208,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 self.CacheParentKey(
                     stackName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

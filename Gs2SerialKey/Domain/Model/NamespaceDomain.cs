@@ -128,7 +128,23 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 (null as Gs2.Gs2SerialKey.Model.CampaignModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CampaignModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCampaignModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2SerialKey.Model.CampaignModel>(
+                (null as Gs2.Gs2SerialKey.Model.CampaignModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CampaignModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCampaignModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

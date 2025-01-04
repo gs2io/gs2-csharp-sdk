@@ -234,7 +234,8 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

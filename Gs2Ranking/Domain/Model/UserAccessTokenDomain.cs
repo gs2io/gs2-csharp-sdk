@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -65,10 +63,10 @@ namespace Gs2.Gs2Ranking.Domain.Model
     public partial class UserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
-        public string NamespaceName { get; }
+        public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string NextPageToken { get; set; }
+        public string NextPageToken { get; set; } = null!;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -148,7 +146,25 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ScoresAsync(
+                                categoryName,
+                                scorerUserId
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -188,10 +204,23 @@ namespace Gs2.Gs2Ranking.Domain.Model
             );
         }
 
+        public void InvalidateScores(
+            string categoryName,
+            string scorerUserId
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking.Model.Score>(
+                (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
+            );
+        }
+
         public Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain Score(
             string categoryName,
             string scorerUserId,
-            string uniqueId = null
+            string uniqueId
         ) {
             return new Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain(
                 this._gs2,
@@ -199,7 +228,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.AccessToken,
                 categoryName,
                 scorerUserId,
-                uniqueId ?? "0"
+                uniqueId
             );
         }
 

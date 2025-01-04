@@ -249,7 +249,23 @@ namespace Gs2.Gs2Deploy.Domain
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Stack>(
                 (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StacksAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -276,6 +292,15 @@ namespace Gs2.Gs2Deploy.Domain
                 (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateStacks(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Deploy.Model.Stack>(
+                (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
+                )
             );
         }
 

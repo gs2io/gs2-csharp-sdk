@@ -201,7 +201,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 self.CacheParentKey(
                     userName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

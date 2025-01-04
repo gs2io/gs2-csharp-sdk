@@ -128,7 +128,23 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 (null as Gs2.Gs2Ranking.Model.CategoryModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CategoryModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCategoryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking.Model.CategoryModel>(
+                (null as Gs2.Gs2Ranking.Model.CategoryModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CategoryModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCategoryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
+                (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

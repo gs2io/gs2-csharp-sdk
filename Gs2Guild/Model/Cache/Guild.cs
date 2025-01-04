@@ -235,7 +235,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

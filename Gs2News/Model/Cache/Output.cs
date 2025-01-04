@@ -237,7 +237,8 @@ namespace Gs2.Gs2News.Model.Cache
                     namespaceName,
                     uploadToken
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

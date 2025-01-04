@@ -128,7 +128,23 @@ namespace Gs2.Gs2Limit.Domain.Model
                 (null as Gs2.Gs2Limit.Model.LimitModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LimitModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -156,6 +172,16 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateLimitModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Limit.Model.LimitModel>(
+                (null as Gs2.Gs2Limit.Model.LimitModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2Limit.Domain.Model
                 (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LimitModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateLimitModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Limit.Model.LimitModelMaster>(
+                (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

@@ -120,7 +120,23 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BonusModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -148,6 +164,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBonusModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -228,7 +254,23 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 (null as Gs2.Gs2LoginReward.Model.BonusModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await BonusModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -256,6 +298,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateBonusModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2LoginReward.Model.BonusModel>(
+                (null as Gs2.Gs2LoginReward.Model.BonusModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

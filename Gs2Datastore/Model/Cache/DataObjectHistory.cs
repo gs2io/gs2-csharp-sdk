@@ -264,7 +264,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                     userId,
                     dataObjectName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

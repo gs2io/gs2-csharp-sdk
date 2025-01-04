@@ -228,7 +228,8 @@ namespace Gs2.Gs2Inbox.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

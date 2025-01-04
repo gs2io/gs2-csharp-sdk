@@ -120,7 +120,23 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StateMachineMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -148,6 +164,16 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateStateMachineMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2StateMachine.Model.StateMachineMaster>(
+                (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

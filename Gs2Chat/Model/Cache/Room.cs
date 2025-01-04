@@ -237,7 +237,8 @@ namespace Gs2.Gs2Chat.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

@@ -225,7 +225,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                     namespaceName,
                     areaModelName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

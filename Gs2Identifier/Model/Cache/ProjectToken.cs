@@ -174,7 +174,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
             cache.ListSubscribe<ProjectToken>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

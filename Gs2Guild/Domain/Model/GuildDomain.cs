@@ -129,7 +129,22 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildModelName,
                     this.GuildName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ReceiveRequestsByGuildNameAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -159,6 +174,18 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateReceiveRequestsByGuildName(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.ReceiveMemberRequest>(
+                (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                )
             );
         }
 
@@ -219,7 +246,22 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildModelName,
                     this.GuildName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await IgnoreUsersByGuildNameAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -249,6 +291,18 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateIgnoreUsersByGuildName(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.IgnoreUser>(
+                (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                )
             );
         }
 
@@ -485,6 +539,60 @@ namespace Gs2.Gs2Guild.Domain.Model
                 _gs2.Cache,
                 this.GuildName,
                 () => this._client.UpdateMemberRoleByGuildNameAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> BatchUpdateMemberRoleFuture(
+            BatchUpdateMemberRoleByGuildNameRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithGuildModelName(this.GuildModelName)
+                    .WithGuildName(this.GuildName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.GuildName,
+                    () => this._client.BatchUpdateMemberRoleByGuildNameFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> BatchUpdateMemberRoleAsync(
+            #else
+        public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> BatchUpdateMemberRoleAsync(
+            #endif
+            BatchUpdateMemberRoleByGuildNameRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithGuildModelName(this.GuildModelName)
+                .WithGuildName(this.GuildName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.GuildName,
+                () => this._client.BatchUpdateMemberRoleByGuildNameAsync(request)
             );
             var domain = this;
 
@@ -943,7 +1051,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     ModelAsync(accessToken).Forget();
             #else

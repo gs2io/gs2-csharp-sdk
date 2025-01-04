@@ -65,11 +65,11 @@ namespace Gs2.Gs2Ranking2.Domain.Model
     public partial class ClusterRankingSeasonDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
-        public string NamespaceName { get; }
-        public string RankingName { get; }
-        public string ClusterName { get; }
-        public long? Season { get; }
-        public string NextPageToken { get; set; }
+        public string NamespaceName { get; } = null!;
+        public string RankingName { get; } = null!;
+        public string ClusterName { get; } = null!;
+        public long? Season { get; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public ClusterRankingSeasonDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -133,14 +133,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
-        public void InvalidateClusterRankings()
+        public void InvalidateClusterRankings(
+        )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.ClusterRankingData>(
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season ?? default
                 )
             );
         }
@@ -186,56 +187,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             #endif
         }
         #endif
-
-        public ulong SubscribeClusterRankings(
-            Action<Gs2.Gs2Ranking2.Model.ClusterRankingData[]> callback,
-            string userId
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.ClusterRankingData>(
-                (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheParentKey(
-                    this.NamespaceName,
-                    this.RankingName,
-                    this.ClusterName,
-                    this.Season
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeClusterRankingsWithInitialCallAsync(
-            Action<Gs2.Gs2Ranking2.Model.ClusterRankingData[]> callback,
-            string userId
-        )
-        {
-            var items = await ClusterRankingsAsync(
-                userId
-            ).ToArrayAsync();
-            var callbackId = SubscribeClusterRankings(
-                callback,
-                userId
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeClusterRankings(
-            ulong callbackId,
-            string userId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.ClusterRankingData>(
-                (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheParentKey(
-                    this.NamespaceName,
-                    this.RankingName,
-                    this.ClusterName,
-                    this.Season
-                ),
-                callbackId
-            );
-        }
 
         public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain ClusterRankingData(
             string userId

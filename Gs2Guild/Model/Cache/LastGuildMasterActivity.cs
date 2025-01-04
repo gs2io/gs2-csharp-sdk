@@ -225,7 +225,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     guildModelName,
                     guildName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

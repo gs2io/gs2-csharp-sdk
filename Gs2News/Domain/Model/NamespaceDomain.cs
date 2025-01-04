@@ -125,7 +125,23 @@ namespace Gs2.Gs2News.Domain.Model
                 (null as Gs2.Gs2News.Model.Progress).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ProgressesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -153,6 +169,16 @@ namespace Gs2.Gs2News.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateProgresses(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2News.Model.Progress>(
+                (null as Gs2.Gs2News.Model.Progress).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 

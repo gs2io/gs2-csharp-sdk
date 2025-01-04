@@ -642,7 +642,22 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildModelName,
                     this.GuildName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ReceiveRequestsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -672,6 +687,18 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateReceiveRequests(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.ReceiveMemberRequest>(
+                (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                )
             );
         }
 
@@ -732,7 +759,22 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildModelName,
                     this.GuildName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await IgnoreUsersAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -762,6 +804,18 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.GuildName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateIgnoreUsers(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.IgnoreUser>(
+                (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                )
             );
         }
 
@@ -894,7 +948,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

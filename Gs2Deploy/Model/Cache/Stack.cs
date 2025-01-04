@@ -201,7 +201,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
             cache.ListSubscribe<Stack>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

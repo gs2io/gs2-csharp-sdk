@@ -251,7 +251,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     userId,
                     withProfile
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

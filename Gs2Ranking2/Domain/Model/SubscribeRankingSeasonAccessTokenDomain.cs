@@ -96,10 +96,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithRankingName(this.RankingName);
+                    .WithRankingName(this.RankingName)
+                    .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -134,10 +134,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             PutSubscribeRankingScoreRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithRankingName(this.RankingName);
+                .WithRankingName(this.RankingName)
+                .WithAccessToken(this.AccessToken?.Token);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -199,9 +199,24 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SubscribeRankingScoresAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -229,9 +244,22 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSubscribeRankingScores(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeRankingScore>(
+                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RankingName,
+                    this.Season ?? default
+                )
             );
         }
 
@@ -292,9 +320,24 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SubscribeRankingsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -322,9 +365,22 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSubscribeRankings(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RankingName,
+                    this.Season ?? default
+                )
             );
         }
 

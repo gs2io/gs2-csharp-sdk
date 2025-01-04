@@ -246,7 +246,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

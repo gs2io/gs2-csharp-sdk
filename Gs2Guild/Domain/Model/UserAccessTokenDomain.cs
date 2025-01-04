@@ -378,7 +378,24 @@ namespace Gs2.Gs2Guild.Domain.Model
                     guildModelName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SendRequestsAsync(
+                                guildModelName
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -412,6 +429,19 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSendRequests(
+            string guildModelName
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.SendMemberRequest>(
+                (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
+                    this.NamespaceName,
+                    guildModelName,
+                    this.UserId
+                )
             );
         }
 
@@ -545,7 +575,24 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await JoinedGuildsAsync(
+                                guildModelName
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -578,6 +625,18 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateJoinedGuilds(
+            string guildModelName = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.JoinedGuild>(
+                (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

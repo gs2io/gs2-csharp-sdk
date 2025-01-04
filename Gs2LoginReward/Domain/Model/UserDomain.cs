@@ -135,7 +135,23 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ReceiveStatusesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -164,6 +180,17 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateReceiveStatuses(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

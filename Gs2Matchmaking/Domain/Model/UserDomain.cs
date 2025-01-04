@@ -123,7 +123,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await GatheringsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -152,6 +167,17 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateGatherings(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -200,7 +226,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DoMatchmakingByPlayerAsync(
+                                player
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -233,6 +276,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDoMatchmakingByPlayer(
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -287,7 +342,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DoMatchmakingAsync(
+                                player
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -320,6 +392,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDoMatchmaking(
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -380,7 +464,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await RatingsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -409,6 +508,17 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateRatings(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Rating>(
+                (null as Gs2.Gs2Matchmaking.Model.Rating).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
@@ -464,7 +574,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
@@ -500,7 +610,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             CreateGatheringByUserIdRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -526,7 +636,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -564,7 +674,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         ) {
             try {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
@@ -590,7 +700,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain[]> self)
             {
                 request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -624,7 +734,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             PutResultRequest request
         ) {
             request = request
-                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,

@@ -48,12 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-#if GS2_ENABLE_UNITASK
+    #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
-#endif
+    #endif
 #else
 using System.Collections.Generic;
 using System.Threading;
@@ -156,7 +156,29 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.AccessLog).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await AccessLogAsync(
+                                service,
+                                method,
+                                userId,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -208,6 +230,22 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateAccessLog(
+            string service = null,
+            string method = null,
+            string userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.AccessLog>(
+                (null as Gs2.Gs2Log.Model.AccessLog).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -284,7 +322,29 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.AccessLogCount).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CountAccessLogAsync(
+                                service,
+                                method,
+                                userId,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -336,6 +396,22 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCountAccessLog(
+            bool? service = null,
+            bool? method = null,
+            bool? userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.AccessLogCount>(
+                (null as Gs2.Gs2Log.Model.AccessLogCount).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -425,7 +501,30 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.ExecuteStampSheetLog).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ExecuteStampSheetLogAsync(
+                                service,
+                                method,
+                                userId,
+                                action,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -481,6 +580,23 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateExecuteStampSheetLog(
+            string service = null,
+            string method = null,
+            string userId = null,
+            string action = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
+                (null as Gs2.Gs2Log.Model.ExecuteStampSheetLog).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -562,7 +678,30 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.ExecuteStampSheetLogCount).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CountExecuteStampSheetLogAsync(
+                                service,
+                                method,
+                                userId,
+                                action,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -618,6 +757,23 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCountExecuteStampSheetLog(
+            bool? service = null,
+            bool? method = null,
+            bool? userId = null,
+            bool? action = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
+                (null as Gs2.Gs2Log.Model.ExecuteStampSheetLogCount).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -707,7 +863,30 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await ExecuteStampTaskLogAsync(
+                                service,
+                                method,
+                                userId,
+                                action,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -763,6 +942,23 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateExecuteStampTaskLog(
+            string service = null,
+            string method = null,
+            string userId = null,
+            string action = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
+                (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -844,7 +1040,30 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.ExecuteStampTaskLogCount).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CountExecuteStampTaskLogAsync(
+                                service,
+                                method,
+                                userId,
+                                action,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -900,6 +1119,23 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateCountExecuteStampTaskLog(
+            bool? service = null,
+            bool? method = null,
+            bool? userId = null,
+            bool? action = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
+                (null as Gs2.Gs2Log.Model.ExecuteStampTaskLogCount).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -989,7 +1225,30 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await IssueStampSheetLogAsync(
+                                service,
+                                method,
+                                userId,
+                                action,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -1045,6 +1304,23 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateIssueStampSheetLog(
+            string service = null,
+            string method = null,
+            string userId = null,
+            string action = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+                (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -1126,7 +1402,30 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.IssueStampSheetLogCount).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CountIssueStampSheetLogAsync(
+                                service,
+                                method,
+                                userId,
+                                action,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -1185,6 +1484,23 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
+        public void InvalidateCountIssueStampSheetLog(
+            bool? service = null,
+            bool? method = null,
+            bool? userId = null,
+            bool? action = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
+                (null as Gs2.Gs2Log.Model.IssueStampSheetLogCount).CacheParentKey(
+                    this.NamespaceName
+                )
+            );
+        }
+
         public Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain IssueStampSheetLog(
         ) {
             return new Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain(
@@ -1232,7 +1548,22 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await InsightsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -1260,6 +1591,16 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateInsights(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.Insight>(
+                (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -1336,7 +1677,27 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await AccessLogWithTelemetryAsync(
+                                userId,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -1380,6 +1741,20 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateAccessLogWithTelemetry(
+            string userId = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
+                (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -1774,7 +2149,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -1907,7 +2282,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

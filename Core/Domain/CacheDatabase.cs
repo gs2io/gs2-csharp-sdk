@@ -18,7 +18,7 @@ namespace Gs2.Core.Domain
         private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>>();
         private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Dictionary<ulong, Tuple<object, Action>>>>> _cacheUpdateCallback = new Dictionary<Type, Dictionary<string, Dictionary<string, Dictionary<ulong, Tuple<object, Action>>>>>();
         private readonly Dictionary<Type, HashSet<string>> _listCached = new Dictionary<Type, HashSet<string>>();
-        private readonly Dictionary<Type, Dictionary<string, Dictionary<ulong, object>>> _listCacheUpdateCallback = new Dictionary<Type, Dictionary<string, Dictionary<ulong, object>>>();
+        private readonly Dictionary<Type, Dictionary<string, Dictionary<ulong, Tuple<object, Action>>>> _listCacheUpdateCallback = new Dictionary<Type, Dictionary<string, Dictionary<ulong, Tuple<object, Action>>>>();
         private readonly Dictionary<Type, HashSet<string>> _listCacheUpdateRequired = new Dictionary<Type, HashSet<string>>();
         private readonly Dictionary<Type, Dictionary<string, object>> _listCacheContexts = new Dictionary<Type, Dictionary<string, object>>();
         private readonly Dictionary<Type, Dictionary<string, Dictionary<string, AsyncLock>>> _lockObjects = new Dictionary<Type, Dictionary<string, Dictionary<string, AsyncLock>>>();
@@ -51,7 +51,7 @@ namespace Gs2.Core.Domain
                 this._listCacheContexts.Ensure(typeof(TKind))[parentKey] = listCacheContext;
             }
             foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+                (callback.Value.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
             }
         }
 
@@ -61,6 +61,15 @@ namespace Gs2.Core.Domain
             this._listCached.Get(typeof(TKind))?.Remove(parentKey);
             this._listCacheUpdateRequired.Get(typeof(TKind))?.Remove(parentKey);
             this._listCacheContexts.Get(typeof(TKind))?.Remove(parentKey);
+            foreach (var pair in this._listCacheUpdateCallback) {
+                var callbacksContainers = pair.Value;
+                foreach (var callbacksContainer in callbacksContainers) {
+                    var callbacks = callbacksContainer.Value;
+                    foreach (var callback in callbacks) {
+                        callback.Value.Item2.Invoke();
+                    }
+                }
+            }
         }
 
         public void RequireListCacheUpdate<TKind>(string parentKey)
@@ -129,9 +138,9 @@ namespace Gs2.Core.Domain
             this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Remove(callbackId);
         }
 
-        public ulong ListSubscribe<TKind>(string parentKey, Action<TKind[]> subscribe)
+        public ulong ListSubscribe<TKind>(string parentKey, Action<TKind[]> subscribe, Action reFetch)
         {
-            this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Add(_callbackId, subscribe);
+            this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Add(_callbackId, new Tuple<object, Action>(subscribe, reFetch));
             return _callbackId++;
         }
 

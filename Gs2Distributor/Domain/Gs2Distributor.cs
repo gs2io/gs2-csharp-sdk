@@ -66,8 +66,8 @@ namespace Gs2.Gs2Distributor.Domain
 
     public class Gs2Distributor {
 
-        private readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
-        private readonly List<AutoRunTransactionNotification> _completedTransactions = new List<AutoRunTransactionNotification>();
+        private static readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
+        private static readonly List<AutoRunTransactionNotification> _completedTransactions = new List<AutoRunTransactionNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
 
@@ -164,7 +164,22 @@ namespace Gs2.Gs2Distributor.Domain
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Distributor.Model.Namespace>(
                 (null as Gs2.Gs2Distributor.Model.Namespace).CacheParentKey(
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await NamespacesAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -194,6 +209,15 @@ namespace Gs2.Gs2Distributor.Domain
             );
         }
 
+        public void InvalidateNamespaces(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Distributor.Model.Namespace>(
+                (null as Gs2.Gs2Distributor.Model.Namespace).CacheParentKey(
+                )
+            );
+        }
+
         public Gs2.Gs2Distributor.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {
@@ -211,31 +235,12 @@ namespace Gs2.Gs2Distributor.Domain
         ) {
         }
 
-    #if UNITY_2017_1_OR_NEWER
-        public static UnityEvent<string, IfExpressionByUserIdRequest, IfExpressionByUserIdResult> IfExpressionByUserIdComplete = new UnityEvent<string, IfExpressionByUserIdRequest, IfExpressionByUserIdResult>();
-    #else
-        public static Action<string, IfExpressionByUserIdRequest, IfExpressionByUserIdResult> IfExpressionByUserIdComplete;
-    #endif
-
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
                 string result
         ) {
-                switch (method) {
-                    case "IfExpressionByUserId": {
-                        var requestModel = IfExpressionByUserIdRequest.FromJson(JsonMapper.ToObject(request));
-                        var resultModel = IfExpressionByUserIdResult.FromJson(JsonMapper.ToObject(result));
-
-                        IfExpressionByUserIdComplete?.Invoke(
-                            taskId,
-                            requestModel,
-                            resultModel
-                        );
-                        break;
-                    }
-                }
         }
 
         public void UpdateCacheFromJobResult(

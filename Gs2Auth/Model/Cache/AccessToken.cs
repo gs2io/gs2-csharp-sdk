@@ -174,7 +174,8 @@ namespace Gs2.Gs2Auth.Model.Cache
             cache.ListSubscribe<AccessToken>(
                 self.CacheParentKey(
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

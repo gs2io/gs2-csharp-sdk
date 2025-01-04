@@ -122,7 +122,23 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.NamespaceName,
                     this.QuestGroupName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await QuestModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -151,6 +167,17 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.QuestGroupName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateQuestModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.QuestModelMaster>(
+                (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheParentKey(
+                    this.NamespaceName,
+                    this.QuestGroupName
+                )
             );
         }
 

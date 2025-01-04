@@ -208,7 +208,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                 self.CacheParentKey(
                     namespaceName
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

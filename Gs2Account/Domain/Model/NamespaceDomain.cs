@@ -122,7 +122,22 @@ namespace Gs2.Gs2Account.Domain.Model
                 (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await AccountsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -150,6 +165,16 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateAccounts(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.Account>(
+                (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -220,7 +245,22 @@ namespace Gs2.Gs2Account.Domain.Model
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await TakeOverTypeModelsAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -248,6 +288,16 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateTakeOverTypeModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.TakeOverTypeModel>(
+                (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -300,7 +350,22 @@ namespace Gs2.Gs2Account.Domain.Model
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheParentKey(
                     this.NamespaceName
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await TakeOverTypeModelMastersAsync().ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -328,6 +393,16 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateTakeOverTypeModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.TakeOverTypeModelMaster>(
+                (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
             );
         }
 
@@ -886,7 +961,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

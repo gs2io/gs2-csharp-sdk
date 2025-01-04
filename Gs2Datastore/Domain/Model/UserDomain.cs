@@ -134,7 +134,24 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DataObjectsAsync(
+                                status
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -167,6 +184,18 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateDataObjects(
+            string status = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Datastore.Model.DataObject>(
+                (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

@@ -242,7 +242,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     clusterName,
                     season
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

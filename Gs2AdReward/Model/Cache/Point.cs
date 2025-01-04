@@ -228,7 +228,8 @@ namespace Gs2.Gs2AdReward.Model.Cache
                     namespaceName,
                     userId
                 ),
-                callback
+                callback,
+                () => {}
             );
         }
 

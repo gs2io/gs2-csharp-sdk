@@ -200,7 +200,23 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SubscribesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -229,6 +245,17 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateSubscribes(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Subscribe>(
+                (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 

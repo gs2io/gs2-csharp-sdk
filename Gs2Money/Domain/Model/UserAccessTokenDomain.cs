@@ -124,7 +124,23 @@ namespace Gs2.Gs2Money.Domain.Model
                     this.NamespaceName,
                     this.UserId
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await WalletsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
             );
         }
 
@@ -153,6 +169,17 @@ namespace Gs2.Gs2Money.Domain.Model
                     this.UserId
                 ),
                 callbackId
+            );
+        }
+
+        public void InvalidateWallets(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money.Model.Wallet>(
+                (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
             );
         }
 
