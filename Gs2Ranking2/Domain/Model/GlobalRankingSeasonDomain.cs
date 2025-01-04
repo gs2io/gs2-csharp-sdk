@@ -138,6 +138,13 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.Season ?? default
                 )
             );
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.RankingName,
+                    null
+                )
+            );
         }
 
         #if UNITY_2017_1_OR_NEWER

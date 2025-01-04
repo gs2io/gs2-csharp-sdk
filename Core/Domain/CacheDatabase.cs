@@ -61,14 +61,8 @@ namespace Gs2.Core.Domain
             this._listCached.Get(typeof(TKind))?.Remove(parentKey);
             this._listCacheUpdateRequired.Get(typeof(TKind))?.Remove(parentKey);
             this._listCacheContexts.Get(typeof(TKind))?.Remove(parentKey);
-            foreach (var pair in this._listCacheUpdateCallback) {
-                var callbacksContainers = pair.Value;
-                foreach (var callbacksContainer in callbacksContainers) {
-                    var callbacks = callbacksContainer.Value;
-                    foreach (var callback in callbacks) {
-                        callback.Value.Item2.Invoke();
-                    }
-                }
+            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+                callback.Value.Item2?.Invoke();
             }
         }
 

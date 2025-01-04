@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -644,15 +646,23 @@ namespace Gs2.Gs2Friend.Domain
                 case "AcceptRequestNotification": {
                     var notification = AcceptRequestNotification.FromJson(JsonMapper.ToObject(payload));
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
-                        (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId
                         )
                     );
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.Friend>(
-                        (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
-                            notification.UserId
+                            notification.UserId,
+                            false
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId,
+                            true
                         )
                     );
     #if UNITY_2017_1_OR_NEWER
@@ -663,15 +673,23 @@ namespace Gs2.Gs2Friend.Domain
                 case "RejectRequestNotification": {
                     var notification = RejectRequestNotification.FromJson(JsonMapper.ToObject(payload));
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
-                        (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId
                         )
                     );
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.Friend>(
-                        (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
-                            notification.UserId
+                            notification.UserId,
+                            true
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId,
+                            false
                         )
                     );
     #if UNITY_2017_1_OR_NEWER
@@ -681,10 +699,18 @@ namespace Gs2.Gs2Friend.Domain
                 }
                 case "DeleteFriendNotification": {
                     var notification = DeleteFriendNotification.FromJson(JsonMapper.ToObject(payload));
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.Friend>(
-                        (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
-                            notification.UserId
+                            notification.UserId,
+                            true
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId,
+                            false
                         )
                     );
                     break;

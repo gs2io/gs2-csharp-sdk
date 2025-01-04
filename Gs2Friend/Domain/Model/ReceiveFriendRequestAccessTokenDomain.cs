@@ -313,34 +313,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                         this.UserId
                     )
                 );
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                    (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        true
-                    )
-                );
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                    (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        false
-                    )
-                );
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                    (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                        this.NamespaceName,
-                        this.FromUserId,
-                        true
-                    )
-                );
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                    (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                        this.NamespaceName,
-                        this.FromUserId,
-                        false
-                    )
-                );
                 var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
                     this._gs2,
                     this.NamespaceName,
@@ -382,34 +354,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
-                )
-            );
-            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    true
-                )
-            );
-            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    false
-                )
-            );
-            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                    this.NamespaceName,
-                    this.FromUserId,
-                    true
-                )
-            );
-            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                    this.NamespaceName,
-                    this.FromUserId,
-                    false
                 )
             );
             var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(

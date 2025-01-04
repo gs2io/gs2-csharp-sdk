@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -269,7 +271,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await FriendsAsync(
+                            Debug.Log("RefetchImpl");
+                            callback(await FriendsAsync(
                                 withProfile
                             ).ToArrayAsync());
                         }
@@ -378,7 +381,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -422,7 +425,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -434,7 +437,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 )
@@ -490,7 +493,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -534,7 +537,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -546,7 +549,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 )
