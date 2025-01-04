@@ -101,7 +101,7 @@ namespace Gs2.Core.Domain
             }
             if (this._listCached.Get(typeof(TKind))?.Contains(parentKey) == true) {
                 foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                    (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+                    (callback.Value.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace Gs2.Core.Domain
                 await UniTask.SwitchToMainThread();
 #endif
                 foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                    (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+                    (callback.Value.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
                 }
                 foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Values) {
                     callback.Item2.Invoke();
