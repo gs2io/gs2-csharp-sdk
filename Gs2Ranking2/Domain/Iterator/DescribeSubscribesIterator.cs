@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -86,7 +84,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             Gs2Ranking2RestClient client,
             string namespaceName,
             AccessToken accessToken,
-            string rankingName = null
+            string rankingName
         ) {
             this._gs2 = gs2;
             this._client = client;
@@ -115,11 +113,12 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        RankingName ?? default
+                        RankingName
                     ),
                     out var list
             )) {
                 this._result = list
+                    .Where(item => this.RankingName == null || item.RankingName == this.RankingName)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -133,8 +132,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     new Gs2.Gs2Ranking2.Request.DescribeSubscribesRequest()
                         .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
-                        .WithRankingName(this.RankingName)
                         .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                        .WithRankingName(this.RankingName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(fetchSize)
                 );
@@ -148,6 +147,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
+                    .Where(item => this.RankingName == null || item.RankingName == this.RankingName)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
@@ -156,7 +156,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         this._gs2.Cache,
                         NamespaceName,
                         AccessToken?.UserId,
-                        RankingName ?? default,
+                        RankingName,
                         item.TargetUserId
                     );
                 }
@@ -166,7 +166,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            RankingName ?? default
+                            RankingName
                         )
                     );
                 }

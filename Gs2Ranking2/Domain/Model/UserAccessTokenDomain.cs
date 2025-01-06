@@ -355,7 +355,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.SubscribeUser> Subscribes(
-            string rankingName = null
+            string rankingName
         )
         {
             return new DescribeSubscribesIterator(
@@ -374,7 +374,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             #else
         public DescribeSubscribesIterator SubscribesAsync(
             #endif
-            string rankingName = null
+            string rankingName
         )
         {
             return new DescribeSubscribesIterator(
@@ -393,7 +393,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         public ulong SubscribeSubscribes(
             Action<Gs2.Gs2Ranking2.Model.SubscribeUser[]> callback,
-            string rankingName = null
+            string rankingName
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.SubscribeUser>(
@@ -426,7 +426,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscribesWithInitialCallAsync(
             Action<Gs2.Gs2Ranking2.Model.SubscribeUser[]> callback,
-            string rankingName = null
+            string rankingName
         )
         {
             var items = await SubscribesAsync(
@@ -443,7 +443,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         public void UnsubscribeSubscribes(
             ulong callbackId,
-            string rankingName = null
+            string rankingName
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.SubscribeUser>(
@@ -457,7 +457,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public void InvalidateSubscribes(
-            string rankingName = null
+            string rankingName
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeUser>(

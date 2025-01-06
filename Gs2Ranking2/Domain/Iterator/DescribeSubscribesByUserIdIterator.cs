@@ -84,7 +84,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             Gs2Ranking2RestClient client,
             string namespaceName,
             string userId,
-            string rankingName = null,
+            string rankingName,
             string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
@@ -115,7 +115,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        RankingName ?? default
+                        RankingName
                     ),
                     out var list
             )) {
@@ -135,6 +135,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithUserId(this.UserId)
+                        .WithRankingName(this.RankingName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(fetchSize)
                 );
@@ -157,7 +158,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         this._gs2.Cache,
                         NamespaceName,
                         UserId,
-                        RankingName ?? default,
+                        RankingName,
                         item.TargetUserId
                     );
                 }
@@ -167,7 +168,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            RankingName ?? default
+                            RankingName
                         )
                     );
                 }
