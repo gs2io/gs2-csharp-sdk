@@ -212,6 +212,71 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return domain;
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain> PutSubscribeRankingScoreFuture(
+            PutSubscribeRankingScoreRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.PutSubscribeRankingScoreFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.AccessToken,
+                    result?.Item?.RankingName,
+                    result?.Item?.Season
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain> PutSubscribeRankingScoreAsync(
+            #else
+        public async Task<Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain> PutSubscribeRankingScoreAsync(
+            #endif
+            PutSubscribeRankingScoreRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.PutSubscribeRankingScoreAsync(request)
+            );
+            var domain = new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                result?.Item?.RankingName,
+                result?.Item?.Season
+            );
+
+            return domain;
+        }
+        #endif
+        
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingScore> GlobalRankingScores(
             string rankingName = null
