@@ -5546,6 +5546,257 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
+        public class ApplyStaminaTask : Gs2RestSessionTask<ApplyStaminaRequest, ApplyStaminaResult>
+        {
+            public ApplyStaminaTask(IGs2Session session, RestSessionRequestFactory factory, ApplyStaminaRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ApplyStaminaRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/stamina/{staminaName}/apply";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ApplyStamina(
+                Request.ApplyStaminaRequest request,
+                UnityAction<AsyncResult<Result.ApplyStaminaResult>> callback
+        )
+		{
+			var task = new ApplyStaminaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ApplyStaminaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ApplyStaminaResult> ApplyStaminaFuture(
+                Request.ApplyStaminaRequest request
+        )
+		{
+			return new ApplyStaminaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ApplyStaminaResult> ApplyStaminaAsync(
+                Request.ApplyStaminaRequest request
+        )
+		{
+            AsyncResult<Result.ApplyStaminaResult> result = null;
+			await ApplyStamina(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ApplyStaminaTask ApplyStaminaAsync(
+                Request.ApplyStaminaRequest request
+        )
+		{
+			return new ApplyStaminaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ApplyStaminaResult> ApplyStaminaAsync(
+                Request.ApplyStaminaRequest request
+        )
+		{
+			var task = new ApplyStaminaTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ApplyStaminaByUserIdTask : Gs2RestSessionTask<ApplyStaminaByUserIdRequest, ApplyStaminaByUserIdResult>
+        {
+            public ApplyStaminaByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ApplyStaminaByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ApplyStaminaByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stamina/{staminaName}/apply";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ApplyStaminaByUserId(
+                Request.ApplyStaminaByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ApplyStaminaByUserIdResult>> callback
+        )
+		{
+			var task = new ApplyStaminaByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ApplyStaminaByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ApplyStaminaByUserIdResult> ApplyStaminaByUserIdFuture(
+                Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+			return new ApplyStaminaByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ApplyStaminaByUserIdResult> ApplyStaminaByUserIdAsync(
+                Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.ApplyStaminaByUserIdResult> result = null;
+			await ApplyStaminaByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ApplyStaminaByUserIdTask ApplyStaminaByUserIdAsync(
+                Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+			return new ApplyStaminaByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ApplyStaminaByUserIdResult> ApplyStaminaByUserIdAsync(
+                Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+			var task = new ApplyStaminaByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class RecoverStaminaByUserIdTask : Gs2RestSessionTask<RecoverStaminaByUserIdRequest, RecoverStaminaByUserIdResult>
         {
             public RecoverStaminaByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, RecoverStaminaByUserIdRequest request) : base(session, factory, request)

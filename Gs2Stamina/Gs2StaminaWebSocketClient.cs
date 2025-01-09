@@ -3890,6 +3890,252 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
+        public class ApplyStaminaTask : Gs2WebSocketSessionTask<Request.ApplyStaminaRequest, Result.ApplyStaminaResult>
+        {
+	        public ApplyStaminaTask(IGs2Session session, Request.ApplyStaminaRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ApplyStaminaRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "applyStamina",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ApplyStamina(
+                Request.ApplyStaminaRequest request,
+                UnityAction<AsyncResult<Result.ApplyStaminaResult>> callback
+        )
+		{
+			var task = new ApplyStaminaTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ApplyStaminaResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ApplyStaminaResult> ApplyStaminaFuture(
+                Request.ApplyStaminaRequest request
+        )
+		{
+			return new ApplyStaminaTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ApplyStaminaResult> ApplyStaminaAsync(
+            Request.ApplyStaminaRequest request
+        )
+		{
+		    var task = new ApplyStaminaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ApplyStaminaTask ApplyStaminaAsync(
+                Request.ApplyStaminaRequest request
+        )
+		{
+			return new ApplyStaminaTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ApplyStaminaResult> ApplyStaminaAsync(
+            Request.ApplyStaminaRequest request
+        )
+		{
+		    var task = new ApplyStaminaTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ApplyStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.ApplyStaminaByUserIdRequest, Result.ApplyStaminaByUserIdResult>
+        {
+	        public ApplyStaminaByUserIdTask(IGs2Session session, Request.ApplyStaminaByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ApplyStaminaByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "applyStaminaByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ApplyStaminaByUserId(
+                Request.ApplyStaminaByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ApplyStaminaByUserIdResult>> callback
+        )
+		{
+			var task = new ApplyStaminaByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ApplyStaminaByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ApplyStaminaByUserIdResult> ApplyStaminaByUserIdFuture(
+                Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+			return new ApplyStaminaByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ApplyStaminaByUserIdResult> ApplyStaminaByUserIdAsync(
+            Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+		    var task = new ApplyStaminaByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ApplyStaminaByUserIdTask ApplyStaminaByUserIdAsync(
+                Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+			return new ApplyStaminaByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ApplyStaminaByUserIdResult> ApplyStaminaByUserIdAsync(
+            Request.ApplyStaminaByUserIdRequest request
+        )
+		{
+		    var task = new ApplyStaminaByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class RecoverStaminaByUserIdTask : Gs2WebSocketSessionTask<Request.RecoverStaminaByUserIdRequest, Result.RecoverStaminaByUserIdResult>
         {
 	        public RecoverStaminaByUserIdTask(IGs2Session session, Request.RecoverStaminaByUserIdRequest request) : base(session, request)

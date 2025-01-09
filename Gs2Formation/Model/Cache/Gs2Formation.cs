@@ -403,6 +403,13 @@ namespace Gs2.Gs2Formation.Model.Cache
                         Request.GetFormWithSignatureByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "setForm":
+                    Result.SetFormResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.SetFormRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "setFormByUserId":
                     Result.SetFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,

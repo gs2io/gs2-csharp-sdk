@@ -354,6 +354,20 @@ namespace Gs2.Gs2Stamina.Model.Cache
                         Request.ConsumeStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "applyStamina":
+                    Result.ApplyStaminaResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.ApplyStaminaRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "applyStaminaByUserId":
+                    Result.ApplyStaminaByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.ApplyStaminaByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "recoverStaminaByUserId":
                     Result.RecoverStaminaByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
