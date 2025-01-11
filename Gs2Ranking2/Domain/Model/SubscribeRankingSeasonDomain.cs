@@ -323,6 +323,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.Season ?? default
                 )
             );
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RankingName,
+                    null
+                )
+            );
         }
 
         public Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingDataDomain SubscribeRankingData(
