@@ -8282,6 +8282,142 @@ namespace Gs2.Gs2Formation
 #endif
 
 
+        public class SetPropertyFormTask : Gs2RestSessionTask<SetPropertyFormRequest, SetPropertyFormResult>
+        {
+            public SetPropertyFormTask(IGs2Session session, RestSessionRequestFactory factory, SetPropertyFormRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetPropertyFormRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "formation")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/property/{propertyFormModelName}/form/{propertyId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{propertyFormModelName}", !string.IsNullOrEmpty(request.PropertyFormModelName) ? request.PropertyFormModelName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Slots != null)
+                {
+                    jsonWriter.WritePropertyName("slots");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Slots)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetPropertyForm(
+                Request.SetPropertyFormRequest request,
+                UnityAction<AsyncResult<Result.SetPropertyFormResult>> callback
+        )
+		{
+			var task = new SetPropertyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetPropertyFormResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetPropertyFormResult> SetPropertyFormFuture(
+                Request.SetPropertyFormRequest request
+        )
+		{
+			return new SetPropertyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetPropertyFormResult> SetPropertyFormAsync(
+                Request.SetPropertyFormRequest request
+        )
+		{
+            AsyncResult<Result.SetPropertyFormResult> result = null;
+			await SetPropertyForm(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetPropertyFormTask SetPropertyFormAsync(
+                Request.SetPropertyFormRequest request
+        )
+		{
+			return new SetPropertyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetPropertyFormResult> SetPropertyFormAsync(
+                Request.SetPropertyFormRequest request
+        )
+		{
+			var task = new SetPropertyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SetPropertyFormByUserIdTask : Gs2RestSessionTask<SetPropertyFormByUserIdRequest, SetPropertyFormByUserIdResult>
         {
             public SetPropertyFormByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetPropertyFormByUserIdRequest request) : base(session, factory, request)

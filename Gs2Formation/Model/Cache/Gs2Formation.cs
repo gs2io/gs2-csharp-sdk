@@ -487,6 +487,13 @@ namespace Gs2.Gs2Formation.Model.Cache
                         Request.GetPropertyFormWithSignatureByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "setPropertyForm":
+                    Result.SetPropertyFormResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.SetPropertyFormRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "setPropertyFormByUserId":
                     Result.SetPropertyFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
