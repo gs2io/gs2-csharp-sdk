@@ -37,6 +37,7 @@ namespace Gs2.Gs2Guild.Request
          public string UserId { set; get; } = null!;
          public string GuildModelName { set; get; } = null!;
          public string TargetGuildName { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SendRequestByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Guild.Request
         }
         public SendRequestByUserIdRequest WithTargetGuildName(string targetGuildName) {
             this.TargetGuildName = targetGuildName;
+            return this;
+        }
+        public SendRequestByUserIdRequest WithMetadata(string metadata) {
+            this.Metadata = metadata;
             return this;
         }
         public SendRequestByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -78,6 +83,7 @@ namespace Gs2.Gs2Guild.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithGuildModelName(!data.Keys.Contains("guildModelName") || data["guildModelName"] == null ? null : data["guildModelName"].ToString())
                 .WithTargetGuildName(!data.Keys.Contains("targetGuildName") || data["targetGuildName"] == null ? null : data["targetGuildName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -88,6 +94,7 @@ namespace Gs2.Gs2Guild.Request
                 ["userId"] = UserId,
                 ["guildModelName"] = GuildModelName,
                 ["targetGuildName"] = TargetGuildName,
+                ["metadata"] = Metadata,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -111,6 +118,10 @@ namespace Gs2.Gs2Guild.Request
                 writer.WritePropertyName("targetGuildName");
                 writer.Write(TargetGuildName.ToString());
             }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -124,6 +135,7 @@ namespace Gs2.Gs2Guild.Request
             key += UserId + ":";
             key += GuildModelName + ":";
             key += TargetGuildName + ":";
+            key += Metadata + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

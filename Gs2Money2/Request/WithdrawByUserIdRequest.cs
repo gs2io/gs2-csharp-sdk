@@ -134,7 +134,6 @@ namespace Gs2.Gs2Money2.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += Slot + ":";
-            key += WithdrawCount + ":";
             key += PaidOnly + ":";
             key += TimeOffsetToken + ":";
             return key;

@@ -33,7 +33,9 @@ namespace Gs2.Gs2Guild.Model
 	{
         public string InboxId { set; get; } = null!;
         public string GuildName { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
         public string[] FromUserIds { set; get; } = null!;
+        public Gs2.Gs2Guild.Model.ReceiveMemberRequest[] ReceiveMemberRequests { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -45,8 +47,13 @@ namespace Gs2.Gs2Guild.Model
             this.GuildName = guildName;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Inbox WithFromUserIds(string[] fromUserIds) {
             this.FromUserIds = fromUserIds;
+            return this;
+        }
+        public Inbox WithReceiveMemberRequests(Gs2.Gs2Guild.Model.ReceiveMemberRequest[] receiveMemberRequests) {
+            this.ReceiveMemberRequests = receiveMemberRequests;
             return this;
         }
         public Inbox WithCreatedAt(long? createdAt) {
@@ -161,6 +168,9 @@ namespace Gs2.Gs2Guild.Model
                 .WithFromUserIds(!data.Keys.Contains("fromUserIds") || data["fromUserIds"] == null || !data["fromUserIds"].IsArray ? null : data["fromUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
+                .WithReceiveMemberRequests(!data.Keys.Contains("receiveMemberRequests") || data["receiveMemberRequests"] == null || !data["receiveMemberRequests"].IsArray ? null : data["receiveMemberRequests"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Guild.Model.ReceiveMemberRequest.FromJson(v);
+                }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -177,10 +187,19 @@ namespace Gs2.Gs2Guild.Model
                     fromUserIdsJsonData.Add(fromUserId);
                 }
             }
+            JsonData receiveMemberRequestsJsonData = null;
+            if (ReceiveMemberRequests != null && ReceiveMemberRequests.Length > 0)
+            {
+                receiveMemberRequestsJsonData = new JsonData();
+                foreach (var receiveMemberRequest in ReceiveMemberRequests)
+                {
+                    receiveMemberRequestsJsonData.Add(receiveMemberRequest.ToJson());
+                }
+            }
             return new JsonData {
                 ["inboxId"] = InboxId,
                 ["guildName"] = GuildName,
-                ["fromUserIds"] = fromUserIdsJsonData,
+                ["receiveMemberRequests"] = receiveMemberRequestsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -205,6 +224,17 @@ namespace Gs2.Gs2Guild.Model
                 {
                     if (fromUserId != null) {
                         writer.Write(fromUserId.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            if (ReceiveMemberRequests != null) {
+                writer.WritePropertyName("receiveMemberRequests");
+                writer.WriteArrayStart();
+                foreach (var receiveMemberRequest in ReceiveMemberRequests)
+                {
+                    if (receiveMemberRequest != null) {
+                        receiveMemberRequest.WriteJson(writer);
                     }
                 }
                 writer.WriteArrayEnd();
@@ -256,6 +286,18 @@ namespace Gs2.Gs2Guild.Model
                     diff += FromUserIds[i].CompareTo(other.FromUserIds[i]);
                 }
             }
+            if (ReceiveMemberRequests == null && ReceiveMemberRequests == other.ReceiveMemberRequests)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ReceiveMemberRequests.Length - other.ReceiveMemberRequests.Length;
+                for (var i = 0; i < ReceiveMemberRequests.Length; i++)
+                {
+                    diff += ReceiveMemberRequests[i].CompareTo(other.ReceiveMemberRequests[i]);
+                }
+            }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
@@ -299,9 +341,9 @@ namespace Gs2.Gs2Guild.Model
                 }
             }
             {
-                if (FromUserIds.Length > 1000) {
+                if (ReceiveMemberRequests.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("inbox", "guild.inbox.fromUserIds.error.tooMany"),
+                        new RequestError("inbox", "guild.inbox.receiveMemberRequests.error.tooMany"),
                     });
                 }
             }
@@ -348,6 +390,7 @@ namespace Gs2.Gs2Guild.Model
                 InboxId = InboxId,
                 GuildName = GuildName,
                 FromUserIds = FromUserIds?.Clone() as string[],
+                ReceiveMemberRequests = ReceiveMemberRequests?.Clone() as Gs2.Gs2Guild.Model.ReceiveMemberRequest[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

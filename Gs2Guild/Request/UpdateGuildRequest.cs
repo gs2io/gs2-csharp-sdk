@@ -42,6 +42,7 @@ namespace Gs2.Gs2Guild.Request
          public int? Attribute3 { set; get; } = null!;
          public int? Attribute4 { set; get; } = null!;
          public int? Attribute5 { set; get; } = null!;
+         public string Metadata { set; get; } = null!;
          public string JoinPolicy { set; get; } = null!;
          public Gs2.Gs2Guild.Model.RoleModel[] CustomRoles { set; get; } = null!;
          public string GuildMemberDefaultRole { set; get; } = null!;
@@ -82,6 +83,10 @@ namespace Gs2.Gs2Guild.Request
             this.Attribute5 = attribute5;
             return this;
         }
+        public UpdateGuildRequest WithMetadata(string metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
         public UpdateGuildRequest WithJoinPolicy(string joinPolicy) {
             this.JoinPolicy = joinPolicy;
             return this;
@@ -118,6 +123,7 @@ namespace Gs2.Gs2Guild.Request
                 .WithAttribute3(!data.Keys.Contains("attribute3") || data["attribute3"] == null ? null : (int?)(data["attribute3"].ToString().Contains(".") ? (int)double.Parse(data["attribute3"].ToString()) : int.Parse(data["attribute3"].ToString())))
                 .WithAttribute4(!data.Keys.Contains("attribute4") || data["attribute4"] == null ? null : (int?)(data["attribute4"].ToString().Contains(".") ? (int)double.Parse(data["attribute4"].ToString()) : int.Parse(data["attribute4"].ToString())))
                 .WithAttribute5(!data.Keys.Contains("attribute5") || data["attribute5"] == null ? null : (int?)(data["attribute5"].ToString().Contains(".") ? (int)double.Parse(data["attribute5"].ToString()) : int.Parse(data["attribute5"].ToString())))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithJoinPolicy(!data.Keys.Contains("joinPolicy") || data["joinPolicy"] == null ? null : data["joinPolicy"].ToString())
                 .WithCustomRoles(!data.Keys.Contains("customRoles") || data["customRoles"] == null || !data["customRoles"].IsArray ? null : data["customRoles"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.RoleModel.FromJson(v);
@@ -146,6 +152,7 @@ namespace Gs2.Gs2Guild.Request
                 ["attribute3"] = Attribute3,
                 ["attribute4"] = Attribute4,
                 ["attribute5"] = Attribute5,
+                ["metadata"] = Metadata,
                 ["joinPolicy"] = JoinPolicy,
                 ["customRoles"] = customRolesJsonData,
                 ["guildMemberDefaultRole"] = GuildMemberDefaultRole,
@@ -191,6 +198,10 @@ namespace Gs2.Gs2Guild.Request
                 writer.WritePropertyName("attribute5");
                 writer.Write((Attribute5.ToString().Contains(".") ? (int)double.Parse(Attribute5.ToString()) : int.Parse(Attribute5.ToString())));
             }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
+            }
             if (JoinPolicy != null) {
                 writer.WritePropertyName("joinPolicy");
                 writer.Write(JoinPolicy.ToString());
@@ -224,6 +235,7 @@ namespace Gs2.Gs2Guild.Request
             key += Attribute3 + ":";
             key += Attribute4 + ":";
             key += Attribute5 + ":";
+            key += Metadata + ":";
             key += JoinPolicy + ":";
             key += CustomRoles + ":";
             key += GuildMemberDefaultRole + ":";

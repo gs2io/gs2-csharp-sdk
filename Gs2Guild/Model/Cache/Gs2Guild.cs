@@ -270,6 +270,20 @@ namespace Gs2.Gs2Guild.Model.Cache
                         Request.BatchUpdateMemberRoleByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
+                case "updateMemberMetadata":
+                    Result.UpdateMemberMetadataResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.UpdateMemberMetadataRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "updateMemberMetadataByUserId":
+                    Result.UpdateMemberMetadataByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.UpdateMemberMetadataByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteGuild":
                     Result.DeleteGuildResult.FromJson(resultPayload).PutCache(
                         cache,

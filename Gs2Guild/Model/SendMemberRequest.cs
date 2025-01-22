@@ -33,12 +33,17 @@ namespace Gs2.Gs2Guild.Model
 	{
         public string UserId { set; get; } = null!;
         public string TargetGuildName { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public SendMemberRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public SendMemberRequest WithTargetGuildName(string targetGuildName) {
             this.TargetGuildName = targetGuildName;
+            return this;
+        }
+        public SendMemberRequest WithMetadata(string metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -52,7 +57,8 @@ namespace Gs2.Gs2Guild.Model
             }
             return new SendMemberRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTargetGuildName(!data.Keys.Contains("targetGuildName") || data["targetGuildName"] == null ? null : data["targetGuildName"].ToString());
+                .WithTargetGuildName(!data.Keys.Contains("targetGuildName") || data["targetGuildName"] == null ? null : data["targetGuildName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
         }
 
         public JsonData ToJson()
@@ -60,6 +66,7 @@ namespace Gs2.Gs2Guild.Model
             return new JsonData {
                 ["userId"] = UserId,
                 ["targetGuildName"] = TargetGuildName,
+                ["metadata"] = Metadata,
             };
         }
 
@@ -73,6 +80,10 @@ namespace Gs2.Gs2Guild.Model
             if (TargetGuildName != null) {
                 writer.WritePropertyName("targetGuildName");
                 writer.Write(TargetGuildName.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -97,6 +108,14 @@ namespace Gs2.Gs2Guild.Model
             {
                 diff += TargetGuildName.CompareTo(other.TargetGuildName);
             }
+            if (Metadata == null && Metadata == other.Metadata)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Metadata.CompareTo(other.Metadata);
+            }
             return diff;
         }
 
@@ -115,12 +134,20 @@ namespace Gs2.Gs2Guild.Model
                     });
                 }
             }
+            {
+                if (Metadata.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("sendMemberRequest", "guild.sendMemberRequest.metadata.error.tooLong"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
             return new SendMemberRequest {
                 UserId = UserId,
                 TargetGuildName = TargetGuildName,
+                Metadata = Metadata,
             };
         }
     }

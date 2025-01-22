@@ -33,6 +33,7 @@ namespace Gs2.Gs2Guild.Model
 	{
         public string UserId { set; get; } = null!;
         public string RoleName { set; get; } = null!;
+        public string Metadata { set; get; } = null!;
         public long? JoinedAt { set; get; } = null!;
         public Member WithUserId(string userId) {
             this.UserId = userId;
@@ -40,6 +41,10 @@ namespace Gs2.Gs2Guild.Model
         }
         public Member WithRoleName(string roleName) {
             this.RoleName = roleName;
+            return this;
+        }
+        public Member WithMetadata(string metadata) {
+            this.Metadata = metadata;
             return this;
         }
         public Member WithJoinedAt(long? joinedAt) {
@@ -58,6 +63,7 @@ namespace Gs2.Gs2Guild.Model
             return new Member()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRoleName(!data.Keys.Contains("roleName") || data["roleName"] == null ? null : data["roleName"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithJoinedAt(!data.Keys.Contains("joinedAt") || data["joinedAt"] == null ? null : (long?)(data["joinedAt"].ToString().Contains(".") ? (long)double.Parse(data["joinedAt"].ToString()) : long.Parse(data["joinedAt"].ToString())));
         }
 
@@ -66,6 +72,7 @@ namespace Gs2.Gs2Guild.Model
             return new JsonData {
                 ["userId"] = UserId,
                 ["roleName"] = RoleName,
+                ["metadata"] = Metadata,
                 ["joinedAt"] = JoinedAt,
             };
         }
@@ -80,6 +87,10 @@ namespace Gs2.Gs2Guild.Model
             if (RoleName != null) {
                 writer.WritePropertyName("roleName");
                 writer.Write(RoleName.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                writer.Write(Metadata.ToString());
             }
             if (JoinedAt != null) {
                 writer.WritePropertyName("joinedAt");
@@ -108,6 +119,14 @@ namespace Gs2.Gs2Guild.Model
             {
                 diff += RoleName.CompareTo(other.RoleName);
             }
+            if (Metadata == null && Metadata == other.Metadata)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Metadata.CompareTo(other.Metadata);
+            }
             if (JoinedAt == null && JoinedAt == other.JoinedAt)
             {
                 // null and null
@@ -135,6 +154,13 @@ namespace Gs2.Gs2Guild.Model
                 }
             }
             {
+                if (Metadata.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("member", "guild.member.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (JoinedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("member", "guild.member.joinedAt.error.invalid"),
@@ -152,6 +178,7 @@ namespace Gs2.Gs2Guild.Model
             return new Member {
                 UserId = UserId,
                 RoleName = RoleName,
+                Metadata = Metadata,
                 JoinedAt = JoinedAt,
             };
         }

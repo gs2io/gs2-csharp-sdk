@@ -45,6 +45,7 @@ namespace Gs2.Gs2Version.Model
         public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; } = null!;
         public bool? NeedSignature { set; get; } = null!;
         public string SignatureKeyId { set; get; } = null!;
+        public string ApproveRequirement { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -94,6 +95,10 @@ namespace Gs2.Gs2Version.Model
         }
         public VersionModelMaster WithSignatureKeyId(string signatureKeyId) {
             this.SignatureKeyId = signatureKeyId;
+            return this;
+        }
+        public VersionModelMaster WithApproveRequirement(string approveRequirement) {
+            this.ApproveRequirement = approveRequirement;
             return this;
         }
         public VersionModelMaster WithCreatedAt(long? createdAt) {
@@ -200,6 +205,7 @@ namespace Gs2.Gs2Version.Model
                 }).ToArray())
                 .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))
                 .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString())
+                .WithApproveRequirement(!data.Keys.Contains("approveRequirement") || data["approveRequirement"] == null ? null : data["approveRequirement"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -229,6 +235,7 @@ namespace Gs2.Gs2Version.Model
                 ["scheduleVersions"] = scheduleVersionsJsonData,
                 ["needSignature"] = NeedSignature,
                 ["signatureKeyId"] = SignatureKeyId,
+                ["approveRequirement"] = ApproveRequirement,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -292,6 +299,10 @@ namespace Gs2.Gs2Version.Model
             if (SignatureKeyId != null) {
                 writer.WritePropertyName("signatureKeyId");
                 writer.Write(SignatureKeyId.ToString());
+            }
+            if (ApproveRequirement != null) {
+                writer.WritePropertyName("approveRequirement");
+                writer.Write(ApproveRequirement.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -412,6 +423,14 @@ namespace Gs2.Gs2Version.Model
             {
                 diff += SignatureKeyId.CompareTo(other.SignatureKeyId);
             }
+            if (ApproveRequirement == null && ApproveRequirement == other.ApproveRequirement)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ApproveRequirement.CompareTo(other.ApproveRequirement);
+            }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
@@ -512,6 +531,17 @@ namespace Gs2.Gs2Version.Model
                     });
                 }
             }
+            if (Scope == "active") {
+                switch (ApproveRequirement) {
+                    case "required":
+                    case "optional":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("versionModelMaster", "version.versionModelMaster.approveRequirement.error.invalid"),
+                        });
+                }
+            }
             {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
@@ -561,9 +591,10 @@ namespace Gs2.Gs2Version.Model
                 CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
                 WarningVersion = WarningVersion.Clone() as Gs2.Gs2Version.Model.Version_,
                 ErrorVersion = ErrorVersion.Clone() as Gs2.Gs2Version.Model.Version_,
-                ScheduleVersions = ScheduleVersions.Clone() as Gs2.Gs2Version.Model.ScheduleVersion[],
+                ScheduleVersions = ScheduleVersions?.Clone() as Gs2.Gs2Version.Model.ScheduleVersion[],
                 NeedSignature = NeedSignature,
                 SignatureKeyId = SignatureKeyId,
+                ApproveRequirement = ApproveRequirement,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

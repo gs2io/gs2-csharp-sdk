@@ -361,6 +361,13 @@ namespace Gs2.Gs2Mission.Model.Cache
                         Request.VerifyCounterValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "deleteCounter":
+                    Result.DeleteCounterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DeleteCounterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteCounterByUserId":
                     Result.DeleteCounterByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
