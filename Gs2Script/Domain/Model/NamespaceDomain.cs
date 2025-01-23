@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -41,6 +43,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
+using Gs2.Gs2Script.Model;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,6 +70,7 @@ namespace Gs2.Gs2Script.Domain.Model
         public string Status { get; set; } = null!;
         public int? Code { get; set; } = null!;
         public string Result { get; set; } = null!;
+        public Transaction_ Transaction { get; set; } = null!;
         public int? ExecuteTime { get; set; } = null!;
         public int? Charged { get; set; } = null!;
         public string[] Output { get; set; } = null!;
@@ -529,6 +533,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var domain = this;
                 this.Code = domain.Code = result?.Code;
                 this.Result = domain.Result = result?.Result;
+                this.Transaction = domain.Transaction = result?.Transaction;
                 this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
                 this.Charged = domain.Charged = result?.Charged;
                 this.Output = domain.Output = result?.Output;
@@ -554,6 +559,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var domain = this;
             this.Code = domain.Code = result?.Code;
             this.Result = domain.Result = result?.Result;
+            this.Transaction = domain.Transaction = result?.Transaction;
             this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
             this.Charged = domain.Charged = result?.Charged;
             this.Output = domain.Output = result?.Output;
@@ -581,6 +587,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var domain = this;
                 this.Code = domain.Code = result?.Code;
                 this.Result = domain.Result = result?.Result;
+                this.Transaction = domain.Transaction = result?.Transaction;
                 this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
                 this.Charged = domain.Charged = result?.Charged;
                 this.Output = domain.Output = result?.Output;
@@ -606,6 +613,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var domain = this;
             this.Code = domain.Code = result?.Code;
             this.Result = domain.Result = result?.Result;
+            this.Transaction = domain.Transaction = result?.Transaction;
             this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
             this.Charged = domain.Charged = result?.Charged;
             this.Output = domain.Output = result?.Output;

@@ -38,6 +38,8 @@ namespace Gs2.Gs2Account.Model
         public string AppleKeyId { set; get; } = null!;
         public string ApplePrivateKeyPem { set; get; } = null!;
         public string DoneEndpointUrl { set; get; } = null!;
+        public Gs2.Gs2Account.Model.ScopeValue[] AdditionalScopeValues { set; get; } = null!;
+        public string[] AdditionalReturnValues { set; get; } = null!;
         public OpenIdConnectSetting WithConfigurationPath(string configurationPath) {
             this.ConfigurationPath = configurationPath;
             return this;
@@ -66,6 +68,14 @@ namespace Gs2.Gs2Account.Model
             this.DoneEndpointUrl = doneEndpointUrl;
             return this;
         }
+        public OpenIdConnectSetting WithAdditionalScopeValues(Gs2.Gs2Account.Model.ScopeValue[] additionalScopeValues) {
+            this.AdditionalScopeValues = additionalScopeValues;
+            return this;
+        }
+        public OpenIdConnectSetting WithAdditionalReturnValues(string[] additionalReturnValues) {
+            this.AdditionalReturnValues = additionalReturnValues;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -82,11 +92,35 @@ namespace Gs2.Gs2Account.Model
                 .WithAppleTeamId(!data.Keys.Contains("appleTeamId") || data["appleTeamId"] == null ? null : data["appleTeamId"].ToString())
                 .WithAppleKeyId(!data.Keys.Contains("appleKeyId") || data["appleKeyId"] == null ? null : data["appleKeyId"].ToString())
                 .WithApplePrivateKeyPem(!data.Keys.Contains("applePrivateKeyPem") || data["applePrivateKeyPem"] == null ? null : data["applePrivateKeyPem"].ToString())
-                .WithDoneEndpointUrl(!data.Keys.Contains("doneEndpointUrl") || data["doneEndpointUrl"] == null ? null : data["doneEndpointUrl"].ToString());
+                .WithDoneEndpointUrl(!data.Keys.Contains("doneEndpointUrl") || data["doneEndpointUrl"] == null ? null : data["doneEndpointUrl"].ToString())
+                .WithAdditionalScopeValues(!data.Keys.Contains("additionalScopeValues") || data["additionalScopeValues"] == null || !data["additionalScopeValues"].IsArray ? null : data["additionalScopeValues"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Account.Model.ScopeValue.FromJson(v);
+                }).ToArray())
+                .WithAdditionalReturnValues(!data.Keys.Contains("additionalReturnValues") || data["additionalReturnValues"] == null || !data["additionalReturnValues"].IsArray ? null : data["additionalReturnValues"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray());
         }
 
         public JsonData ToJson()
         {
+            JsonData additionalScopeValuesJsonData = null;
+            if (AdditionalScopeValues != null && AdditionalScopeValues.Length > 0)
+            {
+                additionalScopeValuesJsonData = new JsonData();
+                foreach (var additionalScopeValue in AdditionalScopeValues)
+                {
+                    additionalScopeValuesJsonData.Add(additionalScopeValue.ToJson());
+                }
+            }
+            JsonData additionalReturnValuesJsonData = null;
+            if (AdditionalReturnValues != null && AdditionalReturnValues.Length > 0)
+            {
+                additionalReturnValuesJsonData = new JsonData();
+                foreach (var additionalReturnValue in AdditionalReturnValues)
+                {
+                    additionalReturnValuesJsonData.Add(additionalReturnValue);
+                }
+            }
             return new JsonData {
                 ["configurationPath"] = ConfigurationPath,
                 ["clientId"] = ClientId,
@@ -95,6 +129,8 @@ namespace Gs2.Gs2Account.Model
                 ["appleKeyId"] = AppleKeyId,
                 ["applePrivateKeyPem"] = ApplePrivateKeyPem,
                 ["doneEndpointUrl"] = DoneEndpointUrl,
+                ["additionalScopeValues"] = additionalScopeValuesJsonData,
+                ["additionalReturnValues"] = additionalReturnValuesJsonData,
             };
         }
 
@@ -128,6 +164,28 @@ namespace Gs2.Gs2Account.Model
             if (DoneEndpointUrl != null) {
                 writer.WritePropertyName("doneEndpointUrl");
                 writer.Write(DoneEndpointUrl.ToString());
+            }
+            if (AdditionalScopeValues != null) {
+                writer.WritePropertyName("additionalScopeValues");
+                writer.WriteArrayStart();
+                foreach (var additionalScopeValue in AdditionalScopeValues)
+                {
+                    if (additionalScopeValue != null) {
+                        additionalScopeValue.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            if (AdditionalReturnValues != null) {
+                writer.WritePropertyName("additionalReturnValues");
+                writer.WriteArrayStart();
+                foreach (var additionalReturnValue in AdditionalReturnValues)
+                {
+                    if (additionalReturnValue != null) {
+                        writer.Write(additionalReturnValue.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -192,6 +250,30 @@ namespace Gs2.Gs2Account.Model
             {
                 diff += DoneEndpointUrl.CompareTo(other.DoneEndpointUrl);
             }
+            if (AdditionalScopeValues == null && AdditionalScopeValues == other.AdditionalScopeValues)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AdditionalScopeValues.Length - other.AdditionalScopeValues.Length;
+                for (var i = 0; i < AdditionalScopeValues.Length; i++)
+                {
+                    diff += AdditionalScopeValues[i].CompareTo(other.AdditionalScopeValues[i]);
+                }
+            }
+            if (AdditionalReturnValues == null && AdditionalReturnValues == other.AdditionalReturnValues)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AdditionalReturnValues.Length - other.AdditionalReturnValues.Length;
+                for (var i = 0; i < AdditionalReturnValues.Length; i++)
+                {
+                    diff += AdditionalReturnValues[i].CompareTo(other.AdditionalReturnValues[i]);
+                }
+            }
             return diff;
         }
 
@@ -245,6 +327,20 @@ namespace Gs2.Gs2Account.Model
                     });
                 }
             }
+            {
+                if (AdditionalScopeValues.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("openIdConnectSetting", "account.openIdConnectSetting.additionalScopeValues.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AdditionalReturnValues.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("openIdConnectSetting", "account.openIdConnectSetting.additionalReturnValues.error.tooMany"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -256,6 +352,8 @@ namespace Gs2.Gs2Account.Model
                 AppleKeyId = AppleKeyId,
                 ApplePrivateKeyPem = ApplePrivateKeyPem,
                 DoneEndpointUrl = DoneEndpointUrl,
+                AdditionalScopeValues = AdditionalScopeValues?.Clone() as Gs2.Gs2Account.Model.ScopeValue[],
+                AdditionalReturnValues = AdditionalReturnValues?.Clone() as string[],
             };
         }
     }
