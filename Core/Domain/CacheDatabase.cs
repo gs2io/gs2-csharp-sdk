@@ -69,6 +69,14 @@ namespace Gs2.Core.Domain
         public void RequireListCacheUpdate<TKind>(string parentKey)
         {
             this._listCacheUpdateRequired.Ensure(typeof(TKind)).Add(parentKey);
+            if (this._listCacheContexts.Get(typeof(TKind))?.Ensure(parentKey) == null) {
+                ClearListCache<TKind>(parentKey);
+            }
+            else {
+                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+                    callback.Value.Item2?.Invoke();
+                }
+            }
         }
 
         public bool IsListCached<TKind>(string parentKey)

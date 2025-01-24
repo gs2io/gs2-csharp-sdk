@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -115,7 +117,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             (
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId,
+                        "Singleton",
                         RoomName
                     ),
                     out var list,
@@ -134,7 +136,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
+                            "Singleton",
                             RoomName
                         )
                     );
@@ -185,7 +187,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
+                            "Singleton",
                             RoomName
                         ),
                         this._startAt

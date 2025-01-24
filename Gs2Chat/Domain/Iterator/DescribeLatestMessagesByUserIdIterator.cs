@@ -119,7 +119,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             (
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
-                        UserId,
+                        "Singleton",
                         RoomName
                     ),
                     out var list,
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            UserId,
+                            "Singleton",
                             RoomName
                         )
                     );
@@ -188,7 +188,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            UserId,
+                            "Singleton",
                             RoomName
                         ),
                         this._startAt
