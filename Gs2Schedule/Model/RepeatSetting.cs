@@ -372,7 +372,7 @@ namespace Gs2.Gs2Schedule.Model
                 }
             }
             if (RepeatType == "custom") {
-                if (InactiveDays < 1) {
+                if (InactiveDays < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("repeatSetting", "schedule.repeatSetting.inactiveDays.error.invalid"),
                     });
