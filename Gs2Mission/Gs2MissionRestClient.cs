@@ -1476,6 +1476,257 @@ namespace Gs2.Gs2Mission
 #endif
 
 
+        public class EvaluateCompleteTask : Gs2RestSessionTask<EvaluateCompleteRequest, EvaluateCompleteResult>
+        {
+            public EvaluateCompleteTask(IGs2Session session, RestSessionRequestFactory factory, EvaluateCompleteRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(EvaluateCompleteRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/complete/group/{missionGroupName}/eval";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{missionGroupName}", !string.IsNullOrEmpty(request.MissionGroupName) ? request.MissionGroupName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator EvaluateComplete(
+                Request.EvaluateCompleteRequest request,
+                UnityAction<AsyncResult<Result.EvaluateCompleteResult>> callback
+        )
+		{
+			var task = new EvaluateCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EvaluateCompleteResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.EvaluateCompleteResult> EvaluateCompleteFuture(
+                Request.EvaluateCompleteRequest request
+        )
+		{
+			return new EvaluateCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EvaluateCompleteResult> EvaluateCompleteAsync(
+                Request.EvaluateCompleteRequest request
+        )
+		{
+            AsyncResult<Result.EvaluateCompleteResult> result = null;
+			await EvaluateComplete(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EvaluateCompleteTask EvaluateCompleteAsync(
+                Request.EvaluateCompleteRequest request
+        )
+		{
+			return new EvaluateCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.EvaluateCompleteResult> EvaluateCompleteAsync(
+                Request.EvaluateCompleteRequest request
+        )
+		{
+			var task = new EvaluateCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class EvaluateCompleteByUserIdTask : Gs2RestSessionTask<EvaluateCompleteByUserIdRequest, EvaluateCompleteByUserIdResult>
+        {
+            public EvaluateCompleteByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, EvaluateCompleteByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(EvaluateCompleteByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/complete/group/{missionGroupName}/eval";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{missionGroupName}", !string.IsNullOrEmpty(request.MissionGroupName) ? request.MissionGroupName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator EvaluateCompleteByUserId(
+                Request.EvaluateCompleteByUserIdRequest request,
+                UnityAction<AsyncResult<Result.EvaluateCompleteByUserIdResult>> callback
+        )
+		{
+			var task = new EvaluateCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EvaluateCompleteByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdFuture(
+                Request.EvaluateCompleteByUserIdRequest request
+        )
+		{
+			return new EvaluateCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdAsync(
+                Request.EvaluateCompleteByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.EvaluateCompleteByUserIdResult> result = null;
+			await EvaluateCompleteByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EvaluateCompleteByUserIdTask EvaluateCompleteByUserIdAsync(
+                Request.EvaluateCompleteByUserIdRequest request
+        )
+		{
+			return new EvaluateCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdAsync(
+                Request.EvaluateCompleteByUserIdRequest request
+        )
+		{
+			var task = new EvaluateCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteCompleteByUserIdTask : Gs2RestSessionTask<DeleteCompleteByUserIdRequest, DeleteCompleteByUserIdResult>
         {
             public DeleteCompleteByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCompleteByUserIdRequest request) : base(session, factory, request)
@@ -3111,6 +3362,16 @@ namespace Gs2.Gs2Mission
                     jsonWriter.WritePropertyName("resetHour");
                     jsonWriter.Write(request.ResetHour.ToString());
                 }
+                if (request.AnchorTimestamp != null)
+                {
+                    jsonWriter.WritePropertyName("anchorTimestamp");
+                    jsonWriter.Write(request.AnchorTimestamp.ToString());
+                }
+                if (request.Days != null)
+                {
+                    jsonWriter.WritePropertyName("days");
+                    jsonWriter.Write(request.Days.ToString());
+                }
                 if (request.CompleteNotificationNamespaceId != null)
                 {
                     jsonWriter.WritePropertyName("completeNotificationNamespaceId");
@@ -3366,6 +3627,16 @@ namespace Gs2.Gs2Mission
                 {
                     jsonWriter.WritePropertyName("resetHour");
                     jsonWriter.Write(request.ResetHour.ToString());
+                }
+                if (request.AnchorTimestamp != null)
+                {
+                    jsonWriter.WritePropertyName("anchorTimestamp");
+                    jsonWriter.Write(request.AnchorTimestamp.ToString());
+                }
+                if (request.Days != null)
+                {
+                    jsonWriter.WritePropertyName("days");
+                    jsonWriter.Write(request.Days.ToString());
                 }
                 if (request.CompleteNotificationNamespaceId != null)
                 {

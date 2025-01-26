@@ -194,6 +194,7 @@ namespace Gs2.Gs2Mission.Model
                     case "daily":
                     case "weekly":
                     case "monthly":
+                    case "days":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {

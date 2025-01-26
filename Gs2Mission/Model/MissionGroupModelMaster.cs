@@ -39,6 +39,8 @@ namespace Gs2.Gs2Mission.Model
         public int? ResetDayOfMonth { set; get; } = null!;
         public string ResetDayOfWeek { set; get; } = null!;
         public int? ResetHour { set; get; } = null!;
+        public long? AnchorTimestamp { set; get; } = null!;
+        public int? Days { set; get; } = null!;
         public string CompleteNotificationNamespaceId { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -73,6 +75,14 @@ namespace Gs2.Gs2Mission.Model
         }
         public MissionGroupModelMaster WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
+            return this;
+        }
+        public MissionGroupModelMaster WithAnchorTimestamp(long? anchorTimestamp) {
+            this.AnchorTimestamp = anchorTimestamp;
+            return this;
+        }
+        public MissionGroupModelMaster WithDays(int? days) {
+            this.Days = days;
             return this;
         }
         public MissionGroupModelMaster WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
@@ -177,6 +187,8 @@ namespace Gs2.Gs2Mission.Model
                 .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)(data["resetDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["resetDayOfMonth"].ToString()) : int.Parse(data["resetDayOfMonth"].ToString())))
                 .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
                 .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)(data["resetHour"].ToString().Contains(".") ? (int)double.Parse(data["resetHour"].ToString()) : int.Parse(data["resetHour"].ToString())))
+                .WithAnchorTimestamp(!data.Keys.Contains("anchorTimestamp") || data["anchorTimestamp"] == null ? null : (long?)(data["anchorTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["anchorTimestamp"].ToString()) : long.Parse(data["anchorTimestamp"].ToString())))
+                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)(data["days"].ToString().Contains(".") ? (int)double.Parse(data["days"].ToString()) : int.Parse(data["days"].ToString())))
                 .WithCompleteNotificationNamespaceId(!data.Keys.Contains("completeNotificationNamespaceId") || data["completeNotificationNamespaceId"] == null ? null : data["completeNotificationNamespaceId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -194,6 +206,8 @@ namespace Gs2.Gs2Mission.Model
                 ["resetDayOfMonth"] = ResetDayOfMonth,
                 ["resetDayOfWeek"] = ResetDayOfWeek,
                 ["resetHour"] = ResetHour,
+                ["anchorTimestamp"] = AnchorTimestamp,
+                ["days"] = Days,
                 ["completeNotificationNamespaceId"] = CompleteNotificationNamespaceId,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -235,6 +249,14 @@ namespace Gs2.Gs2Mission.Model
             if (ResetHour != null) {
                 writer.WritePropertyName("resetHour");
                 writer.Write((ResetHour.ToString().Contains(".") ? (int)double.Parse(ResetHour.ToString()) : int.Parse(ResetHour.ToString())));
+            }
+            if (AnchorTimestamp != null) {
+                writer.WritePropertyName("anchorTimestamp");
+                writer.Write((AnchorTimestamp.ToString().Contains(".") ? (long)double.Parse(AnchorTimestamp.ToString()) : long.Parse(AnchorTimestamp.ToString())));
+            }
+            if (Days != null) {
+                writer.WritePropertyName("days");
+                writer.Write((Days.ToString().Contains(".") ? (int)double.Parse(Days.ToString()) : int.Parse(Days.ToString())));
             }
             if (CompleteNotificationNamespaceId != null) {
                 writer.WritePropertyName("completeNotificationNamespaceId");
@@ -323,6 +345,22 @@ namespace Gs2.Gs2Mission.Model
             {
                 diff += (int)(ResetHour - other.ResetHour);
             }
+            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
+            }
+            if (Days == null && Days == other.Days)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Days - other.Days);
+            }
             if (CompleteNotificationNamespaceId == null && CompleteNotificationNamespaceId == other.CompleteNotificationNamespaceId)
             {
                 // null and null
@@ -393,6 +431,7 @@ namespace Gs2.Gs2Mission.Model
                     case "daily":
                     case "weekly":
                     case "monthly":
+                    case "days":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
@@ -437,6 +476,30 @@ namespace Gs2.Gs2Mission.Model
                 if (ResetHour > 23) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.resetHour.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "days") {
+                if (AnchorTimestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.anchorTimestamp.error.invalid"),
+                    });
+                }
+                if (AnchorTimestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.anchorTimestamp.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "days") {
+                if (Days < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.days.error.invalid"),
+                    });
+                }
+                if (Days > 2147483646.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.days.error.invalid"),
                     });
                 }
             }
@@ -495,6 +558,8 @@ namespace Gs2.Gs2Mission.Model
                 ResetDayOfMonth = ResetDayOfMonth,
                 ResetDayOfWeek = ResetDayOfWeek,
                 ResetHour = ResetHour,
+                AnchorTimestamp = AnchorTimestamp,
+                Days = Days,
                 CompleteNotificationNamespaceId = CompleteNotificationNamespaceId,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

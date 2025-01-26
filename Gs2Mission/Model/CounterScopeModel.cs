@@ -38,6 +38,8 @@ namespace Gs2.Gs2Mission.Model
         public int? ResetHour { set; get; } = null!;
         public string ConditionName { set; get; } = null!;
         public Gs2.Core.Model.VerifyAction Condition { set; get; } = null!;
+        public long? AnchorTimestamp { set; get; } = null!;
+        public int? Days { set; get; } = null!;
         public CounterScopeModel WithScopeType(string scopeType) {
             this.ScopeType = scopeType;
             return this;
@@ -66,6 +68,14 @@ namespace Gs2.Gs2Mission.Model
             this.Condition = condition;
             return this;
         }
+        public CounterScopeModel WithAnchorTimestamp(long? anchorTimestamp) {
+            this.AnchorTimestamp = anchorTimestamp;
+            return this;
+        }
+        public CounterScopeModel WithDays(int? days) {
+            this.Days = days;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -82,7 +92,9 @@ namespace Gs2.Gs2Mission.Model
                 .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
                 .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)(data["resetHour"].ToString().Contains(".") ? (int)double.Parse(data["resetHour"].ToString()) : int.Parse(data["resetHour"].ToString())))
                 .WithConditionName(!data.Keys.Contains("conditionName") || data["conditionName"] == null ? null : data["conditionName"].ToString())
-                .WithCondition(!data.Keys.Contains("condition") || data["condition"] == null ? null : Gs2.Core.Model.VerifyAction.FromJson(data["condition"]));
+                .WithCondition(!data.Keys.Contains("condition") || data["condition"] == null ? null : Gs2.Core.Model.VerifyAction.FromJson(data["condition"]))
+                .WithAnchorTimestamp(!data.Keys.Contains("anchorTimestamp") || data["anchorTimestamp"] == null ? null : (long?)(data["anchorTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["anchorTimestamp"].ToString()) : long.Parse(data["anchorTimestamp"].ToString())))
+                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)(data["days"].ToString().Contains(".") ? (int)double.Parse(data["days"].ToString()) : int.Parse(data["days"].ToString())));
         }
 
         public JsonData ToJson()
@@ -95,6 +107,8 @@ namespace Gs2.Gs2Mission.Model
                 ["resetHour"] = ResetHour,
                 ["conditionName"] = ConditionName,
                 ["condition"] = Condition?.ToJson(),
+                ["anchorTimestamp"] = AnchorTimestamp,
+                ["days"] = Days,
             };
         }
 
@@ -128,6 +142,14 @@ namespace Gs2.Gs2Mission.Model
             if (Condition != null) {
                 writer.WritePropertyName("condition");
                 Condition.WriteJson(writer);
+            }
+            if (AnchorTimestamp != null) {
+                writer.WritePropertyName("anchorTimestamp");
+                writer.Write((AnchorTimestamp.ToString().Contains(".") ? (long)double.Parse(AnchorTimestamp.ToString()) : long.Parse(AnchorTimestamp.ToString())));
+            }
+            if (Days != null) {
+                writer.WritePropertyName("days");
+                writer.Write((Days.ToString().Contains(".") ? (int)double.Parse(Days.ToString()) : int.Parse(Days.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -192,6 +214,22 @@ namespace Gs2.Gs2Mission.Model
             {
                 diff += Condition.CompareTo(other.Condition);
             }
+            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
+            }
+            if (Days == null && Days == other.Days)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Days - other.Days);
+            }
             return diff;
         }
 
@@ -213,6 +251,7 @@ namespace Gs2.Gs2Mission.Model
                     case "daily":
                     case "weekly":
                     case "monthly":
+                    case "days":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
@@ -269,6 +308,30 @@ namespace Gs2.Gs2Mission.Model
             }
             if (ScopeType == "verifyAction") {
             }
+            if (ResetType == "days") {
+                if (AnchorTimestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.anchorTimestamp.error.invalid"),
+                    });
+                }
+                if (AnchorTimestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.anchorTimestamp.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "days") {
+                if (Days < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.days.error.invalid"),
+                    });
+                }
+                if (Days > 2147483646.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.days.error.invalid"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -280,6 +343,8 @@ namespace Gs2.Gs2Mission.Model
                 ResetHour = ResetHour,
                 ConditionName = ConditionName,
                 Condition = Condition.Clone() as Gs2.Core.Model.VerifyAction,
+                AnchorTimestamp = AnchorTimestamp,
+                Days = Days,
             };
         }
     }

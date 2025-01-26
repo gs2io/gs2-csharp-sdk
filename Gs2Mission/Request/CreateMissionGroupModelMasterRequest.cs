@@ -41,6 +41,8 @@ namespace Gs2.Gs2Mission.Request
          public int? ResetDayOfMonth { set; get; } = null!;
          public string ResetDayOfWeek { set; get; } = null!;
          public int? ResetHour { set; get; } = null!;
+         public long? AnchorTimestamp { set; get; } = null!;
+         public int? Days { set; get; } = null!;
          public string CompleteNotificationNamespaceId { set; get; } = null!;
         public CreateMissionGroupModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -74,6 +76,14 @@ namespace Gs2.Gs2Mission.Request
             this.ResetHour = resetHour;
             return this;
         }
+        public CreateMissionGroupModelMasterRequest WithAnchorTimestamp(long? anchorTimestamp) {
+            this.AnchorTimestamp = anchorTimestamp;
+            return this;
+        }
+        public CreateMissionGroupModelMasterRequest WithDays(int? days) {
+            this.Days = days;
+            return this;
+        }
         public CreateMissionGroupModelMasterRequest WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
             this.CompleteNotificationNamespaceId = completeNotificationNamespaceId;
             return this;
@@ -96,6 +106,8 @@ namespace Gs2.Gs2Mission.Request
                 .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)(data["resetDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["resetDayOfMonth"].ToString()) : int.Parse(data["resetDayOfMonth"].ToString())))
                 .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
                 .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)(data["resetHour"].ToString().Contains(".") ? (int)double.Parse(data["resetHour"].ToString()) : int.Parse(data["resetHour"].ToString())))
+                .WithAnchorTimestamp(!data.Keys.Contains("anchorTimestamp") || data["anchorTimestamp"] == null ? null : (long?)(data["anchorTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["anchorTimestamp"].ToString()) : long.Parse(data["anchorTimestamp"].ToString())))
+                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)(data["days"].ToString().Contains(".") ? (int)double.Parse(data["days"].ToString()) : int.Parse(data["days"].ToString())))
                 .WithCompleteNotificationNamespaceId(!data.Keys.Contains("completeNotificationNamespaceId") || data["completeNotificationNamespaceId"] == null ? null : data["completeNotificationNamespaceId"].ToString());
         }
 
@@ -110,6 +122,8 @@ namespace Gs2.Gs2Mission.Request
                 ["resetDayOfMonth"] = ResetDayOfMonth,
                 ["resetDayOfWeek"] = ResetDayOfWeek,
                 ["resetHour"] = ResetHour,
+                ["anchorTimestamp"] = AnchorTimestamp,
+                ["days"] = Days,
                 ["completeNotificationNamespaceId"] = CompleteNotificationNamespaceId,
             };
         }
@@ -149,6 +163,14 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("resetHour");
                 writer.Write((ResetHour.ToString().Contains(".") ? (int)double.Parse(ResetHour.ToString()) : int.Parse(ResetHour.ToString())));
             }
+            if (AnchorTimestamp != null) {
+                writer.WritePropertyName("anchorTimestamp");
+                writer.Write((AnchorTimestamp.ToString().Contains(".") ? (long)double.Parse(AnchorTimestamp.ToString()) : long.Parse(AnchorTimestamp.ToString())));
+            }
+            if (Days != null) {
+                writer.WritePropertyName("days");
+                writer.Write((Days.ToString().Contains(".") ? (int)double.Parse(Days.ToString()) : int.Parse(Days.ToString())));
+            }
             if (CompleteNotificationNamespaceId != null) {
                 writer.WritePropertyName("completeNotificationNamespaceId");
                 writer.Write(CompleteNotificationNamespaceId.ToString());
@@ -166,6 +188,8 @@ namespace Gs2.Gs2Mission.Request
             key += ResetDayOfMonth + ":";
             key += ResetDayOfWeek + ":";
             key += ResetHour + ":";
+            key += AnchorTimestamp + ":";
+            key += Days + ":";
             key += CompleteNotificationNamespaceId + ":";
             return key;
         }

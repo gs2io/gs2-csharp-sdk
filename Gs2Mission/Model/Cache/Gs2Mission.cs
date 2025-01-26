@@ -109,6 +109,20 @@ namespace Gs2.Gs2Mission.Model.Cache
                         Request.GetCompleteByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "evaluateComplete":
+                    Result.EvaluateCompleteResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.EvaluateCompleteRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "evaluateCompleteByUserId":
+                    Result.EvaluateCompleteByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.EvaluateCompleteByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteCompleteByUserId":
                     Result.DeleteCompleteByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
