@@ -126,40 +126,29 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<ClusterRankingBorder>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ClusterRankingBorder>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            rankingName,
-                            clusterName,
-                            season
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName,
-                        clusterName,
-                        season
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName,
+                    clusterName,
+                    season
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ClusterRankingBorder).PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName,
+                    clusterName,
+                    season
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "clusterRankingBorder") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ClusterRankingBorder).PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName,
-                        clusterName,
-                        season
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "clusterRankingBorder") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

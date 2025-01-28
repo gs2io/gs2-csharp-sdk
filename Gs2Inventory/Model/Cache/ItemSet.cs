@@ -211,99 +211,76 @@ namespace Gs2.Gs2Inventory.Model.Cache
             Func<Task<ItemSet[]>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ItemSet>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            inventoryName
-                       ),
-                       self.CacheKey(
-                            itemName,
-                            itemSetName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var items = await fetchImpl();
-                    foreach (var item in items) {
-                        item.PutCache(
-                            cache,
-                            namespaceName,
-                            userId,
-                            inventoryName,
-                            itemName,
-                            itemSetName
-                        );
-                    }
-                    return items;
-                }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ItemSet).PutCache(
+            try {
+                var items = await fetchImpl();
+                foreach (var item in items) {
+                    item.PutCache(
                         cache,
-                            namespaceName,
-                            userId,
-                            inventoryName,
-                            itemName,
-                            itemSetName
+                        namespaceName,
+                        userId,
+                        inventoryName,
+                        itemName,
+                        itemSetName
                     );
-                    if (e.errors.Length == 0 || e.errors[0].component != "itemSet") {
-                        throw;
-                    }
-                    return Array.Empty<ItemSet>();
                 }
+                return items;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ItemSet).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    inventoryName,
+                    itemName,
+                    itemSetName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "itemSet") {
+                    throw;
+                }
+                return Array.Empty<ItemSet>();
             }
         }
-        
-    #if UNITY_2017_1_OR_NEWER
+
+#if UNITY_2017_1_OR_NEWER
         public static async UniTask<ItemSet[]> FetchAsync(
-    #else
+#else
         public static async Task<ItemSet[]> FetchAsync(
-    #endif
+#endif
             this ItemSet[] self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             string inventoryName,
             string itemName,
-    #if UNITY_2017_1_OR_NEWER
+#if UNITY_2017_1_OR_NEWER
             Func<UniTask<ItemSet[]>> fetchImpl
-    #else
+#else
             Func<Task<ItemSet[]>> fetchImpl
-    #endif
+#endif
         ) {
-            using (await cache.GetLockObject<ItemSet[]>(
-                       self.CacheParentKey(
-                           namespaceName,
-                           userId,
-                           inventoryName
-                       ),
-                       self.CacheKey(
-                           itemName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        inventoryName,
-                        itemName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    inventoryName,
+                    itemName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ItemSet[]).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    inventoryName,
+                    itemName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "itemSet") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ItemSet[]).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        inventoryName,
-                        itemName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "itemSet") {
-                        throw;
-                    }
-                    return Array.Empty<ItemSet>();
-                }
+                return Array.Empty<ItemSet>();
             }
         }
 #endif

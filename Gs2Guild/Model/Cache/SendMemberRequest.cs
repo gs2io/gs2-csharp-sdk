@@ -130,40 +130,29 @@ namespace Gs2.Gs2Guild.Model.Cache
             Func<Task<SendMemberRequest>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SendMemberRequest>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            guildModelName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            guildName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        guildModelName,
-                        guildName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    guildModelName,
+                    guildName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SendMemberRequest).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    guildModelName,
+                    guildName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "sendMemberRequest") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SendMemberRequest).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        guildModelName,
-                        guildName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "sendMemberRequest") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

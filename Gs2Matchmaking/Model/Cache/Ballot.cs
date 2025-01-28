@@ -130,40 +130,29 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             Func<Task<SignedBallot>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SignedBallot>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            ratingName,
-                            gatheringName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        ratingName,
-                        gatheringName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    ratingName,
+                    gatheringName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SignedBallot).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    ratingName,
+                    gatheringName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "ballot") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SignedBallot).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        ratingName,
-                        gatheringName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "ballot") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

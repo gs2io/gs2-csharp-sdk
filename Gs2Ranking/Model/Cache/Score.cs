@@ -130,40 +130,29 @@ namespace Gs2.Gs2Ranking.Model.Cache
             Func<Task<Score>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Score>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            categoryName,
-                            uniqueId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName,
-                        uniqueId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName,
+                    uniqueId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Score).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName,
+                    uniqueId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "score") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Score).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName,
-                        uniqueId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "score") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

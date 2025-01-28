@@ -122,36 +122,27 @@ namespace Gs2.Gs2Log.Model.Cache
             Func<Task<InGameLog>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<InGameLog>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            requestId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        requestId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    requestId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as InGameLog).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    requestId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "inGameLog") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as InGameLog).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        requestId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "inGameLog") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

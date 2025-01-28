@@ -120,37 +120,27 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<GlobalRankingBorder>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GlobalRankingBorder>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            rankingName,
-                            season
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName,
-                        season
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName,
+                    season
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GlobalRankingBorder).PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName,
+                    season
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "globalRankingBorder") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GlobalRankingBorder).PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName,
-                        season
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "globalRankingBorder") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

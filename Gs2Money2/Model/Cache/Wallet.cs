@@ -124,37 +124,27 @@ namespace Gs2.Gs2Money2.Model.Cache
             Func<Task<Wallet>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Wallet>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            slot
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        slot
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    slot
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Wallet).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    slot
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "wallet") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Wallet).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        slot
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "wallet") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

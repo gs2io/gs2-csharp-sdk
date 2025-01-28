@@ -142,46 +142,33 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             Func<Task<SeasonGathering>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SeasonGathering>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            "Singleton",
-                            seasonName,
-                            season
-                       ),
-                       self.CacheKey(
-                            tier,
-                            seasonGatheringName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        "Singleton",
-                        seasonName,
-                        season,
-                        tier,
-                        seasonGatheringName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    "Singleton",
+                    seasonName,
+                    season,
+                    tier,
+                    seasonGatheringName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SeasonGathering).PutCache(
+                    cache,
+                    namespaceName,
+                    "Singleton",
+                    seasonName,
+                    season,
+                    tier,
+                    seasonGatheringName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "seasonGathering") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SeasonGathering).PutCache(
-                        cache,
-                        namespaceName,
-                        "Singleton",
-                        seasonName,
-                        season,
-                        tier,
-                        seasonGatheringName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "seasonGathering") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

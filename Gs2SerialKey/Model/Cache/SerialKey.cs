@@ -124,37 +124,27 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             Func<Task<SerialKey>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SerialKey>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            serialKeyCode
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        serialKeyCode
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    serialKeyCode
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SerialKey).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    serialKeyCode
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "serialKey") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SerialKey).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        serialKeyCode
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "serialKey") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

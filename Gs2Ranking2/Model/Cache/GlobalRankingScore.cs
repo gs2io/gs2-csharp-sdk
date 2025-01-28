@@ -132,41 +132,29 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<GlobalRankingScore>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GlobalRankingScore>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            rankingName
-                       ),
-                       self.CacheKey(
-                            rankingName,
-                            season
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        season
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    season
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GlobalRankingScore).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    season
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "globalRankingScore") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GlobalRankingScore).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        season
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "globalRankingScore") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -130,40 +130,29 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<GlobalRankingData>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GlobalRankingData>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            rankingName,
-                            season
-                       ),
-                       self.CacheKey(
-                            userId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName,
-                        season,
-                        userId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName,
+                    season,
+                    userId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GlobalRankingData).PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName,
+                    season,
+                    userId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "globalRankingData") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GlobalRankingData).PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName,
-                        season,
-                        userId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "globalRankingData") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -122,37 +122,27 @@ namespace Gs2.Gs2Schedule.Model.Cache
             Func<Task<RepeatSchedule>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<RepeatSchedule>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            eventName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        eventName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    eventName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as RepeatSchedule).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    eventName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "event") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as RepeatSchedule).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        eventName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "event") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

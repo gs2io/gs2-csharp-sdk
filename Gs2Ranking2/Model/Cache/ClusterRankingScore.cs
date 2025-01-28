@@ -142,46 +142,31 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<ClusterRankingScore>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ClusterRankingScore>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            rankingName,
-                            clusterName,
-                            season
-                       ),
-                       self.CacheKey(
-                            rankingName,
-                            clusterName,
-                            season
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        clusterName,
-                        season
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    clusterName,
+                    season
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ClusterRankingScore).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    clusterName,
+                    season
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "clusterRankingScore") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ClusterRankingScore).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        clusterName,
-                        season
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "clusterRankingScore") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

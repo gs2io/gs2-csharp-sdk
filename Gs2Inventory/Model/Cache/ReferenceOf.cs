@@ -144,48 +144,35 @@ namespace Gs2.Gs2Inventory.Model.Cache
             Func<Task<string>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ReferenceOf>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            inventoryName,
-                            itemName,
-                            itemSetName
-                       ),
-                       self.CacheKey(
-                            referenceOf
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    new ReferenceOf {
-                        Name = item,
-                    }.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        inventoryName,
-                        itemName,
-                        itemSetName,
-                        referenceOf
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                new ReferenceOf {
+                    Name = item,
+                }.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    inventoryName,
+                    itemName,
+                    itemSetName,
+                    referenceOf
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ReferenceOf).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    inventoryName,
+                    itemName,
+                    itemSetName,
+                    referenceOf
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "referenceOf") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ReferenceOf).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        inventoryName,
-                        itemName,
-                        itemSetName,
-                        referenceOf
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "referenceOf") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif
