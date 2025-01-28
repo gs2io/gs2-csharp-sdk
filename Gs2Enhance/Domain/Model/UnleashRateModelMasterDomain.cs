@@ -283,22 +283,31 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public async Task<Gs2.Gs2Enhance.Model.UnleashRateModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Enhance.Model.UnleashRateModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.UnleashRateModelMaster>(
+                        (null as Gs2.Gs2Enhance.Model.UnleashRateModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Enhance.Model.UnleashRateModelMaster).CacheKey(
+                            this.RateName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Enhance.Model.UnleashRateModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Enhance.Model.UnleashRateModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName,
+                    () => this.GetAsync(
+                        new GetUnleashRateModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Enhance.Model.UnleashRateModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName,
-                () => this.GetAsync(
-                    new GetUnleashRateModelMasterRequest()
-                )
-            );
         }
         #endif
 

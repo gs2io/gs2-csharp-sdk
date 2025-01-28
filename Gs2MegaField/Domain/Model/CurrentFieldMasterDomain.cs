@@ -318,20 +318,28 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.CurrentFieldMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2MegaField.Model.CurrentFieldMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                        (null as Gs2.Gs2MegaField.Model.CurrentFieldMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2MegaField.Model.CurrentFieldMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2MegaField.Model.CurrentFieldMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2MegaField.Model.CurrentFieldMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentFieldMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2MegaField.Model.CurrentFieldMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentFieldMasterRequest()
-                )
-            );
         }
         #endif
 

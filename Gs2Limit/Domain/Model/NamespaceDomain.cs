@@ -625,20 +625,28 @@ namespace Gs2.Gs2Limit.Domain.Model
         public async Task<Gs2.Gs2Limit.Model.Namespace> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Limit.Model.Namespace).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.Namespace>(
+                        (null as Gs2.Gs2Limit.Model.Namespace).CacheParentKey(
+                        ),
+                        (null as Gs2.Gs2Limit.Model.Namespace).CacheKey(
+                            this.NamespaceName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Limit.Model.Namespace).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Limit.Model.Namespace).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetNamespaceRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Limit.Model.Namespace).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetNamespaceRequest()
-                )
-            );
         }
         #endif
 

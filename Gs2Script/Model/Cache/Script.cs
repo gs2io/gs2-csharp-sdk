@@ -116,34 +116,25 @@ namespace Gs2.Gs2Script.Model.Cache
             Func<Task<Script>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Script>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            scriptName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        scriptName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    scriptName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Script).PutCache(
+                    cache,
+                    namespaceName,
+                    scriptName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "script") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Script).PutCache(
-                        cache,
-                        namespaceName,
-                        scriptName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "script") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

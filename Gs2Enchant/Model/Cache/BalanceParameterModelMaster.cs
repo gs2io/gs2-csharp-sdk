@@ -116,34 +116,25 @@ namespace Gs2.Gs2Enchant.Model.Cache
             Func<Task<BalanceParameterModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<BalanceParameterModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            parameterName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        parameterName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    parameterName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as BalanceParameterModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    parameterName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "balanceParameterModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as BalanceParameterModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        parameterName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "balanceParameterModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -116,34 +116,25 @@ namespace Gs2.Gs2Buff.Model.Cache
             Func<Task<BuffEntryModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<BuffEntryModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            buffEntryName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        buffEntryName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    buffEntryName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as BuffEntryModel).PutCache(
+                    cache,
+                    namespaceName,
+                    buffEntryName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "buffEntryModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as BuffEntryModel).PutCache(
-                        cache,
-                        namespaceName,
-                        buffEntryName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "buffEntryModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

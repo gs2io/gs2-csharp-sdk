@@ -343,24 +343,34 @@ namespace Gs2.Gs2Account.Domain.Model
         public async Task<Gs2.Gs2Account.Model.PlatformId> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Account.Model.PlatformId).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.Type ?? default
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.PlatformId>(
+                        (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Account.Model.PlatformId).CacheKey(
+                            this.Type
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Account.Model.PlatformId).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Type ?? default
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Account.Model.PlatformId).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Type ?? default,
+                    () => this.GetAsync(
+                        new GetPlatformIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Account.Model.PlatformId).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.Type ?? default,
-                () => this.GetAsync(
-                    new GetPlatformIdRequest()
-                )
-            );
         }
         #endif
 
@@ -410,7 +420,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

@@ -283,22 +283,31 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public async Task<Gs2.Gs2Enchant.Model.RarityParameterModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ParameterName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
+                        (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).CacheKey(
+                            this.ParameterName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ParameterName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ParameterName,
+                    () => this.GetAsync(
+                        new GetRarityParameterModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Enchant.Model.RarityParameterModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ParameterName,
-                () => this.GetAsync(
-                    new GetRarityParameterModelMasterRequest()
-                )
-            );
         }
         #endif
 

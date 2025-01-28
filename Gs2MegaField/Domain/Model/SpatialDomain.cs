@@ -244,17 +244,28 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.Spatial> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2MegaField.Model.Spatial).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.AreaModelName,
-                this.LayerModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.Spatial>(
+                        (null as Gs2.Gs2MegaField.Model.Spatial).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2MegaField.Model.Spatial).CacheKey(
+                            this.AreaModelName,
+                            this.LayerModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2MegaField.Model.Spatial).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.AreaModelName,
+                    this.LayerModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

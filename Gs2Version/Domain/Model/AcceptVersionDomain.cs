@@ -348,24 +348,34 @@ namespace Gs2.Gs2Version.Domain.Model
         public async Task<Gs2.Gs2Version.Model.AcceptVersion> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Version.Model.AcceptVersion).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.VersionName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.AcceptVersion>(
+                        (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Version.Model.AcceptVersion).CacheKey(
+                            this.VersionName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Version.Model.AcceptVersion).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.VersionName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Version.Model.AcceptVersion).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.VersionName,
+                    () => this.GetAsync(
+                        new GetAcceptVersionByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Version.Model.AcceptVersion).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.VersionName,
-                () => this.GetAsync(
-                    new GetAcceptVersionByUserIdRequest()
-                )
-            );
         }
         #endif
 

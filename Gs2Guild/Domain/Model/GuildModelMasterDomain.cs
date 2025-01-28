@@ -283,22 +283,31 @@ namespace Gs2.Gs2Guild.Domain.Model
         public async Task<Gs2.Gs2Guild.Model.GuildModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Guild.Model.GuildModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GuildModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.GuildModelMaster>(
+                        (null as Gs2.Gs2Guild.Model.GuildModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Guild.Model.GuildModelMaster).CacheKey(
+                            this.GuildModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Guild.Model.GuildModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GuildModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Guild.Model.GuildModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    () => this.GetAsync(
+                        new GetGuildModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Guild.Model.GuildModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GuildModelName,
-                () => this.GetAsync(
-                    new GetGuildModelMasterRequest()
-                )
-            );
         }
         #endif
 

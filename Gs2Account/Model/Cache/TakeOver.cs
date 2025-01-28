@@ -122,37 +122,27 @@ namespace Gs2.Gs2Account.Model.Cache
             Func<Task<TakeOver>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<TakeOver>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            type
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        type
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    type
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as TakeOver).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    type
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "takeOver") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as TakeOver).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        type
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "takeOver") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

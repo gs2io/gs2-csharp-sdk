@@ -116,34 +116,25 @@ namespace Gs2.Gs2Stamina.Model.Cache
             Func<Task<MaxStaminaTableMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<MaxStaminaTableMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            maxStaminaTableName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        maxStaminaTableName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    maxStaminaTableName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as MaxStaminaTableMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    maxStaminaTableName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "maxStaminaTableMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as MaxStaminaTableMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        maxStaminaTableName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "maxStaminaTableMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

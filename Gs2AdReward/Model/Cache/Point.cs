@@ -114,34 +114,25 @@ namespace Gs2.Gs2AdReward.Model.Cache
             Func<Task<Point>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Point>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Point).PutCache(
+                    cache,
+                    namespaceName,
+                    userId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "point") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Point).PutCache(
-                        cache,
-                        namespaceName,
-                        userId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "point") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

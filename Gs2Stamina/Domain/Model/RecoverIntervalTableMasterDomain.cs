@@ -283,22 +283,31 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public async Task<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RecoverIntervalTableName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
+                        (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheKey(
+                            this.RecoverIntervalTableName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RecoverIntervalTableName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RecoverIntervalTableName,
+                    () => this.GetAsync(
+                        new GetRecoverIntervalTableMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RecoverIntervalTableName,
-                () => this.GetAsync(
-                    new GetRecoverIntervalTableMasterRequest()
-                )
-            );
         }
         #endif
 

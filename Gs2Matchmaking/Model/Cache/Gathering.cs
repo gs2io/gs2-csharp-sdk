@@ -122,37 +122,27 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             Func<Task<Gathering>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Gathering>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            gatheringName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        gatheringName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    gatheringName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Gathering).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    gatheringName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "gathering") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Gathering).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        gatheringName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "gathering") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

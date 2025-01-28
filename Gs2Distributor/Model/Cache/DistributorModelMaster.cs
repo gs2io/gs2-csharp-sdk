@@ -116,34 +116,25 @@ namespace Gs2.Gs2Distributor.Model.Cache
             Func<Task<DistributorModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<DistributorModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            distributorName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        distributorName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    distributorName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as DistributorModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    distributorName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "distributorModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as DistributorModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        distributorName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "distributorModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

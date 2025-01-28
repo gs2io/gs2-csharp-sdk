@@ -425,20 +425,28 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public async Task<Gs2.Gs2Identifier.Model.Password> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Identifier.Model.Password).GetCache(
-                this._gs2.Cache,
-                this.UserName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.Password>(
+                        (null as Gs2.Gs2Identifier.Model.Password).CacheParentKey(
+                            this.UserName
+                        ),
+                        (null as Gs2.Gs2Identifier.Model.Password).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Identifier.Model.Password).GetCache(
+                    this._gs2.Cache,
+                    this.UserName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Identifier.Model.Password).FetchAsync(
+                    this._gs2.Cache,
+                    this.UserName,
+                    () => this.GetAsync(
+                        new GetPasswordRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Identifier.Model.Password).FetchAsync(
-                this._gs2.Cache,
-                this.UserName,
-                () => this.GetAsync(
-                    new GetPasswordRequest()
-                )
-            );
         }
         #endif
 

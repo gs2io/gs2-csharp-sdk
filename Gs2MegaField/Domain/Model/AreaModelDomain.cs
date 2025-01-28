@@ -287,22 +287,31 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.AreaModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2MegaField.Model.AreaModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.AreaModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.AreaModel>(
+                        (null as Gs2.Gs2MegaField.Model.AreaModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2MegaField.Model.AreaModel).CacheKey(
+                            this.AreaModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2MegaField.Model.AreaModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2MegaField.Model.AreaModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    () => this.GetAsync(
+                        new GetAreaModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2MegaField.Model.AreaModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.AreaModelName,
-                () => this.GetAsync(
-                    new GetAreaModelRequest()
-                )
-            );
         }
         #endif
 

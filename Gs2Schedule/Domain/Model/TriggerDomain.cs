@@ -346,24 +346,34 @@ namespace Gs2.Gs2Schedule.Domain.Model
         public async Task<Gs2.Gs2Schedule.Model.Trigger> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Schedule.Model.Trigger).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.TriggerName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Trigger>(
+                        (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Schedule.Model.Trigger).CacheKey(
+                            this.TriggerName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Schedule.Model.Trigger).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.TriggerName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Schedule.Model.Trigger).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.TriggerName,
+                    () => this.GetAsync(
+                        new GetTriggerByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Schedule.Model.Trigger).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.TriggerName,
-                () => this.GetAsync(
-                    new GetTriggerByUserIdRequest()
-                )
-            );
         }
         #endif
 

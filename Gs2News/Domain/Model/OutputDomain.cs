@@ -182,24 +182,34 @@ namespace Gs2.Gs2News.Domain.Model
         public async Task<Gs2.Gs2News.Model.Output> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2News.Model.Output).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UploadToken,
-                this.OutputName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.Output>(
+                        (null as Gs2.Gs2News.Model.Output).CacheParentKey(
+                            this.NamespaceName,
+                            this.UploadToken
+                        ),
+                        (null as Gs2.Gs2News.Model.Output).CacheKey(
+                            this.OutputName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2News.Model.Output).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UploadToken,
+                    this.OutputName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2News.Model.Output).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UploadToken,
+                    this.OutputName,
+                    () => this.GetAsync(
+                        new GetOutputRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2News.Model.Output).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UploadToken,
-                this.OutputName,
-                () => this.GetAsync(
-                    new GetOutputRequest()
-                )
-            );
         }
         #endif
 

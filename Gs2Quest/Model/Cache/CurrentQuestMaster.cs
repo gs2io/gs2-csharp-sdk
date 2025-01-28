@@ -108,31 +108,23 @@ namespace Gs2.Gs2Quest.Model.Cache
             Func<Task<CurrentQuestMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<CurrentQuestMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as CurrentQuestMaster).PutCache(
+                    cache,
+                    namespaceName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "currentQuestMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as CurrentQuestMaster).PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "currentQuestMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

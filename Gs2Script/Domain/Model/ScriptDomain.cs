@@ -340,22 +340,31 @@ namespace Gs2.Gs2Script.Domain.Model
         public async Task<Gs2.Gs2Script.Model.Script> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Script.Model.Script).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ScriptName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Script.Model.Script>(
+                        (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Script.Model.Script).CacheKey(
+                            this.ScriptName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Script.Model.Script).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ScriptName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Script.Model.Script).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ScriptName,
+                    () => this.GetAsync(
+                        new GetScriptRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Script.Model.Script).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ScriptName,
-                () => this.GetAsync(
-                    new GetScriptRequest()
-                )
-            );
         }
         #endif
 

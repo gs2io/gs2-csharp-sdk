@@ -283,22 +283,31 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.FormModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Formation.Model.FormModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.FormModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.FormModelMaster>(
+                        (null as Gs2.Gs2Formation.Model.FormModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Formation.Model.FormModelMaster).CacheKey(
+                            this.FormModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Formation.Model.FormModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.FormModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Formation.Model.FormModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.FormModelName,
+                    () => this.GetAsync(
+                        new GetFormModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Formation.Model.FormModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.FormModelName,
-                () => this.GetAsync(
-                    new GetFormModelMasterRequest()
-                )
-            );
         }
         #endif
 

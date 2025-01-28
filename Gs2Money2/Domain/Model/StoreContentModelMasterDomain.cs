@@ -283,22 +283,31 @@ namespace Gs2.Gs2Money2.Domain.Model
         public async Task<Gs2.Gs2Money2.Model.StoreContentModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ContentName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.StoreContentModelMaster>(
+                        (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheKey(
+                            this.ContentName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ContentName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ContentName,
+                    () => this.GetAsync(
+                        new GetStoreContentModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ContentName,
-                () => this.GetAsync(
-                    new GetStoreContentModelMasterRequest()
-                )
-            );
         }
         #endif
 

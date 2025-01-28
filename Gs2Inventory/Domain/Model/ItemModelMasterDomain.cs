@@ -294,24 +294,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.ItemModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Inventory.Model.ItemModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName,
-                this.ItemName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.ItemModelMaster>(
+                        (null as Gs2.Gs2Inventory.Model.ItemModelMaster).CacheParentKey(
+                            this.NamespaceName,
+                            this.InventoryName
+                        ),
+                        (null as Gs2.Gs2Inventory.Model.ItemModelMaster).CacheKey(
+                            this.ItemName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Inventory.Model.ItemModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Inventory.Model.ItemModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName,
+                    () => this.GetAsync(
+                        new GetItemModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Inventory.Model.ItemModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName,
-                this.ItemName,
-                () => this.GetAsync(
-                    new GetItemModelMasterRequest()
-                )
-            );
         }
         #endif
 

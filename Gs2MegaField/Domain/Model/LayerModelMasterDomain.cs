@@ -294,24 +294,34 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.LayerModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2MegaField.Model.LayerModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.AreaModelName,
-                this.LayerModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.LayerModelMaster>(
+                        (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheParentKey(
+                            this.NamespaceName,
+                            this.AreaModelName
+                        ),
+                        (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheKey(
+                            this.LayerModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2MegaField.Model.LayerModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    this.LayerModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2MegaField.Model.LayerModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    this.LayerModelName,
+                    () => this.GetAsync(
+                        new GetLayerModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2MegaField.Model.LayerModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.AreaModelName,
-                this.LayerModelName,
-                () => this.GetAsync(
-                    new GetLayerModelMasterRequest()
-                )
-            );
         }
         #endif
 

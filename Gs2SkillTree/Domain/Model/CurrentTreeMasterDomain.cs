@@ -318,20 +318,28 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         public async Task<Gs2.Gs2SkillTree.Model.CurrentTreeMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SkillTree.Model.CurrentTreeMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SkillTree.Model.CurrentTreeMaster>(
+                        (null as Gs2.Gs2SkillTree.Model.CurrentTreeMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2SkillTree.Model.CurrentTreeMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SkillTree.Model.CurrentTreeMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2SkillTree.Model.CurrentTreeMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentTreeMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2SkillTree.Model.CurrentTreeMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentTreeMasterRequest()
-                )
-            );
         }
         #endif
 

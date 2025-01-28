@@ -318,20 +318,28 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public async Task<Gs2.Gs2Ranking2.Model.CurrentRankingMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking2.Model.CurrentRankingMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.CurrentRankingMaster>(
+                        (null as Gs2.Gs2Ranking2.Model.CurrentRankingMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Ranking2.Model.CurrentRankingMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking2.Model.CurrentRankingMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Ranking2.Model.CurrentRankingMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentRankingMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Ranking2.Model.CurrentRankingMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentRankingMasterRequest()
-                )
-            );
         }
         #endif
 

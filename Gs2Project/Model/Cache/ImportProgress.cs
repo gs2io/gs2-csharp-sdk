@@ -122,37 +122,27 @@ namespace Gs2.Gs2Project.Model.Cache
             Func<Task<ImportProgress>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ImportProgress>(
-                       self.CacheParentKey(
-                            accountName,
-                            projectName
-                       ),
-                       self.CacheKey(
-                            transactionId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        accountName,
-                        projectName,
-                        transactionId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    accountName,
+                    projectName,
+                    transactionId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ImportProgress).PutCache(
+                    cache,
+                    accountName,
+                    projectName,
+                    transactionId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "importProgress") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ImportProgress).PutCache(
-                        cache,
-                        accountName,
-                        projectName,
-                        transactionId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "importProgress") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

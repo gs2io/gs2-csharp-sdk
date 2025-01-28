@@ -128,40 +128,29 @@ namespace Gs2.Gs2Showcase.Model.Cache
             Func<Task<DisplayItem>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<DisplayItem>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            showcaseName
-                       ),
-                       self.CacheKey(
-                            displayItemId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName,
-                        displayItemId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName,
+                    displayItemId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as DisplayItem).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName,
+                    displayItemId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "displayItem") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as DisplayItem).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName,
-                        displayItemId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "displayItem") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

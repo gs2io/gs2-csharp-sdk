@@ -116,34 +116,25 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             Func<Task<BonusModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<BonusModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            bonusModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        bonusModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    bonusModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as BonusModel).PutCache(
+                    cache,
+                    namespaceName,
+                    bonusModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "bonusModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as BonusModel).PutCache(
-                        cache,
-                        namespaceName,
-                        bonusModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "bonusModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

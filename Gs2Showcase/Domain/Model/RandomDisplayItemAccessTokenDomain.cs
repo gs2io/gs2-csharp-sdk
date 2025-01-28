@@ -293,26 +293,37 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.RandomDisplayItem> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.ShowcaseName,
-                this.DisplayItemName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                        (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.ShowcaseName
+                        ),
+                        (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheKey(
+                            this.DisplayItemName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName,
+                    this.DisplayItemName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName,
+                    this.DisplayItemName,
+                    () => this.GetAsync(
+                        new GetRandomDisplayItemRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.ShowcaseName,
-                this.DisplayItemName,
-                () => this.GetAsync(
-                    new GetRandomDisplayItemRequest()
-                )
-            );
         }
         #endif
 

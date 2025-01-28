@@ -110,31 +110,23 @@ namespace Gs2.Gs2Identifier.Model.Cache
             Func<Task<SecurityPolicy>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SecurityPolicy>(
-                       self.CacheParentKey(
-                       ),
-                       self.CacheKey(
-                            securityPolicyName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        securityPolicyName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    securityPolicyName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SecurityPolicy).PutCache(
+                    cache,
+                    securityPolicyName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "securityPolicy") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SecurityPolicy).PutCache(
-                        cache,
-                        securityPolicyName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "securityPolicy") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

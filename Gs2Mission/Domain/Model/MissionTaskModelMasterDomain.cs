@@ -294,24 +294,34 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.MissionTaskModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Mission.Model.MissionTaskModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.MissionGroupName,
-                this.MissionTaskName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.MissionTaskModelMaster>(
+                        (null as Gs2.Gs2Mission.Model.MissionTaskModelMaster).CacheParentKey(
+                            this.NamespaceName,
+                            this.MissionGroupName
+                        ),
+                        (null as Gs2.Gs2Mission.Model.MissionTaskModelMaster).CacheKey(
+                            this.MissionTaskName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Mission.Model.MissionTaskModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    this.MissionTaskName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Mission.Model.MissionTaskModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    this.MissionTaskName,
+                    () => this.GetAsync(
+                        new GetMissionTaskModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Mission.Model.MissionTaskModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.MissionGroupName,
-                this.MissionTaskName,
-                () => this.GetAsync(
-                    new GetMissionTaskModelMasterRequest()
-                )
-            );
         }
         #endif
 

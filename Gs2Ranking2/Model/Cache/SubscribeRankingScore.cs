@@ -126,40 +126,29 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<SubscribeRankingScore>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SubscribeRankingScore>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            rankingName,
-                            season
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        season
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    season
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SubscribeRankingScore).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    season
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "subscribeRankingScore") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SubscribeRankingScore).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        season
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "subscribeRankingScore") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -175,22 +175,31 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.CounterModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Mission.Model.CounterModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CounterName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.CounterModel>(
+                        (null as Gs2.Gs2Mission.Model.CounterModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Mission.Model.CounterModel).CacheKey(
+                            this.CounterName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Mission.Model.CounterModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CounterName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Mission.Model.CounterModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CounterName,
+                    () => this.GetAsync(
+                        new GetCounterModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Mission.Model.CounterModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CounterName,
-                () => this.GetAsync(
-                    new GetCounterModelRequest()
-                )
-            );
         }
         #endif
 

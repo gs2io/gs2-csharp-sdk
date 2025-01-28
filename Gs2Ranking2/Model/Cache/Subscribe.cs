@@ -122,37 +122,27 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<Subscribe>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Subscribe>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            rankingName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Subscribe).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "subscribe") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Subscribe).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "subscribe") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -122,37 +122,27 @@ namespace Gs2.Gs2MegaField.Model.Cache
             Func<Task<LayerModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<LayerModel>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            areaModelName
-                       ),
-                       self.CacheKey(
-                            layerModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        areaModelName,
-                        layerModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    areaModelName,
+                    layerModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as LayerModel).PutCache(
+                    cache,
+                    namespaceName,
+                    areaModelName,
+                    layerModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "layerModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as LayerModel).PutCache(
-                        cache,
-                        namespaceName,
-                        areaModelName,
-                        layerModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "layerModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

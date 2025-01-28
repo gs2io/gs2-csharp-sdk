@@ -243,26 +243,37 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.FollowUser> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Friend.Model.FollowUser).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.WithProfile ?? default,
-                this.TargetUserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FollowUser>(
+                        (null as Gs2.Gs2Friend.Model.FollowUser).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.WithProfile
+                        ),
+                        (null as Gs2.Gs2Friend.Model.FollowUser).CacheKey(
+                            this.TargetUserId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Friend.Model.FollowUser).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile ?? default,
+                    this.TargetUserId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Friend.Model.FollowUser).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile ?? default,
+                    this.TargetUserId,
+                    () => this.GetAsync(
+                        new GetFollowByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Friend.Model.FollowUser).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.WithProfile ?? default,
-                this.TargetUserId,
-                () => this.GetAsync(
-                    new GetFollowByUserIdRequest()
-                )
-            );
         }
         #endif
 

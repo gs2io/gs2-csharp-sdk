@@ -283,22 +283,31 @@ namespace Gs2.Gs2Buff.Domain.Model
         public async Task<Gs2.Gs2Buff.Model.BuffEntryModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.BuffEntryName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Buff.Model.BuffEntryModelMaster>(
+                        (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheKey(
+                            this.BuffEntryName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.BuffEntryName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.BuffEntryName,
+                    () => this.GetAsync(
+                        new GetBuffEntryModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.BuffEntryName,
-                () => this.GetAsync(
-                    new GetBuffEntryModelMasterRequest()
-                )
-            );
         }
         #endif
 

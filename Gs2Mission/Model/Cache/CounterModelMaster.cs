@@ -116,34 +116,25 @@ namespace Gs2.Gs2Mission.Model.Cache
             Func<Task<CounterModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<CounterModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            counterName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        counterName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    counterName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as CounterModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    counterName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "counterModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as CounterModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        counterName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "counterModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -292,26 +292,37 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.BigItem> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Inventory.Model.BigItem).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.InventoryName,
-                this.ItemName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigItem>(
+                        (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.InventoryName
+                        ),
+                        (null as Gs2.Gs2Inventory.Model.BigItem).CacheKey(
+                            this.ItemName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Inventory.Model.BigItem).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.InventoryName,
+                    this.ItemName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Inventory.Model.BigItem).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.InventoryName,
+                    this.ItemName,
+                    () => this.GetAsync(
+                        new GetBigItemRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Inventory.Model.BigItem).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.InventoryName,
-                this.ItemName,
-                () => this.GetAsync(
-                    new GetBigItemRequest()
-                )
-            );
         }
         #endif
 

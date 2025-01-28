@@ -116,34 +116,25 @@ namespace Gs2.Gs2Inbox.Model.Cache
             Func<Task<GlobalMessageMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GlobalMessageMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            globalMessageName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        globalMessageName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    globalMessageName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GlobalMessageMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    globalMessageName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "globalMessageMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GlobalMessageMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        globalMessageName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "globalMessageMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -102,28 +102,21 @@ namespace Gs2.Gs2Identifier.Model.Cache
             Func<Task<ProjectToken>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ProjectToken>(
-                       self.CacheParentKey(
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ProjectToken).PutCache(
+                    cache
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "projectToken") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ProjectToken).PutCache(
-                        cache
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "projectToken") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

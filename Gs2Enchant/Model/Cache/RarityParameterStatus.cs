@@ -128,40 +128,29 @@ namespace Gs2.Gs2Enchant.Model.Cache
             Func<Task<RarityParameterStatus>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<RarityParameterStatus>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            parameterName,
-                            propertyId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        parameterName,
-                        propertyId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    parameterName,
+                    propertyId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as RarityParameterStatus).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    parameterName,
+                    propertyId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "rarityParameterStatus") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as RarityParameterStatus).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        parameterName,
-                        propertyId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "rarityParameterStatus") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

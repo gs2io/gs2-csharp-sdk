@@ -116,34 +116,25 @@ namespace Gs2.Gs2Log.Model.Cache
             Func<Task<Insight>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Insight>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            insightName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        insightName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    insightName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Insight).PutCache(
+                    cache,
+                    namespaceName,
+                    insightName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "insight") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Insight).PutCache(
-                        cache,
-                        namespaceName,
-                        insightName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "insight") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

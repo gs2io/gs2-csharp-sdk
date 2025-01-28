@@ -318,20 +318,28 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.CurrentMissionMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Mission.Model.CurrentMissionMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
+                        (null as Gs2.Gs2Mission.Model.CurrentMissionMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Mission.Model.CurrentMissionMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Mission.Model.CurrentMissionMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Mission.Model.CurrentMissionMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentMissionMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Mission.Model.CurrentMissionMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentMissionMasterRequest()
-                )
-            );
         }
         #endif
 

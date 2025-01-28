@@ -175,22 +175,31 @@ namespace Gs2.Gs2Deploy.Domain.Model
         public async Task<Gs2.Gs2Deploy.Model.Output> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Deploy.Model.Output).GetCache(
-                this._gs2.Cache,
-                this.StackName,
-                this.OutputName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Deploy.Model.Output>(
+                        (null as Gs2.Gs2Deploy.Model.Output).CacheParentKey(
+                            this.StackName
+                        ),
+                        (null as Gs2.Gs2Deploy.Model.Output).CacheKey(
+                            this.OutputName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Deploy.Model.Output).GetCache(
+                    this._gs2.Cache,
+                    this.StackName,
+                    this.OutputName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Deploy.Model.Output).FetchAsync(
+                    this._gs2.Cache,
+                    this.StackName,
+                    this.OutputName,
+                    () => this.GetAsync(
+                        new GetOutputRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Deploy.Model.Output).FetchAsync(
-                this._gs2.Cache,
-                this.StackName,
-                this.OutputName,
-                () => this.GetAsync(
-                    new GetOutputRequest()
-                )
-            );
         }
         #endif
 

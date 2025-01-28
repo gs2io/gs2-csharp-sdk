@@ -128,40 +128,29 @@ namespace Gs2.Gs2Project.Model.Cache
             Func<Task<ImportErrorLog>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ImportErrorLog>(
-                       self.CacheParentKey(
-                            accountName,
-                            projectName,
-                            transactionId
-                       ),
-                       self.CacheKey(
-                            errorLogName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        accountName,
-                        projectName,
-                        transactionId,
-                        errorLogName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    accountName,
+                    projectName,
+                    transactionId,
+                    errorLogName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ImportErrorLog).PutCache(
+                    cache,
+                    accountName,
+                    projectName,
+                    transactionId,
+                    errorLogName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "importErrorLog") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ImportErrorLog).PutCache(
-                        cache,
-                        accountName,
-                        projectName,
-                        transactionId,
-                        errorLogName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "importErrorLog") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

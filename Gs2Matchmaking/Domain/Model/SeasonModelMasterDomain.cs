@@ -283,22 +283,31 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public async Task<Gs2.Gs2Matchmaking.Model.SeasonModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.SeasonName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.SeasonModelMaster>(
+                        (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).CacheKey(
+                            this.SeasonName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.SeasonName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.SeasonName,
+                    () => this.GetAsync(
+                        new GetSeasonModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Matchmaking.Model.SeasonModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.SeasonName,
-                () => this.GetAsync(
-                    new GetSeasonModelMasterRequest()
-                )
-            );
         }
         #endif
 

@@ -182,24 +182,34 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.LayerModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2MegaField.Model.LayerModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.AreaModelName,
-                this.LayerModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.LayerModel>(
+                        (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
+                            this.NamespaceName,
+                            this.AreaModelName
+                        ),
+                        (null as Gs2.Gs2MegaField.Model.LayerModel).CacheKey(
+                            this.LayerModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2MegaField.Model.LayerModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    this.LayerModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2MegaField.Model.LayerModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    this.LayerModelName,
+                    () => this.GetAsync(
+                        new GetLayerModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2MegaField.Model.LayerModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.AreaModelName,
-                this.LayerModelName,
-                () => this.GetAsync(
-                    new GetLayerModelRequest()
-                )
-            );
         }
         #endif
 

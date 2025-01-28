@@ -116,34 +116,25 @@ namespace Gs2.Gs2Enhance.Model.Cache
             Func<Task<UnleashRateModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<UnleashRateModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            rateName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        rateName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    rateName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as UnleashRateModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    rateName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "unleashRateModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as UnleashRateModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        rateName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "unleashRateModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

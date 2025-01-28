@@ -283,22 +283,31 @@ namespace Gs2.Gs2Idle.Domain.Model
         public async Task<Gs2.Gs2Idle.Model.CategoryModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Idle.Model.CategoryModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CategoryName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Idle.Model.CategoryModelMaster>(
+                        (null as Gs2.Gs2Idle.Model.CategoryModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Idle.Model.CategoryModelMaster).CacheKey(
+                            this.CategoryName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Idle.Model.CategoryModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CategoryName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Idle.Model.CategoryModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CategoryName,
+                    () => this.GetAsync(
+                        new GetCategoryModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Idle.Model.CategoryModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CategoryName,
-                () => this.GetAsync(
-                    new GetCategoryModelMasterRequest()
-                )
-            );
         }
         #endif
 

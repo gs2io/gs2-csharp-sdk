@@ -128,40 +128,29 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<SubscribeUser>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SubscribeUser>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            rankingName
-                       ),
-                       self.CacheKey(
-                            targetUserId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        targetUserId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    targetUserId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SubscribeUser).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    targetUserId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "subscribeUser") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SubscribeUser).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        targetUserId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "subscribeUser") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

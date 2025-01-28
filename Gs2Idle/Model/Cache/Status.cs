@@ -122,37 +122,27 @@ namespace Gs2.Gs2Idle.Model.Cache
             Func<Task<Status>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Status>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            categoryName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Status).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "status") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Status).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "status") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

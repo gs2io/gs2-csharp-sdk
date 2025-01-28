@@ -465,26 +465,37 @@ namespace Gs2.Gs2Experience.Domain.Model
         public async Task<Gs2.Gs2Experience.Model.Status> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Experience.Model.Status).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.ExperienceName,
-                this.PropertyId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.Status>(
+                        (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Experience.Model.Status).CacheKey(
+                            this.ExperienceName,
+                            this.PropertyId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Experience.Model.Status).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ExperienceName,
+                    this.PropertyId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Experience.Model.Status).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ExperienceName,
+                    this.PropertyId,
+                    () => this.GetAsync(
+                        new GetStatusRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Experience.Model.Status).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.ExperienceName,
-                this.PropertyId,
-                () => this.GetAsync(
-                    new GetStatusRequest()
-                )
-            );
         }
         #endif
 

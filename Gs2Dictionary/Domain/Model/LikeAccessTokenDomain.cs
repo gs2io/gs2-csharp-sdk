@@ -175,24 +175,34 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public async Task<Gs2.Gs2Dictionary.Model.Like> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Dictionary.Model.Like).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.EntryModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.Like>(
+                        (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Dictionary.Model.Like).CacheKey(
+                            this.EntryModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Dictionary.Model.Like).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.EntryModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Dictionary.Model.Like).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.EntryModelName,
+                    () => this.GetAsync(
+                        new GetLikeRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Dictionary.Model.Like).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.EntryModelName,
-                () => this.GetAsync(
-                    new GetLikeRequest()
-                )
-            );
         }
         #endif
 

@@ -175,22 +175,31 @@ namespace Gs2.Gs2Inbox.Domain.Model
         public async Task<Gs2.Gs2Inbox.Model.GlobalMessage> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Inbox.Model.GlobalMessage).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GlobalMessageName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inbox.Model.GlobalMessage>(
+                        (null as Gs2.Gs2Inbox.Model.GlobalMessage).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Inbox.Model.GlobalMessage).CacheKey(
+                            this.GlobalMessageName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Inbox.Model.GlobalMessage).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GlobalMessageName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Inbox.Model.GlobalMessage).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GlobalMessageName,
+                    () => this.GetAsync(
+                        new GetGlobalMessageRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Inbox.Model.GlobalMessage).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GlobalMessageName,
-                () => this.GetAsync(
-                    new GetGlobalMessageRequest()
-                )
-            );
         }
         #endif
 

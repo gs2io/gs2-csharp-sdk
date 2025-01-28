@@ -283,22 +283,31 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public async Task<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
+                        (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheKey(
+                            this.RateName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName,
+                    () => this.GetAsync(
+                        new GetIncrementalRateModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName,
-                () => this.GetAsync(
-                    new GetIncrementalRateModelMasterRequest()
-                )
-            );
         }
         #endif
 

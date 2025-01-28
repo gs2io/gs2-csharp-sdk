@@ -175,24 +175,34 @@ namespace Gs2.Gs2Guild.Domain.Model
         public async Task<Gs2.Gs2Guild.Model.LastGuildMasterActivity> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GuildModelName,
-                this.GuildName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.LastGuildMasterActivity>(
+                        (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheParentKey(
+                            this.NamespaceName,
+                            this.GuildModelName,
+                            this.GuildName
+                        ),
+                        (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName,
+                    () => this.GetAsync(
+                        new GetLastGuildMasterActivityRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GuildModelName,
-                this.GuildName,
-                () => this.GetAsync(
-                    new GetLastGuildMasterActivityRequest()
-                )
-            );
         }
         #endif
 

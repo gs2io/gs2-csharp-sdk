@@ -170,16 +170,26 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         public async Task<Gs2.Gs2SeasonRating.Model.Vote> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SeasonRating.Model.Vote).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.SeasonName,
-                this.SessionName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SeasonRating.Model.Vote>(
+                        (null as Gs2.Gs2SeasonRating.Model.Vote).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2SeasonRating.Model.Vote).CacheKey(
+                            this.SeasonName,
+                            this.SessionName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SeasonRating.Model.Vote).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.SeasonName,
+                    this.SessionName
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

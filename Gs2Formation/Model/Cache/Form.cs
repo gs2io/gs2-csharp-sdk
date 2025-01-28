@@ -128,40 +128,29 @@ namespace Gs2.Gs2Formation.Model.Cache
             Func<Task<Form>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Form>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            moldModelName
-                       ),
-                       self.CacheKey(
-                            index
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        moldModelName,
-                        index
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    moldModelName,
+                    index
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Form).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    moldModelName,
+                    index
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "form") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Form).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        moldModelName,
-                        index
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "form") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

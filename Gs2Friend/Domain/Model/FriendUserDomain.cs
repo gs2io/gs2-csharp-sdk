@@ -189,26 +189,37 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.FriendUser> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Friend.Model.FriendUser).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.WithProfile ?? default,
-                this.TargetUserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.WithProfile
+                        ),
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
+                            this.TargetUserId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Friend.Model.FriendUser).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile ?? default,
+                    this.TargetUserId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Friend.Model.FriendUser).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile ?? default,
+                    this.TargetUserId,
+                    () => this.GetAsync(
+                        new GetFriendByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Friend.Model.FriendUser).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.WithProfile ?? default,
-                this.TargetUserId,
-                () => this.GetAsync(
-                    new GetFriendByUserIdRequest()
-                )
-            );
         }
         #endif
 

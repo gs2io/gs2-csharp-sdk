@@ -231,22 +231,31 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         public async Task<Gs2.Gs2StateMachine.Model.StateMachineMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.Version ?? default
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2StateMachine.Model.StateMachineMaster>(
+                        (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheKey(
+                            this.Version
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.Version ?? default
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.Version ?? default,
+                    () => this.GetAsync(
+                        new GetStateMachineMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.Version ?? default,
-                () => this.GetAsync(
-                    new GetStateMachineMasterRequest()
-                )
-            );
         }
         #endif
 

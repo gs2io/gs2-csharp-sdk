@@ -196,28 +196,40 @@ namespace Gs2.Gs2Money2.Domain.Model
         public async Task<Gs2.Gs2Money2.Model.DailyTransactionHistory> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.Year ?? default,
-                this.Month ?? default,
-                this.Day ?? default,
-                this.Currency
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.DailyTransactionHistory>(
+                        (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheKey(
+                            this.Year,
+                            this.Month,
+                            this.Day,
+                            this.Currency
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.Year ?? default,
+                    this.Month ?? default,
+                    this.Day ?? default,
+                    this.Currency
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.Year ?? default,
+                    this.Month ?? default,
+                    this.Day ?? default,
+                    this.Currency,
+                    () => this.GetAsync(
+                        new GetDailyTransactionHistoryRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.Year ?? default,
-                this.Month ?? default,
-                this.Day ?? default,
-                this.Currency,
-                () => this.GetAsync(
-                    new GetDailyTransactionHistoryRequest()
-                )
-            );
         }
         #endif
 

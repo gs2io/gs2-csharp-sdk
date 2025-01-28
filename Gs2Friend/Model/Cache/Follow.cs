@@ -122,37 +122,27 @@ namespace Gs2.Gs2Friend.Model.Cache
             Func<Task<Follow>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Follow>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            withProfile
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        withProfile
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    withProfile
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Follow).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    withProfile
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "follow") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Follow).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        withProfile
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "follow") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

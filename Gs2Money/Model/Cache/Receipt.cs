@@ -122,37 +122,27 @@ namespace Gs2.Gs2Money.Model.Cache
             Func<Task<Receipt>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Receipt>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            transactionId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        transactionId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    transactionId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Receipt).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    transactionId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "receipt") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Receipt).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        transactionId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "receipt") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

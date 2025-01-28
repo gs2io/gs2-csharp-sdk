@@ -452,26 +452,37 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.PropertyForm> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyForm).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.PropertyFormModelName,
-                this.PropertyId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.PropertyForm>(
+                        (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Formation.Model.PropertyForm).CacheKey(
+                            this.PropertyFormModelName,
+                            this.PropertyId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyForm).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.PropertyFormModelName,
+                    this.PropertyId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Formation.Model.PropertyForm).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.PropertyFormModelName,
+                    this.PropertyId,
+                    () => this.GetAsync(
+                        new GetPropertyFormByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Formation.Model.PropertyForm).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.PropertyFormModelName,
-                this.PropertyId,
-                () => this.GetAsync(
-                    new GetPropertyFormByUserIdRequest()
-                )
-            );
         }
         #endif
 

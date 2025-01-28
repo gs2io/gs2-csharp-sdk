@@ -182,24 +182,34 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.MissionTaskModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Mission.Model.MissionTaskModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.MissionGroupName,
-                this.MissionTaskName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.MissionTaskModel>(
+                        (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheParentKey(
+                            this.NamespaceName,
+                            this.MissionGroupName
+                        ),
+                        (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheKey(
+                            this.MissionTaskName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Mission.Model.MissionTaskModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    this.MissionTaskName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Mission.Model.MissionTaskModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    this.MissionTaskName,
+                    () => this.GetAsync(
+                        new GetMissionTaskModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Mission.Model.MissionTaskModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.MissionGroupName,
-                this.MissionTaskName,
-                () => this.GetAsync(
-                    new GetMissionTaskModelRequest()
-                )
-            );
         }
         #endif
 

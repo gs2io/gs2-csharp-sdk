@@ -188,7 +188,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await TakeOversAsync().ToArrayAsync());
+                            callback.Invoke(await TakeOversAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -308,7 +309,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await PlatformIdsAsync().ToArrayAsync());
+                            callback.Invoke(await PlatformIdsAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -397,15 +399,24 @@ namespace Gs2.Gs2Account.Domain.Model
         public async Task<Gs2.Gs2Account.Model.Account> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.Account>(
+                        (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Account.Model.Account).CacheKey(
+                            this.UserId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 
@@ -453,17 +464,24 @@ namespace Gs2.Gs2Account.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+            #else
+                    async Task Impl() {
+            #endif
                         try {
-                            await UniTask.SwitchToMainThread();
                             await ModelAsync();
                         }
                         catch (System.Exception) {
                             // ignored
                         }
                     }
+            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
+            #else
+                    Impl();
+            #endif
         #endif
                 }
             );

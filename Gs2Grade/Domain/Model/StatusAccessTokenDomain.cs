@@ -408,26 +408,37 @@ namespace Gs2.Gs2Grade.Domain.Model
         public async Task<Gs2.Gs2Grade.Model.Status> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Grade.Model.Status).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.GradeName,
-                this.PropertyId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.Status>(
+                        (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Grade.Model.Status).CacheKey(
+                            this.GradeName,
+                            this.PropertyId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Grade.Model.Status).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GradeName,
+                    this.PropertyId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Grade.Model.Status).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GradeName,
+                    this.PropertyId,
+                    () => this.GetAsync(
+                        new GetStatusRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Grade.Model.Status).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.GradeName,
-                this.PropertyId,
-                () => this.GetAsync(
-                    new GetStatusRequest()
-                )
-            );
         }
         #endif
 

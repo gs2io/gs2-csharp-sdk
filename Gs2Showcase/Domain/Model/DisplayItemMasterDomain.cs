@@ -110,14 +110,22 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.DisplayItemMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.DisplayItemMaster>(
+                        (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

@@ -122,37 +122,27 @@ namespace Gs2.Gs2Showcase.Model.Cache
             Func<Task<RandomShowcase>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<RandomShowcase>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            showcaseName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as RandomShowcase).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "randomShowcase") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as RandomShowcase).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "randomShowcase") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

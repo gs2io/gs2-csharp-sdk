@@ -182,24 +182,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.ItemModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Inventory.Model.ItemModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName,
-                this.ItemName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.ItemModel>(
+                        (null as Gs2.Gs2Inventory.Model.ItemModel).CacheParentKey(
+                            this.NamespaceName,
+                            this.InventoryName
+                        ),
+                        (null as Gs2.Gs2Inventory.Model.ItemModel).CacheKey(
+                            this.ItemName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Inventory.Model.ItemModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Inventory.Model.ItemModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName,
+                    () => this.GetAsync(
+                        new GetItemModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Inventory.Model.ItemModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName,
-                this.ItemName,
-                () => this.GetAsync(
-                    new GetItemModelRequest()
-                )
-            );
         }
         #endif
 

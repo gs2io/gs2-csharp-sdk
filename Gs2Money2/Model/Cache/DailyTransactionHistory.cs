@@ -134,43 +134,31 @@ namespace Gs2.Gs2Money2.Model.Cache
             Func<Task<DailyTransactionHistory>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<DailyTransactionHistory>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            year,
-                            month,
-                            day,
-                            currency
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        year,
-                        month,
-                        day,
-                        currency
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    year,
+                    month,
+                    day,
+                    currency
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as DailyTransactionHistory).PutCache(
+                    cache,
+                    namespaceName,
+                    year,
+                    month,
+                    day,
+                    currency
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "dailyTransactionHistory") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as DailyTransactionHistory).PutCache(
-                        cache,
-                        namespaceName,
-                        year,
-                        month,
-                        day,
-                        currency
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "dailyTransactionHistory") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

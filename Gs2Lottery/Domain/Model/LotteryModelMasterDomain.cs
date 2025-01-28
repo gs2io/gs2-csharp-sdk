@@ -283,22 +283,31 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public async Task<Gs2.Gs2Lottery.Model.LotteryModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.LotteryName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
+                        (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheKey(
+                            this.LotteryName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.LotteryName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.LotteryName,
+                    () => this.GetAsync(
+                        new GetLotteryModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.LotteryName,
-                () => this.GetAsync(
-                    new GetLotteryModelMasterRequest()
-                )
-            );
         }
         #endif
 

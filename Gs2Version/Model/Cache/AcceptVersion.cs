@@ -122,37 +122,27 @@ namespace Gs2.Gs2Version.Model.Cache
             Func<Task<AcceptVersion>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<AcceptVersion>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            versionName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        versionName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    versionName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as AcceptVersion).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    versionName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "acceptVersion") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as AcceptVersion).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        versionName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "acceptVersion") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

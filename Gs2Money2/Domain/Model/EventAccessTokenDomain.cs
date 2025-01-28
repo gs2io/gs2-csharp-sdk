@@ -111,16 +111,26 @@ namespace Gs2.Gs2Money2.Domain.Model
         public async Task<Gs2.Gs2Money2.Model.Event> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Money2.Model.Event).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.TransactionId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.Event>(
+                        (null as Gs2.Gs2Money2.Model.Event).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Money2.Model.Event).CacheKey(
+                            this.TransactionId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Money2.Model.Event).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.TransactionId
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

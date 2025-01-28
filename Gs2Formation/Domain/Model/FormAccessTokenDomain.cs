@@ -416,26 +416,37 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.Form> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Formation.Model.Form).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.MoldModelName,
-                this.Index ?? default
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.Form>(
+                        (null as Gs2.Gs2Formation.Model.Form).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.MoldModelName
+                        ),
+                        (null as Gs2.Gs2Formation.Model.Form).CacheKey(
+                            this.Index
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Formation.Model.Form).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.MoldModelName,
+                    this.Index ?? default
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Formation.Model.Form).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.MoldModelName,
+                    this.Index ?? default,
+                    () => this.GetAsync(
+                        new GetFormRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Formation.Model.Form).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.MoldModelName,
-                this.Index ?? default,
-                () => this.GetAsync(
-                    new GetFormRequest()
-                )
-            );
         }
         #endif
 

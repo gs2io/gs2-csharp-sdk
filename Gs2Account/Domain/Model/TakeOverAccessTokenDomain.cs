@@ -400,24 +400,34 @@ namespace Gs2.Gs2Account.Domain.Model
         public async Task<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Account.Model.TakeOver).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.Type ?? default
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.TakeOver>(
+                        (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
+                            this.Type
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Account.Model.TakeOver).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Type ?? default
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Account.Model.TakeOver).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Type ?? default,
+                    () => this.GetAsync(
+                        new GetTakeOverRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Account.Model.TakeOver).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.Type ?? default,
-                () => this.GetAsync(
-                    new GetTakeOverRequest()
-                )
-            );
         }
         #endif
 
@@ -467,7 +477,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

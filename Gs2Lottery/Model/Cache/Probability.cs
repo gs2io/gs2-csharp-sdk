@@ -128,40 +128,29 @@ namespace Gs2.Gs2Lottery.Model.Cache
             Func<Task<Probability>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Probability>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            lotteryName
-                       ),
-                       self.CacheKey(
-                            prizeId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        lotteryName,
-                        prizeId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    lotteryName,
+                    prizeId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Probability).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    lotteryName,
+                    prizeId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "probability") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Probability).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        lotteryName,
-                        prizeId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "probability") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

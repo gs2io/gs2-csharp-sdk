@@ -318,20 +318,28 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public async Task<Gs2.Gs2Matchmaking.Model.CurrentModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.CurrentModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.CurrentModelMaster>(
+                        (null as Gs2.Gs2Matchmaking.Model.CurrentModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Matchmaking.Model.CurrentModelMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.CurrentModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Matchmaking.Model.CurrentModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Matchmaking.Model.CurrentModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentModelMasterRequest()
-                )
-            );
         }
         #endif
 

@@ -272,20 +272,28 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public async Task<Gs2.Gs2Identifier.Model.SecurityPolicy> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Identifier.Model.SecurityPolicy).GetCache(
-                this._gs2.Cache,
-                this.SecurityPolicyName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                        ),
+                        (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheKey(
+                            this.SecurityPolicyName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Identifier.Model.SecurityPolicy).GetCache(
+                    this._gs2.Cache,
+                    this.SecurityPolicyName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Identifier.Model.SecurityPolicy).FetchAsync(
+                    this._gs2.Cache,
+                    this.SecurityPolicyName,
+                    () => this.GetAsync(
+                        new GetSecurityPolicyRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Identifier.Model.SecurityPolicy).FetchAsync(
-                this._gs2.Cache,
-                this.SecurityPolicyName,
-                () => this.GetAsync(
-                    new GetSecurityPolicyRequest()
-                )
-            );
         }
         #endif
 

@@ -175,22 +175,31 @@ namespace Gs2.Gs2Money2.Domain.Model
         public async Task<Gs2.Gs2Money2.Model.UnusedBalance> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Money2.Model.UnusedBalance).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.Currency
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.UnusedBalance>(
+                        (null as Gs2.Gs2Money2.Model.UnusedBalance).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Money2.Model.UnusedBalance).CacheKey(
+                            this.Currency
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Money2.Model.UnusedBalance).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.Currency
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Money2.Model.UnusedBalance).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.Currency,
+                    () => this.GetAsync(
+                        new GetUnusedBalanceRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Money2.Model.UnusedBalance).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.Currency,
-                () => this.GetAsync(
-                    new GetUnusedBalanceRequest()
-                )
-            );
         }
         #endif
 

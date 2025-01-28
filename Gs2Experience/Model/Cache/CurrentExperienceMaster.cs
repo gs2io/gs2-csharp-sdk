@@ -108,31 +108,23 @@ namespace Gs2.Gs2Experience.Model.Cache
             Func<Task<CurrentExperienceMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<CurrentExperienceMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as CurrentExperienceMaster).PutCache(
+                    cache,
+                    namespaceName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "currentExperienceMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as CurrentExperienceMaster).PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "currentExperienceMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

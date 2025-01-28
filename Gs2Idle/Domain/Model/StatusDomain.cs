@@ -476,24 +476,34 @@ namespace Gs2.Gs2Idle.Domain.Model
         public async Task<Gs2.Gs2Idle.Model.Status> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Idle.Model.Status).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CategoryName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Idle.Model.Status>(
+                        (null as Gs2.Gs2Idle.Model.Status).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Idle.Model.Status).CacheKey(
+                            this.CategoryName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Idle.Model.Status).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Idle.Model.Status).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    () => this.GetAsync(
+                        new GetStatusByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Idle.Model.Status).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CategoryName,
-                () => this.GetAsync(
-                    new GetStatusByUserIdRequest()
-                )
-            );
         }
         #endif
 

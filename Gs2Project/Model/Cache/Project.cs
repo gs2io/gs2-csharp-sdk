@@ -116,34 +116,25 @@ namespace Gs2.Gs2Project.Model.Cache
             Func<Task<Project>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Project>(
-                       self.CacheParentKey(
-                            accountName
-                       ),
-                       self.CacheKey(
-                            projectName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        accountName,
-                        projectName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    accountName,
+                    projectName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Project).PutCache(
+                    cache,
+                    accountName,
+                    projectName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "project") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Project).PutCache(
-                        cache,
-                        accountName,
-                        projectName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "project") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

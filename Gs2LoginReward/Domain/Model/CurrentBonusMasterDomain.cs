@@ -318,20 +318,28 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         public async Task<Gs2.Gs2LoginReward.Model.CurrentBonusMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2LoginReward.Model.CurrentBonusMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2LoginReward.Model.CurrentBonusMaster>(
+                        (null as Gs2.Gs2LoginReward.Model.CurrentBonusMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2LoginReward.Model.CurrentBonusMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2LoginReward.Model.CurrentBonusMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2LoginReward.Model.CurrentBonusMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentBonusMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2LoginReward.Model.CurrentBonusMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentBonusMasterRequest()
-                )
-            );
         }
         #endif
 

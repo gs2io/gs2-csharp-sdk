@@ -238,26 +238,37 @@ namespace Gs2.Gs2Guild.Domain.Model
         public async Task<Gs2.Gs2Guild.Model.JoinedGuild> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Guild.Model.JoinedGuild).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.GuildModelName,
-                this.GuildName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.JoinedGuild>(
+                        (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheKey(
+                            this.GuildModelName,
+                            this.GuildName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Guild.Model.JoinedGuild).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GuildModelName,
+                    this.GuildName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Guild.Model.JoinedGuild).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GuildModelName,
+                    this.GuildName,
+                    () => this.GetAsync(
+                        new GetJoinedGuildRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Guild.Model.JoinedGuild).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.GuildModelName,
-                this.GuildName,
-                () => this.GetAsync(
-                    new GetJoinedGuildRequest()
-                )
-            );
         }
         #endif
 

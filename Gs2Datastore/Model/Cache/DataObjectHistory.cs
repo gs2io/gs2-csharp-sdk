@@ -128,40 +128,29 @@ namespace Gs2.Gs2Datastore.Model.Cache
             Func<Task<DataObjectHistory>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<DataObjectHistory>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            dataObjectName
-                       ),
-                       self.CacheKey(
-                            generation
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        dataObjectName,
-                        generation
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    dataObjectName,
+                    generation
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as DataObjectHistory).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    dataObjectName,
+                    generation
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "dataObjectHistory") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as DataObjectHistory).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        dataObjectName,
-                        generation
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "dataObjectHistory") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

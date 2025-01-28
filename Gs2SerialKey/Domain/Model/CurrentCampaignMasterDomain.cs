@@ -318,20 +318,28 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public async Task<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster>(
+                        (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentCampaignMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentCampaignMasterRequest()
-                )
-            );
         }
         #endif
 

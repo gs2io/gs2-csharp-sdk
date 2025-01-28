@@ -116,34 +116,25 @@ namespace Gs2.Gs2Showcase.Model.Cache
             Func<Task<SalesItemMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SalesItemMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            salesItemName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        salesItemName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    salesItemName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SalesItemMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    salesItemName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "salesItemMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SalesItemMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        salesItemName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "salesItemMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

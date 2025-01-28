@@ -108,31 +108,23 @@ namespace Gs2.Gs2Mission.Model.Cache
             Func<Task<CurrentMissionMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<CurrentMissionMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as CurrentMissionMaster).PutCache(
+                    cache,
+                    namespaceName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "currentMissionMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as CurrentMissionMaster).PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "currentMissionMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

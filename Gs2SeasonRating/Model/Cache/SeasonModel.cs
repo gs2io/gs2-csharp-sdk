@@ -116,34 +116,25 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             Func<Task<SeasonModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SeasonModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            seasonName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        seasonName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    seasonName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SeasonModel).PutCache(
+                    cache,
+                    namespaceName,
+                    seasonName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "seasonModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SeasonModel).PutCache(
-                        cache,
-                        namespaceName,
-                        seasonName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "seasonModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

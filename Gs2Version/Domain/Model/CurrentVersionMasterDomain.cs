@@ -318,20 +318,28 @@ namespace Gs2.Gs2Version.Domain.Model
         public async Task<Gs2.Gs2Version.Model.CurrentVersionMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Version.Model.CurrentVersionMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.CurrentVersionMaster>(
+                        (null as Gs2.Gs2Version.Model.CurrentVersionMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Version.Model.CurrentVersionMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Version.Model.CurrentVersionMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Version.Model.CurrentVersionMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentVersionMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Version.Model.CurrentVersionMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentVersionMasterRequest()
-                )
-            );
         }
         #endif
 

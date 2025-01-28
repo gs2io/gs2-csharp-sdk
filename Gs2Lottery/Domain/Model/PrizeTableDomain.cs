@@ -288,22 +288,31 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public async Task<Gs2.Gs2Lottery.Model.PrizeTable> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Lottery.Model.PrizeTable).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PrizeTableName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.PrizeTable>(
+                        (null as Gs2.Gs2Lottery.Model.PrizeTable).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Lottery.Model.PrizeTable).CacheKey(
+                            this.PrizeTableName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Lottery.Model.PrizeTable).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PrizeTableName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Lottery.Model.PrizeTable).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PrizeTableName,
+                    () => this.GetAsync(
+                        new GetPrizeTableRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Lottery.Model.PrizeTable).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PrizeTableName,
-                () => this.GetAsync(
-                    new GetPrizeTableRequest()
-                )
-            );
         }
         #endif
 

@@ -287,22 +287,31 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.BigInventoryModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Inventory.Model.BigInventoryModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigInventoryModel>(
+                        (null as Gs2.Gs2Inventory.Model.BigInventoryModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Inventory.Model.BigInventoryModel).CacheKey(
+                            this.InventoryName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Inventory.Model.BigInventoryModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Inventory.Model.BigInventoryModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    () => this.GetAsync(
+                        new GetBigInventoryModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Inventory.Model.BigInventoryModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName,
-                () => this.GetAsync(
-                    new GetBigInventoryModelRequest()
-                )
-            );
         }
         #endif
 

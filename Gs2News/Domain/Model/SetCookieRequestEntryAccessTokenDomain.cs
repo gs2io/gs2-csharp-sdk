@@ -115,17 +115,28 @@ namespace Gs2.Gs2News.Domain.Model
         public async Task<Gs2.Gs2News.Model.SetCookieRequestEntry> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2News.Model.SetCookieRequestEntry).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.Key,
-                this.Value
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.SetCookieRequestEntry>(
+                        (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheKey(
+                            this.Key,
+                            this.Value
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2News.Model.SetCookieRequestEntry).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Key,
+                    this.Value
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

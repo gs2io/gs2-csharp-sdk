@@ -589,24 +589,34 @@ namespace Gs2.Gs2Chat.Domain.Model
         public async Task<Gs2.Gs2Chat.Model.Room> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Chat.Model.Room).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.RoomName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Room>(
+                        (null as Gs2.Gs2Chat.Model.Room).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Chat.Model.Room).CacheKey(
+                            this.RoomName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Chat.Model.Room).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Chat.Model.Room).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RoomName,
+                    () => this.GetAsync(
+                        new GetRoomRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Chat.Model.Room).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.RoomName,
-                () => this.GetAsync(
-                    new GetRoomRequest()
-                )
-            );
         }
         #endif
 

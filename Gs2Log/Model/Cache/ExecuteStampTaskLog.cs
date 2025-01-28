@@ -108,31 +108,23 @@ namespace Gs2.Gs2Log.Model.Cache
             Func<Task<ExecuteStampTaskLog>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ExecuteStampTaskLog>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ExecuteStampTaskLog).PutCache(
+                    cache,
+                    namespaceName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "executeStampTaskLog") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ExecuteStampTaskLog).PutCache(
-                        cache,
-                        namespaceName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "executeStampTaskLog") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

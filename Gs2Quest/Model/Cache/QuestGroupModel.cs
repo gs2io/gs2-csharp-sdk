@@ -116,34 +116,25 @@ namespace Gs2.Gs2Quest.Model.Cache
             Func<Task<QuestGroupModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<QuestGroupModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            questGroupName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        questGroupName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    questGroupName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as QuestGroupModel).PutCache(
+                    cache,
+                    namespaceName,
+                    questGroupName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "questGroupModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as QuestGroupModel).PutCache(
-                        cache,
-                        namespaceName,
-                        questGroupName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "questGroupModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

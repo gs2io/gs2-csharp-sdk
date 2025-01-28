@@ -182,26 +182,37 @@ namespace Gs2.Gs2Datastore.Domain.Model
         public async Task<Gs2.Gs2Datastore.Model.DataObjectHistory> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Datastore.Model.DataObjectHistory).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.DataObjectName,
-                this.Generation
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                        (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.DataObjectName
+                        ),
+                        (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheKey(
+                            this.Generation
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Datastore.Model.DataObjectHistory).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName,
+                    this.Generation
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Datastore.Model.DataObjectHistory).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName,
+                    this.Generation,
+                    () => this.GetAsync(
+                        new GetDataObjectHistoryRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Datastore.Model.DataObjectHistory).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.DataObjectName,
-                this.Generation,
-                () => this.GetAsync(
-                    new GetDataObjectHistoryRequest()
-                )
-            );
         }
         #endif
 

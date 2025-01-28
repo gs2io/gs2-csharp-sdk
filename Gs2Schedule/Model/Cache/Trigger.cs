@@ -122,37 +122,27 @@ namespace Gs2.Gs2Schedule.Model.Cache
             Func<Task<Trigger>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Trigger>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            triggerName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        triggerName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    triggerName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Trigger).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    triggerName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "trigger") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Trigger).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        triggerName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "trigger") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -102,28 +102,21 @@ namespace Gs2.Gs2Auth.Model.Cache
             Func<Task<AccessToken>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<AccessToken>(
-                       self.CacheParentKey(
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as AccessToken).PutCache(
+                    cache
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "accessToken") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as AccessToken).PutCache(
-                        cache
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "accessToken") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

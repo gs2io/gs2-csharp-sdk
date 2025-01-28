@@ -283,22 +283,31 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public async Task<Gs2.Gs2Distributor.Model.DistributorModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.DistributorName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
+                        (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).CacheKey(
+                            this.DistributorName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.DistributorName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.DistributorName,
+                    () => this.GetAsync(
+                        new GetDistributorModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.DistributorName,
-                () => this.GetAsync(
-                    new GetDistributorModelMasterRequest()
-                )
-            );
         }
         #endif
 

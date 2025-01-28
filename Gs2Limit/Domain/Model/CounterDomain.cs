@@ -415,26 +415,37 @@ namespace Gs2.Gs2Limit.Domain.Model
         public async Task<Gs2.Gs2Limit.Model.Counter> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Limit.Model.Counter).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.LimitName,
-                this.CounterName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.Counter>(
+                        (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Limit.Model.Counter).CacheKey(
+                            this.LimitName,
+                            this.CounterName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Limit.Model.Counter).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LimitName,
+                    this.CounterName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Limit.Model.Counter).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LimitName,
+                    this.CounterName,
+                    () => this.GetAsync(
+                        new GetCounterByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Limit.Model.Counter).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.LimitName,
-                this.CounterName,
-                () => this.GetAsync(
-                    new GetCounterByUserIdRequest()
-                )
-            );
         }
         #endif
 

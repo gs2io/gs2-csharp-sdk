@@ -182,24 +182,34 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.BigItemModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Inventory.Model.BigItemModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName,
-                this.ItemName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigItemModel>(
+                        (null as Gs2.Gs2Inventory.Model.BigItemModel).CacheParentKey(
+                            this.NamespaceName,
+                            this.InventoryName
+                        ),
+                        (null as Gs2.Gs2Inventory.Model.BigItemModel).CacheKey(
+                            this.ItemName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Inventory.Model.BigItemModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Inventory.Model.BigItemModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName,
+                    () => this.GetAsync(
+                        new GetBigItemModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Inventory.Model.BigItemModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InventoryName,
-                this.ItemName,
-                () => this.GetAsync(
-                    new GetBigItemModelRequest()
-                )
-            );
         }
         #endif
 

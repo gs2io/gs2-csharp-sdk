@@ -571,16 +571,26 @@ namespace Gs2.Gs2Datastore.Domain.Model
         public async Task<Gs2.Gs2Datastore.Model.DataObject> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Datastore.Model.DataObject).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.DataObjectName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Datastore.Model.DataObject>(
+                        (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Datastore.Model.DataObject).CacheKey(
+                            this.DataObjectName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Datastore.Model.DataObject).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

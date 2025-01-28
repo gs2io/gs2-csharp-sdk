@@ -318,20 +318,28 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public async Task<Gs2.Gs2Enhance.Model.CurrentRateMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Enhance.Model.CurrentRateMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.CurrentRateMaster>(
+                        (null as Gs2.Gs2Enhance.Model.CurrentRateMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Enhance.Model.CurrentRateMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Enhance.Model.CurrentRateMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Enhance.Model.CurrentRateMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentRateMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Enhance.Model.CurrentRateMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentRateMasterRequest()
-                )
-            );
         }
         #endif
 

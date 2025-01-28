@@ -283,22 +283,31 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public async Task<Gs2.Gs2SerialKey.Model.CampaignModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CampaignModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                        (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheKey(
+                            this.CampaignModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CampaignModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CampaignModelName,
+                    () => this.GetAsync(
+                        new GetCampaignModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CampaignModelName,
-                () => this.GetAsync(
-                    new GetCampaignModelMasterRequest()
-                )
-            );
         }
         #endif
 

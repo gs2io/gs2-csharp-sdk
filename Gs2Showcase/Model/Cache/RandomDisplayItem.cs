@@ -128,40 +128,29 @@ namespace Gs2.Gs2Showcase.Model.Cache
             Func<Task<RandomDisplayItem>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<RandomDisplayItem>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            showcaseName
-                       ),
-                       self.CacheKey(
-                            displayItemName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName,
-                        displayItemName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName,
+                    displayItemName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as RandomDisplayItem).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName,
+                    displayItemName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "randomDisplayItem") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as RandomDisplayItem).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName,
-                        displayItemName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "randomDisplayItem") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

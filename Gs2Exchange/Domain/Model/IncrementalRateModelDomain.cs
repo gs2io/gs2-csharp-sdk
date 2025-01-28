@@ -175,22 +175,31 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public async Task<Gs2.Gs2Exchange.Model.IncrementalRateModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
+                        (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).CacheKey(
+                            this.RateName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName,
+                    () => this.GetAsync(
+                        new GetIncrementalRateModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Exchange.Model.IncrementalRateModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName,
-                () => this.GetAsync(
-                    new GetIncrementalRateModelRequest()
-                )
-            );
         }
         #endif
 

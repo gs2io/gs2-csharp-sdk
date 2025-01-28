@@ -175,22 +175,31 @@ namespace Gs2.Gs2Version.Domain.Model
         public async Task<Gs2.Gs2Version.Model.VersionModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Version.Model.VersionModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.VersionName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.VersionModel>(
+                        (null as Gs2.Gs2Version.Model.VersionModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Version.Model.VersionModel).CacheKey(
+                            this.VersionName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Version.Model.VersionModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.VersionName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Version.Model.VersionModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.VersionName,
+                    () => this.GetAsync(
+                        new GetVersionModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Version.Model.VersionModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.VersionName,
-                () => this.GetAsync(
-                    new GetVersionModelRequest()
-                )
-            );
         }
         #endif
 

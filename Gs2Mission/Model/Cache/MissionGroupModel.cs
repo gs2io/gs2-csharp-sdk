@@ -116,34 +116,25 @@ namespace Gs2.Gs2Mission.Model.Cache
             Func<Task<MissionGroupModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<MissionGroupModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            missionGroupName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        missionGroupName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    missionGroupName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as MissionGroupModel).PutCache(
+                    cache,
+                    namespaceName,
+                    missionGroupName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "missionGroupModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as MissionGroupModel).PutCache(
-                        cache,
-                        namespaceName,
-                        missionGroupName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "missionGroupModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

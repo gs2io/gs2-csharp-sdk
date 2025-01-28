@@ -172,16 +172,26 @@ namespace Gs2.Gs2Money.Domain.Model
         public async Task<Gs2.Gs2Money.Model.Receipt> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Money.Model.Receipt).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.TransactionId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Receipt>(
+                        (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Money.Model.Receipt).CacheKey(
+                            this.TransactionId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Money.Model.Receipt).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.TransactionId
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

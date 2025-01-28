@@ -126,40 +126,29 @@ namespace Gs2.Gs2Ranking.Model.Cache
             Func<Task<Subscribe>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Subscribe>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            categoryName,
-                            additionalScopeName
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName,
-                        additionalScopeName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName,
+                    additionalScopeName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Subscribe).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName,
+                    additionalScopeName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "subscribe") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Subscribe).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName,
-                        additionalScopeName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "subscribe") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -170,16 +170,26 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public async Task<Gs2.Gs2Matchmaking.Model.Vote> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Vote).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RatingName,
-                this.GatheringName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Vote>(
+                        (null as Gs2.Gs2Matchmaking.Model.Vote).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Matchmaking.Model.Vote).CacheKey(
+                            this.RatingName,
+                            this.GatheringName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Vote).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RatingName,
+                    this.GatheringName
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

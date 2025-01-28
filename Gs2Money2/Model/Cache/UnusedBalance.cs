@@ -116,34 +116,25 @@ namespace Gs2.Gs2Money2.Model.Cache
             Func<Task<UnusedBalance>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<UnusedBalance>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            currency
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        currency
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    currency
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as UnusedBalance).PutCache(
+                    cache,
+                    namespaceName,
+                    currency
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "unusedBalance") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as UnusedBalance).PutCache(
-                        cache,
-                        namespaceName,
-                        currency
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "unusedBalance") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

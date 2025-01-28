@@ -250,28 +250,40 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public async Task<Gs2.Gs2Ranking.Model.SubscribeUser> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking.Model.SubscribeUser).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CategoryName,
-                this.AdditionalScopeName,
-                this.TargetUserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                        (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.CategoryName,
+                            this.AdditionalScopeName
+                        ),
+                        (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheKey(
+                            this.TargetUserId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking.Model.SubscribeUser).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName,
+                    this.TargetUserId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Ranking.Model.SubscribeUser).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName,
+                    this.TargetUserId,
+                    () => this.GetAsync(
+                        new GetSubscribeByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Ranking.Model.SubscribeUser).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CategoryName,
-                this.AdditionalScopeName,
-                this.TargetUserId,
-                () => this.GetAsync(
-                    new GetSubscribeByUserIdRequest()
-                )
-            );
         }
         #endif
 

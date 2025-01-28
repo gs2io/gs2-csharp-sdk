@@ -116,34 +116,25 @@ namespace Gs2.Gs2Lottery.Model.Cache
             Func<Task<PrizeTable>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<PrizeTable>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            prizeTableName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        prizeTableName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    prizeTableName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as PrizeTable).PutCache(
+                    cache,
+                    namespaceName,
+                    prizeTableName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "prizeTable") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as PrizeTable).PutCache(
-                        cache,
-                        namespaceName,
-                        prizeTableName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "prizeTable") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

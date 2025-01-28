@@ -122,37 +122,27 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             Func<Task<Entry>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Entry>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            entryModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        entryModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    entryModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Entry).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    entryModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "entry") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Entry).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        entryModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "entry") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

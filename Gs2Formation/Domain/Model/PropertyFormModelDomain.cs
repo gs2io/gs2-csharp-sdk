@@ -175,22 +175,31 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.PropertyFormModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyFormModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PropertyFormModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.PropertyFormModel>(
+                        (null as Gs2.Gs2Formation.Model.PropertyFormModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Formation.Model.PropertyFormModel).CacheKey(
+                            this.PropertyFormModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyFormModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PropertyFormModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Formation.Model.PropertyFormModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PropertyFormModelName,
+                    () => this.GetAsync(
+                        new GetPropertyFormModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Formation.Model.PropertyFormModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PropertyFormModelName,
-                () => this.GetAsync(
-                    new GetPropertyFormModelRequest()
-                )
-            );
         }
         #endif
 

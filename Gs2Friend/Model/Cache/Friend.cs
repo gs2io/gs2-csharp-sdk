@@ -122,37 +122,27 @@ namespace Gs2.Gs2Friend.Model.Cache
             Func<Task<Friend>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Friend>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            withProfile
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        withProfile
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    withProfile
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Friend).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    withProfile
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "friend") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Friend).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        withProfile
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "friend") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

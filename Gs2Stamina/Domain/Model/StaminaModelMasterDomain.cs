@@ -283,22 +283,31 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public async Task<Gs2.Gs2Stamina.Model.StaminaModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.StaminaName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
+                        (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheKey(
+                            this.StaminaName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.StaminaName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.StaminaName,
+                    () => this.GetAsync(
+                        new GetStaminaModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.StaminaName,
-                () => this.GetAsync(
-                    new GetStaminaModelMasterRequest()
-                )
-            );
         }
         #endif
 

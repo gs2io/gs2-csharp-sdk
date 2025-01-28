@@ -283,22 +283,31 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         public async Task<Gs2.Gs2SkillTree.Model.NodeModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.NodeModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
+                        (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheKey(
+                            this.NodeModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.NodeModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.NodeModelName,
+                    () => this.GetAsync(
+                        new GetNodeModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.NodeModelName,
-                () => this.GetAsync(
-                    new GetNodeModelMasterRequest()
-                )
-            );
         }
         #endif
 

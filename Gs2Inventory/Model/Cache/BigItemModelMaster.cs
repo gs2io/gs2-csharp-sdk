@@ -122,37 +122,27 @@ namespace Gs2.Gs2Inventory.Model.Cache
             Func<Task<BigItemModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<BigItemModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            inventoryName
-                       ),
-                       self.CacheKey(
-                            itemName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        inventoryName,
-                        itemName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    inventoryName,
+                    itemName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as BigItemModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    inventoryName,
+                    itemName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "bigItemModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as BigItemModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        inventoryName,
-                        itemName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "bigItemModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

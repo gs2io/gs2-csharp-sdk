@@ -175,22 +175,31 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.FormModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Formation.Model.FormModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.MoldModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.FormModel>(
+                        (null as Gs2.Gs2Formation.Model.FormModel).CacheParentKey(
+                            this.NamespaceName,
+                            this.MoldModelName
+                        ),
+                        (null as Gs2.Gs2Formation.Model.FormModel).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Formation.Model.FormModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MoldModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Formation.Model.FormModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MoldModelName,
+                    () => this.GetAsync(
+                        new GetFormModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Formation.Model.FormModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.MoldModelName,
-                () => this.GetAsync(
-                    new GetFormModelRequest()
-                )
-            );
         }
         #endif
 

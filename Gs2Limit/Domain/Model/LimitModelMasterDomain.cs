@@ -283,22 +283,31 @@ namespace Gs2.Gs2Limit.Domain.Model
         public async Task<Gs2.Gs2Limit.Model.LimitModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Limit.Model.LimitModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.LimitName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.LimitModelMaster>(
+                        (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheKey(
+                            this.LimitName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Limit.Model.LimitModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.LimitName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Limit.Model.LimitModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.LimitName,
+                    () => this.GetAsync(
+                        new GetLimitModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Limit.Model.LimitModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.LimitName,
-                () => this.GetAsync(
-                    new GetLimitModelMasterRequest()
-                )
-            );
         }
         #endif
 

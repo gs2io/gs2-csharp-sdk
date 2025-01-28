@@ -122,37 +122,27 @@ namespace Gs2.Gs2Showcase.Model.Cache
             Func<Task<Showcase>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Showcase>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            showcaseName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Showcase).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    showcaseName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "showcase") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Showcase).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        showcaseName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "showcase") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

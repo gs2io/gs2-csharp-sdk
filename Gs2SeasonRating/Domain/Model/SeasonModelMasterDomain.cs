@@ -283,22 +283,31 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         public async Task<Gs2.Gs2SeasonRating.Model.SeasonModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.SeasonName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SeasonRating.Model.SeasonModelMaster>(
+                        (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheKey(
+                            this.SeasonName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.SeasonName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.SeasonName,
+                    () => this.GetAsync(
+                        new GetSeasonModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.SeasonName,
-                () => this.GetAsync(
-                    new GetSeasonModelMasterRequest()
-                )
-            );
         }
         #endif
 

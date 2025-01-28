@@ -114,34 +114,25 @@ namespace Gs2.Gs2Inbox.Model.Cache
             Func<Task<Received>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Received>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Received).PutCache(
+                    cache,
+                    namespaceName,
+                    userId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "received") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Received).PutCache(
-                        cache,
-                        namespaceName,
-                        userId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "received") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

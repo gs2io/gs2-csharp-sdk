@@ -183,24 +183,34 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public async Task<Gs2.Gs2SerialKey.Model.IssueJob> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SerialKey.Model.IssueJob).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CampaignModelName,
-                this.IssueJobName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.IssueJob>(
+                        (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheParentKey(
+                            this.NamespaceName,
+                            this.CampaignModelName
+                        ),
+                        (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheKey(
+                            this.IssueJobName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SerialKey.Model.IssueJob).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CampaignModelName,
+                    this.IssueJobName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2SerialKey.Model.IssueJob).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CampaignModelName,
+                    this.IssueJobName,
+                    () => this.GetAsync(
+                        new GetIssueJobRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2SerialKey.Model.IssueJob).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CampaignModelName,
-                this.IssueJobName,
-                () => this.GetAsync(
-                    new GetIssueJobRequest()
-                )
-            );
         }
         #endif
 

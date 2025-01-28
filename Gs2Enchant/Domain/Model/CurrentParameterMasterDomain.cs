@@ -318,20 +318,28 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public async Task<Gs2.Gs2Enchant.Model.CurrentParameterMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Enchant.Model.CurrentParameterMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
+                        (null as Gs2.Gs2Enchant.Model.CurrentParameterMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Enchant.Model.CurrentParameterMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Enchant.Model.CurrentParameterMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Enchant.Model.CurrentParameterMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentParameterMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Enchant.Model.CurrentParameterMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentParameterMasterRequest()
-                )
-            );
         }
         #endif
 

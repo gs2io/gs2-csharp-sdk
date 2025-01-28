@@ -116,34 +116,25 @@ namespace Gs2.Gs2Guild.Model.Cache
             Func<Task<GuildModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GuildModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            guildModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        guildModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    guildModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GuildModel).PutCache(
+                    cache,
+                    namespaceName,
+                    guildModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "guildModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GuildModel).PutCache(
-                        cache,
-                        namespaceName,
-                        guildModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "guildModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -283,22 +283,31 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.CounterModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Mission.Model.CounterModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CounterName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                        (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheKey(
+                            this.CounterName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Mission.Model.CounterModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CounterName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Mission.Model.CounterModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CounterName,
+                    () => this.GetAsync(
+                        new GetCounterModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Mission.Model.CounterModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CounterName,
-                () => this.GetAsync(
-                    new GetCounterModelMasterRequest()
-                )
-            );
         }
         #endif
 

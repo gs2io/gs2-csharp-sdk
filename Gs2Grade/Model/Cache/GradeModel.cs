@@ -116,34 +116,25 @@ namespace Gs2.Gs2Grade.Model.Cache
             Func<Task<GradeModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GradeModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            gradeName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        gradeName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    gradeName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GradeModel).PutCache(
+                    cache,
+                    namespaceName,
+                    gradeName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "gradeModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GradeModel).PutCache(
-                        cache,
-                        namespaceName,
-                        gradeName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "gradeModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -122,37 +122,27 @@ namespace Gs2.Gs2Stamina.Model.Cache
             Func<Task<Stamina>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Stamina>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            staminaName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        staminaName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    staminaName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Stamina).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    staminaName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "stamina") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Stamina).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        staminaName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "stamina") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

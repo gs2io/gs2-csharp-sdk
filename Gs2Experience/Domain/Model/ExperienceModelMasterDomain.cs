@@ -283,22 +283,31 @@ namespace Gs2.Gs2Experience.Domain.Model
         public async Task<Gs2.Gs2Experience.Model.ExperienceModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ExperienceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
+                        (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).CacheKey(
+                            this.ExperienceName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ExperienceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ExperienceName,
+                    () => this.GetAsync(
+                        new GetExperienceModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Experience.Model.ExperienceModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ExperienceName,
-                () => this.GetAsync(
-                    new GetExperienceModelMasterRequest()
-                )
-            );
         }
         #endif
 

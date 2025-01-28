@@ -283,22 +283,31 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.ShowcaseMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ShowcaseName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
+                        (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheKey(
+                            this.ShowcaseName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ShowcaseName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ShowcaseName,
+                    () => this.GetAsync(
+                        new GetShowcaseMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ShowcaseName,
-                () => this.GetAsync(
-                    new GetShowcaseMasterRequest()
-                )
-            );
         }
         #endif
 

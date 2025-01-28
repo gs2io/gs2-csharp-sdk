@@ -283,22 +283,31 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public async Task<Gs2.Gs2Stamina.Model.RecoverValueTableMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RecoverValueTableName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
+                        (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).CacheKey(
+                            this.RecoverValueTableName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RecoverValueTableName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RecoverValueTableName,
+                    () => this.GetAsync(
+                        new GetRecoverValueTableMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RecoverValueTableName,
-                () => this.GetAsync(
-                    new GetRecoverValueTableMasterRequest()
-                )
-            );
         }
         #endif
 

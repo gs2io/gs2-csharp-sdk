@@ -116,34 +116,25 @@ namespace Gs2.Gs2Account.Model.Cache
             Func<Task<TakeOverTypeModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<TakeOverTypeModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            type
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        type
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    type
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as TakeOverTypeModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    type
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "takeOverTypeModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as TakeOverTypeModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        type
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "takeOverTypeModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

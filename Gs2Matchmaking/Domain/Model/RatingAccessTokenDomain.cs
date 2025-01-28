@@ -175,24 +175,34 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public async Task<Gs2.Gs2Matchmaking.Model.Rating> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Rating).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.RatingName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Rating>(
+                        (null as Gs2.Gs2Matchmaking.Model.Rating).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Matchmaking.Model.Rating).CacheKey(
+                            this.RatingName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Rating).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RatingName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Matchmaking.Model.Rating).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RatingName,
+                    () => this.GetAsync(
+                        new GetRatingRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Matchmaking.Model.Rating).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.RatingName,
-                () => this.GetAsync(
-                    new GetRatingRequest()
-                )
-            );
         }
         #endif
 

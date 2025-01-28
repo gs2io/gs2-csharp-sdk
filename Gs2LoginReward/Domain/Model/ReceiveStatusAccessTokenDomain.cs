@@ -229,24 +229,34 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         public async Task<Gs2.Gs2LoginReward.Model.ReceiveStatus> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.BonusModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                        (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheKey(
+                            this.BonusModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.BonusModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.BonusModelName,
+                    () => this.GetAsync(
+                        new GetReceiveStatusRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.BonusModelName,
-                () => this.GetAsync(
-                    new GetReceiveStatusRequest()
-                )
-            );
         }
         #endif
 

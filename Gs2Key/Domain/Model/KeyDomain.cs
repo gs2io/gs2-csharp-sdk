@@ -388,22 +388,31 @@ namespace Gs2.Gs2Key.Domain.Model
         public async Task<Gs2.Gs2Key.Model.Key> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Key.Model.Key).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.KeyName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.Key>(
+                        (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Key.Model.Key).CacheKey(
+                            this.KeyName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Key.Model.Key).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.KeyName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Key.Model.Key).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.KeyName,
+                    () => this.GetAsync(
+                        new GetKeyRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Key.Model.Key).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.KeyName,
-                () => this.GetAsync(
-                    new GetKeyRequest()
-                )
-            );
         }
         #endif
 

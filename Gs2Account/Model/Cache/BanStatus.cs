@@ -110,31 +110,23 @@ namespace Gs2.Gs2Account.Model.Cache
             Func<Task<BanStatus>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<BanStatus>(
-                       self.CacheParentKey(
-                       ),
-                       self.CacheKey(
-                            name
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        name
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    name
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as BanStatus).PutCache(
+                    cache,
+                    name
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "banStatus") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as BanStatus).PutCache(
-                        cache,
-                        name
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "banStatus") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

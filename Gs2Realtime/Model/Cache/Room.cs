@@ -116,34 +116,25 @@ namespace Gs2.Gs2Realtime.Model.Cache
             Func<Task<Room>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Room>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            roomName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        roomName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    roomName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Room).PutCache(
+                    cache,
+                    namespaceName,
+                    roomName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "room") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Room).PutCache(
-                        cache,
-                        namespaceName,
-                        roomName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "room") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

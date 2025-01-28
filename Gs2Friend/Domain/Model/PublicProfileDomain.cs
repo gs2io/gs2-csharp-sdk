@@ -175,22 +175,31 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.PublicProfile> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Friend.Model.PublicProfile).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.PublicProfile>(
+                        (null as Gs2.Gs2Friend.Model.PublicProfile).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Friend.Model.PublicProfile).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Friend.Model.PublicProfile).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Friend.Model.PublicProfile).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    () => this.GetAsync(
+                        new GetPublicProfileRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Friend.Model.PublicProfile).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                () => this.GetAsync(
-                    new GetPublicProfileRequest()
-                )
-            );
         }
         #endif
 

@@ -128,40 +128,29 @@ namespace Gs2.Gs2News.Model.Cache
             Func<Task<SetCookieRequestEntry>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<SetCookieRequestEntry>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            key,
-                            value
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        key,
-                        value
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    key,
+                    value
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as SetCookieRequestEntry).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    key,
+                    value
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "setCookieRequestEntry") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as SetCookieRequestEntry).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        key,
-                        value
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "setCookieRequestEntry") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

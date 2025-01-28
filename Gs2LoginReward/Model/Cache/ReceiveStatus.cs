@@ -122,37 +122,27 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             Func<Task<ReceiveStatus>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ReceiveStatus>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            bonusModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        bonusModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    bonusModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ReceiveStatus).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    bonusModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "receiveStatus") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ReceiveStatus).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        bonusModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "receiveStatus") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

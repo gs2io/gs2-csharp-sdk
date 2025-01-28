@@ -284,22 +284,31 @@ namespace Gs2.Gs2Key.Domain.Model
         public async Task<Gs2.Gs2Key.Model.GitHubApiKey> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Key.Model.GitHubApiKey).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ApiKeyName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.GitHubApiKey>(
+                        (null as Gs2.Gs2Key.Model.GitHubApiKey).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Key.Model.GitHubApiKey).CacheKey(
+                            this.ApiKeyName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Key.Model.GitHubApiKey).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ApiKeyName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Key.Model.GitHubApiKey).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ApiKeyName,
+                    () => this.GetAsync(
+                        new GetGitHubApiKeyRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Key.Model.GitHubApiKey).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.ApiKeyName,
-                () => this.GetAsync(
-                    new GetGitHubApiKeyRequest()
-                )
-            );
         }
         #endif
 

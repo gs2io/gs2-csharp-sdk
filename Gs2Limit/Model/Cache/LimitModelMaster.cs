@@ -116,34 +116,25 @@ namespace Gs2.Gs2Limit.Model.Cache
             Func<Task<LimitModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<LimitModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            limitName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        limitName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    limitName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as LimitModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    limitName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "limitModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as LimitModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        limitName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "limitModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

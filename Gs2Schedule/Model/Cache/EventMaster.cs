@@ -116,34 +116,25 @@ namespace Gs2.Gs2Schedule.Model.Cache
             Func<Task<EventMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<EventMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            eventName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        eventName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    eventName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as EventMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    eventName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "eventMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as EventMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        eventName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "eventMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

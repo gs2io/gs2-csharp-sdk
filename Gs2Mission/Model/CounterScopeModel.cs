@@ -326,7 +326,7 @@ namespace Gs2.Gs2Mission.Model
                         new RequestError("counterScopeModel", "mission.counterScopeModel.days.error.invalid"),
                     });
                 }
-                if (Days > 2147483646.0) {
+                if (Days > 2147483646) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("counterScopeModel", "mission.counterScopeModel.days.error.invalid"),
                     });

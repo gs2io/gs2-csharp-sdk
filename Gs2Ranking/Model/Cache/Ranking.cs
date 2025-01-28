@@ -140,46 +140,33 @@ namespace Gs2.Gs2Ranking.Model.Cache
             Func<Task<Ranking>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Ranking>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            categoryName,
-                            additionalScopeName
-                       ),
-                       self.CacheKey(
-                            scorerUserId,
-                            index
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName,
-                        additionalScopeName,
-                        scorerUserId,
-                        index
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName,
+                    additionalScopeName,
+                    scorerUserId,
+                    index
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Ranking).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    categoryName,
+                    additionalScopeName,
+                    scorerUserId,
+                    index
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "ranking") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Ranking).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        categoryName,
-                        additionalScopeName,
-                        scorerUserId,
-                        index
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "ranking") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

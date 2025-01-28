@@ -116,34 +116,25 @@ namespace Gs2.Gs2MegaField.Model.Cache
             Func<Task<AreaModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<AreaModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            areaModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        areaModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    areaModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as AreaModel).PutCache(
+                    cache,
+                    namespaceName,
+                    areaModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "areaModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as AreaModel).PutCache(
-                        cache,
-                        namespaceName,
-                        areaModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "areaModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

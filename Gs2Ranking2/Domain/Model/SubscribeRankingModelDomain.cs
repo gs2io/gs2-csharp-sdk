@@ -175,22 +175,31 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public async Task<Gs2.Gs2Ranking2.Model.SubscribeRankingModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RankingName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.SubscribeRankingModel>(
+                        (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheKey(
+                            this.RankingName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName,
+                    () => this.GetAsync(
+                        new GetSubscribeRankingModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RankingName,
-                () => this.GetAsync(
-                    new GetSubscribeRankingModelRequest()
-                )
-            );
         }
         #endif
 

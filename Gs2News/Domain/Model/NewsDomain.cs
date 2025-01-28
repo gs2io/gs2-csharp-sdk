@@ -182,15 +182,24 @@ namespace Gs2.Gs2News.Domain.Model
         public async Task<Gs2.Gs2News.Model.News> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2News.Model.News).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.News>(
+                        (null as Gs2.Gs2News.Model.News).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2News.Model.News).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2News.Model.News).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

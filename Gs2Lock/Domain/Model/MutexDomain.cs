@@ -349,24 +349,34 @@ namespace Gs2.Gs2Lock.Domain.Model
         public async Task<Gs2.Gs2Lock.Model.Mutex> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Lock.Model.Mutex).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.PropertyId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lock.Model.Mutex>(
+                        (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Lock.Model.Mutex).CacheKey(
+                            this.PropertyId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Lock.Model.Mutex).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.PropertyId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Lock.Model.Mutex).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.PropertyId,
+                    () => this.GetAsync(
+                        new GetMutexByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Lock.Model.Mutex).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.PropertyId,
-                () => this.GetAsync(
-                    new GetMutexByUserIdRequest()
-                )
-            );
         }
         #endif
 

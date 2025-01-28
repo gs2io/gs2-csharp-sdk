@@ -122,37 +122,27 @@ namespace Gs2.Gs2Formation.Model.Cache
             Func<Task<Mold>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Mold>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            moldModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        moldModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    moldModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Mold).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    moldModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "mold") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Mold).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        moldModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "mold") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

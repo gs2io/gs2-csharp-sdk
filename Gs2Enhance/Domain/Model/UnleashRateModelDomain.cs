@@ -175,22 +175,31 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public async Task<Gs2.Gs2Enhance.Model.UnleashRateModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Enhance.Model.UnleashRateModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.UnleashRateModel>(
+                        (null as Gs2.Gs2Enhance.Model.UnleashRateModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Enhance.Model.UnleashRateModel).CacheKey(
+                            this.RateName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Enhance.Model.UnleashRateModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Enhance.Model.UnleashRateModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName,
+                    () => this.GetAsync(
+                        new GetUnleashRateModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Enhance.Model.UnleashRateModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName,
-                () => this.GetAsync(
-                    new GetUnleashRateModelRequest()
-                )
-            );
         }
         #endif
 

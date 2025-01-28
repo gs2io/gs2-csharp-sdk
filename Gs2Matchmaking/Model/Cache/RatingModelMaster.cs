@@ -116,34 +116,25 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             Func<Task<RatingModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<RatingModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            ratingName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        ratingName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    ratingName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as RatingModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    ratingName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "ratingModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as RatingModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        ratingName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "ratingModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

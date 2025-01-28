@@ -116,34 +116,25 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             Func<Task<NodeModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<NodeModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            nodeModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        nodeModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    nodeModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as NodeModel).PutCache(
+                    cache,
+                    namespaceName,
+                    nodeModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "nodeModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as NodeModel).PutCache(
-                        cache,
-                        namespaceName,
-                        nodeModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "nodeModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

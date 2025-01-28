@@ -116,34 +116,25 @@ namespace Gs2.Gs2Stamina.Model.Cache
             Func<Task<RecoverValueTableMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<RecoverValueTableMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            recoverValueTableName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        recoverValueTableName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    recoverValueTableName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as RecoverValueTableMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    recoverValueTableName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "recoverValueTableMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as RecoverValueTableMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        recoverValueTableName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "recoverValueTableMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

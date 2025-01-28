@@ -182,24 +182,34 @@ namespace Gs2.Gs2Quest.Domain.Model
         public async Task<Gs2.Gs2Quest.Model.QuestModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Quest.Model.QuestModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.QuestGroupName,
-                this.QuestName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.QuestModel>(
+                        (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
+                            this.NamespaceName,
+                            this.QuestGroupName
+                        ),
+                        (null as Gs2.Gs2Quest.Model.QuestModel).CacheKey(
+                            this.QuestName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Quest.Model.QuestModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.QuestGroupName,
+                    this.QuestName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Quest.Model.QuestModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.QuestGroupName,
+                    this.QuestName,
+                    () => this.GetAsync(
+                        new GetQuestModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Quest.Model.QuestModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.QuestGroupName,
-                this.QuestName,
-                () => this.GetAsync(
-                    new GetQuestModelRequest()
-                )
-            );
         }
         #endif
 

@@ -126,40 +126,29 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             Func<Task<JoinedSeasonGathering>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<JoinedSeasonGathering>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            seasonName,
-                            season
-                       ),
-                       self.CacheKey(
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        seasonName,
-                        season
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    seasonName,
+                    season
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as JoinedSeasonGathering).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    seasonName,
+                    season
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "joinedSeasonGathering") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as JoinedSeasonGathering).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        seasonName,
-                        season
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "joinedSeasonGathering") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

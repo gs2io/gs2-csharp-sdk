@@ -287,22 +287,31 @@ namespace Gs2.Gs2Quest.Domain.Model
         public async Task<Gs2.Gs2Quest.Model.QuestGroupModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Quest.Model.QuestGroupModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.QuestGroupName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.QuestGroupModel>(
+                        (null as Gs2.Gs2Quest.Model.QuestGroupModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Quest.Model.QuestGroupModel).CacheKey(
+                            this.QuestGroupName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Quest.Model.QuestGroupModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.QuestGroupName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Quest.Model.QuestGroupModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.QuestGroupName,
+                    () => this.GetAsync(
+                        new GetQuestGroupModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Quest.Model.QuestGroupModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.QuestGroupName,
-                () => this.GetAsync(
-                    new GetQuestGroupModelRequest()
-                )
-            );
         }
         #endif
 

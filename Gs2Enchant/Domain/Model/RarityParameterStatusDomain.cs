@@ -474,26 +474,37 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public async Task<Gs2.Gs2Enchant.Model.RarityParameterStatus> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.ParameterName,
-                this.PropertyId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
+                        (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheKey(
+                            this.ParameterName,
+                            this.PropertyId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ParameterName,
+                    this.PropertyId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ParameterName,
+                    this.PropertyId,
+                    () => this.GetAsync(
+                        new GetRarityParameterStatusByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.ParameterName,
-                this.PropertyId,
-                () => this.GetAsync(
-                    new GetRarityParameterStatusByUserIdRequest()
-                )
-            );
         }
         #endif
 

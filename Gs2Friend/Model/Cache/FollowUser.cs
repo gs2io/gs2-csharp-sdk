@@ -128,40 +128,29 @@ namespace Gs2.Gs2Friend.Model.Cache
             Func<Task<FollowUser>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<FollowUser>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            withProfile
-                       ),
-                       self.CacheKey(
-                            targetUserId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        withProfile,
-                        targetUserId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    withProfile,
+                    targetUserId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as FollowUser).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    withProfile,
+                    targetUserId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "followUser") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as FollowUser).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        withProfile,
-                        targetUserId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "followUser") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

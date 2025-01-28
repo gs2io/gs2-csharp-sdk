@@ -116,34 +116,25 @@ namespace Gs2.Gs2Experience.Model.Cache
             Func<Task<ThresholdMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ThresholdMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            thresholdName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        thresholdName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    thresholdName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ThresholdMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    thresholdName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "thresholdMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ThresholdMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        thresholdName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "thresholdMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

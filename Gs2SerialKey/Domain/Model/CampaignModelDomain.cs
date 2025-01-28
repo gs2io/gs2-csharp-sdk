@@ -350,22 +350,31 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public async Task<Gs2.Gs2SerialKey.Model.CampaignModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SerialKey.Model.CampaignModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CampaignModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.CampaignModel>(
+                        (null as Gs2.Gs2SerialKey.Model.CampaignModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2SerialKey.Model.CampaignModel).CacheKey(
+                            this.CampaignModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2SerialKey.Model.CampaignModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CampaignModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2SerialKey.Model.CampaignModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CampaignModelName,
+                    () => this.GetAsync(
+                        new GetCampaignModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2SerialKey.Model.CampaignModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.CampaignModelName,
-                () => this.GetAsync(
-                    new GetCampaignModelRequest()
-                )
-            );
         }
         #endif
 

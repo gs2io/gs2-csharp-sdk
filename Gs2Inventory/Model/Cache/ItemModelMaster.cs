@@ -122,37 +122,27 @@ namespace Gs2.Gs2Inventory.Model.Cache
             Func<Task<ItemModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ItemModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            inventoryName
-                       ),
-                       self.CacheKey(
-                            itemName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        inventoryName,
-                        itemName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    inventoryName,
+                    itemName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ItemModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    inventoryName,
+                    itemName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "itemModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ItemModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        inventoryName,
-                        itemName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "itemModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

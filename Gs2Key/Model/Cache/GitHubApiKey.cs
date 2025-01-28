@@ -116,34 +116,25 @@ namespace Gs2.Gs2Key.Model.Cache
             Func<Task<GitHubApiKey>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GitHubApiKey>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            apiKeyName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        apiKeyName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    apiKeyName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GitHubApiKey).PutCache(
+                    cache,
+                    namespaceName,
+                    apiKeyName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "gitHubApiKey") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GitHubApiKey).PutCache(
-                        cache,
-                        namespaceName,
-                        apiKeyName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "gitHubApiKey") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

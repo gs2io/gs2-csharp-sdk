@@ -122,37 +122,27 @@ namespace Gs2.Gs2Mission.Model.Cache
             Func<Task<Complete>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Complete>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            missionGroupName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        missionGroupName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    missionGroupName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Complete).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    missionGroupName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "complete") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Complete).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        missionGroupName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "complete") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

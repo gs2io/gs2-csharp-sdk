@@ -116,34 +116,25 @@ namespace Gs2.Gs2Idle.Model.Cache
             Func<Task<CategoryModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<CategoryModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            categoryName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        categoryName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    categoryName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as CategoryModel).PutCache(
+                    cache,
+                    namespaceName,
+                    categoryName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "categoryModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as CategoryModel).PutCache(
-                        cache,
-                        namespaceName,
-                        categoryName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "categoryModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

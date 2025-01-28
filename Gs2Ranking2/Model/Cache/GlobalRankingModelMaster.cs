@@ -116,34 +116,25 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<GlobalRankingModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GlobalRankingModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            rankingName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GlobalRankingModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    rankingName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "globalRankingModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GlobalRankingModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        rankingName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "globalRankingModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

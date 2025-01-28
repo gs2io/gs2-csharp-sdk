@@ -122,37 +122,27 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             Func<Task<Like>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Like>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            entryModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        entryModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    entryModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Like).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    entryModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "like") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Like).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        entryModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "like") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

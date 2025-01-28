@@ -231,22 +231,31 @@ namespace Gs2.Gs2Log.Domain.Model
         public async Task<Gs2.Gs2Log.Model.Insight> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Log.Model.Insight).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InsightName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.Insight>(
+                        (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Log.Model.Insight).CacheKey(
+                            this.InsightName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Log.Model.Insight).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InsightName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Log.Model.Insight).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InsightName,
+                    () => this.GetAsync(
+                        new GetInsightRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Log.Model.Insight).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.InsightName,
-                () => this.GetAsync(
-                    new GetInsightRequest()
-                )
-            );
         }
         #endif
 

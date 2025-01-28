@@ -128,40 +128,29 @@ namespace Gs2.Gs2Formation.Model.Cache
             Func<Task<PropertyForm>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<PropertyForm>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            propertyFormModelName,
-                            propertyId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        propertyFormModelName,
-                        propertyId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    propertyFormModelName,
+                    propertyId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as PropertyForm).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    propertyFormModelName,
+                    propertyId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "propertyForm") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as PropertyForm).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        propertyFormModelName,
-                        propertyId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "propertyForm") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

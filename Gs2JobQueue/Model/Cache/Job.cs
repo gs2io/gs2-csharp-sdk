@@ -122,37 +122,27 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             Func<Task<Job>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Job>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            jobName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        jobName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    jobName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Job).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    jobName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "job") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Job).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        jobName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "job") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -477,30 +477,40 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.FriendRequest> ModelAsync()
             #endif
         {
-            if (this.UserId == null) {
-                throw new NullReferenceException();
-            }
-            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                            this.TargetUserId
+                        )
+                    ).LockAsync()) {
+                if (this.UserId == null) {
+                    throw new NullReferenceException();
+                }
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+                    (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                        this.NamespaceName,
+                        this.UserId
+                    ),
+                    (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                        this.TargetUserId
+                    )
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Friend.Model.FriendRequest).FetchAsync(
+                    this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
-                ),
-                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                    this.TargetUserId
-                )
-            );
-            if (find) {
-                return value;
+                    this.UserId,
+                    this.TargetUserId,
+                    () => this.GetAsync(
+                        new GetReceiveRequestByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Friend.Model.FriendRequest).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.TargetUserId,
-                () => this.GetAsync(
-                    new GetReceiveRequestByUserIdRequest()
-                )
-            );
         }
         #endif
 

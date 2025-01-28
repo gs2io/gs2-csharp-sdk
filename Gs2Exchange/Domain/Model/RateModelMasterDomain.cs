@@ -283,22 +283,31 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public async Task<Gs2.Gs2Exchange.Model.RateModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Exchange.Model.RateModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                        (null as Gs2.Gs2Exchange.Model.RateModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Exchange.Model.RateModelMaster).CacheKey(
+                            this.RateName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Exchange.Model.RateModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Exchange.Model.RateModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName,
+                    () => this.GetAsync(
+                        new GetRateModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Exchange.Model.RateModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RateName,
-                () => this.GetAsync(
-                    new GetRateModelMasterRequest()
-                )
-            );
         }
         #endif
 

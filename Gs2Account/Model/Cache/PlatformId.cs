@@ -122,37 +122,27 @@ namespace Gs2.Gs2Account.Model.Cache
             Func<Task<PlatformId>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<PlatformId>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            type
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        type
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    type
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as PlatformId).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    type
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "platformId") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as PlatformId).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        type
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "platformId") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

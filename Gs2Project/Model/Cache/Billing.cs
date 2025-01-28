@@ -128,40 +128,29 @@ namespace Gs2.Gs2Project.Model.Cache
             Func<Task<Billing>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Billing>(
-                       self.CacheParentKey(
-                            accountName,
-                            projectName
-                       ),
-                       self.CacheKey(
-                            year,
-                            month
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        accountName,
-                        projectName,
-                        year,
-                        month
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    accountName,
+                    projectName,
+                    year,
+                    month
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Billing).PutCache(
+                    cache,
+                    accountName,
+                    projectName,
+                    year,
+                    month
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "billing") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Billing).PutCache(
-                        cache,
-                        accountName,
-                        projectName,
-                        year,
-                        month
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "billing") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

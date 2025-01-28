@@ -128,40 +128,29 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             Func<Task<JobResult>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<JobResult>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId,
-                            jobName
-                       ),
-                       self.CacheKey(
-                            tryNumber
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        jobName,
-                        tryNumber
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    jobName,
+                    tryNumber
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as JobResult).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    jobName,
+                    tryNumber
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "jobResult") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as JobResult).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        jobName,
-                        tryNumber
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "jobResult") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

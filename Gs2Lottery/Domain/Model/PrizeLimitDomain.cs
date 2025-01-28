@@ -234,24 +234,34 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public async Task<Gs2.Gs2Lottery.Model.PrizeLimit> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Lottery.Model.PrizeLimit).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PrizeTableName,
-                this.PrizeId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                        (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
+                            this.NamespaceName,
+                            this.PrizeTableName
+                        ),
+                        (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheKey(
+                            this.PrizeId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Lottery.Model.PrizeLimit).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PrizeTableName,
+                    this.PrizeId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Lottery.Model.PrizeLimit).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PrizeTableName,
+                    this.PrizeId,
+                    () => this.GetAsync(
+                        new GetPrizeLimitRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Lottery.Model.PrizeLimit).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PrizeTableName,
-                this.PrizeId,
-                () => this.GetAsync(
-                    new GetPrizeLimitRequest()
-                )
-            );
         }
         #endif
 

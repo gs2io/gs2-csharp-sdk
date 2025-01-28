@@ -128,40 +128,29 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             Func<Task<GlobalRankingReceivedReward>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<GlobalRankingReceivedReward>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            rankingName,
-                            season
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        season
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    season
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as GlobalRankingReceivedReward).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    rankingName,
+                    season
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "globalRankingReceivedReward") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as GlobalRankingReceivedReward).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        rankingName,
-                        season
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "globalRankingReceivedReward") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

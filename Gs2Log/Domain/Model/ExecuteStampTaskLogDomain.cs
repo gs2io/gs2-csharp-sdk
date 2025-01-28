@@ -110,14 +110,22 @@ namespace Gs2.Gs2Log.Domain.Model
         public async Task<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
+                        (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

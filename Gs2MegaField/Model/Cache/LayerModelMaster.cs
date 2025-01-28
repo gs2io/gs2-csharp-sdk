@@ -122,37 +122,27 @@ namespace Gs2.Gs2MegaField.Model.Cache
             Func<Task<LayerModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<LayerModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            areaModelName
-                       ),
-                       self.CacheKey(
-                            layerModelName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        areaModelName,
-                        layerModelName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    areaModelName,
+                    layerModelName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as LayerModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    areaModelName,
+                    layerModelName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "layerModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as LayerModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        areaModelName,
-                        layerModelName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "layerModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

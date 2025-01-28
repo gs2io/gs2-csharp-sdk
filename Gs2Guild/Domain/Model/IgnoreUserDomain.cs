@@ -294,24 +294,34 @@ namespace Gs2.Gs2Guild.Domain.Model
         public async Task<Gs2.Gs2Guild.Model.IgnoreUser> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Guild.Model.IgnoreUser).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GuildModelName,
-                this.GuildName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.IgnoreUser>(
+                        (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
+                            this.NamespaceName,
+                            this.GuildModelName,
+                            this.GuildName
+                        ),
+                        (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Guild.Model.IgnoreUser).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Guild.Model.IgnoreUser).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName,
+                    () => this.GetAsync(
+                        new GetIgnoreUserByGuildNameRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Guild.Model.IgnoreUser).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GuildModelName,
-                this.GuildName,
-                () => this.GetAsync(
-                    new GetIgnoreUserByGuildNameRequest()
-                )
-            );
         }
         #endif
 

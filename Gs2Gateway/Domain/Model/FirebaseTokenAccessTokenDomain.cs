@@ -280,22 +280,31 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public async Task<Gs2.Gs2Gateway.Model.FirebaseToken> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Gateway.Model.FirebaseToken).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Gateway.Model.FirebaseToken>(
+                        (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Gateway.Model.FirebaseToken).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Gateway.Model.FirebaseToken).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    () => this.GetAsync(
+                        new GetFirebaseTokenRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Gateway.Model.FirebaseToken).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                () => this.GetAsync(
-                    new GetFirebaseTokenRequest()
-                )
-            );
         }
         #endif
 

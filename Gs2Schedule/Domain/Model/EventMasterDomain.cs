@@ -283,22 +283,31 @@ namespace Gs2.Gs2Schedule.Domain.Model
         public async Task<Gs2.Gs2Schedule.Model.EventMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Schedule.Model.EventMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.EventName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.EventMaster>(
+                        (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Schedule.Model.EventMaster).CacheKey(
+                            this.EventName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Schedule.Model.EventMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.EventName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Schedule.Model.EventMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.EventName,
+                    () => this.GetAsync(
+                        new GetEventMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Schedule.Model.EventMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.EventName,
-                () => this.GetAsync(
-                    new GetEventMasterRequest()
-                )
-            );
         }
         #endif
 

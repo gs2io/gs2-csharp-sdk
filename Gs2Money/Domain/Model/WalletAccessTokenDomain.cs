@@ -232,24 +232,34 @@ namespace Gs2.Gs2Money.Domain.Model
         public async Task<Gs2.Gs2Money.Model.Wallet> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Money.Model.Wallet).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.Slot ?? default
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Wallet>(
+                        (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Money.Model.Wallet).CacheKey(
+                            this.Slot
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Money.Model.Wallet).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Slot ?? default
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Money.Model.Wallet).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Slot ?? default,
+                    () => this.GetAsync(
+                        new GetWalletRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Money.Model.Wallet).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.Slot ?? default,
-                () => this.GetAsync(
-                    new GetWalletRequest()
-                )
-            );
         }
         #endif
 

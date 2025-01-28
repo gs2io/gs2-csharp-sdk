@@ -118,16 +118,26 @@ namespace Gs2.Gs2Guild.Domain.Model
         public async Task<Gs2.Gs2Guild.Model.Inbox> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Guild.Model.Inbox).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.GuildModelName,
-                this.GuildName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.Inbox>(
+                        (null as Gs2.Gs2Guild.Model.Inbox).CacheParentKey(
+                            this.NamespaceName,
+                            this.GuildModelName,
+                            this.GuildName
+                        ),
+                        (null as Gs2.Gs2Guild.Model.Inbox).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Guild.Model.Inbox).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GuildModelName,
+                    this.GuildName
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

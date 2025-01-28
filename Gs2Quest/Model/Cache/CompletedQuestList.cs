@@ -122,37 +122,27 @@ namespace Gs2.Gs2Quest.Model.Cache
             Func<Task<CompletedQuestList>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<CompletedQuestList>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            questGroupName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        questGroupName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    questGroupName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as CompletedQuestList).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    questGroupName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "completedQuestList") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as CompletedQuestList).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        questGroupName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "completedQuestList") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

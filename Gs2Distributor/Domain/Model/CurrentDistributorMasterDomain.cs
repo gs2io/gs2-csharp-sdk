@@ -318,20 +318,28 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public async Task<Gs2.Gs2Distributor.Model.CurrentDistributorMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Distributor.Model.CurrentDistributorMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.CurrentDistributorMaster>(
+                        (null as Gs2.Gs2Distributor.Model.CurrentDistributorMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Distributor.Model.CurrentDistributorMaster).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Distributor.Model.CurrentDistributorMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Distributor.Model.CurrentDistributorMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetAsync(
+                        new GetCurrentDistributorMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Distributor.Model.CurrentDistributorMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                () => this.GetAsync(
-                    new GetCurrentDistributorMasterRequest()
-                )
-            );
         }
         #endif
 

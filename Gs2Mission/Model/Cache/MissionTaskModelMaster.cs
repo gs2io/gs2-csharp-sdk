@@ -122,37 +122,27 @@ namespace Gs2.Gs2Mission.Model.Cache
             Func<Task<MissionTaskModelMaster>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<MissionTaskModelMaster>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            missionGroupName
-                       ),
-                       self.CacheKey(
-                            missionTaskName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        missionGroupName,
-                        missionTaskName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    missionGroupName,
+                    missionTaskName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as MissionTaskModelMaster).PutCache(
+                    cache,
+                    namespaceName,
+                    missionGroupName,
+                    missionTaskName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "missionTaskModelMaster") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as MissionTaskModelMaster).PutCache(
-                        cache,
-                        namespaceName,
-                        missionGroupName,
-                        missionTaskName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "missionTaskModelMaster") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

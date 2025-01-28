@@ -110,14 +110,22 @@ namespace Gs2.Gs2Account.Domain.Model
         public async Task<Gs2.Gs2Account.Model.BanStatus> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Account.Model.BanStatus).GetCache(
-                this._gs2.Cache,
-                this.Name
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.BanStatus>(
+                        (null as Gs2.Gs2Account.Model.BanStatus).CacheParentKey(
+                        ),
+                        (null as Gs2.Gs2Account.Model.BanStatus).CacheKey(
+                            this.Name
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Account.Model.BanStatus).GetCache(
+                    this._gs2.Cache,
+                    this.Name
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 

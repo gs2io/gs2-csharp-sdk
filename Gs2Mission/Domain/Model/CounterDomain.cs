@@ -455,24 +455,34 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.Counter> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Mission.Model.Counter).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CounterName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.Counter>(
+                        (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Mission.Model.Counter).CacheKey(
+                            this.CounterName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Mission.Model.Counter).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CounterName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Mission.Model.Counter).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CounterName,
+                    () => this.GetAsync(
+                        new GetCounterByUserIdRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Mission.Model.Counter).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CounterName,
-                () => this.GetAsync(
-                    new GetCounterByUserIdRequest()
-                )
-            );
         }
         #endif
 

@@ -122,37 +122,27 @@ namespace Gs2.Gs2Inventory.Model.Cache
             Func<Task<ItemModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ItemModel>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            inventoryName
-                       ),
-                       self.CacheKey(
-                            itemName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        inventoryName,
-                        itemName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    inventoryName,
+                    itemName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ItemModel).PutCache(
+                    cache,
+                    namespaceName,
+                    inventoryName,
+                    itemName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "itemModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ItemModel).PutCache(
-                        cache,
-                        namespaceName,
-                        inventoryName,
-                        itemName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "itemModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

@@ -124,22 +124,32 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.FriendRequest> ModelAsync()
             #endif
         {
-            if (this.UserId == null) {
-                throw new NullReferenceException();
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                            this.TargetUserId
+                        )
+                    ).LockAsync()) {
+                if (this.UserId == null) {
+                    throw new NullReferenceException();
+                }
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                        this.NamespaceName,
+                        this.UserId
+                    ),
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                        this.TargetUserId
+                    )
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                ),
-                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
-                    this.TargetUserId
-                )
-            );
-            if (find) {
-                return value;
-            }
-            return null;
         }
         #endif
 

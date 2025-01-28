@@ -116,34 +116,25 @@ namespace Gs2.Gs2Exchange.Model.Cache
             Func<Task<IncrementalRateModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<IncrementalRateModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            rateName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        rateName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    rateName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as IncrementalRateModel).PutCache(
+                    cache,
+                    namespaceName,
+                    rateName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "incrementalRateModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as IncrementalRateModel).PutCache(
-                        cache,
-                        namespaceName,
-                        rateName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "incrementalRateModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

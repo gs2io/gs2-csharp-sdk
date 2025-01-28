@@ -175,24 +175,34 @@ namespace Gs2.Gs2Quest.Domain.Model
         public async Task<Gs2.Gs2Quest.Model.CompletedQuestList> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Quest.Model.CompletedQuestList).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.QuestGroupName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheKey(
+                            this.QuestGroupName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Quest.Model.CompletedQuestList).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.QuestGroupName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Quest.Model.CompletedQuestList).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.QuestGroupName,
+                    () => this.GetAsync(
+                        new GetCompletedQuestListRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Quest.Model.CompletedQuestList).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.QuestGroupName,
-                () => this.GetAsync(
-                    new GetCompletedQuestListRequest()
-                )
-            );
         }
         #endif
 

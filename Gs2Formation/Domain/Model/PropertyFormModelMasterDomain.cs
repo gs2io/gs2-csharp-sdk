@@ -283,22 +283,31 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.PropertyFormModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PropertyFormModelName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
+                        (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).CacheKey(
+                            this.PropertyFormModelName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PropertyFormModelName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.PropertyFormModelName,
+                    () => this.GetAsync(
+                        new GetPropertyFormModelMasterRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.PropertyFormModelName,
-                () => this.GetAsync(
-                    new GetPropertyFormModelMasterRequest()
-                )
-            );
         }
         #endif
 

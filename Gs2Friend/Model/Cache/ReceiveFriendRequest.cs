@@ -122,37 +122,27 @@ namespace Gs2.Gs2Friend.Model.Cache
             Func<Task<ReceiveFriendRequest>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<ReceiveFriendRequest>(
-                       self.CacheParentKey(
-                            namespaceName,
-                            userId
-                       ),
-                       self.CacheKey(
-                            fromUserId
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        fromUserId
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    fromUserId
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as ReceiveFriendRequest).PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    fromUserId
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "receiveFriendRequest") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as ReceiveFriendRequest).PutCache(
-                        cache,
-                        namespaceName,
-                        userId,
-                        fromUserId
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "receiveFriendRequest") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

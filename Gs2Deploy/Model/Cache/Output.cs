@@ -116,34 +116,25 @@ namespace Gs2.Gs2Deploy.Model.Cache
             Func<Task<Output>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Output>(
-                       self.CacheParentKey(
-                            stackName
-                       ),
-                       self.CacheKey(
-                            outputName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        stackName,
-                        outputName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    stackName,
+                    outputName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as Output).PutCache(
+                    cache,
+                    stackName,
+                    outputName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "output") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Output).PutCache(
-                        cache,
-                        stackName,
-                        outputName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "output") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif

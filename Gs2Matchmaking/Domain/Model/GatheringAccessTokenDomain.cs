@@ -389,24 +389,34 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public async Task<Gs2.Gs2Matchmaking.Model.Gathering> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Gathering).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.GatheringName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Gathering>(
+                        (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheKey(
+                            this.GatheringName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Gathering).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GatheringName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Matchmaking.Model.Gathering).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GatheringName,
+                    () => this.GetAsync(
+                        new GetGatheringRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Matchmaking.Model.Gathering).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.GatheringName,
-                () => this.GetAsync(
-                    new GetGatheringRequest()
-                )
-            );
         }
         #endif
 

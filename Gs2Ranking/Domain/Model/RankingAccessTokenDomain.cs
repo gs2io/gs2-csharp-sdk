@@ -194,30 +194,43 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public async Task<Gs2.Gs2Ranking.Model.Ranking> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking.Model.Ranking).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CategoryName,
-                this.AdditionalScopeName,
-                this.ScorerUserId,
-                this.Index ?? default
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.Ranking>(
+                        (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.CategoryName,
+                            this.AdditionalScopeName
+                        ),
+                        (null as Gs2.Gs2Ranking.Model.Ranking).CacheKey(
+                            this.ScorerUserId,
+                            this.Index
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking.Model.Ranking).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName,
+                    this.ScorerUserId,
+                    this.Index ?? default
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Ranking.Model.Ranking).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName,
+                    this.ScorerUserId,
+                    this.Index ?? default,
+                    () => this.GetAsync(
+                        new GetRankingRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Ranking.Model.Ranking).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.CategoryName,
-                this.AdditionalScopeName,
-                this.ScorerUserId,
-                this.Index ?? default,
-                () => this.GetAsync(
-                    new GetRankingRequest()
-                )
-            );
         }
         #endif
 

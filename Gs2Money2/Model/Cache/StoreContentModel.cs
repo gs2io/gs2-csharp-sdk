@@ -116,34 +116,25 @@ namespace Gs2.Gs2Money2.Model.Cache
             Func<Task<StoreContentModel>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<StoreContentModel>(
-                       self.CacheParentKey(
-                            namespaceName
-                       ),
-                       self.CacheKey(
-                            contentName
-                       )
-                   ).LockAsync()) {
-                try {
-                    var item = await fetchImpl();
-                    item.PutCache(
-                        cache,
-                        namespaceName,
-                        contentName
-                    );
-                    return item;
+            try {
+                var item = await fetchImpl();
+                item.PutCache(
+                    cache,
+                    namespaceName,
+                    contentName
+                );
+                return item;
+            }
+            catch (Gs2.Core.Exception.NotFoundException e) {
+                (null as StoreContentModel).PutCache(
+                    cache,
+                    namespaceName,
+                    contentName
+                );
+                if (e.errors.Length == 0 || e.errors[0].component != "storeContentModel") {
+                    throw;
                 }
-                catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as StoreContentModel).PutCache(
-                        cache,
-                        namespaceName,
-                        contentName
-                    );
-                    if (e.errors.Length == 0 || e.errors[0].component != "storeContentModel") {
-                        throw;
-                    }
-                    return null;
-                }
+                return null;
             }
         }
 #endif
