@@ -41,6 +41,8 @@ namespace Gs2.Gs2Limit.Request
          public int? ResetDayOfMonth { set; get; } = null!;
          public string ResetDayOfWeek { set; get; } = null!;
          public int? ResetHour { set; get; } = null!;
+         public long? AnchorTimestamp { set; get; } = null!;
+         public int? Days { set; get; } = null!;
         public UpdateLimitModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -73,6 +75,14 @@ namespace Gs2.Gs2Limit.Request
             this.ResetHour = resetHour;
             return this;
         }
+        public UpdateLimitModelMasterRequest WithAnchorTimestamp(long? anchorTimestamp) {
+            this.AnchorTimestamp = anchorTimestamp;
+            return this;
+        }
+        public UpdateLimitModelMasterRequest WithDays(int? days) {
+            this.Days = days;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -90,7 +100,9 @@ namespace Gs2.Gs2Limit.Request
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())
                 .WithResetDayOfMonth(!data.Keys.Contains("resetDayOfMonth") || data["resetDayOfMonth"] == null ? null : (int?)(data["resetDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["resetDayOfMonth"].ToString()) : int.Parse(data["resetDayOfMonth"].ToString())))
                 .WithResetDayOfWeek(!data.Keys.Contains("resetDayOfWeek") || data["resetDayOfWeek"] == null ? null : data["resetDayOfWeek"].ToString())
-                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)(data["resetHour"].ToString().Contains(".") ? (int)double.Parse(data["resetHour"].ToString()) : int.Parse(data["resetHour"].ToString())));
+                .WithResetHour(!data.Keys.Contains("resetHour") || data["resetHour"] == null ? null : (int?)(data["resetHour"].ToString().Contains(".") ? (int)double.Parse(data["resetHour"].ToString()) : int.Parse(data["resetHour"].ToString())))
+                .WithAnchorTimestamp(!data.Keys.Contains("anchorTimestamp") || data["anchorTimestamp"] == null ? null : (long?)(data["anchorTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["anchorTimestamp"].ToString()) : long.Parse(data["anchorTimestamp"].ToString())))
+                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)(data["days"].ToString().Contains(".") ? (int)double.Parse(data["days"].ToString()) : int.Parse(data["days"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -104,6 +116,8 @@ namespace Gs2.Gs2Limit.Request
                 ["resetDayOfMonth"] = ResetDayOfMonth,
                 ["resetDayOfWeek"] = ResetDayOfWeek,
                 ["resetHour"] = ResetHour,
+                ["anchorTimestamp"] = AnchorTimestamp,
+                ["days"] = Days,
             };
         }
 
@@ -142,6 +156,14 @@ namespace Gs2.Gs2Limit.Request
                 writer.WritePropertyName("resetHour");
                 writer.Write((ResetHour.ToString().Contains(".") ? (int)double.Parse(ResetHour.ToString()) : int.Parse(ResetHour.ToString())));
             }
+            if (AnchorTimestamp != null) {
+                writer.WritePropertyName("anchorTimestamp");
+                writer.Write((AnchorTimestamp.ToString().Contains(".") ? (long)double.Parse(AnchorTimestamp.ToString()) : long.Parse(AnchorTimestamp.ToString())));
+            }
+            if (Days != null) {
+                writer.WritePropertyName("days");
+                writer.Write((Days.ToString().Contains(".") ? (int)double.Parse(Days.ToString()) : int.Parse(Days.ToString())));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -155,6 +177,8 @@ namespace Gs2.Gs2Limit.Request
             key += ResetDayOfMonth + ":";
             key += ResetDayOfWeek + ":";
             key += ResetHour + ":";
+            key += AnchorTimestamp + ":";
+            key += Days + ":";
             return key;
         }
     }

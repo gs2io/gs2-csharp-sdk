@@ -2497,6 +2497,16 @@ namespace Gs2.Gs2Limit
                     jsonWriter.WritePropertyName("resetHour");
                     jsonWriter.Write(request.ResetHour.ToString());
                 }
+                if (request.AnchorTimestamp != null)
+                {
+                    jsonWriter.WritePropertyName("anchorTimestamp");
+                    jsonWriter.Write(request.AnchorTimestamp.ToString());
+                }
+                if (request.Days != null)
+                {
+                    jsonWriter.WritePropertyName("days");
+                    jsonWriter.Write(request.Days.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2742,6 +2752,16 @@ namespace Gs2.Gs2Limit
                 {
                     jsonWriter.WritePropertyName("resetHour");
                     jsonWriter.Write(request.ResetHour.ToString());
+                }
+                if (request.AnchorTimestamp != null)
+                {
+                    jsonWriter.WritePropertyName("anchorTimestamp");
+                    jsonWriter.Write(request.AnchorTimestamp.ToString());
+                }
+                if (request.Days != null)
+                {
+                    jsonWriter.WritePropertyName("days");
+                    jsonWriter.Write(request.Days.ToString());
                 }
                 if (request.ContextStack != null)
                 {

@@ -241,6 +241,60 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain> ResetFuture(
+            ResetCounterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithCounterName(this.CounterName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ResetCounterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain> ResetAsync(
+            #else
+        public async Task<Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain> ResetAsync(
+            #endif
+            ResetCounterRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithCounterName(this.CounterName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ResetCounterAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain> DeleteFuture(
             DeleteCounterRequest request
         ) {

@@ -625,6 +625,12 @@ namespace Gs2.Gs2Mission.Domain
         public static Action<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ResetCounterByUserIdRequest, ResetCounterByUserIdResult> ResetCounterByUserIdComplete = new UnityEvent<string, ResetCounterByUserIdRequest, ResetCounterByUserIdResult>();
+    #else
+        public static Action<string, ResetCounterByUserIdRequest, ResetCounterByUserIdResult> ResetCounterByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
@@ -677,6 +683,23 @@ namespace Gs2.Gs2Mission.Domain
                         );
 
                         DecreaseCounterByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "ResetCounterByUserId": {
+                        var requestModel = ResetCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ResetCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        ResetCounterByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

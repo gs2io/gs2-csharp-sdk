@@ -38,6 +38,8 @@ namespace Gs2.Gs2Mission.Model
                     return VerifyCompleteByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Mission:DecreaseCounterByUserId":
                     return DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Mission:ResetCounterByUserId":
+                    return ResetCounterByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Mission:VerifyCounterValueByUserId":
                     return VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

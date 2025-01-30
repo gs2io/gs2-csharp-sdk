@@ -6706,6 +6706,277 @@ namespace Gs2.Gs2Mission
 #endif
 
 
+        public class ResetCounterTask : Gs2RestSessionTask<ResetCounterRequest, ResetCounterResult>
+        {
+            public ResetCounterTask(IGs2Session session, RestSessionRequestFactory factory, ResetCounterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetCounterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/counter/{counterName}/reset";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{counterName}", !string.IsNullOrEmpty(request.CounterName) ? request.CounterName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Scopes != null)
+                {
+                    jsonWriter.WritePropertyName("scopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Scopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetCounter(
+                Request.ResetCounterRequest request,
+                UnityAction<AsyncResult<Result.ResetCounterResult>> callback
+        )
+		{
+			var task = new ResetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetCounterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetCounterResult> ResetCounterFuture(
+                Request.ResetCounterRequest request
+        )
+		{
+			return new ResetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetCounterResult> ResetCounterAsync(
+                Request.ResetCounterRequest request
+        )
+		{
+            AsyncResult<Result.ResetCounterResult> result = null;
+			await ResetCounter(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetCounterTask ResetCounterAsync(
+                Request.ResetCounterRequest request
+        )
+		{
+			return new ResetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetCounterResult> ResetCounterAsync(
+                Request.ResetCounterRequest request
+        )
+		{
+			var task = new ResetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetCounterByUserIdTask : Gs2RestSessionTask<ResetCounterByUserIdRequest, ResetCounterByUserIdResult>
+        {
+            public ResetCounterByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ResetCounterByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetCounterByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/counter/{counterName}/reset";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{counterName}", !string.IsNullOrEmpty(request.CounterName) ? request.CounterName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Scopes != null)
+                {
+                    jsonWriter.WritePropertyName("scopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Scopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetCounterByUserId(
+                Request.ResetCounterByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ResetCounterByUserIdResult>> callback
+        )
+		{
+			var task = new ResetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetCounterByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetCounterByUserIdResult> ResetCounterByUserIdFuture(
+                Request.ResetCounterByUserIdRequest request
+        )
+		{
+			return new ResetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
+                Request.ResetCounterByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.ResetCounterByUserIdResult> result = null;
+			await ResetCounterByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetCounterByUserIdTask ResetCounterByUserIdAsync(
+                Request.ResetCounterByUserIdRequest request
+        )
+		{
+			return new ResetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
+                Request.ResetCounterByUserIdRequest request
+        )
+		{
+			var task = new ResetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteCounterTask : Gs2RestSessionTask<DeleteCounterRequest, DeleteCounterResult>
         {
             public DeleteCounterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCounterRequest request) : base(session, factory, request)
@@ -7294,6 +7565,130 @@ namespace Gs2.Gs2Mission
         )
 		{
 			var task = new DecreaseByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetByStampTaskTask : Gs2RestSessionTask<ResetByStampTaskRequest, ResetByStampTaskResult>
+        {
+            public ResetByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, ResetByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ResetByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mission")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/reset";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetByStampTask(
+                Request.ResetByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.ResetByStampTaskResult>> callback
+        )
+		{
+			var task = new ResetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetByStampTaskResult> ResetByStampTaskFuture(
+                Request.ResetByStampTaskRequest request
+        )
+		{
+			return new ResetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetByStampTaskResult> ResetByStampTaskAsync(
+                Request.ResetByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.ResetByStampTaskResult> result = null;
+			await ResetByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ResetByStampTaskTask ResetByStampTaskAsync(
+                Request.ResetByStampTaskRequest request
+        )
+		{
+			return new ResetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetByStampTaskResult> ResetByStampTaskAsync(
+                Request.ResetByStampTaskRequest request
+        )
+		{
+			var task = new ResetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

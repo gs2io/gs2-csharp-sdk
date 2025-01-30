@@ -375,6 +375,20 @@ namespace Gs2.Gs2Mission.Model.Cache
                         Request.VerifyCounterValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "resetCounter":
+                    Result.ResetCounterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.ResetCounterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "resetCounterByUserId":
+                    Result.ResetCounterByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.ResetCounterByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteCounter":
                     Result.DeleteCounterResult.FromJson(resultPayload).PutCache(
                         cache,

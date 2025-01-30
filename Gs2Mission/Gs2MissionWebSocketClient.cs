@@ -2549,6 +2549,272 @@ namespace Gs2.Gs2Mission
 #endif
 
 
+        public class ResetCounterTask : Gs2WebSocketSessionTask<Request.ResetCounterRequest, Result.ResetCounterResult>
+        {
+	        public ResetCounterTask(IGs2Session session, Request.ResetCounterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetCounterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName.ToString());
+                }
+                if (request.Scopes != null)
+                {
+                    jsonWriter.WritePropertyName("scopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Scopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "mission",
+                    "counter",
+                    "resetCounter",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetCounter(
+                Request.ResetCounterRequest request,
+                UnityAction<AsyncResult<Result.ResetCounterResult>> callback
+        )
+		{
+			var task = new ResetCounterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetCounterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetCounterResult> ResetCounterFuture(
+                Request.ResetCounterRequest request
+        )
+		{
+			return new ResetCounterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetCounterResult> ResetCounterAsync(
+            Request.ResetCounterRequest request
+        )
+		{
+		    var task = new ResetCounterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetCounterTask ResetCounterAsync(
+                Request.ResetCounterRequest request
+        )
+		{
+			return new ResetCounterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetCounterResult> ResetCounterAsync(
+            Request.ResetCounterRequest request
+        )
+		{
+		    var task = new ResetCounterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ResetCounterByUserIdTask : Gs2WebSocketSessionTask<Request.ResetCounterByUserIdRequest, Result.ResetCounterByUserIdResult>
+        {
+	        public ResetCounterByUserIdTask(IGs2Session session, Request.ResetCounterByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetCounterByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName.ToString());
+                }
+                if (request.Scopes != null)
+                {
+                    jsonWriter.WritePropertyName("scopes");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Scopes)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "mission",
+                    "counter",
+                    "resetCounterByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetCounterByUserId(
+                Request.ResetCounterByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ResetCounterByUserIdResult>> callback
+        )
+		{
+			var task = new ResetCounterByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetCounterByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetCounterByUserIdResult> ResetCounterByUserIdFuture(
+                Request.ResetCounterByUserIdRequest request
+        )
+		{
+			return new ResetCounterByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
+            Request.ResetCounterByUserIdRequest request
+        )
+		{
+		    var task = new ResetCounterByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetCounterByUserIdTask ResetCounterByUserIdAsync(
+                Request.ResetCounterByUserIdRequest request
+        )
+		{
+			return new ResetCounterByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
+            Request.ResetCounterByUserIdRequest request
+        )
+		{
+		    var task = new ResetCounterByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteCounterTask : Gs2WebSocketSessionTask<Request.DeleteCounterRequest, Result.DeleteCounterResult>
         {
 	        public DeleteCounterTask(IGs2Session session, Request.DeleteCounterRequest request) : base(session, request)

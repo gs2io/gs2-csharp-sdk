@@ -352,6 +352,60 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> ResetFuture(
+            ResetCounterByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithCounterName(this.CounterName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ResetCounterByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Mission.Domain.Model.CounterDomain> ResetAsync(
+            #else
+        public async Task<Gs2.Gs2Mission.Domain.Model.CounterDomain> ResetAsync(
+            #endif
+            ResetCounterByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithCounterName(this.CounterName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ResetCounterByUserIdAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.CounterDomain> DeleteFuture(
             DeleteCounterByUserIdRequest request
         ) {
