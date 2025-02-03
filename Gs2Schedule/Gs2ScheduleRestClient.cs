@@ -2711,6 +2711,11 @@ namespace Gs2.Gs2Schedule
                     jsonWriter.WritePropertyName("ttl");
                     jsonWriter.Write(request.Ttl.ToString());
                 }
+                if (request.EventId != null)
+                {
+                    jsonWriter.WritePropertyName("eventId");
+                    jsonWriter.Write(request.EventId);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

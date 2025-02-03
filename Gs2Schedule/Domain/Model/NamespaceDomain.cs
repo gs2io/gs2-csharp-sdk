@@ -81,6 +81,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this.NamespaceName = namespaceName;
         }
 
+        public Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain CurrentEventMaster(
+        ) {
+            return new Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain(
+                this._gs2,
+                this.NamespaceName
+            );
+        }
+
         public Gs2.Gs2Schedule.Domain.Model.UserDomain User(
             string userId
         ) {
@@ -98,14 +106,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 accessToken
-            );
-        }
-
-        public Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain CurrentEventMaster(
-        ) {
-            return new Gs2.Gs2Schedule.Domain.Model.CurrentEventMasterDomain(
-                this._gs2,
-                this.NamespaceName
             );
         }
         #if UNITY_2017_1_OR_NEWER

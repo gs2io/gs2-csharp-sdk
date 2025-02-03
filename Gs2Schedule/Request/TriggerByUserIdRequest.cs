@@ -38,6 +38,7 @@ namespace Gs2.Gs2Schedule.Request
          public string UserId { set; get; } = null!;
          public string TriggerStrategy { set; get; } = null!;
          public int? Ttl { set; get; } = null!;
+         public string EventId { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public TriggerByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -58,6 +59,10 @@ namespace Gs2.Gs2Schedule.Request
         }
         public TriggerByUserIdRequest WithTtl(int? ttl) {
             this.Ttl = ttl;
+            return this;
+        }
+        public TriggerByUserIdRequest WithEventId(string eventId) {
+            this.EventId = eventId;
             return this;
         }
         public TriggerByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -84,6 +89,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTriggerStrategy(!data.Keys.Contains("triggerStrategy") || data["triggerStrategy"] == null ? null : data["triggerStrategy"].ToString())
                 .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)(data["ttl"].ToString().Contains(".") ? (int)double.Parse(data["ttl"].ToString()) : int.Parse(data["ttl"].ToString())))
+                .WithEventId(!data.Keys.Contains("eventId") || data["eventId"] == null ? null : data["eventId"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -95,6 +101,7 @@ namespace Gs2.Gs2Schedule.Request
                 ["userId"] = UserId,
                 ["triggerStrategy"] = TriggerStrategy,
                 ["ttl"] = Ttl,
+                ["eventId"] = EventId,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -122,6 +129,10 @@ namespace Gs2.Gs2Schedule.Request
                 writer.WritePropertyName("ttl");
                 writer.Write((Ttl.ToString().Contains(".") ? (int)double.Parse(Ttl.ToString()) : int.Parse(Ttl.ToString())));
             }
+            if (EventId != null) {
+                writer.WritePropertyName("eventId");
+                writer.Write(EventId.ToString());
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -136,6 +147,7 @@ namespace Gs2.Gs2Schedule.Request
             key += UserId + ":";
             key += TriggerStrategy + ":";
             key += Ttl + ":";
+            key += EventId + ":";
             key += TimeOffsetToken + ":";
             return key;
         }
