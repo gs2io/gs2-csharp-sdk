@@ -222,53 +222,62 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
             #endif
         #endif
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            while(this._hasNext()) {
+                using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.CampaignModel>(
+                        (null as Gs2.Gs2SerialKey.Model.CampaignModel).CacheParentKey(
+                            NamespaceName
+                       ),
+                       "ListCampaignModel"
+                   ).LockAsync()) {
+                while(this._hasNext()) {
         #endif
-                if (this._result.Length == 0 && !this._last) {
+                    if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
+                        yield return this._load();
         #else
-                    await this._load();
+                        await this._load();
         #endif
-                }
-                if (this._result.Length == 0) {
+                    }
+                    if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    Current = null;
+                        Current = null;
+                        callback.Invoke(new AsyncResult<Gs2.Gs2SerialKey.Model.CampaignModel>(
+                            Current,
+                            Error
+                        ));
+                        yield break;
+        #else
+                        break;
+        #endif
+                    }
+                    var ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                        yield return this._load();
+        #else
+                        await this._load();
+        #endif
+                    }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+                    await writer.YieldAsync(ret);
+            #else
+                    Current = ret;
                     callback.Invoke(new AsyncResult<Gs2.Gs2SerialKey.Model.CampaignModel>(
                         Current,
                         Error
                     ));
-                    yield break;
-        #else
-                    break;
-        #endif
-                }
-                var ret = this._result[0];
-                this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
-        #else
-                    await this._load();
-        #endif
-                }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                await writer.YieldAsync(ret);
-            #else
-                Current = ret;
-                callback.Invoke(new AsyncResult<Gs2.Gs2SerialKey.Model.CampaignModel>(
-                    Current,
-                    Error
-                ));
             #endif
         #else
-                yield return ret;
+                    yield return ret;
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+                }
         #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            }
-            });
+                }
+                });
             #endif
         #else
             }

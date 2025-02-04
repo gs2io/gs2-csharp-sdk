@@ -42,6 +42,16 @@ namespace Gs2.Core.Domain
             }
         }
 
+        public void ClearAndAllUnsubscribe()
+        {
+            this._cache.Clear();
+            this._listCached.Clear();
+            this._listCacheContexts.Clear();
+            this._listCacheUpdateRequired.Clear();
+            this._cacheUpdateCallback.Clear();
+            this._listCacheUpdateCallback.Clear();
+        }
+
         public void SetListCached<TKind>(string parentKey, object listCacheContext = null)
         {
             this._listCached.Ensure(typeof(TKind)).Add(parentKey);
