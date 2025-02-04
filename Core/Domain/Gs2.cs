@@ -324,6 +324,11 @@ namespace Gs2.Core.Domain
             _cache.Clear();
         }
 
+        public void ClearCacheAndAllUnsubscribe()
+        {
+            _cache.ClearAndAllUnsubscribe();
+        }
+
         public void ClearCache<TKind>(
             string parentKey,
             string key
