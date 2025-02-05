@@ -86,7 +86,7 @@ namespace Gs2.Core.Net
 #if UNITY_WEBGL && !UNITY_EDITOR
             this._session = WebSocketFactory.CreateInstance(url);
 #else
-            this._session = new WebSocket(url) {SslConfiguration = {EnabledSslProtocols = SslProtocols.Tls12, CheckCertificateRevocation = this._checkCertificateRevocation}};
+            this._session = new WebSocket(url);
 #endif
             
 #if UNITY_WEBGL && !UNITY_EDITOR
