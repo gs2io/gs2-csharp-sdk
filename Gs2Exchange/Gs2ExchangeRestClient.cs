@@ -222,6 +222,11 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("incrementalExchangeScript");
                     request.IncrementalExchangeScript.WriteJson(jsonWriter);
                 }
+                if (request.AcquireAwaitScript != null)
+                {
+                    jsonWriter.WritePropertyName("acquireAwaitScript");
+                    request.AcquireAwaitScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -588,6 +593,11 @@ namespace Gs2.Gs2Exchange
                 {
                     jsonWriter.WritePropertyName("incrementalExchangeScript");
                     request.IncrementalExchangeScript.WriteJson(jsonWriter);
+                }
+                if (request.AcquireAwaitScript != null)
+                {
+                    jsonWriter.WritePropertyName("acquireAwaitScript");
+                    request.AcquireAwaitScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Exchange.Model
         public Gs2.Gs2Exchange.Model.TransactionSetting TransactionSetting { set; get; } = null!;
         public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; } = null!;
         public Gs2.Gs2Exchange.Model.ScriptSetting IncrementalExchangeScript { set; get; } = null!;
+        public Gs2.Gs2Exchange.Model.ScriptSetting AcquireAwaitScript { set; get; } = null!;
         public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -77,6 +78,10 @@ namespace Gs2.Gs2Exchange.Model
         }
         public Namespace WithIncrementalExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting incrementalExchangeScript) {
             this.IncrementalExchangeScript = incrementalExchangeScript;
+            return this;
+        }
+        public Namespace WithAcquireAwaitScript(Gs2.Gs2Exchange.Model.ScriptSetting acquireAwaitScript) {
+            this.AcquireAwaitScript = acquireAwaitScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
@@ -174,6 +179,7 @@ namespace Gs2.Gs2Exchange.Model
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Exchange.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
                 .WithIncrementalExchangeScript(!data.Keys.Contains("incrementalExchangeScript") || data["incrementalExchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["incrementalExchangeScript"]))
+                .WithAcquireAwaitScript(!data.Keys.Contains("acquireAwaitScript") || data["acquireAwaitScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["acquireAwaitScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -193,6 +199,7 @@ namespace Gs2.Gs2Exchange.Model
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["exchangeScript"] = ExchangeScript?.ToJson(),
                 ["incrementalExchangeScript"] = IncrementalExchangeScript?.ToJson(),
+                ["acquireAwaitScript"] = AcquireAwaitScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -234,6 +241,10 @@ namespace Gs2.Gs2Exchange.Model
             if (IncrementalExchangeScript != null) {
                 writer.WritePropertyName("incrementalExchangeScript");
                 IncrementalExchangeScript.WriteJson(writer);
+            }
+            if (AcquireAwaitScript != null) {
+                writer.WritePropertyName("acquireAwaitScript");
+                AcquireAwaitScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -330,6 +341,14 @@ namespace Gs2.Gs2Exchange.Model
             {
                 diff += IncrementalExchangeScript.CompareTo(other.IncrementalExchangeScript);
             }
+            if (AcquireAwaitScript == null && AcquireAwaitScript == other.AcquireAwaitScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += AcquireAwaitScript.CompareTo(other.AcquireAwaitScript);
+            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -416,6 +435,8 @@ namespace Gs2.Gs2Exchange.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "exchange.namespace.createdAt.error.invalid"),
@@ -463,6 +484,7 @@ namespace Gs2.Gs2Exchange.Model
                 TransactionSetting = TransactionSetting.Clone() as Gs2.Gs2Exchange.Model.TransactionSetting,
                 ExchangeScript = ExchangeScript.Clone() as Gs2.Gs2Exchange.Model.ScriptSetting,
                 IncrementalExchangeScript = IncrementalExchangeScript.Clone() as Gs2.Gs2Exchange.Model.ScriptSetting,
+                AcquireAwaitScript = AcquireAwaitScript.Clone() as Gs2.Gs2Exchange.Model.ScriptSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Exchange.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

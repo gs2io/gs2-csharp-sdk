@@ -40,6 +40,7 @@ namespace Gs2.Gs2Exchange.Request
          public Gs2.Gs2Exchange.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; } = null!;
          public Gs2.Gs2Exchange.Model.ScriptSetting IncrementalExchangeScript { set; get; } = null!;
+         public Gs2.Gs2Exchange.Model.ScriptSetting AcquireAwaitScript { set; get; } = null!;
          public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; } = null!;
         [Obsolete("This method is deprecated")]
          public string QueueNamespaceId { set; get; } = null!;
@@ -73,6 +74,10 @@ namespace Gs2.Gs2Exchange.Request
             this.IncrementalExchangeScript = incrementalExchangeScript;
             return this;
         }
+        public UpdateNamespaceRequest WithAcquireAwaitScript(Gs2.Gs2Exchange.Model.ScriptSetting acquireAwaitScript) {
+            this.AcquireAwaitScript = acquireAwaitScript;
+            return this;
+        }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Exchange.Request
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Exchange.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
                 .WithIncrementalExchangeScript(!data.Keys.Contains("incrementalExchangeScript") || data["incrementalExchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["incrementalExchangeScript"]))
+                .WithAcquireAwaitScript(!data.Keys.Contains("acquireAwaitScript") || data["acquireAwaitScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["acquireAwaitScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -117,6 +123,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["exchangeScript"] = ExchangeScript?.ToJson(),
                 ["incrementalExchangeScript"] = IncrementalExchangeScript?.ToJson(),
+                ["acquireAwaitScript"] = AcquireAwaitScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -149,6 +156,9 @@ namespace Gs2.Gs2Exchange.Request
             if (IncrementalExchangeScript != null) {
                 IncrementalExchangeScript.WriteJson(writer);
             }
+            if (AcquireAwaitScript != null) {
+                AcquireAwaitScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -172,6 +182,7 @@ namespace Gs2.Gs2Exchange.Request
             key += TransactionSetting + ":";
             key += ExchangeScript + ":";
             key += IncrementalExchangeScript + ":";
+            key += AcquireAwaitScript + ":";
             key += LogSetting + ":";
             return key;
         }
