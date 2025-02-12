@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+#if !UNITY_2017_1_OR_NEWER
+using System.Collections.Concurrent;
+#endif
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,9 +28,14 @@ namespace Gs2.Core.Net
         // ReSharper disable once MemberCanBePrivate.Global
         public State State;
         private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
-        
+
+#if UNITY_2017_1_OR_NEWER
         private Dictionary<Gs2SessionTaskId, RestSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, RestSessionRequest>();
         protected Dictionary<Gs2SessionTaskId, RestResult> _result = new Dictionary<Gs2SessionTaskId, RestResult>();
+#else
+        private ConcurrentDictionary<Gs2SessionTaskId, RestSessionRequest> _inflightRequest = new ConcurrentDictionary<Gs2SessionTaskId, RestSessionRequest>();
+        protected ConcurrentDictionary<Gs2SessionTaskId, RestResult> _result = new ConcurrentDictionary<Gs2SessionTaskId, RestResult>();
+#endif
 
         public IGs2Credential Credential { get; }
         public Region Region { get; }
@@ -351,7 +359,11 @@ namespace Gs2.Core.Net
                 yield return sessionRequest;
 
                 if (sessionRequest.Error != null) {
+#if UNITY_2017_1_OR_NEWER
                     this._inflightRequest.Remove(sessionRequest.TaskId);
+#else
+                    this._inflightRequest.Remove(sessionRequest.TaskId, out var value);
+#endif
                 }
 
                 this._result[sessionRequest.TaskId] = sessionRequest.Result;
@@ -372,7 +384,11 @@ namespace Gs2.Core.Net
                 await sessionRequest.Invoke();
 
                 if (sessionRequest.Error != null) {
+#if UNITY_2017_1_OR_NEWER
                     this._inflightRequest.Remove(sessionRequest.TaskId);
+#else
+                    this._inflightRequest.Remove(sessionRequest.TaskId, out var value);
+#endif
                 }
 
                 this._result[sessionRequest.TaskId] = sessionRequest.Result;
@@ -403,8 +419,13 @@ namespace Gs2.Core.Net
         public IGs2SessionResult MarkRead(IGs2SessionRequest request)
         {
             var result = _result[request.TaskId];
+#if UNITY_2017_1_OR_NEWER
             this._inflightRequest.Remove(request.TaskId);
             this._result.Remove(request.TaskId);
+#else
+            this._inflightRequest.Remove(request.TaskId, out var inflightRequestvalue);
+            this._result.Remove(request.TaskId, out var resultValue);
+#endif
             return result;
         }
     }
