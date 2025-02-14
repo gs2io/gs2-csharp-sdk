@@ -33,8 +33,9 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class SetMaximumIdleMinutesByUserIdResult : IResult
 	{
-        public Gs2.Gs2Idle.Model.Status Item { set; get; } = null!;
-        public Gs2.Gs2Idle.Model.Status Old { set; get; } = null!;
+        public Gs2.Gs2Idle.Model.Status Item { set; get; }
+        public Gs2.Gs2Idle.Model.Status Old { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SetMaximumIdleMinutesByUserIdResult WithItem(Gs2.Gs2Idle.Model.Status item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Idle.Result
 
         public SetMaximumIdleMinutesByUserIdResult WithOld(Gs2.Gs2Idle.Model.Status old) {
             this.Old = old;
+            return this;
+        }
+
+        public SetMaximumIdleMinutesByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Idle.Result
             }
             return new SetMaximumIdleMinutesByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Idle.Model.Status.FromJson(data["item"]))
-                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Idle.Model.Status.FromJson(data["old"]));
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Idle.Model.Status.FromJson(data["old"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Idle.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["old"] = Old?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Idle.Result
             }
             if (Old != null) {
                 Old.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

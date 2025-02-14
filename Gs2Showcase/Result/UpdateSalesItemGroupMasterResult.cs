@@ -33,10 +33,16 @@ namespace Gs2.Gs2Showcase.Result
 	[System.Serializable]
 	public class UpdateSalesItemGroupMasterResult : IResult
 	{
-        public Gs2.Gs2Showcase.Model.SalesItemGroupMaster Item { set; get; } = null!;
+        public Gs2.Gs2Showcase.Model.SalesItemGroupMaster Item { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public UpdateSalesItemGroupMasterResult WithItem(Gs2.Gs2Showcase.Model.SalesItemGroupMaster item) {
             this.Item = item;
+            return this;
+        }
+
+        public UpdateSalesItemGroupMasterResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Showcase.Result
                 return null;
             }
             return new UpdateSalesItemGroupMasterResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Showcase.Model.SalesItemGroupMaster.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Showcase.Model.SalesItemGroupMaster.FromJson(data["item"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -64,6 +72,10 @@ namespace Gs2.Gs2Showcase.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

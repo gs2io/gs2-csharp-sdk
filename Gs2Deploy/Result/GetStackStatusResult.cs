@@ -33,10 +33,16 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class GetStackStatusResult : IResult
 	{
-        public string Status { set; get; } = null!;
+        public string Status { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetStackStatusResult WithStatus(string status) {
             this.Status = status;
+            return this;
+        }
+
+        public GetStackStatusResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Deploy.Result
                 return null;
             }
             return new GetStackStatusResult()
-                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString());
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["status"] = Status,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Deploy.Result
             if (Status != null) {
                 writer.WritePropertyName("status");
                 writer.Write(Status.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,9 +33,10 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class GetProjectTokenByIdentifierResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Project Item { set; get; } = null!;
-        public string OwnerId { set; get; } = null!;
-        public string ProjectToken { set; get; } = null!;
+        public Gs2.Gs2Project.Model.Project Item { set; get; }
+        public string OwnerId { set; get; }
+        public string ProjectToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetProjectTokenByIdentifierResult WithItem(Gs2.Gs2Project.Model.Project item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Project.Result
             return this;
         }
 
+        public GetProjectTokenByIdentifierResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Project.Result
             return new GetProjectTokenByIdentifierResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Project.Model.Project.FromJson(data["item"]))
                 .WithOwnerId(!data.Keys.Contains("ownerId") || data["ownerId"] == null ? null : data["ownerId"].ToString())
-                .WithProjectToken(!data.Keys.Contains("projectToken") || data["projectToken"] == null ? null : data["projectToken"].ToString());
+                .WithProjectToken(!data.Keys.Contains("projectToken") || data["projectToken"] == null ? null : data["projectToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Project.Result
                 ["item"] = Item?.ToJson(),
                 ["ownerId"] = OwnerId,
                 ["projectToken"] = ProjectToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -88,6 +96,10 @@ namespace Gs2.Gs2Project.Result
             if (ProjectToken != null) {
                 writer.WritePropertyName("projectToken");
                 writer.Write(ProjectToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

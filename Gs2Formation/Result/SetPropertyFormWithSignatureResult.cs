@@ -33,8 +33,9 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class SetPropertyFormWithSignatureResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.PropertyFormModel ProeprtyFormModel { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyFormModel ProeprtyFormModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SetPropertyFormWithSignatureResult WithItem(Gs2.Gs2Formation.Model.PropertyForm item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Formation.Result
 
         public SetPropertyFormWithSignatureResult WithProeprtyFormModel(Gs2.Gs2Formation.Model.PropertyFormModel proeprtyFormModel) {
             this.ProeprtyFormModel = proeprtyFormModel;
+            return this;
+        }
+
+        public SetPropertyFormWithSignatureResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Formation.Result
             }
             return new SetPropertyFormWithSignatureResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.PropertyForm.FromJson(data["item"]))
-                .WithProeprtyFormModel(!data.Keys.Contains("proeprtyFormModel") || data["proeprtyFormModel"] == null ? null : Gs2.Gs2Formation.Model.PropertyFormModel.FromJson(data["proeprtyFormModel"]));
+                .WithProeprtyFormModel(!data.Keys.Contains("proeprtyFormModel") || data["proeprtyFormModel"] == null ? null : Gs2.Gs2Formation.Model.PropertyFormModel.FromJson(data["proeprtyFormModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Formation.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["proeprtyFormModel"] = ProeprtyFormModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Formation.Result
             }
             if (ProeprtyFormModel != null) {
                 ProeprtyFormModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

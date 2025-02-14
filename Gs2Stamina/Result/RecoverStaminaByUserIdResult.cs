@@ -33,9 +33,10 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class RecoverStaminaByUserIdResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; } = null!;
-        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; } = null!;
-        public int? OverflowValue { set; get; } = null!;
+        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
+        public int? OverflowValue { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public RecoverStaminaByUserIdResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Stamina.Result
             return this;
         }
 
+        public RecoverStaminaByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Stamina.Result
             return new RecoverStaminaByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["item"]))
                 .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]))
-                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (int?)(data["overflowValue"].ToString().Contains(".") ? (int)double.Parse(data["overflowValue"].ToString()) : int.Parse(data["overflowValue"].ToString())));
+                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (int?)(data["overflowValue"].ToString().Contains(".") ? (int)double.Parse(data["overflowValue"].ToString()) : int.Parse(data["overflowValue"].ToString())))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Stamina.Result
                 ["item"] = Item?.ToJson(),
                 ["staminaModel"] = StaminaModel?.ToJson(),
                 ["overflowValue"] = OverflowValue,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -87,6 +95,10 @@ namespace Gs2.Gs2Stamina.Result
             if (OverflowValue != null) {
                 writer.WritePropertyName("overflowValue");
                 writer.Write((OverflowValue.ToString().Contains(".") ? (int)double.Parse(OverflowValue.ToString()) : int.Parse(OverflowValue.ToString())));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

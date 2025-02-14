@@ -33,8 +33,9 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class GetBigItemResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.BigItem Item { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.BigItemModel ItemModel { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.BigItem Item { set; get; }
+        public Gs2.Gs2Inventory.Model.BigItemModel ItemModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetBigItemResult WithItem(Gs2.Gs2Inventory.Model.BigItem item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Inventory.Result
 
         public GetBigItemResult WithItemModel(Gs2.Gs2Inventory.Model.BigItemModel itemModel) {
             this.ItemModel = itemModel;
+            return this;
+        }
+
+        public GetBigItemResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Inventory.Result
             }
             return new GetBigItemResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.BigItem.FromJson(data["item"]))
-                .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.BigItemModel.FromJson(data["itemModel"]));
+                .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.BigItemModel.FromJson(data["itemModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Inventory.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["itemModel"] = ItemModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Inventory.Result
             }
             if (ItemModel != null) {
                 ItemModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,10 +33,16 @@ namespace Gs2.Gs2Account.Result
 	[System.Serializable]
 	public class GetAuthorizationUrlResult : IResult
 	{
-        public string AuthorizationUrl { set; get; } = null!;
+        public string AuthorizationUrl { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetAuthorizationUrlResult WithAuthorizationUrl(string authorizationUrl) {
             this.AuthorizationUrl = authorizationUrl;
+            return this;
+        }
+
+        public GetAuthorizationUrlResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Account.Result
                 return null;
             }
             return new GetAuthorizationUrlResult()
-                .WithAuthorizationUrl(!data.Keys.Contains("authorizationUrl") || data["authorizationUrl"] == null ? null : data["authorizationUrl"].ToString());
+                .WithAuthorizationUrl(!data.Keys.Contains("authorizationUrl") || data["authorizationUrl"] == null ? null : data["authorizationUrl"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["authorizationUrl"] = AuthorizationUrl,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Account.Result
             if (AuthorizationUrl != null) {
                 writer.WritePropertyName("authorizationUrl");
                 writer.Write(AuthorizationUrl.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

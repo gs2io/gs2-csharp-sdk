@@ -33,10 +33,16 @@ namespace Gs2.Gs2Ranking.Result
 	[System.Serializable]
 	public class CalcRankingResult : IResult
 	{
-        public bool? Processing { set; get; } = null!;
+        public bool? Processing { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public CalcRankingResult WithProcessing(bool? processing) {
             this.Processing = processing;
+            return this;
+        }
+
+        public CalcRankingResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Ranking.Result
                 return null;
             }
             return new CalcRankingResult()
-                .WithProcessing(!data.Keys.Contains("processing") || data["processing"] == null ? null : (bool?)bool.Parse(data["processing"].ToString()));
+                .WithProcessing(!data.Keys.Contains("processing") || data["processing"] == null ? null : (bool?)bool.Parse(data["processing"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["processing"] = Processing,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Ranking.Result
             if (Processing != null) {
                 writer.WritePropertyName("processing");
                 writer.Write(bool.Parse(Processing.ToString()));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,9 +33,10 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class RunResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.Job Item { set; get; } = null!;
-        public Gs2.Gs2JobQueue.Model.JobResultBody Result { set; get; } = null!;
-        public bool? IsLastJob { set; get; } = null!;
+        public Gs2.Gs2JobQueue.Model.Job Item { set; get; }
+        public Gs2.Gs2JobQueue.Model.JobResultBody Result { set; get; }
+        public bool? IsLastJob { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public RunResult WithItem(Gs2.Gs2JobQueue.Model.Job item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2JobQueue.Result
             return this;
         }
 
+        public RunResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2JobQueue.Result
             return new RunResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2JobQueue.Model.Job.FromJson(data["item"]))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : Gs2.Gs2JobQueue.Model.JobResultBody.FromJson(data["result"]))
-                .WithIsLastJob(!data.Keys.Contains("isLastJob") || data["isLastJob"] == null ? null : (bool?)bool.Parse(data["isLastJob"].ToString()));
+                .WithIsLastJob(!data.Keys.Contains("isLastJob") || data["isLastJob"] == null ? null : (bool?)bool.Parse(data["isLastJob"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2JobQueue.Result
                 ["item"] = Item?.ToJson(),
                 ["result"] = Result?.ToJson(),
                 ["isLastJob"] = IsLastJob,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -87,6 +95,10 @@ namespace Gs2.Gs2JobQueue.Result
             if (IsLastJob != null) {
                 writer.WritePropertyName("isLastJob");
                 writer.Write(bool.Parse(IsLastJob.ToString()));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

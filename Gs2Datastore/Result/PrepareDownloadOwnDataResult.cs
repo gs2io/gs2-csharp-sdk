@@ -33,9 +33,10 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class PrepareDownloadOwnDataResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; } = null!;
-        public string FileUrl { set; get; } = null!;
-        public long? ContentLength { set; get; } = null!;
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
+        public string FileUrl { set; get; }
+        public long? ContentLength { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public PrepareDownloadOwnDataResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Datastore.Result
             return this;
         }
 
+        public PrepareDownloadOwnDataResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Datastore.Result
             return new PrepareDownloadOwnDataResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObject.FromJson(data["item"]))
                 .WithFileUrl(!data.Keys.Contains("fileUrl") || data["fileUrl"] == null ? null : data["fileUrl"].ToString())
-                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)(data["contentLength"].ToString().Contains(".") ? (long)double.Parse(data["contentLength"].ToString()) : long.Parse(data["contentLength"].ToString())));
+                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)(data["contentLength"].ToString().Contains(".") ? (long)double.Parse(data["contentLength"].ToString()) : long.Parse(data["contentLength"].ToString())))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Datastore.Result
                 ["item"] = Item?.ToJson(),
                 ["fileUrl"] = FileUrl,
                 ["contentLength"] = ContentLength,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -88,6 +96,10 @@ namespace Gs2.Gs2Datastore.Result
             if (ContentLength != null) {
                 writer.WritePropertyName("contentLength");
                 writer.Write((ContentLength.ToString().Contains(".") ? (long)double.Parse(ContentLength.ToString()) : long.Parse(ContentLength.ToString())));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

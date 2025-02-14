@@ -33,8 +33,9 @@ namespace Gs2.Gs2JobQueue.Result
 	[System.Serializable]
 	public class PushByStampSheetResult : IResult
 	{
-        public Gs2.Gs2JobQueue.Model.Job[] Items { set; get; } = null!;
-        public bool? AutoRun { set; get; } = null!;
+        public Gs2.Gs2JobQueue.Model.Job[] Items { set; get; }
+        public bool? AutoRun { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public PushByStampSheetResult WithItems(Gs2.Gs2JobQueue.Model.Job[] items) {
             this.Items = items;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2JobQueue.Result
 
         public PushByStampSheetResult WithAutoRun(bool? autoRun) {
             this.AutoRun = autoRun;
+            return this;
+        }
+
+        public PushByStampSheetResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2JobQueue.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2JobQueue.Model.Job.FromJson(v);
                 }).ToArray())
-                .WithAutoRun(!data.Keys.Contains("autoRun") || data["autoRun"] == null ? null : (bool?)bool.Parse(data["autoRun"].ToString()));
+                .WithAutoRun(!data.Keys.Contains("autoRun") || data["autoRun"] == null ? null : (bool?)bool.Parse(data["autoRun"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2JobQueue.Result
             return new JsonData {
                 ["items"] = itemsJsonData,
                 ["autoRun"] = AutoRun,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -95,6 +103,10 @@ namespace Gs2.Gs2JobQueue.Result
             if (AutoRun != null) {
                 writer.WritePropertyName("autoRun");
                 writer.Write(bool.Parse(AutoRun.ToString()));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,8 +33,9 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class SetBalanceParameterStatusByUserIdResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Item { set; get; } = null!;
-        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Old { set; get; } = null!;
+        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Item { set; get; }
+        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Old { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SetBalanceParameterStatusByUserIdResult WithItem(Gs2.Gs2Enchant.Model.BalanceParameterStatus item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Enchant.Result
 
         public SetBalanceParameterStatusByUserIdResult WithOld(Gs2.Gs2Enchant.Model.BalanceParameterStatus old) {
             this.Old = old;
+            return this;
+        }
+
+        public SetBalanceParameterStatusByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Enchant.Result
             }
             return new SetBalanceParameterStatusByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enchant.Model.BalanceParameterStatus.FromJson(data["item"]))
-                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Enchant.Model.BalanceParameterStatus.FromJson(data["old"]));
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Enchant.Model.BalanceParameterStatus.FromJson(data["old"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Enchant.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["old"] = Old?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Enchant.Result
             }
             if (Old != null) {
                 Old.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

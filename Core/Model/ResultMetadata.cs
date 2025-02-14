@@ -32,8 +32,13 @@ namespace Gs2.Core.Model
 	public class ResultMetadata : IComparable
 	{
         public string Uncommitted { set; get; } = null!;
+        public Gs2.Core.Model.ScriptTransactionResult[] ScriptTransactionResults { set; get; } = null!;
         public ResultMetadata WithUncommitted(string uncommitted) {
             this.Uncommitted = uncommitted;
+            return this;
+        }
+        public ResultMetadata WithScriptTransactionResults(Gs2.Core.Model.ScriptTransactionResult[] scriptTransactionResults) {
+            this.ScriptTransactionResults = scriptTransactionResults;
             return this;
         }
 
@@ -46,13 +51,26 @@ namespace Gs2.Core.Model
                 return null;
             }
             return new ResultMetadata()
-                .WithUncommitted(!data.Keys.Contains("uncommitted") || data["uncommitted"] == null ? null : data["uncommitted"].ToString());
+                .WithUncommitted(!data.Keys.Contains("uncommitted") || data["uncommitted"] == null ? null : data["uncommitted"].ToString())
+                .WithScriptTransactionResults(!data.Keys.Contains("scriptTransactionResults") || data["scriptTransactionResults"] == null || !data["scriptTransactionResults"].IsArray ? new Gs2.Core.Model.ScriptTransactionResult[]{} : data["scriptTransactionResults"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.ScriptTransactionResult.FromJson(v);
+                }).ToArray());
         }
 
         public JsonData ToJson()
         {
+            JsonData scriptTransactionResultsJsonData = null;
+            if (ScriptTransactionResults != null && ScriptTransactionResults.Length > 0)
+            {
+                scriptTransactionResultsJsonData = new JsonData();
+                foreach (var verifyResult in ScriptTransactionResults)
+                {
+                    scriptTransactionResultsJsonData.Add(verifyResult.ToJson());
+                }
+            }
             return new JsonData {
                 ["uncommitted"] = Uncommitted,
+                ["scriptTransactionResults"] = scriptTransactionResultsJsonData,
             };
         }
 
@@ -62,6 +80,17 @@ namespace Gs2.Core.Model
             if (Uncommitted != null) {
                 writer.WritePropertyName("uncommitted");
                 writer.Write(Uncommitted);
+            }
+            if (ScriptTransactionResults != null) {
+                writer.WritePropertyName("scriptTransactionResults");
+                writer.WriteArrayStart();
+                foreach (var verifyResult in ScriptTransactionResults)
+                {
+                    if (verifyResult != null) {
+                        verifyResult.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -78,6 +107,18 @@ namespace Gs2.Core.Model
             {
                 diff += Uncommitted.CompareTo(other.Uncommitted);
             }
+            if (ScriptTransactionResults == null && ScriptTransactionResults == other.ScriptTransactionResults)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ScriptTransactionResults.Length - other.ScriptTransactionResults.Length;
+                for (var i = 0; i < ScriptTransactionResults.Length; i++)
+                {
+                    diff += ScriptTransactionResults[i].CompareTo(other.ScriptTransactionResults[i]);
+                }
+            }
             return diff;
         }
 
@@ -89,6 +130,7 @@ namespace Gs2.Core.Model
         public object Clone() {
             return new ResultMetadata {
                 Uncommitted = Uncommitted.Clone() as string,
+                ScriptTransactionResults = ScriptTransactionResults?.Clone() as Gs2.Core.Model.ScriptTransactionResult[],
             };
         }
     }

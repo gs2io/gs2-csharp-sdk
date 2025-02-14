@@ -33,8 +33,9 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class PrepareUpdateCurrentNewsMasterResult : IResult
 	{
-        public string UploadToken { set; get; } = null!;
-        public string TemplateUploadUrl { set; get; } = null!;
+        public string UploadToken { set; get; }
+        public string TemplateUploadUrl { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public PrepareUpdateCurrentNewsMasterResult WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2News.Result
 
         public PrepareUpdateCurrentNewsMasterResult WithTemplateUploadUrl(string templateUploadUrl) {
             this.TemplateUploadUrl = templateUploadUrl;
+            return this;
+        }
+
+        public PrepareUpdateCurrentNewsMasterResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2News.Result
             }
             return new PrepareUpdateCurrentNewsMasterResult()
                 .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString())
-                .WithTemplateUploadUrl(!data.Keys.Contains("templateUploadUrl") || data["templateUploadUrl"] == null ? null : data["templateUploadUrl"].ToString());
+                .WithTemplateUploadUrl(!data.Keys.Contains("templateUploadUrl") || data["templateUploadUrl"] == null ? null : data["templateUploadUrl"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2News.Result
             return new JsonData {
                 ["uploadToken"] = UploadToken,
                 ["templateUploadUrl"] = TemplateUploadUrl,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -77,6 +85,10 @@ namespace Gs2.Gs2News.Result
             if (TemplateUploadUrl != null) {
                 writer.WritePropertyName("templateUploadUrl");
                 writer.Write(TemplateUploadUrl.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

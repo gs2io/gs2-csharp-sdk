@@ -33,10 +33,11 @@ namespace Gs2.Gs2Log.Result
 	[System.Serializable]
 	public class QueryExecuteStampTaskLogResult : IResult
 	{
-        public Gs2.Gs2Log.Model.ExecuteStampTaskLog[] Items { set; get; } = null!;
-        public string NextPageToken { set; get; } = null!;
-        public long? TotalCount { set; get; } = null!;
-        public long? ScanSize { set; get; } = null!;
+        public Gs2.Gs2Log.Model.ExecuteStampTaskLog[] Items { set; get; }
+        public string NextPageToken { set; get; }
+        public long? TotalCount { set; get; }
+        public long? ScanSize { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public QueryExecuteStampTaskLogResult WithItems(Gs2.Gs2Log.Model.ExecuteStampTaskLog[] items) {
             this.Items = items;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Log.Result
             return this;
         }
 
+        public QueryExecuteStampTaskLogResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -72,7 +78,8 @@ namespace Gs2.Gs2Log.Result
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
                 .WithTotalCount(!data.Keys.Contains("totalCount") || data["totalCount"] == null ? null : (long?)(data["totalCount"].ToString().Contains(".") ? (long)double.Parse(data["totalCount"].ToString()) : long.Parse(data["totalCount"].ToString())))
-                .WithScanSize(!data.Keys.Contains("scanSize") || data["scanSize"] == null ? null : (long?)(data["scanSize"].ToString().Contains(".") ? (long)double.Parse(data["scanSize"].ToString()) : long.Parse(data["scanSize"].ToString())));
+                .WithScanSize(!data.Keys.Contains("scanSize") || data["scanSize"] == null ? null : (long?)(data["scanSize"].ToString().Contains(".") ? (long)double.Parse(data["scanSize"].ToString()) : long.Parse(data["scanSize"].ToString())))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -91,6 +98,7 @@ namespace Gs2.Gs2Log.Result
                 ["nextPageToken"] = NextPageToken,
                 ["totalCount"] = TotalCount,
                 ["scanSize"] = ScanSize,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -119,6 +127,10 @@ namespace Gs2.Gs2Log.Result
             if (ScanSize != null) {
                 writer.WritePropertyName("scanSize");
                 writer.Write((ScanSize.ToString().Contains(".") ? (long)double.Parse(ScanSize.ToString()) : long.Parse(ScanSize.ToString())));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

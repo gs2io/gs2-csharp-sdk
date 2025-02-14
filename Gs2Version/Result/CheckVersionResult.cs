@@ -33,9 +33,10 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class CheckVersionResult : IResult
 	{
-        public string ProjectToken { set; get; } = null!;
-        public Gs2.Gs2Version.Model.Status[] Warnings { set; get; } = null!;
-        public Gs2.Gs2Version.Model.Status[] Errors { set; get; } = null!;
+        public string ProjectToken { set; get; }
+        public Gs2.Gs2Version.Model.Status[] Warnings { set; get; }
+        public Gs2.Gs2Version.Model.Status[] Errors { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public CheckVersionResult WithProjectToken(string projectToken) {
             this.ProjectToken = projectToken;
@@ -49,6 +50,11 @@ namespace Gs2.Gs2Version.Result
 
         public CheckVersionResult WithErrors(Gs2.Gs2Version.Model.Status[] errors) {
             this.Errors = errors;
+            return this;
+        }
+
+        public CheckVersionResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -67,7 +73,8 @@ namespace Gs2.Gs2Version.Result
                 }).ToArray())
                 .WithErrors(!data.Keys.Contains("errors") || data["errors"] == null || !data["errors"].IsArray ? null : data["errors"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.Status.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -94,6 +101,7 @@ namespace Gs2.Gs2Version.Result
                 ["projectToken"] = ProjectToken,
                 ["warnings"] = warningsJsonData,
                 ["errors"] = errorsJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -125,6 +133,10 @@ namespace Gs2.Gs2Version.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

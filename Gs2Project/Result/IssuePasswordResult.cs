@@ -33,10 +33,16 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class IssuePasswordResult : IResult
 	{
-        public string NewPassword { set; get; } = null!;
+        public string NewPassword { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public IssuePasswordResult WithNewPassword(string newPassword) {
             this.NewPassword = newPassword;
+            return this;
+        }
+
+        public IssuePasswordResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Project.Result
                 return null;
             }
             return new IssuePasswordResult()
-                .WithNewPassword(!data.Keys.Contains("newPassword") || data["newPassword"] == null ? null : data["newPassword"].ToString());
+                .WithNewPassword(!data.Keys.Contains("newPassword") || data["newPassword"] == null ? null : data["newPassword"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["newPassword"] = NewPassword,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Project.Result
             if (NewPassword != null) {
                 writer.WritePropertyName("newPassword");
                 writer.Write(NewPassword.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

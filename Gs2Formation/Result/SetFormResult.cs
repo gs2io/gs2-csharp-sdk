@@ -33,10 +33,11 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class SetFormResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Form Item { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.Mold Mold { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.Form Item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Mold { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
+        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SetFormResult WithItem(Gs2.Gs2Formation.Model.Form item) {
             this.Item = item;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Formation.Result
             return this;
         }
 
+        public SetFormResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -70,7 +76,8 @@ namespace Gs2.Gs2Formation.Result
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Form.FromJson(data["item"]))
                 .WithMold(!data.Keys.Contains("mold") || data["mold"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["mold"]))
                 .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]))
-                .WithFormModel(!data.Keys.Contains("formModel") || data["formModel"] == null ? null : Gs2.Gs2Formation.Model.FormModel.FromJson(data["formModel"]));
+                .WithFormModel(!data.Keys.Contains("formModel") || data["formModel"] == null ? null : Gs2.Gs2Formation.Model.FormModel.FromJson(data["formModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -80,6 +87,7 @@ namespace Gs2.Gs2Formation.Result
                 ["mold"] = Mold?.ToJson(),
                 ["moldModel"] = MoldModel?.ToJson(),
                 ["formModel"] = FormModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -97,6 +105,10 @@ namespace Gs2.Gs2Formation.Result
             }
             if (FormModel != null) {
                 FormModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

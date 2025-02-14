@@ -33,8 +33,9 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class CreateIdentifierResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.Identifier Item { set; get; } = null!;
-        public string ClientSecret { set; get; } = null!;
+        public Gs2.Gs2Identifier.Model.Identifier Item { set; get; }
+        public string ClientSecret { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public CreateIdentifierResult WithItem(Gs2.Gs2Identifier.Model.Identifier item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Identifier.Result
 
         public CreateIdentifierResult WithClientSecret(string clientSecret) {
             this.ClientSecret = clientSecret;
+            return this;
+        }
+
+        public CreateIdentifierResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Identifier.Result
             }
             return new CreateIdentifierResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Identifier.Model.Identifier.FromJson(data["item"]))
-                .WithClientSecret(!data.Keys.Contains("clientSecret") || data["clientSecret"] == null ? null : data["clientSecret"].ToString());
+                .WithClientSecret(!data.Keys.Contains("clientSecret") || data["clientSecret"] == null ? null : data["clientSecret"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Identifier.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["clientSecret"] = ClientSecret,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Identifier.Result
             if (ClientSecret != null) {
                 writer.WritePropertyName("clientSecret");
                 writer.Write(ClientSecret.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

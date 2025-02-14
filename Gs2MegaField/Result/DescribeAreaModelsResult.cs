@@ -33,10 +33,16 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class DescribeAreaModelsResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.AreaModel[] Items { set; get; } = null!;
+        public Gs2.Gs2MegaField.Model.AreaModel[] Items { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DescribeAreaModelsResult WithItems(Gs2.Gs2MegaField.Model.AreaModel[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public DescribeAreaModelsResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -51,7 +57,8 @@ namespace Gs2.Gs2MegaField.Result
             return new DescribeAreaModelsResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2MegaField.Model.AreaModel.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -67,6 +74,7 @@ namespace Gs2.Gs2MegaField.Result
             }
             return new JsonData {
                 ["items"] = itemsJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -83,6 +91,10 @@ namespace Gs2.Gs2MegaField.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

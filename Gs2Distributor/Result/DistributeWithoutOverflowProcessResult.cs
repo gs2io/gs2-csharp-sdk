@@ -33,8 +33,9 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class DistributeWithoutOverflowProcessResult : IResult
 	{
-        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; } = null!;
-        public string Result { set; get; } = null!;
+        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
+        public string Result { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DistributeWithoutOverflowProcessResult WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
             this.DistributeResource = distributeResource;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Distributor.Result
 
         public DistributeWithoutOverflowProcessResult WithResult(string result) {
             this.Result = result;
+            return this;
+        }
+
+        public DistributeWithoutOverflowProcessResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Distributor.Result
             }
             return new DistributeWithoutOverflowProcessResult()
                 .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]))
-                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Distributor.Result
             return new JsonData {
                 ["distributeResource"] = DistributeResource?.ToJson(),
                 ["result"] = Result,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Distributor.Result
             if (Result != null) {
                 writer.WritePropertyName("result");
                 writer.Write(Result.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

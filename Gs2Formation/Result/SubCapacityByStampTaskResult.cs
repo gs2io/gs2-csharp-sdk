@@ -33,9 +33,10 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class SubCapacityByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Mold Item { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; } = null!;
-        public string NewContextStack { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
+        public string NewContextStack { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SubCapacityByStampTaskResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Formation.Result
             return this;
         }
 
+        public SubCapacityByStampTaskResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Formation.Result
             return new SubCapacityByStampTaskResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["item"]))
                 .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]))
-                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
+                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Formation.Result
                 ["item"] = Item?.ToJson(),
                 ["moldModel"] = MoldModel?.ToJson(),
                 ["newContextStack"] = NewContextStack,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -87,6 +95,10 @@ namespace Gs2.Gs2Formation.Result
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

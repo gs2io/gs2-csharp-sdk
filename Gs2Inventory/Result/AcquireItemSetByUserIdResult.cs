@@ -33,10 +33,11 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class AcquireItemSetByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; } = null!;
-        public long? OverflowCount { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
+        public long? OverflowCount { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public AcquireItemSetByUserIdResult WithItems(Gs2.Gs2Inventory.Model.ItemSet[] items) {
             this.Items = items;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Inventory.Result
             return this;
         }
 
+        public AcquireItemSetByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -72,7 +78,8 @@ namespace Gs2.Gs2Inventory.Result
                 }).ToArray())
                 .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
                 .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]))
-                .WithOverflowCount(!data.Keys.Contains("overflowCount") || data["overflowCount"] == null ? null : (long?)(data["overflowCount"].ToString().Contains(".") ? (long)double.Parse(data["overflowCount"].ToString()) : long.Parse(data["overflowCount"].ToString())));
+                .WithOverflowCount(!data.Keys.Contains("overflowCount") || data["overflowCount"] == null ? null : (long?)(data["overflowCount"].ToString().Contains(".") ? (long)double.Parse(data["overflowCount"].ToString()) : long.Parse(data["overflowCount"].ToString())))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -91,6 +98,7 @@ namespace Gs2.Gs2Inventory.Result
                 ["itemModel"] = ItemModel?.ToJson(),
                 ["inventory"] = Inventory?.ToJson(),
                 ["overflowCount"] = OverflowCount,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -117,6 +125,10 @@ namespace Gs2.Gs2Inventory.Result
             if (OverflowCount != null) {
                 writer.WritePropertyName("overflowCount");
                 writer.Write((OverflowCount.ToString().Contains(".") ? (long)double.Parse(OverflowCount.ToString()) : long.Parse(OverflowCount.ToString())));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

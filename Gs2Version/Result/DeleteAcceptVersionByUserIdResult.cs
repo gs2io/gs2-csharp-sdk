@@ -33,10 +33,16 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class DeleteAcceptVersionByUserIdResult : IResult
 	{
-        public Gs2.Gs2Version.Model.AcceptVersion Item { set; get; } = null!;
+        public Gs2.Gs2Version.Model.AcceptVersion Item { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DeleteAcceptVersionByUserIdResult WithItem(Gs2.Gs2Version.Model.AcceptVersion item) {
             this.Item = item;
+            return this;
+        }
+
+        public DeleteAcceptVersionByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Version.Result
                 return null;
             }
             return new DeleteAcceptVersionByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Version.Model.AcceptVersion.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Version.Model.AcceptVersion.FromJson(data["item"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -64,6 +72,10 @@ namespace Gs2.Gs2Version.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,9 +33,10 @@ namespace Gs2.Gs2Auth.Result
 	[System.Serializable]
 	public class IssueTimeOffsetTokenByUserIdResult : IResult
 	{
-        public string Token { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public long? Expire { set; get; } = null!;
+        public string Token { set; get; }
+        public string UserId { set; get; }
+        public long? Expire { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public IssueTimeOffsetTokenByUserIdResult WithToken(string token) {
             this.Token = token;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Auth.Result
             return this;
         }
 
+        public IssueTimeOffsetTokenByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Auth.Result
             return new IssueTimeOffsetTokenByUserIdResult()
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)(data["expire"].ToString().Contains(".") ? (long)double.Parse(data["expire"].ToString()) : long.Parse(data["expire"].ToString())));
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)(data["expire"].ToString().Contains(".") ? (long)double.Parse(data["expire"].ToString()) : long.Parse(data["expire"].ToString())))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Auth.Result
                 ["token"] = Token,
                 ["userId"] = UserId,
                 ["expire"] = Expire,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -89,6 +97,10 @@ namespace Gs2.Gs2Auth.Result
             if (Expire != null) {
                 writer.WritePropertyName("expire");
                 writer.Write((Expire.ToString().Contains(".") ? (long)double.Parse(Expire.ToString()) : long.Parse(Expire.ToString())));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

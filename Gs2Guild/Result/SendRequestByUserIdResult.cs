@@ -33,8 +33,9 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class SendRequestByUserIdResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.Guild Item { set; get; } = null!;
-        public Gs2.Gs2Guild.Model.SendMemberRequest SendMemberRequest { set; get; } = null!;
+        public Gs2.Gs2Guild.Model.Guild Item { set; get; }
+        public Gs2.Gs2Guild.Model.SendMemberRequest SendMemberRequest { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SendRequestByUserIdResult WithItem(Gs2.Gs2Guild.Model.Guild item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Guild.Result
 
         public SendRequestByUserIdResult WithSendMemberRequest(Gs2.Gs2Guild.Model.SendMemberRequest sendMemberRequest) {
             this.SendMemberRequest = sendMemberRequest;
+            return this;
+        }
+
+        public SendRequestByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Guild.Result
             }
             return new SendRequestByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Guild.Model.Guild.FromJson(data["item"]))
-                .WithSendMemberRequest(!data.Keys.Contains("sendMemberRequest") || data["sendMemberRequest"] == null ? null : Gs2.Gs2Guild.Model.SendMemberRequest.FromJson(data["sendMemberRequest"]));
+                .WithSendMemberRequest(!data.Keys.Contains("sendMemberRequest") || data["sendMemberRequest"] == null ? null : Gs2.Gs2Guild.Model.SendMemberRequest.FromJson(data["sendMemberRequest"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Guild.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["sendMemberRequest"] = SendMemberRequest?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Guild.Result
             }
             if (SendMemberRequest != null) {
                 SendMemberRequest.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

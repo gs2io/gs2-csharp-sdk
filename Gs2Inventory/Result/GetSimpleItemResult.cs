@@ -33,8 +33,9 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class GetSimpleItemResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.SimpleItemModel ItemModel { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; }
+        public Gs2.Gs2Inventory.Model.SimpleItemModel ItemModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetSimpleItemResult WithItem(Gs2.Gs2Inventory.Model.SimpleItem item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Inventory.Result
 
         public GetSimpleItemResult WithItemModel(Gs2.Gs2Inventory.Model.SimpleItemModel itemModel) {
             this.ItemModel = itemModel;
+            return this;
+        }
+
+        public GetSimpleItemResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Inventory.Result
             }
             return new GetSimpleItemResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.SimpleItem.FromJson(data["item"]))
-                .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.SimpleItemModel.FromJson(data["itemModel"]));
+                .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.SimpleItemModel.FromJson(data["itemModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Inventory.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["itemModel"] = ItemModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Inventory.Result
             }
             if (ItemModel != null) {
                 ItemModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

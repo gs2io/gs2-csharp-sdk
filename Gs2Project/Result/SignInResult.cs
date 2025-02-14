@@ -33,8 +33,9 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class SignInResult : IResult
 	{
-        public Gs2.Gs2Project.Model.Account Item { set; get; } = null!;
-        public string AccountToken { set; get; } = null!;
+        public Gs2.Gs2Project.Model.Account Item { set; get; }
+        public string AccountToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SignInResult WithItem(Gs2.Gs2Project.Model.Account item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Project.Result
 
         public SignInResult WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
+            return this;
+        }
+
+        public SignInResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Project.Result
             }
             return new SignInResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Project.Model.Account.FromJson(data["item"]))
-                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString());
+                .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Project.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["accountToken"] = AccountToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Project.Result
             if (AccountToken != null) {
                 writer.WritePropertyName("accountToken");
                 writer.Write(AccountToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

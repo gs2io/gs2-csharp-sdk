@@ -33,9 +33,10 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class DescribeNewsByUserIdResult : IResult
 	{
-        public Gs2.Gs2News.Model.News[] Items { set; get; } = null!;
-        public string ContentHash { set; get; } = null!;
-        public string TemplateHash { set; get; } = null!;
+        public Gs2.Gs2News.Model.News[] Items { set; get; }
+        public string ContentHash { set; get; }
+        public string TemplateHash { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DescribeNewsByUserIdResult WithItems(Gs2.Gs2News.Model.News[] items) {
             this.Items = items;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2News.Result
             return this;
         }
 
+        public DescribeNewsByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -65,7 +71,8 @@ namespace Gs2.Gs2News.Result
                     return Gs2.Gs2News.Model.News.FromJson(v);
                 }).ToArray())
                 .WithContentHash(!data.Keys.Contains("contentHash") || data["contentHash"] == null ? null : data["contentHash"].ToString())
-                .WithTemplateHash(!data.Keys.Contains("templateHash") || data["templateHash"] == null ? null : data["templateHash"].ToString());
+                .WithTemplateHash(!data.Keys.Contains("templateHash") || data["templateHash"] == null ? null : data["templateHash"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -83,6 +90,7 @@ namespace Gs2.Gs2News.Result
                 ["items"] = itemsJsonData,
                 ["contentHash"] = ContentHash,
                 ["templateHash"] = TemplateHash,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -107,6 +115,10 @@ namespace Gs2.Gs2News.Result
             if (TemplateHash != null) {
                 writer.WritePropertyName("templateHash");
                 writer.Write(TemplateHash.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

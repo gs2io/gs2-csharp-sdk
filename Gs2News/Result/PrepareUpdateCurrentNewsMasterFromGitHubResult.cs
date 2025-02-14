@@ -33,10 +33,16 @@ namespace Gs2.Gs2News.Result
 	[System.Serializable]
 	public class PrepareUpdateCurrentNewsMasterFromGitHubResult : IResult
 	{
-        public string UploadToken { set; get; } = null!;
+        public string UploadToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public PrepareUpdateCurrentNewsMasterFromGitHubResult WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
+            return this;
+        }
+
+        public PrepareUpdateCurrentNewsMasterFromGitHubResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2News.Result
                 return null;
             }
             return new PrepareUpdateCurrentNewsMasterFromGitHubResult()
-                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["uploadToken"] = UploadToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2News.Result
             if (UploadToken != null) {
                 writer.WritePropertyName("uploadToken");
                 writer.Write(UploadToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

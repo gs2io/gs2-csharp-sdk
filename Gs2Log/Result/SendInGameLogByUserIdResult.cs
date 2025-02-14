@@ -33,10 +33,16 @@ namespace Gs2.Gs2Log.Result
 	[System.Serializable]
 	public class SendInGameLogByUserIdResult : IResult
 	{
-        public Gs2.Gs2Log.Model.InGameLog Item { set; get; } = null!;
+        public Gs2.Gs2Log.Model.InGameLog Item { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SendInGameLogByUserIdResult WithItem(Gs2.Gs2Log.Model.InGameLog item) {
             this.Item = item;
+            return this;
+        }
+
+        public SendInGameLogByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Log.Result
                 return null;
             }
             return new SendInGameLogByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Log.Model.InGameLog.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Log.Model.InGameLog.FromJson(data["item"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -64,6 +72,10 @@ namespace Gs2.Gs2Log.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

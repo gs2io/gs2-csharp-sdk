@@ -33,10 +33,16 @@ namespace Gs2.Gs2MegaField.Result
 	[System.Serializable]
 	public class GetAreaModelResult : IResult
 	{
-        public Gs2.Gs2MegaField.Model.AreaModel Item { set; get; } = null!;
+        public Gs2.Gs2MegaField.Model.AreaModel Item { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetAreaModelResult WithItem(Gs2.Gs2MegaField.Model.AreaModel item) {
             this.Item = item;
+            return this;
+        }
+
+        public GetAreaModelResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2MegaField.Result
                 return null;
             }
             return new GetAreaModelResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2MegaField.Model.AreaModel.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2MegaField.Model.AreaModel.FromJson(data["item"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -64,6 +72,10 @@ namespace Gs2.Gs2MegaField.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,9 +33,10 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunVerifyTaskResult : IResult
 	{
-        public string ContextStack { set; get; } = null!;
-        public int? StatusCode { set; get; } = null!;
-        public string Result { set; get; } = null!;
+        public string ContextStack { set; get; }
+        public int? StatusCode { set; get; }
+        public string Result { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public RunVerifyTaskResult WithContextStack(string contextStack) {
             this.ContextStack = contextStack;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Distributor.Result
             return this;
         }
 
+        public RunVerifyTaskResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Distributor.Result
             return new RunVerifyTaskResult()
                 .WithContextStack(!data.Keys.Contains("contextStack") || data["contextStack"] == null ? null : data["contextStack"].ToString())
                 .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
-                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
+                .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Distributor.Result
                 ["contextStack"] = ContextStack,
                 ["statusCode"] = StatusCode,
                 ["result"] = Result,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -89,6 +97,10 @@ namespace Gs2.Gs2Distributor.Result
             if (Result != null) {
                 writer.WritePropertyName("result");
                 writer.Write(Result.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

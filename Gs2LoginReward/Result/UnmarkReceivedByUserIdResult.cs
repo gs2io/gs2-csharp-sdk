@@ -33,8 +33,9 @@ namespace Gs2.Gs2LoginReward.Result
 	[System.Serializable]
 	public class UnmarkReceivedByUserIdResult : IResult
 	{
-        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; } = null!;
-        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; } = null!;
+        public Gs2.Gs2LoginReward.Model.ReceiveStatus Item { set; get; }
+        public Gs2.Gs2LoginReward.Model.BonusModel BonusModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public UnmarkReceivedByUserIdResult WithItem(Gs2.Gs2LoginReward.Model.ReceiveStatus item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2LoginReward.Result
 
         public UnmarkReceivedByUserIdResult WithBonusModel(Gs2.Gs2LoginReward.Model.BonusModel bonusModel) {
             this.BonusModel = bonusModel;
+            return this;
+        }
+
+        public UnmarkReceivedByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2LoginReward.Result
             }
             return new UnmarkReceivedByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2LoginReward.Model.ReceiveStatus.FromJson(data["item"]))
-                .WithBonusModel(!data.Keys.Contains("bonusModel") || data["bonusModel"] == null ? null : Gs2.Gs2LoginReward.Model.BonusModel.FromJson(data["bonusModel"]));
+                .WithBonusModel(!data.Keys.Contains("bonusModel") || data["bonusModel"] == null ? null : Gs2.Gs2LoginReward.Model.BonusModel.FromJson(data["bonusModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2LoginReward.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["bonusModel"] = BonusModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2LoginReward.Result
             }
             if (BonusModel != null) {
                 BonusModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

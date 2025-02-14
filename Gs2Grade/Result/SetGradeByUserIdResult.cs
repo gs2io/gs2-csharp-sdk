@@ -33,10 +33,11 @@ namespace Gs2.Gs2Grade.Result
 	[System.Serializable]
 	public class SetGradeByUserIdResult : IResult
 	{
-        public Gs2.Gs2Grade.Model.Status Item { set; get; } = null!;
-        public Gs2.Gs2Grade.Model.Status Old { set; get; } = null!;
-        public string ExperienceNamespaceName { set; get; } = null!;
-        public Gs2.Gs2Experience.Model.Status ExperienceStatus { set; get; } = null!;
+        public Gs2.Gs2Grade.Model.Status Item { set; get; }
+        public Gs2.Gs2Grade.Model.Status Old { set; get; }
+        public string ExperienceNamespaceName { set; get; }
+        public Gs2.Gs2Experience.Model.Status ExperienceStatus { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SetGradeByUserIdResult WithItem(Gs2.Gs2Grade.Model.Status item) {
             this.Item = item;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Grade.Result
             return this;
         }
 
+        public SetGradeByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -70,7 +76,8 @@ namespace Gs2.Gs2Grade.Result
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Grade.Model.Status.FromJson(data["item"]))
                 .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Grade.Model.Status.FromJson(data["old"]))
                 .WithExperienceNamespaceName(!data.Keys.Contains("experienceNamespaceName") || data["experienceNamespaceName"] == null ? null : data["experienceNamespaceName"].ToString())
-                .WithExperienceStatus(!data.Keys.Contains("experienceStatus") || data["experienceStatus"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["experienceStatus"]));
+                .WithExperienceStatus(!data.Keys.Contains("experienceStatus") || data["experienceStatus"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["experienceStatus"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -80,6 +87,7 @@ namespace Gs2.Gs2Grade.Result
                 ["old"] = Old?.ToJson(),
                 ["experienceNamespaceName"] = ExperienceNamespaceName,
                 ["experienceStatus"] = ExperienceStatus?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -98,6 +106,10 @@ namespace Gs2.Gs2Grade.Result
             }
             if (ExperienceStatus != null) {
                 ExperienceStatus.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

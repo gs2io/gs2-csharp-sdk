@@ -33,8 +33,9 @@ namespace Gs2.Gs2Gateway.Result
 	[System.Serializable]
 	public class SendNotificationResult : IResult
 	{
-        public string Protocol { set; get; } = null!;
-        public string[] SendConnectionIds { set; get; } = null!;
+        public string Protocol { set; get; }
+        public string[] SendConnectionIds { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SendNotificationResult WithProtocol(string protocol) {
             this.Protocol = protocol;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Gateway.Result
 
         public SendNotificationResult WithSendConnectionIds(string[] sendConnectionIds) {
             this.SendConnectionIds = sendConnectionIds;
+            return this;
+        }
+
+        public SendNotificationResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2Gateway.Result
                 .WithProtocol(!data.Keys.Contains("protocol") || data["protocol"] == null ? null : data["protocol"].ToString())
                 .WithSendConnectionIds(!data.Keys.Contains("sendConnectionIds") || data["sendConnectionIds"] == null || !data["sendConnectionIds"].IsArray ? null : data["sendConnectionIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2Gateway.Result
             return new JsonData {
                 ["protocol"] = Protocol,
                 ["sendConnectionIds"] = sendConnectionIdsJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -95,6 +103,10 @@ namespace Gs2.Gs2Gateway.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

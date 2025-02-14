@@ -33,9 +33,10 @@ namespace Gs2.Gs2Dictionary.Result
 	[System.Serializable]
 	public class GetEntryWithSignatureByUserIdResult : IResult
 	{
-        public Gs2.Gs2Dictionary.Model.Entry Item { set; get; } = null!;
-        public string Body { set; get; } = null!;
-        public string Signature { set; get; } = null!;
+        public Gs2.Gs2Dictionary.Model.Entry Item { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetEntryWithSignatureByUserIdResult WithItem(Gs2.Gs2Dictionary.Model.Entry item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Dictionary.Result
             return this;
         }
 
+        public GetEntryWithSignatureByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Dictionary.Result
             return new GetEntryWithSignatureByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Dictionary.Model.Entry.FromJson(data["item"]))
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
-                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Dictionary.Result
                 ["item"] = Item?.ToJson(),
                 ["body"] = Body,
                 ["signature"] = Signature,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -88,6 +96,10 @@ namespace Gs2.Gs2Dictionary.Result
             if (Signature != null) {
                 writer.WritePropertyName("signature");
                 writer.Write(Signature.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

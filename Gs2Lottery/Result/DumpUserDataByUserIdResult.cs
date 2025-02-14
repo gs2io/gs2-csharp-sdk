@@ -33,6 +33,12 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class DumpUserDataByUserIdResult : IResult
 	{
+        public ResultMetadata Metadata { set; get; }
+
+        public DumpUserDataByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,24 @@ namespace Gs2.Gs2Lottery.Result
             if (data == null) {
                 return null;
             }
-            return new DumpUserDataByUserIdResult();
+            return new DumpUserDataByUserIdResult()
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

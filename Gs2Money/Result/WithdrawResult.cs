@@ -33,8 +33,9 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class WithdrawResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Wallet Item { set; get; } = null!;
-        public float? Price { set; get; } = null!;
+        public Gs2.Gs2Money.Model.Wallet Item { set; get; }
+        public float? Price { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public WithdrawResult WithItem(Gs2.Gs2Money.Model.Wallet item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Money.Result
 
         public WithdrawResult WithPrice(float? price) {
             this.Price = price;
+            return this;
+        }
+
+        public WithdrawResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Money.Result
             }
             return new WithdrawResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Money.Model.Wallet.FromJson(data["item"]))
-                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()));
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Money.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["price"] = Price,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Money.Result
             if (Price != null) {
                 writer.WritePropertyName("price");
                 writer.Write(float.Parse(Price.ToString()));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

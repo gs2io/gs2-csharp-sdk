@@ -33,8 +33,9 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class EnableMfaResult : IResult
 	{
-        public Gs2.Gs2Identifier.Model.Password Item { set; get; } = null!;
-        public string ChallengeToken { set; get; } = null!;
+        public Gs2.Gs2Identifier.Model.Password Item { set; get; }
+        public string ChallengeToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public EnableMfaResult WithItem(Gs2.Gs2Identifier.Model.Password item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Identifier.Result
 
         public EnableMfaResult WithChallengeToken(string challengeToken) {
             this.ChallengeToken = challengeToken;
+            return this;
+        }
+
+        public EnableMfaResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Identifier.Result
             }
             return new EnableMfaResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Identifier.Model.Password.FromJson(data["item"]))
-                .WithChallengeToken(!data.Keys.Contains("challengeToken") || data["challengeToken"] == null ? null : data["challengeToken"].ToString());
+                .WithChallengeToken(!data.Keys.Contains("challengeToken") || data["challengeToken"] == null ? null : data["challengeToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Identifier.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["challengeToken"] = ChallengeToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Identifier.Result
             if (ChallengeToken != null) {
                 writer.WritePropertyName("challengeToken");
                 writer.Write(ChallengeToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

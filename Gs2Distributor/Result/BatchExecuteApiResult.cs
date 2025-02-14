@@ -33,10 +33,16 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class BatchExecuteApiResult : IResult
 	{
-        public Gs2.Gs2Distributor.Model.BatchResultPayload[] Results { set; get; } = null!;
+        public Gs2.Gs2Distributor.Model.BatchResultPayload[] Results { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public BatchExecuteApiResult WithResults(Gs2.Gs2Distributor.Model.BatchResultPayload[] results) {
             this.Results = results;
+            return this;
+        }
+
+        public BatchExecuteApiResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -51,7 +57,8 @@ namespace Gs2.Gs2Distributor.Result
             return new BatchExecuteApiResult()
                 .WithResults(!data.Keys.Contains("results") || data["results"] == null || !data["results"].IsArray ? null : data["results"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Distributor.Model.BatchResultPayload.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -67,6 +74,7 @@ namespace Gs2.Gs2Distributor.Result
             }
             return new JsonData {
                 ["results"] = resultsJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -83,6 +91,10 @@ namespace Gs2.Gs2Distributor.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

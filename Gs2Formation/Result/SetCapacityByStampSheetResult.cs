@@ -33,9 +33,10 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class SetCapacityByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.Mold Item { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.Mold Old { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.Mold Item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Old { set; get; }
+        public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SetCapacityByStampSheetResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Formation.Result
             return this;
         }
 
+        public SetCapacityByStampSheetResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -63,7 +69,8 @@ namespace Gs2.Gs2Formation.Result
             return new SetCapacityByStampSheetResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["item"]))
                 .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["old"]))
-                .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]));
+                .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -72,6 +79,7 @@ namespace Gs2.Gs2Formation.Result
                 ["item"] = Item?.ToJson(),
                 ["old"] = Old?.ToJson(),
                 ["moldModel"] = MoldModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -86,6 +94,10 @@ namespace Gs2.Gs2Formation.Result
             }
             if (MoldModel != null) {
                 MoldModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

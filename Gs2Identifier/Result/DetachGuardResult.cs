@@ -33,10 +33,16 @@ namespace Gs2.Gs2Identifier.Result
 	[System.Serializable]
 	public class DetachGuardResult : IResult
 	{
-        public string[] Items { set; get; } = null!;
+        public string[] Items { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DetachGuardResult WithItems(string[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public DetachGuardResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -51,7 +57,8 @@ namespace Gs2.Gs2Identifier.Result
             return new DetachGuardResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -67,6 +74,7 @@ namespace Gs2.Gs2Identifier.Result
             }
             return new JsonData {
                 ["items"] = itemsJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -83,6 +91,10 @@ namespace Gs2.Gs2Identifier.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

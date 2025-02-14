@@ -33,8 +33,9 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class DescribeIgnoreUsersResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.IgnoreUser[] Items { set; get; } = null!;
-        public string NextPageToken { set; get; } = null!;
+        public Gs2.Gs2Guild.Model.IgnoreUser[] Items { set; get; }
+        public string NextPageToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DescribeIgnoreUsersResult WithItems(Gs2.Gs2Guild.Model.IgnoreUser[] items) {
             this.Items = items;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Guild.Result
 
         public DescribeIgnoreUsersResult WithNextPageToken(string nextPageToken) {
             this.NextPageToken = nextPageToken;
+            return this;
+        }
+
+        public DescribeIgnoreUsersResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2Guild.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.IgnoreUser.FromJson(v);
                 }).ToArray())
-                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2Guild.Result
             return new JsonData {
                 ["items"] = itemsJsonData,
                 ["nextPageToken"] = NextPageToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -95,6 +103,10 @@ namespace Gs2.Gs2Guild.Result
             if (NextPageToken != null) {
                 writer.WritePropertyName("nextPageToken");
                 writer.Write(NextPageToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,12 +33,13 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunStampSheetExpressResult : IResult
 	{
-        public int[] VerifyTaskResultCodes { set; get; } = null!;
-        public string[] VerifyTaskResults { set; get; } = null!;
-        public int[] TaskResultCodes { set; get; } = null!;
-        public string[] TaskResults { set; get; } = null!;
-        public int? SheetResultCode { set; get; } = null!;
-        public string SheetResult { set; get; } = null!;
+        public int[] VerifyTaskResultCodes { set; get; }
+        public string[] VerifyTaskResults { set; get; }
+        public int[] TaskResultCodes { set; get; }
+        public string[] TaskResults { set; get; }
+        public int? SheetResultCode { set; get; }
+        public string SheetResult { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public RunStampSheetExpressResult WithVerifyTaskResultCodes(int[] verifyTaskResultCodes) {
             this.VerifyTaskResultCodes = verifyTaskResultCodes;
@@ -70,6 +71,11 @@ namespace Gs2.Gs2Distributor.Result
             return this;
         }
 
+        public RunStampSheetExpressResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -92,7 +98,8 @@ namespace Gs2.Gs2Distributor.Result
                     return v.ToString();
                 }).ToArray())
                 .WithSheetResultCode(!data.Keys.Contains("sheetResultCode") || data["sheetResultCode"] == null ? null : (int?)(data["sheetResultCode"].ToString().Contains(".") ? (int)double.Parse(data["sheetResultCode"].ToString()) : int.Parse(data["sheetResultCode"].ToString())))
-                .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString());
+                .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -140,6 +147,7 @@ namespace Gs2.Gs2Distributor.Result
                 ["taskResults"] = taskResultsJsonData,
                 ["sheetResultCode"] = SheetResultCode,
                 ["sheetResult"] = SheetResult,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -193,6 +201,10 @@ namespace Gs2.Gs2Distributor.Result
             if (SheetResult != null) {
                 writer.WritePropertyName("sheetResult");
                 writer.Write(SheetResult.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

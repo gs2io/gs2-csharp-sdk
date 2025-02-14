@@ -33,8 +33,9 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class PromoteSeniorMemberByGuildNameResult : IResult
 	{
-        public Gs2.Gs2Guild.Model.LastGuildMasterActivity Item { set; get; } = null!;
-        public Gs2.Gs2Guild.Model.Guild Guild { set; get; } = null!;
+        public Gs2.Gs2Guild.Model.LastGuildMasterActivity Item { set; get; }
+        public Gs2.Gs2Guild.Model.Guild Guild { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public PromoteSeniorMemberByGuildNameResult WithItem(Gs2.Gs2Guild.Model.LastGuildMasterActivity item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Guild.Result
 
         public PromoteSeniorMemberByGuildNameResult WithGuild(Gs2.Gs2Guild.Model.Guild guild) {
             this.Guild = guild;
+            return this;
+        }
+
+        public PromoteSeniorMemberByGuildNameResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Guild.Result
             }
             return new PromoteSeniorMemberByGuildNameResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Guild.Model.LastGuildMasterActivity.FromJson(data["item"]))
-                .WithGuild(!data.Keys.Contains("guild") || data["guild"] == null ? null : Gs2.Gs2Guild.Model.Guild.FromJson(data["guild"]));
+                .WithGuild(!data.Keys.Contains("guild") || data["guild"] == null ? null : Gs2.Gs2Guild.Model.Guild.FromJson(data["guild"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Guild.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["guild"] = Guild?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Guild.Result
             }
             if (Guild != null) {
                 Guild.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

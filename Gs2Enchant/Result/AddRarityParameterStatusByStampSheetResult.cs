@@ -33,8 +33,9 @@ namespace Gs2.Gs2Enchant.Result
 	[System.Serializable]
 	public class AddRarityParameterStatusByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Enchant.Model.RarityParameterStatus Item { set; get; } = null!;
-        public Gs2.Gs2Enchant.Model.RarityParameterStatus Old { set; get; } = null!;
+        public Gs2.Gs2Enchant.Model.RarityParameterStatus Item { set; get; }
+        public Gs2.Gs2Enchant.Model.RarityParameterStatus Old { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public AddRarityParameterStatusByStampSheetResult WithItem(Gs2.Gs2Enchant.Model.RarityParameterStatus item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Enchant.Result
 
         public AddRarityParameterStatusByStampSheetResult WithOld(Gs2.Gs2Enchant.Model.RarityParameterStatus old) {
             this.Old = old;
+            return this;
+        }
+
+        public AddRarityParameterStatusByStampSheetResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Enchant.Result
             }
             return new AddRarityParameterStatusByStampSheetResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enchant.Model.RarityParameterStatus.FromJson(data["item"]))
-                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Enchant.Model.RarityParameterStatus.FromJson(data["old"]));
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Enchant.Model.RarityParameterStatus.FromJson(data["old"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Enchant.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["old"] = Old?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Enchant.Result
             }
             if (Old != null) {
                 Old.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

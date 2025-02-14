@@ -33,10 +33,11 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class GetSimpleItemWithSignatureResult : IResult
 	{
-        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.SimpleItemModel SimpleItemModel { set; get; } = null!;
-        public string Body { set; get; } = null!;
-        public string Signature { set; get; } = null!;
+        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; }
+        public Gs2.Gs2Inventory.Model.SimpleItemModel SimpleItemModel { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetSimpleItemWithSignatureResult WithItem(Gs2.Gs2Inventory.Model.SimpleItem item) {
             this.Item = item;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Inventory.Result
             return this;
         }
 
+        public GetSimpleItemWithSignatureResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -70,7 +76,8 @@ namespace Gs2.Gs2Inventory.Result
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.SimpleItem.FromJson(data["item"]))
                 .WithSimpleItemModel(!data.Keys.Contains("simpleItemModel") || data["simpleItemModel"] == null ? null : Gs2.Gs2Inventory.Model.SimpleItemModel.FromJson(data["simpleItemModel"]))
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
-                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -80,6 +87,7 @@ namespace Gs2.Gs2Inventory.Result
                 ["simpleItemModel"] = SimpleItemModel?.ToJson(),
                 ["body"] = Body,
                 ["signature"] = Signature,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -99,6 +107,10 @@ namespace Gs2.Gs2Inventory.Result
             if (Signature != null) {
                 writer.WritePropertyName("signature");
                 writer.Write(Signature.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,8 +33,9 @@ namespace Gs2.Gs2SerialKey.Result
 	[System.Serializable]
 	public class RevertUseByStampSheetResult : IResult
 	{
-        public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; } = null!;
-        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; } = null!;
+        public Gs2.Gs2SerialKey.Model.SerialKey Item { set; get; }
+        public Gs2.Gs2SerialKey.Model.CampaignModel CampaignModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public RevertUseByStampSheetResult WithItem(Gs2.Gs2SerialKey.Model.SerialKey item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2SerialKey.Result
 
         public RevertUseByStampSheetResult WithCampaignModel(Gs2.Gs2SerialKey.Model.CampaignModel campaignModel) {
             this.CampaignModel = campaignModel;
+            return this;
+        }
+
+        public RevertUseByStampSheetResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2SerialKey.Result
             }
             return new RevertUseByStampSheetResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2SerialKey.Model.SerialKey.FromJson(data["item"]))
-                .WithCampaignModel(!data.Keys.Contains("campaignModel") || data["campaignModel"] == null ? null : Gs2.Gs2SerialKey.Model.CampaignModel.FromJson(data["campaignModel"]));
+                .WithCampaignModel(!data.Keys.Contains("campaignModel") || data["campaignModel"] == null ? null : Gs2.Gs2SerialKey.Model.CampaignModel.FromJson(data["campaignModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2SerialKey.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["campaignModel"] = CampaignModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2SerialKey.Result
             }
             if (CampaignModel != null) {
                 CampaignModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

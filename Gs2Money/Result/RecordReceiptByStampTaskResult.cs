@@ -33,8 +33,9 @@ namespace Gs2.Gs2Money.Result
 	[System.Serializable]
 	public class RecordReceiptByStampTaskResult : IResult
 	{
-        public Gs2.Gs2Money.Model.Receipt Item { set; get; } = null!;
-        public string NewContextStack { set; get; } = null!;
+        public Gs2.Gs2Money.Model.Receipt Item { set; get; }
+        public string NewContextStack { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public RecordReceiptByStampTaskResult WithItem(Gs2.Gs2Money.Model.Receipt item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Money.Result
 
         public RecordReceiptByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
+            return this;
+        }
+
+        public RecordReceiptByStampTaskResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Money.Result
             }
             return new RecordReceiptByStampTaskResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Money.Model.Receipt.FromJson(data["item"]))
-                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
+                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Money.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["newContextStack"] = NewContextStack,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Money.Result
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,8 +33,9 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class DoMatchmakingByUserIdResult : IResult
 	{
-        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; } = null!;
-        public string MatchmakingContextToken { set; get; } = null!;
+        public Gs2.Gs2Matchmaking.Model.Gathering Item { set; get; }
+        public string MatchmakingContextToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DoMatchmakingByUserIdResult WithItem(Gs2.Gs2Matchmaking.Model.Gathering item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Matchmaking.Result
 
         public DoMatchmakingByUserIdResult WithMatchmakingContextToken(string matchmakingContextToken) {
             this.MatchmakingContextToken = matchmakingContextToken;
+            return this;
+        }
+
+        public DoMatchmakingByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Matchmaking.Result
             }
             return new DoMatchmakingByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.Gathering.FromJson(data["item"]))
-                .WithMatchmakingContextToken(!data.Keys.Contains("matchmakingContextToken") || data["matchmakingContextToken"] == null ? null : data["matchmakingContextToken"].ToString());
+                .WithMatchmakingContextToken(!data.Keys.Contains("matchmakingContextToken") || data["matchmakingContextToken"] == null ? null : data["matchmakingContextToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Matchmaking.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["matchmakingContextToken"] = MatchmakingContextToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Matchmaking.Result
             if (MatchmakingContextToken != null) {
                 writer.WritePropertyName("matchmakingContextToken");
                 writer.Write(MatchmakingContextToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

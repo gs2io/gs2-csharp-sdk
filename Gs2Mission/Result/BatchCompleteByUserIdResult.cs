@@ -33,13 +33,14 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class BatchCompleteByUserIdResult : IResult
 	{
-        public string TransactionId { set; get; } = null!;
-        public string StampSheet { set; get; } = null!;
-        public string StampSheetEncryptionKeyId { set; get; } = null!;
-        public bool? AutoRunStampSheet { set; get; } = null!;
-        public bool? AtomicCommit { set; get; } = null!;
-        public string Transaction { set; get; } = null!;
-        public Gs2.Core.Model.TransactionResult TransactionResult { set; get; } = null!;
+        public string TransactionId { set; get; }
+        public string StampSheet { set; get; }
+        public string StampSheetEncryptionKeyId { set; get; }
+        public bool? AutoRunStampSheet { set; get; }
+        public bool? AtomicCommit { set; get; }
+        public string Transaction { set; get; }
+        public Gs2.Core.Model.TransactionResult TransactionResult { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public BatchCompleteByUserIdResult WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
@@ -76,6 +77,11 @@ namespace Gs2.Gs2Mission.Result
             return this;
         }
 
+        public BatchCompleteByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -91,7 +97,8 @@ namespace Gs2.Gs2Mission.Result
                 .WithAutoRunStampSheet(!data.Keys.Contains("autoRunStampSheet") || data["autoRunStampSheet"] == null ? null : (bool?)bool.Parse(data["autoRunStampSheet"].ToString()))
                 .WithAtomicCommit(!data.Keys.Contains("atomicCommit") || data["atomicCommit"] == null ? null : (bool?)bool.Parse(data["atomicCommit"].ToString()))
                 .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : data["transaction"].ToString())
-                .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Gs2.Core.Model.TransactionResult.FromJson(data["transactionResult"]));
+                .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Gs2.Core.Model.TransactionResult.FromJson(data["transactionResult"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -104,6 +111,7 @@ namespace Gs2.Gs2Mission.Result
                 ["atomicCommit"] = AtomicCommit,
                 ["transaction"] = Transaction,
                 ["transactionResult"] = TransactionResult?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -136,6 +144,10 @@ namespace Gs2.Gs2Mission.Result
             }
             if (TransactionResult != null) {
                 TransactionResult.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

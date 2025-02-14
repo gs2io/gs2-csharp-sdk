@@ -33,10 +33,16 @@ namespace Gs2.Gs2Key.Result
 	[System.Serializable]
 	public class EncryptResult : IResult
 	{
-        public string Data { set; get; } = null!;
+        public string Data { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public EncryptResult WithData(string data) {
             this.Data = data;
+            return this;
+        }
+
+        public EncryptResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Key.Result
                 return null;
             }
             return new EncryptResult()
-                .WithData(!data.Keys.Contains("data") || data["data"] == null ? null : data["data"].ToString());
+                .WithData(!data.Keys.Contains("data") || data["data"] == null ? null : data["data"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["data"] = Data,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Key.Result
             if (Data != null) {
                 writer.WritePropertyName("data");
                 writer.Write(Data.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

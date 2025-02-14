@@ -33,8 +33,9 @@ namespace Gs2.Gs2Stamina.Result
 	[System.Serializable]
 	public class ConsumeStaminaResult : IResult
 	{
-        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; } = null!;
-        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; } = null!;
+        public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
+        public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public ConsumeStaminaResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Stamina.Result
 
         public ConsumeStaminaResult WithStaminaModel(Gs2.Gs2Stamina.Model.StaminaModel staminaModel) {
             this.StaminaModel = staminaModel;
+            return this;
+        }
+
+        public ConsumeStaminaResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Stamina.Result
             }
             return new ConsumeStaminaResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["item"]))
-                .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]));
+                .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Stamina.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["staminaModel"] = StaminaModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -75,6 +83,10 @@ namespace Gs2.Gs2Stamina.Result
             }
             if (StaminaModel != null) {
                 StaminaModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

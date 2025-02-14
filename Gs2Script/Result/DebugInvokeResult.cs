@@ -33,13 +33,16 @@ namespace Gs2.Gs2Script.Result
 	[System.Serializable]
 	public class DebugInvokeResult : IResult
 	{
-        public int? Code { set; get; } = null!;
-        public string Result { set; get; } = null!;
-        public Gs2.Gs2Script.Model.Transaction_ Transaction { set; get; } = null!;
-        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; } = null!;
-        public int? ExecuteTime { set; get; } = null!;
-        public int? Charged { set; get; } = null!;
-        public string[] Output { set; get; } = null!;
+        public int? Code { set; get; }
+        public string Result { set; get; }
+        public Gs2.Gs2Script.Model.Transaction_ Transaction { set; get; }
+        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
+        public bool? AtomicCommit { set; get; }
+        public Gs2.Core.Model.TransactionResult TransactionResult { set; get; }
+        public int? ExecuteTime { set; get; }
+        public int? Charged { set; get; }
+        public string[] Output { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DebugInvokeResult WithCode(int? code) {
             this.Code = code;
@@ -61,6 +64,16 @@ namespace Gs2.Gs2Script.Result
             return this;
         }
 
+        public DebugInvokeResult WithAtomicCommit(bool? atomicCommit) {
+            this.AtomicCommit = atomicCommit;
+            return this;
+        }
+
+        public DebugInvokeResult WithTransactionResult(Gs2.Core.Model.TransactionResult transactionResult) {
+            this.TransactionResult = transactionResult;
+            return this;
+        }
+
         public DebugInvokeResult WithExecuteTime(int? executeTime) {
             this.ExecuteTime = executeTime;
             return this;
@@ -73,6 +86,11 @@ namespace Gs2.Gs2Script.Result
 
         public DebugInvokeResult WithOutput(string[] output) {
             this.Output = output;
+            return this;
+        }
+
+        public DebugInvokeResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -89,11 +107,14 @@ namespace Gs2.Gs2Script.Result
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
                 .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : Gs2.Gs2Script.Model.Transaction_.FromJson(data["transaction"]))
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
+                .WithAtomicCommit(!data.Keys.Contains("atomicCommit") || data["atomicCommit"] == null ? null : (bool?)bool.Parse(data["atomicCommit"].ToString()))
+                .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Gs2.Core.Model.TransactionResult.FromJson(data["transactionResult"]))
                 .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)(data["executeTime"].ToString().Contains(".") ? (int)double.Parse(data["executeTime"].ToString()) : int.Parse(data["executeTime"].ToString())))
                 .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)(data["charged"].ToString().Contains(".") ? (int)double.Parse(data["charged"].ToString()) : int.Parse(data["charged"].ToString())))
                 .WithOutput(!data.Keys.Contains("output") || data["output"] == null || !data["output"].IsArray ? null : data["output"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -112,9 +133,12 @@ namespace Gs2.Gs2Script.Result
                 ["result"] = Result,
                 ["transaction"] = Transaction?.ToJson(),
                 ["randomStatus"] = RandomStatus?.ToJson(),
+                ["atomicCommit"] = AtomicCommit,
+                ["transactionResult"] = TransactionResult?.ToJson(),
                 ["executeTime"] = ExecuteTime,
                 ["charged"] = Charged,
                 ["output"] = outputJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -135,6 +159,13 @@ namespace Gs2.Gs2Script.Result
             if (RandomStatus != null) {
                 RandomStatus.WriteJson(writer);
             }
+            if (AtomicCommit != null) {
+                writer.WritePropertyName("atomicCommit");
+                writer.Write(bool.Parse(AtomicCommit.ToString()));
+            }
+            if (TransactionResult != null) {
+                TransactionResult.WriteJson(writer);
+            }
             if (ExecuteTime != null) {
                 writer.WritePropertyName("executeTime");
                 writer.Write((ExecuteTime.ToString().Contains(".") ? (int)double.Parse(ExecuteTime.ToString()) : int.Parse(ExecuteTime.ToString())));
@@ -153,6 +184,10 @@ namespace Gs2.Gs2Script.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

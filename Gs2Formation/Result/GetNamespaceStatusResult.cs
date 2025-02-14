@@ -33,10 +33,16 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class GetNamespaceStatusResult : IResult
 	{
-        public string Status { set; get; } = null!;
+        public string Status { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetNamespaceStatusResult WithStatus(string status) {
             this.Status = status;
+            return this;
+        }
+
+        public GetNamespaceStatusResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Formation.Result
                 return null;
             }
             return new GetNamespaceStatusResult()
-                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString());
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["status"] = Status,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Formation.Result
             if (Status != null) {
                 writer.WritePropertyName("status");
                 writer.Write(Status.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

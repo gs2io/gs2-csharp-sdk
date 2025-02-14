@@ -33,8 +33,9 @@ namespace Gs2.Gs2Money2.Result
 	[System.Serializable]
 	public class WithdrawByUserIdResult : IResult
 	{
-        public Gs2.Gs2Money2.Model.Wallet Item { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.DepositTransaction[] WithdrawTransactions { set; get; } = null!;
+        public Gs2.Gs2Money2.Model.Wallet Item { set; get; }
+        public Gs2.Gs2Money2.Model.DepositTransaction[] WithdrawTransactions { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public WithdrawByUserIdResult WithItem(Gs2.Gs2Money2.Model.Wallet item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Money2.Result
 
         public WithdrawByUserIdResult WithWithdrawTransactions(Gs2.Gs2Money2.Model.DepositTransaction[] withdrawTransactions) {
             this.WithdrawTransactions = withdrawTransactions;
+            return this;
+        }
+
+        public WithdrawByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2Money2.Result
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Money2.Model.Wallet.FromJson(data["item"]))
                 .WithWithdrawTransactions(!data.Keys.Contains("withdrawTransactions") || data["withdrawTransactions"] == null || !data["withdrawTransactions"].IsArray ? null : data["withdrawTransactions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money2.Model.DepositTransaction.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2Money2.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["withdrawTransactions"] = withdrawTransactionsJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -94,6 +102,10 @@ namespace Gs2.Gs2Money2.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

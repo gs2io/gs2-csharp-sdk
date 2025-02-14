@@ -33,8 +33,9 @@ namespace Gs2.Gs2Exchange.Result
 	[System.Serializable]
 	public class DescribeAwaitsByUserIdResult : IResult
 	{
-        public Gs2.Gs2Exchange.Model.Await[] Items { set; get; } = null!;
-        public string NextPageToken { set; get; } = null!;
+        public Gs2.Gs2Exchange.Model.Await[] Items { set; get; }
+        public string NextPageToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DescribeAwaitsByUserIdResult WithItems(Gs2.Gs2Exchange.Model.Await[] items) {
             this.Items = items;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Exchange.Result
 
         public DescribeAwaitsByUserIdResult WithNextPageToken(string nextPageToken) {
             this.NextPageToken = nextPageToken;
+            return this;
+        }
+
+        public DescribeAwaitsByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2Exchange.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.Await.FromJson(v);
                 }).ToArray())
-                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2Exchange.Result
             return new JsonData {
                 ["items"] = itemsJsonData,
                 ["nextPageToken"] = NextPageToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -95,6 +103,10 @@ namespace Gs2.Gs2Exchange.Result
             if (NextPageToken != null) {
                 writer.WritePropertyName("nextPageToken");
                 writer.Write(NextPageToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

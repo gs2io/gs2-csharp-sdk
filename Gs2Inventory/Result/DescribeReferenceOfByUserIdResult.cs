@@ -33,10 +33,11 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class DescribeReferenceOfByUserIdResult : IResult
 	{
-        public string[] Items { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.ItemSet ItemSet { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; } = null!;
-        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; } = null!;
+        public string[] Items { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemSet ItemSet { set; get; }
+        public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DescribeReferenceOfByUserIdResult WithItems(string[] items) {
             this.Items = items;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Inventory.Result
             return this;
         }
 
+        public DescribeReferenceOfByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -72,7 +78,8 @@ namespace Gs2.Gs2Inventory.Result
                 }).ToArray())
                 .WithItemSet(!data.Keys.Contains("itemSet") || data["itemSet"] == null ? null : Gs2.Gs2Inventory.Model.ItemSet.FromJson(data["itemSet"]))
                 .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
-                .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]));
+                .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -91,6 +98,7 @@ namespace Gs2.Gs2Inventory.Result
                 ["itemSet"] = ItemSet?.ToJson(),
                 ["itemModel"] = ItemModel?.ToJson(),
                 ["inventory"] = Inventory?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -116,6 +124,10 @@ namespace Gs2.Gs2Inventory.Result
             }
             if (Inventory != null) {
                 Inventory.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

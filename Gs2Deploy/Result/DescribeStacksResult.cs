@@ -33,8 +33,9 @@ namespace Gs2.Gs2Deploy.Result
 	[System.Serializable]
 	public class DescribeStacksResult : IResult
 	{
-        public Gs2.Gs2Deploy.Model.Stack[] Items { set; get; } = null!;
-        public string NextPageToken { set; get; } = null!;
+        public Gs2.Gs2Deploy.Model.Stack[] Items { set; get; }
+        public string NextPageToken { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public DescribeStacksResult WithItems(Gs2.Gs2Deploy.Model.Stack[] items) {
             this.Items = items;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Deploy.Result
 
         public DescribeStacksResult WithNextPageToken(string nextPageToken) {
             this.NextPageToken = nextPageToken;
+            return this;
+        }
+
+        public DescribeStacksResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2Deploy.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Deploy.Model.Stack.FromJson(v);
                 }).ToArray())
-                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2Deploy.Result
             return new JsonData {
                 ["items"] = itemsJsonData,
                 ["nextPageToken"] = NextPageToken,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -95,6 +103,10 @@ namespace Gs2.Gs2Deploy.Result
             if (NextPageToken != null) {
                 writer.WritePropertyName("nextPageToken");
                 writer.Write(NextPageToken.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

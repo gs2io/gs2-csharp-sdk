@@ -33,8 +33,9 @@ namespace Gs2.Gs2Version.Result
 	[System.Serializable]
 	public class CalculateSignatureResult : IResult
 	{
-        public string Body { set; get; } = null!;
-        public string Signature { set; get; } = null!;
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public CalculateSignatureResult WithBody(string body) {
             this.Body = body;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Version.Result
 
         public CalculateSignatureResult WithSignature(string signature) {
             this.Signature = signature;
+            return this;
+        }
+
+        public CalculateSignatureResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Version.Result
             }
             return new CalculateSignatureResult()
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
-                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Version.Result
             return new JsonData {
                 ["body"] = Body,
                 ["signature"] = Signature,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -77,6 +85,10 @@ namespace Gs2.Gs2Version.Result
             if (Signature != null) {
                 writer.WritePropertyName("signature");
                 writer.Write(Signature.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

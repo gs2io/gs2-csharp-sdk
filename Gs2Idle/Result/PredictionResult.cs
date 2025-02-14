@@ -33,8 +33,9 @@ namespace Gs2.Gs2Idle.Result
 	[System.Serializable]
 	public class PredictionResult : IResult
 	{
-        public Gs2.Core.Model.AcquireAction[] Items { set; get; } = null!;
-        public Gs2.Gs2Idle.Model.Status Status { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] Items { set; get; }
+        public Gs2.Gs2Idle.Model.Status Status { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public PredictionResult WithItems(Gs2.Core.Model.AcquireAction[] items) {
             this.Items = items;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Idle.Result
 
         public PredictionResult WithStatus(Gs2.Gs2Idle.Model.Status status) {
             this.Status = status;
+            return this;
+        }
+
+        public PredictionResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2Idle.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : Gs2.Gs2Idle.Model.Status.FromJson(data["status"]));
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : Gs2.Gs2Idle.Model.Status.FromJson(data["status"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2Idle.Result
             return new JsonData {
                 ["items"] = itemsJsonData,
                 ["status"] = Status?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -94,6 +102,10 @@ namespace Gs2.Gs2Idle.Result
             }
             if (Status != null) {
                 Status.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

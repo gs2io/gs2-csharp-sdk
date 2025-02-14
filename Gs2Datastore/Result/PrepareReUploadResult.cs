@@ -33,8 +33,9 @@ namespace Gs2.Gs2Datastore.Result
 	[System.Serializable]
 	public class PrepareReUploadResult : IResult
 	{
-        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; } = null!;
-        public string UploadUrl { set; get; } = null!;
+        public Gs2.Gs2Datastore.Model.DataObject Item { set; get; }
+        public string UploadUrl { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public PrepareReUploadResult WithItem(Gs2.Gs2Datastore.Model.DataObject item) {
             this.Item = item;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Datastore.Result
 
         public PrepareReUploadResult WithUploadUrl(string uploadUrl) {
             this.UploadUrl = uploadUrl;
+            return this;
+        }
+
+        public PrepareReUploadResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -56,7 +62,8 @@ namespace Gs2.Gs2Datastore.Result
             }
             return new PrepareReUploadResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObject.FromJson(data["item"]))
-                .WithUploadUrl(!data.Keys.Contains("uploadUrl") || data["uploadUrl"] == null ? null : data["uploadUrl"].ToString());
+                .WithUploadUrl(!data.Keys.Contains("uploadUrl") || data["uploadUrl"] == null ? null : data["uploadUrl"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +71,7 @@ namespace Gs2.Gs2Datastore.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["uploadUrl"] = UploadUrl,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -76,6 +84,10 @@ namespace Gs2.Gs2Datastore.Result
             if (UploadUrl != null) {
                 writer.WritePropertyName("uploadUrl");
                 writer.Write(UploadUrl.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,10 +33,16 @@ namespace Gs2.Gs2Project.Result
 	[System.Serializable]
 	public class GetDumpUserDataResult : IResult
 	{
-        public string Url { set; get; } = null!;
+        public string Url { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetDumpUserDataResult WithUrl(string url) {
             this.Url = url;
+            return this;
+        }
+
+        public GetDumpUserDataResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Project.Result
                 return null;
             }
             return new GetDumpUserDataResult()
-                .WithUrl(!data.Keys.Contains("url") || data["url"] == null ? null : data["url"].ToString());
+                .WithUrl(!data.Keys.Contains("url") || data["url"] == null ? null : data["url"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["url"] = Url,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Project.Result
             if (Url != null) {
                 writer.WritePropertyName("url");
                 writer.Write(Url.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

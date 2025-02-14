@@ -33,10 +33,16 @@ namespace Gs2.Gs2Inbox.Result
 	[System.Serializable]
 	public class ReceiveGlobalMessageByUserIdResult : IResult
 	{
-        public Gs2.Gs2Inbox.Model.Message[] Item { set; get; } = null!;
+        public Gs2.Gs2Inbox.Model.Message[] Item { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public ReceiveGlobalMessageByUserIdResult WithItem(Gs2.Gs2Inbox.Model.Message[] item) {
             this.Item = item;
+            return this;
+        }
+
+        public ReceiveGlobalMessageByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -51,7 +57,8 @@ namespace Gs2.Gs2Inbox.Result
             return new ReceiveGlobalMessageByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null || !data["item"].IsArray ? null : data["item"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inbox.Model.Message.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -67,6 +74,7 @@ namespace Gs2.Gs2Inbox.Result
             }
             return new JsonData {
                 ["item"] = itemJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -83,6 +91,10 @@ namespace Gs2.Gs2Inbox.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

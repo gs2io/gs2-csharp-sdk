@@ -33,9 +33,10 @@ namespace Gs2.Gs2Mission.Result
 	[System.Serializable]
 	public class SetByStampSheetResult : IResult
 	{
-        public Gs2.Gs2Mission.Model.Counter Item { set; get; } = null!;
-        public Gs2.Gs2Mission.Model.Counter Old { set; get; } = null!;
-        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { set; get; } = null!;
+        public Gs2.Gs2Mission.Model.Counter Item { set; get; }
+        public Gs2.Gs2Mission.Model.Counter Old { set; get; }
+        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public SetByStampSheetResult WithItem(Gs2.Gs2Mission.Model.Counter item) {
             this.Item = item;
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Mission.Result
             return this;
         }
 
+        public SetByStampSheetResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -65,7 +71,8 @@ namespace Gs2.Gs2Mission.Result
                 .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Mission.Model.Counter.FromJson(data["old"]))
                 .WithChangedCompletes(!data.Keys.Contains("changedCompletes") || data["changedCompletes"] == null || !data["changedCompletes"].IsArray ? null : data["changedCompletes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.Complete.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -83,6 +90,7 @@ namespace Gs2.Gs2Mission.Result
                 ["item"] = Item?.ToJson(),
                 ["old"] = Old?.ToJson(),
                 ["changedCompletes"] = changedCompletesJsonData,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -105,6 +113,10 @@ namespace Gs2.Gs2Mission.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

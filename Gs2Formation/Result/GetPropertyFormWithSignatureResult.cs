@@ -33,10 +33,11 @@ namespace Gs2.Gs2Formation.Result
 	[System.Serializable]
 	public class GetPropertyFormWithSignatureResult : IResult
 	{
-        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; } = null!;
-        public string Body { set; get; } = null!;
-        public string Signature { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.PropertyFormModel PropertyFormModel { set; get; } = null!;
+        public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyFormModel PropertyFormModel { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public GetPropertyFormWithSignatureResult WithItem(Gs2.Gs2Formation.Model.PropertyForm item) {
             this.Item = item;
@@ -58,6 +59,11 @@ namespace Gs2.Gs2Formation.Result
             return this;
         }
 
+        public GetPropertyFormWithSignatureResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -70,7 +76,8 @@ namespace Gs2.Gs2Formation.Result
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.PropertyForm.FromJson(data["item"]))
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
                 .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
-                .WithPropertyFormModel(!data.Keys.Contains("propertyFormModel") || data["propertyFormModel"] == null ? null : Gs2.Gs2Formation.Model.PropertyFormModel.FromJson(data["propertyFormModel"]));
+                .WithPropertyFormModel(!data.Keys.Contains("propertyFormModel") || data["propertyFormModel"] == null ? null : Gs2.Gs2Formation.Model.PropertyFormModel.FromJson(data["propertyFormModel"]))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -80,6 +87,7 @@ namespace Gs2.Gs2Formation.Result
                 ["body"] = Body,
                 ["signature"] = Signature,
                 ["propertyFormModel"] = PropertyFormModel?.ToJson(),
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -99,6 +107,10 @@ namespace Gs2.Gs2Formation.Result
             }
             if (PropertyFormModel != null) {
                 PropertyFormModel.WriteJson(writer);
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -33,16 +33,17 @@ namespace Gs2.Gs2Enhance.Result
 	[System.Serializable]
 	public class EndByUserIdResult : IResult
 	{
-        public Gs2.Gs2Enhance.Model.Progress Item { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public string StampSheet { set; get; } = null!;
-        public string StampSheetEncryptionKeyId { set; get; } = null!;
-        public bool? AutoRunStampSheet { set; get; } = null!;
-        public bool? AtomicCommit { set; get; } = null!;
-        public string Transaction { set; get; } = null!;
-        public Gs2.Core.Model.TransactionResult TransactionResult { set; get; } = null!;
-        public long? AcquireExperience { set; get; } = null!;
-        public float? BonusRate { set; get; } = null!;
+        public Gs2.Gs2Enhance.Model.Progress Item { set; get; }
+        public string TransactionId { set; get; }
+        public string StampSheet { set; get; }
+        public string StampSheetEncryptionKeyId { set; get; }
+        public bool? AutoRunStampSheet { set; get; }
+        public bool? AtomicCommit { set; get; }
+        public string Transaction { set; get; }
+        public Gs2.Core.Model.TransactionResult TransactionResult { set; get; }
+        public long? AcquireExperience { set; get; }
+        public float? BonusRate { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public EndByUserIdResult WithItem(Gs2.Gs2Enhance.Model.Progress item) {
             this.Item = item;
@@ -94,6 +95,11 @@ namespace Gs2.Gs2Enhance.Result
             return this;
         }
 
+        public EndByUserIdResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
+            return this;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -112,7 +118,8 @@ namespace Gs2.Gs2Enhance.Result
                 .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : data["transaction"].ToString())
                 .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Gs2.Core.Model.TransactionResult.FromJson(data["transactionResult"]))
                 .WithAcquireExperience(!data.Keys.Contains("acquireExperience") || data["acquireExperience"] == null ? null : (long?)(data["acquireExperience"].ToString().Contains(".") ? (long)double.Parse(data["acquireExperience"].ToString()) : long.Parse(data["acquireExperience"].ToString())))
-                .WithBonusRate(!data.Keys.Contains("bonusRate") || data["bonusRate"] == null ? null : (float?)float.Parse(data["bonusRate"].ToString()));
+                .WithBonusRate(!data.Keys.Contains("bonusRate") || data["bonusRate"] == null ? null : (float?)float.Parse(data["bonusRate"].ToString()))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -128,6 +135,7 @@ namespace Gs2.Gs2Enhance.Result
                 ["transactionResult"] = TransactionResult?.ToJson(),
                 ["acquireExperience"] = AcquireExperience,
                 ["bonusRate"] = BonusRate,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -171,6 +179,10 @@ namespace Gs2.Gs2Enhance.Result
             if (BonusRate != null) {
                 writer.WritePropertyName("bonusRate");
                 writer.Write(float.Parse(BonusRate.ToString()));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

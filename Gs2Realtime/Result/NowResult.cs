@@ -33,10 +33,16 @@ namespace Gs2.Gs2Realtime.Result
 	[System.Serializable]
 	public class NowResult : IResult
 	{
-        public long? Timestamp { set; get; } = null!;
+        public long? Timestamp { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public NowResult WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
+            return this;
+        }
+
+        public NowResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Realtime.Result
                 return null;
             }
             return new NowResult()
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())));
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())))
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["timestamp"] = Timestamp,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -65,6 +73,10 @@ namespace Gs2.Gs2Realtime.Result
             if (Timestamp != null) {
                 writer.WritePropertyName("timestamp");
                 writer.Write((Timestamp.ToString().Contains(".") ? (long)double.Parse(Timestamp.ToString()) : long.Parse(Timestamp.ToString())));
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

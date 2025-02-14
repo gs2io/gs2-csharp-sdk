@@ -33,8 +33,9 @@ namespace Gs2.Gs2Buff.Result
 	[System.Serializable]
 	public class ApplyBuffResult : IResult
 	{
-        public Gs2.Gs2Buff.Model.BuffEntryModel[] Items { set; get; } = null!;
-        public string NewContextStack { set; get; } = null!;
+        public Gs2.Gs2Buff.Model.BuffEntryModel[] Items { set; get; }
+        public string NewContextStack { set; get; }
+        public ResultMetadata Metadata { set; get; }
 
         public ApplyBuffResult WithItems(Gs2.Gs2Buff.Model.BuffEntryModel[] items) {
             this.Items = items;
@@ -43,6 +44,11 @@ namespace Gs2.Gs2Buff.Result
 
         public ApplyBuffResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
+            return this;
+        }
+
+        public ApplyBuffResult WithMetadata(ResultMetadata metadata) {
+            this.Metadata = metadata;
             return this;
         }
 
@@ -58,7 +64,8 @@ namespace Gs2.Gs2Buff.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Buff.Model.BuffEntryModel.FromJson(v);
                 }).ToArray())
-                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
+                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
@@ -75,6 +82,7 @@ namespace Gs2.Gs2Buff.Result
             return new JsonData {
                 ["items"] = itemsJsonData,
                 ["newContextStack"] = NewContextStack,
+                ["metadata"] = Metadata?.ToJson(),
             };
         }
 
@@ -95,6 +103,10 @@ namespace Gs2.Gs2Buff.Result
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());
+            }
+            if (Metadata != null) {
+                writer.WritePropertyName("metadata");
+                Metadata.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }
