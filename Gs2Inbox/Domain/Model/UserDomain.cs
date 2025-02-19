@@ -370,6 +370,86 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Core.Domain.TransactionDomain> BatchReadMessagesFuture(
+            BatchReadMessagesByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.BatchReadMessagesByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                    this._gs2,
+                    this.UserId,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId,
+                    result.AtomicCommit,
+                    result.TransactionResult
+                );
+                if (result.StampSheet != null) {
+                    var future2 = transaction.WaitFuture(true);
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+                self.OnComplete(transaction);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> BatchReadMessagesAsync(
+            #else
+        public async Task<Gs2.Core.Domain.TransactionDomain> BatchReadMessagesAsync(
+            #endif
+            BatchReadMessagesByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.BatchReadMessagesByUserIdAsync(request)
+            );
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                this._gs2,
+                this.UserId,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId,
+                result.AtomicCommit,
+                result.TransactionResult
+            );
+            if (result.StampSheet != null) {
+                await transaction.WaitAsync(true);
+            }
+            return transaction;
+        }
+        #endif
+
     }
 
     public partial class UserDomain {

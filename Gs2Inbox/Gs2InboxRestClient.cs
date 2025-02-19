@@ -3033,6 +3033,315 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
+        public class BatchReadMessagesTask : Gs2RestSessionTask<BatchReadMessagesRequest, BatchReadMessagesResult>
+        {
+            public BatchReadMessagesTask(IGs2Session session, RestSessionRequestFactory factory, BatchReadMessagesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchReadMessagesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inbox")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/messages/read/batch";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MessageNames != null)
+                {
+                    jsonWriter.WritePropertyName("messageNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MessageNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
+                    base.OnError(new Exception.MessageExpiredException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchReadMessages(
+                Request.BatchReadMessagesRequest request,
+                UnityAction<AsyncResult<Result.BatchReadMessagesResult>> callback
+        )
+		{
+			var task = new BatchReadMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchReadMessagesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchReadMessagesResult> BatchReadMessagesFuture(
+                Request.BatchReadMessagesRequest request
+        )
+		{
+			return new BatchReadMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchReadMessagesResult> BatchReadMessagesAsync(
+                Request.BatchReadMessagesRequest request
+        )
+		{
+            AsyncResult<Result.BatchReadMessagesResult> result = null;
+			await BatchReadMessages(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchReadMessagesTask BatchReadMessagesAsync(
+                Request.BatchReadMessagesRequest request
+        )
+		{
+			return new BatchReadMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchReadMessagesResult> BatchReadMessagesAsync(
+                Request.BatchReadMessagesRequest request
+        )
+		{
+			var task = new BatchReadMessagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class BatchReadMessagesByUserIdTask : Gs2RestSessionTask<BatchReadMessagesByUserIdRequest, BatchReadMessagesByUserIdResult>
+        {
+            public BatchReadMessagesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, BatchReadMessagesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(BatchReadMessagesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inbox")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/messages/read/batch";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MessageNames != null)
+                {
+                    jsonWriter.WritePropertyName("messageNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MessageNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
+                    base.OnError(new Exception.MessageExpiredException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator BatchReadMessagesByUserId(
+                Request.BatchReadMessagesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.BatchReadMessagesByUserIdResult>> callback
+        )
+		{
+			var task = new BatchReadMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.BatchReadMessagesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.BatchReadMessagesByUserIdResult> BatchReadMessagesByUserIdFuture(
+                Request.BatchReadMessagesByUserIdRequest request
+        )
+		{
+			return new BatchReadMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.BatchReadMessagesByUserIdResult> BatchReadMessagesByUserIdAsync(
+                Request.BatchReadMessagesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.BatchReadMessagesByUserIdResult> result = null;
+			await BatchReadMessagesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public BatchReadMessagesByUserIdTask BatchReadMessagesByUserIdAsync(
+                Request.BatchReadMessagesByUserIdRequest request
+        )
+		{
+			return new BatchReadMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.BatchReadMessagesByUserIdResult> BatchReadMessagesByUserIdAsync(
+                Request.BatchReadMessagesByUserIdRequest request
+        )
+		{
+			var task = new BatchReadMessagesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteMessageTask : Gs2RestSessionTask<DeleteMessageRequest, DeleteMessageResult>
         {
             public DeleteMessageTask(IGs2Session session, RestSessionRequestFactory factory, DeleteMessageRequest request) : base(session, factory, request)

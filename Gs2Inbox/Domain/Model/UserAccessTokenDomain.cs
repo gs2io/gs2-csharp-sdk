@@ -168,6 +168,113 @@ namespace Gs2.Gs2Inbox.Domain.Model
             return domain;
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> BatchReadMessagesFuture(
+            BatchReadMessagesRequest request,
+            bool speculativeExecute = true
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token);
+
+                if (speculativeExecute) {
+                    var speculativeExecuteFuture = Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor.BatchReadMessagesByUserIdSpeculativeExecutor.ExecuteFuture(
+                        this._gs2,
+                        AccessToken,
+                        BatchReadMessagesByUserIdRequest.FromJson(request.ToJson())
+                    );
+                    yield return speculativeExecuteFuture;
+                    if (speculativeExecuteFuture.Error != null)
+                    {
+                        self.OnError(speculativeExecuteFuture.Error);
+                        yield break;
+                    }
+                    var commit = speculativeExecuteFuture.Result;
+                    commit?.Invoke();
+                }
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.BatchReadMessagesFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                    this._gs2,
+                    this.AccessToken,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId,
+                    result.AtomicCommit,
+                    result.TransactionResult
+                );
+                if (result.StampSheet != null) {
+                    var future2 = transaction.WaitFuture(true);
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+                self.OnComplete(transaction);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> BatchReadMessagesAsync(
+            #else
+        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> BatchReadMessagesAsync(
+            #endif
+            BatchReadMessagesRequest request,
+            bool speculativeExecute = true
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token);
+
+            if (speculativeExecute) {
+                var commit = await Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor.BatchReadMessagesByUserIdSpeculativeExecutor.ExecuteAsync(
+                    this._gs2,
+                    AccessToken,
+                    BatchReadMessagesByUserIdRequest.FromJson(request.ToJson())
+                );
+                commit?.Invoke();
+            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.BatchReadMessagesAsync(request)
+            );
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                this._gs2,
+                this.AccessToken,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId,
+                result.AtomicCommit,
+                result.TransactionResult
+            );
+            if (result.StampSheet != null) {
+                await transaction.WaitAsync(true);
+            }
+            return transaction;
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Inbox.Model.Message> Messages(
             bool? isRead = null

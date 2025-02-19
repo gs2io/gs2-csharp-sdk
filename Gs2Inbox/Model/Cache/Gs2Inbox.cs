@@ -200,6 +200,20 @@ namespace Gs2.Gs2Inbox.Model.Cache
                         Request.ReadMessageByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "batchReadMessages":
+                    Result.BatchReadMessagesResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.BatchReadMessagesRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "batchReadMessagesByUserId":
+                    Result.BatchReadMessagesByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.BatchReadMessagesByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteMessage":
                     Result.DeleteMessageResult.FromJson(resultPayload).PutCache(
                         cache,
