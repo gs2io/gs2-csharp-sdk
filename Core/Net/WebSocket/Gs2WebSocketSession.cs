@@ -188,6 +188,7 @@ namespace Gs2.Core.Net
             this._session.OnError += (_, _) =>
 #endif
             {
+                OnDisconnect?.Invoke();
 #pragma warning disable 4014
                 CloseAsync();
 #pragma warning restore 4014
