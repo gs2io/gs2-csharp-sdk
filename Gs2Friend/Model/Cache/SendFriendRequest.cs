@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -62,15 +64,15 @@ namespace Gs2.Gs2Friend.Model.Cache
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<SendFriendRequest> FetchFuture(
+        public static IFuture<FriendRequest> FetchFuture(
             this SendFriendRequest self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             string targetUserId,
-            Func<IFuture<SendFriendRequest>> fetchImpl
+            Func<IFuture<FriendRequest>> fetchImpl
         ) {
-            IEnumerator Impl(IFuture<SendFriendRequest> self)
+            IEnumerator Impl(IFuture<FriendRequest> self)
             {
                 var future = fetchImpl();
                 yield return future;
@@ -101,15 +103,15 @@ namespace Gs2.Gs2Friend.Model.Cache
                 );
                 self.OnComplete(item);
             }
-            return new Gs2InlineFuture<SendFriendRequest>(Impl);
+            return new Gs2InlineFuture<FriendRequest>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<SendFriendRequest> FetchAsync(
+        public static async UniTask<FriendRequest> FetchAsync(
     #else
-        public static async Task<SendFriendRequest> FetchAsync(
+        public static async Task<FriendRequest> FetchAsync(
     #endif
             this SendFriendRequest self,
             CacheDatabase cache,
@@ -117,9 +119,9 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             string targetUserId,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<SendFriendRequest>> fetchImpl
+            Func<UniTask<FriendRequest>> fetchImpl
     #else
-            Func<Task<SendFriendRequest>> fetchImpl
+            Func<Task<FriendRequest>> fetchImpl
     #endif
         ) {
             try {

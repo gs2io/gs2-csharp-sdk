@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -247,7 +249,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #endif
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
-                        (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
                             UserId
                        ),

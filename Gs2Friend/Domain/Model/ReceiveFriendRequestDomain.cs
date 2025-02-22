@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -450,7 +452,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     self.OnComplete(value);
                     yield break;
                 }
-                var future = (null as Gs2.Gs2Friend.Model.FriendRequest).FetchFuture(
+                var future = (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.FromUserId,
@@ -501,7 +503,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 if (find) {
                     return value;
                 }
-                return await (null as Gs2.Gs2Friend.Model.FriendRequest).FetchAsync(
+                return await (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
@@ -539,7 +541,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public void Invalidate()
         {
-            (null as Gs2.Gs2Friend.Model.FriendRequest).DeleteCache(
+            (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.TargetUserId,

@@ -327,7 +327,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -371,7 +371,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -383,7 +383,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 )
@@ -443,7 +443,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -487,7 +487,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
@@ -499,7 +499,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 )
