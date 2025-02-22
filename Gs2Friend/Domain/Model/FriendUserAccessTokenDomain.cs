@@ -98,8 +98,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken?.Token)
-                    .WithWithProfile(this.WithProfile)
-                    .WithTargetUserId(this.TargetUserId);
+                    .WithTargetUserId(this.TargetUserId)
+                    .WithWithProfile(this.WithProfile);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -129,8 +129,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
-                .WithWithProfile(this.WithProfile)
-                .WithTargetUserId(this.TargetUserId);
+                .WithTargetUserId(this.TargetUserId)
+                .WithWithProfile(this.WithProfile);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -240,26 +240,37 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.FriendUser> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Friend.Model.FriendUser).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.WithProfile ?? default,
-                this.TargetUserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.WithProfile
+                        ),
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
+                            this.TargetUserId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Friend.Model.FriendUser).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile ?? default,
+                    this.TargetUserId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Friend.Model.FriendUser).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile ?? default,
+                    this.TargetUserId,
+                    () => this.GetAsync(
+                        new GetFriendRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Friend.Model.FriendUser).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.WithProfile ?? default,
-                this.TargetUserId,
-                () => this.GetAsync(
-                    new GetFriendRequest()
-                )
-            );
         }
         #endif
 
@@ -311,7 +322,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

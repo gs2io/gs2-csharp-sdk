@@ -197,7 +197,7 @@ namespace Gs2.Gs2Auth.Model
                         new RequestError("accessToken", "auth.accessToken.timeOffset.error.invalid"),
                     });
                 }
-                if (TimeOffset > 31536000) {
+                if (TimeOffset > 315360000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("accessToken", "auth.accessToken.timeOffset.error.invalid"),
                     });

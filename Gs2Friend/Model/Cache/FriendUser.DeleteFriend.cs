@@ -64,6 +64,13 @@ namespace Gs2.Gs2Friend.Model.Cache
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
+                userId,
+                null,
+                request.TargetUserId
+            );
+            (null as FriendUser).DeleteCache(
+                cache,
+                request.NamespaceName,
                 request.TargetUserId,
                 false,
                 userId
@@ -73,6 +80,13 @@ namespace Gs2.Gs2Friend.Model.Cache
                 request.NamespaceName,
                 request.TargetUserId,
                 false,
+                userId
+            );
+            (null as FriendUser).DeleteCache(
+                cache,
+                request.NamespaceName,
+                request.TargetUserId,
+                null,
                 userId
             );
         }

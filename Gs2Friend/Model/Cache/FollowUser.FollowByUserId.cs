@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -48,10 +50,34 @@ namespace Gs2.Gs2Friend.Model.Cache
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
-                default,
+                userId,
+                true,
                 request.TargetUserId
             );
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                false,
+                request.TargetUserId
+            );
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                null,
+                request.TargetUserId
+            );
+            if (self.Item != null) {
+                new PublicProfile {
+                    UserId = self.Item.UserId,
+                    Value = self.Item.PublicProfile
+                }.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    self.Item.UserId
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

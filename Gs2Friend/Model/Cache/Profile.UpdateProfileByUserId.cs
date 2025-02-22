@@ -60,7 +60,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 }.PutCache(
                     cache,
                     request.NamespaceName,
-                    userId
+                    self.Item.UserId
                 );
             }
         }

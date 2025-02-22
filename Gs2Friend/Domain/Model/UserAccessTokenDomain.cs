@@ -271,8 +271,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            Debug.Log("RefetchImpl");
-                            callback(await FriendsAsync(
+                            callback.Invoke(await FriendsAsync(
                                 withProfile
                             ).ToArrayAsync());
                         }

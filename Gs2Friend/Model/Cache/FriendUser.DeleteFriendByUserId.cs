@@ -50,15 +50,22 @@ namespace Gs2.Gs2Friend.Model.Cache
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                userId,
                 true,
                 request.TargetUserId
             );
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                userId,
                 false,
+                request.TargetUserId
+            );
+            (null as FriendUser).DeleteCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                null,
                 request.TargetUserId
             );
         }

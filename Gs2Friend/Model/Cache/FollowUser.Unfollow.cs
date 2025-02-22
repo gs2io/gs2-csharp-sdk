@@ -61,6 +61,34 @@ namespace Gs2.Gs2Friend.Model.Cache
                 true,
                 request.TargetUserId
             );
+            (null as FollowUser).DeleteCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                null,
+                request.TargetUserId
+            );
+            (null as FollowUser).DeleteCache(
+                cache,
+                request.NamespaceName,
+                request.TargetUserId,
+                false,
+                userId
+            );
+            (null as FollowUser).DeleteCache(
+                cache,
+                request.NamespaceName,
+                request.TargetUserId,
+                true,
+                userId
+            );
+            (null as FollowUser).DeleteCache(
+                cache,
+                request.NamespaceName,
+                request.TargetUserId,
+                null,
+                userId
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER
