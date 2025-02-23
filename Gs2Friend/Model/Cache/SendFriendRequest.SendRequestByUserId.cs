@@ -64,6 +64,20 @@ namespace Gs2.Gs2Friend.Model.Cache
                 },
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
+            cache.Put(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                    request.NamespaceName,
+                    self.Item.TargetUserId
+                ),
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                    request.UserId
+                ),
+                new ReceiveFriendRequest {
+                    UserId = self.Item.UserId,
+                    TargetUserId = self.Item.TargetUserId
+                },
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

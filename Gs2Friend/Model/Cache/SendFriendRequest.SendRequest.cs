@@ -53,12 +53,26 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Put(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    userId
+                    self.Item.UserId
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
                     self.Item.TargetUserId
                 ),
                 new SendFriendRequest {
+                    UserId = self.Item.UserId,
+                    TargetUserId = self.Item.TargetUserId
+                },
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
+            cache.Put(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
+                    request.NamespaceName,
+                    self.Item.TargetUserId
+                ),
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                    self.Item.UserId
+                ),
+                new ReceiveFriendRequest {
                     UserId = self.Item.UserId,
                     TargetUserId = self.Item.TargetUserId
                 },

@@ -169,18 +169,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                     }
                 }
                 var result = future.Result;
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId
-                    )
-                );
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                    (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
-                        this.NamespaceName,
-                        this.TargetUserId
-                    )
-                );
                 var domain = new Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain(
                     this._gs2,
                     this.NamespaceName,
@@ -215,18 +203,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 );
             }
             catch (NotFoundException e) {}
-            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                )
-            );
-            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
-                    this.NamespaceName,
-                    this.TargetUserId
-                )
-            );
             var domain = new Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain(
                 this._gs2,
                 this.NamespaceName,

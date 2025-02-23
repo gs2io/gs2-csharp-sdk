@@ -53,10 +53,10 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Put(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    request.UserId
+                    self.Item.TargetUserId
                 ),
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                    self.Item.TargetUserId
+                    self.Item.UserId
                 ),
                 new ReceiveFriendRequest {
                     UserId = self.Item.UserId,

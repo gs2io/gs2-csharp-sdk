@@ -55,8 +55,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 }.PutCache(
                     cache,
                     request.NamespaceName,
-                    userId,
-                    item.TargetUserId
+                    item.TargetUserId,
+                    item.UserId
                 );
             }
         }

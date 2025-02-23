@@ -166,18 +166,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                     }
                 }
                 var result = future.Result;
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId
-                    )
-                );
-                _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                    (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
-                        this.NamespaceName,
-                        this.TargetUserId
-                    )
-                );
                 var domain = new Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain(
                     this._gs2,
                     this.NamespaceName,
