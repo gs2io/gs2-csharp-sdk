@@ -119,17 +119,18 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Dictionary.Request.DescribeEntriesRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeEntriesFuture(
                 #else
                 var r = await this._client.DescribeEntriesAsync(
                 #endif
-                    new Gs2.Gs2Dictionary.Request.DescribeEntriesRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -144,14 +145,11 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        AccessToken?.UserId,
-                        item.Name
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Dictionary.Model.Entry>(

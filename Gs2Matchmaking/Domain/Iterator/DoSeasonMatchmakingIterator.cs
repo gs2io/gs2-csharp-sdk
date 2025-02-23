@@ -108,17 +108,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
 
+            var request = new Gs2.Gs2Matchmaking.Request.DoSeasonMatchmakingRequest()
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithSeasonName(this.SeasonName)
+                .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                .WithMatchmakingContextToken(this._matchmakingContextToken);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DoSeasonMatchmakingFuture(
             #else
             var r = await this._client.DoSeasonMatchmakingAsync(
             #endif
-                new Gs2.Gs2Matchmaking.Request.DoSeasonMatchmakingRequest()
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithSeasonName(this.SeasonName)
-                    .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                    .WithMatchmakingContextToken(this._matchmakingContextToken)
+                request
             );
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             yield return future;

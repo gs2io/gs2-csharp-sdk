@@ -125,17 +125,18 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Limit.Request.DescribeCountersByUserIdRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeCountersByUserIdFuture(
                 #else
                 var r = await this._client.DescribeCountersByUserIdAsync(
                 #endif
-                    new Gs2.Gs2Limit.Request.DescribeCountersByUserIdRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithUserId(this.UserId)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -151,15 +152,11 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        UserId,
-                        item.LimitName,
-                        item.Name
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Limit.Model.Counter>(

@@ -47,36 +47,44 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             GetFollowRequest request
         ) {
-            self.Item?.PutCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                true,
-                request.TargetUserId
-            );
-            self.Item?.PutCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                false,
-                request.TargetUserId
-            );
-            self.Item?.PutCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                null,
-                request.TargetUserId
-            );
-            if (self.Item != null && (request.WithProfile ?? false)) {
-                new PublicProfile {
-                    UserId = self.Item.UserId,
-                    Value = self.Item.PublicProfile
+            if (request.WithProfile ?? false) {
+                self.Item?.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    true,
+                    request.TargetUserId
+                );
+            }
+            if (self.Item != null) {
+                new FollowUser {
+                    UserId = request.TargetUserId,
                 }.PutCache(
                     cache,
                     request.NamespaceName,
-                    self.Item.UserId
+                    userId,
+                    false,
+                    request.TargetUserId
                 );
+                new FollowUser {
+                    UserId = request.TargetUserId,
+                }.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    null,
+                    request.TargetUserId
+                );
+                if (request.WithProfile ?? false) {
+                    new PublicProfile {
+                        UserId = self.Item.UserId,
+                        Value = self.Item.PublicProfile
+                    }.PutCache(
+                        cache,
+                        request.NamespaceName,
+                        self.Item.UserId
+                    );
+                }
             }
         }
 

@@ -129,17 +129,18 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Ranking2.Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeGlobalRankingReceivedRewardsByUserIdFuture(
                 #else
                 var r = await this._client.DescribeGlobalRankingReceivedRewardsByUserIdAsync(
                 #endif
-                    new Gs2.Gs2Ranking2.Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithUserId(this.UserId)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -156,15 +157,11 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        UserId,
-                        item.RankingName,
-                        this.Season
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>(

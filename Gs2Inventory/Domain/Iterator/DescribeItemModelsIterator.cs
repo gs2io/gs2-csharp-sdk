@@ -115,15 +115,16 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Inventory.Request.DescribeItemModelsRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithInventoryName(this.InventoryName);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeItemModelsFuture(
                 #else
                 var r = await this._client.DescribeItemModelsAsync(
                 #endif
-                    new Gs2.Gs2Inventory.Request.DescribeItemModelsRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithInventoryName(this.InventoryName)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -137,14 +138,11 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this._result = r.Items
                     .ToArray();
                 this._last = true;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        InventoryName,
-                        item.Name
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    null,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Inventory.Model.ItemModel>(

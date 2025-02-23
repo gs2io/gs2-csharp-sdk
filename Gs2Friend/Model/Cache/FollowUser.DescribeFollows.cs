@@ -49,21 +49,27 @@ namespace Gs2.Gs2Friend.Model.Cache
         ) {
             foreach (var item in self.Items ?? Array.Empty<FollowUser>())
             {
-                item.PutCache(
-                    cache,
-                    request.NamespaceName,
-                    userId,
-                    true,
-                    item.UserId
-                );
-                item.PutCache(
+                if (request.WithProfile ?? false) {
+                    item.PutCache(
+                        cache,
+                        request.NamespaceName,
+                        userId,
+                        true,
+                        item.UserId
+                    );
+                }
+                new FollowUser {
+                    UserId = item.UserId,
+                }.PutCache(
                     cache,
                     request.NamespaceName,
                     userId,
                     false,
                     item.UserId
                 );
-                item.PutCache(
+                new FollowUser {
+                    UserId = item.UserId,
+                }.PutCache(
                     cache,
                     request.NamespaceName,
                     userId,

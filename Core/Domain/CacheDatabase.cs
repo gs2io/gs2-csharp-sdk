@@ -203,7 +203,7 @@ namespace Gs2.Core.Domain
 
         public bool TryGetList<TKind>(string parentKey, out TKind[] list)
         {
-            if (this._listCached.Get(typeof(TKind))?.Contains(parentKey) != true)
+            if (!IsListCached<TKind>(parentKey))
             {
                 list = null;
                 return false;

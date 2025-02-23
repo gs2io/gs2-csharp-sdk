@@ -124,17 +124,18 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Friend.Request.DescribeReceiveRequestsByUserIdRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeReceiveRequestsByUserIdFuture(
                 #else
                 var r = await this._client.DescribeReceiveRequestsByUserIdAsync(
                 #endif
-                    new Gs2.Gs2Friend.Request.DescribeReceiveRequestsByUserIdRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithUserId(this.UserId)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -152,22 +153,11 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in this._result ) {
-                    if (item.UserId == null) {
-                        throw new NullReferenceException();
-                    }
-                    this._gs2.Cache.Put<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
-                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
-                            NamespaceName,
-                            UserId
-                        ),
-                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                            item.TargetUserId
-                        ),
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(

@@ -123,16 +123,17 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Ranking.Request.DescribeSubscribesByCategoryNameAndUserIdRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithCategoryName(this.CategoryName)
+                    .WithUserId(this.UserId);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeSubscribesByCategoryNameAndUserIdFuture(
                 #else
                 var r = await this._client.DescribeSubscribesByCategoryNameAndUserIdAsync(
                 #endif
-                    new Gs2.Gs2Ranking.Request.DescribeSubscribesByCategoryNameAndUserIdRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithCategoryName(this.CategoryName)
-                        .WithUserId(this.UserId)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -146,16 +147,11 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 this._result = r.Items
                     .ToArray();
                 this._last = true;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        UserId,
-                        CategoryName,
-                        default,
-                        item.TargetUserId
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking.Model.SubscribeUser>(

@@ -116,15 +116,16 @@ namespace Gs2.Gs2News.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2News.Request.DescribeNewsRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeNewsFuture(
                 #else
                 var r = await this._client.DescribeNewsAsync(
                 #endif
-                    new Gs2.Gs2News.Request.DescribeNewsRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -138,13 +139,11 @@ namespace Gs2.Gs2News.Domain.Iterator
                 this._result = r.Items
                     .ToArray();
                 this._last = true;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        AccessToken?.UserId
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2News.Model.News>(

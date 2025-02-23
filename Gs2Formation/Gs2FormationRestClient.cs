@@ -6589,7 +6589,7 @@ namespace Gs2.Gs2Formation
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "formation")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/mold/{moldModelName}/form/{index}";
+                    + "/{namespaceName}/user/me/mold/{moldModelName}/form/{index}/raw";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{moldModelName}", !string.IsNullOrEmpty(request.MoldModelName) ? request.MoldModelName.ToString() : "null");
@@ -8293,7 +8293,7 @@ namespace Gs2.Gs2Formation
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "formation")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/property/{propertyFormModelName}/form/{propertyId}";
+                    + "/{namespaceName}/user/me/property/{propertyFormModelName}/form/{propertyId}/raw";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{propertyFormModelName}", !string.IsNullOrEmpty(request.PropertyFormModelName) ? request.PropertyFormModelName.ToString() : "null");

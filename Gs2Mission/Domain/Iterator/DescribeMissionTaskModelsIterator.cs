@@ -115,15 +115,16 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Mission.Request.DescribeMissionTaskModelsRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithMissionGroupName(this.MissionGroupName);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeMissionTaskModelsFuture(
                 #else
                 var r = await this._client.DescribeMissionTaskModelsAsync(
                 #endif
-                    new Gs2.Gs2Mission.Request.DescribeMissionTaskModelsRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithMissionGroupName(this.MissionGroupName)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -137,14 +138,11 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                 this._result = r.Items
                     .ToArray();
                 this._last = true;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        MissionGroupName,
-                        item.Name
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    null,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Mission.Model.MissionTaskModel>(

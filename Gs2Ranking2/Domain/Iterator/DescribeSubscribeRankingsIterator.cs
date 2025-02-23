@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -129,19 +127,20 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Ranking2.Request.DescribeSubscribeRankingsRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    .WithRankingName(this.RankingName)
+                    .WithSeason(this.Season)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeSubscribeRankingsFuture(
                 #else
                 var r = await this._client.DescribeSubscribeRankingsAsync(
                 #endif
-                    new Gs2.Gs2Ranking2.Request.DescribeSubscribeRankingsRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                        .WithRankingName(this.RankingName)
-                        .WithSeason(this.Season)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -156,24 +155,11 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        AccessToken?.UserId,
-                        RankingName,
-                        item.Season,
-                        item.ScorerUserId
-                    );
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        AccessToken?.UserId,
-                        RankingName,
-                        null,
-                        item.ScorerUserId
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
@@ -260,53 +246,65 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             #endif
         #endif
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            while(this._hasNext()) {
+                using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
+                        (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
+                            NamespaceName,
+                            AccessToken?.UserId,
+                            RankingName,
+                            this.Season
+                       ),
+                       "ListSubscribeRankingData"
+                   ).LockAsync()) {
+                while(this._hasNext()) {
         #endif
-                if (this._result.Length == 0 && !this._last) {
+                    if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
+                        yield return this._load();
         #else
-                    await this._load();
+                        await this._load();
         #endif
-                }
-                if (this._result.Length == 0) {
+                    }
+                    if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    Current = null;
+                        Current = null;
+                        callback.Invoke(new AsyncResult<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
+                            Current,
+                            Error
+                        ));
+                        yield break;
+        #else
+                        break;
+        #endif
+                    }
+                    var ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                        yield return this._load();
+        #else
+                        await this._load();
+        #endif
+                    }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+                    await writer.YieldAsync(ret);
+            #else
+                    Current = ret;
                     callback.Invoke(new AsyncResult<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
                         Current,
                         Error
                     ));
-                    yield break;
-        #else
-                    break;
-        #endif
-                }
-                var ret = this._result[0];
-                this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
-        #else
-                    await this._load();
-        #endif
-                }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                await writer.YieldAsync(ret);
-            #else
-                Current = ret;
-                callback.Invoke(new AsyncResult<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
-                    Current,
-                    Error
-                ));
             #endif
         #else
-                yield return ret;
+                    yield return ret;
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+                }
         #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            }
-            });
+                }
+                });
             #endif
         #else
             }

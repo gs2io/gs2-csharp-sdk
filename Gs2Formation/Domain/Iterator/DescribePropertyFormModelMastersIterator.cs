@@ -114,16 +114,17 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Formation.Request.DescribePropertyFormModelMastersRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribePropertyFormModelMastersFuture(
                 #else
                 var r = await this._client.DescribePropertyFormModelMastersAsync(
                 #endif
-                    new Gs2.Gs2Formation.Request.DescribePropertyFormModelMastersRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -138,13 +139,11 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        item.Name
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    null,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(

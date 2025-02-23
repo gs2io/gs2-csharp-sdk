@@ -127,18 +127,19 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Matchmaking.Request.DescribeSeasonGatheringsRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithSeasonName(this.SeasonName)
+                    .WithSeason(this.Season)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeSeasonGatheringsFuture(
                 #else
                 var r = await this._client.DescribeSeasonGatheringsAsync(
                 #endif
-                    new Gs2.Gs2Matchmaking.Request.DescribeSeasonGatheringsRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithSeasonName(this.SeasonName)
-                        .WithSeason(this.Season)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -154,17 +155,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        default,
-                        SeasonName,
-                        Season,
-                        item.Tier,
-                        item.Name
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    null,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Matchmaking.Model.SeasonGathering>(

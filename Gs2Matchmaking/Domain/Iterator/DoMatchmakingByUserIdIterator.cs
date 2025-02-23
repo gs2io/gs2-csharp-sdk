@@ -110,17 +110,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
 
+            var request = new Gs2.Gs2Matchmaking.Request.DoMatchmakingByUserIdRequest()
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithPlayer(this.Player)
+                .WithMatchmakingContextToken(this._matchmakingContextToken);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DoMatchmakingByUserIdFuture(
             #else
             var r = await this._client.DoMatchmakingByUserIdAsync(
             #endif
-                new Gs2.Gs2Matchmaking.Request.DoMatchmakingByUserIdRequest()
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithPlayer(this.Player)
-                    .WithMatchmakingContextToken(this._matchmakingContextToken)
+                request
             );
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             yield return future;

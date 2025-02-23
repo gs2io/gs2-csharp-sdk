@@ -54,21 +54,25 @@ namespace Gs2.Gs2Friend.Model.Cache
                 true,
                 request.TargetUserId
             );
-            self.Item?.PutCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                false,
-                request.TargetUserId
-            );
-            self.Item?.PutCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                null,
-                request.TargetUserId
-            );
             if (self.Item != null) {
+                new FollowUser {
+                    UserId = request.TargetUserId,
+                }.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    false,
+                    request.TargetUserId
+                );
+                new FollowUser {
+                    UserId = request.TargetUserId,
+                }.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    null,
+                    request.TargetUserId
+                );
                 new PublicProfile {
                     UserId = self.Item.UserId,
                     Value = self.Item.PublicProfile

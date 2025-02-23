@@ -114,16 +114,17 @@ namespace Gs2.Gs2StateMachine.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2StateMachine.Request.DescribeStateMachineMastersRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeStateMachineMastersFuture(
                 #else
                 var r = await this._client.DescribeStateMachineMastersAsync(
                 #endif
-                    new Gs2.Gs2StateMachine.Request.DescribeStateMachineMastersRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -138,13 +139,11 @@ namespace Gs2.Gs2StateMachine.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        item.Version
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    null,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2StateMachine.Model.StateMachineMaster>(

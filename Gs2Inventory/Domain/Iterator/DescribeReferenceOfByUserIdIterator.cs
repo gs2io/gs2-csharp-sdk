@@ -39,7 +39,6 @@ using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Inventory.Model;
 using Gs2.Util.LitJson;
 using Gs2.Gs2Inventory.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
@@ -90,7 +89,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             string inventoryName,
             string userId,
             string itemName,
-            string itemSetName = null,
+            string itemSetName,
             string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
@@ -133,18 +132,19 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Inventory.Request.DescribeReferenceOfByUserIdRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithInventoryName(this.InventoryName)
+                    .WithUserId(this.UserId)
+                    .WithItemName(this.ItemName)
+                    .WithItemSetName(this.ItemSetName);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeReferenceOfByUserIdFuture(
                 #else
                 var r = await this._client.DescribeReferenceOfByUserIdAsync(
                 #endif
-                    new Gs2.Gs2Inventory.Request.DescribeReferenceOfByUserIdRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithInventoryName(this.InventoryName)
-                        .WithUserId(this.UserId)
-                        .WithItemName(this.ItemName)
-                        .WithItemSetName(this.ItemSetName)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -158,25 +158,11 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this._result = r.Items
                     .ToArray();
                 this._last = true;
-                foreach (var item in r.Items) {
-                    var value = new ReferenceOf {
-                        Name = item,
-                    };
-                    this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.ReferenceOf>(
-                        (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheParentKey(
-                            NamespaceName,
-                            UserId,
-                            InventoryName,
-                            ItemName,
-                            ItemSetName ?? default
-                        ),
-                        (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheKey(
-                            value.Name
-                        ),
-                        value,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Inventory.Model.ReferenceOf>(
@@ -185,7 +171,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                             UserId,
                             InventoryName,
                             ItemName,
-                            ItemSetName ?? default
+                            ItemSetName
                         )
                     );
                 }
@@ -264,53 +250,66 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             #endif
         #endif
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            while(this._hasNext()) {
+                using (await this._gs2.Cache.GetLockObject<string>(
+                        (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheParentKey(
+                            NamespaceName,
+                            UserId,
+                            InventoryName,
+                            ItemName,
+                            ItemSetName ?? default
+                       ),
+                       "ListString"
+                   ).LockAsync()) {
+                while(this._hasNext()) {
         #endif
-                if (this._result.Length == 0 && !this._last) {
+                    if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
+                        yield return this._load();
         #else
-                    await this._load();
+                        await this._load();
         #endif
-                }
-                if (this._result.Length == 0) {
+                    }
+                    if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    Current = null;
+                        Current = null;
+                        callback.Invoke(new AsyncResult<string>(
+                            Current,
+                            Error
+                        ));
+                        yield break;
+        #else
+                        break;
+        #endif
+                    }
+                    var ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                        yield return this._load();
+        #else
+                        await this._load();
+        #endif
+                    }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+                    await writer.YieldAsync(ret);
+            #else
+                    Current = ret;
                     callback.Invoke(new AsyncResult<string>(
                         Current,
                         Error
                     ));
-                    yield break;
-        #else
-                    break;
-        #endif
-                }
-                var ret = this._result[0];
-                this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
-        #else
-                    await this._load();
-        #endif
-                }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                await writer.YieldAsync(ret);
-            #else
-                Current = ret;
-                callback.Invoke(new AsyncResult<string>(
-                    Current,
-                    Error
-                ));
             #endif
         #else
-                yield return ret;
+                    yield return ret;
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+                }
         #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            }
-            });
+                }
+                });
             #endif
         #else
             }

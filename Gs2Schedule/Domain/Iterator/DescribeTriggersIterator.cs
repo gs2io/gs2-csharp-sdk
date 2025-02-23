@@ -119,17 +119,18 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Schedule.Request.DescribeTriggersRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeTriggersFuture(
                 #else
                 var r = await this._client.DescribeTriggersAsync(
                 #endif
-                    new Gs2.Gs2Schedule.Request.DescribeTriggersRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -144,14 +145,11 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        AccessToken?.UserId,
-                        item.Name
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Schedule.Model.Trigger>(

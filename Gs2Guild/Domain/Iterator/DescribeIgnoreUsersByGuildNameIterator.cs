@@ -122,18 +122,19 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Guild.Request.DescribeIgnoreUsersByGuildNameRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithGuildModelName(this.GuildModelName)
+                    .WithGuildName(this.GuildName)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeIgnoreUsersByGuildNameFuture(
                 #else
                 var r = await this._client.DescribeIgnoreUsersByGuildNameAsync(
                 #endif
-                    new Gs2.Gs2Guild.Request.DescribeIgnoreUsersByGuildNameRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithGuildModelName(this.GuildModelName)
-                        .WithGuildName(this.GuildName)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -148,14 +149,11 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        GuildModelName,
-                        GuildName
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    null,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Guild.Model.IgnoreUser>(

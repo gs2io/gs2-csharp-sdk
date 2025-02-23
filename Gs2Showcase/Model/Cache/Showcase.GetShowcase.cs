@@ -53,7 +53,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 userId,
                 request.ShowcaseName
             );
-            foreach (var displayItem in self.Item.DisplayItems) {
+            foreach (var displayItem in self.Item.DisplayItems ?? Array.Empty<DisplayItem>()) {
                 displayItem.PutCache(
                     cache,
                     request.NamespaceName,

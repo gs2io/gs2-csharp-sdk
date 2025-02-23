@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -123,18 +125,19 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                 this._last = true;
             } else {
 
+                var request = new Gs2.Gs2Guild.Request.DescribeReceiveRequestsRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithGuildModelName(this.GuildModelName)
+                    .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 var future = this._client.DescribeReceiveRequestsFuture(
                 #else
                 var r = await this._client.DescribeReceiveRequestsAsync(
                 #endif
-                    new Gs2.Gs2Guild.Request.DescribeReceiveRequestsRequest()
-                        .WithContextStack(this._gs2.DefaultContextStack)
-                        .WithNamespaceName(this.NamespaceName)
-                        .WithGuildModelName(this.GuildModelName)
-                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                        .WithPageToken(this._pageToken)
-                        .WithLimit(fetchSize)
+                    request
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -149,15 +152,11 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        GuildModelName,
-                        default,
-                        item.UserId
-                    );
-                }
+                r.PutCache(
+                    this._gs2.Cache,
+                    null,
+                    request
+                );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Guild.Model.ReceiveMemberRequest>(

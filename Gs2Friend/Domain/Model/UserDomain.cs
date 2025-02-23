@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -285,7 +287,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
+        public Gs2Iterator<Gs2.Gs2Friend.Model.SendFriendRequest> SendRequests(
             string timeOffsetToken = null
         )
         {
@@ -301,7 +303,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> SendRequestsAsync(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.SendFriendRequest> SendRequestsAsync(
             #else
         public DescribeSendRequestsByUserIdIterator SendRequestsAsync(
             #endif
@@ -323,10 +325,10 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
 
         public ulong SubscribeSendRequests(
-            Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
+            Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback
         )
         {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
@@ -353,7 +355,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSendRequestsWithInitialCallAsync(
-            Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
+            Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback
         )
         {
             var items = await SendRequestsAsync(
@@ -527,7 +529,6 @@ namespace Gs2.Gs2Friend.Domain.Model
         ) {
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain> self)
             {
-                
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
