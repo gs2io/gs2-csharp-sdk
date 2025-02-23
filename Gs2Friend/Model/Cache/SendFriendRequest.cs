@@ -64,15 +64,15 @@ namespace Gs2.Gs2Friend.Model.Cache
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<FriendRequest> FetchFuture(
+        public static IFuture<SendFriendRequest> FetchFuture(
             this SendFriendRequest self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             string targetUserId,
-            Func<IFuture<FriendRequest>> fetchImpl
+            Func<IFuture<SendFriendRequest>> fetchImpl
         ) {
-            IEnumerator Impl(IFuture<FriendRequest> self)
+            IEnumerator Impl(IFuture<SendFriendRequest> self)
             {
                 var future = fetchImpl();
                 yield return future;
@@ -95,7 +95,10 @@ namespace Gs2.Gs2Friend.Model.Cache
                     yield break;
                 }
                 var item = future.Result;
-                item.PutCache(
+                new SendFriendRequest {
+                    UserId = item.UserId,
+                    TargetUserId = item.TargetUserId,
+                }.PutCache(
                     cache,
                     namespaceName,
                     userId,
@@ -103,15 +106,15 @@ namespace Gs2.Gs2Friend.Model.Cache
                 );
                 self.OnComplete(item);
             }
-            return new Gs2InlineFuture<FriendRequest>(Impl);
+            return new Gs2InlineFuture<SendFriendRequest>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<FriendRequest> FetchAsync(
+        public static async UniTask<SendFriendRequest> FetchAsync(
     #else
-        public static async Task<FriendRequest> FetchAsync(
+        public static async Task<SendFriendRequest> FetchAsync(
     #endif
             this SendFriendRequest self,
             CacheDatabase cache,
@@ -119,14 +122,17 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             string targetUserId,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<FriendRequest>> fetchImpl
+            Func<UniTask<SendFriendRequest>> fetchImpl
     #else
-            Func<Task<FriendRequest>> fetchImpl
+            Func<Task<SendFriendRequest>> fetchImpl
     #endif
         ) {
             try {
                 var item = await fetchImpl();
-                item.PutCache(
+                new SendFriendRequest {
+                    UserId = item.UserId,
+                    TargetUserId = item.TargetUserId,
+                }.PutCache(
                     cache,
                     namespaceName,
                     userId,

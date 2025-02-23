@@ -39,6 +39,7 @@ using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Friend.Model;
 using Gs2.Util.LitJson;
 using Gs2.Gs2Friend.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
@@ -64,9 +65,9 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeReceiveRequestsIterator : Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> {
+    public class DescribeReceiveRequestsIterator : Gs2Iterator<Gs2.Gs2Friend.Model.ReceiveFriendRequest> {
     #else
-    public class DescribeReceiveRequestsIterator : IAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> {
+    public class DescribeReceiveRequestsIterator : IAsyncEnumerable<Gs2.Gs2Friend.Model.ReceiveFriendRequest> {
     #endif
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
@@ -76,7 +77,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
-        private Gs2.Gs2Friend.Model.FriendRequest[] _result;
+        private Gs2.Gs2Friend.Model.ReceiveFriendRequest[] _result;
 
         public static int? fetchSize;
 
@@ -92,7 +93,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             this.AccessToken = accessToken;
             this._pageToken = null;
             this._last = false;
-            this._result = new Gs2.Gs2Friend.Model.FriendRequest[]{};
+            this._result = new Gs2.Gs2Friend.Model.ReceiveFriendRequest[]{};
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -107,7 +108,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
             if (!isCacheChecked && this._gs2.Cache.TryGetList
-                    <Gs2.Gs2Friend.Model.FriendRequest>
+                    <Gs2.Gs2Friend.Model.ReceiveFriendRequest>
             (
                     (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                         NamespaceName,
@@ -142,15 +143,18 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items
+                this._result = r.Items.Select(v => new ReceiveFriendRequest {
+                        UserId = v.UserId,
+                        TargetUserId = v.TargetUserId,
+                    })
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
+                foreach (var item in this._result) {
                     if (item.UserId == null) {
                         throw new NullReferenceException();
                     }
-                    this._gs2.Cache.Put<Gs2.Gs2Friend.Model.FriendRequest>(
+                    this._gs2.Cache.Put<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId
@@ -164,7 +168,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.FriendRequest>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId
@@ -190,7 +194,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>> callback
+            Action<AsyncResult<Gs2.Gs2Friend.Model.ReceiveFriendRequest>> callback
         )
         {
             Gs2Exception error = null;
@@ -217,7 +221,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     }
                 }
             );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>(
+            callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                 Current,
                 error
             ));
@@ -226,32 +230,32 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.ReceiveFriendRequest> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
         protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>> callback
+            Action<AsyncResult<Gs2.Gs2Friend.Model.ReceiveFriendRequest>> callback
             #endif
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Friend.Model.FriendRequest> GetAsyncEnumerator(
+        public async IAsyncEnumerator<Gs2.Gs2Friend.Model.ReceiveFriendRequest> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
         #endif
         )
         {
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Friend.Model.FriendRequest>(async (writer, token) =>
+            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(async (writer, token) =>
             {
             #endif
         #endif
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-                using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
+                using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId
                        ),
-                       "ListFriendRequest"
+                       "ListReceiveFriendRequest"
                    ).LockAsync()) {
                 while(this._hasNext()) {
         #endif
@@ -265,7 +269,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                         Current = null;
-                        callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>(
+                        callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                             Current,
                             Error
                         ));
@@ -288,7 +292,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     await writer.YieldAsync(ret);
             #else
                     Current = ret;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>(
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         Current,
                         Error
                     ));
