@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Security;
 using System.Security.Authentication;
 using System.Threading;
 using Gs2.Core.Domain;
@@ -87,6 +88,12 @@ namespace Gs2.Core.Net
             this._session = WebSocketFactory.CreateInstance(url);
 #else
             this._session = new WebSocket(url);
+#endif
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+#else
+            this._session.SslConfiguration.ServerCertificateValidationCallback =
+                (sender, certificate, chain, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None;
 #endif
             
 #if UNITY_WEBGL && !UNITY_EDITOR
