@@ -40,6 +40,7 @@ namespace Gs2.Gs2Account.Request
          public Gs2.Gs2Account.Model.ScriptSetting AuthenticationScript { set; get; } = null!;
          public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; } = null!;
          public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting BanScript { set; get; } = null!;
          public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Account.Request
             this.DoTakeOverScript = doTakeOverScript;
             return this;
         }
+        public UpdateNamespaceRequest WithBanScript(Gs2.Gs2Account.Model.ScriptSetting banScript) {
+            this.BanScript = banScript;
+            return this;
+        }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Account.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -90,6 +95,7 @@ namespace Gs2.Gs2Account.Request
                 .WithAuthenticationScript(!data.Keys.Contains("authenticationScript") || data["authenticationScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["authenticationScript"]))
                 .WithCreateTakeOverScript(!data.Keys.Contains("createTakeOverScript") || data["createTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createTakeOverScript"]))
                 .WithDoTakeOverScript(!data.Keys.Contains("doTakeOverScript") || data["doTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["doTakeOverScript"]))
+                .WithBanScript(!data.Keys.Contains("banScript") || data["banScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["banScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Account.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -103,6 +109,7 @@ namespace Gs2.Gs2Account.Request
                 ["authenticationScript"] = AuthenticationScript?.ToJson(),
                 ["createTakeOverScript"] = CreateTakeOverScript?.ToJson(),
                 ["doTakeOverScript"] = DoTakeOverScript?.ToJson(),
+                ["banScript"] = BanScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -134,6 +141,9 @@ namespace Gs2.Gs2Account.Request
             if (DoTakeOverScript != null) {
                 DoTakeOverScript.WriteJson(writer);
             }
+            if (BanScript != null) {
+                BanScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -149,6 +159,7 @@ namespace Gs2.Gs2Account.Request
             key += AuthenticationScript + ":";
             key += CreateTakeOverScript + ":";
             key += DoTakeOverScript + ":";
+            key += BanScript + ":";
             key += LogSetting + ":";
             return key;
         }

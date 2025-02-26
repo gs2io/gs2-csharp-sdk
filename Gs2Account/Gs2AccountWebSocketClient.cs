@@ -102,6 +102,11 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("doTakeOverScript");
                     request.DoTakeOverScript.WriteJson(jsonWriter);
                 }
+                if (request.BanScript != null)
+                {
+                    jsonWriter.WritePropertyName("banScript");
+                    request.BanScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -342,6 +347,11 @@ namespace Gs2.Gs2Account
                 {
                     jsonWriter.WritePropertyName("doTakeOverScript");
                     request.DoTakeOverScript.WriteJson(jsonWriter);
+                }
+                if (request.BanScript != null)
+                {
+                    jsonWriter.WritePropertyName("banScript");
+                    request.BanScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

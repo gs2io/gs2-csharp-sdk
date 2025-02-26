@@ -48,47 +48,15 @@ namespace Gs2.Gs2Friend.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            
-            // 受信したフレンドリクエスト
-            cache.Delete<ReceiveFriendRequest>(
-                (null as ReceiveFriendRequest).CacheParentKey(
+            cache.Delete<FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    self.Item.TargetUserId
+                    userId
                 ),
-                (null as ReceiveFriendRequest).CacheKey(
-                    self.Item.UserId
-                )
-            );
-            
-            // 送信したフレンドリクエスト
-            cache.Delete<SendFriendRequest>(
-                (null as SendFriendRequest).CacheParentKey(
-                    request.NamespaceName,
-                    self.Item.UserId
-                ),
-                (null as SendFriendRequest).CacheKey(
+                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
                     self.Item.TargetUserId
                 )
             );
-            
-            foreach (var withProfile in new bool?[] {false, true, null}) {
-                // 送信したユーザー側のフレンドリストのキャッシュを削除
-                cache.ClearListCache<FriendUser>(
-                    (null as FriendUser).CacheParentKey(
-                        request.NamespaceName,
-                        self.Item.UserId,
-                        withProfile
-                    )
-                );
-                // 受信したユーザー側のフレンドリストのキャッシュを削除
-                cache.ClearListCache<FriendUser>(
-                    (null as FriendUser).CacheParentKey(
-                        request.NamespaceName,
-                        self.Item.TargetUserId,
-                        withProfile
-                    )
-                );
-            }
         }
 
 #if UNITY_2017_1_OR_NEWER
