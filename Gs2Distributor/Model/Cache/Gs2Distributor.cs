@@ -263,6 +263,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
                         Request.FreezeMasterDataBySignedTimestampRequest.FromJson(requestPayload)
                     );
                     break;
+                case "freezeMasterDataByTimestamp":
+                    Result.FreezeMasterDataByTimestampResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.FreezeMasterDataByTimestampRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "batchExecuteApi":
                     Result.BatchExecuteApiResult.FromJson(resultPayload).PutCache(
                         cache,

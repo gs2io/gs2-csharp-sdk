@@ -4070,6 +4070,135 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
+        public class FreezeMasterDataByTimestampTask : Gs2RestSessionTask<FreezeMasterDataByTimestampRequest, FreezeMasterDataByTimestampResult>
+        {
+            public FreezeMasterDataByTimestampTask(IGs2Session session, RestSessionRequestFactory factory, FreezeMasterDataByTimestampRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(FreezeMasterDataByTimestampRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/masterdata/freeze/timestamp/raw";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Timestamp != null)
+                {
+                    jsonWriter.WritePropertyName("timestamp");
+                    jsonWriter.Write(request.Timestamp.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator FreezeMasterDataByTimestamp(
+                Request.FreezeMasterDataByTimestampRequest request,
+                UnityAction<AsyncResult<Result.FreezeMasterDataByTimestampResult>> callback
+        )
+		{
+			var task = new FreezeMasterDataByTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.FreezeMasterDataByTimestampResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.FreezeMasterDataByTimestampResult> FreezeMasterDataByTimestampFuture(
+                Request.FreezeMasterDataByTimestampRequest request
+        )
+		{
+			return new FreezeMasterDataByTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.FreezeMasterDataByTimestampResult> FreezeMasterDataByTimestampAsync(
+                Request.FreezeMasterDataByTimestampRequest request
+        )
+		{
+            AsyncResult<Result.FreezeMasterDataByTimestampResult> result = null;
+			await FreezeMasterDataByTimestamp(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public FreezeMasterDataByTimestampTask FreezeMasterDataByTimestampAsync(
+                Request.FreezeMasterDataByTimestampRequest request
+        )
+		{
+			return new FreezeMasterDataByTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.FreezeMasterDataByTimestampResult> FreezeMasterDataByTimestampAsync(
+                Request.FreezeMasterDataByTimestampRequest request
+        )
+		{
+			var task = new FreezeMasterDataByTimestampTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class BatchExecuteApiTask : Gs2RestSessionTask<BatchExecuteApiRequest, BatchExecuteApiResult>
         {
             public BatchExecuteApiTask(IGs2Session session, RestSessionRequestFactory factory, BatchExecuteApiRequest request) : base(session, factory, request)
