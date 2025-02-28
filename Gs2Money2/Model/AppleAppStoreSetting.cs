@@ -32,8 +32,23 @@ namespace Gs2.Gs2Money2.Model
 	public class AppleAppStoreSetting : IComparable
 	{
         public string BundleId { set; get; } = null!;
+        public string TeamId { set; get; } = null!;
+        public string KeyId { set; get; } = null!;
+        public string PrivateKeyPem { set; get; } = null!;
         public AppleAppStoreSetting WithBundleId(string bundleId) {
             this.BundleId = bundleId;
+            return this;
+        }
+        public AppleAppStoreSetting WithTeamId(string teamId) {
+            this.TeamId = teamId;
+            return this;
+        }
+        public AppleAppStoreSetting WithKeyId(string keyId) {
+            this.KeyId = keyId;
+            return this;
+        }
+        public AppleAppStoreSetting WithPrivateKeyPem(string privateKeyPem) {
+            this.PrivateKeyPem = privateKeyPem;
             return this;
         }
 
@@ -46,13 +61,19 @@ namespace Gs2.Gs2Money2.Model
                 return null;
             }
             return new AppleAppStoreSetting()
-                .WithBundleId(!data.Keys.Contains("bundleId") || data["bundleId"] == null ? null : data["bundleId"].ToString());
+                .WithBundleId(!data.Keys.Contains("bundleId") || data["bundleId"] == null ? null : data["bundleId"].ToString())
+                .WithTeamId(!data.Keys.Contains("teamId") || data["teamId"] == null ? null : data["teamId"].ToString())
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithPrivateKeyPem(!data.Keys.Contains("privateKeyPem") || data["privateKeyPem"] == null ? null : data["privateKeyPem"].ToString());
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["bundleId"] = BundleId,
+                ["teamId"] = TeamId,
+                ["keyId"] = KeyId,
+                ["privateKeyPem"] = PrivateKeyPem,
             };
         }
 
@@ -62,6 +83,18 @@ namespace Gs2.Gs2Money2.Model
             if (BundleId != null) {
                 writer.WritePropertyName("bundleId");
                 writer.Write(BundleId.ToString());
+            }
+            if (TeamId != null) {
+                writer.WritePropertyName("teamId");
+                writer.Write(TeamId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
+            if (PrivateKeyPem != null) {
+                writer.WritePropertyName("privateKeyPem");
+                writer.Write(PrivateKeyPem.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -78,6 +111,30 @@ namespace Gs2.Gs2Money2.Model
             {
                 diff += BundleId.CompareTo(other.BundleId);
             }
+            if (TeamId == null && TeamId == other.TeamId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TeamId.CompareTo(other.TeamId);
+            }
+            if (KeyId == null && KeyId == other.KeyId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += KeyId.CompareTo(other.KeyId);
+            }
+            if (PrivateKeyPem == null && PrivateKeyPem == other.PrivateKeyPem)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += PrivateKeyPem.CompareTo(other.PrivateKeyPem);
+            }
             return diff;
         }
 
@@ -89,11 +146,35 @@ namespace Gs2.Gs2Money2.Model
                     });
                 }
             }
+            {
+                if (TeamId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("appleAppStoreSetting", "money2.appleAppStoreSetting.teamId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (KeyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("appleAppStoreSetting", "money2.appleAppStoreSetting.keyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PrivateKeyPem.Length > 10240) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("appleAppStoreSetting", "money2.appleAppStoreSetting.privateKeyPem.error.tooLong"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
             return new AppleAppStoreSetting {
                 BundleId = BundleId,
+                TeamId = TeamId,
+                KeyId = KeyId,
+                PrivateKeyPem = PrivateKeyPem,
             };
         }
     }

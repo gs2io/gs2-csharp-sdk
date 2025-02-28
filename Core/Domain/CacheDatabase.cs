@@ -187,13 +187,13 @@ namespace Gs2.Core.Domain
 
         public AsyncLock GetLockObject<TKind>(string parentKey, string key)
         {
-            var asyncLocks = this._lockObjects.Get(typeof(TKind))?.Get(parentKey);
-            if (asyncLocks != null && asyncLocks.TryGetValue(key, out var asyncLock))
-            {
-                return asyncLock;
+            lock (this) {
+                var asyncLocks = this._lockObjects.Get(typeof(TKind))?.Get(parentKey);
+                if (asyncLocks != null && asyncLocks.TryGetValue(key, out var asyncLock)) {
+                    return asyncLock;
+                }
+                return this._lockObjects.Ensure(typeof(TKind)).Ensure(parentKey)[key] = new AsyncLock();
             }
-
-            return this._lockObjects.Ensure(typeof(TKind)).Ensure(parentKey)[key] = new AsyncLock();
         }
 
         public TKind[] List<TKind>(string parentKey)

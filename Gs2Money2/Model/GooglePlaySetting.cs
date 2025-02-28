@@ -33,12 +33,17 @@ namespace Gs2.Gs2Money2.Model
 	{
         public string PackageName { set; get; } = null!;
         public string PublicKey { set; get; } = null!;
+        public string CredentialsJSON { set; get; } = null!;
         public GooglePlaySetting WithPackageName(string packageName) {
             this.PackageName = packageName;
             return this;
         }
         public GooglePlaySetting WithPublicKey(string publicKey) {
             this.PublicKey = publicKey;
+            return this;
+        }
+        public GooglePlaySetting WithCredentialsJSON(string credentialsJSON) {
+            this.CredentialsJSON = credentialsJSON;
             return this;
         }
 
@@ -52,7 +57,8 @@ namespace Gs2.Gs2Money2.Model
             }
             return new GooglePlaySetting()
                 .WithPackageName(!data.Keys.Contains("packageName") || data["packageName"] == null ? null : data["packageName"].ToString())
-                .WithPublicKey(!data.Keys.Contains("publicKey") || data["publicKey"] == null ? null : data["publicKey"].ToString());
+                .WithPublicKey(!data.Keys.Contains("publicKey") || data["publicKey"] == null ? null : data["publicKey"].ToString())
+                .WithCredentialsJSON(!data.Keys.Contains("credentialsJSON") || data["credentialsJSON"] == null ? null : data["credentialsJSON"].ToString());
         }
 
         public JsonData ToJson()
@@ -60,6 +66,7 @@ namespace Gs2.Gs2Money2.Model
             return new JsonData {
                 ["packageName"] = PackageName,
                 ["publicKey"] = PublicKey,
+                ["credentialsJSON"] = CredentialsJSON,
             };
         }
 
@@ -73,6 +80,10 @@ namespace Gs2.Gs2Money2.Model
             if (PublicKey != null) {
                 writer.WritePropertyName("publicKey");
                 writer.Write(PublicKey.ToString());
+            }
+            if (CredentialsJSON != null) {
+                writer.WritePropertyName("credentialsJSON");
+                writer.Write(CredentialsJSON.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -97,6 +108,14 @@ namespace Gs2.Gs2Money2.Model
             {
                 diff += PublicKey.CompareTo(other.PublicKey);
             }
+            if (CredentialsJSON == null && CredentialsJSON == other.CredentialsJSON)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += CredentialsJSON.CompareTo(other.CredentialsJSON);
+            }
             return diff;
         }
 
@@ -115,12 +134,20 @@ namespace Gs2.Gs2Money2.Model
                     });
                 }
             }
+            {
+                if (CredentialsJSON.Length > 5120) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("googlePlaySetting", "money2.googlePlaySetting.credentialsJSON.error.tooLong"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
             return new GooglePlaySetting {
                 PackageName = PackageName,
                 PublicKey = PublicKey,
+                CredentialsJSON = CredentialsJSON,
             };
         }
     }

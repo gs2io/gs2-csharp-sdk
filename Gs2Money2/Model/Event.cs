@@ -38,6 +38,7 @@ namespace Gs2.Gs2Money2.Model
         public Gs2.Gs2Money2.Model.VerifyReceiptEvent VerifyReceiptEvent { set; get; } = null!;
         public Gs2.Gs2Money2.Model.DepositEvent DepositEvent { set; get; } = null!;
         public Gs2.Gs2Money2.Model.WithdrawEvent WithdrawEvent { set; get; } = null!;
+        public Gs2.Gs2Money2.Model.RefundEvent RefundEvent { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
         public Event WithEventId(string eventId) {
@@ -66,6 +67,10 @@ namespace Gs2.Gs2Money2.Model
         }
         public Event WithWithdrawEvent(Gs2.Gs2Money2.Model.WithdrawEvent withdrawEvent) {
             this.WithdrawEvent = withdrawEvent;
+            return this;
+        }
+        public Event WithRefundEvent(Gs2.Gs2Money2.Model.RefundEvent refundEvent) {
+            this.RefundEvent = refundEvent;
             return this;
         }
         public Event WithCreatedAt(long? createdAt) {
@@ -161,6 +166,7 @@ namespace Gs2.Gs2Money2.Model
                 .WithVerifyReceiptEvent(!data.Keys.Contains("verifyReceiptEvent") || data["verifyReceiptEvent"] == null ? null : Gs2.Gs2Money2.Model.VerifyReceiptEvent.FromJson(data["verifyReceiptEvent"]))
                 .WithDepositEvent(!data.Keys.Contains("depositEvent") || data["depositEvent"] == null ? null : Gs2.Gs2Money2.Model.DepositEvent.FromJson(data["depositEvent"]))
                 .WithWithdrawEvent(!data.Keys.Contains("withdrawEvent") || data["withdrawEvent"] == null ? null : Gs2.Gs2Money2.Model.WithdrawEvent.FromJson(data["withdrawEvent"]))
+                .WithRefundEvent(!data.Keys.Contains("refundEvent") || data["refundEvent"] == null ? null : Gs2.Gs2Money2.Model.RefundEvent.FromJson(data["refundEvent"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -175,6 +181,7 @@ namespace Gs2.Gs2Money2.Model
                 ["verifyReceiptEvent"] = VerifyReceiptEvent?.ToJson(),
                 ["depositEvent"] = DepositEvent?.ToJson(),
                 ["withdrawEvent"] = WithdrawEvent?.ToJson(),
+                ["refundEvent"] = RefundEvent?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
@@ -210,6 +217,10 @@ namespace Gs2.Gs2Money2.Model
             if (WithdrawEvent != null) {
                 writer.WritePropertyName("withdrawEvent");
                 WithdrawEvent.WriteJson(writer);
+            }
+            if (RefundEvent != null) {
+                writer.WritePropertyName("refundEvent");
+                RefundEvent.WriteJson(writer);
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -282,6 +293,14 @@ namespace Gs2.Gs2Money2.Model
             {
                 diff += WithdrawEvent.CompareTo(other.WithdrawEvent);
             }
+            if (RefundEvent == null && RefundEvent == other.RefundEvent)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RefundEvent.CompareTo(other.RefundEvent);
+            }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
@@ -328,12 +347,15 @@ namespace Gs2.Gs2Money2.Model
                     case "VerifyReceipt":
                     case "Deposit":
                     case "Withdraw":
+                    case "Refund":
                         break;
                     default:
                         throw new Gs2.Core.Exception.BadRequestException(new [] {
                             new RequestError("event", "money2.event.eventType.error.invalid"),
                         });
                 }
+            }
+            {
             }
             {
             }
@@ -376,6 +398,7 @@ namespace Gs2.Gs2Money2.Model
                 VerifyReceiptEvent = VerifyReceiptEvent.Clone() as Gs2.Gs2Money2.Model.VerifyReceiptEvent,
                 DepositEvent = DepositEvent.Clone() as Gs2.Gs2Money2.Model.DepositEvent,
                 WithdrawEvent = WithdrawEvent.Clone() as Gs2.Gs2Money2.Model.WithdrawEvent,
+                RefundEvent = RefundEvent.Clone() as Gs2.Gs2Money2.Model.RefundEvent,
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };
