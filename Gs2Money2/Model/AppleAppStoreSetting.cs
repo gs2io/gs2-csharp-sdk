@@ -32,15 +32,15 @@ namespace Gs2.Gs2Money2.Model
 	public class AppleAppStoreSetting : IComparable
 	{
         public string BundleId { set; get; } = null!;
-        public string TeamId { set; get; } = null!;
+        public string IssuerId { set; get; } = null!;
         public string KeyId { set; get; } = null!;
         public string PrivateKeyPem { set; get; } = null!;
         public AppleAppStoreSetting WithBundleId(string bundleId) {
             this.BundleId = bundleId;
             return this;
         }
-        public AppleAppStoreSetting WithTeamId(string teamId) {
-            this.TeamId = teamId;
+        public AppleAppStoreSetting WithIssuerId(string issuerId) {
+            this.IssuerId = issuerId;
             return this;
         }
         public AppleAppStoreSetting WithKeyId(string keyId) {
@@ -62,7 +62,7 @@ namespace Gs2.Gs2Money2.Model
             }
             return new AppleAppStoreSetting()
                 .WithBundleId(!data.Keys.Contains("bundleId") || data["bundleId"] == null ? null : data["bundleId"].ToString())
-                .WithTeamId(!data.Keys.Contains("teamId") || data["teamId"] == null ? null : data["teamId"].ToString())
+                .WithIssuerId(!data.Keys.Contains("issuerId") || data["issuerId"] == null ? null : data["issuerId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithPrivateKeyPem(!data.Keys.Contains("privateKeyPem") || data["privateKeyPem"] == null ? null : data["privateKeyPem"].ToString());
         }
@@ -71,7 +71,7 @@ namespace Gs2.Gs2Money2.Model
         {
             return new JsonData {
                 ["bundleId"] = BundleId,
-                ["teamId"] = TeamId,
+                ["issuerId"] = IssuerId,
                 ["keyId"] = KeyId,
                 ["privateKeyPem"] = PrivateKeyPem,
             };
@@ -84,9 +84,9 @@ namespace Gs2.Gs2Money2.Model
                 writer.WritePropertyName("bundleId");
                 writer.Write(BundleId.ToString());
             }
-            if (TeamId != null) {
-                writer.WritePropertyName("teamId");
-                writer.Write(TeamId.ToString());
+            if (IssuerId != null) {
+                writer.WritePropertyName("issuerId");
+                writer.Write(IssuerId.ToString());
             }
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
@@ -111,13 +111,13 @@ namespace Gs2.Gs2Money2.Model
             {
                 diff += BundleId.CompareTo(other.BundleId);
             }
-            if (TeamId == null && TeamId == other.TeamId)
+            if (IssuerId == null && IssuerId == other.IssuerId)
             {
                 // null and null
             }
             else
             {
-                diff += TeamId.CompareTo(other.TeamId);
+                diff += IssuerId.CompareTo(other.IssuerId);
             }
             if (KeyId == null && KeyId == other.KeyId)
             {
@@ -147,9 +147,9 @@ namespace Gs2.Gs2Money2.Model
                 }
             }
             {
-                if (TeamId.Length > 1024) {
+                if (IssuerId.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("appleAppStoreSetting", "money2.appleAppStoreSetting.teamId.error.tooLong"),
+                        new RequestError("appleAppStoreSetting", "money2.appleAppStoreSetting.issuerId.error.tooLong"),
                     });
                 }
             }
@@ -172,7 +172,7 @@ namespace Gs2.Gs2Money2.Model
         public object Clone() {
             return new AppleAppStoreSetting {
                 BundleId = BundleId,
-                TeamId = TeamId,
+                IssuerId = IssuerId,
                 KeyId = KeyId,
                 PrivateKeyPem = PrivateKeyPem,
             };
