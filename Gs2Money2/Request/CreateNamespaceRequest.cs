@@ -40,6 +40,11 @@ namespace Gs2.Gs2Money2.Request
          public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
          public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
          public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; } = null!;
+         public string SubscribeScript { set; get; } = null!;
+         public string RenewScript { set; get; } = null!;
+         public string UnsubscribeScript { set; get; } = null!;
+         public Gs2.Gs2Money2.Model.ScriptSetting TakeOverScript { set; get; } = null!;
+         public Gs2.Gs2Money2.Model.NotificationSetting ChangeSubscriptionStatusNotification { set; get; } = null!;
          public Gs2.Gs2Money2.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -69,6 +74,26 @@ namespace Gs2.Gs2Money2.Request
             this.WithdrawBalanceScript = withdrawBalanceScript;
             return this;
         }
+        public CreateNamespaceRequest WithSubscribeScript(string subscribeScript) {
+            this.SubscribeScript = subscribeScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithRenewScript(string renewScript) {
+            this.RenewScript = renewScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithUnsubscribeScript(string unsubscribeScript) {
+            this.UnsubscribeScript = unsubscribeScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithTakeOverScript(Gs2.Gs2Money2.Model.ScriptSetting takeOverScript) {
+            this.TakeOverScript = takeOverScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithChangeSubscriptionStatusNotification(Gs2.Gs2Money2.Model.NotificationSetting changeSubscriptionStatusNotification) {
+            this.ChangeSubscriptionStatusNotification = changeSubscriptionStatusNotification;
+            return this;
+        }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Money2.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -90,6 +115,11 @@ namespace Gs2.Gs2Money2.Request
                 .WithPlatformSetting(!data.Keys.Contains("platformSetting") || data["platformSetting"] == null ? null : Gs2.Gs2Money2.Model.PlatformSetting.FromJson(data["platformSetting"]))
                 .WithDepositBalanceScript(!data.Keys.Contains("depositBalanceScript") || data["depositBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["depositBalanceScript"]))
                 .WithWithdrawBalanceScript(!data.Keys.Contains("withdrawBalanceScript") || data["withdrawBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["withdrawBalanceScript"]))
+                .WithSubscribeScript(!data.Keys.Contains("subscribeScript") || data["subscribeScript"] == null ? null : data["subscribeScript"].ToString())
+                .WithRenewScript(!data.Keys.Contains("renewScript") || data["renewScript"] == null ? null : data["renewScript"].ToString())
+                .WithUnsubscribeScript(!data.Keys.Contains("unsubscribeScript") || data["unsubscribeScript"] == null ? null : data["unsubscribeScript"].ToString())
+                .WithTakeOverScript(!data.Keys.Contains("takeOverScript") || data["takeOverScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["takeOverScript"]))
+                .WithChangeSubscriptionStatusNotification(!data.Keys.Contains("changeSubscriptionStatusNotification") || data["changeSubscriptionStatusNotification"] == null ? null : Gs2.Gs2Money2.Model.NotificationSetting.FromJson(data["changeSubscriptionStatusNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Money2.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -103,6 +133,11 @@ namespace Gs2.Gs2Money2.Request
                 ["platformSetting"] = PlatformSetting?.ToJson(),
                 ["depositBalanceScript"] = DepositBalanceScript?.ToJson(),
                 ["withdrawBalanceScript"] = WithdrawBalanceScript?.ToJson(),
+                ["subscribeScript"] = SubscribeScript,
+                ["renewScript"] = RenewScript,
+                ["unsubscribeScript"] = UnsubscribeScript,
+                ["takeOverScript"] = TakeOverScript?.ToJson(),
+                ["changeSubscriptionStatusNotification"] = ChangeSubscriptionStatusNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -135,6 +170,24 @@ namespace Gs2.Gs2Money2.Request
             if (WithdrawBalanceScript != null) {
                 WithdrawBalanceScript.WriteJson(writer);
             }
+            if (SubscribeScript != null) {
+                writer.WritePropertyName("subscribeScript");
+                writer.Write(SubscribeScript.ToString());
+            }
+            if (RenewScript != null) {
+                writer.WritePropertyName("renewScript");
+                writer.Write(RenewScript.ToString());
+            }
+            if (UnsubscribeScript != null) {
+                writer.WritePropertyName("unsubscribeScript");
+                writer.Write(UnsubscribeScript.ToString());
+            }
+            if (TakeOverScript != null) {
+                TakeOverScript.WriteJson(writer);
+            }
+            if (ChangeSubscriptionStatusNotification != null) {
+                ChangeSubscriptionStatusNotification.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -150,6 +203,11 @@ namespace Gs2.Gs2Money2.Request
             key += PlatformSetting + ":";
             key += DepositBalanceScript + ":";
             key += WithdrawBalanceScript + ":";
+            key += SubscribeScript + ":";
+            key += RenewScript + ":";
+            key += UnsubscribeScript + ":";
+            key += TakeOverScript + ":";
+            key += ChangeSubscriptionStatusNotification + ":";
             key += LogSetting + ":";
             return key;
         }

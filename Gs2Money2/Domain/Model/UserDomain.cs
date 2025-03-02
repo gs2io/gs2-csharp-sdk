@@ -517,6 +517,130 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> AllocateSubscriptionStatusFuture(
+            AllocateSubscriptionStatusByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.AllocateSubscriptionStatusByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.ContentName
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> AllocateSubscriptionStatusAsync(
+            #else
+        public async Task<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> AllocateSubscriptionStatusAsync(
+            #endif
+            AllocateSubscriptionStatusByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.AllocateSubscriptionStatusByUserIdAsync(request)
+            );
+            var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.UserId,
+                result?.Item?.ContentName
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> TakeoverSubscriptionStatusFuture(
+            TakeoverSubscriptionStatusByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.TakeoverSubscriptionStatusByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.ContentName
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> TakeoverSubscriptionStatusAsync(
+            #else
+        public async Task<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> TakeoverSubscriptionStatusAsync(
+            #endif
+            TakeoverSubscriptionStatusByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.TakeoverSubscriptionStatusByUserIdAsync(request)
+            );
+            var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.UserId,
+                result?.Item?.ContentName
+            );
+
+            return domain;
+        }
+        #endif
+
     }
 
     public partial class UserDomain {

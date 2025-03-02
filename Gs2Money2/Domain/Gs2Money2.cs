@@ -642,12 +642,49 @@ namespace Gs2.Gs2Money2.Domain
                 }
             }
         }
+    #if UNITY_2017_1_OR_NEWER
+        [Serializable]
+        private class ChangeSubscriptionStatusNotificationEvent : UnityEvent<ChangeSubscriptionStatusNotification>
+        {
+
+        }
+
+        [SerializeField]
+        private ChangeSubscriptionStatusNotificationEvent onChangeSubscriptionStatusNotification = new ChangeSubscriptionStatusNotificationEvent();
+
+        public event UnityAction<ChangeSubscriptionStatusNotification> OnChangeSubscriptionStatusNotification
+        {
+            add => onChangeSubscriptionStatusNotification.AddListener(value);
+            remove => onChangeSubscriptionStatusNotification.RemoveListener(value);
+        }
+    #endif
 
         public void HandleNotification(
                 CacheDatabase cache,
                 string action,
                 string payload
         ) {
+            switch (action) {
+                case "ChangeSubscriptionStatus": {
+                    var notification = ChangeSubscriptionStatusNotification.FromJson(JsonMapper.ToObject(payload));
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.SubscriptionStatus>(
+                        (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId
+                        )
+                    );
+                    (null as Gs2.Gs2Money2.Model.SubscriptionStatus).DeleteCache(
+                        _gs2.Cache,
+                        notification.NamespaceName,
+                        notification.UserId,
+                        notification.ContentName
+                    );
+    #if UNITY_2017_1_OR_NEWER
+                    onChangeSubscriptionStatusNotification.Invoke(notification);
+    #endif
+                    break;
+                }
+            }
         }
     }
 }

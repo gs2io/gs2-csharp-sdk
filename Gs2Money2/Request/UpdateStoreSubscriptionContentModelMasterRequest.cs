@@ -39,6 +39,7 @@ namespace Gs2.Gs2Money2.Request
          public string Metadata { set; get; } = null!;
          public string ScheduleNamespaceId { set; get; } = null!;
          public string TriggerName { set; get; } = null!;
+         public int? ReallocateSpanDays { set; get; } = null!;
          public Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent AppleAppStore { set; get; } = null!;
          public Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent GooglePlay { set; get; } = null!;
         public UpdateStoreSubscriptionContentModelMasterRequest WithNamespaceName(string namespaceName) {
@@ -65,6 +66,10 @@ namespace Gs2.Gs2Money2.Request
             this.TriggerName = triggerName;
             return this;
         }
+        public UpdateStoreSubscriptionContentModelMasterRequest WithReallocateSpanDays(int? reallocateSpanDays) {
+            this.ReallocateSpanDays = reallocateSpanDays;
+            return this;
+        }
         public UpdateStoreSubscriptionContentModelMasterRequest WithAppleAppStore(Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent appleAppStore) {
             this.AppleAppStore = appleAppStore;
             return this;
@@ -89,6 +94,7 @@ namespace Gs2.Gs2Money2.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithScheduleNamespaceId(!data.Keys.Contains("scheduleNamespaceId") || data["scheduleNamespaceId"] == null ? null : data["scheduleNamespaceId"].ToString())
                 .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
+                .WithReallocateSpanDays(!data.Keys.Contains("reallocateSpanDays") || data["reallocateSpanDays"] == null ? null : (int?)(data["reallocateSpanDays"].ToString().Contains(".") ? (int)double.Parse(data["reallocateSpanDays"].ToString()) : int.Parse(data["reallocateSpanDays"].ToString())))
                 .WithAppleAppStore(!data.Keys.Contains("appleAppStore") || data["appleAppStore"] == null ? null : Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent.FromJson(data["appleAppStore"]))
                 .WithGooglePlay(!data.Keys.Contains("googlePlay") || data["googlePlay"] == null ? null : Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent.FromJson(data["googlePlay"]));
         }
@@ -102,6 +108,7 @@ namespace Gs2.Gs2Money2.Request
                 ["metadata"] = Metadata,
                 ["scheduleNamespaceId"] = ScheduleNamespaceId,
                 ["triggerName"] = TriggerName,
+                ["reallocateSpanDays"] = ReallocateSpanDays,
                 ["appleAppStore"] = AppleAppStore?.ToJson(),
                 ["googlePlay"] = GooglePlay?.ToJson(),
             };
@@ -134,6 +141,10 @@ namespace Gs2.Gs2Money2.Request
                 writer.WritePropertyName("triggerName");
                 writer.Write(TriggerName.ToString());
             }
+            if (ReallocateSpanDays != null) {
+                writer.WritePropertyName("reallocateSpanDays");
+                writer.Write((ReallocateSpanDays.ToString().Contains(".") ? (int)double.Parse(ReallocateSpanDays.ToString()) : int.Parse(ReallocateSpanDays.ToString())));
+            }
             if (AppleAppStore != null) {
                 AppleAppStore.WriteJson(writer);
             }
@@ -151,6 +162,7 @@ namespace Gs2.Gs2Money2.Request
             key += Metadata + ":";
             key += ScheduleNamespaceId + ":";
             key += TriggerName + ":";
+            key += ReallocateSpanDays + ":";
             key += AppleAppStore + ":";
             key += GooglePlay + ":";
             return key;

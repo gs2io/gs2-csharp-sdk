@@ -38,6 +38,7 @@ namespace Gs2.Gs2Money2.Model
         public string UserId { set; get; } = null!;
         public string StatusDetail { set; get; } = null!;
         public long? ExpiresAt { set; get; } = null!;
+        public long? LastAllocatedAt { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
@@ -67,6 +68,10 @@ namespace Gs2.Gs2Money2.Model
         }
         public SubscribeTransaction WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
+            return this;
+        }
+        public SubscribeTransaction WithLastAllocatedAt(long? lastAllocatedAt) {
+            this.LastAllocatedAt = lastAllocatedAt;
             return this;
         }
         public SubscribeTransaction WithCreatedAt(long? createdAt) {
@@ -183,6 +188,7 @@ namespace Gs2.Gs2Money2.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithStatusDetail(!data.Keys.Contains("statusDetail") || data["statusDetail"] == null ? null : data["statusDetail"].ToString())
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
+                .WithLastAllocatedAt(!data.Keys.Contains("lastAllocatedAt") || data["lastAllocatedAt"] == null ? null : (long?)(data["lastAllocatedAt"].ToString().Contains(".") ? (long)double.Parse(data["lastAllocatedAt"].ToString()) : long.Parse(data["lastAllocatedAt"].ToString())))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -198,6 +204,7 @@ namespace Gs2.Gs2Money2.Model
                 ["userId"] = UserId,
                 ["statusDetail"] = StatusDetail,
                 ["expiresAt"] = ExpiresAt,
+                ["lastAllocatedAt"] = LastAllocatedAt,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -234,6 +241,10 @@ namespace Gs2.Gs2Money2.Model
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write((ExpiresAt.ToString().Contains(".") ? (long)double.Parse(ExpiresAt.ToString()) : long.Parse(ExpiresAt.ToString())));
+            }
+            if (LastAllocatedAt != null) {
+                writer.WritePropertyName("lastAllocatedAt");
+                writer.Write((LastAllocatedAt.ToString().Contains(".") ? (long)double.Parse(LastAllocatedAt.ToString()) : long.Parse(LastAllocatedAt.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -309,6 +320,14 @@ namespace Gs2.Gs2Money2.Model
             else
             {
                 diff += (int)(ExpiresAt - other.ExpiresAt);
+            }
+            if (LastAllocatedAt == null && LastAllocatedAt == other.LastAllocatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(LastAllocatedAt - other.LastAllocatedAt);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -409,6 +428,18 @@ namespace Gs2.Gs2Money2.Model
                 }
             }
             {
+                if (LastAllocatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribeTransaction", "money2.subscribeTransaction.lastAllocatedAt.error.invalid"),
+                    });
+                }
+                if (LastAllocatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribeTransaction", "money2.subscribeTransaction.lastAllocatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("subscribeTransaction", "money2.subscribeTransaction.createdAt.error.invalid"),
@@ -455,6 +486,7 @@ namespace Gs2.Gs2Money2.Model
                 UserId = UserId,
                 StatusDetail = StatusDetail,
                 ExpiresAt = ExpiresAt,
+                LastAllocatedAt = LastAllocatedAt,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

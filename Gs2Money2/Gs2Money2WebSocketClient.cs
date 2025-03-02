@@ -1925,6 +1925,11 @@ namespace Gs2.Gs2Money2
                     jsonWriter.WritePropertyName("triggerName");
                     jsonWriter.Write(request.TriggerName.ToString());
                 }
+                if (request.ReallocateSpanDays != null)
+                {
+                    jsonWriter.WritePropertyName("reallocateSpanDays");
+                    jsonWriter.Write(request.ReallocateSpanDays.ToString());
+                }
                 if (request.AppleAppStore != null)
                 {
                     jsonWriter.WritePropertyName("appleAppStore");
@@ -2170,6 +2175,11 @@ namespace Gs2.Gs2Money2
                 {
                     jsonWriter.WritePropertyName("triggerName");
                     jsonWriter.Write(request.TriggerName.ToString());
+                }
+                if (request.ReallocateSpanDays != null)
+                {
+                    jsonWriter.WritePropertyName("reallocateSpanDays");
+                    jsonWriter.Write(request.ReallocateSpanDays.ToString());
                 }
                 if (request.AppleAppStore != null)
                 {

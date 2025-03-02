@@ -39,6 +39,11 @@ namespace Gs2.Gs2Money2.Model
         public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
         public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
         public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; } = null!;
+        public string SubscribeScript { set; get; } = null!;
+        public string RenewScript { set; get; } = null!;
+        public string UnsubscribeScript { set; get; } = null!;
+        public Gs2.Gs2Money2.Model.ScriptSetting TakeOverScript { set; get; } = null!;
+        public Gs2.Gs2Money2.Model.NotificationSetting ChangeSubscriptionStatusNotification { set; get; } = null!;
         public Gs2.Gs2Money2.Model.LogSetting LogSetting { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
@@ -73,6 +78,26 @@ namespace Gs2.Gs2Money2.Model
         }
         public Namespace WithWithdrawBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting withdrawBalanceScript) {
             this.WithdrawBalanceScript = withdrawBalanceScript;
+            return this;
+        }
+        public Namespace WithSubscribeScript(string subscribeScript) {
+            this.SubscribeScript = subscribeScript;
+            return this;
+        }
+        public Namespace WithRenewScript(string renewScript) {
+            this.RenewScript = renewScript;
+            return this;
+        }
+        public Namespace WithUnsubscribeScript(string unsubscribeScript) {
+            this.UnsubscribeScript = unsubscribeScript;
+            return this;
+        }
+        public Namespace WithTakeOverScript(Gs2.Gs2Money2.Model.ScriptSetting takeOverScript) {
+            this.TakeOverScript = takeOverScript;
+            return this;
+        }
+        public Namespace WithChangeSubscriptionStatusNotification(Gs2.Gs2Money2.Model.NotificationSetting changeSubscriptionStatusNotification) {
+            this.ChangeSubscriptionStatusNotification = changeSubscriptionStatusNotification;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Money2.Model.LogSetting logSetting) {
@@ -160,6 +185,11 @@ namespace Gs2.Gs2Money2.Model
                 .WithPlatformSetting(!data.Keys.Contains("platformSetting") || data["platformSetting"] == null ? null : Gs2.Gs2Money2.Model.PlatformSetting.FromJson(data["platformSetting"]))
                 .WithDepositBalanceScript(!data.Keys.Contains("depositBalanceScript") || data["depositBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["depositBalanceScript"]))
                 .WithWithdrawBalanceScript(!data.Keys.Contains("withdrawBalanceScript") || data["withdrawBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["withdrawBalanceScript"]))
+                .WithSubscribeScript(!data.Keys.Contains("subscribeScript") || data["subscribeScript"] == null ? null : data["subscribeScript"].ToString())
+                .WithRenewScript(!data.Keys.Contains("renewScript") || data["renewScript"] == null ? null : data["renewScript"].ToString())
+                .WithUnsubscribeScript(!data.Keys.Contains("unsubscribeScript") || data["unsubscribeScript"] == null ? null : data["unsubscribeScript"].ToString())
+                .WithTakeOverScript(!data.Keys.Contains("takeOverScript") || data["takeOverScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["takeOverScript"]))
+                .WithChangeSubscriptionStatusNotification(!data.Keys.Contains("changeSubscriptionStatusNotification") || data["changeSubscriptionStatusNotification"] == null ? null : Gs2.Gs2Money2.Model.NotificationSetting.FromJson(data["changeSubscriptionStatusNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Money2.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -177,6 +207,11 @@ namespace Gs2.Gs2Money2.Model
                 ["platformSetting"] = PlatformSetting?.ToJson(),
                 ["depositBalanceScript"] = DepositBalanceScript?.ToJson(),
                 ["withdrawBalanceScript"] = WithdrawBalanceScript?.ToJson(),
+                ["subscribeScript"] = SubscribeScript,
+                ["renewScript"] = RenewScript,
+                ["unsubscribeScript"] = UnsubscribeScript,
+                ["takeOverScript"] = TakeOverScript?.ToJson(),
+                ["changeSubscriptionStatusNotification"] = ChangeSubscriptionStatusNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -218,6 +253,26 @@ namespace Gs2.Gs2Money2.Model
             if (WithdrawBalanceScript != null) {
                 writer.WritePropertyName("withdrawBalanceScript");
                 WithdrawBalanceScript.WriteJson(writer);
+            }
+            if (SubscribeScript != null) {
+                writer.WritePropertyName("subscribeScript");
+                writer.Write(SubscribeScript.ToString());
+            }
+            if (RenewScript != null) {
+                writer.WritePropertyName("renewScript");
+                writer.Write(RenewScript.ToString());
+            }
+            if (UnsubscribeScript != null) {
+                writer.WritePropertyName("unsubscribeScript");
+                writer.Write(UnsubscribeScript.ToString());
+            }
+            if (TakeOverScript != null) {
+                writer.WritePropertyName("takeOverScript");
+                TakeOverScript.WriteJson(writer);
+            }
+            if (ChangeSubscriptionStatusNotification != null) {
+                writer.WritePropertyName("changeSubscriptionStatusNotification");
+                ChangeSubscriptionStatusNotification.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -306,6 +361,46 @@ namespace Gs2.Gs2Money2.Model
             {
                 diff += WithdrawBalanceScript.CompareTo(other.WithdrawBalanceScript);
             }
+            if (SubscribeScript == null && SubscribeScript == other.SubscribeScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SubscribeScript.CompareTo(other.SubscribeScript);
+            }
+            if (RenewScript == null && RenewScript == other.RenewScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RenewScript.CompareTo(other.RenewScript);
+            }
+            if (UnsubscribeScript == null && UnsubscribeScript == other.UnsubscribeScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += UnsubscribeScript.CompareTo(other.UnsubscribeScript);
+            }
+            if (TakeOverScript == null && TakeOverScript == other.TakeOverScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TakeOverScript.CompareTo(other.TakeOverScript);
+            }
+            if (ChangeSubscriptionStatusNotification == null && ChangeSubscriptionStatusNotification == other.ChangeSubscriptionStatusNotification)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ChangeSubscriptionStatusNotification.CompareTo(other.ChangeSubscriptionStatusNotification);
+            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -383,6 +478,31 @@ namespace Gs2.Gs2Money2.Model
             {
             }
             {
+                if (SubscribeScript.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "money2.namespace.subscribeScript.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RenewScript.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "money2.namespace.renewScript.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UnsubscribeScript.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "money2.namespace.unsubscribeScript.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+            }
+            {
             }
             {
                 if (CreatedAt < 0) {
@@ -432,6 +552,11 @@ namespace Gs2.Gs2Money2.Model
                 PlatformSetting = PlatformSetting.Clone() as Gs2.Gs2Money2.Model.PlatformSetting,
                 DepositBalanceScript = DepositBalanceScript.Clone() as Gs2.Gs2Money2.Model.ScriptSetting,
                 WithdrawBalanceScript = WithdrawBalanceScript.Clone() as Gs2.Gs2Money2.Model.ScriptSetting,
+                SubscribeScript = SubscribeScript,
+                RenewScript = RenewScript,
+                UnsubscribeScript = UnsubscribeScript,
+                TakeOverScript = TakeOverScript.Clone() as Gs2.Gs2Money2.Model.ScriptSetting,
+                ChangeSubscriptionStatusNotification = ChangeSubscriptionStatusNotification.Clone() as Gs2.Gs2Money2.Model.NotificationSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Money2.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

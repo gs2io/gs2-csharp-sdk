@@ -222,6 +222,31 @@ namespace Gs2.Gs2Money2
                     jsonWriter.WritePropertyName("withdrawBalanceScript");
                     request.WithdrawBalanceScript.WriteJson(jsonWriter);
                 }
+                if (request.SubscribeScript != null)
+                {
+                    jsonWriter.WritePropertyName("subscribeScript");
+                    jsonWriter.Write(request.SubscribeScript);
+                }
+                if (request.RenewScript != null)
+                {
+                    jsonWriter.WritePropertyName("renewScript");
+                    jsonWriter.Write(request.RenewScript);
+                }
+                if (request.UnsubscribeScript != null)
+                {
+                    jsonWriter.WritePropertyName("unsubscribeScript");
+                    jsonWriter.Write(request.UnsubscribeScript);
+                }
+                if (request.TakeOverScript != null)
+                {
+                    jsonWriter.WritePropertyName("takeOverScript");
+                    request.TakeOverScript.WriteJson(jsonWriter);
+                }
+                if (request.ChangeSubscriptionStatusNotification != null)
+                {
+                    jsonWriter.WritePropertyName("changeSubscriptionStatusNotification");
+                    request.ChangeSubscriptionStatusNotification.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -573,6 +598,31 @@ namespace Gs2.Gs2Money2
                 {
                     jsonWriter.WritePropertyName("withdrawBalanceScript");
                     request.WithdrawBalanceScript.WriteJson(jsonWriter);
+                }
+                if (request.SubscribeScript != null)
+                {
+                    jsonWriter.WritePropertyName("subscribeScript");
+                    jsonWriter.Write(request.SubscribeScript);
+                }
+                if (request.RenewScript != null)
+                {
+                    jsonWriter.WritePropertyName("renewScript");
+                    jsonWriter.Write(request.RenewScript);
+                }
+                if (request.UnsubscribeScript != null)
+                {
+                    jsonWriter.WritePropertyName("unsubscribeScript");
+                    jsonWriter.Write(request.UnsubscribeScript);
+                }
+                if (request.TakeOverScript != null)
+                {
+                    jsonWriter.WritePropertyName("takeOverScript");
+                    request.TakeOverScript.WriteJson(jsonWriter);
+                }
+                if (request.ChangeSubscriptionStatusNotification != null)
+                {
+                    jsonWriter.WritePropertyName("changeSubscriptionStatusNotification");
+                    request.ChangeSubscriptionStatusNotification.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -3781,6 +3831,564 @@ namespace Gs2.Gs2Money2
 #endif
 
 
+        public class AllocateSubscriptionStatusTask : Gs2RestSessionTask<AllocateSubscriptionStatusRequest, AllocateSubscriptionStatusResult>
+        {
+            public AllocateSubscriptionStatusTask(IGs2Session session, RestSessionRequestFactory factory, AllocateSubscriptionStatusRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AllocateSubscriptionStatusRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/allocate/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Receipt != null)
+                {
+                    jsonWriter.WritePropertyName("receipt");
+                    jsonWriter.Write(request.Receipt);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "subscription.transaction.used") > 0) {
+                    base.OnError(new Exception.AlreadyUsedException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AllocateSubscriptionStatus(
+                Request.AllocateSubscriptionStatusRequest request,
+                UnityAction<AsyncResult<Result.AllocateSubscriptionStatusResult>> callback
+        )
+		{
+			var task = new AllocateSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AllocateSubscriptionStatusResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AllocateSubscriptionStatusResult> AllocateSubscriptionStatusFuture(
+                Request.AllocateSubscriptionStatusRequest request
+        )
+		{
+			return new AllocateSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AllocateSubscriptionStatusResult> AllocateSubscriptionStatusAsync(
+                Request.AllocateSubscriptionStatusRequest request
+        )
+		{
+            AsyncResult<Result.AllocateSubscriptionStatusResult> result = null;
+			await AllocateSubscriptionStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AllocateSubscriptionStatusTask AllocateSubscriptionStatusAsync(
+                Request.AllocateSubscriptionStatusRequest request
+        )
+		{
+			return new AllocateSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AllocateSubscriptionStatusResult> AllocateSubscriptionStatusAsync(
+                Request.AllocateSubscriptionStatusRequest request
+        )
+		{
+			var task = new AllocateSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AllocateSubscriptionStatusByUserIdTask : Gs2RestSessionTask<AllocateSubscriptionStatusByUserIdRequest, AllocateSubscriptionStatusByUserIdResult>
+        {
+            public AllocateSubscriptionStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, AllocateSubscriptionStatusByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AllocateSubscriptionStatusByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/allocate/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Receipt != null)
+                {
+                    jsonWriter.WritePropertyName("receipt");
+                    jsonWriter.Write(request.Receipt);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "subscription.transaction.used") > 0) {
+                    base.OnError(new Exception.AlreadyUsedException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AllocateSubscriptionStatusByUserId(
+                Request.AllocateSubscriptionStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AllocateSubscriptionStatusByUserIdResult>> callback
+        )
+		{
+			var task = new AllocateSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AllocateSubscriptionStatusByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AllocateSubscriptionStatusByUserIdResult> AllocateSubscriptionStatusByUserIdFuture(
+                Request.AllocateSubscriptionStatusByUserIdRequest request
+        )
+		{
+			return new AllocateSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AllocateSubscriptionStatusByUserIdResult> AllocateSubscriptionStatusByUserIdAsync(
+                Request.AllocateSubscriptionStatusByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.AllocateSubscriptionStatusByUserIdResult> result = null;
+			await AllocateSubscriptionStatusByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AllocateSubscriptionStatusByUserIdTask AllocateSubscriptionStatusByUserIdAsync(
+                Request.AllocateSubscriptionStatusByUserIdRequest request
+        )
+		{
+			return new AllocateSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AllocateSubscriptionStatusByUserIdResult> AllocateSubscriptionStatusByUserIdAsync(
+                Request.AllocateSubscriptionStatusByUserIdRequest request
+        )
+		{
+			var task = new AllocateSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class TakeoverSubscriptionStatusTask : Gs2RestSessionTask<TakeoverSubscriptionStatusRequest, TakeoverSubscriptionStatusResult>
+        {
+            public TakeoverSubscriptionStatusTask(IGs2Session session, RestSessionRequestFactory factory, TakeoverSubscriptionStatusRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(TakeoverSubscriptionStatusRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/takeover/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Receipt != null)
+                {
+                    jsonWriter.WritePropertyName("receipt");
+                    jsonWriter.Write(request.Receipt);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "subscription.transaction.used") > 0) {
+                    base.OnError(new Exception.LockPeriodNotElapsedException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator TakeoverSubscriptionStatus(
+                Request.TakeoverSubscriptionStatusRequest request,
+                UnityAction<AsyncResult<Result.TakeoverSubscriptionStatusResult>> callback
+        )
+		{
+			var task = new TakeoverSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.TakeoverSubscriptionStatusResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.TakeoverSubscriptionStatusResult> TakeoverSubscriptionStatusFuture(
+                Request.TakeoverSubscriptionStatusRequest request
+        )
+		{
+			return new TakeoverSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.TakeoverSubscriptionStatusResult> TakeoverSubscriptionStatusAsync(
+                Request.TakeoverSubscriptionStatusRequest request
+        )
+		{
+            AsyncResult<Result.TakeoverSubscriptionStatusResult> result = null;
+			await TakeoverSubscriptionStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public TakeoverSubscriptionStatusTask TakeoverSubscriptionStatusAsync(
+                Request.TakeoverSubscriptionStatusRequest request
+        )
+		{
+			return new TakeoverSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.TakeoverSubscriptionStatusResult> TakeoverSubscriptionStatusAsync(
+                Request.TakeoverSubscriptionStatusRequest request
+        )
+		{
+			var task = new TakeoverSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class TakeoverSubscriptionStatusByUserIdTask : Gs2RestSessionTask<TakeoverSubscriptionStatusByUserIdRequest, TakeoverSubscriptionStatusByUserIdResult>
+        {
+            public TakeoverSubscriptionStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, TakeoverSubscriptionStatusByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(TakeoverSubscriptionStatusByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/takeover/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Receipt != null)
+                {
+                    jsonWriter.WritePropertyName("receipt");
+                    jsonWriter.Write(request.Receipt);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "subscription.transaction.used") > 0) {
+                    base.OnError(new Exception.LockPeriodNotElapsedException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator TakeoverSubscriptionStatusByUserId(
+                Request.TakeoverSubscriptionStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.TakeoverSubscriptionStatusByUserIdResult>> callback
+        )
+		{
+			var task = new TakeoverSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.TakeoverSubscriptionStatusByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.TakeoverSubscriptionStatusByUserIdResult> TakeoverSubscriptionStatusByUserIdFuture(
+                Request.TakeoverSubscriptionStatusByUserIdRequest request
+        )
+		{
+			return new TakeoverSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.TakeoverSubscriptionStatusByUserIdResult> TakeoverSubscriptionStatusByUserIdAsync(
+                Request.TakeoverSubscriptionStatusByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.TakeoverSubscriptionStatusByUserIdResult> result = null;
+			await TakeoverSubscriptionStatusByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public TakeoverSubscriptionStatusByUserIdTask TakeoverSubscriptionStatusByUserIdAsync(
+                Request.TakeoverSubscriptionStatusByUserIdRequest request
+        )
+		{
+			return new TakeoverSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.TakeoverSubscriptionStatusByUserIdResult> TakeoverSubscriptionStatusByUserIdAsync(
+                Request.TakeoverSubscriptionStatusByUserIdRequest request
+        )
+		{
+			var task = new TakeoverSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribeStoreContentModelsTask : Gs2RestSessionTask<DescribeStoreContentModelsRequest, DescribeStoreContentModelsResult>
         {
             public DescribeStoreContentModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeStoreContentModelsRequest request) : base(session, factory, request)
@@ -4944,6 +5552,11 @@ namespace Gs2.Gs2Money2
                     jsonWriter.WritePropertyName("triggerName");
                     jsonWriter.Write(request.TriggerName);
                 }
+                if (request.ReallocateSpanDays != null)
+                {
+                    jsonWriter.WritePropertyName("reallocateSpanDays");
+                    jsonWriter.Write(request.ReallocateSpanDays.ToString());
+                }
                 if (request.AppleAppStore != null)
                 {
                     jsonWriter.WritePropertyName("appleAppStore");
@@ -5194,6 +5807,11 @@ namespace Gs2.Gs2Money2
                 {
                     jsonWriter.WritePropertyName("triggerName");
                     jsonWriter.Write(request.TriggerName);
+                }
+                if (request.ReallocateSpanDays != null)
+                {
+                    jsonWriter.WritePropertyName("reallocateSpanDays");
+                    jsonWriter.Write(request.ReallocateSpanDays.ToString());
                 }
                 if (request.AppleAppStore != null)
                 {

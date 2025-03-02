@@ -228,6 +228,34 @@ namespace Gs2.Gs2Money2.Model.Cache
                         Request.GetSubscriptionStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "allocateSubscriptionStatus":
+                    Result.AllocateSubscriptionStatusResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.AllocateSubscriptionStatusRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "allocateSubscriptionStatusByUserId":
+                    Result.AllocateSubscriptionStatusByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.AllocateSubscriptionStatusByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "takeoverSubscriptionStatus":
+                    Result.TakeoverSubscriptionStatusResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.TakeoverSubscriptionStatusRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "takeoverSubscriptionStatusByUserId":
+                    Result.TakeoverSubscriptionStatusByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.TakeoverSubscriptionStatusByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeStoreContentModels":
                     Result.DescribeStoreContentModelsResult.FromJson(resultPayload).PutCache(
                         cache,
