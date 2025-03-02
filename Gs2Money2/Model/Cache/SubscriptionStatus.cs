@@ -35,42 +35,42 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2Money2.Model.Cache
 {
-    public static partial class SubscribeTransactionExt
+    public static partial class SubscriptionStatusExt
     {
         public static string CacheParentKey(
-            this SubscribeTransaction self,
-            string namespaceName
+            this SubscriptionStatus self,
+            string namespaceName,
+            string userId
         ) {
             return string.Join(
                 ":",
                 "money2",
                 namespaceName,
-                "SubscribeTransaction"
+                userId,
+                "SubscriptionStatus"
             );
         }
 
         public static string CacheKey(
-            this SubscribeTransaction self,
-            string contentName,
-            string transactionId
+            this SubscriptionStatus self,
+            string contentName
         ) {
             return string.Join(
                 ":",
-                contentName,
-                transactionId
+                contentName
             );
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<SubscribeTransaction> FetchFuture(
-            this SubscribeTransaction self,
+        public static IFuture<SubscriptionStatus> FetchFuture(
+            this SubscriptionStatus self,
             CacheDatabase cache,
             string namespaceName,
+            string userId,
             string contentName,
-            string transactionId,
-            Func<IFuture<SubscribeTransaction>> fetchImpl
+            Func<IFuture<SubscriptionStatus>> fetchImpl
         ) {
-            IEnumerator Impl(IFuture<SubscribeTransaction> self)
+            IEnumerator Impl(IFuture<SubscriptionStatus> self)
             {
                 var future = fetchImpl();
                 yield return future;
@@ -78,13 +78,13 @@ namespace Gs2.Gs2Money2.Model.Cache
                 {
                     if (future.Error is Gs2.Core.Exception.NotFoundException e)
                     {
-                        (null as SubscribeTransaction).PutCache(
+                        (null as SubscriptionStatus).PutCache(
                             cache,
                             namespaceName,
-                            contentName,
-                            transactionId
+                            userId,
+                            contentName
                         );
-                        if (e.Errors.Length != 0 && e.Errors[0].Component == "subscribeTransaction") {
+                        if (e.Errors.Length != 0 && e.Errors[0].Component == "subscriptionStatus") {
                             self.OnComplete(default);
                             yield break;
                         }
@@ -96,30 +96,30 @@ namespace Gs2.Gs2Money2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    contentName,
-                    transactionId
+                    userId,
+                    contentName
                 );
                 self.OnComplete(item);
             }
-            return new Gs2InlineFuture<SubscribeTransaction>(Impl);
+            return new Gs2InlineFuture<SubscriptionStatus>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<SubscribeTransaction> FetchAsync(
+        public static async UniTask<SubscriptionStatus> FetchAsync(
     #else
-        public static async Task<SubscribeTransaction> FetchAsync(
+        public static async Task<SubscriptionStatus> FetchAsync(
     #endif
-            this SubscribeTransaction self,
+            this SubscriptionStatus self,
             CacheDatabase cache,
             string namespaceName,
+            string userId,
             string contentName,
-            string transactionId,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<SubscribeTransaction>> fetchImpl
+            Func<UniTask<SubscriptionStatus>> fetchImpl
     #else
-            Func<Task<SubscribeTransaction>> fetchImpl
+            Func<Task<SubscriptionStatus>> fetchImpl
     #endif
         ) {
             try {
@@ -127,19 +127,19 @@ namespace Gs2.Gs2Money2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    contentName,
-                    transactionId
+                    userId,
+                    contentName
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
-                (null as SubscribeTransaction).PutCache(
+                (null as SubscriptionStatus).PutCache(
                     cache,
                     namespaceName,
-                    contentName,
-                    transactionId
+                    userId,
+                    contentName
                 );
-                if (e.errors.Length == 0 || e.errors[0].component != "subscribeTransaction") {
+                if (e.errors.Length == 0 || e.errors[0].component != "subscriptionStatus") {
                     throw;
                 }
                 return null;
@@ -147,50 +147,44 @@ namespace Gs2.Gs2Money2.Model.Cache
         }
 #endif
 
-        public static Tuple<SubscribeTransaction, bool> GetCache(
-            this SubscribeTransaction self,
+        public static Tuple<SubscriptionStatus, bool> GetCache(
+            this SubscriptionStatus self,
             CacheDatabase cache,
             string namespaceName,
-            string contentName,
-            string transactionId
+            string userId,
+            string contentName
         ) {
-            return cache.Get<SubscribeTransaction>(
+            if (userId == null) {
+                throw new NullReferenceException();
+            }
+            return cache.Get<SubscriptionStatus>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    userId
                 ),
                 self.CacheKey(
-                    contentName,
-                    transactionId
+                    contentName
                 )
             );
         }
 
         public static void PutCache(
-            this SubscribeTransaction self,
+            this SubscriptionStatus self,
             CacheDatabase cache,
             string namespaceName,
-            string contentName,
-            string transactionId
+            string userId,
+            string contentName
         ) {
-            var (value, find) = cache.Get<SubscribeTransaction>(
-                self.CacheParentKey(
-                    namespaceName
-                ),
-                self.CacheKey(
-                    contentName,
-                    transactionId
-                )
-            );
-            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
-                return;
+            if (userId == null) {
+                throw new NullReferenceException();
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    userId
                 ),
                 self.CacheKey(
-                    contentName,
-                    transactionId
+                    contentName
                 ),
                 self,
                 ((self?.ExpiresAt ?? 0) == 0 ? null : self.ExpiresAt) ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -198,32 +192,37 @@ namespace Gs2.Gs2Money2.Model.Cache
         }
 
         public static void DeleteCache(
-            this SubscribeTransaction self,
+            this SubscriptionStatus self,
             CacheDatabase cache,
             string namespaceName,
-            string contentName,
-            string transactionId
+            string userId,
+            string contentName
         ) {
-            cache.Delete<SubscribeTransaction>(
+            if (userId == null) {
+                throw new NullReferenceException();
+            }
+            cache.Delete<SubscriptionStatus>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    userId
                 ),
                 self.CacheKey(
-                    contentName,
-                    transactionId
+                    contentName
                 )
             );
         }
 
         public static void ListSubscribe(
-            this SubscribeTransaction self,
+            this SubscriptionStatus self,
             CacheDatabase cache,
             string namespaceName,
-            Action<SubscribeTransaction[]> callback
+            string userId,
+            Action<SubscriptionStatus[]> callback
         ) {
-            cache.ListSubscribe<SubscribeTransaction>(
+            cache.ListSubscribe<SubscriptionStatus>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    userId
                 ),
                 callback,
                 () => {}
@@ -231,14 +230,16 @@ namespace Gs2.Gs2Money2.Model.Cache
         }
 
         public static void ListUnsubscribe(
-            this SubscribeTransaction self,
+            this SubscriptionStatus self,
             CacheDatabase cache,
             string namespaceName,
+            string userId,
             ulong callbackId
         ) {
-            cache.ListUnsubscribe<SubscribeTransaction>(
+            cache.ListUnsubscribe<SubscriptionStatus>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    userId
                 ),
                 callbackId
             );

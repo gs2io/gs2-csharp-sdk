@@ -700,6 +700,218 @@ namespace Gs2.Gs2Money2.Domain.Model
                 contentName
             );
         }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel> StoreSubscriptionContentModels(
+        )
+        {
+            return new DescribeStoreSubscriptionContentModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel> StoreSubscriptionContentModelsAsync(
+            #else
+        public DescribeStoreSubscriptionContentModelsIterator StoreSubscriptionContentModelsAsync(
+            #endif
+        )
+        {
+            return new DescribeStoreSubscriptionContentModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeStoreSubscriptionContentModels(
+            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel>(
+                (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StoreSubscriptionContentModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeStoreSubscriptionContentModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel[]> callback
+        )
+        {
+            var items = await StoreSubscriptionContentModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeStoreSubscriptionContentModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeStoreSubscriptionContentModels(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel>(
+                (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateStoreSubscriptionContentModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel>(
+                (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModel).CacheParentKey(
+                    this.NamespaceName
+                )
+            );
+        }
+
+        public Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelDomain StoreSubscriptionContentModel(
+            string contentName
+        ) {
+            return new Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                contentName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster> StoreSubscriptionContentModelMasters(
+        )
+        {
+            return new DescribeStoreSubscriptionContentModelMastersIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster> StoreSubscriptionContentModelMastersAsync(
+            #else
+        public DescribeStoreSubscriptionContentModelMastersIterator StoreSubscriptionContentModelMastersAsync(
+            #endif
+        )
+        {
+            return new DescribeStoreSubscriptionContentModelMastersIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeStoreSubscriptionContentModelMasters(
+            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>(
+                (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await StoreSubscriptionContentModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeStoreSubscriptionContentModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster[]> callback
+        )
+        {
+            var items = await StoreSubscriptionContentModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeStoreSubscriptionContentModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeStoreSubscriptionContentModelMasters(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>(
+                (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateStoreSubscriptionContentModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>(
+                (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster).CacheParentKey(
+                    this.NamespaceName
+                )
+            );
+        }
+
+        public Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain StoreSubscriptionContentModelMaster(
+            string contentName
+        ) {
+            return new Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                contentName
+            );
+        }
 
     }
 
@@ -954,6 +1166,64 @@ namespace Gs2.Gs2Money2.Domain.Model
                 () => this._client.CreateStoreContentModelMasterAsync(request)
             );
             var domain = new Gs2.Gs2Money2.Domain.Model.StoreContentModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain> CreateStoreSubscriptionContentModelMasterFuture(
+            CreateStoreSubscriptionContentModelMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateStoreSubscriptionContentModelMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain> CreateStoreSubscriptionContentModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain> CreateStoreSubscriptionContentModelMasterAsync(
+            #endif
+            CreateStoreSubscriptionContentModelMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateStoreSubscriptionContentModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Money2.Domain.Model.StoreSubscriptionContentModelMasterDomain(
                 this._gs2,
                 this.NamespaceName,
                 result?.Item?.Name

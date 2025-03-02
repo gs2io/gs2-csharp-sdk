@@ -3349,6 +3349,438 @@ namespace Gs2.Gs2Money2
 #endif
 
 
+        public class DescribeSubscriptionStatusesTask : Gs2RestSessionTask<DescribeSubscriptionStatusesRequest, DescribeSubscriptionStatusesResult>
+        {
+            public DescribeSubscriptionStatusesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSubscriptionStatusesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSubscriptionStatusesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSubscriptionStatuses(
+                Request.DescribeSubscriptionStatusesRequest request,
+                UnityAction<AsyncResult<Result.DescribeSubscriptionStatusesResult>> callback
+        )
+		{
+			var task = new DescribeSubscriptionStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSubscriptionStatusesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSubscriptionStatusesResult> DescribeSubscriptionStatusesFuture(
+                Request.DescribeSubscriptionStatusesRequest request
+        )
+		{
+			return new DescribeSubscriptionStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSubscriptionStatusesResult> DescribeSubscriptionStatusesAsync(
+                Request.DescribeSubscriptionStatusesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSubscriptionStatusesResult> result = null;
+			await DescribeSubscriptionStatuses(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSubscriptionStatusesTask DescribeSubscriptionStatusesAsync(
+                Request.DescribeSubscriptionStatusesRequest request
+        )
+		{
+			return new DescribeSubscriptionStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSubscriptionStatusesResult> DescribeSubscriptionStatusesAsync(
+                Request.DescribeSubscriptionStatusesRequest request
+        )
+		{
+			var task = new DescribeSubscriptionStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeSubscriptionStatusesByUserIdTask : Gs2RestSessionTask<DescribeSubscriptionStatusesByUserIdRequest, DescribeSubscriptionStatusesByUserIdResult>
+        {
+            public DescribeSubscriptionStatusesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeSubscriptionStatusesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeSubscriptionStatusesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeSubscriptionStatusesByUserId(
+                Request.DescribeSubscriptionStatusesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeSubscriptionStatusesByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeSubscriptionStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeSubscriptionStatusesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeSubscriptionStatusesByUserIdResult> DescribeSubscriptionStatusesByUserIdFuture(
+                Request.DescribeSubscriptionStatusesByUserIdRequest request
+        )
+		{
+			return new DescribeSubscriptionStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeSubscriptionStatusesByUserIdResult> DescribeSubscriptionStatusesByUserIdAsync(
+                Request.DescribeSubscriptionStatusesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeSubscriptionStatusesByUserIdResult> result = null;
+			await DescribeSubscriptionStatusesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeSubscriptionStatusesByUserIdTask DescribeSubscriptionStatusesByUserIdAsync(
+                Request.DescribeSubscriptionStatusesByUserIdRequest request
+        )
+		{
+			return new DescribeSubscriptionStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeSubscriptionStatusesByUserIdResult> DescribeSubscriptionStatusesByUserIdAsync(
+                Request.DescribeSubscriptionStatusesByUserIdRequest request
+        )
+		{
+			var task = new DescribeSubscriptionStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSubscriptionStatusTask : Gs2RestSessionTask<GetSubscriptionStatusRequest, GetSubscriptionStatusResult>
+        {
+            public GetSubscriptionStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetSubscriptionStatusRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSubscriptionStatusRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/subscription/{contentName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{contentName}", !string.IsNullOrEmpty(request.ContentName) ? request.ContentName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSubscriptionStatus(
+                Request.GetSubscriptionStatusRequest request,
+                UnityAction<AsyncResult<Result.GetSubscriptionStatusResult>> callback
+        )
+		{
+			var task = new GetSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSubscriptionStatusResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSubscriptionStatusResult> GetSubscriptionStatusFuture(
+                Request.GetSubscriptionStatusRequest request
+        )
+		{
+			return new GetSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSubscriptionStatusResult> GetSubscriptionStatusAsync(
+                Request.GetSubscriptionStatusRequest request
+        )
+		{
+            AsyncResult<Result.GetSubscriptionStatusResult> result = null;
+			await GetSubscriptionStatus(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSubscriptionStatusTask GetSubscriptionStatusAsync(
+                Request.GetSubscriptionStatusRequest request
+        )
+		{
+			return new GetSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSubscriptionStatusResult> GetSubscriptionStatusAsync(
+                Request.GetSubscriptionStatusRequest request
+        )
+		{
+			var task = new GetSubscriptionStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetSubscriptionStatusByUserIdTask : Gs2RestSessionTask<GetSubscriptionStatusByUserIdRequest, GetSubscriptionStatusByUserIdResult>
+        {
+            public GetSubscriptionStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetSubscriptionStatusByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetSubscriptionStatusByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/subscription/{contentName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{contentName}", !string.IsNullOrEmpty(request.ContentName) ? request.ContentName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetSubscriptionStatusByUserId(
+                Request.GetSubscriptionStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetSubscriptionStatusByUserIdResult>> callback
+        )
+		{
+			var task = new GetSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetSubscriptionStatusByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetSubscriptionStatusByUserIdResult> GetSubscriptionStatusByUserIdFuture(
+                Request.GetSubscriptionStatusByUserIdRequest request
+        )
+		{
+			return new GetSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetSubscriptionStatusByUserIdResult> GetSubscriptionStatusByUserIdAsync(
+                Request.GetSubscriptionStatusByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetSubscriptionStatusByUserIdResult> result = null;
+			await GetSubscriptionStatusByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetSubscriptionStatusByUserIdTask GetSubscriptionStatusByUserIdAsync(
+                Request.GetSubscriptionStatusByUserIdRequest request
+        )
+		{
+			return new GetSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetSubscriptionStatusByUserIdResult> GetSubscriptionStatusByUserIdAsync(
+                Request.GetSubscriptionStatusByUserIdRequest request
+        )
+		{
+			var task = new GetSubscriptionStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribeStoreContentModelsTask : Gs2RestSessionTask<DescribeStoreContentModelsRequest, DescribeStoreContentModelsResult>
         {
             public DescribeStoreContentModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeStoreContentModelsRequest request) : base(session, factory, request)
@@ -4142,6 +4574,828 @@ namespace Gs2.Gs2Money2
         )
 		{
 			var task = new DeleteStoreContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeStoreSubscriptionContentModelsTask : Gs2RestSessionTask<DescribeStoreSubscriptionContentModelsRequest, DescribeStoreSubscriptionContentModelsResult>
+        {
+            public DescribeStoreSubscriptionContentModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeStoreSubscriptionContentModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeStoreSubscriptionContentModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/subscription/content";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeStoreSubscriptionContentModels(
+                Request.DescribeStoreSubscriptionContentModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeStoreSubscriptionContentModelsResult>> callback
+        )
+		{
+			var task = new DescribeStoreSubscriptionContentModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeStoreSubscriptionContentModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeStoreSubscriptionContentModelsResult> DescribeStoreSubscriptionContentModelsFuture(
+                Request.DescribeStoreSubscriptionContentModelsRequest request
+        )
+		{
+			return new DescribeStoreSubscriptionContentModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeStoreSubscriptionContentModelsResult> DescribeStoreSubscriptionContentModelsAsync(
+                Request.DescribeStoreSubscriptionContentModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeStoreSubscriptionContentModelsResult> result = null;
+			await DescribeStoreSubscriptionContentModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeStoreSubscriptionContentModelsTask DescribeStoreSubscriptionContentModelsAsync(
+                Request.DescribeStoreSubscriptionContentModelsRequest request
+        )
+		{
+			return new DescribeStoreSubscriptionContentModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeStoreSubscriptionContentModelsResult> DescribeStoreSubscriptionContentModelsAsync(
+                Request.DescribeStoreSubscriptionContentModelsRequest request
+        )
+		{
+			var task = new DescribeStoreSubscriptionContentModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetStoreSubscriptionContentModelTask : Gs2RestSessionTask<GetStoreSubscriptionContentModelRequest, GetStoreSubscriptionContentModelResult>
+        {
+            public GetStoreSubscriptionContentModelTask(IGs2Session session, RestSessionRequestFactory factory, GetStoreSubscriptionContentModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetStoreSubscriptionContentModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/subscription/content/{contentName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{contentName}", !string.IsNullOrEmpty(request.ContentName) ? request.ContentName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetStoreSubscriptionContentModel(
+                Request.GetStoreSubscriptionContentModelRequest request,
+                UnityAction<AsyncResult<Result.GetStoreSubscriptionContentModelResult>> callback
+        )
+		{
+			var task = new GetStoreSubscriptionContentModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetStoreSubscriptionContentModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStoreSubscriptionContentModelResult> GetStoreSubscriptionContentModelFuture(
+                Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStoreSubscriptionContentModelResult> GetStoreSubscriptionContentModelAsync(
+                Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+            AsyncResult<Result.GetStoreSubscriptionContentModelResult> result = null;
+			await GetStoreSubscriptionContentModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetStoreSubscriptionContentModelTask GetStoreSubscriptionContentModelAsync(
+                Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetStoreSubscriptionContentModelResult> GetStoreSubscriptionContentModelAsync(
+                Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+			var task = new GetStoreSubscriptionContentModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeStoreSubscriptionContentModelMastersTask : Gs2RestSessionTask<DescribeStoreSubscriptionContentModelMastersRequest, DescribeStoreSubscriptionContentModelMastersResult>
+        {
+            public DescribeStoreSubscriptionContentModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeStoreSubscriptionContentModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeStoreSubscriptionContentModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeStoreSubscriptionContentModelMasters(
+                Request.DescribeStoreSubscriptionContentModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeStoreSubscriptionContentModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeStoreSubscriptionContentModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeStoreSubscriptionContentModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeStoreSubscriptionContentModelMastersResult> DescribeStoreSubscriptionContentModelMastersFuture(
+                Request.DescribeStoreSubscriptionContentModelMastersRequest request
+        )
+		{
+			return new DescribeStoreSubscriptionContentModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeStoreSubscriptionContentModelMastersResult> DescribeStoreSubscriptionContentModelMastersAsync(
+                Request.DescribeStoreSubscriptionContentModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeStoreSubscriptionContentModelMastersResult> result = null;
+			await DescribeStoreSubscriptionContentModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeStoreSubscriptionContentModelMastersTask DescribeStoreSubscriptionContentModelMastersAsync(
+                Request.DescribeStoreSubscriptionContentModelMastersRequest request
+        )
+		{
+			return new DescribeStoreSubscriptionContentModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeStoreSubscriptionContentModelMastersResult> DescribeStoreSubscriptionContentModelMastersAsync(
+                Request.DescribeStoreSubscriptionContentModelMastersRequest request
+        )
+		{
+			var task = new DescribeStoreSubscriptionContentModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateStoreSubscriptionContentModelMasterTask : Gs2RestSessionTask<CreateStoreSubscriptionContentModelMasterRequest, CreateStoreSubscriptionContentModelMasterResult>
+        {
+            public CreateStoreSubscriptionContentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateStoreSubscriptionContentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateStoreSubscriptionContentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/subscription";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ScheduleNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("scheduleNamespaceId");
+                    jsonWriter.Write(request.ScheduleNamespaceId);
+                }
+                if (request.TriggerName != null)
+                {
+                    jsonWriter.WritePropertyName("triggerName");
+                    jsonWriter.Write(request.TriggerName);
+                }
+                if (request.AppleAppStore != null)
+                {
+                    jsonWriter.WritePropertyName("appleAppStore");
+                    request.AppleAppStore.WriteJson(jsonWriter);
+                }
+                if (request.GooglePlay != null)
+                {
+                    jsonWriter.WritePropertyName("googlePlay");
+                    request.GooglePlay.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateStoreSubscriptionContentModelMaster(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new CreateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateStoreSubscriptionContentModelMasterResult> CreateStoreSubscriptionContentModelMasterFuture(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new CreateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateStoreSubscriptionContentModelMasterResult> CreateStoreSubscriptionContentModelMasterAsync(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateStoreSubscriptionContentModelMasterResult> result = null;
+			await CreateStoreSubscriptionContentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateStoreSubscriptionContentModelMasterTask CreateStoreSubscriptionContentModelMasterAsync(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new CreateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateStoreSubscriptionContentModelMasterResult> CreateStoreSubscriptionContentModelMasterAsync(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			var task = new CreateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetStoreSubscriptionContentModelMasterTask : Gs2RestSessionTask<GetStoreSubscriptionContentModelMasterRequest, GetStoreSubscriptionContentModelMasterResult>
+        {
+            public GetStoreSubscriptionContentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetStoreSubscriptionContentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetStoreSubscriptionContentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/subscription/{contentName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{contentName}", !string.IsNullOrEmpty(request.ContentName) ? request.ContentName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetStoreSubscriptionContentModelMaster(
+                Request.GetStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new GetStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStoreSubscriptionContentModelMasterResult> GetStoreSubscriptionContentModelMasterFuture(
+                Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStoreSubscriptionContentModelMasterResult> GetStoreSubscriptionContentModelMasterAsync(
+                Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetStoreSubscriptionContentModelMasterResult> result = null;
+			await GetStoreSubscriptionContentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetStoreSubscriptionContentModelMasterTask GetStoreSubscriptionContentModelMasterAsync(
+                Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetStoreSubscriptionContentModelMasterResult> GetStoreSubscriptionContentModelMasterAsync(
+                Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			var task = new GetStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateStoreSubscriptionContentModelMasterTask : Gs2RestSessionTask<UpdateStoreSubscriptionContentModelMasterRequest, UpdateStoreSubscriptionContentModelMasterResult>
+        {
+            public UpdateStoreSubscriptionContentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateStoreSubscriptionContentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateStoreSubscriptionContentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/subscription/{contentName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{contentName}", !string.IsNullOrEmpty(request.ContentName) ? request.ContentName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ScheduleNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("scheduleNamespaceId");
+                    jsonWriter.Write(request.ScheduleNamespaceId);
+                }
+                if (request.TriggerName != null)
+                {
+                    jsonWriter.WritePropertyName("triggerName");
+                    jsonWriter.Write(request.TriggerName);
+                }
+                if (request.AppleAppStore != null)
+                {
+                    jsonWriter.WritePropertyName("appleAppStore");
+                    request.AppleAppStore.WriteJson(jsonWriter);
+                }
+                if (request.GooglePlay != null)
+                {
+                    jsonWriter.WritePropertyName("googlePlay");
+                    request.GooglePlay.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateStoreSubscriptionContentModelMaster(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateStoreSubscriptionContentModelMasterResult> UpdateStoreSubscriptionContentModelMasterFuture(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new UpdateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateStoreSubscriptionContentModelMasterResult> UpdateStoreSubscriptionContentModelMasterAsync(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateStoreSubscriptionContentModelMasterResult> result = null;
+			await UpdateStoreSubscriptionContentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateStoreSubscriptionContentModelMasterTask UpdateStoreSubscriptionContentModelMasterAsync(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new UpdateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateStoreSubscriptionContentModelMasterResult> UpdateStoreSubscriptionContentModelMasterAsync(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			var task = new UpdateStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteStoreSubscriptionContentModelMasterTask : Gs2RestSessionTask<DeleteStoreSubscriptionContentModelMasterRequest, DeleteStoreSubscriptionContentModelMasterResult>
+        {
+            public DeleteStoreSubscriptionContentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteStoreSubscriptionContentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteStoreSubscriptionContentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/subscription/{contentName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{contentName}", !string.IsNullOrEmpty(request.ContentName) ? request.ContentName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteStoreSubscriptionContentModelMaster(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteStoreSubscriptionContentModelMasterResult> DeleteStoreSubscriptionContentModelMasterFuture(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new DeleteStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteStoreSubscriptionContentModelMasterResult> DeleteStoreSubscriptionContentModelMasterAsync(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteStoreSubscriptionContentModelMasterResult> result = null;
+			await DeleteStoreSubscriptionContentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteStoreSubscriptionContentModelMasterTask DeleteStoreSubscriptionContentModelMasterAsync(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new DeleteStoreSubscriptionContentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteStoreSubscriptionContentModelMasterResult> DeleteStoreSubscriptionContentModelMasterAsync(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			var task = new DeleteStoreSubscriptionContentModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

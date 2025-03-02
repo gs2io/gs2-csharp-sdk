@@ -32,10 +32,10 @@ namespace Gs2.Gs2Money2.Model
 	public class SubscribeTransaction : IComparable
 	{
         public string SubscribeTransactionId { set; get; } = null!;
+        public string ContentName { set; get; } = null!;
         public string TransactionId { set; get; } = null!;
         public string Store { set; get; } = null!;
         public string UserId { set; get; } = null!;
-        public string Status { set; get; } = null!;
         public string StatusDetail { set; get; } = null!;
         public long? ExpiresAt { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
@@ -43,6 +43,10 @@ namespace Gs2.Gs2Money2.Model
         public long? Revision { set; get; } = null!;
         public SubscribeTransaction WithSubscribeTransactionId(string subscribeTransactionId) {
             this.SubscribeTransactionId = subscribeTransactionId;
+            return this;
+        }
+        public SubscribeTransaction WithContentName(string contentName) {
+            this.ContentName = contentName;
             return this;
         }
         public SubscribeTransaction WithTransactionId(string transactionId) {
@@ -55,10 +59,6 @@ namespace Gs2.Gs2Money2.Model
         }
         public SubscribeTransaction WithUserId(string userId) {
             this.UserId = userId;
-            return this;
-        }
-        public SubscribeTransaction WithStatus(string status) {
-            this.Status = status;
             return this;
         }
         public SubscribeTransaction WithStatusDetail(string statusDetail) {
@@ -83,7 +83,7 @@ namespace Gs2.Gs2Money2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<transactionId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<contentName>.+):(?<transactionId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -100,7 +100,7 @@ namespace Gs2.Gs2Money2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<transactionId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<contentName>.+):(?<transactionId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -117,7 +117,7 @@ namespace Gs2.Gs2Money2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<transactionId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<contentName>.+):(?<transactionId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -133,8 +133,25 @@ namespace Gs2.Gs2Money2.Model
             return match.Groups["namespaceName"].Value;
         }
 
+        private static System.Text.RegularExpressions.Regex _contentNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<contentName>.+):(?<transactionId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetContentNameFromGrn(
+            string grn
+        )
+        {
+            var match = _contentNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["contentName"].Success)
+            {
+                return null;
+            }
+            return match.Groups["contentName"].Value;
+        }
+
         private static System.Text.RegularExpressions.Regex _transactionIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<transactionId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):money2:(?<namespaceName>.+):subscriptionTransaction:(?<contentName>.+):(?<transactionId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -160,10 +177,10 @@ namespace Gs2.Gs2Money2.Model
             }
             return new SubscribeTransaction()
                 .WithSubscribeTransactionId(!data.Keys.Contains("subscribeTransactionId") || data["subscribeTransactionId"] == null ? null : data["subscribeTransactionId"].ToString())
+                .WithContentName(!data.Keys.Contains("contentName") || data["contentName"] == null ? null : data["contentName"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithStore(!data.Keys.Contains("store") || data["store"] == null ? null : data["store"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithStatusDetail(!data.Keys.Contains("statusDetail") || data["statusDetail"] == null ? null : data["statusDetail"].ToString())
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
@@ -175,10 +192,10 @@ namespace Gs2.Gs2Money2.Model
         {
             return new JsonData {
                 ["subscribeTransactionId"] = SubscribeTransactionId,
+                ["contentName"] = ContentName,
                 ["transactionId"] = TransactionId,
                 ["store"] = Store,
                 ["userId"] = UserId,
-                ["status"] = Status,
                 ["statusDetail"] = StatusDetail,
                 ["expiresAt"] = ExpiresAt,
                 ["createdAt"] = CreatedAt,
@@ -194,6 +211,10 @@ namespace Gs2.Gs2Money2.Model
                 writer.WritePropertyName("subscribeTransactionId");
                 writer.Write(SubscribeTransactionId.ToString());
             }
+            if (ContentName != null) {
+                writer.WritePropertyName("contentName");
+                writer.Write(ContentName.ToString());
+            }
             if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
                 writer.Write(TransactionId.ToString());
@@ -205,10 +226,6 @@ namespace Gs2.Gs2Money2.Model
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
-            }
-            if (Status != null) {
-                writer.WritePropertyName("status");
-                writer.Write(Status.ToString());
             }
             if (StatusDetail != null) {
                 writer.WritePropertyName("statusDetail");
@@ -245,6 +262,14 @@ namespace Gs2.Gs2Money2.Model
             {
                 diff += SubscribeTransactionId.CompareTo(other.SubscribeTransactionId);
             }
+            if (ContentName == null && ContentName == other.ContentName)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ContentName.CompareTo(other.ContentName);
+            }
             if (TransactionId == null && TransactionId == other.TransactionId)
             {
                 // null and null
@@ -268,14 +293,6 @@ namespace Gs2.Gs2Money2.Model
             else
             {
                 diff += UserId.CompareTo(other.UserId);
-            }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
             }
             if (StatusDetail == null && StatusDetail == other.StatusDetail)
             {
@@ -329,6 +346,13 @@ namespace Gs2.Gs2Money2.Model
                 }
             }
             {
+                if (ContentName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribeTransaction", "money2.subscribeTransaction.contentName.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (TransactionId.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("subscribeTransaction", "money2.subscribeTransaction.transactionId.error.tooLong"),
@@ -352,17 +376,6 @@ namespace Gs2.Gs2Money2.Model
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("subscribeTransaction", "money2.subscribeTransaction.userId.error.tooLong"),
                     });
-                }
-            }
-            {
-                switch (Status) {
-                    case "active":
-                    case "inactive":
-                        break;
-                    default:
-                        throw new Gs2.Core.Exception.BadRequestException(new [] {
-                            new RequestError("subscribeTransaction", "money2.subscribeTransaction.status.error.invalid"),
-                        });
                 }
             }
             {
@@ -436,10 +449,10 @@ namespace Gs2.Gs2Money2.Model
         public object Clone() {
             return new SubscribeTransaction {
                 SubscribeTransactionId = SubscribeTransactionId,
+                ContentName = ContentName,
                 TransactionId = TransactionId,
                 Store = Store,
                 UserId = UserId,
-                Status = Status,
                 StatusDetail = StatusDetail,
                 ExpiresAt = ExpiresAt,
                 CreatedAt = CreatedAt,

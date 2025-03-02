@@ -200,6 +200,34 @@ namespace Gs2.Gs2Money2.Model.Cache
                         Request.VerifyReceiptByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "describeSubscriptionStatuses":
+                    Result.DescribeSubscriptionStatusesResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DescribeSubscriptionStatusesRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeSubscriptionStatusesByUserId":
+                    Result.DescribeSubscriptionStatusesByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DescribeSubscriptionStatusesByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getSubscriptionStatus":
+                    Result.GetSubscriptionStatusResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetSubscriptionStatusRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getSubscriptionStatusByUserId":
+                    Result.GetSubscriptionStatusByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetSubscriptionStatusByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeStoreContentModels":
                     Result.DescribeStoreContentModelsResult.FromJson(resultPayload).PutCache(
                         cache,
@@ -247,6 +275,55 @@ namespace Gs2.Gs2Money2.Model.Cache
                         cache,
                         userId,
                         Request.DeleteStoreContentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeStoreSubscriptionContentModels":
+                    Result.DescribeStoreSubscriptionContentModelsResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DescribeStoreSubscriptionContentModelsRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getStoreSubscriptionContentModel":
+                    Result.GetStoreSubscriptionContentModelResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetStoreSubscriptionContentModelRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeStoreSubscriptionContentModelMasters":
+                    Result.DescribeStoreSubscriptionContentModelMastersResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DescribeStoreSubscriptionContentModelMastersRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "createStoreSubscriptionContentModelMaster":
+                    Result.CreateStoreSubscriptionContentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.CreateStoreSubscriptionContentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getStoreSubscriptionContentModelMaster":
+                    Result.GetStoreSubscriptionContentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetStoreSubscriptionContentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "updateStoreSubscriptionContentModelMaster":
+                    Result.UpdateStoreSubscriptionContentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.UpdateStoreSubscriptionContentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "deleteStoreSubscriptionContentModelMaster":
+                    Result.DeleteStoreSubscriptionContentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DeleteStoreSubscriptionContentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
                 case "exportMaster":

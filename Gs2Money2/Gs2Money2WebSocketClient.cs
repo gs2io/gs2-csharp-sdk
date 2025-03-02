@@ -1774,6 +1774,606 @@ namespace Gs2.Gs2Money2
 #endif
 
 
+        public class GetStoreSubscriptionContentModelTask : Gs2WebSocketSessionTask<Request.GetStoreSubscriptionContentModelRequest, Result.GetStoreSubscriptionContentModelResult>
+        {
+	        public GetStoreSubscriptionContentModelTask(IGs2Session session, Request.GetStoreSubscriptionContentModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetStoreSubscriptionContentModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContentName != null)
+                {
+                    jsonWriter.WritePropertyName("contentName");
+                    jsonWriter.Write(request.ContentName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "storeSubscriptionContentModel",
+                    "getStoreSubscriptionContentModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetStoreSubscriptionContentModel(
+                Request.GetStoreSubscriptionContentModelRequest request,
+                UnityAction<AsyncResult<Result.GetStoreSubscriptionContentModelResult>> callback
+        )
+		{
+			var task = new GetStoreSubscriptionContentModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetStoreSubscriptionContentModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStoreSubscriptionContentModelResult> GetStoreSubscriptionContentModelFuture(
+                Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStoreSubscriptionContentModelResult> GetStoreSubscriptionContentModelAsync(
+            Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+		    var task = new GetStoreSubscriptionContentModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetStoreSubscriptionContentModelTask GetStoreSubscriptionContentModelAsync(
+                Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetStoreSubscriptionContentModelResult> GetStoreSubscriptionContentModelAsync(
+            Request.GetStoreSubscriptionContentModelRequest request
+        )
+		{
+		    var task = new GetStoreSubscriptionContentModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateStoreSubscriptionContentModelMasterTask : Gs2WebSocketSessionTask<Request.CreateStoreSubscriptionContentModelMasterRequest, Result.CreateStoreSubscriptionContentModelMasterResult>
+        {
+	        public CreateStoreSubscriptionContentModelMasterTask(IGs2Session session, Request.CreateStoreSubscriptionContentModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateStoreSubscriptionContentModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ScheduleNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("scheduleNamespaceId");
+                    jsonWriter.Write(request.ScheduleNamespaceId.ToString());
+                }
+                if (request.TriggerName != null)
+                {
+                    jsonWriter.WritePropertyName("triggerName");
+                    jsonWriter.Write(request.TriggerName.ToString());
+                }
+                if (request.AppleAppStore != null)
+                {
+                    jsonWriter.WritePropertyName("appleAppStore");
+                    request.AppleAppStore.WriteJson(jsonWriter);
+                }
+                if (request.GooglePlay != null)
+                {
+                    jsonWriter.WritePropertyName("googlePlay");
+                    request.GooglePlay.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "storeSubscriptionContentModelMaster",
+                    "createStoreSubscriptionContentModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateStoreSubscriptionContentModelMaster(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new CreateStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateStoreSubscriptionContentModelMasterResult> CreateStoreSubscriptionContentModelMasterFuture(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new CreateStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateStoreSubscriptionContentModelMasterResult> CreateStoreSubscriptionContentModelMasterAsync(
+            Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new CreateStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateStoreSubscriptionContentModelMasterTask CreateStoreSubscriptionContentModelMasterAsync(
+                Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new CreateStoreSubscriptionContentModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateStoreSubscriptionContentModelMasterResult> CreateStoreSubscriptionContentModelMasterAsync(
+            Request.CreateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new CreateStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetStoreSubscriptionContentModelMasterTask : Gs2WebSocketSessionTask<Request.GetStoreSubscriptionContentModelMasterRequest, Result.GetStoreSubscriptionContentModelMasterResult>
+        {
+	        public GetStoreSubscriptionContentModelMasterTask(IGs2Session session, Request.GetStoreSubscriptionContentModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetStoreSubscriptionContentModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContentName != null)
+                {
+                    jsonWriter.WritePropertyName("contentName");
+                    jsonWriter.Write(request.ContentName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "storeSubscriptionContentModelMaster",
+                    "getStoreSubscriptionContentModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetStoreSubscriptionContentModelMaster(
+                Request.GetStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new GetStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetStoreSubscriptionContentModelMasterResult> GetStoreSubscriptionContentModelMasterFuture(
+                Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetStoreSubscriptionContentModelMasterResult> GetStoreSubscriptionContentModelMasterAsync(
+            Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new GetStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetStoreSubscriptionContentModelMasterTask GetStoreSubscriptionContentModelMasterAsync(
+                Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new GetStoreSubscriptionContentModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetStoreSubscriptionContentModelMasterResult> GetStoreSubscriptionContentModelMasterAsync(
+            Request.GetStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new GetStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateStoreSubscriptionContentModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateStoreSubscriptionContentModelMasterRequest, Result.UpdateStoreSubscriptionContentModelMasterResult>
+        {
+	        public UpdateStoreSubscriptionContentModelMasterTask(IGs2Session session, Request.UpdateStoreSubscriptionContentModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateStoreSubscriptionContentModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContentName != null)
+                {
+                    jsonWriter.WritePropertyName("contentName");
+                    jsonWriter.Write(request.ContentName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ScheduleNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("scheduleNamespaceId");
+                    jsonWriter.Write(request.ScheduleNamespaceId.ToString());
+                }
+                if (request.TriggerName != null)
+                {
+                    jsonWriter.WritePropertyName("triggerName");
+                    jsonWriter.Write(request.TriggerName.ToString());
+                }
+                if (request.AppleAppStore != null)
+                {
+                    jsonWriter.WritePropertyName("appleAppStore");
+                    request.AppleAppStore.WriteJson(jsonWriter);
+                }
+                if (request.GooglePlay != null)
+                {
+                    jsonWriter.WritePropertyName("googlePlay");
+                    request.GooglePlay.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "storeSubscriptionContentModelMaster",
+                    "updateStoreSubscriptionContentModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateStoreSubscriptionContentModelMaster(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateStoreSubscriptionContentModelMasterResult> UpdateStoreSubscriptionContentModelMasterFuture(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new UpdateStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateStoreSubscriptionContentModelMasterResult> UpdateStoreSubscriptionContentModelMasterAsync(
+            Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new UpdateStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateStoreSubscriptionContentModelMasterTask UpdateStoreSubscriptionContentModelMasterAsync(
+                Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new UpdateStoreSubscriptionContentModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateStoreSubscriptionContentModelMasterResult> UpdateStoreSubscriptionContentModelMasterAsync(
+            Request.UpdateStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new UpdateStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteStoreSubscriptionContentModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteStoreSubscriptionContentModelMasterRequest, Result.DeleteStoreSubscriptionContentModelMasterResult>
+        {
+	        public DeleteStoreSubscriptionContentModelMasterTask(IGs2Session session, Request.DeleteStoreSubscriptionContentModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteStoreSubscriptionContentModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContentName != null)
+                {
+                    jsonWriter.WritePropertyName("contentName");
+                    jsonWriter.Write(request.ContentName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "storeSubscriptionContentModelMaster",
+                    "deleteStoreSubscriptionContentModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteStoreSubscriptionContentModelMaster(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteStoreSubscriptionContentModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteStoreSubscriptionContentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteStoreSubscriptionContentModelMasterResult> DeleteStoreSubscriptionContentModelMasterFuture(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new DeleteStoreSubscriptionContentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteStoreSubscriptionContentModelMasterResult> DeleteStoreSubscriptionContentModelMasterAsync(
+            Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new DeleteStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteStoreSubscriptionContentModelMasterTask DeleteStoreSubscriptionContentModelMasterAsync(
+                Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+			return new DeleteStoreSubscriptionContentModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteStoreSubscriptionContentModelMasterResult> DeleteStoreSubscriptionContentModelMasterAsync(
+            Request.DeleteStoreSubscriptionContentModelMasterRequest request
+        )
+		{
+		    var task = new DeleteStoreSubscriptionContentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetDailyTransactionHistoryTask : Gs2WebSocketSessionTask<Request.GetDailyTransactionHistoryRequest, Result.GetDailyTransactionHistoryResult>
         {
 	        public GetDailyTransactionHistoryTask(IGs2Session session, Request.GetDailyTransactionHistoryRequest request) : base(session, request)

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -264,6 +266,118 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 transactionId
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Money2.Model.SubscriptionStatus> SubscriptionStatuses(
+        )
+        {
+            return new DescribeSubscriptionStatusesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.AccessToken
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.SubscriptionStatus> SubscriptionStatusesAsync(
+            #else
+        public DescribeSubscriptionStatusesIterator SubscriptionStatusesAsync(
+            #endif
+        )
+        {
+            return new DescribeSubscriptionStatusesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.AccessToken
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeSubscriptionStatuses(
+            Action<Gs2.Gs2Money2.Model.SubscriptionStatus[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.SubscriptionStatus>(
+                (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await SubscriptionStatusesAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSubscriptionStatusesWithInitialCallAsync(
+            Action<Gs2.Gs2Money2.Model.SubscriptionStatus[]> callback
+        )
+        {
+            var items = await SubscriptionStatusesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSubscriptionStatuses(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSubscriptionStatuses(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.SubscriptionStatus>(
+                (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateSubscriptionStatuses(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.SubscriptionStatus>(
+                (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                )
+            );
+        }
+
+        public Gs2.Gs2Money2.Domain.Model.SubscriptionStatusAccessTokenDomain SubscriptionStatus(
+            string contentName
+        ) {
+            return new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                contentName
             );
         }
 

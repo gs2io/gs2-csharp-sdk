@@ -64,11 +64,13 @@ namespace Gs2.Gs2Money2.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Money2RestClient _client;
         public string NamespaceName { get; } = null!;
+        public string ContentName { get; } = null!;
         public string TransactionId { get; } = null!;
 
         public SubscribeTransactionDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
+            string contentName,
             string transactionId
         ) {
             this._gs2 = gs2;
@@ -76,6 +78,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
+            this.ContentName = contentName;
             this.TransactionId = transactionId;
         }
 
@@ -95,6 +98,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Money2.Model.SubscribeTransaction).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
+                    this.ContentName,
                     this.TransactionId
                 );
                 if (find) {
@@ -119,12 +123,14 @@ namespace Gs2.Gs2Money2.Domain.Model
                             this.NamespaceName
                         ),
                         (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheKey(
+                            this.ContentName,
                             this.TransactionId
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Money2.Model.SubscribeTransaction).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
+                    this.ContentName,
                     this.TransactionId
                 );
                 if (find) {
@@ -163,6 +169,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             (null as Gs2.Gs2Money2.Model.SubscribeTransaction).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
+                this.ContentName,
                 this.TransactionId
             );
         }
@@ -174,6 +181,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheKey(
+                    this.ContentName,
                     this.TransactionId
                 ),
                 callback,
@@ -209,6 +217,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheKey(
+                    this.ContentName,
                     this.TransactionId
                 ),
                 callbackId
