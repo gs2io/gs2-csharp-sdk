@@ -66,6 +66,7 @@ namespace Gs2.Gs2Money2.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public string TransactionId { get; } = null!;
+        public string Message { get; set; } = null!;
 
         public EventDomain(
             Gs2.Core.Domain.Gs2 gs2,

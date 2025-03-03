@@ -573,7 +573,7 @@ namespace Gs2.Gs2Chat.Domain
                 string payload
         ) {
             switch (action) {
-                case "Post": {
+                case "PostNotification": {
                     var notification = PostNotification.FromJson(JsonMapper.ToObject(payload));
                     _gs2.Cache.RequireListCacheUpdate<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(

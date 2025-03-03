@@ -642,7 +642,7 @@ namespace Gs2.Gs2AdReward.Domain
                 string payload
         ) {
             switch (action) {
-                case "ChangePoint": {
+                case "ChangePointNotification": {
                     var notification = ChangePointNotification.FromJson(JsonMapper.ToObject(payload));
                     (null as Gs2.Gs2AdReward.Model.Point).DeleteCache(
                         _gs2.Cache,

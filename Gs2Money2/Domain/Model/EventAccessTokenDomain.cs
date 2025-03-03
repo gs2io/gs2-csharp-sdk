@@ -67,6 +67,7 @@ namespace Gs2.Gs2Money2.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string TransactionId { get; } = null!;
+        public string Message { get; set; } = null!;
 
         public EventAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

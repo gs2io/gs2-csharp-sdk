@@ -791,7 +791,7 @@ namespace Gs2.Gs2Mission.Domain
                 string payload
         ) {
             switch (action) {
-                case "Complete": {
+                case "CompleteNotification": {
                     var notification = CompleteNotification.FromJson(JsonMapper.ToObject(payload));
                     _gs2.Cache.Delete<Gs2.Gs2Mission.Model.Complete>(
                         (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(

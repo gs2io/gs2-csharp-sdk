@@ -621,19 +621,19 @@ namespace Gs2.Gs2Matchmaking.Domain
                 string payload
         ) {
             switch (action) {
-                case "Join": {
+                case "JoinNotification": {
     #if UNITY_2017_1_OR_NEWER
                     onJoinNotification.Invoke(JoinNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
                     break;
                 }
-                case "Leave": {
+                case "LeaveNotification": {
     #if UNITY_2017_1_OR_NEWER
                     onLeaveNotification.Invoke(LeaveNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
                     break;
                 }
-                case "Complete": {
+                case "CompleteNotification": {
     #if UNITY_2017_1_OR_NEWER
                     onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
