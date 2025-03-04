@@ -109,10 +109,14 @@ namespace Gs2.Core.Net
 
             Telemetry.StartRequest(request.TaskId, Request);
 
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            this.Session.Send(request);
-#else
+#if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             await this.Session.SendAsync(request);
+#else
+            this.Session.Send(request);
+#endif
+#else
+            var task = this.Session.SendAsync(request);
 #endif
             var begin = DateTime.Now;
             while (!this.Session.IsCompleted(request))

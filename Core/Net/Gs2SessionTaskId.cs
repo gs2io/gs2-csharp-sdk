@@ -1,4 +1,6 @@
-﻿namespace Gs2.Core.Net
+﻿using System.Threading;
+
+namespace Gs2.Core.Net
 {
     public class Gs2SessionTaskId
     {
@@ -52,15 +54,19 @@
         public static class Generator
         {
             private static int _valueCounter = InvalidIdValue;
+            private static readonly object _lock = new object();
 
             public static Gs2SessionTaskId Issue()
             {
-                if (++_valueCounter <= ReservedIdValueMax)
+                lock (_lock)
                 {
-                    _valueCounter = ReservedIdValueMax + 1;
-                }
+                    if (++_valueCounter <= ReservedIdValueMax)
+                    {
+                        _valueCounter = ReservedIdValueMax + 1;
+                    }
 
-                return new Gs2SessionTaskId(_valueCounter);
+                    return new Gs2SessionTaskId(_valueCounter);
+                }
             }
         }
     }
