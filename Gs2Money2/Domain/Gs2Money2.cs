@@ -644,18 +644,18 @@ namespace Gs2.Gs2Money2.Domain
         }
     #if UNITY_2017_1_OR_NEWER
         [Serializable]
-        private class ChangeSubscriptionStatusNotificationEvent : UnityEvent<ChangeSubscriptionStatusNotification>
+        private class ChangeSubscriptionStatusEvent : UnityEvent<ChangeSubscriptionStatus>
         {
 
         }
 
         [SerializeField]
-        private ChangeSubscriptionStatusNotificationEvent onChangeSubscriptionStatusNotification = new ChangeSubscriptionStatusNotificationEvent();
+        private ChangeSubscriptionStatusEvent onChangeSubscriptionStatus = new ChangeSubscriptionStatusEvent();
 
-        public event UnityAction<ChangeSubscriptionStatusNotification> OnChangeSubscriptionStatusNotification
+        public event UnityAction<ChangeSubscriptionStatus> OnChangeSubscriptionStatus
         {
-            add => onChangeSubscriptionStatusNotification.AddListener(value);
-            remove => onChangeSubscriptionStatusNotification.RemoveListener(value);
+            add => onChangeSubscriptionStatus.AddListener(value);
+            remove => onChangeSubscriptionStatus.RemoveListener(value);
         }
     #endif
 
@@ -665,8 +665,8 @@ namespace Gs2.Gs2Money2.Domain
                 string payload
         ) {
             switch (action) {
-                case "ChangeSubscriptionStatusNotification": {
-                    var notification = ChangeSubscriptionStatusNotification.FromJson(JsonMapper.ToObject(payload));
+                case "ChangeSubscriptionStatus": {
+                    var notification = ChangeSubscriptionStatus.FromJson(JsonMapper.ToObject(payload));
                     _gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.SubscriptionStatus>(
                         (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                             notification.NamespaceName,
@@ -680,7 +680,7 @@ namespace Gs2.Gs2Money2.Domain
                         notification.ContentName
                     );
     #if UNITY_2017_1_OR_NEWER
-                    onChangeSubscriptionStatusNotification.Invoke(notification);
+                    onChangeSubscriptionStatus.Invoke(notification);
     #endif
                     break;
                 }

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Script.Request
          public string UserId { set; get; } = null!;
          public string Args { set; get; } = null!;
          public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; } = null!;
+         public bool? ForceUseDistributor { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public InvokeScriptRequest WithScriptId(string scriptId) {
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Script.Request
         }
         public InvokeScriptRequest WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
             this.RandomStatus = randomStatus;
+            return this;
+        }
+        public InvokeScriptRequest WithForceUseDistributor(bool? forceUseDistributor) {
+            this.ForceUseDistributor = forceUseDistributor;
             return this;
         }
         public InvokeScriptRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -78,6 +83,7 @@ namespace Gs2.Gs2Script.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
+                .WithForceUseDistributor(!data.Keys.Contains("forceUseDistributor") || data["forceUseDistributor"] == null ? null : (bool?)bool.Parse(data["forceUseDistributor"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -88,6 +94,7 @@ namespace Gs2.Gs2Script.Request
                 ["userId"] = UserId,
                 ["args"] = Args,
                 ["randomStatus"] = RandomStatus?.ToJson(),
+                ["forceUseDistributor"] = ForceUseDistributor,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -110,6 +117,10 @@ namespace Gs2.Gs2Script.Request
             if (RandomStatus != null) {
                 RandomStatus.WriteJson(writer);
             }
+            if (ForceUseDistributor != null) {
+                writer.WritePropertyName("forceUseDistributor");
+                writer.Write(bool.Parse(ForceUseDistributor.ToString()));
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -123,6 +134,7 @@ namespace Gs2.Gs2Script.Request
             key += UserId + ":";
             key += Args + ":";
             key += RandomStatus + ":";
+            key += ForceUseDistributor + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

@@ -1634,6 +1634,11 @@ namespace Gs2.Gs2Script
                     jsonWriter.WritePropertyName("randomStatus");
                     request.RandomStatus.WriteJson(jsonWriter);
                 }
+                if (request.ForceUseDistributor != null)
+                {
+                    jsonWriter.WritePropertyName("forceUseDistributor");
+                    jsonWriter.Write(request.ForceUseDistributor.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

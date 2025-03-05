@@ -1925,6 +1925,16 @@ namespace Gs2.Gs2Money2
                     jsonWriter.WritePropertyName("triggerName");
                     jsonWriter.Write(request.TriggerName.ToString());
                 }
+                if (request.TriggerExtendMode != null)
+                {
+                    jsonWriter.WritePropertyName("triggerExtendMode");
+                    jsonWriter.Write(request.TriggerExtendMode.ToString());
+                }
+                if (request.RollupHour != null)
+                {
+                    jsonWriter.WritePropertyName("rollupHour");
+                    jsonWriter.Write(request.RollupHour.ToString());
+                }
                 if (request.ReallocateSpanDays != null)
                 {
                     jsonWriter.WritePropertyName("reallocateSpanDays");
@@ -2175,6 +2185,16 @@ namespace Gs2.Gs2Money2
                 {
                     jsonWriter.WritePropertyName("triggerName");
                     jsonWriter.Write(request.TriggerName.ToString());
+                }
+                if (request.TriggerExtendMode != null)
+                {
+                    jsonWriter.WritePropertyName("triggerExtendMode");
+                    jsonWriter.Write(request.TriggerExtendMode.ToString());
+                }
+                if (request.RollupHour != null)
+                {
+                    jsonWriter.WritePropertyName("rollupHour");
+                    jsonWriter.Write(request.RollupHour.ToString());
                 }
                 if (request.ReallocateSpanDays != null)
                 {
