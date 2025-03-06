@@ -168,8 +168,8 @@ namespace Gs2.Gs2Money2.Model
             return new RefundEvent {
                 ContentName = ContentName,
                 Platform = Platform,
-                AppleAppStoreRefundEvent = AppleAppStoreRefundEvent.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent,
-                GooglePlayRefundEvent = GooglePlayRefundEvent.Clone() as Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent,
+                AppleAppStoreRefundEvent = AppleAppStoreRefundEvent?.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent,
+                GooglePlayRefundEvent = GooglePlayRefundEvent?.Clone() as Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent,
             };
         }
     }

@@ -499,7 +499,7 @@ namespace Gs2.Gs2Schedule.Model
                 AbsoluteBegin = AbsoluteBegin,
                 AbsoluteEnd = AbsoluteEnd,
                 RelativeTriggerName = RelativeTriggerName,
-                RepeatSetting = RepeatSetting.Clone() as Gs2.Gs2Schedule.Model.RepeatSetting,
+                RepeatSetting = RepeatSetting?.Clone() as Gs2.Gs2Schedule.Model.RepeatSetting,
                 RepeatType = RepeatType,
                 RepeatBeginDayOfMonth = RepeatBeginDayOfMonth,
                 RepeatEndDayOfMonth = RepeatEndDayOfMonth,

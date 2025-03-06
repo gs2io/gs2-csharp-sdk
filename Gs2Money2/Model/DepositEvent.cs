@@ -169,7 +169,7 @@ namespace Gs2.Gs2Money2.Model
             return new DepositEvent {
                 Slot = Slot,
                 DepositTransactions = DepositTransactions?.Clone() as Gs2.Gs2Money2.Model.DepositTransaction[],
-                Status = Status.Clone() as Gs2.Gs2Money2.Model.WalletSummary,
+                Status = Status?.Clone() as Gs2.Gs2Money2.Model.WalletSummary,
             };
         }
     }

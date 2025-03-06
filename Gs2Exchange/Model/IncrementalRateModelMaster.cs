@@ -581,7 +581,7 @@ namespace Gs2.Gs2Exchange.Model
                 Name = Name,
                 Description = Description,
                 Metadata = Metadata,
-                ConsumeAction = ConsumeAction.Clone() as Gs2.Core.Model.ConsumeAction,
+                ConsumeAction = ConsumeAction?.Clone() as Gs2.Core.Model.ConsumeAction,
                 CalculateType = CalculateType,
                 BaseValue = BaseValue,
                 CoefficientValue = CoefficientValue,

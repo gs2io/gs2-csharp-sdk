@@ -340,7 +340,7 @@ namespace Gs2.Gs2Stamina.Model
                 Name = Name,
                 Description = Description,
                 OverflowTriggerScript = OverflowTriggerScript,
-                LogSetting = LogSetting.Clone() as Gs2.Gs2Stamina.Model.LogSetting,
+                LogSetting = LogSetting?.Clone() as Gs2.Gs2Stamina.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

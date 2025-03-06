@@ -168,8 +168,8 @@ namespace Gs2.Gs2Money2.Model
             return new VerifyReceiptEvent {
                 ContentName = ContentName,
                 Platform = Platform,
-                AppleAppStoreVerifyReceiptEvent = AppleAppStoreVerifyReceiptEvent.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent,
-                GooglePlayVerifyReceiptEvent = GooglePlayVerifyReceiptEvent.Clone() as Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent,
+                AppleAppStoreVerifyReceiptEvent = AppleAppStoreVerifyReceiptEvent?.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent,
+                GooglePlayVerifyReceiptEvent = GooglePlayVerifyReceiptEvent?.Clone() as Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent,
             };
         }
     }

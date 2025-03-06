@@ -156,9 +156,9 @@ namespace Gs2.Gs2Version.Model
 
         public object Clone() {
             return new ScheduleVersion {
-                CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
-                WarningVersion = WarningVersion.Clone() as Gs2.Gs2Version.Model.Version_,
-                ErrorVersion = ErrorVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                CurrentVersion = CurrentVersion?.Clone() as Gs2.Gs2Version.Model.Version_,
+                WarningVersion = WarningVersion?.Clone() as Gs2.Gs2Version.Model.Version_,
+                ErrorVersion = ErrorVersion?.Clone() as Gs2.Gs2Version.Model.Version_,
                 ScheduleEventId = ScheduleEventId,
             };
         }

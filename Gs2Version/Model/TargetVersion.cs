@@ -169,7 +169,7 @@ namespace Gs2.Gs2Version.Model
                 VersionName = VersionName,
                 Body = Body,
                 Signature = Signature,
-                Version = Version.Clone() as Gs2.Gs2Version.Model.Version_,
+                Version = Version?.Clone() as Gs2.Gs2Version.Model.Version_,
             };
         }
     }

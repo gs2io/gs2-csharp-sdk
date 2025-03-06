@@ -140,8 +140,8 @@ namespace Gs2.Gs2MegaField.Model
 
         public object Clone() {
             return new MyPosition {
-                Position = Position.Clone() as Gs2.Gs2MegaField.Model.Position,
-                Vector = Vector.Clone() as Gs2.Gs2MegaField.Model.Vector,
+                Position = Position?.Clone() as Gs2.Gs2MegaField.Model.Position,
+                Vector = Vector?.Clone() as Gs2.Gs2MegaField.Model.Vector,
                 R = R,
             };
         }

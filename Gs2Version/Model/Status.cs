@@ -109,8 +109,8 @@ namespace Gs2.Gs2Version.Model
 
         public object Clone() {
             return new Status {
-                VersionModel = VersionModel.Clone() as Gs2.Gs2Version.Model.VersionModel,
-                CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                VersionModel = VersionModel?.Clone() as Gs2.Gs2Version.Model.VersionModel,
+                CurrentVersion = CurrentVersion?.Clone() as Gs2.Gs2Version.Model.Version_,
             };
         }
     }

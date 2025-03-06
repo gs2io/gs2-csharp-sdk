@@ -313,7 +313,7 @@ namespace Gs2.Gs2Schedule.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
-                LogSetting = LogSetting.Clone() as Gs2.Gs2Schedule.Model.LogSetting,
+                LogSetting = LogSetting?.Clone() as Gs2.Gs2Schedule.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

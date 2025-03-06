@@ -461,7 +461,7 @@ namespace Gs2.Gs2Exchange.Model
                 IncrementalRateModelId = IncrementalRateModelId,
                 Name = Name,
                 Metadata = Metadata,
-                ConsumeAction = ConsumeAction.Clone() as Gs2.Core.Model.ConsumeAction,
+                ConsumeAction = ConsumeAction?.Clone() as Gs2.Core.Model.ConsumeAction,
                 CalculateType = CalculateType,
                 BaseValue = BaseValue,
                 CoefficientValue = CoefficientValue,

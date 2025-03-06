@@ -140,8 +140,8 @@ namespace Gs2.Gs2StateMachine.Model
         public object Clone() {
             return new Event {
                 EventType = EventType,
-                ChangeStateEvent = ChangeStateEvent.Clone() as Gs2.Gs2StateMachine.Model.ChangeStateEvent,
-                EmitEvent = EmitEvent.Clone() as Gs2.Gs2StateMachine.Model.EmitEvent,
+                ChangeStateEvent = ChangeStateEvent?.Clone() as Gs2.Gs2StateMachine.Model.ChangeStateEvent,
+                EmitEvent = EmitEvent?.Clone() as Gs2.Gs2StateMachine.Model.EmitEvent,
             };
         }
     }

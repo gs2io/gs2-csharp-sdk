@@ -169,7 +169,7 @@ namespace Gs2.Gs2Version.Model
                 Region = Region,
                 NamespaceName = NamespaceName,
                 VersionName = VersionName,
-                Version = Version.Clone() as Gs2.Gs2Version.Model.Version_,
+                Version = Version?.Clone() as Gs2.Gs2Version.Model.Version_,
             };
         }
     }

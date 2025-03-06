@@ -340,7 +340,7 @@ namespace Gs2.Gs2News.Model
                 Name = Name,
                 Description = Description,
                 Version = Version,
-                LogSetting = LogSetting.Clone() as Gs2.Gs2News.Model.LogSetting,
+                LogSetting = LogSetting?.Clone() as Gs2.Gs2News.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

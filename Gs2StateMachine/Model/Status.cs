@@ -591,7 +591,7 @@ namespace Gs2.Gs2StateMachine.Model
                 StateMachineVersion = StateMachineVersion,
                 EnableSpeculativeExecution = EnableSpeculativeExecution,
                 StateMachineDefinition = StateMachineDefinition,
-                RandomStatus = RandomStatus.Clone() as Gs2.Gs2StateMachine.Model.RandomStatus,
+                RandomStatus = RandomStatus?.Clone() as Gs2.Gs2StateMachine.Model.RandomStatus,
                 Stacks = Stacks?.Clone() as Gs2.Gs2StateMachine.Model.StackEntry[],
                 Variables = Variables?.Clone() as Gs2.Gs2StateMachine.Model.Variable[],
                 Value = Value,

@@ -381,7 +381,7 @@ namespace Gs2.Gs2Experience.Model
                 DefaultExperience = DefaultExperience,
                 DefaultRankCap = DefaultRankCap,
                 MaxRankCap = MaxRankCap,
-                RankThreshold = RankThreshold.Clone() as Gs2.Gs2Experience.Model.Threshold,
+                RankThreshold = RankThreshold?.Clone() as Gs2.Gs2Experience.Model.Threshold,
                 AcquireActionRates = AcquireActionRates?.Clone() as Gs2.Gs2Experience.Model.AcquireActionRate[],
             };
         }

@@ -119,7 +119,7 @@ namespace Gs2.Gs2Lottery.Model
 
         public object Clone() {
             return new Probability {
-                Prize = Prize.Clone() as Gs2.Gs2Lottery.Model.DrawnPrize,
+                Prize = Prize?.Clone() as Gs2.Gs2Lottery.Model.DrawnPrize,
                 Rate = Rate,
             };
         }

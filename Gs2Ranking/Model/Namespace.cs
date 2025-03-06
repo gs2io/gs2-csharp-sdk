@@ -362,7 +362,7 @@ namespace Gs2.Gs2Ranking.Model
                 Name = Name,
                 Description = Description,
                 LastCalculatedAts = LastCalculatedAts?.Clone() as Gs2.Gs2Ranking.Model.CalculatedAt[],
-                LogSetting = LogSetting.Clone() as Gs2.Gs2Ranking.Model.LogSetting,
+                LogSetting = LogSetting?.Clone() as Gs2.Gs2Ranking.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

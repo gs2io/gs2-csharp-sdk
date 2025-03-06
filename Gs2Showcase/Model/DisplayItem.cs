@@ -193,8 +193,8 @@ namespace Gs2.Gs2Showcase.Model
             return new DisplayItem {
                 DisplayItemId = DisplayItemId,
                 Type = Type,
-                SalesItem = SalesItem.Clone() as Gs2.Gs2Showcase.Model.SalesItem,
-                SalesItemGroup = SalesItemGroup.Clone() as Gs2.Gs2Showcase.Model.SalesItemGroup,
+                SalesItem = SalesItem?.Clone() as Gs2.Gs2Showcase.Model.SalesItem,
+                SalesItemGroup = SalesItemGroup?.Clone() as Gs2.Gs2Showcase.Model.SalesItemGroup,
                 SalesPeriodEventId = SalesPeriodEventId,
             };
         }

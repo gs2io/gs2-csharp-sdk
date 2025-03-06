@@ -242,7 +242,7 @@ namespace Gs2.Gs2Account.Model
                 TakeOverTypeModelId = TakeOverTypeModelId,
                 Type = Type,
                 Metadata = Metadata,
-                OpenIdConnectSetting = OpenIdConnectSetting.Clone() as Gs2.Gs2Account.Model.OpenIdConnectSetting,
+                OpenIdConnectSetting = OpenIdConnectSetting?.Clone() as Gs2.Gs2Account.Model.OpenIdConnectSetting,
             };
         }
     }

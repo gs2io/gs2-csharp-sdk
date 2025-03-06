@@ -342,7 +342,7 @@ namespace Gs2.Gs2Mission.Model
                 ResetDayOfWeek = ResetDayOfWeek,
                 ResetHour = ResetHour,
                 ConditionName = ConditionName,
-                Condition = Condition.Clone() as Gs2.Core.Model.VerifyAction,
+                Condition = Condition?.Clone() as Gs2.Core.Model.VerifyAction,
                 AnchorTimestamp = AnchorTimestamp,
                 Days = Days,
             };

@@ -136,7 +136,7 @@ namespace Gs2.Gs2SeasonRating.Model
 
         public object Clone() {
             return new WrittenBallot {
-                Ballot = Ballot.Clone() as Gs2.Gs2SeasonRating.Model.Ballot,
+                Ballot = Ballot?.Clone() as Gs2.Gs2SeasonRating.Model.Ballot,
                 GameResults = GameResults?.Clone() as Gs2.Gs2SeasonRating.Model.GameResult[],
             };
         }

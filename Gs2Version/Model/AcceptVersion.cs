@@ -377,7 +377,7 @@ namespace Gs2.Gs2Version.Model
                 AcceptVersionId = AcceptVersionId,
                 VersionName = VersionName,
                 UserId = UserId,
-                Version = Version.Clone() as Gs2.Gs2Version.Model.Version_,
+                Version = Version?.Clone() as Gs2.Gs2Version.Model.Version_,
                 Status = Status,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

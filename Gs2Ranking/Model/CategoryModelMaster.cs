@@ -741,7 +741,7 @@ namespace Gs2.Gs2Ranking.Model
                 Sum = Sum,
                 OrderDirection = OrderDirection,
                 Scope = Scope,
-                GlobalRankingSetting = GlobalRankingSetting.Clone() as Gs2.Gs2Ranking.Model.GlobalRankingSetting,
+                GlobalRankingSetting = GlobalRankingSetting?.Clone() as Gs2.Gs2Ranking.Model.GlobalRankingSetting,
                 EntryPeriodEventId = EntryPeriodEventId,
                 AccessPeriodEventId = AccessPeriodEventId,
                 UniqueByUserId = UniqueByUserId,

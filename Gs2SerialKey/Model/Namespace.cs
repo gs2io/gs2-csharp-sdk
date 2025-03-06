@@ -313,7 +313,7 @@ namespace Gs2.Gs2SerialKey.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
-                LogSetting = LogSetting.Clone() as Gs2.Gs2SerialKey.Model.LogSetting,
+                LogSetting = LogSetting?.Clone() as Gs2.Gs2SerialKey.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

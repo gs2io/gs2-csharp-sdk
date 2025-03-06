@@ -340,7 +340,7 @@ namespace Gs2.Gs2Gateway.Model
                 Name = Name,
                 Description = Description,
                 FirebaseSecret = FirebaseSecret,
-                LogSetting = LogSetting.Clone() as Gs2.Gs2Gateway.Model.LogSetting,
+                LogSetting = LogSetting?.Clone() as Gs2.Gs2Gateway.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

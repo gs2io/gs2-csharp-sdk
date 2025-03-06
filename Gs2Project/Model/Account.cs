@@ -369,7 +369,7 @@ namespace Gs2.Gs2Project.Model
                 FullName = FullName,
                 CompanyName = CompanyName,
                 EnableTwoFactorAuthentication = EnableTwoFactorAuthentication,
-                TwoFactorAuthenticationSetting = TwoFactorAuthenticationSetting.Clone() as Gs2.Gs2Project.Model.TwoFactorAuthenticationSetting,
+                TwoFactorAuthenticationSetting = TwoFactorAuthenticationSetting?.Clone() as Gs2.Gs2Project.Model.TwoFactorAuthenticationSetting,
                 Status = Status,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

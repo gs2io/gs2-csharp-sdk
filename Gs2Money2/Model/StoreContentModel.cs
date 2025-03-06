@@ -258,8 +258,8 @@ namespace Gs2.Gs2Money2.Model
                 StoreContentModelId = StoreContentModelId,
                 Name = Name,
                 Metadata = Metadata,
-                AppleAppStore = AppleAppStore.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreContent,
-                GooglePlay = GooglePlay.Clone() as Gs2.Gs2Money2.Model.GooglePlayContent,
+                AppleAppStore = AppleAppStore?.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreContent,
+                GooglePlay = GooglePlay?.Clone() as Gs2.Gs2Money2.Model.GooglePlayContent,
             };
         }
     }

@@ -130,9 +130,9 @@ namespace Gs2.Gs2Money2.Model
 
         public object Clone() {
             return new PlatformSetting {
-                AppleAppStore = AppleAppStore.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreSetting,
-                GooglePlay = GooglePlay.Clone() as Gs2.Gs2Money2.Model.GooglePlaySetting,
-                Fake = Fake.Clone() as Gs2.Gs2Money2.Model.FakeSetting,
+                AppleAppStore = AppleAppStore?.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreSetting,
+                GooglePlay = GooglePlay?.Clone() as Gs2.Gs2Money2.Model.GooglePlaySetting,
+                Fake = Fake?.Clone() as Gs2.Gs2Money2.Model.FakeSetting,
             };
         }
     }

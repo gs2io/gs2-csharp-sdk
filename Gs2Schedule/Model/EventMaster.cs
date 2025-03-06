@@ -619,7 +619,7 @@ namespace Gs2.Gs2Schedule.Model
                 AbsoluteBegin = AbsoluteBegin,
                 AbsoluteEnd = AbsoluteEnd,
                 RelativeTriggerName = RelativeTriggerName,
-                RepeatSetting = RepeatSetting.Clone() as Gs2.Gs2Schedule.Model.RepeatSetting,
+                RepeatSetting = RepeatSetting?.Clone() as Gs2.Gs2Schedule.Model.RepeatSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

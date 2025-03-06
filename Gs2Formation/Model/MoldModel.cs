@@ -301,7 +301,7 @@ namespace Gs2.Gs2Formation.Model
                 Metadata = Metadata,
                 InitialMaxCapacity = InitialMaxCapacity,
                 MaxCapacity = MaxCapacity,
-                FormModel = FormModel.Clone() as Gs2.Gs2Formation.Model.FormModel,
+                FormModel = FormModel?.Clone() as Gs2.Gs2Formation.Model.FormModel,
             };
         }
     }

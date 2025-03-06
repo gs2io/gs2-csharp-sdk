@@ -313,7 +313,7 @@ namespace Gs2.Gs2Lock.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
-                LogSetting = LogSetting.Clone() as Gs2.Gs2Lock.Model.LogSetting,
+                LogSetting = LogSetting?.Clone() as Gs2.Gs2Lock.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

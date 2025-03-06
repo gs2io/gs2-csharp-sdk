@@ -296,7 +296,7 @@ namespace Gs2.Gs2Identifier.Model
                 UserId = UserId,
                 UserName = UserName,
                 EnableTwoFactorAuthentication = EnableTwoFactorAuthentication,
-                TwoFactorAuthenticationSetting = TwoFactorAuthenticationSetting.Clone() as Gs2.Gs2Identifier.Model.TwoFactorAuthenticationSetting,
+                TwoFactorAuthenticationSetting = TwoFactorAuthenticationSetting?.Clone() as Gs2.Gs2Identifier.Model.TwoFactorAuthenticationSetting,
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

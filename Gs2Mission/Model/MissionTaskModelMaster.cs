@@ -613,7 +613,7 @@ namespace Gs2.Gs2Mission.Model
                 Metadata = Metadata,
                 Description = Description,
                 VerifyCompleteType = VerifyCompleteType,
-                TargetCounter = TargetCounter.Clone() as Gs2.Gs2Mission.Model.TargetCounterModel,
+                TargetCounter = TargetCounter?.Clone() as Gs2.Gs2Mission.Model.TargetCounterModel,
                 VerifyCompleteConsumeActions = VerifyCompleteConsumeActions?.Clone() as Gs2.Core.Model.VerifyAction[],
                 CompleteAcquireActions = CompleteAcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
                 ChallengePeriodEventId = ChallengePeriodEventId,

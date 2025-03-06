@@ -407,8 +407,8 @@ namespace Gs2.Gs2Money2.Model
                 TriggerExtendMode = TriggerExtendMode,
                 RollupHour = RollupHour,
                 ReallocateSpanDays = ReallocateSpanDays,
-                AppleAppStore = AppleAppStore.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent,
-                GooglePlay = GooglePlay.Clone() as Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent,
+                AppleAppStore = AppleAppStore?.Clone() as Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent,
+                GooglePlay = GooglePlay?.Clone() as Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent,
             };
         }
     }

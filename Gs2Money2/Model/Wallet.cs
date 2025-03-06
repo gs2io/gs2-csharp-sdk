@@ -421,7 +421,7 @@ namespace Gs2.Gs2Money2.Model
                 WalletId = WalletId,
                 UserId = UserId,
                 Slot = Slot,
-                Summary = Summary.Clone() as Gs2.Gs2Money2.Model.WalletSummary,
+                Summary = Summary?.Clone() as Gs2.Gs2Money2.Model.WalletSummary,
                 DepositTransactions = DepositTransactions?.Clone() as Gs2.Gs2Money2.Model.DepositTransaction[],
                 SharedFreeCurrency = SharedFreeCurrency,
                 CreatedAt = CreatedAt,

@@ -313,7 +313,7 @@ namespace Gs2.Gs2Guard.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
-                BlockingPolicy = BlockingPolicy.Clone() as Gs2.Gs2Guard.Model.BlockingPolicyModel,
+                BlockingPolicy = BlockingPolicy?.Clone() as Gs2.Gs2Guard.Model.BlockingPolicyModel,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,
