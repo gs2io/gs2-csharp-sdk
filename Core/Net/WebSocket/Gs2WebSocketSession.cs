@@ -36,6 +36,8 @@ namespace Gs2.Core.Net
         public event NotificationHandler OnNotificationMessage;
         public delegate void DisconnectHandler();
         public event DisconnectHandler OnDisconnect;
+        public delegate void ErrorHandler(Gs2.Core.Exception.Gs2Exception error);
+        public event ErrorHandler OnError;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         private HybridWebSocket.WebSocket _session;
@@ -130,6 +132,7 @@ namespace Gs2.Core.Net
                         }
                         else
                         {
+                            OnError?.Invoke(gs2WebSocketResponse.Error);
 #pragma warning disable 4014
                             CloseAsync();
 #pragma warning restore 4014
@@ -167,6 +170,7 @@ namespace Gs2.Core.Net
                         }
                         else
                         {
+                            OnError?.Invoke(gs2WebSocketResponse.Error);
 #pragma warning disable 4014
                             CloseAsync();
 #pragma warning restore 4014
@@ -192,9 +196,16 @@ namespace Gs2.Core.Net
 #if UNITY_WEBGL && !UNITY_EDITOR
             this._session.OnError += (errorEventArgs) =>
 #else
-            this._session.OnError += (_, _) =>
+            this._session.OnError += (_, errorEventArgs) =>
 #endif
             {
+                var error = new Gs2.Core.Exception.UnknownException(new Gs2.Core.Model.RequestError[]{
+                    new Gs2.Core.Model.RequestError {
+                        Component = "WebSocket",
+                        Message = errorEventArgs.Message
+                    }
+                });
+                OnError?.Invoke(error);
                 OnDisconnect?.Invoke();
 #pragma warning disable 4014
                 CloseAsync();
