@@ -29,13 +29,13 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Player : IComparable
+	public partial class Player : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public Gs2.Gs2Matchmaking.Model.Attribute_[] Attributes { set; get; } = null!;
-        public string RoleName { set; get; } = null!;
-        public string[] DenyUserIds { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
+        public string UserId { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Attribute_[] Attributes { set; get; }
+        public string RoleName { set; get; }
+        public string[] DenyUserIds { set; get; }
+        public long? CreatedAt { set; get; }
         public Player WithUserId(string userId) {
             this.UserId = userId;
             return this;

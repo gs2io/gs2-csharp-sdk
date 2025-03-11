@@ -29,14 +29,14 @@ namespace Gs2.Gs2Gateway.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class FirebaseToken : IComparable
+	public partial class FirebaseToken : IComparable
 	{
-        public string FirebaseTokenId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Token { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string FirebaseTokenId { set; get; }
+        public string UserId { set; get; }
+        public string Token { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public FirebaseToken WithFirebaseTokenId(string firebaseTokenId) {
             this.FirebaseTokenId = firebaseTokenId;
             return this;

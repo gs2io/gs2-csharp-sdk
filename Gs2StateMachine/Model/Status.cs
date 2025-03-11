@@ -29,22 +29,22 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Status : IComparable
+	public partial class Status : IComparable
 	{
-        public string StatusId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public long? StateMachineVersion { set; get; } = null!;
-        public string EnableSpeculativeExecution { set; get; } = null!;
-        public string StateMachineDefinition { set; get; } = null!;
-        public Gs2.Gs2StateMachine.Model.RandomStatus RandomStatus { set; get; } = null!;
-        public Gs2.Gs2StateMachine.Model.StackEntry[] Stacks { set; get; } = null!;
-        public Gs2.Gs2StateMachine.Model.Variable[] Variables { set; get; } = null!;
-        public string Value { set; get; } = null!;
-        public string LastError { set; get; } = null!;
-        public int? TransitionCount { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
+        public string StatusId { set; get; }
+        public string UserId { set; get; }
+        public string Name { set; get; }
+        public long? StateMachineVersion { set; get; }
+        public string EnableSpeculativeExecution { set; get; }
+        public string StateMachineDefinition { set; get; }
+        public Gs2.Gs2StateMachine.Model.RandomStatus RandomStatus { set; get; }
+        public Gs2.Gs2StateMachine.Model.StackEntry[] Stacks { set; get; }
+        public Gs2.Gs2StateMachine.Model.Variable[] Variables { set; get; }
+        public string Value { set; get; }
+        public string LastError { set; get; }
+        public int? TransitionCount { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;

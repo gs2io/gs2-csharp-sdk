@@ -29,10 +29,10 @@ namespace Gs2.Gs2Exchange.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LogRate : IComparable
+	public partial class LogRate : IComparable
 	{
-        public double? Base { set; get; } = null!;
-        public double[] Logs { set; get; } = null!;
+        public double? Base { set; get; }
+        public double[] Logs { set; get; }
         public LogRate WithBase(double? base_) {
             this.Base = base_;
             return this;

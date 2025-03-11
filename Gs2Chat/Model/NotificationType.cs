@@ -29,10 +29,10 @@ namespace Gs2.Gs2Chat.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class NotificationType : IComparable
+	public partial class NotificationType : IComparable
 	{
-        public int? Category { set; get; } = null!;
-        public bool? EnableTransferMobilePushNotification { set; get; } = null!;
+        public int? Category { set; get; }
+        public bool? EnableTransferMobilePushNotification { set; get; }
         public NotificationType WithCategory(int? category) {
             this.Category = category;
             return this;

@@ -29,18 +29,18 @@ namespace Gs2.Gs2Inventory.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class InventoryModelMaster : IComparable
+	public partial class InventoryModelMaster : IComparable
 	{
-        public string InventoryModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public int? InitialCapacity { set; get; } = null!;
-        public int? MaxCapacity { set; get; } = null!;
-        public bool? ProtectReferencedItem { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string InventoryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public int? InitialCapacity { set; get; }
+        public int? MaxCapacity { set; get; }
+        public bool? ProtectReferencedItem { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public InventoryModelMaster WithInventoryModelId(string inventoryModelId) {
             this.InventoryModelId = inventoryModelId;
             return this;

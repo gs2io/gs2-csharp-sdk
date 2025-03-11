@@ -29,18 +29,18 @@ namespace Gs2.Gs2Inbox.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GlobalMessageMaster : IComparable
+	public partial class GlobalMessageMaster : IComparable
 	{
-        public string GlobalMessageId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; } = null!;
-        public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; } = null!;
+        public string GlobalMessageId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
+        public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         [Obsolete("This method is deprecated")]
-        public long? ExpiresAt { set; get; } = null!;
-        public string MessageReceptionPeriodEventId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public long? ExpiresAt { set; get; }
+        public string MessageReceptionPeriodEventId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public GlobalMessageMaster WithGlobalMessageId(string globalMessageId) {
             this.GlobalMessageId = globalMessageId;
             return this;

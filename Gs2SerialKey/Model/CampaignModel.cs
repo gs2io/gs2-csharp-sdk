@@ -29,12 +29,12 @@ namespace Gs2.Gs2SerialKey.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CampaignModel : IComparable
+	public partial class CampaignModel : IComparable
 	{
-        public string CampaignId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public bool? EnableCampaignCode { set; get; } = null!;
+        public string CampaignId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public bool? EnableCampaignCode { set; get; }
         public CampaignModel WithCampaignId(string campaignId) {
             this.CampaignId = campaignId;
             return this;

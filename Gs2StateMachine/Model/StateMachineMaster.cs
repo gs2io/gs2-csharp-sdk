@@ -29,15 +29,15 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class StateMachineMaster : IComparable
+	public partial class StateMachineMaster : IComparable
 	{
-        public string StateMachineId { set; get; } = null!;
-        public string MainStateMachineName { set; get; } = null!;
-        public string Payload { set; get; } = null!;
-        public long? Version { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string StateMachineId { set; get; }
+        public string MainStateMachineName { set; get; }
+        public string Payload { set; get; }
+        public long? Version { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public StateMachineMaster WithStateMachineId(string stateMachineId) {
             this.StateMachineId = stateMachineId;
             return this;

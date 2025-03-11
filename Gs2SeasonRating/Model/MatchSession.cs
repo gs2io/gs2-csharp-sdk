@@ -29,12 +29,12 @@ namespace Gs2.Gs2SeasonRating.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class MatchSession : IComparable
+	public partial class MatchSession : IComparable
 	{
-        public string SessionId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SessionId { set; get; }
+        public string Name { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public MatchSession WithSessionId(string sessionId) {
             this.SessionId = sessionId;
             return this;

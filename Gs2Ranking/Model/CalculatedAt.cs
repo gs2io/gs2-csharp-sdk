@@ -29,10 +29,10 @@ namespace Gs2.Gs2Ranking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CalculatedAt : IComparable
+	public partial class CalculatedAt : IComparable
 	{
-        public string CategoryName { set; get; } = null!;
-        public long? Value { set; get; } = null!;
+        public string CategoryName { set; get; }
+        public long? Value { set; get; }
         public CalculatedAt WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;

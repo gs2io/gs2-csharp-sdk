@@ -29,17 +29,17 @@ namespace Gs2.Gs2Mission.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CounterScopeModel : IComparable
+	public partial class CounterScopeModel : IComparable
 	{
-        public string ScopeType { set; get; } = null!;
-        public string ResetType { set; get; } = null!;
-        public int? ResetDayOfMonth { set; get; } = null!;
-        public string ResetDayOfWeek { set; get; } = null!;
-        public int? ResetHour { set; get; } = null!;
-        public string ConditionName { set; get; } = null!;
-        public Gs2.Core.Model.VerifyAction Condition { set; get; } = null!;
-        public long? AnchorTimestamp { set; get; } = null!;
-        public int? Days { set; get; } = null!;
+        public string ScopeType { set; get; }
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
+        public string ConditionName { set; get; }
+        public Gs2.Core.Model.VerifyAction Condition { set; get; }
+        public long? AnchorTimestamp { set; get; }
+        public int? Days { set; get; }
         public CounterScopeModel WithScopeType(string scopeType) {
             this.ScopeType = scopeType;
             return this;

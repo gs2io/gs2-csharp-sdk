@@ -29,16 +29,16 @@ namespace Gs2.Gs2SerialKey.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class IssueJob : IComparable
+	public partial class IssueJob : IComparable
 	{
-        public string IssueJobId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public int? IssuedCount { set; get; } = null!;
-        public int? IssueRequestCount { set; get; } = null!;
-        public string Status { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string IssueJobId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public int? IssuedCount { set; get; }
+        public int? IssueRequestCount { set; get; }
+        public string Status { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public IssueJob WithIssueJobId(string issueJobId) {
             this.IssueJobId = issueJobId;
             return this;

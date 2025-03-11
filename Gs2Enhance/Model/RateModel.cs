@@ -29,18 +29,18 @@ namespace Gs2.Gs2Enhance.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RateModel : IComparable
+	public partial class RateModel : IComparable
 	{
-        public string RateModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string TargetInventoryModelId { set; get; } = null!;
-        public string AcquireExperienceSuffix { set; get; } = null!;
-        public string MaterialInventoryModelId { set; get; } = null!;
-        public string[] AcquireExperienceHierarchy { set; get; } = null!;
-        public string ExperienceModelId { set; get; } = null!;
-        public Gs2.Gs2Enhance.Model.BonusRate[] BonusRates { set; get; } = null!;
+        public string RateModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string TargetInventoryModelId { set; get; }
+        public string AcquireExperienceSuffix { set; get; }
+        public string MaterialInventoryModelId { set; get; }
+        public string[] AcquireExperienceHierarchy { set; get; }
+        public string ExperienceModelId { set; get; }
+        public Gs2.Gs2Enhance.Model.BonusRate[] BonusRates { set; get; }
         public RateModel WithRateModelId(string rateModelId) {
             this.RateModelId = rateModelId;
             return this;

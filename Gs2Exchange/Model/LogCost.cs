@@ -29,11 +29,11 @@ namespace Gs2.Gs2Exchange.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LogCost : IComparable
+	public partial class LogCost : IComparable
 	{
-        public double? Base { set; get; } = null!;
-        public double[] Adds { set; get; } = null!;
-        public double[] Subs { set; get; } = null!;
+        public double? Base { set; get; }
+        public double[] Adds { set; get; }
+        public double[] Subs { set; get; }
         public LogCost WithBase(double? base_) {
             this.Base = base_;
             return this;

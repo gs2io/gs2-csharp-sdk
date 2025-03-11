@@ -29,10 +29,10 @@ namespace Gs2.Gs2Money.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class WalletDetail : IComparable
+	public partial class WalletDetail : IComparable
 	{
-        public float? Price { set; get; } = null!;
-        public int? Count { set; get; } = null!;
+        public float? Price { set; get; }
+        public int? Count { set; get; }
         public WalletDetail WithPrice(float? price) {
             this.Price = price;
             return this;

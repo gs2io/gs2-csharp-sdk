@@ -29,10 +29,10 @@ namespace Gs2.Gs2Version.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Status : IComparable
+	public partial class Status : IComparable
 	{
-        public Gs2.Gs2Version.Model.VersionModel VersionModel { set; get; } = null!;
-        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; } = null!;
+        public Gs2.Gs2Version.Model.VersionModel VersionModel { set; get; }
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
         public Status WithVersionModel(Gs2.Gs2Version.Model.VersionModel versionModel) {
             this.VersionModel = versionModel;
             return this;

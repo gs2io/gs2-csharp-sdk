@@ -29,16 +29,16 @@ namespace Gs2.Gs2Friend.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Profile : IComparable
+	public partial class Profile : IComparable
 	{
-        public string ProfileId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string PublicProfile { set; get; } = null!;
-        public string FollowerProfile { set; get; } = null!;
-        public string FriendProfile { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string ProfileId { set; get; }
+        public string UserId { set; get; }
+        public string PublicProfile { set; get; }
+        public string FollowerProfile { set; get; }
+        public string FriendProfile { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Profile WithProfileId(string profileId) {
             this.ProfileId = profileId;
             return this;

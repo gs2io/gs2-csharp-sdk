@@ -29,20 +29,20 @@ namespace Gs2.Gs2Ranking2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ClusterRankingModel : IComparable
+	public partial class ClusterRankingModel : IComparable
 	{
-        public string ClusterRankingModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string ClusterType { set; get; } = null!;
-        public long? MinimumValue { set; get; } = null!;
-        public long? MaximumValue { set; get; } = null!;
-        public bool? Sum { set; get; } = null!;
-        public string OrderDirection { set; get; } = null!;
-        public string EntryPeriodEventId { set; get; } = null!;
-        public Gs2.Gs2Ranking2.Model.RankingReward[] RankingRewards { set; get; } = null!;
-        public string AccessPeriodEventId { set; get; } = null!;
-        public string RewardCalculationIndex { set; get; } = null!;
+        public string ClusterRankingModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string ClusterType { set; get; }
+        public long? MinimumValue { set; get; }
+        public long? MaximumValue { set; get; }
+        public bool? Sum { set; get; }
+        public string OrderDirection { set; get; }
+        public string EntryPeriodEventId { set; get; }
+        public Gs2.Gs2Ranking2.Model.RankingReward[] RankingRewards { set; get; }
+        public string AccessPeriodEventId { set; get; }
+        public string RewardCalculationIndex { set; get; }
         public ClusterRankingModel WithClusterRankingModelId(string clusterRankingModelId) {
             this.ClusterRankingModelId = clusterRankingModelId;
             return this;

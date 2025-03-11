@@ -29,15 +29,15 @@ namespace Gs2.Gs2Showcase.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RandomDisplayItemModel : IComparable
+	public partial class RandomDisplayItemModel : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
-        public int? Stock { set; get; } = null!;
-        public int? Weight { set; get; } = null!;
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public int? Stock { set; get; }
+        public int? Weight { set; get; }
         public RandomDisplayItemModel WithName(string name) {
             this.Name = name;
             return this;

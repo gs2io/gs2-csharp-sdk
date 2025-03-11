@@ -29,10 +29,10 @@ namespace Gs2.Gs2AdReward.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AppLovinMax : IComparable
+	public partial class AppLovinMax : IComparable
 	{
-        public string AllowAdUnitId { set; get; } = null!;
-        public string EventKey { set; get; } = null!;
+        public string AllowAdUnitId { set; get; }
+        public string EventKey { set; get; }
         public AppLovinMax WithAllowAdUnitId(string allowAdUnitId) {
             this.AllowAdUnitId = allowAdUnitId;
             return this;

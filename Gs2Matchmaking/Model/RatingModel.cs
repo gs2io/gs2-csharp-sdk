@@ -29,13 +29,13 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RatingModel : IComparable
+	public partial class RatingModel : IComparable
 	{
-        public string RatingModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public int? InitialValue { set; get; } = null!;
-        public int? Volatility { set; get; } = null!;
+        public string RatingModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public int? InitialValue { set; get; }
+        public int? Volatility { set; get; }
         public RatingModel WithRatingModelId(string ratingModelId) {
             this.RatingModelId = ratingModelId;
             return this;

@@ -29,12 +29,12 @@ namespace Gs2.Gs2Formation.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class PropertyFormModel : IComparable
+	public partial class PropertyFormModel : IComparable
 	{
-        public string PropertyFormModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; } = null!;
+        public string PropertyFormModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
         public PropertyFormModel WithPropertyFormModelId(string propertyFormModelId) {
             this.PropertyFormModelId = propertyFormModelId;
             return this;

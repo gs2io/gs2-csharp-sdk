@@ -29,17 +29,17 @@ namespace Gs2.Gs2Stamina.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RecoverIntervalTableMaster : IComparable
+	public partial class RecoverIntervalTableMaster : IComparable
 	{
-        public string RecoverIntervalTableId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string ExperienceModelId { set; get; } = null!;
-        public int[] Values { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string RecoverIntervalTableId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public string ExperienceModelId { set; get; }
+        public int[] Values { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public RecoverIntervalTableMaster WithRecoverIntervalTableId(string recoverIntervalTableId) {
             this.RecoverIntervalTableId = recoverIntervalTableId;
             return this;

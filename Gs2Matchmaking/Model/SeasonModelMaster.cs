@@ -29,18 +29,18 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SeasonModelMaster : IComparable
+	public partial class SeasonModelMaster : IComparable
 	{
-        public string SeasonModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public int? MaximumParticipants { set; get; } = null!;
-        public string ExperienceModelId { set; get; } = null!;
-        public string ChallengePeriodEventId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SeasonModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Description { set; get; }
+        public int? MaximumParticipants { set; get; }
+        public string ExperienceModelId { set; get; }
+        public string ChallengePeriodEventId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SeasonModelMaster WithSeasonModelId(string seasonModelId) {
             this.SeasonModelId = seasonModelId;
             return this;

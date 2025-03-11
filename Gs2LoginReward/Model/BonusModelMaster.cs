@@ -29,23 +29,23 @@ namespace Gs2.Gs2LoginReward.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BonusModelMaster : IComparable
+	public partial class BonusModelMaster : IComparable
 	{
-        public string BonusModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string Mode { set; get; } = null!;
-        public string PeriodEventId { set; get; } = null!;
-        public int? ResetHour { set; get; } = null!;
-        public string Repeat { set; get; } = null!;
-        public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; } = null!;
-        public string MissedReceiveRelief { set; get; } = null!;
-        public Gs2.Core.Model.VerifyAction[] MissedReceiveReliefVerifyActions { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string BonusModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string Mode { set; get; }
+        public string PeriodEventId { set; get; }
+        public int? ResetHour { set; get; }
+        public string Repeat { set; get; }
+        public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; }
+        public string MissedReceiveRelief { set; get; }
+        public Gs2.Core.Model.VerifyAction[] MissedReceiveReliefVerifyActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public BonusModelMaster WithBonusModelId(string bonusModelId) {
             this.BonusModelId = bonusModelId;
             return this;

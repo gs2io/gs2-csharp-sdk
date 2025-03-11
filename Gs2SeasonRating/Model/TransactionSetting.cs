@@ -29,13 +29,13 @@ namespace Gs2.Gs2SeasonRating.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TransactionSetting : IComparable
+	public partial class TransactionSetting : IComparable
 	{
-        public bool? EnableAtomicCommit { set; get; } = null!;
-        public bool? TransactionUseDistributor { set; get; } = null!;
-        public bool? AcquireActionUseJobQueue { set; get; } = null!;
-        public string DistributorNamespaceId { set; get; } = null!;
-        public string QueueNamespaceId { set; get; } = null!;
+        public bool? EnableAtomicCommit { set; get; }
+        public bool? TransactionUseDistributor { set; get; }
+        public bool? AcquireActionUseJobQueue { set; get; }
+        public string DistributorNamespaceId { set; get; }
+        public string QueueNamespaceId { set; get; }
         public TransactionSetting WithEnableAtomicCommit(bool? enableAtomicCommit) {
             this.EnableAtomicCommit = enableAtomicCommit;
             return this;

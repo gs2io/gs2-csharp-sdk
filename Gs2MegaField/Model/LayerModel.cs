@@ -29,11 +29,11 @@ namespace Gs2.Gs2MegaField.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LayerModel : IComparable
+	public partial class LayerModel : IComparable
 	{
-        public string LayerModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
+        public string LayerModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
         public LayerModel WithLayerModelId(string layerModelId) {
             this.LayerModelId = layerModelId;
             return this;

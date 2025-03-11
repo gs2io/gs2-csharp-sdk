@@ -29,10 +29,10 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LastGuildMasterActivity : IComparable
+	public partial class LastGuildMasterActivity : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
+        public string UserId { set; get; }
+        public long? UpdatedAt { set; get; }
         public LastGuildMasterActivity WithUserId(string userId) {
             this.UserId = userId;
             return this;

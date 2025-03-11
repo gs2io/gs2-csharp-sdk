@@ -29,14 +29,14 @@ namespace Gs2.Gs2Mission.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ScopedValue : IComparable
+	public partial class ScopedValue : IComparable
 	{
-        public string ScopeType { set; get; } = null!;
-        public string ResetType { set; get; } = null!;
-        public string ConditionName { set; get; } = null!;
-        public long? Value { set; get; } = null!;
-        public long? NextResetAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
+        public string ScopeType { set; get; }
+        public string ResetType { set; get; }
+        public string ConditionName { set; get; }
+        public long? Value { set; get; }
+        public long? NextResetAt { set; get; }
+        public long? UpdatedAt { set; get; }
         public ScopedValue WithScopeType(string scopeType) {
             this.ScopeType = scopeType;
             return this;

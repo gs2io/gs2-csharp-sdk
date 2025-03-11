@@ -29,18 +29,18 @@ namespace Gs2.Gs2Formation.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class MoldModelMaster : IComparable
+	public partial class MoldModelMaster : IComparable
 	{
-        public string MoldModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public int? InitialMaxCapacity { set; get; } = null!;
-        public int? MaxCapacity { set; get; } = null!;
-        public string FormModelName { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string MoldModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public int? InitialMaxCapacity { set; get; }
+        public int? MaxCapacity { set; get; }
+        public string FormModelName { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public MoldModelMaster WithMoldModelId(string moldModelId) {
             this.MoldModelId = moldModelId;
             return this;

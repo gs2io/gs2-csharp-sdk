@@ -29,11 +29,11 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Event : IComparable
+	public partial class Event : IComparable
 	{
-        public string EventType { set; get; } = null!;
-        public Gs2.Gs2StateMachine.Model.ChangeStateEvent ChangeStateEvent { set; get; } = null!;
-        public Gs2.Gs2StateMachine.Model.EmitEvent EmitEvent { set; get; } = null!;
+        public string EventType { set; get; }
+        public Gs2.Gs2StateMachine.Model.ChangeStateEvent ChangeStateEvent { set; get; }
+        public Gs2.Gs2StateMachine.Model.EmitEvent EmitEvent { set; get; }
         public Event WithEventType(string eventType) {
             this.EventType = eventType;
             return this;

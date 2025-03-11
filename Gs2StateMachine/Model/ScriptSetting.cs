@@ -29,12 +29,12 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ScriptSetting : IComparable
+	public partial class ScriptSetting : IComparable
 	{
-        public string TriggerScriptId { set; get; } = null!;
-        public string DoneTriggerTargetType { set; get; } = null!;
-        public string DoneTriggerScriptId { set; get; } = null!;
-        public string DoneTriggerQueueNamespaceId { set; get; } = null!;
+        public string TriggerScriptId { set; get; }
+        public string DoneTriggerTargetType { set; get; }
+        public string DoneTriggerScriptId { set; get; }
+        public string DoneTriggerQueueNamespaceId { set; get; }
         public ScriptSetting WithTriggerScriptId(string triggerScriptId) {
             this.TriggerScriptId = triggerScriptId;
             return this;

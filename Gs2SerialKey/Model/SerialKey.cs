@@ -29,18 +29,18 @@ namespace Gs2.Gs2SerialKey.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SerialKey : IComparable
+	public partial class SerialKey : IComparable
 	{
-        public string SerialKeyId { set; get; } = null!;
-        public string CampaignModelName { set; get; } = null!;
-        public string Code { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string Status { set; get; } = null!;
-        public string UsedUserId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UsedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SerialKeyId { set; get; }
+        public string CampaignModelName { set; get; }
+        public string Code { set; get; }
+        public string Metadata { set; get; }
+        public string Status { set; get; }
+        public string UsedUserId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UsedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SerialKey WithSerialKeyId(string serialKeyId) {
             this.SerialKeyId = serialKeyId;
             return this;

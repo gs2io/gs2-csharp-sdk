@@ -29,12 +29,12 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CapacityOfRole : IComparable
+	public partial class CapacityOfRole : IComparable
 	{
-        public string RoleName { set; get; } = null!;
-        public string[] RoleAliases { set; get; } = null!;
-        public int? Capacity { set; get; } = null!;
-        public Gs2.Gs2Matchmaking.Model.Player[] Participants { set; get; } = null!;
+        public string RoleName { set; get; }
+        public string[] RoleAliases { set; get; }
+        public int? Capacity { set; get; }
+        public Gs2.Gs2Matchmaking.Model.Player[] Participants { set; get; }
         public CapacityOfRole WithRoleName(string roleName) {
             this.RoleName = roleName;
             return this;

@@ -29,15 +29,15 @@ namespace Gs2.Gs2News.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Progress : IComparable
+	public partial class Progress : IComparable
 	{
-        public string ProgressId { set; get; } = null!;
-        public string UploadToken { set; get; } = null!;
-        public int? Generated { set; get; } = null!;
-        public int? PatternCount { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string ProgressId { set; get; }
+        public string UploadToken { set; get; }
+        public int? Generated { set; get; }
+        public int? PatternCount { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Progress WithProgressId(string progressId) {
             this.ProgressId = progressId;
             return this;

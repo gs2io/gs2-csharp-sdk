@@ -29,10 +29,10 @@ namespace Gs2.Gs2Grade.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DefaultGradeModel : IComparable
+	public partial class DefaultGradeModel : IComparable
 	{
-        public string PropertyIdRegex { set; get; } = null!;
-        public long? DefaultGradeValue { set; get; } = null!;
+        public string PropertyIdRegex { set; get; }
+        public long? DefaultGradeValue { set; get; }
         public DefaultGradeModel WithPropertyIdRegex(string propertyIdRegex) {
             this.PropertyIdRegex = propertyIdRegex;
             return this;

@@ -29,9 +29,9 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class FakeSetting : IComparable
+	public partial class FakeSetting : IComparable
 	{
-        public string AcceptFakeReceipt { set; get; } = null!;
+        public string AcceptFakeReceipt { set; get; }
         public FakeSetting WithAcceptFakeReceipt(string acceptFakeReceipt) {
             this.AcceptFakeReceipt = acceptFakeReceipt;
             return this;

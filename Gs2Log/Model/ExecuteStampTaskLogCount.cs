@@ -29,13 +29,13 @@ namespace Gs2.Gs2Log.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ExecuteStampTaskLogCount : IComparable
+	public partial class ExecuteStampTaskLogCount : IComparable
 	{
-        public string Service { set; get; } = null!;
-        public string Method { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Action { set; get; } = null!;
-        public long? Count { set; get; } = null!;
+        public string Service { set; get; }
+        public string Method { set; get; }
+        public string UserId { set; get; }
+        public string Action { set; get; }
+        public long? Count { set; get; }
         public ExecuteStampTaskLogCount WithService(string service) {
             this.Service = service;
             return this;

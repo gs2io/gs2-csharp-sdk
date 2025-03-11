@@ -29,18 +29,18 @@ namespace Gs2.Gs2Quest.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class QuestModel : IComparable
+	public partial class QuestModel : IComparable
 	{
-        public string QuestModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; } = null!;
-        public string ChallengePeriodEventId { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; } = null!;
-        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; } = null!;
-        public string[] PremiseQuestNames { set; get; } = null!;
+        public string QuestModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
+        public string ChallengePeriodEventId { set; get; }
+        public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
+        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
+        public string[] PremiseQuestNames { set; get; }
         public QuestModel WithQuestModelId(string questModelId) {
             this.QuestModelId = questModelId;
             return this;

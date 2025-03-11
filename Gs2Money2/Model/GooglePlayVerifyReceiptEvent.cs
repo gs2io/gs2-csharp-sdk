@@ -29,9 +29,9 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GooglePlayVerifyReceiptEvent : IComparable
+	public partial class GooglePlayVerifyReceiptEvent : IComparable
 	{
-        public string PurchaseToken { set; get; } = null!;
+        public string PurchaseToken { set; get; }
         public GooglePlayVerifyReceiptEvent WithPurchaseToken(string purchaseToken) {
             this.PurchaseToken = purchaseToken;
             return this;

@@ -29,13 +29,13 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SubscriptionStatus : IComparable
+	public partial class SubscriptionStatus : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public string ContentName { set; get; } = null!;
-        public string Status { set; get; } = null!;
-        public long? ExpiresAt { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.SubscribeTransaction[] Detail { set; get; } = null!;
+        public string UserId { set; get; }
+        public string ContentName { set; get; }
+        public string Status { set; get; }
+        public long? ExpiresAt { set; get; }
+        public Gs2.Gs2Money2.Model.SubscribeTransaction[] Detail { set; get; }
         public SubscriptionStatus WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -29,12 +29,12 @@ namespace Gs2.Gs2Dictionary.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Entry : IComparable
+	public partial class Entry : IComparable
 	{
-        public string EntryId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public long? AcquiredAt { set; get; } = null!;
+        public string EntryId { set; get; }
+        public string UserId { set; get; }
+        public string Name { set; get; }
+        public long? AcquiredAt { set; get; }
         public Entry WithEntryId(string entryId) {
             this.EntryId = entryId;
             return this;

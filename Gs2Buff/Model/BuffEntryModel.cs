@@ -29,17 +29,17 @@ namespace Gs2.Gs2Buff.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BuffEntryModel : IComparable
+	public partial class BuffEntryModel : IComparable
 	{
-        public string BuffEntryModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string Expression { set; get; } = null!;
-        public string TargetType { set; get; } = null!;
-        public Gs2.Gs2Buff.Model.BuffTargetModel TargetModel { set; get; } = null!;
-        public Gs2.Gs2Buff.Model.BuffTargetAction TargetAction { set; get; } = null!;
-        public int? Priority { set; get; } = null!;
-        public string ApplyPeriodScheduleEventId { set; get; } = null!;
+        public string BuffEntryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Expression { set; get; }
+        public string TargetType { set; get; }
+        public Gs2.Gs2Buff.Model.BuffTargetModel TargetModel { set; get; }
+        public Gs2.Gs2Buff.Model.BuffTargetAction TargetAction { set; get; }
+        public int? Priority { set; get; }
+        public string ApplyPeriodScheduleEventId { set; get; }
         public BuffEntryModel WithBuffEntryModelId(string buffEntryModelId) {
             this.BuffEntryModelId = buffEntryModelId;
             return this;

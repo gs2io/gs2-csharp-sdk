@@ -29,11 +29,11 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BatchResultPayload : IComparable
+	public partial class BatchResultPayload : IComparable
 	{
-        public string RequestId { set; get; } = null!;
-        public int? StatusCode { set; get; } = null!;
-        public string ResultPayload { set; get; } = null!;
+        public string RequestId { set; get; }
+        public int? StatusCode { set; get; }
+        public string ResultPayload { set; get; }
         public BatchResultPayload WithRequestId(string requestId) {
             this.RequestId = requestId;
             return this;

@@ -29,12 +29,12 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DepositTransaction : IComparable
+	public partial class DepositTransaction : IComparable
 	{
-        public float? Price { set; get; } = null!;
-        public string Currency { set; get; } = null!;
-        public int? Count { set; get; } = null!;
-        public long? DepositedAt { set; get; } = null!;
+        public float? Price { set; get; }
+        public string Currency { set; get; }
+        public int? Count { set; get; }
+        public long? DepositedAt { set; get; }
         public DepositTransaction WithPrice(float? price) {
             this.Price = price;
             return this;

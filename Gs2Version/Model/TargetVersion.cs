@@ -29,12 +29,12 @@ namespace Gs2.Gs2Version.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TargetVersion : IComparable
+	public partial class TargetVersion : IComparable
 	{
-        public string VersionName { set; get; } = null!;
-        public string Body { set; get; } = null!;
-        public string Signature { set; get; } = null!;
-        public Gs2.Gs2Version.Model.Version_ Version { set; get; } = null!;
+        public string VersionName { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
         public TargetVersion WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;

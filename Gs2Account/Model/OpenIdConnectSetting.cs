@@ -29,17 +29,17 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class OpenIdConnectSetting : IComparable
+	public partial class OpenIdConnectSetting : IComparable
 	{
-        public string ConfigurationPath { set; get; } = null!;
-        public string ClientId { set; get; } = null!;
-        public string ClientSecret { set; get; } = null!;
-        public string AppleTeamId { set; get; } = null!;
-        public string AppleKeyId { set; get; } = null!;
-        public string ApplePrivateKeyPem { set; get; } = null!;
-        public string DoneEndpointUrl { set; get; } = null!;
-        public Gs2.Gs2Account.Model.ScopeValue[] AdditionalScopeValues { set; get; } = null!;
-        public string[] AdditionalReturnValues { set; get; } = null!;
+        public string ConfigurationPath { set; get; }
+        public string ClientId { set; get; }
+        public string ClientSecret { set; get; }
+        public string AppleTeamId { set; get; }
+        public string AppleKeyId { set; get; }
+        public string ApplePrivateKeyPem { set; get; }
+        public string DoneEndpointUrl { set; get; }
+        public Gs2.Gs2Account.Model.ScopeValue[] AdditionalScopeValues { set; get; }
+        public string[] AdditionalReturnValues { set; get; }
         public OpenIdConnectSetting WithConfigurationPath(string configurationPath) {
             this.ConfigurationPath = configurationPath;
             return this;

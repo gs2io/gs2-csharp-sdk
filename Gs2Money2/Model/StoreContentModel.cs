@@ -29,13 +29,13 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class StoreContentModel : IComparable
+	public partial class StoreContentModel : IComparable
 	{
-        public string StoreContentModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.AppleAppStoreContent AppleAppStore { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.GooglePlayContent GooglePlay { set; get; } = null!;
+        public string StoreContentModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Money2.Model.AppleAppStoreContent AppleAppStore { set; get; }
+        public Gs2.Gs2Money2.Model.GooglePlayContent GooglePlay { set; get; }
         public StoreContentModel WithStoreContentModelId(string storeContentModelId) {
             this.StoreContentModelId = storeContentModelId;
             return this;

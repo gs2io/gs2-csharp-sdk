@@ -29,15 +29,15 @@ namespace Gs2.Gs2Ranking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GitHubCheckoutSetting : IComparable
+	public partial class GitHubCheckoutSetting : IComparable
 	{
-        public string ApiKeyId { set; get; } = null!;
-        public string RepositoryName { set; get; } = null!;
-        public string SourcePath { set; get; } = null!;
-        public string ReferenceType { set; get; } = null!;
-        public string CommitHash { set; get; } = null!;
-        public string BranchName { set; get; } = null!;
-        public string TagName { set; get; } = null!;
+        public string ApiKeyId { set; get; }
+        public string RepositoryName { set; get; }
+        public string SourcePath { set; get; }
+        public string ReferenceType { set; get; }
+        public string CommitHash { set; get; }
+        public string BranchName { set; get; }
+        public string TagName { set; get; }
         public GitHubCheckoutSetting WithApiKeyId(string apiKeyId) {
             this.ApiKeyId = apiKeyId;
             return this;

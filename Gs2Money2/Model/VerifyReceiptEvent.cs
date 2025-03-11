@@ -29,12 +29,12 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class VerifyReceiptEvent : IComparable
+	public partial class VerifyReceiptEvent : IComparable
 	{
-        public string ContentName { set; get; } = null!;
-        public string Platform { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent AppleAppStoreVerifyReceiptEvent { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent GooglePlayVerifyReceiptEvent { set; get; } = null!;
+        public string ContentName { set; get; }
+        public string Platform { set; get; }
+        public Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent AppleAppStoreVerifyReceiptEvent { set; get; }
+        public Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent GooglePlayVerifyReceiptEvent { set; get; }
         public VerifyReceiptEvent WithContentName(string contentName) {
             this.ContentName = contentName;
             return this;

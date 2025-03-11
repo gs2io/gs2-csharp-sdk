@@ -29,13 +29,13 @@ namespace Gs2.Gs2Auth.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AccessToken : IComparable
+	public partial class AccessToken : IComparable
 	{
-        public string Token { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string FederationFromUserId { set; get; } = null!;
-        public long? Expire { set; get; } = null!;
-        public int? TimeOffset { set; get; } = null!;
+        public string Token { set; get; }
+        public string UserId { set; get; }
+        public string FederationFromUserId { set; get; }
+        public long? Expire { set; get; }
+        public int? TimeOffset { set; get; }
         public AccessToken WithToken(string token) {
             this.Token = token;
             return this;

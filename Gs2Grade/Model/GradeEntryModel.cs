@@ -29,12 +29,12 @@ namespace Gs2.Gs2Grade.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GradeEntryModel : IComparable
+	public partial class GradeEntryModel : IComparable
 	{
-        public string Metadata { set; get; } = null!;
-        public long? RankCapValue { set; get; } = null!;
-        public string PropertyIdRegex { set; get; } = null!;
-        public string GradeUpPropertyIdRegex { set; get; } = null!;
+        public string Metadata { set; get; }
+        public long? RankCapValue { set; get; }
+        public string PropertyIdRegex { set; get; }
+        public string GradeUpPropertyIdRegex { set; get; }
         public GradeEntryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

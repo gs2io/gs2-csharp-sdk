@@ -29,9 +29,9 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GooglePlaySubscriptionContent : IComparable
+	public partial class GooglePlaySubscriptionContent : IComparable
 	{
-        public string ProductId { set; get; } = null!;
+        public string ProductId { set; get; }
         public GooglePlaySubscriptionContent WithProductId(string productId) {
             this.ProductId = productId;
             return this;

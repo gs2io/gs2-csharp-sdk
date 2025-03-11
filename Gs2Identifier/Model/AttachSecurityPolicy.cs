@@ -29,12 +29,12 @@ namespace Gs2.Gs2Identifier.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AttachSecurityPolicy : IComparable
+	public partial class AttachSecurityPolicy : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public string[] SecurityPolicyIds { set; get; } = null!;
-        public long? AttachedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string UserId { set; get; }
+        public string[] SecurityPolicyIds { set; get; }
+        public long? AttachedAt { set; get; }
+        public long? Revision { set; get; }
         public AttachSecurityPolicy WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -29,14 +29,14 @@ namespace Gs2.Gs2Lock.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Mutex : IComparable
+	public partial class Mutex : IComparable
 	{
-        public string MutexId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string PropertyId { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string MutexId { set; get; }
+        public string UserId { set; get; }
+        public string PropertyId { set; get; }
+        public string TransactionId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Mutex WithMutexId(string mutexId) {
             this.MutexId = mutexId;
             return this;

@@ -29,14 +29,14 @@ namespace Gs2.Gs2News.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class News : IComparable
+	public partial class News : IComparable
 	{
-        public string Section { set; get; } = null!;
-        public string Content { set; get; } = null!;
-        public string Title { set; get; } = null!;
-        public string ScheduleEventId { set; get; } = null!;
-        public long? Timestamp { set; get; } = null!;
-        public string FrontMatter { set; get; } = null!;
+        public string Section { set; get; }
+        public string Content { set; get; }
+        public string Title { set; get; }
+        public string ScheduleEventId { set; get; }
+        public long? Timestamp { set; get; }
+        public string FrontMatter { set; get; }
         public News WithSection(string section) {
             this.Section = section;
             return this;

@@ -29,14 +29,14 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class PlatformId : IComparable
+	public partial class PlatformId : IComparable
 	{
-        public string Value { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public int? Type { set; get; } = null!;
-        public string UserIdentifier { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string Value { set; get; }
+        public string UserId { set; get; }
+        public int? Type { set; get; }
+        public string UserIdentifier { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public PlatformId WithValue(string value) {
             this.Value = value;
             return this;

@@ -29,11 +29,11 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class WalletSummary : IComparable
+	public partial class WalletSummary : IComparable
 	{
-        public int? Paid { set; get; } = null!;
-        public int? Free { set; get; } = null!;
-        public int? Total { set; get; } = null!;
+        public int? Paid { set; get; }
+        public int? Free { set; get; }
+        public int? Total { set; get; }
         public WalletSummary WithPaid(int? paid) {
             this.Paid = paid;
             return this;

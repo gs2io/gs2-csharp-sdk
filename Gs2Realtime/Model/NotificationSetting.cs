@@ -29,11 +29,11 @@ namespace Gs2.Gs2Realtime.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class NotificationSetting : IComparable
+	public partial class NotificationSetting : IComparable
 	{
-        public string GatewayNamespaceId { set; get; } = null!;
-        public bool? EnableTransferMobileNotification { set; get; } = null!;
-        public string Sound { set; get; } = null!;
+        public string GatewayNamespaceId { set; get; }
+        public bool? EnableTransferMobileNotification { set; get; }
+        public string Sound { set; get; }
         public NotificationSetting WithGatewayNamespaceId(string gatewayNamespaceId) {
             this.GatewayNamespaceId = gatewayNamespaceId;
             return this;

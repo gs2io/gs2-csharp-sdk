@@ -29,18 +29,18 @@ namespace Gs2.Gs2Enchant.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BalanceParameterModelMaster : IComparable
+	public partial class BalanceParameterModelMaster : IComparable
 	{
-        public string BalanceParameterModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public long? TotalValue { set; get; } = null!;
-        public string InitialValueStrategy { set; get; } = null!;
-        public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string BalanceParameterModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? TotalValue { set; get; }
+        public string InitialValueStrategy { set; get; }
+        public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public BalanceParameterModelMaster WithBalanceParameterModelId(string balanceParameterModelId) {
             this.BalanceParameterModelId = balanceParameterModelId;
             return this;

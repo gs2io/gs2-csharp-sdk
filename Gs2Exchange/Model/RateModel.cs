@@ -29,16 +29,16 @@ namespace Gs2.Gs2Exchange.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RateModel : IComparable
+	public partial class RateModel : IComparable
 	{
-        public string RateModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
-        public string TimingType { set; get; } = null!;
-        public int? LockTime { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public string RateModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public string TimingType { set; get; }
+        public int? LockTime { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public RateModel WithRateModelId(string rateModelId) {
             this.RateModelId = rateModelId;
             return this;

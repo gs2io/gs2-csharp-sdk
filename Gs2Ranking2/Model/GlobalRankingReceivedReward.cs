@@ -29,14 +29,14 @@ namespace Gs2.Gs2Ranking2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GlobalRankingReceivedReward : IComparable
+	public partial class GlobalRankingReceivedReward : IComparable
 	{
-        public string GlobalRankingReceivedRewardId { set; get; } = null!;
-        public string RankingName { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public long? Season { set; get; } = null!;
-        public long? ReceivedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string GlobalRankingReceivedRewardId { set; get; }
+        public string RankingName { set; get; }
+        public string UserId { set; get; }
+        public long? Season { set; get; }
+        public long? ReceivedAt { set; get; }
+        public long? Revision { set; get; }
         public GlobalRankingReceivedReward WithGlobalRankingReceivedRewardId(string globalRankingReceivedRewardId) {
             this.GlobalRankingReceivedRewardId = globalRankingReceivedRewardId;
             return this;

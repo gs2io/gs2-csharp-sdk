@@ -29,14 +29,14 @@ namespace Gs2.Gs2SeasonRating.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SeasonModel : IComparable
+	public partial class SeasonModel : IComparable
 	{
-        public string SeasonModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; } = null!;
-        public string ExperienceModelId { set; get; } = null!;
-        public string ChallengePeriodEventId { set; get; } = null!;
+        public string SeasonModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; }
+        public string ExperienceModelId { set; get; }
+        public string ChallengePeriodEventId { set; get; }
         public SeasonModel WithSeasonModelId(string seasonModelId) {
             this.SeasonModelId = seasonModelId;
             return this;

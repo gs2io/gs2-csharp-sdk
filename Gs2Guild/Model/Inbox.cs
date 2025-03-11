@@ -29,16 +29,16 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Inbox : IComparable
+	public partial class Inbox : IComparable
 	{
-        public string InboxId { set; get; } = null!;
-        public string GuildName { set; get; } = null!;
+        public string InboxId { set; get; }
+        public string GuildName { set; get; }
         [Obsolete("This method is deprecated")]
-        public string[] FromUserIds { set; get; } = null!;
-        public Gs2.Gs2Guild.Model.ReceiveMemberRequest[] ReceiveMemberRequests { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string[] FromUserIds { set; get; }
+        public Gs2.Gs2Guild.Model.ReceiveMemberRequest[] ReceiveMemberRequests { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Inbox WithInboxId(string inboxId) {
             this.InboxId = inboxId;
             return this;

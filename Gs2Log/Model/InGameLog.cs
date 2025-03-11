@@ -29,13 +29,13 @@ namespace Gs2.Gs2Log.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class InGameLog : IComparable
+	public partial class InGameLog : IComparable
 	{
-        public long? Timestamp { set; get; } = null!;
-        public string RequestId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public Gs2.Gs2Log.Model.InGameLogTag[] Tags { set; get; } = null!;
-        public string Payload { set; get; } = null!;
+        public long? Timestamp { set; get; }
+        public string RequestId { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Log.Model.InGameLogTag[] Tags { set; get; }
+        public string Payload { set; get; }
         public InGameLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;

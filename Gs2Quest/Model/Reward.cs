@@ -29,12 +29,12 @@ namespace Gs2.Gs2Quest.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Reward : IComparable
+	public partial class Reward : IComparable
 	{
-        public string Action { set; get; } = null!;
-        public string Request { set; get; } = null!;
-        public string ItemId { set; get; } = null!;
-        public int? Value { set; get; } = null!;
+        public string Action { set; get; }
+        public string Request { set; get; }
+        public string ItemId { set; get; }
+        public int? Value { set; get; }
         public Reward WithAction(string action) {
             this.Action = action;
             return this;

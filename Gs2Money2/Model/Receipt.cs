@@ -29,11 +29,11 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Receipt : IComparable
+	public partial class Receipt : IComparable
 	{
-        public string Store { set; get; } = null!;
-        public string TransactionID { set; get; } = null!;
-        public string Payload { set; get; } = null!;
+        public string Store { set; get; }
+        public string TransactionID { set; get; }
+        public string Payload { set; get; }
         public Receipt WithStore(string store) {
             this.Store = store;
             return this;

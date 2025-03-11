@@ -29,10 +29,10 @@ namespace Gs2.Gs2Inventory.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AcquireCount : IComparable
+	public partial class AcquireCount : IComparable
 	{
-        public string ItemName { set; get; } = null!;
-        public long? Count { set; get; } = null!;
+        public string ItemName { set; get; }
+        public long? Count { set; get; }
         public AcquireCount WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;

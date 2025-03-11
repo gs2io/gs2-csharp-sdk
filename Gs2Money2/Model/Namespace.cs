@@ -29,25 +29,25 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Namespace : IComparable
+	public partial class Namespace : IComparable
 	{
-        public string NamespaceId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string CurrencyUsagePriority { set; get; } = null!;
-        public bool? SharedFreeCurrency { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; } = null!;
-        public string SubscribeScript { set; get; } = null!;
-        public string RenewScript { set; get; } = null!;
-        public string UnsubscribeScript { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.ScriptSetting TakeOverScript { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.NotificationSetting ChangeSubscriptionStatusNotification { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.LogSetting LogSetting { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string CurrencyUsagePriority { set; get; }
+        public bool? SharedFreeCurrency { set; get; }
+        public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; }
+        public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; }
+        public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; }
+        public string SubscribeScript { set; get; }
+        public string RenewScript { set; get; }
+        public string UnsubscribeScript { set; get; }
+        public Gs2.Gs2Money2.Model.ScriptSetting TakeOverScript { set; get; }
+        public Gs2.Gs2Money2.Model.NotificationSetting ChangeSubscriptionStatusNotification { set; get; }
+        public Gs2.Gs2Money2.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

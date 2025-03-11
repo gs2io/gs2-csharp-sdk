@@ -29,11 +29,11 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BanStatus : IComparable
+	public partial class BanStatus : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string Reason { set; get; } = null!;
-        public long? ReleaseTimestamp { set; get; } = null!;
+        public string Name { set; get; }
+        public string Reason { set; get; }
+        public long? ReleaseTimestamp { set; get; }
         public BanStatus WithName(string name) {
             this.Name = name;
             return this;

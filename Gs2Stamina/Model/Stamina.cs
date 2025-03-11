@@ -29,21 +29,21 @@ namespace Gs2.Gs2Stamina.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Stamina : IComparable
+	public partial class Stamina : IComparable
 	{
-        public string StaminaId { set; get; } = null!;
-        public string StaminaName { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public int? Value { set; get; } = null!;
-        public int? MaxValue { set; get; } = null!;
-        public int? RecoverIntervalMinutes { set; get; } = null!;
-        public int? RecoverValue { set; get; } = null!;
-        public int? OverflowValue { set; get; } = null!;
-        public long? NextRecoverAt { set; get; } = null!;
-        public long? LastRecoveredAt { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string StaminaId { set; get; }
+        public string StaminaName { set; get; }
+        public string UserId { set; get; }
+        public int? Value { set; get; }
+        public int? MaxValue { set; get; }
+        public int? RecoverIntervalMinutes { set; get; }
+        public int? RecoverValue { set; get; }
+        public int? OverflowValue { set; get; }
+        public long? NextRecoverAt { set; get; }
+        public long? LastRecoveredAt { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Stamina WithStaminaId(string staminaId) {
             this.StaminaId = staminaId;
             return this;

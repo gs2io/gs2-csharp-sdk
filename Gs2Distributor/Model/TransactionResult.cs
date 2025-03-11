@@ -29,16 +29,16 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TransactionResult : IComparable
+	public partial class TransactionResult : IComparable
 	{
-        public string TransactionResultId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public Gs2.Gs2Distributor.Model.VerifyActionResult[] VerifyResults { set; get; } = null!;
-        public Gs2.Gs2Distributor.Model.ConsumeActionResult[] ConsumeResults { set; get; } = null!;
-        public Gs2.Gs2Distributor.Model.AcquireActionResult[] AcquireResults { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string TransactionResultId { set; get; }
+        public string UserId { set; get; }
+        public string TransactionId { set; get; }
+        public Gs2.Gs2Distributor.Model.VerifyActionResult[] VerifyResults { set; get; }
+        public Gs2.Gs2Distributor.Model.ConsumeActionResult[] ConsumeResults { set; get; }
+        public Gs2.Gs2Distributor.Model.AcquireActionResult[] AcquireResults { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public TransactionResult WithTransactionResultId(string transactionResultId) {
             this.TransactionResultId = transactionResultId;
             return this;

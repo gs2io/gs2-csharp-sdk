@@ -29,13 +29,13 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class JoinedGuild : IComparable
+	public partial class JoinedGuild : IComparable
 	{
-        public string JoinedGuildId { set; get; } = null!;
-        public string GuildModelName { set; get; } = null!;
-        public string GuildName { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
+        public string JoinedGuildId { set; get; }
+        public string GuildModelName { set; get; }
+        public string GuildName { set; get; }
+        public string UserId { set; get; }
+        public long? CreatedAt { set; get; }
         public JoinedGuild WithJoinedGuildId(string joinedGuildId) {
             this.JoinedGuildId = joinedGuildId;
             return this;

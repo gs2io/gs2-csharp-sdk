@@ -29,15 +29,15 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TakeOver : IComparable
+	public partial class TakeOver : IComparable
 	{
-        public string TakeOverId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public int? Type { set; get; } = null!;
-        public string UserIdentifier { set; get; } = null!;
-        public string Password { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string TakeOverId { set; get; }
+        public string UserId { set; get; }
+        public int? Type { set; get; }
+        public string UserIdentifier { set; get; }
+        public string Password { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public TakeOver WithTakeOverId(string takeOverId) {
             this.TakeOverId = takeOverId;
             return this;

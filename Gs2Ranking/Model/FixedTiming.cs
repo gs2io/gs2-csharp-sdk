@@ -29,10 +29,10 @@ namespace Gs2.Gs2Ranking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class FixedTiming : IComparable
+	public partial class FixedTiming : IComparable
 	{
-        public int? Hour { set; get; } = null!;
-        public int? Minute { set; get; } = null!;
+        public int? Hour { set; get; }
+        public int? Minute { set; get; }
         public FixedTiming WithHour(int? hour) {
             this.Hour = hour;
             return this;

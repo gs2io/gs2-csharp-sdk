@@ -29,11 +29,11 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class EmitEvent : IComparable
+	public partial class EmitEvent : IComparable
 	{
-        public string Event { set; get; } = null!;
-        public string Parameters { set; get; } = null!;
-        public long? Timestamp { set; get; } = null!;
+        public string Event { set; get; }
+        public string Parameters { set; get; }
+        public long? Timestamp { set; get; }
         public EmitEvent WithEvent(string event_) {
             this.Event = event_;
             return this;

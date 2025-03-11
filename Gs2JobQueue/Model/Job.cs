@@ -29,17 +29,17 @@ namespace Gs2.Gs2JobQueue.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Job : IComparable
+	public partial class Job : IComparable
 	{
-        public string JobId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string ScriptId { set; get; } = null!;
-        public string Args { set; get; } = null!;
-        public int? CurrentRetryCount { set; get; } = null!;
-        public int? MaxTryCount { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
+        public string JobId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public string ScriptId { set; get; }
+        public string Args { set; get; }
+        public int? CurrentRetryCount { set; get; }
+        public int? MaxTryCount { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
         public Job WithJobId(string jobId) {
             this.JobId = jobId;
             return this;

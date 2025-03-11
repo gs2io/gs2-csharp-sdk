@@ -29,13 +29,13 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DataOwner : IComparable
+	public partial class DataOwner : IComparable
 	{
-        public string DataOwnerId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string DataOwnerId { set; get; }
+        public string UserId { set; get; }
+        public string Name { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public DataOwner WithDataOwnerId(string dataOwnerId) {
             this.DataOwnerId = dataOwnerId;
             return this;

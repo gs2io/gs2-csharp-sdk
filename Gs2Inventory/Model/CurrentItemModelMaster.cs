@@ -29,10 +29,10 @@ namespace Gs2.Gs2Inventory.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CurrentItemModelMaster : IComparable
+	public partial class CurrentItemModelMaster : IComparable
 	{
-        public string NamespaceId { set; get; } = null!;
-        public string Settings { set; get; } = null!;
+        public string NamespaceId { set; get; }
+        public string Settings { set; get; }
         public CurrentItemModelMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

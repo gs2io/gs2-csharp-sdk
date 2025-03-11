@@ -29,10 +29,10 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class IgnoreUser : IComparable
+	public partial class IgnoreUser : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
+        public string UserId { set; get; }
+        public long? CreatedAt { set; get; }
         public IgnoreUser WithUserId(string userId) {
             this.UserId = userId;
             return this;

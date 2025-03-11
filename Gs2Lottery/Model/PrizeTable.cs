@@ -29,12 +29,12 @@ namespace Gs2.Gs2Lottery.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class PrizeTable : IComparable
+	public partial class PrizeTable : IComparable
 	{
-        public string PrizeTableId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2Lottery.Model.Prize[] Prizes { set; get; } = null!;
+        public string PrizeTableId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Lottery.Model.Prize[] Prizes { set; get; }
         public PrizeTable WithPrizeTableId(string prizeTableId) {
             this.PrizeTableId = prizeTableId;
             return this;

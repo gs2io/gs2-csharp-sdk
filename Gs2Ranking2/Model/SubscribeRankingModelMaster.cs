@@ -29,22 +29,22 @@ namespace Gs2.Gs2Ranking2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SubscribeRankingModelMaster : IComparable
+	public partial class SubscribeRankingModelMaster : IComparable
 	{
-        public string SubscribeRankingModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public long? MinimumValue { set; get; } = null!;
-        public long? MaximumValue { set; get; } = null!;
-        public bool? Sum { set; get; } = null!;
-        public int? ScoreTtlDays { set; get; } = null!;
-        public string OrderDirection { set; get; } = null!;
-        public string EntryPeriodEventId { set; get; } = null!;
-        public string AccessPeriodEventId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SubscribeRankingModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? MinimumValue { set; get; }
+        public long? MaximumValue { set; get; }
+        public bool? Sum { set; get; }
+        public int? ScoreTtlDays { set; get; }
+        public string OrderDirection { set; get; }
+        public string EntryPeriodEventId { set; get; }
+        public string AccessPeriodEventId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SubscribeRankingModelMaster WithSubscribeRankingModelId(string subscribeRankingModelId) {
             this.SubscribeRankingModelId = subscribeRankingModelId;
             return this;

@@ -29,16 +29,16 @@ namespace Gs2.Gs2Log.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class IssueStampSheetLog : IComparable
+	public partial class IssueStampSheetLog : IComparable
 	{
-        public long? Timestamp { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public string Service { set; get; } = null!;
-        public string Method { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Action { set; get; } = null!;
-        public string Args { set; get; } = null!;
-        public string[] Tasks { set; get; } = null!;
+        public long? Timestamp { set; get; }
+        public string TransactionId { set; get; }
+        public string Service { set; get; }
+        public string Method { set; get; }
+        public string UserId { set; get; }
+        public string Action { set; get; }
+        public string Args { set; get; }
+        public string[] Tasks { set; get; }
         public IssueStampSheetLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;

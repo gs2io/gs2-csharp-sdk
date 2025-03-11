@@ -29,10 +29,10 @@ namespace Gs2.Gs2News.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class View : IComparable
+	public partial class View : IComparable
 	{
-        public Gs2.Gs2News.Model.Content[] Contents { set; get; } = null!;
-        public Gs2.Gs2News.Model.Content[] RemoveContents { set; get; } = null!;
+        public Gs2.Gs2News.Model.Content[] Contents { set; get; }
+        public Gs2.Gs2News.Model.Content[] RemoveContents { set; get; }
         public View WithContents(Gs2.Gs2News.Model.Content[] contents) {
             this.Contents = contents;
             return this;

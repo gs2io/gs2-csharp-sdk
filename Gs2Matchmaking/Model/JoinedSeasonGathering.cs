@@ -29,15 +29,15 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class JoinedSeasonGathering : IComparable
+	public partial class JoinedSeasonGathering : IComparable
 	{
-        public string JoinedSeasonGatheringId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string SeasonName { set; get; } = null!;
-        public long? Season { set; get; } = null!;
-        public long? Tier { set; get; } = null!;
-        public string SeasonGatheringName { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
+        public string JoinedSeasonGatheringId { set; get; }
+        public string UserId { set; get; }
+        public string SeasonName { set; get; }
+        public long? Season { set; get; }
+        public long? Tier { set; get; }
+        public string SeasonGatheringName { set; get; }
+        public long? CreatedAt { set; get; }
         public JoinedSeasonGathering WithJoinedSeasonGatheringId(string joinedSeasonGatheringId) {
             this.JoinedSeasonGatheringId = joinedSeasonGatheringId;
             return this;

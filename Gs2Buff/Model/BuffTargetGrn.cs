@@ -29,10 +29,10 @@ namespace Gs2.Gs2Buff.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BuffTargetGrn : IComparable
+	public partial class BuffTargetGrn : IComparable
 	{
-        public string TargetModelName { set; get; } = null!;
-        public string TargetGrn { set; get; } = null!;
+        public string TargetModelName { set; get; }
+        public string TargetGrn { set; get; }
         public BuffTargetGrn WithTargetModelName(string targetModelName) {
             this.TargetModelName = targetModelName;
             return this;

@@ -29,10 +29,10 @@ namespace Gs2.Gs2Enhance.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BonusRate : IComparable
+	public partial class BonusRate : IComparable
 	{
-        public float? Rate { set; get; } = null!;
-        public int? Weight { set; get; } = null!;
+        public float? Rate { set; get; }
+        public int? Weight { set; get; }
         public BonusRate WithRate(float? rate) {
             this.Rate = rate;
             return this;

@@ -29,11 +29,11 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class PlatformSetting : IComparable
+	public partial class PlatformSetting : IComparable
 	{
-        public Gs2.Gs2Money2.Model.AppleAppStoreSetting AppleAppStore { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.GooglePlaySetting GooglePlay { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.FakeSetting Fake { set; get; } = null!;
+        public Gs2.Gs2Money2.Model.AppleAppStoreSetting AppleAppStore { set; get; }
+        public Gs2.Gs2Money2.Model.GooglePlaySetting GooglePlay { set; get; }
+        public Gs2.Gs2Money2.Model.FakeSetting Fake { set; get; }
         public PlatformSetting WithAppleAppStore(Gs2.Gs2Money2.Model.AppleAppStoreSetting appleAppStore) {
             this.AppleAppStore = appleAppStore;
             return this;

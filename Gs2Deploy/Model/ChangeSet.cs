@@ -29,11 +29,11 @@ namespace Gs2.Gs2Deploy.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ChangeSet : IComparable
+	public partial class ChangeSet : IComparable
 	{
-        public string ResourceName { set; get; } = null!;
-        public string ResourceType { set; get; } = null!;
-        public string Operation { set; get; } = null!;
+        public string ResourceName { set; get; }
+        public string ResourceType { set; get; }
+        public string Operation { set; get; }
         public ChangeSet WithResourceName(string resourceName) {
             this.ResourceName = resourceName;
             return this;

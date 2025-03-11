@@ -29,12 +29,12 @@ namespace Gs2.Gs2Buff.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BuffTargetAction : IComparable
+	public partial class BuffTargetAction : IComparable
 	{
-        public string TargetActionName { set; get; } = null!;
-        public string TargetFieldName { set; get; } = null!;
-        public Gs2.Gs2Buff.Model.BuffTargetGrn[] ConditionGrns { set; get; } = null!;
-        public float? Rate { set; get; } = null!;
+        public string TargetActionName { set; get; }
+        public string TargetFieldName { set; get; }
+        public Gs2.Gs2Buff.Model.BuffTargetGrn[] ConditionGrns { set; get; }
+        public float? Rate { set; get; }
         public BuffTargetAction WithTargetActionName(string targetActionName) {
             this.TargetActionName = targetActionName;
             return this;

@@ -29,10 +29,10 @@ namespace Gs2.Gs2Buff.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class OverrideBuffRate : IComparable
+	public partial class OverrideBuffRate : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public float? Rate { set; get; } = null!;
+        public string Name { set; get; }
+        public float? Rate { set; get; }
         public OverrideBuffRate WithName(string name) {
             this.Name = name;
             return this;

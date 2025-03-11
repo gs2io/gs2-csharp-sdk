@@ -29,10 +29,10 @@ namespace Gs2.Gs2News.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SetCookieRequestEntry : IComparable
+	public partial class SetCookieRequestEntry : IComparable
 	{
-        public string Key { set; get; } = null!;
-        public string Value { set; get; } = null!;
+        public string Key { set; get; }
+        public string Value { set; get; }
         public SetCookieRequestEntry WithKey(string key) {
             this.Key = key;
             return this;

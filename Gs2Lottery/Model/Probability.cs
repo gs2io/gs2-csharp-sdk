@@ -29,10 +29,10 @@ namespace Gs2.Gs2Lottery.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Probability : IComparable
+	public partial class Probability : IComparable
 	{
-        public Gs2.Gs2Lottery.Model.DrawnPrize Prize { set; get; } = null!;
-        public float? Rate { set; get; } = null!;
+        public Gs2.Gs2Lottery.Model.DrawnPrize Prize { set; get; }
+        public float? Rate { set; get; }
         public Probability WithPrize(Gs2.Gs2Lottery.Model.DrawnPrize prize) {
             this.Prize = prize;
             return this;

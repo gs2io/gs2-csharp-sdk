@@ -29,10 +29,10 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RandomStatus : IComparable
+	public partial class RandomStatus : IComparable
 	{
-        public long? Seed { set; get; } = null!;
-        public Gs2.Gs2StateMachine.Model.RandomUsed[] Used { set; get; } = null!;
+        public long? Seed { set; get; }
+        public Gs2.Gs2StateMachine.Model.RandomUsed[] Used { set; get; }
         public RandomStatus WithSeed(long? seed) {
             this.Seed = seed;
             return this;

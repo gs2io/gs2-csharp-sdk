@@ -29,10 +29,10 @@ namespace Gs2.Gs2Enhance.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class UnleashRateEntryModel : IComparable
+	public partial class UnleashRateEntryModel : IComparable
 	{
-        public long? GradeValue { set; get; } = null!;
-        public int? NeedCount { set; get; } = null!;
+        public long? GradeValue { set; get; }
+        public int? NeedCount { set; get; }
         public UnleashRateEntryModel WithGradeValue(long? gradeValue) {
             this.GradeValue = gradeValue;
             return this;

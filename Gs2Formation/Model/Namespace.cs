@@ -29,19 +29,19 @@ namespace Gs2.Gs2Formation.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Namespace : IComparable
+	public partial class Namespace : IComparable
 	{
-        public string NamespaceId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.ScriptSetting UpdatePropertyFormScript { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string NamespaceId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
+        public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
+        public Gs2.Gs2Formation.Model.ScriptSetting UpdatePropertyFormScript { set; get; }
+        public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

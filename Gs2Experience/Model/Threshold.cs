@@ -29,10 +29,10 @@ namespace Gs2.Gs2Experience.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Threshold : IComparable
+	public partial class Threshold : IComparable
 	{
-        public string Metadata { set; get; } = null!;
-        public long[] Values { set; get; } = null!;
+        public string Metadata { set; get; }
+        public long[] Values { set; get; }
         public Threshold WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

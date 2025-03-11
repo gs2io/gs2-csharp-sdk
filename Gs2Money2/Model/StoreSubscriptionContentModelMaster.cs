@@ -29,22 +29,22 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class StoreSubscriptionContentModelMaster : IComparable
+	public partial class StoreSubscriptionContentModelMaster : IComparable
 	{
-        public string StoreSubscriptionContentModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string ScheduleNamespaceId { set; get; } = null!;
-        public string TriggerName { set; get; } = null!;
-        public int? ReallocateSpanDays { set; get; } = null!;
-        public string TriggerExtendMode { set; get; } = null!;
-        public int? RollupHour { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent AppleAppStore { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent GooglePlay { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string StoreSubscriptionContentModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string ScheduleNamespaceId { set; get; }
+        public string TriggerName { set; get; }
+        public int? ReallocateSpanDays { set; get; }
+        public string TriggerExtendMode { set; get; }
+        public int? RollupHour { set; get; }
+        public Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent AppleAppStore { set; get; }
+        public Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent GooglePlay { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public StoreSubscriptionContentModelMaster WithStoreSubscriptionContentModelId(string storeSubscriptionContentModelId) {
             this.StoreSubscriptionContentModelId = storeSubscriptionContentModelId;
             return this;

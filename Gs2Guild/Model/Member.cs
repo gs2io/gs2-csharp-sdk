@@ -29,12 +29,12 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Member : IComparable
+	public partial class Member : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public string RoleName { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public long? JoinedAt { set; get; } = null!;
+        public string UserId { set; get; }
+        public string RoleName { set; get; }
+        public string Metadata { set; get; }
+        public long? JoinedAt { set; get; }
         public Member WithUserId(string userId) {
             this.UserId = userId;
             return this;

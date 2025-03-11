@@ -29,16 +29,16 @@ namespace Gs2.Gs2Chat.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Message : IComparable
+	public partial class Message : IComparable
 	{
-        public string MessageId { set; get; } = null!;
-        public string RoomName { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public int? Category { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string MessageId { set; get; }
+        public string RoomName { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public int? Category { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Message WithMessageId(string messageId) {
             this.MessageId = messageId;
             return this;

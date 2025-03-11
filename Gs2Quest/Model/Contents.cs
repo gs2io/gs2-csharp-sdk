@@ -29,11 +29,11 @@ namespace Gs2.Gs2Quest.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Contents : IComparable
+	public partial class Contents : IComparable
 	{
-        public string Metadata { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; } = null!;
-        public int? Weight { set; get; } = null!;
+        public string Metadata { set; get; }
+        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
+        public int? Weight { set; get; }
         public Contents WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

@@ -29,10 +29,10 @@ namespace Gs2.Gs2Mission.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CurrentMissionMaster : IComparable
+	public partial class CurrentMissionMaster : IComparable
 	{
-        public string NamespaceId { set; get; } = null!;
-        public string Settings { set; get; } = null!;
+        public string NamespaceId { set; get; }
+        public string Settings { set; get; }
         public CurrentMissionMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

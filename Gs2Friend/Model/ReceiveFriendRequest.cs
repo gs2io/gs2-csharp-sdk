@@ -29,10 +29,10 @@ namespace Gs2.Gs2Friend.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ReceiveFriendRequest : IComparable
+	public partial class ReceiveFriendRequest : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public string TargetUserId { set; get; } = null!;
+        public string UserId { set; get; }
+        public string TargetUserId { set; get; }
         public ReceiveFriendRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

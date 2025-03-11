@@ -29,17 +29,17 @@ namespace Gs2.Gs2Showcase.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ShowcaseMaster : IComparable
+	public partial class ShowcaseMaster : IComparable
 	{
-        public string ShowcaseId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string SalesPeriodEventId { set; get; } = null!;
-        public Gs2.Gs2Showcase.Model.DisplayItemMaster[] DisplayItems { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string ShowcaseId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string SalesPeriodEventId { set; get; }
+        public Gs2.Gs2Showcase.Model.DisplayItemMaster[] DisplayItems { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public ShowcaseMaster WithShowcaseId(string showcaseId) {
             this.ShowcaseId = showcaseId;
             return this;

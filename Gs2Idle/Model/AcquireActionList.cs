@@ -29,9 +29,9 @@ namespace Gs2.Gs2Idle.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AcquireActionList : IComparable
+	public partial class AcquireActionList : IComparable
 	{
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public AcquireActionList WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

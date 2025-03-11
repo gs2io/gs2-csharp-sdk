@@ -29,11 +29,11 @@ namespace Gs2.Gs2Showcase.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SalesItemGroup : IComparable
+	public partial class SalesItemGroup : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2Showcase.Model.SalesItem[] SalesItems { set; get; } = null!;
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Showcase.Model.SalesItem[] SalesItems { set; get; }
         public SalesItemGroup WithName(string name) {
             this.Name = name;
             return this;

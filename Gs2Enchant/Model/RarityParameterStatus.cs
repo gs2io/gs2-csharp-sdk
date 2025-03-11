@@ -29,16 +29,16 @@ namespace Gs2.Gs2Enchant.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RarityParameterStatus : IComparable
+	public partial class RarityParameterStatus : IComparable
 	{
-        public string RarityParameterStatusId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string ParameterName { set; get; } = null!;
-        public string PropertyId { set; get; } = null!;
-        public Gs2.Gs2Enchant.Model.RarityParameterValue[] ParameterValues { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string RarityParameterStatusId { set; get; }
+        public string UserId { set; get; }
+        public string ParameterName { set; get; }
+        public string PropertyId { set; get; }
+        public Gs2.Gs2Enchant.Model.RarityParameterValue[] ParameterValues { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public RarityParameterStatus WithRarityParameterStatusId(string rarityParameterStatusId) {
             this.RarityParameterStatusId = rarityParameterStatusId;
             return this;

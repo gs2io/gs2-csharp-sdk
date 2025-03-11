@@ -29,18 +29,18 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Event : IComparable
+	public partial class Event : IComparable
 	{
-        public string EventId { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string EventType { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.VerifyReceiptEvent VerifyReceiptEvent { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.DepositEvent DepositEvent { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.WithdrawEvent WithdrawEvent { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.RefundEvent RefundEvent { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string EventId { set; get; }
+        public string TransactionId { set; get; }
+        public string UserId { set; get; }
+        public string EventType { set; get; }
+        public Gs2.Gs2Money2.Model.VerifyReceiptEvent VerifyReceiptEvent { set; get; }
+        public Gs2.Gs2Money2.Model.DepositEvent DepositEvent { set; get; }
+        public Gs2.Gs2Money2.Model.WithdrawEvent WithdrawEvent { set; get; }
+        public Gs2.Gs2Money2.Model.RefundEvent RefundEvent { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Event WithEventId(string eventId) {
             this.EventId = eventId;
             return this;

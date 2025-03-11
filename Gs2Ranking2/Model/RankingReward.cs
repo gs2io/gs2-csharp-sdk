@@ -29,11 +29,11 @@ namespace Gs2.Gs2Ranking2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RankingReward : IComparable
+	public partial class RankingReward : IComparable
 	{
-        public int? ThresholdRank { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public int? ThresholdRank { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public RankingReward WithThresholdRank(int? thresholdRank) {
             this.ThresholdRank = thresholdRank;
             return this;

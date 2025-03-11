@@ -29,11 +29,11 @@ namespace Gs2.Gs2MegaField.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Position : IComparable
+	public partial class Position : IComparable
 	{
-        public float? X { set; get; } = null!;
-        public float? Y { set; get; } = null!;
-        public float? Z { set; get; } = null!;
+        public float? X { set; get; }
+        public float? Y { set; get; }
+        public float? Z { set; get; }
         public Position WithX(float? x) {
             this.X = x;
             return this;

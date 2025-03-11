@@ -29,15 +29,15 @@ namespace Gs2.Gs2SeasonRating.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Vote : IComparable
+	public partial class Vote : IComparable
 	{
-        public string VoteId { set; get; } = null!;
-        public string SeasonName { set; get; } = null!;
-        public string SessionName { set; get; } = null!;
-        public Gs2.Gs2SeasonRating.Model.WrittenBallot[] WrittenBallots { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string VoteId { set; get; }
+        public string SeasonName { set; get; }
+        public string SessionName { set; get; }
+        public Gs2.Gs2SeasonRating.Model.WrittenBallot[] WrittenBallots { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Vote WithVoteId(string voteId) {
             this.VoteId = voteId;
             return this;

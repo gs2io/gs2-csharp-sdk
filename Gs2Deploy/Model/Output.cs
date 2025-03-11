@@ -29,12 +29,12 @@ namespace Gs2.Gs2Deploy.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Output : IComparable
+	public partial class Output : IComparable
 	{
-        public string OutputId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Value { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
+        public string OutputId { set; get; }
+        public string Name { set; get; }
+        public string Value { set; get; }
+        public long? CreatedAt { set; get; }
         public Output WithOutputId(string outputId) {
             this.OutputId = outputId;
             return this;

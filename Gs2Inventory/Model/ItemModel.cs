@@ -29,14 +29,14 @@ namespace Gs2.Gs2Inventory.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ItemModel : IComparable
+	public partial class ItemModel : IComparable
 	{
-        public string ItemModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public long? StackingLimit { set; get; } = null!;
-        public bool? AllowMultipleStacks { set; get; } = null!;
-        public int? SortValue { set; get; } = null!;
+        public string ItemModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public long? StackingLimit { set; get; }
+        public bool? AllowMultipleStacks { set; get; }
+        public int? SortValue { set; get; }
         public ItemModel WithItemModelId(string itemModelId) {
             this.ItemModelId = itemModelId;
             return this;

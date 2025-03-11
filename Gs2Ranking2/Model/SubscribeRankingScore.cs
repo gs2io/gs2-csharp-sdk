@@ -29,17 +29,17 @@ namespace Gs2.Gs2Ranking2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SubscribeRankingScore : IComparable
+	public partial class SubscribeRankingScore : IComparable
 	{
-        public string SubscribeRankingScoreId { set; get; } = null!;
-        public string RankingName { set; get; } = null!;
-        public long? Season { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public long? Score { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SubscribeRankingScoreId { set; get; }
+        public string RankingName { set; get; }
+        public long? Season { set; get; }
+        public string UserId { set; get; }
+        public long? Score { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SubscribeRankingScore WithSubscribeRankingScoreId(string subscribeRankingScoreId) {
             this.SubscribeRankingScoreId = subscribeRankingScoreId;
             return this;

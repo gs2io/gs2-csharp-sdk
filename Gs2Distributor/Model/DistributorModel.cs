@@ -29,13 +29,13 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DistributorModel : IComparable
+	public partial class DistributorModel : IComparable
 	{
-        public string DistributorModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string InboxNamespaceId { set; get; } = null!;
-        public string[] WhiteListTargetIds { set; get; } = null!;
+        public string DistributorModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string InboxNamespaceId { set; get; }
+        public string[] WhiteListTargetIds { set; get; }
         public DistributorModel WithDistributorModelId(string distributorModelId) {
             this.DistributorModelId = distributorModelId;
             return this;

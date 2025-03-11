@@ -29,11 +29,11 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class PlatformUser : IComparable
+	public partial class PlatformUser : IComparable
 	{
-        public int? Type { set; get; } = null!;
-        public string UserIdentifier { set; get; } = null!;
-        public string UserId { set; get; } = null!;
+        public int? Type { set; get; }
+        public string UserIdentifier { set; get; }
+        public string UserId { set; get; }
         public PlatformUser WithType(int? type) {
             this.Type = type;
             return this;

@@ -29,9 +29,9 @@ namespace Gs2.Gs2AdReward.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class UnityAd : IComparable
+	public partial class UnityAd : IComparable
 	{
-        public string[] Keys { set; get; } = null!;
+        public string[] Keys { set; get; }
         public UnityAd WithKeys(string[] keys) {
             this.Keys = keys;
             return this;

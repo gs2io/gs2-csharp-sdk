@@ -29,15 +29,15 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Rating : IComparable
+	public partial class Rating : IComparable
 	{
-        public string RatingId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public float? RateValue { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string RatingId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public float? RateValue { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Rating WithRatingId(string ratingId) {
             this.RatingId = ratingId;
             return this;

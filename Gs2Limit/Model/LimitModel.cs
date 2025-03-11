@@ -29,17 +29,17 @@ namespace Gs2.Gs2Limit.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LimitModel : IComparable
+	public partial class LimitModel : IComparable
 	{
-        public string LimitModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string ResetType { set; get; } = null!;
-        public int? ResetDayOfMonth { set; get; } = null!;
-        public string ResetDayOfWeek { set; get; } = null!;
-        public int? ResetHour { set; get; } = null!;
-        public long? AnchorTimestamp { set; get; } = null!;
-        public int? Days { set; get; } = null!;
+        public string LimitModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string ResetType { set; get; }
+        public int? ResetDayOfMonth { set; get; }
+        public string ResetDayOfWeek { set; get; }
+        public int? ResetHour { set; get; }
+        public long? AnchorTimestamp { set; get; }
+        public int? Days { set; get; }
         public LimitModel WithLimitModelId(string limitModelId) {
             this.LimitModelId = limitModelId;
             return this;

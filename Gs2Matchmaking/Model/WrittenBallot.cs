@@ -29,10 +29,10 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class WrittenBallot : IComparable
+	public partial class WrittenBallot : IComparable
 	{
-        public Gs2.Gs2Matchmaking.Model.Ballot Ballot { set; get; } = null!;
-        public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; } = null!;
+        public Gs2.Gs2Matchmaking.Model.Ballot Ballot { set; get; }
+        public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
         public WrittenBallot WithBallot(Gs2.Gs2Matchmaking.Model.Ballot ballot) {
             this.Ballot = ballot;
             return this;

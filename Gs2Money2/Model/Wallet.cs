@@ -29,17 +29,17 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Wallet : IComparable
+	public partial class Wallet : IComparable
 	{
-        public string WalletId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public int? Slot { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.WalletSummary Summary { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.DepositTransaction[] DepositTransactions { set; get; } = null!;
-        public bool? SharedFreeCurrency { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string WalletId { set; get; }
+        public string UserId { set; get; }
+        public int? Slot { set; get; }
+        public Gs2.Gs2Money2.Model.WalletSummary Summary { set; get; }
+        public Gs2.Gs2Money2.Model.DepositTransaction[] DepositTransactions { set; get; }
+        public bool? SharedFreeCurrency { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Wallet WithWalletId(string walletId) {
             this.WalletId = walletId;
             return this;

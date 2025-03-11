@@ -29,17 +29,17 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DailyTransactionHistory : IComparable
+	public partial class DailyTransactionHistory : IComparable
 	{
-        public string DailyTransactionHistoryId { set; get; } = null!;
-        public int? Year { set; get; } = null!;
-        public int? Month { set; get; } = null!;
-        public int? Day { set; get; } = null!;
-        public string Currency { set; get; } = null!;
-        public float? DepositAmount { set; get; } = null!;
-        public float? WithdrawAmount { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string DailyTransactionHistoryId { set; get; }
+        public int? Year { set; get; }
+        public int? Month { set; get; }
+        public int? Day { set; get; }
+        public string Currency { set; get; }
+        public float? DepositAmount { set; get; }
+        public float? WithdrawAmount { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public DailyTransactionHistory WithDailyTransactionHistoryId(string dailyTransactionHistoryId) {
             this.DailyTransactionHistoryId = dailyTransactionHistoryId;
             return this;

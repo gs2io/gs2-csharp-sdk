@@ -29,10 +29,10 @@ namespace Gs2.Gs2Showcase.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class PurchaseCount : IComparable
+	public partial class PurchaseCount : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public int? Count { set; get; } = null!;
+        public string Name { set; get; }
+        public int? Count { set; get; }
         public PurchaseCount WithName(string name) {
             this.Name = name;
             return this;

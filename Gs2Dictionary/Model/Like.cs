@@ -29,11 +29,11 @@ namespace Gs2.Gs2Dictionary.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Like : IComparable
+	public partial class Like : IComparable
 	{
-        public string LikeId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Name { set; get; } = null!;
+        public string LikeId { set; get; }
+        public string UserId { set; get; }
+        public string Name { set; get; }
         public Like WithLikeId(string likeId) {
             this.LikeId = likeId;
             return this;

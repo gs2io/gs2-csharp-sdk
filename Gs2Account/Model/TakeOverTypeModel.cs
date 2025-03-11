@@ -29,12 +29,12 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TakeOverTypeModel : IComparable
+	public partial class TakeOverTypeModel : IComparable
 	{
-        public string TakeOverTypeModelId { set; get; } = null!;
-        public int? Type { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2Account.Model.OpenIdConnectSetting OpenIdConnectSetting { set; get; } = null!;
+        public string TakeOverTypeModelId { set; get; }
+        public int? Type { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Account.Model.OpenIdConnectSetting OpenIdConnectSetting { set; get; }
         public TakeOverTypeModel WithTakeOverTypeModelId(string takeOverTypeModelId) {
             this.TakeOverTypeModelId = takeOverTypeModelId;
             return this;

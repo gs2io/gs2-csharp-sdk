@@ -29,10 +29,10 @@ namespace Gs2.Gs2Enhance.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Material : IComparable
+	public partial class Material : IComparable
 	{
-        public string MaterialItemSetId { set; get; } = null!;
-        public int? Count { set; get; } = null!;
+        public string MaterialItemSetId { set; get; }
+        public int? Count { set; get; }
         public Material WithMaterialItemSetId(string materialItemSetId) {
             this.MaterialItemSetId = materialItemSetId;
             return this;

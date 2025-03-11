@@ -29,10 +29,10 @@ namespace Gs2.Gs2Enchant.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RarityParameterCountModel : IComparable
+	public partial class RarityParameterCountModel : IComparable
 	{
-        public int? Count { set; get; } = null!;
-        public int? Weight { set; get; } = null!;
+        public int? Count { set; get; }
+        public int? Weight { set; get; }
         public RarityParameterCountModel WithCount(int? count) {
             this.Count = count;
             return this;

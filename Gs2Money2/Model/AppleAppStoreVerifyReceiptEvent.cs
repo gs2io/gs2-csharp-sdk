@@ -29,9 +29,9 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AppleAppStoreVerifyReceiptEvent : IComparable
+	public partial class AppleAppStoreVerifyReceiptEvent : IComparable
 	{
-        public string Environment { set; get; } = null!;
+        public string Environment { set; get; }
         public AppleAppStoreVerifyReceiptEvent WithEnvironment(string environment) {
             this.Environment = environment;
             return this;

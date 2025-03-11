@@ -29,16 +29,16 @@ namespace Gs2.Gs2Showcase.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SalesItemGroupMaster : IComparable
+	public partial class SalesItemGroupMaster : IComparable
 	{
-        public string SalesItemGroupId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string[] SalesItemNames { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SalesItemGroupId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string[] SalesItemNames { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SalesItemGroupMaster WithSalesItemGroupId(string salesItemGroupId) {
             this.SalesItemGroupId = salesItemGroupId;
             return this;

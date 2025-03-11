@@ -29,11 +29,11 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GooglePlayRealtimeNotificationMessage : IComparable
+	public partial class GooglePlayRealtimeNotificationMessage : IComparable
 	{
-        public string Data { set; get; } = null!;
-        public string MessageId { set; get; } = null!;
-        public string PublishTime { set; get; } = null!;
+        public string Data { set; get; }
+        public string MessageId { set; get; }
+        public string PublishTime { set; get; }
         public GooglePlayRealtimeNotificationMessage WithData(string data) {
             this.Data = data;
             return this;

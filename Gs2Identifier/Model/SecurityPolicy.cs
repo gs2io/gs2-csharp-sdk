@@ -29,14 +29,14 @@ namespace Gs2.Gs2Identifier.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SecurityPolicy : IComparable
+	public partial class SecurityPolicy : IComparable
 	{
-        public string SecurityPolicyId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Policy { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
+        public string SecurityPolicyId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Policy { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
         public SecurityPolicy WithSecurityPolicyId(string securityPolicyId) {
             this.SecurityPolicyId = securityPolicyId;
             return this;

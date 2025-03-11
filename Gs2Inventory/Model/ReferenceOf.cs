@@ -29,10 +29,10 @@ namespace Gs2.Gs2Inventory.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ReferenceOf : IComparable
+	public partial class ReferenceOf : IComparable
 	{
-        public string ReferenceOfId { set; get; } = null!;
-        public string Name { set; get; } = null!;
+        public string ReferenceOfId { set; get; }
+        public string Name { set; get; }
         public ReferenceOf WithReferenceOfId(string referenceOfId) {
             this.ReferenceOfId = referenceOfId;
             return this;

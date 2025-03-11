@@ -29,11 +29,11 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ChangeStateEvent : IComparable
+	public partial class ChangeStateEvent : IComparable
 	{
-        public string TaskName { set; get; } = null!;
-        public string Hash { set; get; } = null!;
-        public long? Timestamp { set; get; } = null!;
+        public string TaskName { set; get; }
+        public string Hash { set; get; }
+        public long? Timestamp { set; get; }
         public ChangeStateEvent WithTaskName(string taskName) {
             this.TaskName = taskName;
             return this;

@@ -29,11 +29,11 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SendMemberRequest : IComparable
+	public partial class SendMemberRequest : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public string TargetGuildName { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
+        public string UserId { set; get; }
+        public string TargetGuildName { set; get; }
+        public string Metadata { set; get; }
         public SendMemberRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

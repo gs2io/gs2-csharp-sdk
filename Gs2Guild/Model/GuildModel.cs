@@ -29,20 +29,20 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GuildModel : IComparable
+	public partial class GuildModel : IComparable
 	{
-        public string GuildModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public int? DefaultMaximumMemberCount { set; get; } = null!;
-        public int? MaximumMemberCount { set; get; } = null!;
-        public int? InactivityPeriodDays { set; get; } = null!;
-        public Gs2.Gs2Guild.Model.RoleModel[] Roles { set; get; } = null!;
-        public string GuildMasterRole { set; get; } = null!;
-        public string GuildMemberDefaultRole { set; get; } = null!;
-        public int? RejoinCoolTimeMinutes { set; get; } = null!;
-        public int? MaxConcurrentJoinGuilds { set; get; } = null!;
-        public int? MaxConcurrentGuildMasterCount { set; get; } = null!;
+        public string GuildModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public int? DefaultMaximumMemberCount { set; get; }
+        public int? MaximumMemberCount { set; get; }
+        public int? InactivityPeriodDays { set; get; }
+        public Gs2.Gs2Guild.Model.RoleModel[] Roles { set; get; }
+        public string GuildMasterRole { set; get; }
+        public string GuildMemberDefaultRole { set; get; }
+        public int? RejoinCoolTimeMinutes { set; get; }
+        public int? MaxConcurrentJoinGuilds { set; get; }
+        public int? MaxConcurrentGuildMasterCount { set; get; }
         public GuildModel WithGuildModelId(string guildModelId) {
             this.GuildModelId = guildModelId;
             return this;

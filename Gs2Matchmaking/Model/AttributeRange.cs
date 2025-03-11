@@ -29,11 +29,11 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AttributeRange : IComparable
+	public partial class AttributeRange : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public int? Min { set; get; } = null!;
-        public int? Max { set; get; } = null!;
+        public string Name { set; get; }
+        public int? Min { set; get; }
+        public int? Max { set; get; }
         public AttributeRange WithName(string name) {
             this.Name = name;
             return this;

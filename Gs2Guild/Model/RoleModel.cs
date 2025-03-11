@@ -29,11 +29,11 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RoleModel : IComparable
+	public partial class RoleModel : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string PolicyDocument { set; get; } = null!;
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string PolicyDocument { set; get; }
         public RoleModel WithName(string name) {
             this.Name = name;
             return this;

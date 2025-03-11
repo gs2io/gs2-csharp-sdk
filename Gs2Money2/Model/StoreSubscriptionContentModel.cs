@@ -29,18 +29,18 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class StoreSubscriptionContentModel : IComparable
+	public partial class StoreSubscriptionContentModel : IComparable
 	{
-        public string StoreSubscriptionContentModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string ScheduleNamespaceId { set; get; } = null!;
-        public string TriggerName { set; get; } = null!;
-        public string TriggerExtendMode { set; get; } = null!;
-        public int? RollupHour { set; get; } = null!;
-        public int? ReallocateSpanDays { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent AppleAppStore { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent GooglePlay { set; get; } = null!;
+        public string StoreSubscriptionContentModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string ScheduleNamespaceId { set; get; }
+        public string TriggerName { set; get; }
+        public string TriggerExtendMode { set; get; }
+        public int? RollupHour { set; get; }
+        public int? ReallocateSpanDays { set; get; }
+        public Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent AppleAppStore { set; get; }
+        public Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent GooglePlay { set; get; }
         public StoreSubscriptionContentModel WithStoreSubscriptionContentModelId(string storeSubscriptionContentModelId) {
             this.StoreSubscriptionContentModelId = storeSubscriptionContentModelId;
             return this;

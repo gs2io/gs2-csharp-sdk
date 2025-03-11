@@ -29,12 +29,12 @@ namespace Gs2.Gs2Version.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ScheduleVersion : IComparable
+	public partial class ScheduleVersion : IComparable
 	{
-        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; } = null!;
-        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; } = null!;
-        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; } = null!;
-        public string ScheduleEventId { set; get; } = null!;
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
+        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
+        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
+        public string ScheduleEventId { set; get; }
         public ScheduleVersion WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;

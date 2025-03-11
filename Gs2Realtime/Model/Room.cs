@@ -29,17 +29,17 @@ namespace Gs2.Gs2Realtime.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Room : IComparable
+	public partial class Room : IComparable
 	{
-        public string RoomId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string IpAddress { set; get; } = null!;
-        public int? Port { set; get; } = null!;
-        public string EncryptionKey { set; get; } = null!;
-        public string[] NotificationUserIds { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string RoomId { set; get; }
+        public string Name { set; get; }
+        public string IpAddress { set; get; }
+        public int? Port { set; get; }
+        public string EncryptionKey { set; get; }
+        public string[] NotificationUserIds { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Room WithRoomId(string roomId) {
             this.RoomId = roomId;
             return this;

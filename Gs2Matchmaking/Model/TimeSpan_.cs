@@ -29,11 +29,11 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TimeSpan_ : IComparable
+	public partial class TimeSpan_ : IComparable
 	{
-        public int? Days { set; get; } = null!;
-        public int? Hours { set; get; } = null!;
-        public int? Minutes { set; get; } = null!;
+        public int? Days { set; get; }
+        public int? Hours { set; get; }
+        public int? Minutes { set; get; }
         public TimeSpan_ WithDays(int? days) {
             this.Days = days;
             return this;

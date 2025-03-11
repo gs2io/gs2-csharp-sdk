@@ -29,12 +29,12 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AcquireActionResult : IComparable
+	public partial class AcquireActionResult : IComparable
 	{
-        public string Action { set; get; } = null!;
-        public string AcquireRequest { set; get; } = null!;
-        public int? StatusCode { set; get; } = null!;
-        public string AcquireResult { set; get; } = null!;
+        public string Action { set; get; }
+        public string AcquireRequest { set; get; }
+        public int? StatusCode { set; get; }
+        public string AcquireResult { set; get; }
         public AcquireActionResult WithAction(string action) {
             this.Action = action;
             return this;

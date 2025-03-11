@@ -29,11 +29,11 @@ namespace Gs2.Gs2News.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Content : IComparable
+	public partial class Content : IComparable
 	{
-        public string Section { set; get; } = null!;
-        public string Value { set; get; } = null!;
-        public string FrontMatter { set; get; } = null!;
+        public string Section { set; get; }
+        public string Value { set; get; }
+        public string FrontMatter { set; get; }
         public Content WithSection(string section) {
             this.Section = section;
             return this;

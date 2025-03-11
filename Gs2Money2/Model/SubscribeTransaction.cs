@@ -29,20 +29,20 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SubscribeTransaction : IComparable
+	public partial class SubscribeTransaction : IComparable
 	{
-        public string SubscribeTransactionId { set; get; } = null!;
-        public string ContentName { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public string Store { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string StatusDetail { set; get; } = null!;
-        public long? ExpiresAt { set; get; } = null!;
-        public long? LastAllocatedAt { set; get; } = null!;
-        public long? LastTakeOverAt { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SubscribeTransactionId { set; get; }
+        public string ContentName { set; get; }
+        public string TransactionId { set; get; }
+        public string Store { set; get; }
+        public string UserId { set; get; }
+        public string StatusDetail { set; get; }
+        public long? ExpiresAt { set; get; }
+        public long? LastAllocatedAt { set; get; }
+        public long? LastTakeOverAt { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SubscribeTransaction WithSubscribeTransactionId(string subscribeTransactionId) {
             this.SubscribeTransactionId = subscribeTransactionId;
             return this;

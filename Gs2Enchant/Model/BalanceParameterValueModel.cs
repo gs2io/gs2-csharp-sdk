@@ -29,10 +29,10 @@ namespace Gs2.Gs2Enchant.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BalanceParameterValueModel : IComparable
+	public partial class BalanceParameterValueModel : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
+        public string Name { set; get; }
+        public string Metadata { set; get; }
         public BalanceParameterValueModel WithName(string name) {
             this.Name = name;
             return this;

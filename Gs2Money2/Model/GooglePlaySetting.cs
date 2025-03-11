@@ -29,10 +29,10 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GooglePlaySetting : IComparable
+	public partial class GooglePlaySetting : IComparable
 	{
-        public string PackageName { set; get; } = null!;
-        public string PublicKey { set; get; } = null!;
+        public string PackageName { set; get; }
+        public string PublicKey { set; get; }
         public GooglePlaySetting WithPackageName(string packageName) {
             this.PackageName = packageName;
             return this;

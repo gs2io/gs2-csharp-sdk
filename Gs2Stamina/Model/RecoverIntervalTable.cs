@@ -29,12 +29,12 @@ namespace Gs2.Gs2Stamina.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RecoverIntervalTable : IComparable
+	public partial class RecoverIntervalTable : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string ExperienceModelId { set; get; } = null!;
-        public int[] Values { set; get; } = null!;
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string ExperienceModelId { set; get; }
+        public int[] Values { set; get; }
         public RecoverIntervalTable WithName(string name) {
             this.Name = name;
             return this;

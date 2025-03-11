@@ -29,16 +29,16 @@ namespace Gs2.Gs2Deploy.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Stack : IComparable
+	public partial class Stack : IComparable
 	{
-        public string StackId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Template { set; get; } = null!;
-        public string Status { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string StackId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Template { set; get; }
+        public string Status { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Stack WithStackId(string stackId) {
             this.StackId = stackId;
             return this;

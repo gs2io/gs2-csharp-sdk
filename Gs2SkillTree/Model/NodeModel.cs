@@ -29,16 +29,16 @@ namespace Gs2.Gs2SkillTree.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class NodeModel : IComparable
+	public partial class NodeModel : IComparable
 	{
-        public string NodeModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Core.Model.VerifyAction[] ReleaseVerifyActions { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] ReturnAcquireActions { set; get; } = null!;
-        public float? RestrainReturnRate { set; get; } = null!;
-        public string[] PremiseNodeNames { set; get; } = null!;
+        public string NodeModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Core.Model.VerifyAction[] ReleaseVerifyActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] ReturnAcquireActions { set; get; }
+        public float? RestrainReturnRate { set; get; }
+        public string[] PremiseNodeNames { set; get; }
         public NodeModel WithNodeModelId(string nodeModelId) {
             this.NodeModelId = nodeModelId;
             return this;

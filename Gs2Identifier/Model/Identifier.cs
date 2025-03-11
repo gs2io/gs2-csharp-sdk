@@ -29,13 +29,13 @@ namespace Gs2.Gs2Identifier.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Identifier : IComparable
+	public partial class Identifier : IComparable
 	{
-        public string ClientId { set; get; } = null!;
-        public string UserName { set; get; } = null!;
-        public string ClientSecret { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string ClientId { set; get; }
+        public string UserName { set; get; }
+        public string ClientSecret { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Identifier WithClientId(string clientId) {
             this.ClientId = clientId;
             return this;

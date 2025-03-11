@@ -29,10 +29,10 @@ namespace Gs2.Gs2Lottery.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DrawnPrize : IComparable
+	public partial class DrawnPrize : IComparable
 	{
-        public string PrizeId { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public string PrizeId { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public DrawnPrize WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;

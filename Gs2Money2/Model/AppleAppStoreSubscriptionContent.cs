@@ -29,9 +29,9 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AppleAppStoreSubscriptionContent : IComparable
+	public partial class AppleAppStoreSubscriptionContent : IComparable
 	{
-        public string SubscriptionGroupIdentifier { set; get; } = null!;
+        public string SubscriptionGroupIdentifier { set; get; }
         public AppleAppStoreSubscriptionContent WithSubscriptionGroupIdentifier(string subscriptionGroupIdentifier) {
             this.SubscriptionGroupIdentifier = subscriptionGroupIdentifier;
             return this;

@@ -29,12 +29,12 @@ namespace Gs2.Gs2JobQueue.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class JobResultBody : IComparable
+	public partial class JobResultBody : IComparable
 	{
-        public int? TryNumber { set; get; } = null!;
-        public int? StatusCode { set; get; } = null!;
-        public string Result { set; get; } = null!;
-        public long? TryAt { set; get; } = null!;
+        public int? TryNumber { set; get; }
+        public int? StatusCode { set; get; }
+        public string Result { set; get; }
+        public long? TryAt { set; get; }
         public JobResultBody WithTryNumber(int? tryNumber) {
             this.TryNumber = tryNumber;
             return this;

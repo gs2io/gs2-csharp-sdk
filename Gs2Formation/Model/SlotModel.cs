@@ -29,11 +29,11 @@ namespace Gs2.Gs2Formation.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SlotModel : IComparable
+	public partial class SlotModel : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string PropertyRegex { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
+        public string Name { set; get; }
+        public string PropertyRegex { set; get; }
+        public string Metadata { set; get; }
         public SlotModel WithName(string name) {
             this.Name = name;
             return this;

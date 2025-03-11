@@ -29,10 +29,10 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class StackEntry : IComparable
+	public partial class StackEntry : IComparable
 	{
-        public string StateMachineName { set; get; } = null!;
-        public string TaskName { set; get; } = null!;
+        public string StateMachineName { set; get; }
+        public string TaskName { set; get; }
         public StackEntry WithStateMachineName(string stateMachineName) {
             this.StateMachineName = stateMachineName;
             return this;

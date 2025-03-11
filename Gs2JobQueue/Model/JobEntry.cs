@@ -29,11 +29,11 @@ namespace Gs2.Gs2JobQueue.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class JobEntry : IComparable
+	public partial class JobEntry : IComparable
 	{
-        public string ScriptId { set; get; } = null!;
-        public string Args { set; get; } = null!;
-        public int? MaxTryCount { set; get; } = null!;
+        public string ScriptId { set; get; }
+        public string Args { set; get; }
+        public int? MaxTryCount { set; get; }
         public JobEntry WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;

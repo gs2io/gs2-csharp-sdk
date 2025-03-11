@@ -29,26 +29,26 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Guild : IComparable
+	public partial class Guild : IComparable
 	{
-        public string GuildId { set; get; } = null!;
-        public string GuildModelName { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string DisplayName { set; get; } = null!;
-        public int? Attribute1 { set; get; } = null!;
-        public int? Attribute2 { set; get; } = null!;
-        public int? Attribute3 { set; get; } = null!;
-        public int? Attribute4 { set; get; } = null!;
-        public int? Attribute5 { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string JoinPolicy { set; get; } = null!;
-        public Gs2.Gs2Guild.Model.RoleModel[] CustomRoles { set; get; } = null!;
-        public string GuildMemberDefaultRole { set; get; } = null!;
-        public int? CurrentMaximumMemberCount { set; get; } = null!;
-        public Gs2.Gs2Guild.Model.Member[] Members { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string GuildId { set; get; }
+        public string GuildModelName { set; get; }
+        public string Name { set; get; }
+        public string DisplayName { set; get; }
+        public int? Attribute1 { set; get; }
+        public int? Attribute2 { set; get; }
+        public int? Attribute3 { set; get; }
+        public int? Attribute4 { set; get; }
+        public int? Attribute5 { set; get; }
+        public string Metadata { set; get; }
+        public string JoinPolicy { set; get; }
+        public Gs2.Gs2Guild.Model.RoleModel[] CustomRoles { set; get; }
+        public string GuildMemberDefaultRole { set; get; }
+        public int? CurrentMaximumMemberCount { set; get; }
+        public Gs2.Gs2Guild.Model.Member[] Members { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Guild WithGuildId(string guildId) {
             this.GuildId = guildId;
             return this;

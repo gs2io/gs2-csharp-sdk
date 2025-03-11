@@ -29,9 +29,9 @@ namespace Gs2.Gs2LoginReward.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Reward : IComparable
+	public partial class Reward : IComparable
 	{
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public Reward WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

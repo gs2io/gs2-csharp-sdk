@@ -29,13 +29,13 @@ namespace Gs2.Gs2Formation.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SlotWithSignature : IComparable
+	public partial class SlotWithSignature : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string PropertyType { set; get; } = null!;
-        public string Body { set; get; } = null!;
-        public string Signature { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
+        public string Name { set; get; }
+        public string PropertyType { set; get; }
+        public string Body { set; get; }
+        public string Signature { set; get; }
+        public string Metadata { set; get; }
         public SlotWithSignature WithName(string name) {
             this.Name = name;
             return this;

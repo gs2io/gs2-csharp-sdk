@@ -29,10 +29,10 @@ namespace Gs2.Gs2Script.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RandomUsed : IComparable
+	public partial class RandomUsed : IComparable
 	{
-        public long? Category { set; get; } = null!;
-        public long? Used { set; get; } = null!;
+        public long? Category { set; get; }
+        public long? Used { set; get; }
         public RandomUsed WithCategory(long? category) {
             this.Category = category;
             return this;

@@ -29,10 +29,10 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Config : IComparable
+	public partial class Config : IComparable
 	{
-        public string Key { set; get; } = null!;
-        public string Value { set; get; } = null!;
+        public string Key { set; get; }
+        public string Value { set; get; }
         public Config WithKey(string key) {
             this.Key = key;
             return this;

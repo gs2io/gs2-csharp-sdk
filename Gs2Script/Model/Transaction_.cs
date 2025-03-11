@@ -29,12 +29,12 @@ namespace Gs2.Gs2Script.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Transaction_ : IComparable
+	public partial class Transaction_ : IComparable
 	{
-        public string TransactionId { set; get; } = null!;
-        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public string TransactionId { set; get; }
+        public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public Transaction_ WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

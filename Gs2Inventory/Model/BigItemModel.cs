@@ -29,11 +29,11 @@ namespace Gs2.Gs2Inventory.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BigItemModel : IComparable
+	public partial class BigItemModel : IComparable
 	{
-        public string ItemModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
+        public string ItemModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
         public BigItemModel WithItemModelId(string itemModelId) {
             this.ItemModelId = itemModelId;
             return this;

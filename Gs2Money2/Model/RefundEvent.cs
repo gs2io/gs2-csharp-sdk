@@ -29,12 +29,12 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RefundEvent : IComparable
+	public partial class RefundEvent : IComparable
 	{
-        public string ContentName { set; get; } = null!;
-        public string Platform { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent AppleAppStoreRefundEvent { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent GooglePlayRefundEvent { set; get; } = null!;
+        public string ContentName { set; get; }
+        public string Platform { set; get; }
+        public Gs2.Gs2Money2.Model.AppleAppStoreVerifyReceiptEvent AppleAppStoreRefundEvent { set; get; }
+        public Gs2.Gs2Money2.Model.GooglePlayVerifyReceiptEvent GooglePlayRefundEvent { set; get; }
         public RefundEvent WithContentName(string contentName) {
             this.ContentName = contentName;
             return this;

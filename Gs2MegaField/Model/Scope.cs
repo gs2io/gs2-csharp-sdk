@@ -29,11 +29,11 @@ namespace Gs2.Gs2MegaField.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Scope : IComparable
+	public partial class Scope : IComparable
 	{
-        public string LayerName { set; get; } = null!;
-        public float? R { set; get; } = null!;
-        public int? Limit { set; get; } = null!;
+        public string LayerName { set; get; }
+        public float? R { set; get; }
+        public int? Limit { set; get; }
         public Scope WithLayerName(string layerName) {
             this.LayerName = layerName;
             return this;

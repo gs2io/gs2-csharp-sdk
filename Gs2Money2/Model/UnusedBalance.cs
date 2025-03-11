@@ -29,13 +29,13 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class UnusedBalance : IComparable
+	public partial class UnusedBalance : IComparable
 	{
-        public string UnusedBalanceId { set; get; } = null!;
-        public string Currency { set; get; } = null!;
-        public float? Balance { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string UnusedBalanceId { set; get; }
+        public string Currency { set; get; }
+        public float? Balance { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public UnusedBalance WithUnusedBalanceId(string unusedBalanceId) {
             this.UnusedBalanceId = unusedBalanceId;
             return this;

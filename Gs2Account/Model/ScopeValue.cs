@@ -29,10 +29,10 @@ namespace Gs2.Gs2Account.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ScopeValue : IComparable
+	public partial class ScopeValue : IComparable
 	{
-        public string Key { set; get; } = null!;
-        public string Value { set; get; } = null!;
+        public string Key { set; get; }
+        public string Value { set; get; }
         public ScopeValue WithKey(string key) {
             this.Key = key;
             return this;

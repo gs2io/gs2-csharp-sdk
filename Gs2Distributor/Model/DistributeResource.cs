@@ -29,10 +29,10 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DistributeResource : IComparable
+	public partial class DistributeResource : IComparable
 	{
-        public string Action { set; get; } = null!;
-        public string Request { set; get; } = null!;
+        public string Action { set; get; }
+        public string Request { set; get; }
         public DistributeResource WithAction(string action) {
             this.Action = action;
             return this;

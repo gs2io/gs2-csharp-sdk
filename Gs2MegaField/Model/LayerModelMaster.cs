@@ -29,15 +29,15 @@ namespace Gs2.Gs2MegaField.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LayerModelMaster : IComparable
+	public partial class LayerModelMaster : IComparable
 	{
-        public string LayerModelMasterId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string LayerModelMasterId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public LayerModelMaster WithLayerModelMasterId(string layerModelMasterId) {
             this.LayerModelMasterId = layerModelMasterId;
             return this;

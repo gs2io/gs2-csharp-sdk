@@ -29,10 +29,10 @@ namespace Gs2.Gs2Lottery.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CurrentLotteryMaster : IComparable
+	public partial class CurrentLotteryMaster : IComparable
 	{
-        public string NamespaceId { set; get; } = null!;
-        public string Settings { set; get; } = null!;
+        public string NamespaceId { set; get; }
+        public string Settings { set; get; }
         public CurrentLotteryMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;

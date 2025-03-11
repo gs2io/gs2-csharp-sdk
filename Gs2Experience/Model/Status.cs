@@ -29,19 +29,19 @@ namespace Gs2.Gs2Experience.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Status : IComparable
+	public partial class Status : IComparable
 	{
-        public string StatusId { set; get; } = null!;
-        public string ExperienceName { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string PropertyId { set; get; } = null!;
-        public long? ExperienceValue { set; get; } = null!;
-        public long? RankValue { set; get; } = null!;
-        public long? RankCapValue { set; get; } = null!;
-        public long? NextRankUpExperienceValue { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string StatusId { set; get; }
+        public string ExperienceName { set; get; }
+        public string UserId { set; get; }
+        public string PropertyId { set; get; }
+        public long? ExperienceValue { set; get; }
+        public long? RankValue { set; get; }
+        public long? RankCapValue { set; get; }
+        public long? NextRankUpExperienceValue { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;

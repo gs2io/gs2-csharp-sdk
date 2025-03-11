@@ -29,15 +29,15 @@ namespace Gs2.Gs2Guild.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SendBox : IComparable
+	public partial class SendBox : IComparable
 	{
-        public string SendBoxId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string GuildModelName { set; get; } = null!;
-        public string[] TargetGuildNames { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string SendBoxId { set; get; }
+        public string UserId { set; get; }
+        public string GuildModelName { set; get; }
+        public string[] TargetGuildNames { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SendBox WithSendBoxId(string sendBoxId) {
             this.SendBoxId = sendBoxId;
             return this;

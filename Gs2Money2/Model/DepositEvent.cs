@@ -29,11 +29,11 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class DepositEvent : IComparable
+	public partial class DepositEvent : IComparable
 	{
-        public int? Slot { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.DepositTransaction[] DepositTransactions { set; get; } = null!;
-        public Gs2.Gs2Money2.Model.WalletSummary Status { set; get; } = null!;
+        public int? Slot { set; get; }
+        public Gs2.Gs2Money2.Model.DepositTransaction[] DepositTransactions { set; get; }
+        public Gs2.Gs2Money2.Model.WalletSummary Status { set; get; }
         public DepositEvent WithSlot(int? slot) {
             this.Slot = slot;
             return this;

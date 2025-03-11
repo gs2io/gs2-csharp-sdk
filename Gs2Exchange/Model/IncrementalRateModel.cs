@@ -29,19 +29,19 @@ namespace Gs2.Gs2Exchange.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class IncrementalRateModel : IComparable
+	public partial class IncrementalRateModel : IComparable
 	{
-        public string IncrementalRateModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; } = null!;
-        public string CalculateType { set; get; } = null!;
-        public long? BaseValue { set; get; } = null!;
-        public long? CoefficientValue { set; get; } = null!;
-        public string CalculateScriptId { set; get; } = null!;
-        public string ExchangeCountId { set; get; } = null!;
-        public int? MaximumExchangeCount { set; get; } = null!;
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+        public string IncrementalRateModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; }
+        public string CalculateType { set; get; }
+        public long? BaseValue { set; get; }
+        public long? CoefficientValue { set; get; }
+        public string CalculateScriptId { set; get; }
+        public string ExchangeCountId { set; get; }
+        public int? MaximumExchangeCount { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public IncrementalRateModel WithIncrementalRateModelId(string incrementalRateModelId) {
             this.IncrementalRateModelId = incrementalRateModelId;
             return this;

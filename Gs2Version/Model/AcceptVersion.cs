@@ -29,16 +29,16 @@ namespace Gs2.Gs2Version.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AcceptVersion : IComparable
+	public partial class AcceptVersion : IComparable
 	{
-        public string AcceptVersionId { set; get; } = null!;
-        public string VersionName { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public Gs2.Gs2Version.Model.Version_ Version { set; get; } = null!;
-        public string Status { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string AcceptVersionId { set; get; }
+        public string VersionName { set; get; }
+        public string UserId { set; get; }
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
+        public string Status { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public AcceptVersion WithAcceptVersionId(string acceptVersionId) {
             this.AcceptVersionId = acceptVersionId;
             return this;

@@ -29,14 +29,14 @@ namespace Gs2.Gs2Schedule.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Trigger : IComparable
+	public partial class Trigger : IComparable
 	{
-        public string TriggerId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? ExpiresAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string TriggerId { set; get; }
+        public string Name { set; get; }
+        public string UserId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? ExpiresAt { set; get; }
+        public long? Revision { set; get; }
         public Trigger WithTriggerId(string triggerId) {
             this.TriggerId = triggerId;
             return this;

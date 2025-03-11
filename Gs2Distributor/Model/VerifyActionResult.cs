@@ -29,12 +29,12 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class VerifyActionResult : IComparable
+	public partial class VerifyActionResult : IComparable
 	{
-        public string Action { set; get; } = null!;
-        public string VerifyRequest { set; get; } = null!;
-        public int? StatusCode { set; get; } = null!;
-        public string VerifyResult { set; get; } = null!;
+        public string Action { set; get; }
+        public string VerifyRequest { set; get; }
+        public int? StatusCode { set; get; }
+        public string VerifyResult { set; get; }
         public VerifyActionResult WithAction(string action) {
             this.Action = action;
             return this;

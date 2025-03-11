@@ -29,10 +29,10 @@ namespace Gs2.Gs2StateMachine.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Variable : IComparable
+	public partial class Variable : IComparable
 	{
-        public string StateMachineName { set; get; } = null!;
-        public string Value { set; get; } = null!;
+        public string StateMachineName { set; get; }
+        public string Value { set; get; }
         public Variable WithStateMachineName(string stateMachineName) {
             this.StateMachineName = stateMachineName;
             return this;

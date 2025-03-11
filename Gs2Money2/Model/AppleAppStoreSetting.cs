@@ -29,14 +29,19 @@ namespace Gs2.Gs2Money2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AppleAppStoreSetting : IComparable
+	public partial class AppleAppStoreSetting : IComparable
 	{
-        public string BundleId { set; get; } = null!;
-        public string IssuerId { set; get; } = null!;
-        public string KeyId { set; get; } = null!;
-        public string PrivateKeyPem { set; get; } = null!;
+        public string BundleId { set; get; }
+        public string SharedSecretKey { set; get; }
+        public string IssuerId { set; get; }
+        public string KeyId { set; get; }
+        public string PrivateKeyPem { set; get; }
         public AppleAppStoreSetting WithBundleId(string bundleId) {
             this.BundleId = bundleId;
+            return this;
+        }
+        public AppleAppStoreSetting WithSharedSecretKey(string sharedSecretKey) {
+            this.SharedSecretKey = sharedSecretKey;
             return this;
         }
         public AppleAppStoreSetting WithIssuerId(string issuerId) {
@@ -62,6 +67,7 @@ namespace Gs2.Gs2Money2.Model
             }
             return new AppleAppStoreSetting()
                 .WithBundleId(!data.Keys.Contains("bundleId") || data["bundleId"] == null ? null : data["bundleId"].ToString())
+                .WithSharedSecretKey(!data.Keys.Contains("sharedSecretKey") || data["sharedSecretKey"] == null ? null : data["sharedSecretKey"].ToString())
                 .WithIssuerId(!data.Keys.Contains("issuerId") || data["issuerId"] == null ? null : data["issuerId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithPrivateKeyPem(!data.Keys.Contains("privateKeyPem") || data["privateKeyPem"] == null ? null : data["privateKeyPem"].ToString());
@@ -71,6 +77,7 @@ namespace Gs2.Gs2Money2.Model
         {
             return new JsonData {
                 ["bundleId"] = BundleId,
+                ["sharedSecretKey"] = SharedSecretKey,
                 ["issuerId"] = IssuerId,
                 ["keyId"] = KeyId,
                 ["privateKeyPem"] = PrivateKeyPem,
@@ -83,6 +90,10 @@ namespace Gs2.Gs2Money2.Model
             if (BundleId != null) {
                 writer.WritePropertyName("bundleId");
                 writer.Write(BundleId.ToString());
+            }
+            if (SharedSecretKey != null) {
+                writer.WritePropertyName("sharedSecretKey");
+                writer.Write(SharedSecretKey.ToString());
             }
             if (IssuerId != null) {
                 writer.WritePropertyName("issuerId");
@@ -110,6 +121,14 @@ namespace Gs2.Gs2Money2.Model
             else
             {
                 diff += BundleId.CompareTo(other.BundleId);
+            }
+            if (SharedSecretKey == null && SharedSecretKey == other.SharedSecretKey)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SharedSecretKey.CompareTo(other.SharedSecretKey);
             }
             if (IssuerId == null && IssuerId == other.IssuerId)
             {
@@ -147,6 +166,13 @@ namespace Gs2.Gs2Money2.Model
                 }
             }
             {
+                if (SharedSecretKey.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("appleAppStoreSetting", "money2.appleAppStoreSetting.sharedSecretKey.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (IssuerId.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("appleAppStoreSetting", "money2.appleAppStoreSetting.issuerId.error.tooLong"),
@@ -172,6 +198,7 @@ namespace Gs2.Gs2Money2.Model
         public object Clone() {
             return new AppleAppStoreSetting {
                 BundleId = BundleId,
+                SharedSecretKey = SharedSecretKey,
                 IssuerId = IssuerId,
                 KeyId = KeyId,
                 PrivateKeyPem = PrivateKeyPem,

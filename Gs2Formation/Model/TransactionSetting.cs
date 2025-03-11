@@ -29,16 +29,16 @@ namespace Gs2.Gs2Formation.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TransactionSetting : IComparable
+	public partial class TransactionSetting : IComparable
 	{
-        public bool? EnableAutoRun { set; get; } = null!;
-        public bool? EnableAtomicCommit { set; get; } = null!;
-        public bool? TransactionUseDistributor { set; get; } = null!;
-        public bool? AcquireActionUseJobQueue { set; get; } = null!;
-        public string DistributorNamespaceId { set; get; } = null!;
+        public bool? EnableAutoRun { set; get; }
+        public bool? EnableAtomicCommit { set; get; }
+        public bool? TransactionUseDistributor { set; get; }
+        public bool? AcquireActionUseJobQueue { set; get; }
+        public string DistributorNamespaceId { set; get; }
         [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; } = null!;
-        public string QueueNamespaceId { set; get; } = null!;
+        public string KeyId { set; get; }
+        public string QueueNamespaceId { set; get; }
         public TransactionSetting WithEnableAutoRun(bool? enableAutoRun) {
             this.EnableAutoRun = enableAutoRun;
             return this;

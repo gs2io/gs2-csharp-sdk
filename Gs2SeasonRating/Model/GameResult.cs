@@ -29,10 +29,10 @@ namespace Gs2.Gs2SeasonRating.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GameResult : IComparable
+	public partial class GameResult : IComparable
 	{
-        public int? Rank { set; get; } = null!;
-        public string UserId { set; get; } = null!;
+        public int? Rank { set; get; }
+        public string UserId { set; get; }
         public GameResult WithRank(int? rank) {
             this.Rank = rank;
             return this;

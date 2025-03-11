@@ -29,15 +29,15 @@ namespace Gs2.Gs2Deploy.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Event : IComparable
+	public partial class Event : IComparable
 	{
-        public string EventId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string ResourceName { set; get; } = null!;
-        public string Type { set; get; } = null!;
-        public string Message { set; get; } = null!;
-        public long? EventAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string EventId { set; get; }
+        public string Name { set; get; }
+        public string ResourceName { set; get; }
+        public string Type { set; get; }
+        public string Message { set; get; }
+        public long? EventAt { set; get; }
+        public long? Revision { set; get; }
         public Event WithEventId(string eventId) {
             this.EventId = eventId;
             return this;

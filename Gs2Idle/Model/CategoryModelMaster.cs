@@ -29,20 +29,20 @@ namespace Gs2.Gs2Idle.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CategoryModelMaster : IComparable
+	public partial class CategoryModelMaster : IComparable
 	{
-        public string CategoryModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public int? RewardIntervalMinutes { set; get; } = null!;
-        public int? DefaultMaximumIdleMinutes { set; get; } = null!;
-        public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; } = null!;
-        public string IdlePeriodScheduleId { set; get; } = null!;
-        public string ReceivePeriodScheduleId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string CategoryModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public int? RewardIntervalMinutes { set; get; }
+        public int? DefaultMaximumIdleMinutes { set; get; }
+        public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
+        public string IdlePeriodScheduleId { set; get; }
+        public string ReceivePeriodScheduleId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public CategoryModelMaster WithCategoryModelId(string categoryModelId) {
             this.CategoryModelId = categoryModelId;
             return this;

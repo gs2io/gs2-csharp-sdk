@@ -29,10 +29,10 @@ namespace Gs2.Gs2Deploy.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class OutputField : IComparable
+	public partial class OutputField : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string FieldName { set; get; } = null!;
+        public string Name { set; get; }
+        public string FieldName { set; get; }
         public OutputField WithName(string name) {
             this.Name = name;
             return this;

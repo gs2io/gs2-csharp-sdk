@@ -29,11 +29,11 @@ namespace Gs2.Gs2Version.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Version_ : IComparable
+	public partial class Version_ : IComparable
 	{
-        public int? Major { set; get; } = null!;
-        public int? Minor { set; get; } = null!;
-        public int? Micro { set; get; } = null!;
+        public int? Major { set; get; }
+        public int? Minor { set; get; }
+        public int? Micro { set; get; }
         public Version_ WithMajor(int? major) {
             this.Major = major;
             return this;

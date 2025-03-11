@@ -29,14 +29,14 @@ namespace Gs2.Gs2Inbox.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Received : IComparable
+	public partial class Received : IComparable
 	{
-        public string ReceivedId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string[] ReceivedGlobalMessageNames { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string ReceivedId { set; get; }
+        public string UserId { set; get; }
+        public string[] ReceivedGlobalMessageNames { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Received WithReceivedId(string receivedId) {
             this.ReceivedId = receivedId;
             return this;

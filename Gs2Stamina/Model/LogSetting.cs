@@ -29,9 +29,9 @@ namespace Gs2.Gs2Stamina.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LogSetting : IComparable
+	public partial class LogSetting : IComparable
 	{
-        public string LoggingNamespaceId { set; get; } = null!;
+        public string LoggingNamespaceId { set; get; }
         public LogSetting WithLoggingNamespaceId(string loggingNamespaceId) {
             this.LoggingNamespaceId = loggingNamespaceId;
             return this;

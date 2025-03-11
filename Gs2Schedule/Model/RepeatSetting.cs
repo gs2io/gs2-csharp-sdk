@@ -29,18 +29,18 @@ namespace Gs2.Gs2Schedule.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class RepeatSetting : IComparable
+	public partial class RepeatSetting : IComparable
 	{
-        public string RepeatType { set; get; } = null!;
-        public int? BeginDayOfMonth { set; get; } = null!;
-        public int? EndDayOfMonth { set; get; } = null!;
-        public string BeginDayOfWeek { set; get; } = null!;
-        public string EndDayOfWeek { set; get; } = null!;
-        public int? BeginHour { set; get; } = null!;
-        public int? EndHour { set; get; } = null!;
-        public long? AnchorTimestamp { set; get; } = null!;
-        public int? ActiveDays { set; get; } = null!;
-        public int? InactiveDays { set; get; } = null!;
+        public string RepeatType { set; get; }
+        public int? BeginDayOfMonth { set; get; }
+        public int? EndDayOfMonth { set; get; }
+        public string BeginDayOfWeek { set; get; }
+        public string EndDayOfWeek { set; get; }
+        public int? BeginHour { set; get; }
+        public int? EndHour { set; get; }
+        public long? AnchorTimestamp { set; get; }
+        public int? ActiveDays { set; get; }
+        public int? InactiveDays { set; get; }
         public RepeatSetting WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;

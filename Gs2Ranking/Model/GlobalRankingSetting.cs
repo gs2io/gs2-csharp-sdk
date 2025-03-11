@@ -29,14 +29,14 @@ namespace Gs2.Gs2Ranking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class GlobalRankingSetting : IComparable
+	public partial class GlobalRankingSetting : IComparable
 	{
-        public bool? UniqueByUserId { set; get; } = null!;
-        public int? CalculateIntervalMinutes { set; get; } = null!;
-        public Gs2.Gs2Ranking.Model.FixedTiming CalculateFixedTiming { set; get; } = null!;
-        public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; } = null!;
-        public string[] IgnoreUserIds { set; get; } = null!;
-        public string Generation { set; get; } = null!;
+        public bool? UniqueByUserId { set; get; }
+        public int? CalculateIntervalMinutes { set; get; }
+        public Gs2.Gs2Ranking.Model.FixedTiming CalculateFixedTiming { set; get; }
+        public Gs2.Gs2Ranking.Model.Scope[] AdditionalScopes { set; get; }
+        public string[] IgnoreUserIds { set; get; }
+        public string Generation { set; get; }
         public GlobalRankingSetting WithUniqueByUserId(bool? uniqueByUserId) {
             this.UniqueByUserId = uniqueByUserId;
             return this;

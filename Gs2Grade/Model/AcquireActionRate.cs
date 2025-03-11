@@ -29,12 +29,12 @@ namespace Gs2.Gs2Grade.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AcquireActionRate : IComparable
+	public partial class AcquireActionRate : IComparable
 	{
-        public string Name { set; get; } = null!;
-        public string Mode { set; get; } = null!;
-        public double[] Rates { set; get; } = null!;
-        public string[] BigRates { set; get; } = null!;
+        public string Name { set; get; }
+        public string Mode { set; get; }
+        public double[] Rates { set; get; }
+        public string[] BigRates { set; get; }
         public AcquireActionRate WithName(string name) {
             this.Name = name;
             return this;

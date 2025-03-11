@@ -29,22 +29,22 @@ namespace Gs2.Gs2Guard.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BlockingPolicyModel : IComparable
+	public partial class BlockingPolicyModel : IComparable
 	{
-        public string[] PassServices { set; get; } = null!;
-        public string DefaultRestriction { set; get; } = null!;
-        public string LocationDetection { set; get; } = null!;
-        public string[] Locations { set; get; } = null!;
-        public string LocationRestriction { set; get; } = null!;
-        public string AnonymousIpDetection { set; get; } = null!;
-        public string AnonymousIpRestriction { set; get; } = null!;
-        public string HostingProviderIpDetection { set; get; } = null!;
-        public string HostingProviderIpRestriction { set; get; } = null!;
-        public string ReputationIpDetection { set; get; } = null!;
-        public string ReputationIpRestriction { set; get; } = null!;
-        public string IpAddressesDetection { set; get; } = null!;
-        public string[] IpAddresses { set; get; } = null!;
-        public string IpAddressRestriction { set; get; } = null!;
+        public string[] PassServices { set; get; }
+        public string DefaultRestriction { set; get; }
+        public string LocationDetection { set; get; }
+        public string[] Locations { set; get; }
+        public string LocationRestriction { set; get; }
+        public string AnonymousIpDetection { set; get; }
+        public string AnonymousIpRestriction { set; get; }
+        public string HostingProviderIpDetection { set; get; }
+        public string HostingProviderIpRestriction { set; get; }
+        public string ReputationIpDetection { set; get; }
+        public string ReputationIpRestriction { set; get; }
+        public string IpAddressesDetection { set; get; }
+        public string[] IpAddresses { set; get; }
+        public string IpAddressRestriction { set; get; }
         public BlockingPolicyModel WithPassServices(string[] passServices) {
             this.PassServices = passServices;
             return this;

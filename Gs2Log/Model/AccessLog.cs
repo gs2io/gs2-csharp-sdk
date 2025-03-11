@@ -29,15 +29,15 @@ namespace Gs2.Gs2Log.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AccessLog : IComparable
+	public partial class AccessLog : IComparable
 	{
-        public long? Timestamp { set; get; } = null!;
-        public string RequestId { set; get; } = null!;
-        public string Service { set; get; } = null!;
-        public string Method { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string Request { set; get; } = null!;
-        public string Result { set; get; } = null!;
+        public long? Timestamp { set; get; }
+        public string RequestId { set; get; }
+        public string Service { set; get; }
+        public string Method { set; get; }
+        public string UserId { set; get; }
+        public string Request { set; get; }
+        public string Result { set; get; }
         public AccessLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;

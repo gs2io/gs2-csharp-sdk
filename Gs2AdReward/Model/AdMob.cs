@@ -29,9 +29,9 @@ namespace Gs2.Gs2AdReward.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class AdMob : IComparable
+	public partial class AdMob : IComparable
 	{
-        public string[] AllowAdUnitIds { set; get; } = null!;
+        public string[] AllowAdUnitIds { set; get; }
         public AdMob WithAllowAdUnitIds(string[] allowAdUnitIds) {
             this.AllowAdUnitIds = allowAdUnitIds;
             return this;

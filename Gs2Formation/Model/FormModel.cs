@@ -29,12 +29,12 @@ namespace Gs2.Gs2Formation.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class FormModel : IComparable
+	public partial class FormModel : IComparable
 	{
-        public string FormModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; } = null!;
+        public string FormModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
         public FormModel WithFormModelId(string formModelId) {
             this.FormModelId = formModelId;
             return this;

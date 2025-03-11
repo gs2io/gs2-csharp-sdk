@@ -29,13 +29,13 @@ namespace Gs2.Gs2SeasonRating.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TierModel : IComparable
+	public partial class TierModel : IComparable
 	{
-        public string Metadata { set; get; } = null!;
-        public int? RaiseRankBonus { set; get; } = null!;
-        public int? EntryFee { set; get; } = null!;
-        public int? MinimumChangePoint { set; get; } = null!;
-        public int? MaximumChangePoint { set; get; } = null!;
+        public string Metadata { set; get; }
+        public int? RaiseRankBonus { set; get; }
+        public int? EntryFee { set; get; }
+        public int? MinimumChangePoint { set; get; }
+        public int? MaximumChangePoint { set; get; }
         public TierModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

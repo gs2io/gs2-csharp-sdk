@@ -29,9 +29,9 @@ namespace Gs2.Gs2Identifier.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ProjectToken : IComparable
+	public partial class ProjectToken : IComparable
 	{
-        public string Token { set; get; } = null!;
+        public string Token { set; get; }
         public ProjectToken WithToken(string token) {
             this.Token = token;
             return this;

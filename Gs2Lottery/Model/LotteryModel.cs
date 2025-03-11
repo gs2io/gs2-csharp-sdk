@@ -29,15 +29,15 @@ namespace Gs2.Gs2Lottery.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LotteryModel : IComparable
+	public partial class LotteryModel : IComparable
 	{
-        public string LotteryModelId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Metadata { set; get; } = null!;
-        public string Mode { set; get; } = null!;
-        public string Method { set; get; } = null!;
-        public string PrizeTableName { set; get; } = null!;
-        public string ChoicePrizeTableScriptId { set; get; } = null!;
+        public string LotteryModelId { set; get; }
+        public string Name { set; get; }
+        public string Metadata { set; get; }
+        public string Mode { set; get; }
+        public string Method { set; get; }
+        public string PrizeTableName { set; get; }
+        public string ChoicePrizeTableScriptId { set; get; }
         public LotteryModel WithLotteryModelId(string lotteryModelId) {
             this.LotteryModelId = lotteryModelId;
             return this;

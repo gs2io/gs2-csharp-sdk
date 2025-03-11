@@ -29,11 +29,11 @@ namespace Gs2.Gs2Ranking2.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SubscribeUser : IComparable
+	public partial class SubscribeUser : IComparable
 	{
-        public string RankingName { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public string TargetUserId { set; get; } = null!;
+        public string RankingName { set; get; }
+        public string UserId { set; get; }
+        public string TargetUserId { set; get; }
         public SubscribeUser WithRankingName(string rankingName) {
             this.RankingName = rankingName;
             return this;

@@ -29,10 +29,10 @@ namespace Gs2.Gs2Matchmaking.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class SignedBallot : IComparable
+	public partial class SignedBallot : IComparable
 	{
-        public string Body { set; get; } = null!;
-        public string Signature { set; get; } = null!;
+        public string Body { set; get; }
+        public string Signature { set; get; }
         public SignedBallot WithBody(string body) {
             this.Body = body;
             return this;

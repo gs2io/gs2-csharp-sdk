@@ -29,10 +29,10 @@ namespace Gs2.Gs2Friend.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class PublicProfile : IComparable
+	public partial class PublicProfile : IComparable
 	{
-        public string UserId { set; get; } = null!;
-        public string Value { set; get; } = null!;
+        public string UserId { set; get; }
+        public string Value { set; get; }
         public PublicProfile WithUserId(string userId) {
             this.UserId = userId;
             return this;
