@@ -4389,6 +4389,338 @@ namespace Gs2.Gs2Money2
 #endif
 
 
+        public class DescribeRefundHistoriesByUserIdTask : Gs2RestSessionTask<DescribeRefundHistoriesByUserIdRequest, DescribeRefundHistoriesByUserIdResult>
+        {
+            public DescribeRefundHistoriesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRefundHistoriesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeRefundHistoriesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/refund/user/{userId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeRefundHistoriesByUserId(
+                Request.DescribeRefundHistoriesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeRefundHistoriesByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeRefundHistoriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeRefundHistoriesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeRefundHistoriesByUserIdResult> DescribeRefundHistoriesByUserIdFuture(
+                Request.DescribeRefundHistoriesByUserIdRequest request
+        )
+		{
+			return new DescribeRefundHistoriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeRefundHistoriesByUserIdResult> DescribeRefundHistoriesByUserIdAsync(
+                Request.DescribeRefundHistoriesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeRefundHistoriesByUserIdResult> result = null;
+			await DescribeRefundHistoriesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeRefundHistoriesByUserIdTask DescribeRefundHistoriesByUserIdAsync(
+                Request.DescribeRefundHistoriesByUserIdRequest request
+        )
+		{
+			return new DescribeRefundHistoriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeRefundHistoriesByUserIdResult> DescribeRefundHistoriesByUserIdAsync(
+                Request.DescribeRefundHistoriesByUserIdRequest request
+        )
+		{
+			var task = new DescribeRefundHistoriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeRefundHistoriesByDateTask : Gs2RestSessionTask<DescribeRefundHistoriesByDateRequest, DescribeRefundHistoriesByDateResult>
+        {
+            public DescribeRefundHistoriesByDateTask(IGs2Session session, RestSessionRequestFactory factory, DescribeRefundHistoriesByDateRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeRefundHistoriesByDateRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/refund/date/{year}/{month}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{year}",request.Year != null ? request.Year.ToString() : "null");
+                url = url.Replace("{month}",request.Month != null ? request.Month.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Day != null) {
+                    sessionRequest.AddQueryString("day", $"{request.Day}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeRefundHistoriesByDate(
+                Request.DescribeRefundHistoriesByDateRequest request,
+                UnityAction<AsyncResult<Result.DescribeRefundHistoriesByDateResult>> callback
+        )
+		{
+			var task = new DescribeRefundHistoriesByDateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeRefundHistoriesByDateResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeRefundHistoriesByDateResult> DescribeRefundHistoriesByDateFuture(
+                Request.DescribeRefundHistoriesByDateRequest request
+        )
+		{
+			return new DescribeRefundHistoriesByDateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeRefundHistoriesByDateResult> DescribeRefundHistoriesByDateAsync(
+                Request.DescribeRefundHistoriesByDateRequest request
+        )
+		{
+            AsyncResult<Result.DescribeRefundHistoriesByDateResult> result = null;
+			await DescribeRefundHistoriesByDate(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeRefundHistoriesByDateTask DescribeRefundHistoriesByDateAsync(
+                Request.DescribeRefundHistoriesByDateRequest request
+        )
+		{
+			return new DescribeRefundHistoriesByDateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeRefundHistoriesByDateResult> DescribeRefundHistoriesByDateAsync(
+                Request.DescribeRefundHistoriesByDateRequest request
+        )
+		{
+			var task = new DescribeRefundHistoriesByDateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetRefundHistoryTask : Gs2RestSessionTask<GetRefundHistoryRequest, GetRefundHistoryResult>
+        {
+            public GetRefundHistoryTask(IGs2Session session, RestSessionRequestFactory factory, GetRefundHistoryRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetRefundHistoryRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money2")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/refund/{transactionId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetRefundHistory(
+                Request.GetRefundHistoryRequest request,
+                UnityAction<AsyncResult<Result.GetRefundHistoryResult>> callback
+        )
+		{
+			var task = new GetRefundHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetRefundHistoryResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetRefundHistoryResult> GetRefundHistoryFuture(
+                Request.GetRefundHistoryRequest request
+        )
+		{
+			return new GetRefundHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRefundHistoryResult> GetRefundHistoryAsync(
+                Request.GetRefundHistoryRequest request
+        )
+		{
+            AsyncResult<Result.GetRefundHistoryResult> result = null;
+			await GetRefundHistory(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetRefundHistoryTask GetRefundHistoryAsync(
+                Request.GetRefundHistoryRequest request
+        )
+		{
+			return new GetRefundHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetRefundHistoryResult> GetRefundHistoryAsync(
+                Request.GetRefundHistoryRequest request
+        )
+		{
+			var task = new GetRefundHistoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribeStoreContentModelsTask : Gs2RestSessionTask<DescribeStoreContentModelsRequest, DescribeStoreContentModelsResult>
         {
             public DescribeStoreContentModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeStoreContentModelsRequest request) : base(session, factory, request)

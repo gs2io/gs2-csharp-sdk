@@ -34,8 +34,9 @@ namespace Gs2.Gs2Schedule.Model
         public string TriggerId { set; get; }
         public string Name { set; get; }
         public string UserId { set; get; }
-        public long? CreatedAt { set; get; }
+        public long? TriggeredAt { set; get; }
         public long? ExpiresAt { set; get; }
+        public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
         public Trigger WithTriggerId(string triggerId) {
             this.TriggerId = triggerId;
@@ -49,12 +50,16 @@ namespace Gs2.Gs2Schedule.Model
             this.UserId = userId;
             return this;
         }
-        public Trigger WithCreatedAt(long? createdAt) {
-            this.CreatedAt = createdAt;
+        public Trigger WithTriggeredAt(long? triggeredAt) {
+            this.TriggeredAt = triggeredAt;
             return this;
         }
         public Trigger WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
+            return this;
+        }
+        public Trigger WithCreatedAt(long? createdAt) {
+            this.CreatedAt = createdAt;
             return this;
         }
         public Trigger WithRevision(long? revision) {
@@ -159,8 +164,9 @@ namespace Gs2.Gs2Schedule.Model
                 .WithTriggerId(!data.Keys.Contains("triggerId") || data["triggerId"] == null ? null : data["triggerId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithTriggeredAt(!data.Keys.Contains("triggeredAt") || data["triggeredAt"] == null ? null : (long?)(data["triggeredAt"].ToString().Contains(".") ? (long)double.Parse(data["triggeredAt"].ToString()) : long.Parse(data["triggeredAt"].ToString())))
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
@@ -170,8 +176,9 @@ namespace Gs2.Gs2Schedule.Model
                 ["triggerId"] = TriggerId,
                 ["name"] = Name,
                 ["userId"] = UserId,
-                ["createdAt"] = CreatedAt,
+                ["triggeredAt"] = TriggeredAt,
                 ["expiresAt"] = ExpiresAt,
+                ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
         }
@@ -191,13 +198,17 @@ namespace Gs2.Gs2Schedule.Model
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            if (CreatedAt != null) {
-                writer.WritePropertyName("createdAt");
-                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
+            if (TriggeredAt != null) {
+                writer.WritePropertyName("triggeredAt");
+                writer.Write((TriggeredAt.ToString().Contains(".") ? (long)double.Parse(TriggeredAt.ToString()) : long.Parse(TriggeredAt.ToString())));
             }
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write((ExpiresAt.ToString().Contains(".") ? (long)double.Parse(ExpiresAt.ToString()) : long.Parse(ExpiresAt.ToString())));
+            }
+            if (CreatedAt != null) {
+                writer.WritePropertyName("createdAt");
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
@@ -234,13 +245,13 @@ namespace Gs2.Gs2Schedule.Model
             {
                 diff += UserId.CompareTo(other.UserId);
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            if (TriggeredAt == null && TriggeredAt == other.TriggeredAt)
             {
                 // null and null
             }
             else
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                diff += (int)(TriggeredAt - other.TriggeredAt);
             }
             if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
             {
@@ -249,6 +260,14 @@ namespace Gs2.Gs2Schedule.Model
             else
             {
                 diff += (int)(ExpiresAt - other.ExpiresAt);
+            }
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             if (Revision == null && Revision == other.Revision)
             {
@@ -284,14 +303,14 @@ namespace Gs2.Gs2Schedule.Model
                 }
             }
             {
-                if (CreatedAt < 0) {
+                if (TriggeredAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("trigger", "schedule.trigger.createdAt.error.invalid"),
+                        new RequestError("trigger", "schedule.trigger.triggeredAt.error.invalid"),
                     });
                 }
-                if (CreatedAt > 32503680000000) {
+                if (TriggeredAt > 32503680000000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("trigger", "schedule.trigger.createdAt.error.invalid"),
+                        new RequestError("trigger", "schedule.trigger.triggeredAt.error.invalid"),
                     });
                 }
             }
@@ -304,6 +323,18 @@ namespace Gs2.Gs2Schedule.Model
                 if (ExpiresAt > 32503680000000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("trigger", "schedule.trigger.expiresAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("trigger", "schedule.trigger.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("trigger", "schedule.trigger.createdAt.error.invalid"),
                     });
                 }
             }
@@ -326,8 +357,9 @@ namespace Gs2.Gs2Schedule.Model
                 TriggerId = TriggerId,
                 Name = Name,
                 UserId = UserId,
-                CreatedAt = CreatedAt,
+                TriggeredAt = TriggeredAt,
                 ExpiresAt = ExpiresAt,
+                CreatedAt = CreatedAt,
                 Revision = Revision,
             };
         }

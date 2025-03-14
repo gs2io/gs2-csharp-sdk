@@ -29,10 +29,10 @@ namespace Gs2.Gs2Project.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Gs2Region : IComparable
+	public partial class Gs2Region : IComparable
 	{
-        public string RegionName { set; get; } = null!;
-        public string Status { set; get; } = null!;
+        public string RegionName { set; get; }
+        public string Status { set; get; }
         public Gs2Region WithRegionName(string regionName) {
             this.RegionName = regionName;
             return this;

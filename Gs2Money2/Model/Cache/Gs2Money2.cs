@@ -256,6 +256,27 @@ namespace Gs2.Gs2Money2.Model.Cache
                         Request.TakeoverSubscriptionStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "describeRefundHistoriesByUserId":
+                    Result.DescribeRefundHistoriesByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DescribeRefundHistoriesByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeRefundHistoriesByDate":
+                    Result.DescribeRefundHistoriesByDateResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.DescribeRefundHistoriesByDateRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getRefundHistory":
+                    Result.GetRefundHistoryResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetRefundHistoryRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeStoreContentModels":
                     Result.DescribeStoreContentModelsResult.FromJson(resultPayload).PutCache(
                         cache,

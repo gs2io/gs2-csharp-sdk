@@ -29,14 +29,14 @@ namespace Gs2.Gs2Key.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Key : IComparable
+	public partial class Key : IComparable
 	{
-        public string KeyId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string KeyId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public Key WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

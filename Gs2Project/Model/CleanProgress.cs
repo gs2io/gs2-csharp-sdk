@@ -29,16 +29,16 @@ namespace Gs2.Gs2Project.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class CleanProgress : IComparable
+	public partial class CleanProgress : IComparable
 	{
-        public string CleanProgressId { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public int? Cleaned { set; get; } = null!;
-        public int? MicroserviceCount { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string CleanProgressId { set; get; }
+        public string TransactionId { set; get; }
+        public string UserId { set; get; }
+        public int? Cleaned { set; get; }
+        public int? MicroserviceCount { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public CleanProgress WithCleanProgressId(string cleanProgressId) {
             this.CleanProgressId = cleanProgressId;
             return this;

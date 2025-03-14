@@ -29,9 +29,9 @@ namespace Gs2.Gs2Project.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class TwoFactorAuthenticationSetting : IComparable
+	public partial class TwoFactorAuthenticationSetting : IComparable
 	{
-        public string Status { set; get; } = null!;
+        public string Status { set; get; }
         public TwoFactorAuthenticationSetting WithStatus(string status) {
             this.Status = status;
             return this;

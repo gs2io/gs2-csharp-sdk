@@ -29,19 +29,19 @@ namespace Gs2.Gs2Project.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class BillingMethod : IComparable
+	public partial class BillingMethod : IComparable
 	{
-        public string BillingMethodId { set; get; } = null!;
-        public string AccountName { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string MethodType { set; get; } = null!;
-        public string CardSignatureName { set; get; } = null!;
-        public string CardBrand { set; get; } = null!;
-        public string CardLast4 { set; get; } = null!;
-        public string PartnerId { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
+        public string BillingMethodId { set; get; }
+        public string AccountName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string MethodType { set; get; }
+        public string CardSignatureName { set; get; }
+        public string CardBrand { set; get; }
+        public string CardLast4 { set; get; }
+        public string PartnerId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
         public BillingMethod WithBillingMethodId(string billingMethodId) {
             this.BillingMethodId = billingMethodId;
             return this;

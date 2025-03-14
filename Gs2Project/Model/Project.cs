@@ -29,21 +29,21 @@ namespace Gs2.Gs2Project.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class Project : IComparable
+	public partial class Project : IComparable
 	{
-        public string ProjectId { set; get; } = null!;
-        public string AccountName { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string Description { set; get; } = null!;
-        public string Plan { set; get; } = null!;
-        public Gs2.Gs2Project.Model.Gs2Region[] Regions { set; get; } = null!;
-        public string BillingMethodName { set; get; } = null!;
-        public string EnableEventBridge { set; get; } = null!;
-        public string Currency { set; get; } = null!;
-        public string EventBridgeAwsAccountId { set; get; } = null!;
-        public string EventBridgeAwsRegion { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
+        public string ProjectId { set; get; }
+        public string AccountName { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Plan { set; get; }
+        public Gs2.Gs2Project.Model.Gs2Region[] Regions { set; get; }
+        public string BillingMethodName { set; get; }
+        public string EnableEventBridge { set; get; }
+        public string Currency { set; get; }
+        public string EventBridgeAwsAccountId { set; get; }
+        public string EventBridgeAwsRegion { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
         public Project WithProjectId(string projectId) {
             this.ProjectId = projectId;
             return this;

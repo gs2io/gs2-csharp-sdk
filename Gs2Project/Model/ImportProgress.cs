@@ -29,16 +29,16 @@ namespace Gs2.Gs2Project.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ImportProgress : IComparable
+	public partial class ImportProgress : IComparable
 	{
-        public string ImportProgressId { set; get; } = null!;
-        public string TransactionId { set; get; } = null!;
-        public string UserId { set; get; } = null!;
-        public int? Imported { set; get; } = null!;
-        public int? MicroserviceCount { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? UpdatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string ImportProgressId { set; get; }
+        public string TransactionId { set; get; }
+        public string UserId { set; get; }
+        public int? Imported { set; get; }
+        public int? MicroserviceCount { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public ImportProgress WithImportProgressId(string importProgressId) {
             this.ImportProgressId = importProgressId;
             return this;

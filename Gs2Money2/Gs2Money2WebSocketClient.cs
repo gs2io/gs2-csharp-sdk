@@ -1194,6 +1194,114 @@ namespace Gs2.Gs2Money2
 #endif
 
 
+        public class GetRefundHistoryTask : Gs2WebSocketSessionTask<Request.GetRefundHistoryRequest, Result.GetRefundHistoryResult>
+        {
+	        public GetRefundHistoryTask(IGs2Session session, Request.GetRefundHistoryRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetRefundHistoryRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money2",
+                    "refundHistory",
+                    "getRefundHistory",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetRefundHistory(
+                Request.GetRefundHistoryRequest request,
+                UnityAction<AsyncResult<Result.GetRefundHistoryResult>> callback
+        )
+		{
+			var task = new GetRefundHistoryTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetRefundHistoryResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetRefundHistoryResult> GetRefundHistoryFuture(
+                Request.GetRefundHistoryRequest request
+        )
+		{
+			return new GetRefundHistoryTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetRefundHistoryResult> GetRefundHistoryAsync(
+            Request.GetRefundHistoryRequest request
+        )
+		{
+		    var task = new GetRefundHistoryTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetRefundHistoryTask GetRefundHistoryAsync(
+                Request.GetRefundHistoryRequest request
+        )
+		{
+			return new GetRefundHistoryTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetRefundHistoryResult> GetRefundHistoryAsync(
+            Request.GetRefundHistoryRequest request
+        )
+		{
+		    var task = new GetRefundHistoryTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetStoreContentModelTask : Gs2WebSocketSessionTask<Request.GetStoreContentModelRequest, Result.GetStoreContentModelResult>
         {
 	        public GetStoreContentModelTask(IGs2Session session, Request.GetStoreContentModelRequest request) : base(session, request)

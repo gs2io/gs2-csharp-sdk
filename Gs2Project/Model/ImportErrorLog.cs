@@ -29,14 +29,14 @@ namespace Gs2.Gs2Project.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class ImportErrorLog : IComparable
+	public partial class ImportErrorLog : IComparable
 	{
-        public string DumpProgressId { set; get; } = null!;
-        public string Name { set; get; } = null!;
-        public string MicroserviceName { set; get; } = null!;
-        public string Message { set; get; } = null!;
-        public long? CreatedAt { set; get; } = null!;
-        public long? Revision { set; get; } = null!;
+        public string DumpProgressId { set; get; }
+        public string Name { set; get; }
+        public string MicroserviceName { set; get; }
+        public string Message { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public ImportErrorLog WithDumpProgressId(string dumpProgressId) {
             this.DumpProgressId = dumpProgressId;
             return this;
