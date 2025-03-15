@@ -33,7 +33,7 @@ namespace Gs2.Core.Exception
 			
 		}
 
-		public override bool RecommendRetry => false;
+		public override bool RecommendRetry => true;
 		public override bool RecommendAutoRetry => false;
 
 		public override int StatusCode => 0;
