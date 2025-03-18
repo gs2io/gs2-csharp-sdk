@@ -60,6 +60,26 @@ namespace Gs2.Core.Domain
             this.Actions = actions;
         }
 
+        public string TransactionId()
+        {
+            return this switch {
+                RanTransactionAccessTokenDomain => (this as RanTransactionAccessTokenDomain)?.TransactionId,
+                AutoTransactionAccessTokenDomain => (this as AutoTransactionAccessTokenDomain)?.TransactionId,
+                AutoStampSheetAccessTokenDomain => (this as AutoStampSheetAccessTokenDomain)?.TransactionId,
+                ManualStampSheetAccessTokenDomain => (this as ManualStampSheetAccessTokenDomain)?.TransactionId,
+                _ => null
+            };
+        }
+        
+        public string JobName()
+        {
+            return this switch {
+                AutoJobQueueAccessTokenDomain => (this as AutoJobQueueAccessTokenDomain)?.JobName,
+                ManualJobQueueAccessTokenDomain => (this as ManualJobQueueAccessTokenDomain)?.JobName,
+                _ => null
+            };
+        }
+
 #if UNITY_2017_1_OR_NEWER
         public virtual IFuture<TransactionAccessTokenDomain> WaitFuture(
             bool all = false

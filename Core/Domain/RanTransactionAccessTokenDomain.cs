@@ -50,6 +50,7 @@ namespace Gs2.Core.Domain
     {
         private readonly string _transactionId;
         private readonly List<TransactionAccessTokenDomain> _nextTransactions = new();
+        public string TransactionId => _transactionId;
 
         public RanTransactionAccessTokenDomain(
             Gs2 gs2,

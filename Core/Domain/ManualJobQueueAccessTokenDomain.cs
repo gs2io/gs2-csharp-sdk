@@ -52,6 +52,7 @@ namespace Gs2.Core.Domain
         private static Dictionary<string, long> _handled = new Dictionary<string, long>();
         private readonly string _namespaceName;
         private readonly string _jobName;
+        public string JobName => _jobName;
 
         public ManualJobQueueAccessTokenDomain(
             Gs2 gs2,

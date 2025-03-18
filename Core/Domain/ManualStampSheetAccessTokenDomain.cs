@@ -53,6 +53,7 @@ namespace Gs2.Core.Domain
         private readonly string _transactionId;
         private readonly string _stampSheet;
         private readonly string _stampSheetEncryptionKeyId;
+        public string TransactionId => _transactionId;
 
         public ManualStampSheetAccessTokenDomain(
             Gs2 gs2,

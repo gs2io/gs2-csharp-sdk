@@ -50,6 +50,7 @@ namespace Gs2.Core.Domain
     {
         private static Dictionary<string, long> _handled = new Dictionary<string, long>();
         private readonly string _transactionId;
+        public string TransactionId => _transactionId;
 
         public AutoStampSheetAccessTokenDomain(
             Gs2 gs2,
@@ -161,7 +162,7 @@ namespace Gs2.Core.Domain
                     yield break;
                 }
                 var domain = Gs2.Distributor.Namespace(
-                    Gs2.TransactionConfiguration.NamespaceName
+                    Gs2.TransactionConfiguration.NamespaceName ?? "default"
                 ).AccessToken(
                     AccessToken
                 ).StampSheetResult(
@@ -233,7 +234,7 @@ namespace Gs2.Core.Domain
             var domain = new Gs2Distributor.Domain.Gs2Distributor(
                 Gs2
             ).Namespace(
-                Gs2.TransactionConfiguration.NamespaceName
+                Gs2.TransactionConfiguration.NamespaceName ?? "default"
             ).AccessToken(
                 AccessToken
             ).StampSheetResult(
