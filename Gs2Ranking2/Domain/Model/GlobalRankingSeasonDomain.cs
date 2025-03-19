@@ -187,6 +187,84 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
+        public ulong SubscribeGlobalRankings(
+            Action<Gs2.Gs2Ranking2.Model.GlobalRankingData[]> callback,
+            string userId
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.Season ?? default
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await GlobalRankingsAsync(
+                                userId
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeGlobalRankingsWithInitialCallAsync(
+            Action<Gs2.Gs2Ranking2.Model.GlobalRankingData[]> callback,
+            string userId
+        )
+        {
+            var items = await GlobalRankingsAsync(
+                userId
+            ).ToArrayAsync();
+            var callbackId = SubscribeGlobalRankings(
+                callback,
+                userId
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeGlobalRankings(
+            ulong callbackId,
+            string userId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.Season ?? default
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateGlobalRankings(
+            string userId
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
+                (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.Season ?? default
+                )
+            );
+        }
+
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain GlobalRankingData(
             string userId
         ) {
@@ -200,7 +278,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataAccessTokenDomain GlobalRankingData(
-            AccessToken accessToken
+             AccessToken accessToken
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataAccessTokenDomain(
                 this._gs2,
@@ -208,30 +286,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.RankingName,
                 this.Season,
                 accessToken
-            );
-        }
-
-        public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreDomain GlobalRankingScore(
-            string userId
-        ) {
-            return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreDomain(
-                this._gs2,
-                this.NamespaceName,
-                userId,
-                this.RankingName,
-                this.Season
-            );
-        }
-
-        public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain GlobalRankingScore(
-            AccessToken accessToken
-        ) {
-            return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                accessToken,
-                this.RankingName,
-                this.Season
             );
         }
 

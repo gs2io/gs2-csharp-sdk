@@ -153,7 +153,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 );
                 if (find) {
