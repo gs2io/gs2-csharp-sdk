@@ -35,6 +35,7 @@ namespace Gs2.Gs2Account.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string UserId { set; get; } = null!;
+         public bool? IncludeLastAuthenticatedAt { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public GetAccountRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -42,6 +43,10 @@ namespace Gs2.Gs2Account.Request
         }
         public GetAccountRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public GetAccountRequest WithIncludeLastAuthenticatedAt(bool? includeLastAuthenticatedAt) {
+            this.IncludeLastAuthenticatedAt = includeLastAuthenticatedAt;
             return this;
         }
         public GetAccountRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -60,6 +65,7 @@ namespace Gs2.Gs2Account.Request
             return new GetAccountRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithIncludeLastAuthenticatedAt(!data.Keys.Contains("includeLastAuthenticatedAt") || data["includeLastAuthenticatedAt"] == null ? null : (bool?)bool.Parse(data["includeLastAuthenticatedAt"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -68,6 +74,7 @@ namespace Gs2.Gs2Account.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["includeLastAuthenticatedAt"] = IncludeLastAuthenticatedAt,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -83,6 +90,10 @@ namespace Gs2.Gs2Account.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (IncludeLastAuthenticatedAt != null) {
+                writer.WritePropertyName("includeLastAuthenticatedAt");
+                writer.Write(bool.Parse(IncludeLastAuthenticatedAt.ToString()));
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -94,6 +105,7 @@ namespace Gs2.Gs2Account.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
+            key += IncludeLastAuthenticatedAt + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

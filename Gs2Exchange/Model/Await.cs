@@ -40,6 +40,7 @@ namespace Gs2.Gs2Exchange.Model
         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public long? AcquirableAt { set; get; }
         public long? ExchangedAt { set; get; }
+        public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
         public Await WithAwaitId(string awaitId) {
             this.AwaitId = awaitId;
@@ -75,6 +76,10 @@ namespace Gs2.Gs2Exchange.Model
         }
         public Await WithExchangedAt(long? exchangedAt) {
             this.ExchangedAt = exchangedAt;
+            return this;
+        }
+        public Await WithCreatedAt(long? createdAt) {
+            this.CreatedAt = createdAt;
             return this;
         }
         public Await WithRevision(long? revision) {
@@ -187,6 +192,7 @@ namespace Gs2.Gs2Exchange.Model
                 }).ToArray())
                 .WithAcquirableAt(!data.Keys.Contains("acquirableAt") || data["acquirableAt"] == null ? null : (long?)(data["acquirableAt"].ToString().Contains(".") ? (long)double.Parse(data["acquirableAt"].ToString()) : long.Parse(data["acquirableAt"].ToString())))
                 .WithExchangedAt(!data.Keys.Contains("exchangedAt") || data["exchangedAt"] == null ? null : (long?)(data["exchangedAt"].ToString().Contains(".") ? (long)double.Parse(data["exchangedAt"].ToString()) : long.Parse(data["exchangedAt"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
@@ -211,6 +217,7 @@ namespace Gs2.Gs2Exchange.Model
                 ["config"] = configJsonData,
                 ["acquirableAt"] = AcquirableAt,
                 ["exchangedAt"] = ExchangedAt,
+                ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
         }
@@ -260,6 +267,10 @@ namespace Gs2.Gs2Exchange.Model
             if (ExchangedAt != null) {
                 writer.WritePropertyName("exchangedAt");
                 writer.Write((ExchangedAt.ToString().Contains(".") ? (long)double.Parse(ExchangedAt.ToString()) : long.Parse(ExchangedAt.ToString())));
+            }
+            if (CreatedAt != null) {
+                writer.WritePropertyName("createdAt");
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
@@ -347,6 +358,14 @@ namespace Gs2.Gs2Exchange.Model
             else
             {
                 diff += (int)(ExchangedAt - other.ExchangedAt);
+            }
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(CreatedAt - other.CreatedAt);
             }
             if (Revision == null && Revision == other.Revision)
             {
@@ -444,6 +463,18 @@ namespace Gs2.Gs2Exchange.Model
                 }
             }
             {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (Revision < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("await", "exchange.await.revision.error.invalid"),
@@ -468,6 +499,7 @@ namespace Gs2.Gs2Exchange.Model
                 Config = Config?.Clone() as Gs2.Gs2Exchange.Model.Config[],
                 AcquirableAt = AcquirableAt,
                 ExchangedAt = ExchangedAt,
+                CreatedAt = CreatedAt,
                 Revision = Revision,
             };
         }

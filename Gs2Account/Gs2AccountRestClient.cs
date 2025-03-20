@@ -2354,6 +2354,9 @@ namespace Gs2.Gs2Account
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.IncludeLastAuthenticatedAt != null) {
+                    sessionRequest.AddQueryString("includeLastAuthenticatedAt", $"{request.IncludeLastAuthenticatedAt}");
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);

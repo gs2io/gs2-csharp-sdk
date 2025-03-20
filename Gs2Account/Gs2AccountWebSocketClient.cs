@@ -1822,6 +1822,11 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
+                if (request.IncludeLastAuthenticatedAt != null)
+                {
+                    jsonWriter.WritePropertyName("includeLastAuthenticatedAt");
+                    jsonWriter.Write(request.IncludeLastAuthenticatedAt.ToString());
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     jsonWriter.WritePropertyName("timeOffsetToken");
