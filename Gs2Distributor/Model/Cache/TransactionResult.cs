@@ -29,7 +29,6 @@ using System.Linq;
 using System.Collections;
 using Gs2.Core.Exception;
 #if UNITY_2017_1_OR_NEWER
-using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
@@ -211,7 +210,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             foreach (var acquireAction in self?.AcquireResults ?? Array.Empty<AcquireActionResult>()) {
                 var data = JsonMapper.ToObject(acquireAction.AcquireResult);
                 if (data.ContainsKey("transactionResult")) {
-                    JsonMapper.ToObject<TransactionResult>(data["transactionResult"].ToString()).PutCache(
+                    JsonMapper.ToObject<TransactionResult>(data["transactionResult"].ToJson()).PutCache(
                         cache,
                         namespaceName,
                         userId,
