@@ -84,33 +84,24 @@ namespace Gs2.Core.Net
 
             try {
                 await request.SendWebRequest();
-
-                if (request.responseCode == 500) {
-                    return await Invoke();
-                }
-
-                var result = new RestResult(
-                    (int) request.responseCode,
-                    request.downloadHandler.text
-                );
-                OnComplete(result);
-
-                // ReSharper disable once DisposeOnUsingVariable
-                request.Dispose();
-
-                return result;
-            } catch (UnityWebRequestException e) {
-                var result = new RestResult(
-                    0,
-                    ""
-                );
-                OnComplete(result);
-
-                // ReSharper disable once DisposeOnUsingVariable
-                request.Dispose();
-
-                return result;
             }
+            catch (UnityWebRequestException e) {
+            }
+
+            if (request.responseCode == 500) {
+                return await Invoke();
+            }
+
+            var result = new RestResult(
+                (int) request.responseCode,
+                request.downloadHandler.text
+            );
+            OnComplete(result);
+
+            // ReSharper disable once DisposeOnUsingVariable
+            request.Dispose();
+
+            return result;
 #else
             throw new NotImplementedException();
 #endif

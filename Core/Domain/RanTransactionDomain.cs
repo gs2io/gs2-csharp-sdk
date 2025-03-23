@@ -32,6 +32,7 @@ using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Distributor.Model.Cache;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
@@ -68,6 +69,13 @@ namespace Gs2.Core.Domain
         private void HandleResult(
             TransactionResult result
         ) {
+            result.PutCache(
+                Gs2.Cache,
+                Gs2.TransactionConfiguration.NamespaceName,
+                UserId,
+                result.TransactionId
+            );
+
             if (result.ConsumeResults != null) {
                 for (var i = 0; i < result.ConsumeResults.Length; i++) {
                     var consumeActionResult = result.ConsumeResults[i];

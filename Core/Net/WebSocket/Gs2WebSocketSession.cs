@@ -252,10 +252,27 @@ namespace Gs2.Core.Net
                 while (!this._semaphore.Wait(0)) {
                     yield return null;
                 }
+                void HandleError(Gs2Exception error)
+                {
+                    result.OnError(error);
+                }
+                OnError += HandleError;
                 try {
                     OpenImpl();
                     {
                         var begin = DateTime.Now;
+                        while (this.State == State.Opening) {
+                            if ((DateTime.Now - begin).Seconds > 10) {
+                                result.OnError(
+                                    new RequestTimeoutException(Array.Empty<RequestError>())
+                                );
+                                yield break;
+                            }
+
+#if UNITY_2017_1_OR_NEWER
+                            yield return new WaitForSeconds(0.05f);
+#endif
+                        }
                         while (this.State == State.LoggingIn) {
                             if ((DateTime.Now - begin).Seconds > 10) {
                                 result.OnError(
@@ -292,6 +309,7 @@ namespace Gs2.Core.Net
                     result.OnComplete(new OpenResult());
                 }
                 finally {
+                    OnError -= HandleError;
                     this._semaphore.Release();
                 }
             }
@@ -314,12 +332,20 @@ namespace Gs2.Core.Net
                 await Task.Yield();
     #endif
             }
+            Gs2Exception error = null;
+            void HandleError(Gs2Exception e) {
+                error = e;
+            }
+            OnError += HandleError;
             try {
                 var result = OpenImpl();
                 {
                     var begin = DateTime.Now;
                     while (this.State != State.Available)
                     {
+                        if (error != null) {
+                            throw error;
+                        }
                         if ((DateTime.Now - begin).Seconds > 10)
                         {
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
@@ -336,6 +362,9 @@ namespace Gs2.Core.Net
                     while (this._session.ReadyState != WebSocketState.Open)
     #endif
                     {
+                        if (error != null) {
+                            throw error;
+                        }
                         if ((DateTime.Now - begin).Seconds > 10)
                         {
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
@@ -348,6 +377,7 @@ namespace Gs2.Core.Net
                 return result;
             }
             finally {
+                OnError -= HandleError;
                 this._semaphore.Release();
             }
         }

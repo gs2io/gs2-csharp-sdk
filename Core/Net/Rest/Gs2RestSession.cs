@@ -383,7 +383,7 @@ namespace Gs2.Core.Net
 
                 await sessionRequest.Invoke();
 
-                if (sessionRequest.Error != null) {
+                if (sessionRequest.Error != null || sessionRequest.Result.Error != null) {
 #if UNITY_2017_1_OR_NEWER
                     this._inflightRequest.Remove(sessionRequest.TaskId);
 #else
