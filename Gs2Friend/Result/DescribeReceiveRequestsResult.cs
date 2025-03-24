@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using System;
 using System.Collections.Generic;
@@ -33,11 +35,11 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class DescribeReceiveRequestsResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.FriendRequest[] Items { set; get; }
+        public Gs2.Gs2Friend.Model.ReceiveFriendRequest[] Items { set; get; }
         public string NextPageToken { set; get; }
         public ResultMetadata Metadata { set; get; }
 
-        public DescribeReceiveRequestsResult WithItems(Gs2.Gs2Friend.Model.FriendRequest[] items) {
+        public DescribeReceiveRequestsResult WithItems(Gs2.Gs2Friend.Model.ReceiveFriendRequest[] items) {
             this.Items = items;
             return this;
         }
@@ -62,7 +64,7 @@ namespace Gs2.Gs2Friend.Result
             }
             return new DescribeReceiveRequestsResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Friend.Model.FriendRequest.FromJson(v);
+                    return Gs2.Gs2Friend.Model.ReceiveFriendRequest.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));

@@ -47,7 +47,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             DescribeSendRequestsRequest request
         ) {
-            foreach (var item in self.Items ?? Array.Empty<FriendRequest>())
+            foreach (var item in self.Items ?? Array.Empty<SendFriendRequest>())
             {
                 new SendFriendRequest {
                     UserId = item.UserId,

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -48,13 +50,13 @@ namespace Gs2.Gs2Friend.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            cache.Delete<FriendRequest>(
+            cache.Delete<ReceiveFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    userId
+                    self.Item.TargetUserId
                 ),
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                    self.Item.TargetUserId
+                    self.Item.UserId
                 )
             );
         }
