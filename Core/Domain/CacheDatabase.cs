@@ -141,24 +141,32 @@ namespace Gs2.Core.Domain
 
         public ulong Subscribe<TKind>(string parentKey, string key, Action<TKind> subscribe, Action reFetch)
         {
-            this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Add(_callbackId, new Tuple<object, Action>(subscribe, reFetch));
-            return _callbackId++;
+            lock(this) {
+                this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Add(_callbackId, new Tuple<object, Action>(subscribe, reFetch));
+                return _callbackId++;
+            }
         }
 
         public void Unsubscribe<TKind>(string parentKey, string key, ulong callbackId)
         {
-            this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Remove(callbackId);
+            lock (this) {
+                this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Remove(callbackId);
+            }
         }
 
         public ulong ListSubscribe<TKind>(string parentKey, Action<TKind[]> subscribe, Action reFetch)
         {
-            this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Add(_callbackId, new Tuple<object, Action>(subscribe, reFetch));
-            return _callbackId++;
+            lock(this) {
+                this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Add(_callbackId, new Tuple<object, Action>(subscribe, reFetch));
+                return _callbackId++;
+            }
         }
 
         public void ListUnsubscribe<TKind>(string parentKey, ulong callbackId)
         {
-            this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Remove(callbackId);
+            lock (this) {
+                this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Remove(callbackId);
+            }
         }
 
         public Tuple<TKind, bool> Get<TKind>(string parentKey, string key)
