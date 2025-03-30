@@ -33,7 +33,7 @@ namespace Gs2.Gs2Money2.Model
 	{
         public string UnusedBalanceId { set; get; }
         public string Currency { set; get; }
-        public float? Balance { set; get; }
+        public double? Balance { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
         public UnusedBalance WithUnusedBalanceId(string unusedBalanceId) {
@@ -44,7 +44,7 @@ namespace Gs2.Gs2Money2.Model
             this.Currency = currency;
             return this;
         }
-        public UnusedBalance WithBalance(float? balance) {
+        public UnusedBalance WithBalance(double? balance) {
             this.Balance = balance;
             return this;
         }
@@ -136,7 +136,7 @@ namespace Gs2.Gs2Money2.Model
             return new UnusedBalance()
                 .WithUnusedBalanceId(!data.Keys.Contains("unusedBalanceId") || data["unusedBalanceId"] == null ? null : data["unusedBalanceId"].ToString())
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
-                .WithBalance(!data.Keys.Contains("balance") || data["balance"] == null ? null : (float?)float.Parse(data["balance"].ToString()))
+                .WithBalance(!data.Keys.Contains("balance") || data["balance"] == null ? null : (double?)double.Parse(data["balance"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -165,7 +165,7 @@ namespace Gs2.Gs2Money2.Model
             }
             if (Balance != null) {
                 writer.WritePropertyName("balance");
-                writer.Write(float.Parse(Balance.ToString()));
+                writer.Write(double.Parse(Balance.ToString()));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");

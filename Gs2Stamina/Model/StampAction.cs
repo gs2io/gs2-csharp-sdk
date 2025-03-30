@@ -34,12 +34,32 @@ namespace Gs2.Gs2Stamina.Model
                     return DecreaseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Stamina:ConsumeStaminaByUserId":
                     return ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaValueByUserId":
+                    return VerifyStaminaValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaMaxValueByUserId":
+                    return VerifyStaminaMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaRecoverIntervalMinutesByUserId":
+                    return VerifyStaminaRecoverIntervalMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaRecoverValueByUserId":
+                    return VerifyStaminaRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaOverflowValueByUserId":
+                    return VerifyStaminaOverflowValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2Stamina:VerifyStaminaValueByUserId":
+                    return VerifyStaminaValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaMaxValueByUserId":
+                    return VerifyStaminaMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaRecoverIntervalMinutesByUserId":
+                    return VerifyStaminaRecoverIntervalMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaRecoverValueByUserId":
+                    return VerifyStaminaRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Stamina:VerifyStaminaOverflowValueByUserId":
+                    return VerifyStaminaOverflowValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

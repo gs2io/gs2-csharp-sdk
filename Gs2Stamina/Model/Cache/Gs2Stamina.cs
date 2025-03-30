@@ -445,6 +445,76 @@ namespace Gs2.Gs2Stamina.Model.Cache
                         Request.DeleteStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyStaminaValue":
+                    Result.VerifyStaminaValueResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaValueRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaValueByUserId":
+                    Result.VerifyStaminaValueByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaValueByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaMaxValue":
+                    Result.VerifyStaminaMaxValueResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaMaxValueRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaMaxValueByUserId":
+                    Result.VerifyStaminaMaxValueByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaMaxValueByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaRecoverIntervalMinutes":
+                    Result.VerifyStaminaRecoverIntervalMinutesResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaRecoverIntervalMinutesRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaRecoverIntervalMinutesByUserId":
+                    Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaRecoverValue":
+                    Result.VerifyStaminaRecoverValueResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaRecoverValueRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaRecoverValueByUserId":
+                    Result.VerifyStaminaRecoverValueByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaRecoverValueByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaOverflowValue":
+                    Result.VerifyStaminaOverflowValueResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaOverflowValueRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStaminaOverflowValueByUserId":
+                    Result.VerifyStaminaOverflowValueByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.VerifyStaminaOverflowValueByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
             }
         }
     }

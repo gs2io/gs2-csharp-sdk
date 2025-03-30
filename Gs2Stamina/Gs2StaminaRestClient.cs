@@ -7246,6 +7246,1371 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
+        public class VerifyStaminaValueTask : Gs2RestSessionTask<VerifyStaminaValueRequest, VerifyStaminaValueResult>
+        {
+            public VerifyStaminaValueTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaValueRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaValueRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/stamina/{staminaName}/value/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaValue(
+                Request.VerifyStaminaValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaValueResult> VerifyStaminaValueFuture(
+                Request.VerifyStaminaValueRequest request
+        )
+		{
+			return new VerifyStaminaValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaValueResult> VerifyStaminaValueAsync(
+                Request.VerifyStaminaValueRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaValueResult> result = null;
+			await VerifyStaminaValue(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaValueTask VerifyStaminaValueAsync(
+                Request.VerifyStaminaValueRequest request
+        )
+		{
+			return new VerifyStaminaValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaValueResult> VerifyStaminaValueAsync(
+                Request.VerifyStaminaValueRequest request
+        )
+		{
+			var task = new VerifyStaminaValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaValueByUserIdTask : Gs2RestSessionTask<VerifyStaminaValueByUserIdRequest, VerifyStaminaValueByUserIdResult>
+        {
+            public VerifyStaminaValueByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaValueByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaValueByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stamina/{staminaName}/value/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaValueByUserId(
+                Request.VerifyStaminaValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaValueByUserIdResult> VerifyStaminaValueByUserIdFuture(
+                Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaValueByUserIdResult> VerifyStaminaValueByUserIdAsync(
+                Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaValueByUserIdResult> result = null;
+			await VerifyStaminaValueByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaValueByUserIdTask VerifyStaminaValueByUserIdAsync(
+                Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaValueByUserIdResult> VerifyStaminaValueByUserIdAsync(
+                Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+			var task = new VerifyStaminaValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaMaxValueTask : Gs2RestSessionTask<VerifyStaminaMaxValueRequest, VerifyStaminaMaxValueResult>
+        {
+            public VerifyStaminaMaxValueTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaMaxValueRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaMaxValueRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/stamina/{staminaName}/max/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaMaxValue(
+                Request.VerifyStaminaMaxValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaMaxValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaMaxValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaMaxValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaMaxValueResult> VerifyStaminaMaxValueFuture(
+                Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaMaxValueResult> VerifyStaminaMaxValueAsync(
+                Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaMaxValueResult> result = null;
+			await VerifyStaminaMaxValue(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaMaxValueTask VerifyStaminaMaxValueAsync(
+                Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaMaxValueResult> VerifyStaminaMaxValueAsync(
+                Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+			var task = new VerifyStaminaMaxValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaMaxValueByUserIdTask : Gs2RestSessionTask<VerifyStaminaMaxValueByUserIdRequest, VerifyStaminaMaxValueByUserIdResult>
+        {
+            public VerifyStaminaMaxValueByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaMaxValueByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaMaxValueByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stamina/{staminaName}/max/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaMaxValueByUserId(
+                Request.VerifyStaminaMaxValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaMaxValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaMaxValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaMaxValueByUserIdResult> VerifyStaminaMaxValueByUserIdFuture(
+                Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaMaxValueByUserIdResult> VerifyStaminaMaxValueByUserIdAsync(
+                Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaMaxValueByUserIdResult> result = null;
+			await VerifyStaminaMaxValueByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaMaxValueByUserIdTask VerifyStaminaMaxValueByUserIdAsync(
+                Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaMaxValueByUserIdResult> VerifyStaminaMaxValueByUserIdAsync(
+                Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+			var task = new VerifyStaminaMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverIntervalMinutesTask : Gs2RestSessionTask<VerifyStaminaRecoverIntervalMinutesRequest, VerifyStaminaRecoverIntervalMinutesResult>
+        {
+            public VerifyStaminaRecoverIntervalMinutesTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaRecoverIntervalMinutesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaRecoverIntervalMinutesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/stamina/{staminaName}/recover/interval/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverIntervalMinutes(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverIntervalMinutesResult> VerifyStaminaRecoverIntervalMinutesFuture(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverIntervalMinutesResult> VerifyStaminaRecoverIntervalMinutesAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesResult> result = null;
+			await VerifyStaminaRecoverIntervalMinutes(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaRecoverIntervalMinutesTask VerifyStaminaRecoverIntervalMinutesAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverIntervalMinutesResult> VerifyStaminaRecoverIntervalMinutesAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverIntervalMinutesByUserIdTask : Gs2RestSessionTask<VerifyStaminaRecoverIntervalMinutesByUserIdRequest, VerifyStaminaRecoverIntervalMinutesByUserIdResult>
+        {
+            public VerifyStaminaRecoverIntervalMinutesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaRecoverIntervalMinutesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaRecoverIntervalMinutesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stamina/{staminaName}/recover/interval/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverIntervalMinutesByUserId(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult> VerifyStaminaRecoverIntervalMinutesByUserIdFuture(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult> VerifyStaminaRecoverIntervalMinutesByUserIdAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult> result = null;
+			await VerifyStaminaRecoverIntervalMinutesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaRecoverIntervalMinutesByUserIdTask VerifyStaminaRecoverIntervalMinutesByUserIdAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult> VerifyStaminaRecoverIntervalMinutesByUserIdAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverValueTask : Gs2RestSessionTask<VerifyStaminaRecoverValueRequest, VerifyStaminaRecoverValueResult>
+        {
+            public VerifyStaminaRecoverValueTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaRecoverValueRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaRecoverValueRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/stamina/{staminaName}/recover/value/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverValue(
+                Request.VerifyStaminaRecoverValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverValueResult> VerifyStaminaRecoverValueFuture(
+                Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverValueResult> VerifyStaminaRecoverValueAsync(
+                Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaRecoverValueResult> result = null;
+			await VerifyStaminaRecoverValue(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaRecoverValueTask VerifyStaminaRecoverValueAsync(
+                Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverValueResult> VerifyStaminaRecoverValueAsync(
+                Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+			var task = new VerifyStaminaRecoverValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverValueByUserIdTask : Gs2RestSessionTask<VerifyStaminaRecoverValueByUserIdRequest, VerifyStaminaRecoverValueByUserIdResult>
+        {
+            public VerifyStaminaRecoverValueByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaRecoverValueByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaRecoverValueByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stamina/{staminaName}/recover/value/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverValueByUserId(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverValueByUserIdResult> VerifyStaminaRecoverValueByUserIdFuture(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverValueByUserIdResult> VerifyStaminaRecoverValueByUserIdAsync(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaRecoverValueByUserIdResult> result = null;
+			await VerifyStaminaRecoverValueByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaRecoverValueByUserIdTask VerifyStaminaRecoverValueByUserIdAsync(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverValueByUserIdResult> VerifyStaminaRecoverValueByUserIdAsync(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+			var task = new VerifyStaminaRecoverValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaOverflowValueTask : Gs2RestSessionTask<VerifyStaminaOverflowValueRequest, VerifyStaminaOverflowValueResult>
+        {
+            public VerifyStaminaOverflowValueTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaOverflowValueRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaOverflowValueRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/stamina/{staminaName}/overflow/value/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaOverflowValue(
+                Request.VerifyStaminaOverflowValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaOverflowValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaOverflowValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaOverflowValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaOverflowValueResult> VerifyStaminaOverflowValueFuture(
+                Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaOverflowValueResult> VerifyStaminaOverflowValueAsync(
+                Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaOverflowValueResult> result = null;
+			await VerifyStaminaOverflowValue(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaOverflowValueTask VerifyStaminaOverflowValueAsync(
+                Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaOverflowValueResult> VerifyStaminaOverflowValueAsync(
+                Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+			var task = new VerifyStaminaOverflowValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaOverflowValueByUserIdTask : Gs2RestSessionTask<VerifyStaminaOverflowValueByUserIdRequest, VerifyStaminaOverflowValueByUserIdResult>
+        {
+            public VerifyStaminaOverflowValueByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaOverflowValueByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaOverflowValueByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stamina/{staminaName}/overflow/value/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaOverflowValueByUserId(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaOverflowValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaOverflowValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaOverflowValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaOverflowValueByUserIdResult> VerifyStaminaOverflowValueByUserIdFuture(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaOverflowValueByUserIdResult> VerifyStaminaOverflowValueByUserIdAsync(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaOverflowValueByUserIdResult> result = null;
+			await VerifyStaminaOverflowValueByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaOverflowValueByUserIdTask VerifyStaminaOverflowValueByUserIdAsync(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaOverflowValueByUserIdResult> VerifyStaminaOverflowValueByUserIdAsync(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+			var task = new VerifyStaminaOverflowValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class RecoverStaminaByStampSheetTask : Gs2RestSessionTask<RecoverStaminaByStampSheetRequest, RecoverStaminaByStampSheetResult>
         {
             public RecoverStaminaByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, RecoverStaminaByStampSheetRequest request) : base(session, factory, request)
@@ -8105,6 +9470,626 @@ namespace Gs2.Gs2Stamina
         )
 		{
 			var task = new ConsumeStaminaByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaValueByStampTaskTask : Gs2RestSessionTask<VerifyStaminaValueByStampTaskRequest, VerifyStaminaValueByStampTaskResult>
+        {
+            public VerifyStaminaValueByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaValueByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaValueByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamina/value/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaValueByStampTask(
+                Request.VerifyStaminaValueByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaValueByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyStaminaValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaValueByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaValueByStampTaskResult> VerifyStaminaValueByStampTaskFuture(
+                Request.VerifyStaminaValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaValueByStampTaskResult> VerifyStaminaValueByStampTaskAsync(
+                Request.VerifyStaminaValueByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaValueByStampTaskResult> result = null;
+			await VerifyStaminaValueByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaValueByStampTaskTask VerifyStaminaValueByStampTaskAsync(
+                Request.VerifyStaminaValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaValueByStampTaskResult> VerifyStaminaValueByStampTaskAsync(
+                Request.VerifyStaminaValueByStampTaskRequest request
+        )
+		{
+			var task = new VerifyStaminaValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaMaxValueByStampTaskTask : Gs2RestSessionTask<VerifyStaminaMaxValueByStampTaskRequest, VerifyStaminaMaxValueByStampTaskResult>
+        {
+            public VerifyStaminaMaxValueByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaMaxValueByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaMaxValueByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamina/max/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaMaxValueByStampTask(
+                Request.VerifyStaminaMaxValueByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaMaxValueByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyStaminaMaxValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaMaxValueByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaMaxValueByStampTaskResult> VerifyStaminaMaxValueByStampTaskFuture(
+                Request.VerifyStaminaMaxValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaMaxValueByStampTaskResult> VerifyStaminaMaxValueByStampTaskAsync(
+                Request.VerifyStaminaMaxValueByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaMaxValueByStampTaskResult> result = null;
+			await VerifyStaminaMaxValueByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaMaxValueByStampTaskTask VerifyStaminaMaxValueByStampTaskAsync(
+                Request.VerifyStaminaMaxValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaMaxValueByStampTaskResult> VerifyStaminaMaxValueByStampTaskAsync(
+                Request.VerifyStaminaMaxValueByStampTaskRequest request
+        )
+		{
+			var task = new VerifyStaminaMaxValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverIntervalMinutesByStampTaskTask : Gs2RestSessionTask<VerifyStaminaRecoverIntervalMinutesByStampTaskRequest, VerifyStaminaRecoverIntervalMinutesByStampTaskResult>
+        {
+            public VerifyStaminaRecoverIntervalMinutesByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaRecoverIntervalMinutesByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaRecoverIntervalMinutesByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamina/recover/interval/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverIntervalMinutesByStampTask(
+                Request.VerifyStaminaRecoverIntervalMinutesByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverIntervalMinutesByStampTaskResult> VerifyStaminaRecoverIntervalMinutesByStampTaskFuture(
+                Request.VerifyStaminaRecoverIntervalMinutesByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverIntervalMinutesByStampTaskResult> VerifyStaminaRecoverIntervalMinutesByStampTaskAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByStampTaskResult> result = null;
+			await VerifyStaminaRecoverIntervalMinutesByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaRecoverIntervalMinutesByStampTaskTask VerifyStaminaRecoverIntervalMinutesByStampTaskAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverIntervalMinutesByStampTaskResult> VerifyStaminaRecoverIntervalMinutesByStampTaskAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesByStampTaskRequest request
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverValueByStampTaskTask : Gs2RestSessionTask<VerifyStaminaRecoverValueByStampTaskRequest, VerifyStaminaRecoverValueByStampTaskResult>
+        {
+            public VerifyStaminaRecoverValueByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaRecoverValueByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaRecoverValueByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamina/recover/value/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverValueByStampTask(
+                Request.VerifyStaminaRecoverValueByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverValueByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverValueByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverValueByStampTaskResult> VerifyStaminaRecoverValueByStampTaskFuture(
+                Request.VerifyStaminaRecoverValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverValueByStampTaskResult> VerifyStaminaRecoverValueByStampTaskAsync(
+                Request.VerifyStaminaRecoverValueByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaRecoverValueByStampTaskResult> result = null;
+			await VerifyStaminaRecoverValueByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaRecoverValueByStampTaskTask VerifyStaminaRecoverValueByStampTaskAsync(
+                Request.VerifyStaminaRecoverValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverValueByStampTaskResult> VerifyStaminaRecoverValueByStampTaskAsync(
+                Request.VerifyStaminaRecoverValueByStampTaskRequest request
+        )
+		{
+			var task = new VerifyStaminaRecoverValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaOverflowValueByStampTaskTask : Gs2RestSessionTask<VerifyStaminaOverflowValueByStampTaskRequest, VerifyStaminaOverflowValueByStampTaskResult>
+        {
+            public VerifyStaminaOverflowValueByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStaminaOverflowValueByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStaminaOverflowValueByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamina/overflow/value/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaOverflowValueByStampTask(
+                Request.VerifyStaminaOverflowValueByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaOverflowValueByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyStaminaOverflowValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaOverflowValueByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaOverflowValueByStampTaskResult> VerifyStaminaOverflowValueByStampTaskFuture(
+                Request.VerifyStaminaOverflowValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaOverflowValueByStampTaskResult> VerifyStaminaOverflowValueByStampTaskAsync(
+                Request.VerifyStaminaOverflowValueByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyStaminaOverflowValueByStampTaskResult> result = null;
+			await VerifyStaminaOverflowValueByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyStaminaOverflowValueByStampTaskTask VerifyStaminaOverflowValueByStampTaskAsync(
+                Request.VerifyStaminaOverflowValueByStampTaskRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaOverflowValueByStampTaskResult> VerifyStaminaOverflowValueByStampTaskAsync(
+                Request.VerifyStaminaOverflowValueByStampTaskRequest request
+        )
+		{
+			var task = new VerifyStaminaOverflowValueByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

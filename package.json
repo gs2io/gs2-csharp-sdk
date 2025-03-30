@@ -1,7 +1,7 @@
 {
   "name": "io.gs2.csharp.sdk",
   "displayName": "GS2 C# SDK",
-  "version": "2025.3.21",
+  "version": "2025.3.22",
   "unity": "2019.2",
   "description": "Game Server Services C# SDK.",
   "keywords": ["GS2", "Game Server Services", "BaaS", "mBaaS", "Server"],

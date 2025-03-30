@@ -31,11 +31,11 @@ namespace Gs2.Gs2Money2.Model
 #endif
 	public partial class DepositTransaction : IComparable
 	{
-        public float? Price { set; get; }
+        public double? Price { set; get; }
         public string Currency { set; get; }
         public int? Count { set; get; }
         public long? DepositedAt { set; get; }
-        public DepositTransaction WithPrice(float? price) {
+        public DepositTransaction WithPrice(double? price) {
             this.Price = price;
             return this;
         }
@@ -61,7 +61,7 @@ namespace Gs2.Gs2Money2.Model
                 return null;
             }
             return new DepositTransaction()
-                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (double?)double.Parse(data["price"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
                 .WithDepositedAt(!data.Keys.Contains("depositedAt") || data["depositedAt"] == null ? null : (long?)(data["depositedAt"].ToString().Contains(".") ? (long)double.Parse(data["depositedAt"].ToString()) : long.Parse(data["depositedAt"].ToString())));
@@ -82,7 +82,7 @@ namespace Gs2.Gs2Money2.Model
             writer.WriteObjectStart();
             if (Price != null) {
                 writer.WritePropertyName("price");
-                writer.Write(float.Parse(Price.ToString()));
+                writer.Write(double.Parse(Price.ToString()));
             }
             if (Currency != null) {
                 writer.WritePropertyName("currency");
@@ -145,7 +145,7 @@ namespace Gs2.Gs2Money2.Model
                         new RequestError("depositTransaction", "money2.depositTransaction.price.error.invalid"),
                     });
                 }
-                if (Price > 100000.0) {
+                if (Price > 100000000.0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("depositTransaction", "money2.depositTransaction.price.error.invalid"),
                     });

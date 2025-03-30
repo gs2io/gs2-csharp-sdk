@@ -5569,6 +5569,1386 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
+        public class VerifyStaminaValueTask : Gs2WebSocketSessionTask<Request.VerifyStaminaValueRequest, Result.VerifyStaminaValueResult>
+        {
+	        public VerifyStaminaValueTask(IGs2Session session, Request.VerifyStaminaValueRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaValueRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaValue",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaValue(
+                Request.VerifyStaminaValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaValueTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaValueResult> VerifyStaminaValueFuture(
+                Request.VerifyStaminaValueRequest request
+        )
+		{
+			return new VerifyStaminaValueTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaValueResult> VerifyStaminaValueAsync(
+            Request.VerifyStaminaValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaValueTask VerifyStaminaValueAsync(
+                Request.VerifyStaminaValueRequest request
+        )
+		{
+			return new VerifyStaminaValueTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaValueResult> VerifyStaminaValueAsync(
+            Request.VerifyStaminaValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaValueByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyStaminaValueByUserIdRequest, Result.VerifyStaminaValueByUserIdResult>
+        {
+	        public VerifyStaminaValueByUserIdTask(IGs2Session session, Request.VerifyStaminaValueByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaValueByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaValueByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaValueByUserId(
+                Request.VerifyStaminaValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaValueByUserIdResult> VerifyStaminaValueByUserIdFuture(
+                Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaValueByUserIdResult> VerifyStaminaValueByUserIdAsync(
+            Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaValueByUserIdTask VerifyStaminaValueByUserIdAsync(
+                Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaValueByUserIdResult> VerifyStaminaValueByUserIdAsync(
+            Request.VerifyStaminaValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaMaxValueTask : Gs2WebSocketSessionTask<Request.VerifyStaminaMaxValueRequest, Result.VerifyStaminaMaxValueResult>
+        {
+	        public VerifyStaminaMaxValueTask(IGs2Session session, Request.VerifyStaminaMaxValueRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaMaxValueRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaMaxValue",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaMaxValue(
+                Request.VerifyStaminaMaxValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaMaxValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaMaxValueTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaMaxValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaMaxValueResult> VerifyStaminaMaxValueFuture(
+                Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaMaxValueResult> VerifyStaminaMaxValueAsync(
+            Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaMaxValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaMaxValueTask VerifyStaminaMaxValueAsync(
+                Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaMaxValueResult> VerifyStaminaMaxValueAsync(
+            Request.VerifyStaminaMaxValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaMaxValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaMaxValueByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyStaminaMaxValueByUserIdRequest, Result.VerifyStaminaMaxValueByUserIdResult>
+        {
+	        public VerifyStaminaMaxValueByUserIdTask(IGs2Session session, Request.VerifyStaminaMaxValueByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaMaxValueByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaMaxValueByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaMaxValueByUserId(
+                Request.VerifyStaminaMaxValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaMaxValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaMaxValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaMaxValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaMaxValueByUserIdResult> VerifyStaminaMaxValueByUserIdFuture(
+                Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaMaxValueByUserIdResult> VerifyStaminaMaxValueByUserIdAsync(
+            Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaMaxValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaMaxValueByUserIdTask VerifyStaminaMaxValueByUserIdAsync(
+                Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaMaxValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaMaxValueByUserIdResult> VerifyStaminaMaxValueByUserIdAsync(
+            Request.VerifyStaminaMaxValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaMaxValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverIntervalMinutesTask : Gs2WebSocketSessionTask<Request.VerifyStaminaRecoverIntervalMinutesRequest, Result.VerifyStaminaRecoverIntervalMinutesResult>
+        {
+	        public VerifyStaminaRecoverIntervalMinutesTask(IGs2Session session, Request.VerifyStaminaRecoverIntervalMinutesRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaRecoverIntervalMinutesRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaRecoverIntervalMinutes",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverIntervalMinutes(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverIntervalMinutesResult> VerifyStaminaRecoverIntervalMinutesFuture(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverIntervalMinutesResult> VerifyStaminaRecoverIntervalMinutesAsync(
+            Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverIntervalMinutesTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaRecoverIntervalMinutesTask VerifyStaminaRecoverIntervalMinutesAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverIntervalMinutesResult> VerifyStaminaRecoverIntervalMinutesAsync(
+            Request.VerifyStaminaRecoverIntervalMinutesRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverIntervalMinutesTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverIntervalMinutesByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest, Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult>
+        {
+	        public VerifyStaminaRecoverIntervalMinutesByUserIdTask(IGs2Session session, Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaRecoverIntervalMinutesByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverIntervalMinutesByUserId(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult> VerifyStaminaRecoverIntervalMinutesByUserIdFuture(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult> VerifyStaminaRecoverIntervalMinutesByUserIdAsync(
+            Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaRecoverIntervalMinutesByUserIdTask VerifyStaminaRecoverIntervalMinutesByUserIdAsync(
+                Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult> VerifyStaminaRecoverIntervalMinutesByUserIdAsync(
+            Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverIntervalMinutesByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverValueTask : Gs2WebSocketSessionTask<Request.VerifyStaminaRecoverValueRequest, Result.VerifyStaminaRecoverValueResult>
+        {
+	        public VerifyStaminaRecoverValueTask(IGs2Session session, Request.VerifyStaminaRecoverValueRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaRecoverValueRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaRecoverValue",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverValue(
+                Request.VerifyStaminaRecoverValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverValueTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverValueResult> VerifyStaminaRecoverValueFuture(
+                Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverValueResult> VerifyStaminaRecoverValueAsync(
+            Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaRecoverValueTask VerifyStaminaRecoverValueAsync(
+                Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverValueResult> VerifyStaminaRecoverValueAsync(
+            Request.VerifyStaminaRecoverValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaRecoverValueByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyStaminaRecoverValueByUserIdRequest, Result.VerifyStaminaRecoverValueByUserIdResult>
+        {
+	        public VerifyStaminaRecoverValueByUserIdTask(IGs2Session session, Request.VerifyStaminaRecoverValueByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaRecoverValueByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaRecoverValueByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaRecoverValueByUserId(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaRecoverValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaRecoverValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaRecoverValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaRecoverValueByUserIdResult> VerifyStaminaRecoverValueByUserIdFuture(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaRecoverValueByUserIdResult> VerifyStaminaRecoverValueByUserIdAsync(
+            Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaRecoverValueByUserIdTask VerifyStaminaRecoverValueByUserIdAsync(
+                Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaRecoverValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaRecoverValueByUserIdResult> VerifyStaminaRecoverValueByUserIdAsync(
+            Request.VerifyStaminaRecoverValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaRecoverValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaOverflowValueTask : Gs2WebSocketSessionTask<Request.VerifyStaminaOverflowValueRequest, Result.VerifyStaminaOverflowValueResult>
+        {
+	        public VerifyStaminaOverflowValueTask(IGs2Session session, Request.VerifyStaminaOverflowValueRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaOverflowValueRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaOverflowValue",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaOverflowValue(
+                Request.VerifyStaminaOverflowValueRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaOverflowValueResult>> callback
+        )
+		{
+			var task = new VerifyStaminaOverflowValueTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaOverflowValueResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaOverflowValueResult> VerifyStaminaOverflowValueFuture(
+                Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaOverflowValueResult> VerifyStaminaOverflowValueAsync(
+            Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaOverflowValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaOverflowValueTask VerifyStaminaOverflowValueAsync(
+                Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaOverflowValueResult> VerifyStaminaOverflowValueAsync(
+            Request.VerifyStaminaOverflowValueRequest request
+        )
+		{
+		    var task = new VerifyStaminaOverflowValueTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyStaminaOverflowValueByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyStaminaOverflowValueByUserIdRequest, Result.VerifyStaminaOverflowValueByUserIdResult>
+        {
+	        public VerifyStaminaOverflowValueByUserIdTask(IGs2Session session, Request.VerifyStaminaOverflowValueByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyStaminaOverflowValueByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.StaminaName != null)
+                {
+                    jsonWriter.WritePropertyName("staminaName");
+                    jsonWriter.Write(request.StaminaName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Value != null)
+                {
+                    jsonWriter.WritePropertyName("value");
+                    jsonWriter.Write(request.Value.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "stamina",
+                    "stamina",
+                    "verifyStaminaOverflowValueByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStaminaOverflowValueByUserId(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStaminaOverflowValueByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyStaminaOverflowValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyStaminaOverflowValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyStaminaOverflowValueByUserIdResult> VerifyStaminaOverflowValueByUserIdFuture(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyStaminaOverflowValueByUserIdResult> VerifyStaminaOverflowValueByUserIdAsync(
+            Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaOverflowValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyStaminaOverflowValueByUserIdTask VerifyStaminaOverflowValueByUserIdAsync(
+                Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+			return new VerifyStaminaOverflowValueByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyStaminaOverflowValueByUserIdResult> VerifyStaminaOverflowValueByUserIdAsync(
+            Request.VerifyStaminaOverflowValueByUserIdRequest request
+        )
+		{
+		    var task = new VerifyStaminaOverflowValueByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class RecoverStaminaByStampSheetTask : Gs2WebSocketSessionTask<Request.RecoverStaminaByStampSheetRequest, Result.RecoverStaminaByStampSheetResult>
         {
 	        public RecoverStaminaByStampSheetTask(IGs2Session session, Request.RecoverStaminaByStampSheetRequest request) : base(session, request)

@@ -36,8 +36,8 @@ namespace Gs2.Gs2Money2.Model
         public int? Month { set; get; }
         public int? Day { set; get; }
         public string Currency { set; get; }
-        public float? DepositAmount { set; get; }
-        public float? WithdrawAmount { set; get; }
+        public double? DepositAmount { set; get; }
+        public double? WithdrawAmount { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
         public DailyTransactionHistory WithDailyTransactionHistoryId(string dailyTransactionHistoryId) {
@@ -60,11 +60,11 @@ namespace Gs2.Gs2Money2.Model
             this.Currency = currency;
             return this;
         }
-        public DailyTransactionHistory WithDepositAmount(float? depositAmount) {
+        public DailyTransactionHistory WithDepositAmount(double? depositAmount) {
             this.DepositAmount = depositAmount;
             return this;
         }
-        public DailyTransactionHistory WithWithdrawAmount(float? withdrawAmount) {
+        public DailyTransactionHistory WithWithdrawAmount(double? withdrawAmount) {
             this.WithdrawAmount = withdrawAmount;
             return this;
         }
@@ -210,8 +210,8 @@ namespace Gs2.Gs2Money2.Model
                 .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
                 .WithDay(!data.Keys.Contains("day") || data["day"] == null ? null : (int?)(data["day"].ToString().Contains(".") ? (int)double.Parse(data["day"].ToString()) : int.Parse(data["day"].ToString())))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
-                .WithDepositAmount(!data.Keys.Contains("depositAmount") || data["depositAmount"] == null ? null : (float?)float.Parse(data["depositAmount"].ToString()))
-                .WithWithdrawAmount(!data.Keys.Contains("withdrawAmount") || data["withdrawAmount"] == null ? null : (float?)float.Parse(data["withdrawAmount"].ToString()))
+                .WithDepositAmount(!data.Keys.Contains("depositAmount") || data["depositAmount"] == null ? null : (double?)double.Parse(data["depositAmount"].ToString()))
+                .WithWithdrawAmount(!data.Keys.Contains("withdrawAmount") || data["withdrawAmount"] == null ? null : (double?)double.Parse(data["withdrawAmount"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -256,11 +256,11 @@ namespace Gs2.Gs2Money2.Model
             }
             if (DepositAmount != null) {
                 writer.WritePropertyName("depositAmount");
-                writer.Write(float.Parse(DepositAmount.ToString()));
+                writer.Write(double.Parse(DepositAmount.ToString()));
             }
             if (WithdrawAmount != null) {
                 writer.WritePropertyName("withdrawAmount");
-                writer.Write(float.Parse(WithdrawAmount.ToString()));
+                writer.Write(double.Parse(WithdrawAmount.ToString()));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
