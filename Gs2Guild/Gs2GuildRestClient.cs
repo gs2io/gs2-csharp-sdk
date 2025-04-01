@@ -4662,269 +4662,6 @@ namespace Gs2.Gs2Guild
 #endif
 
 
-        public class UpdateMemberMetadataTask : Gs2RestSessionTask<UpdateMemberMetadataRequest, UpdateMemberMetadataResult>
-        {
-            public UpdateMemberMetadataTask(IGs2Session session, RestSessionRequestFactory factory, UpdateMemberMetadataRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(UpdateMemberMetadataRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "guild")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/guild/{guildModelName}/guild/{guildName}/member/me/metadata";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
-                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
-
-                var sessionRequest = Factory.Put(url);
-
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-                jsonWriter.WriteObjectStart();
-                if (request.Metadata != null)
-                {
-                    jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(request.Metadata);
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                jsonWriter.WriteObjectEnd();
-
-                var body = stringBuilder.ToString();
-                if (!string.IsNullOrEmpty(body))
-                {
-                    sessionRequest.Body = body;
-                }
-                sessionRequest.AddHeader("Content-Type", "application/json");
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
-                if (request.DryRun)
-                {
-                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateMemberMetadata(
-                Request.UpdateMemberMetadataRequest request,
-                UnityAction<AsyncResult<Result.UpdateMemberMetadataResult>> callback
-        )
-		{
-			var task = new UpdateMemberMetadataTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateMemberMetadataResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.UpdateMemberMetadataResult> UpdateMemberMetadataFuture(
-                Request.UpdateMemberMetadataRequest request
-        )
-		{
-			return new UpdateMemberMetadataTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateMemberMetadataResult> UpdateMemberMetadataAsync(
-                Request.UpdateMemberMetadataRequest request
-        )
-		{
-            AsyncResult<Result.UpdateMemberMetadataResult> result = null;
-			await UpdateMemberMetadata(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public UpdateMemberMetadataTask UpdateMemberMetadataAsync(
-                Request.UpdateMemberMetadataRequest request
-        )
-		{
-			return new UpdateMemberMetadataTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.UpdateMemberMetadataResult> UpdateMemberMetadataAsync(
-                Request.UpdateMemberMetadataRequest request
-        )
-		{
-			var task = new UpdateMemberMetadataTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
-        public class UpdateMemberMetadataByUserIdTask : Gs2RestSessionTask<UpdateMemberMetadataByUserIdRequest, UpdateMemberMetadataByUserIdResult>
-        {
-            public UpdateMemberMetadataByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UpdateMemberMetadataByUserIdRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(UpdateMemberMetadataByUserIdRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "guild")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/guild/{guildModelName}/guild/{guildName}/member/{userId}/metadata";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
-                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
-                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
-
-                var sessionRequest = Factory.Put(url);
-
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-                jsonWriter.WriteObjectStart();
-                if (request.Metadata != null)
-                {
-                    jsonWriter.WritePropertyName("metadata");
-                    jsonWriter.Write(request.Metadata);
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                jsonWriter.WriteObjectEnd();
-
-                var body = stringBuilder.ToString();
-                if (!string.IsNullOrEmpty(body))
-                {
-                    sessionRequest.Body = body;
-                }
-                sessionRequest.AddHeader("Content-Type", "application/json");
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
-                if (request.TimeOffsetToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
-                }
-                if (request.DryRun)
-                {
-                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateMemberMetadataByUserId(
-                Request.UpdateMemberMetadataByUserIdRequest request,
-                UnityAction<AsyncResult<Result.UpdateMemberMetadataByUserIdResult>> callback
-        )
-		{
-			var task = new UpdateMemberMetadataByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateMemberMetadataByUserIdResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.UpdateMemberMetadataByUserIdResult> UpdateMemberMetadataByUserIdFuture(
-                Request.UpdateMemberMetadataByUserIdRequest request
-        )
-		{
-			return new UpdateMemberMetadataByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateMemberMetadataByUserIdResult> UpdateMemberMetadataByUserIdAsync(
-                Request.UpdateMemberMetadataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.UpdateMemberMetadataByUserIdResult> result = null;
-			await UpdateMemberMetadataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public UpdateMemberMetadataByUserIdTask UpdateMemberMetadataByUserIdAsync(
-                Request.UpdateMemberMetadataByUserIdRequest request
-        )
-		{
-			return new UpdateMemberMetadataByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.UpdateMemberMetadataByUserIdResult> UpdateMemberMetadataByUserIdAsync(
-                Request.UpdateMemberMetadataByUserIdRequest request
-        )
-		{
-			var task = new UpdateMemberMetadataByUserIdTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class DeleteGuildTask : Gs2RestSessionTask<DeleteGuildRequest, DeleteGuildResult>
         {
             public DeleteGuildTask(IGs2Session session, RestSessionRequestFactory factory, DeleteGuildRequest request) : base(session, factory, request)
@@ -7513,6 +7250,269 @@ namespace Gs2.Gs2Guild
         )
 		{
 			var task = new GetJoinedGuildByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateMemberMetadataTask : Gs2RestSessionTask<UpdateMemberMetadataRequest, UpdateMemberMetadataResult>
+        {
+            public UpdateMemberMetadataTask(IGs2Session session, RestSessionRequestFactory factory, UpdateMemberMetadataRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateMemberMetadataRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/guild/{guildName}/member/me/metadata";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateMemberMetadata(
+                Request.UpdateMemberMetadataRequest request,
+                UnityAction<AsyncResult<Result.UpdateMemberMetadataResult>> callback
+        )
+		{
+			var task = new UpdateMemberMetadataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateMemberMetadataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateMemberMetadataResult> UpdateMemberMetadataFuture(
+                Request.UpdateMemberMetadataRequest request
+        )
+		{
+			return new UpdateMemberMetadataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateMemberMetadataResult> UpdateMemberMetadataAsync(
+                Request.UpdateMemberMetadataRequest request
+        )
+		{
+            AsyncResult<Result.UpdateMemberMetadataResult> result = null;
+			await UpdateMemberMetadata(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateMemberMetadataTask UpdateMemberMetadataAsync(
+                Request.UpdateMemberMetadataRequest request
+        )
+		{
+			return new UpdateMemberMetadataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateMemberMetadataResult> UpdateMemberMetadataAsync(
+                Request.UpdateMemberMetadataRequest request
+        )
+		{
+			var task = new UpdateMemberMetadataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateMemberMetadataByUserIdTask : Gs2RestSessionTask<UpdateMemberMetadataByUserIdRequest, UpdateMemberMetadataByUserIdResult>
+        {
+            public UpdateMemberMetadataByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UpdateMemberMetadataByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateMemberMetadataByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "guild")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/guild/{guildModelName}/guild/{guildName}/member/{userId}/metadata";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{guildModelName}", !string.IsNullOrEmpty(request.GuildModelName) ? request.GuildModelName.ToString() : "null");
+                url = url.Replace("{guildName}", !string.IsNullOrEmpty(request.GuildName) ? request.GuildName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateMemberMetadataByUserId(
+                Request.UpdateMemberMetadataByUserIdRequest request,
+                UnityAction<AsyncResult<Result.UpdateMemberMetadataByUserIdResult>> callback
+        )
+		{
+			var task = new UpdateMemberMetadataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateMemberMetadataByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateMemberMetadataByUserIdResult> UpdateMemberMetadataByUserIdFuture(
+                Request.UpdateMemberMetadataByUserIdRequest request
+        )
+		{
+			return new UpdateMemberMetadataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateMemberMetadataByUserIdResult> UpdateMemberMetadataByUserIdAsync(
+                Request.UpdateMemberMetadataByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.UpdateMemberMetadataByUserIdResult> result = null;
+			await UpdateMemberMetadataByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateMemberMetadataByUserIdTask UpdateMemberMetadataByUserIdAsync(
+                Request.UpdateMemberMetadataByUserIdRequest request
+        )
+		{
+			return new UpdateMemberMetadataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateMemberMetadataByUserIdResult> UpdateMemberMetadataByUserIdAsync(
+                Request.UpdateMemberMetadataByUserIdRequest request
+        )
+		{
+			var task = new UpdateMemberMetadataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
