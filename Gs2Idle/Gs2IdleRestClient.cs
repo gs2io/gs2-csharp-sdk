@@ -1724,6 +1724,11 @@ namespace Gs2.Gs2Idle
                     jsonWriter.WritePropertyName("defaultMaximumIdleMinutes");
                     jsonWriter.Write(request.DefaultMaximumIdleMinutes.ToString());
                 }
+                if (request.RewardResetMode != null)
+                {
+                    jsonWriter.WritePropertyName("rewardResetMode");
+                    jsonWriter.Write(request.RewardResetMode);
+                }
                 if (request.AcquireActions != null)
                 {
                     jsonWriter.WritePropertyName("acquireActions");
@@ -1988,6 +1993,11 @@ namespace Gs2.Gs2Idle
                 {
                     jsonWriter.WritePropertyName("defaultMaximumIdleMinutes");
                     jsonWriter.Write(request.DefaultMaximumIdleMinutes.ToString());
+                }
+                if (request.RewardResetMode != null)
+                {
+                    jsonWriter.WritePropertyName("rewardResetMode");
+                    jsonWriter.Write(request.RewardResetMode);
                 }
                 if (request.AcquireActions != null)
                 {

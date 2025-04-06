@@ -37,7 +37,7 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2Guild.Model.Cache
 {
-    public static partial class GuildExt
+    public static partial class JoinedGuildExt
     {
         public static void PutCache(
             this UpdateMemberMetadataByUserIdResult self,

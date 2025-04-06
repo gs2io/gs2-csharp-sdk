@@ -409,7 +409,7 @@ namespace Gs2.Gs2Money2.Model
                         new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.depositAmount.error.invalid"),
                     });
                 }
-                if (DepositAmount > 16777214) {
+                if (DepositAmount > 281474976710654) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.depositAmount.error.invalid"),
                     });
@@ -421,7 +421,7 @@ namespace Gs2.Gs2Money2.Model
                         new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.withdrawAmount.error.invalid"),
                     });
                 }
-                if (WithdrawAmount > 16777214) {
+                if (WithdrawAmount > 281474976710654) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.withdrawAmount.error.invalid"),
                     });

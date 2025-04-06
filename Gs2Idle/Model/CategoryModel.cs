@@ -36,6 +36,7 @@ namespace Gs2.Gs2Idle.Model
         public string Metadata { set; get; }
         public int? RewardIntervalMinutes { set; get; }
         public int? DefaultMaximumIdleMinutes { set; get; }
+        public string RewardResetMode { set; get; }
         public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
         public string IdlePeriodScheduleId { set; get; }
         public string ReceivePeriodScheduleId { set; get; }
@@ -57,6 +58,10 @@ namespace Gs2.Gs2Idle.Model
         }
         public CategoryModel WithDefaultMaximumIdleMinutes(int? defaultMaximumIdleMinutes) {
             this.DefaultMaximumIdleMinutes = defaultMaximumIdleMinutes;
+            return this;
+        }
+        public CategoryModel WithRewardResetMode(string rewardResetMode) {
+            this.RewardResetMode = rewardResetMode;
             return this;
         }
         public CategoryModel WithAcquireActions(Gs2.Gs2Idle.Model.AcquireActionList[] acquireActions) {
@@ -154,6 +159,7 @@ namespace Gs2.Gs2Idle.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithRewardIntervalMinutes(!data.Keys.Contains("rewardIntervalMinutes") || data["rewardIntervalMinutes"] == null ? null : (int?)(data["rewardIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["rewardIntervalMinutes"].ToString()) : int.Parse(data["rewardIntervalMinutes"].ToString())))
                 .WithDefaultMaximumIdleMinutes(!data.Keys.Contains("defaultMaximumIdleMinutes") || data["defaultMaximumIdleMinutes"] == null ? null : (int?)(data["defaultMaximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["defaultMaximumIdleMinutes"].ToString()) : int.Parse(data["defaultMaximumIdleMinutes"].ToString())))
+                .WithRewardResetMode(!data.Keys.Contains("rewardResetMode") || data["rewardResetMode"] == null ? null : data["rewardResetMode"].ToString())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Idle.Model.AcquireActionList.FromJson(v);
                 }).ToArray())
@@ -178,6 +184,7 @@ namespace Gs2.Gs2Idle.Model
                 ["metadata"] = Metadata,
                 ["rewardIntervalMinutes"] = RewardIntervalMinutes,
                 ["defaultMaximumIdleMinutes"] = DefaultMaximumIdleMinutes,
+                ["rewardResetMode"] = RewardResetMode,
                 ["acquireActions"] = acquireActionsJsonData,
                 ["idlePeriodScheduleId"] = IdlePeriodScheduleId,
                 ["receivePeriodScheduleId"] = ReceivePeriodScheduleId,
@@ -206,6 +213,10 @@ namespace Gs2.Gs2Idle.Model
             if (DefaultMaximumIdleMinutes != null) {
                 writer.WritePropertyName("defaultMaximumIdleMinutes");
                 writer.Write((DefaultMaximumIdleMinutes.ToString().Contains(".") ? (int)double.Parse(DefaultMaximumIdleMinutes.ToString()) : int.Parse(DefaultMaximumIdleMinutes.ToString())));
+            }
+            if (RewardResetMode != null) {
+                writer.WritePropertyName("rewardResetMode");
+                writer.Write(RewardResetMode.ToString());
             }
             if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
@@ -272,6 +283,14 @@ namespace Gs2.Gs2Idle.Model
             else
             {
                 diff += (int)(DefaultMaximumIdleMinutes - other.DefaultMaximumIdleMinutes);
+            }
+            if (RewardResetMode == null && RewardResetMode == other.RewardResetMode)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RewardResetMode.CompareTo(other.RewardResetMode);
             }
             if (AcquireActions == null && AcquireActions == other.AcquireActions)
             {
@@ -351,6 +370,17 @@ namespace Gs2.Gs2Idle.Model
                 }
             }
             {
+                switch (RewardResetMode) {
+                    case "Reset":
+                    case "CarryOver":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("categoryModel", "idle.categoryModel.rewardResetMode.error.invalid"),
+                        });
+                }
+            }
+            {
                 if (AcquireActions.Length < 1) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("categoryModel", "idle.categoryModel.acquireActions.error.tooFew"),
@@ -385,6 +415,7 @@ namespace Gs2.Gs2Idle.Model
                 Metadata = Metadata,
                 RewardIntervalMinutes = RewardIntervalMinutes,
                 DefaultMaximumIdleMinutes = DefaultMaximumIdleMinutes,
+                RewardResetMode = RewardResetMode,
                 AcquireActions = AcquireActions?.Clone() as Gs2.Gs2Idle.Model.AcquireActionList[],
                 IdlePeriodScheduleId = IdlePeriodScheduleId,
                 ReceivePeriodScheduleId = ReceivePeriodScheduleId,
