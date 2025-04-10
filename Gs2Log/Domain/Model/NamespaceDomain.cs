@@ -1615,7 +1615,7 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLogWithTelemetry> AccessLogWithTelemetry(
-            string? userId = null,
+            string userId = null,
             long? begin = null,
             long? end = null,
             bool? longTerm = null,
@@ -1641,7 +1641,7 @@ namespace Gs2.Gs2Log.Domain.Model
             #else
         public QueryAccessLogWithTelemetryIterator AccessLogWithTelemetryAsync(
             #endif
-            string? userId = null,
+            string userId = null,
             long? begin = null,
             long? end = null,
             bool? longTerm = null,

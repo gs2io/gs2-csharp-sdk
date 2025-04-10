@@ -398,7 +398,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public Gs2.Gs2Matchmaking.Domain.Model.SeasonAccessTokenDomain Season(
             string seasonName,
-            long? season = null
+            long? season
         ) {
             return new Gs2.Gs2Matchmaking.Domain.Model.SeasonAccessTokenDomain(
                 this._gs2,

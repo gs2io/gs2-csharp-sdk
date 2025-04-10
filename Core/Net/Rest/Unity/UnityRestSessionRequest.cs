@@ -82,11 +82,13 @@ namespace Gs2.Core.Net
             else if (!this._checkCertificateRevocation)
                 request.certificateHandler = new DisabledCertificateHandler();
 
+#pragma warning disable 0168
             try {
                 await request.SendWebRequest();
             }
             catch (UnityWebRequestException e) {
             }
+#pragma warning restore 0168
 
             if (request.responseCode == 500) {
                 return await Invoke();

@@ -13,6 +13,9 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
+#pragma warning disable CS0618 // Obsolete with a message
+
 using System;
 using System.Collections.Generic;
 using System.Text;

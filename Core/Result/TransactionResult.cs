@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
-using Gs2.Core.Model;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER

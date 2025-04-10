@@ -1,3 +1,5 @@
+#pragma warning disable CS0618 // Obsolete with a message
+
 using System;
 using System.Collections;
 using System.Threading.Tasks;

@@ -60,7 +60,7 @@ namespace Gs2.Core.Domain
             this.Actions = actions;
         }
 
-        public string TransactionId()
+        public string GetTransactionId()
         {
             return this switch {
                 RanTransactionAccessTokenDomain => (this as RanTransactionAccessTokenDomain)?.TransactionId,
@@ -71,7 +71,7 @@ namespace Gs2.Core.Domain
             };
         }
         
-        public string JobName()
+        public string GetJobName()
         {
             return this switch {
                 AutoJobQueueAccessTokenDomain => (this as AutoJobQueueAccessTokenDomain)?.JobName,

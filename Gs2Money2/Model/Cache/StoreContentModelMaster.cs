@@ -16,6 +16,7 @@
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 
+#pragma warning disable CS0618 // Obsolete with a message
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
