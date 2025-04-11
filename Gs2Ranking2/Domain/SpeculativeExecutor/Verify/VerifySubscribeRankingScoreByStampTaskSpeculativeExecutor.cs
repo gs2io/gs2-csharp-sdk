@@ -63,11 +63,11 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 var future = domain.Ranking2.Namespace(
                     request.NamespaceName
-                ).AccessToken(
-                    accessToken
+                ).SubscribeRankingModel(
+                    request.RankingName
                 ).SubscribeRankingSeason(
-                    request.RankingName,
-                    request.Season
+                    request.Season,
+                    request.UserId
                 ).SubscribeRankingScore(
                 ).ModelFuture();
                 yield return future;
@@ -89,9 +89,9 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
                             request.RankingName,
-                            request.Season
+                            request.Season,
+                            accessToken.UserId
                         );
                         return null;
                     });
@@ -119,11 +119,11 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Ranking2.Namespace(
                 request.NamespaceName
-            ).AccessToken(
-                accessToken
+            ).SubscribeRankingModel(
+                request.RankingName
             ).SubscribeRankingSeason(
-                request.RankingName,
-                request.Season
+                request.Season,
+                request.UserId
             ).SubscribeRankingScore(
             ).ModelAsync();
 

@@ -65,13 +65,13 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 var future = domain.Ranking2.Namespace(
                     request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).ClusterRankingReceivedReward(
-                    request.RankingName,
+                ).ClusterRankingModel(
+                    request.RankingName
+                ).ClusterRankingSeason(
                     request.ClusterName,
-                    request.Season
-                ).ModelFuture();
+                    request.Season,
+                    accessToken
+                ).ClusterRankingReceivedReward().ModelFuture();
                 yield return future;
                 if (future.Error != null) {
                     result.OnError(future.Error);
@@ -91,18 +91,18 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
                             request.RankingName,
                             request.ClusterName,
-                            request.Season
+                            request.Season,
+                            accessToken.UserId
                         );
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
                             request.RankingName,
                             request.ClusterName,
-                            null
+                            null,
+                            accessToken.UserId
                         );
                         return null;
                     });
@@ -130,13 +130,13 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Ranking2.Namespace(
                 request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).ClusterRankingReceivedReward(
-                request.RankingName,
+            ).ClusterRankingModel(
+                request.RankingName
+            ).ClusterRankingSeason(
                 request.ClusterName,
-                request.Season
-            ).ModelAsync();
+                request.Season,
+                accessToken
+            ).ClusterRankingReceivedReward().ModelAsync();
 
             if (item == null) {
                 return () => null;
@@ -148,18 +148,18 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
                     request.RankingName,
                     request.ClusterName,
-                    request.Season
+                    request.Season,
+                    accessToken.UserId
                 );
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
                     request.RankingName,
                     request.ClusterName,
-                    null
+                    null,
+                    accessToken.UserId
                 );
                 return null;
             };

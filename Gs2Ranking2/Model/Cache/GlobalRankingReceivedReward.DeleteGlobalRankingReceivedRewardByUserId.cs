@@ -50,16 +50,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             (null as GlobalRankingReceivedReward).DeleteCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
                 self.Item.RankingName,
-                self.Item.Season
+                self.Item.Season,
+                self.Item.UserId
             );
             (null as GlobalRankingReceivedReward).DeleteCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
                 self.Item.RankingName,
-                null
+                null,
+                self.Item.UserId
             );
         }
 

@@ -41,17 +41,17 @@ namespace Gs2.Gs2Ranking2.Model.Cache
         public static string CacheParentKey(
             this SubscribeRankingScore self,
             string namespaceName,
-            string userId,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             return string.Join(
                 ":",
                 "ranking2",
                 namespaceName,
-                userId,
                 rankingName,
                 season.ToString(),
+                userId,
                 "SubscribeRankingScore"
             );
         }
@@ -67,9 +67,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             long? season,
+            string userId,
             Func<IFuture<SubscribeRankingScore>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SubscribeRankingScore> self)
@@ -83,9 +83,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                         (null as SubscribeRankingScore).PutCache(
                             cache,
                             namespaceName,
-                            userId,
                             rankingName,
-                            season
+                            season,
+                            userId
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "subscribeRankingScore") {
                             self.OnComplete(default);
@@ -99,9 +99,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 );
                 self.OnComplete(item);
             }
@@ -118,9 +118,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             long? season,
+            string userId,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SubscribeRankingScore>> fetchImpl
     #else
@@ -132,9 +132,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 );
                 return item;
             }
@@ -142,9 +142,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 (null as SubscribeRankingScore).PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "subscribeRankingScore") {
                     throw;
@@ -158,9 +158,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -168,9 +168,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             return cache.Get<SubscribeRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 self.CacheKey(
                 )
@@ -181,9 +181,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -191,9 +191,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             var (value, find) = cache.Get<SubscribeRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 self.CacheKey(
                 )
@@ -204,9 +204,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 self.CacheKey(
                 ),
@@ -219,9 +219,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -229,9 +229,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Delete<SubscribeRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 self.CacheKey(
                 )
@@ -242,17 +242,17 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             long? season,
+            string userId,
             Action<SubscribeRankingScore[]> callback
         ) {
             cache.ListSubscribe<SubscribeRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 callback,
                 () => {}
@@ -263,17 +263,17 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             long? season,
+            string userId,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SubscribeRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 callbackId
             );

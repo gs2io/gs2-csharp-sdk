@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -122,10 +120,10 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                         NamespaceName,
-                        UserId,
-                        this.RankingName,
-                        this.ClusterName,
-                        this.Season
+                        RankingName ?? default,
+                        ClusterName ?? default,
+                        this.Season,
+                        UserId
                     ),
                     out var list
             )) {
@@ -139,6 +137,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
+                    .WithRankingName(this.RankingName)
+                    .WithClusterName(this.ClusterName)
+                    .WithSeason(this.Season)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -170,11 +171,11 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            this.RankingName,
-                            this.ClusterName,
-                            this.Season
+                            NamespaceName,
+                            RankingName ?? default,
+                            ClusterName ?? default,
+                            this.Season,
+                            UserId
                         )
                     );
                 }
@@ -256,10 +257,10 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                             NamespaceName,
-                            UserId,
-                            RankingName,
-                            ClusterName,
-                            Season
+                            RankingName ?? default,
+                            ClusterName ?? default,
+                            this.Season,
+                            UserId
                        ),
                        "ListClusterRankingScore"
                    ).LockAsync()) {

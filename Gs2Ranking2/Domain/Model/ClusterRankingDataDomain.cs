@@ -105,8 +105,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     .WithNamespaceName(this.NamespaceName)
                     .WithRankingName(this.RankingName)
                     .WithClusterName(this.ClusterName)
-                    .WithSeason(this.Season)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithSeason(this.Season);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -118,9 +118,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                var domain = this;
 
-                self.OnComplete(domain);
+                self.OnComplete(new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.ClusterName,
+                    result.Item.Season,
+                    this.UserId
+                ));
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain>(Impl);
         }
@@ -139,16 +145,22 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 .WithNamespaceName(this.NamespaceName)
                 .WithRankingName(this.RankingName)
                 .WithClusterName(this.ClusterName)
-                .WithSeason(this.Season)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithSeason(this.Season);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
                 () => this._client.GetClusterRankingByUserIdAsync(request)
             );
-            var domain = this;
 
-            return domain;
+            return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.RankingName,
+                this.ClusterName,
+                result.Item.Season,
+                this.UserId
+            );
         }
         #endif
 
@@ -166,7 +178,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season,
+                    this.Season ?? default,
                     this.UserId
                 );
                 if (find) {
@@ -186,18 +198,30 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public async Task<Gs2.Gs2Ranking2.Model.ClusterRankingData> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RankingName,
-                this.ClusterName,
-                this.Season,
-                this.UserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingData>(
+                        (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheParentKey(
+                            this.NamespaceName,
+                            this.RankingName,
+                            this.ClusterName,
+                            this.Season,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.ClusterName,
+                    this.Season ?? default,
+                    this.UserId
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 
@@ -231,7 +255,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.RankingName,
                 this.ClusterName,
-                this.Season,
+                this.Season ?? default,
                 this.UserId
             );
         }
@@ -243,15 +267,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
-                    this.UserId
                 ),
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -281,10 +305,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
-                    this.UserId
                 ),
                 callbackId
             );

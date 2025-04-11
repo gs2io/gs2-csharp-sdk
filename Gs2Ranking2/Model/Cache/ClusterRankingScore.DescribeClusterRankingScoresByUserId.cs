@@ -52,19 +52,19 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    request.UserId,
                     item.RankingName,
                     item.ClusterName,
-                    item.Season
+                    item.Season,
+                    request.UserId
                 );
                 if (request.Season == null) {
                     item.PutCache(
                         cache,
                         request.NamespaceName,
-                        request.UserId,
                         item.RankingName,
                         item.ClusterName,
-                        null
+                        null,
+                        request.UserId
                     );
                 }
             }

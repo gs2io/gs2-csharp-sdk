@@ -66,27 +66,27 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
         public string NamespaceName { get; } = null!;
-        public AccessToken AccessToken { get; }
-        public string UserId => this.AccessToken.UserId;
         public string RankingName { get; } = null!;
         public long? Season { get; } = null!;
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string NextPageToken { get; set; } = null!;
 
         public SubscribeRankingSeasonAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            AccessToken accessToken,
             string rankingName,
-            long? season
+            long? season,
+            AccessToken accessToken
         ) {
             this._gs2 = gs2;
             this._client = new Gs2Ranking2RestClient(
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.AccessToken = accessToken;
             this.RankingName = rankingName;
             this.Season = season;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -114,9 +114,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var domain = new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain(
                     this._gs2,
                     this.NamespaceName,
-                    this.AccessToken,
                     result?.Item?.RankingName,
-                    result?.Item?.Season
+                    result?.Item?.Season,
+                    this.AccessToken
                 );
 
                 self.OnComplete(domain);
@@ -146,9 +146,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var domain = new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this.AccessToken,
                 result?.Item?.RankingName,
-                result?.Item?.Season
+                result?.Item?.Season,
+                this.AccessToken
             );
 
             return domain;
@@ -197,9 +197,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingScore>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season ?? default
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 callback,
                 () =>
@@ -208,7 +208,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await SubscribeRankingScoresAsync().ToArrayAsync());
+                            callback.Invoke(await SubscribeRankingScoresAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -242,9 +243,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingScore>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season ?? default
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 callbackId
             );
@@ -256,9 +257,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeRankingScore>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season ?? default
+                    this.Season ?? default,
+                    this.UserId
                 )
             );
         }
@@ -268,9 +269,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingScoreAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this.AccessToken,
                 this.RankingName,
-                this.Season
+                this.Season,
+                this.AccessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -318,9 +319,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season ?? default
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 callback,
                 () =>
@@ -329,7 +330,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await SubscribeRankingsAsync().ToArrayAsync());
+                            callback.Invoke(await SubscribeRankingsAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -363,9 +365,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season ?? default
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 callbackId
             );
@@ -377,17 +379,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season ?? default
-                )
-            );
-            this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
-                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    this.RankingName,
-                    null
+                    this.Season ?? default,
+                    this.UserId
                 )
             );
         }
@@ -398,10 +392,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingDataAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this.AccessToken,
                 this.RankingName,
                 this.Season,
-                scorerUserId ?? this.AccessToken.UserId
+                this.AccessToken,
+                scorerUserId ?? this.UserId
             );
         }
 

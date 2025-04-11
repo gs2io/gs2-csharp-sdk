@@ -120,10 +120,10 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId,
-                        this.RankingName,
-                        this.ClusterName,
-                        this.Season
+                        RankingName ?? default,
+                        ClusterName ?? default,
+                        this.Season,
+                        UserId
                     ),
                     out var list
             )) {
@@ -137,6 +137,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    .WithRankingName(this.RankingName)
+                    .WithClusterName(this.ClusterName)
+                    .WithSeason(this.Season)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -169,10 +172,10 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
-                            this.RankingName,
-                            this.ClusterName,
-                            this.Season
+                            RankingName ?? default,
+                            ClusterName ?? default,
+                            this.Season,
+                            UserId
                         )
                     );
                 }
@@ -254,10 +257,10 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
-                            RankingName,
-                            ClusterName,
-                            Season
+                            RankingName ?? default,
+                            ClusterName ?? default,
+                            this.Season,
+                            UserId
                        ),
                        "ListClusterRankingScore"
                    ).LockAsync()) {

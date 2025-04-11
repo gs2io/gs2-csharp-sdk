@@ -66,26 +66,26 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
         public string NamespaceName { get; } = null!;
-        public AccessToken AccessToken { get; }
-        public string UserId => this.AccessToken.UserId;
         public string RankingName { get; } = null!;
         public long? Season { get; } = null!;
+        public AccessToken AccessToken { get; } = null!;
+        public string UserId => this.AccessToken?.UserId;
 
         public GlobalRankingScoreAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            AccessToken accessToken,
             string rankingName,
-            long? season
+            long? season,
+            AccessToken accessToken
         ) {
             this._gs2 = gs2;
             this._client = new Gs2Ranking2RestClient(
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.AccessToken = accessToken;
             this.RankingName = rankingName;
             this.Season = season;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -97,8 +97,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
                     .WithRankingName(this.RankingName)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithSeason(this.Season);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
@@ -128,8 +128,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
                 .WithRankingName(this.RankingName)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithSeason(this.Season);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -141,6 +141,62 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain> VerifyFuture(
+            VerifyGlobalRankingScoreRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithRankingName(this.RankingName)
+                    .WithSeason(this.Season);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyGlobalRankingScoreFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain> VerifyAsync(
+            #else
+        public async Task<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain> VerifyAsync(
+            #endif
+            VerifyGlobalRankingScoreRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithRankingName(this.RankingName)
+                .WithSeason(this.Season);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyGlobalRankingScoreAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Ranking2.Model.GlobalRankingScore> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Model.GlobalRankingScore> self)
@@ -148,9 +204,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default,
+                    this.UserId
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -159,9 +215,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season,
+                    this.Season ?? default,
+                    this.UserId,
                     () => this.GetFuture(
                         new GetGlobalRankingScoreRequest()
                     )
@@ -184,26 +240,37 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public async Task<Gs2.Gs2Ranking2.Model.GlobalRankingScore> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.RankingName,
-                this.Season
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.GlobalRankingScore>(
+                        (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
+                            this.NamespaceName,
+                            this.RankingName,
+                            this.Season,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.Season ?? default,
+                    this.UserId
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.Season ?? default,
+                    this.UserId,
+                    () => this.GetAsync(
+                        new GetGlobalRankingScoreRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.RankingName,
-                this.Season,
-                () => this.GetAsync(
-                    new GetGlobalRankingScoreRequest()
-                )
-            );
         }
         #endif
 
@@ -235,9 +302,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId,
                 this.RankingName,
-                this.Season
+                this.Season ?? default,
+                this.UserId
             );
         }
 
@@ -246,17 +313,16 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
-                    this.RankingName,
-                    this.Season
                 ),
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -284,12 +350,11 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingScore>(
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
-                    this.RankingName,
-                    this.Season
                 ),
                 callbackId
             );

@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -116,8 +114,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                         NamespaceName,
-                        UserId,
-                        this.RankingName
+                        RankingName ?? default,
+                        default,
+                        UserId
                     ),
                     out var list
             )) {
@@ -131,6 +130,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
+                    .WithRankingName(this.RankingName)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -163,8 +163,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                             NamespaceName,
-                            UserId,
-                            this.RankingName
+                            RankingName ?? default,
+                            default,
+                            UserId
                         )
                     );
                 }
@@ -246,8 +247,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.GlobalRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                             NamespaceName,
-                            UserId,
-                            RankingName
+                            RankingName ?? default,
+                            default,
+                            UserId
                        ),
                        "ListGlobalRankingScore"
                    ).LockAsync()) {

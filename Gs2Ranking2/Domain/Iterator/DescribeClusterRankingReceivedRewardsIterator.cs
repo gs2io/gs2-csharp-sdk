@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -118,14 +120,14 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        RankingName ?? default,
+                        ClusterName ?? default,
+                        this.Season,
+                        UserId
                     ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this.RankingName == null || item.RankingName == this.RankingName)
-                    .Where(item => this.ClusterName == null || item.ClusterName == this.ClusterName)
-                    .Where(item => this.Season == null || item.Season == this.Season)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -135,6 +137,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    .WithRankingName(this.RankingName)
+                    .WithClusterName(this.ClusterName)
+                    .WithSeason(this.Season)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -154,9 +159,6 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this.RankingName == null || item.RankingName == this.RankingName)
-                    .Where(item => this.ClusterName == null || item.ClusterName == this.ClusterName)
-                    .Where(item => this.Season == null || item.Season == this.Season)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
@@ -170,7 +172,10 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            RankingName ?? default,
+                            ClusterName ?? default,
+                            this.Season,
+                            UserId
                         )
                     );
                 }
@@ -252,7 +257,10 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            RankingName ?? default,
+                            ClusterName ?? default,
+                            this.Season,
+                            UserId
                        ),
                        "ListClusterRankingReceivedReward"
                    ).LockAsync()) {

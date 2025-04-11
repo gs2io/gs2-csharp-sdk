@@ -66,17 +66,17 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
         public string NamespaceName { get; } = null!;
-        public string UserId { get; } = null!;
         public string RankingName { get; } = null!;
         public long? Season { get; } = null!;
+        public string UserId { get; } = null!;
         public string ScorerUserId { get; } = null!;
 
         public SubscribeRankingDataDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            string userId,
             string rankingName,
             long? season,
+            string userId,
             string scorerUserId
         ) {
             this._gs2 = gs2;
@@ -84,9 +84,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.UserId = userId;
             this.RankingName = rankingName;
             this.Season = season;
+            this.UserId = userId;
             this.ScorerUserId = scorerUserId;
         }
 
@@ -103,8 +103,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
                     .WithRankingName(this.RankingName)
+                    .WithUserId(this.UserId)
                     .WithSeason(this.Season)
                     .WithScorerUserId(this.ScorerUserId);
                 var future = request.InvokeFuture(
@@ -118,9 +118,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                var domain = this;
 
-                self.OnComplete(domain);
+                self.OnComplete(new SubscribeRankingDataDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.RankingName,
+                    result.Item.Season,
+                    this.UserId,
+                    this.ScorerUserId
+                ));
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingDataDomain>(Impl);
         }
@@ -137,8 +143,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
                 .WithRankingName(this.RankingName)
+                .WithUserId(this.UserId)
                 .WithSeason(this.Season)
                 .WithScorerUserId(this.ScorerUserId);
             var result = await request.InvokeAsync(
@@ -146,9 +152,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.UserId,
                 () => this._client.GetSubscribeRankingByUserIdAsync(request)
             );
-            var domain = this;
 
-            return domain;
+            return new SubscribeRankingDataDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.RankingName,
+                result.Item.Season,
+                this.UserId,
+                this.ScorerUserId
+            );
         }
         #endif
 
@@ -164,9 +176,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season,
+                    this.Season ?? default,
+                    this.UserId,
                     this.ScorerUserId
                 );
                 if (find) {
@@ -186,18 +198,30 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public async Task<Gs2.Gs2Ranking2.Model.SubscribeRankingData> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.RankingName,
-                this.Season,
-                this.ScorerUserId
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
+                        (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
+                            this.NamespaceName,
+                            this.RankingName,
+                            this.Season,
+                            this.UserId
+                        ),
+                        (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheKey(
+                            this.ScorerUserId
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName,
+                    this.Season ?? default,
+                    this.UserId,
+                    this.ScorerUserId
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 
@@ -229,9 +253,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId,
                 this.RankingName,
-                this.Season,
+                this.Season ?? default,
+                this.UserId,
                 this.ScorerUserId
             );
         }
@@ -241,9 +265,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheKey(
                     this.ScorerUserId
@@ -251,7 +275,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -279,9 +303,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
                     this.RankingName,
-                    this.Season
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheKey(
                     this.ScorerUserId

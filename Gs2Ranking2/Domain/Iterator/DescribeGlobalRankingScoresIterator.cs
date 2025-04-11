@@ -114,8 +114,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId,
-                        this.RankingName
+                        RankingName ?? default,
+                        default,
+                        UserId
                     ),
                     out var list
             )) {
@@ -129,6 +130,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                    .WithRankingName(this.RankingName)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -161,8 +163,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
-                            this.RankingName
+                            RankingName ?? default,
+                            default,
+                            UserId
                         )
                     );
                 }
@@ -244,8 +247,9 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.GlobalRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
-                            this.RankingName
+                            RankingName ?? default,
+                            default,
+                            UserId
                        ),
                        "ListGlobalRankingScore"
                    ).LockAsync()) {

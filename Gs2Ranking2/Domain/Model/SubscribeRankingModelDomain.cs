@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -77,6 +79,32 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.RankingName = rankingName;
+        }
+
+        public Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingSeasonDomain SubscribeRankingSeason(
+            long? season,
+            string userId
+        ) {
+            return new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingSeasonDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.RankingName,
+                season,
+                userId
+            );
+        }
+
+        public Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingSeasonAccessTokenDomain SubscribeRankingSeason(
+            long? season,
+            AccessToken accessToken
+        ) {
+            return new Gs2.Gs2Ranking2.Domain.Model.SubscribeRankingSeasonAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.RankingName,
+                season,
+                accessToken
+            );
         }
 
     }

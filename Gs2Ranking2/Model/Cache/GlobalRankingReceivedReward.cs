@@ -41,27 +41,25 @@ namespace Gs2.Gs2Ranking2.Model.Cache
         public static string CacheParentKey(
             this GlobalRankingReceivedReward self,
             string namespaceName,
+            string rankingName,
+            long? season,
             string userId
         ) {
             return string.Join(
                 ":",
                 "ranking2",
                 namespaceName,
+                rankingName,
+                season.ToString(),
                 userId,
                 "GlobalRankingReceivedReward"
             );
         }
 
         public static string CacheKey(
-            this GlobalRankingReceivedReward self,
-            string rankingName,
-            long? season
+            this GlobalRankingReceivedReward self
         ) {
-            return string.Join(
-                ":",
-                rankingName,
-                season.ToString()
-            );
+            return "Singleton";
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -69,9 +67,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             long? season,
+            string userId,
             Func<IFuture<GlobalRankingReceivedReward>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<GlobalRankingReceivedReward> self)
@@ -85,9 +83,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                         (null as GlobalRankingReceivedReward).PutCache(
                             cache,
                             namespaceName,
-                            userId,
                             rankingName,
-                            season
+                            season,
+                            userId
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "globalRankingReceivedReward") {
                             self.OnComplete(default);
@@ -101,9 +99,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 );
                 self.OnComplete(item);
             }
@@ -120,9 +118,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             long? season,
+            string userId,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GlobalRankingReceivedReward>> fetchImpl
     #else
@@ -134,9 +132,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 );
                 return item;
             }
@@ -144,9 +142,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 (null as GlobalRankingReceivedReward).PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
-                    season
+                    season,
+                    userId
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "globalRankingReceivedReward") {
                     throw;
@@ -160,9 +158,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -170,11 +168,11 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             return cache.Get<GlobalRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    season
                 )
             );
         }
@@ -183,9 +181,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -193,11 +191,11 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             var (value, find) = cache.Get<GlobalRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    season
                 )
             );
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
@@ -206,11 +204,11 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    season
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -221,9 +219,9 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -231,11 +229,11 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Delete<GlobalRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    season
                 )
             );
         }
@@ -244,12 +242,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
+            string rankingName,
+            long? season,
             string userId,
             Action<GlobalRankingReceivedReward[]> callback
         ) {
             cache.ListSubscribe<GlobalRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    season,
                     userId
                 ),
                 callback,
@@ -261,12 +263,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
+            string rankingName,
+            long? season,
             string userId,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<GlobalRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    season,
                     userId
                 ),
                 callbackId

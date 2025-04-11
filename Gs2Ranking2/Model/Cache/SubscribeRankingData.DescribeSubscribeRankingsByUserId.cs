@@ -52,17 +52,17 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    request.UserId,
                     request.RankingName,
                     item.Season,
+                    request.UserId,
                     item.ScorerUserId
                 );
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    request.UserId,
                     request.RankingName,
                     null,
+                    request.UserId,
                     item.ScorerUserId
                 );
             }

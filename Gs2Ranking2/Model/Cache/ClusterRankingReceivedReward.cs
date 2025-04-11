@@ -41,29 +41,27 @@ namespace Gs2.Gs2Ranking2.Model.Cache
         public static string CacheParentKey(
             this ClusterRankingReceivedReward self,
             string namespaceName,
+            string rankingName,
+            string clusterName,
+            long? season,
             string userId
         ) {
             return string.Join(
                 ":",
                 "ranking2",
                 namespaceName,
+                rankingName,
+                clusterName,
+                season.ToString(),
                 userId,
                 "ClusterRankingReceivedReward"
             );
         }
 
         public static string CacheKey(
-            this ClusterRankingReceivedReward self,
-            string rankingName,
-            string clusterName,
-            long? season
+            this ClusterRankingReceivedReward self
         ) {
-            return string.Join(
-                ":",
-                rankingName,
-                clusterName,
-                season.ToString()
-            );
+            return "Singleton";
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -71,10 +69,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             string clusterName,
             long? season,
+            string userId,
             Func<IFuture<ClusterRankingReceivedReward>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ClusterRankingReceivedReward> self)
@@ -88,10 +86,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                         (null as ClusterRankingReceivedReward).PutCache(
                             cache,
                             namespaceName,
-                            userId,
                             rankingName,
                             clusterName,
-                            season
+                            season,
+                            userId
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "clusterRankingReceivedReward") {
                             self.OnComplete(default);
@@ -105,10 +103,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    userId
                 );
                 self.OnComplete(item);
             }
@@ -125,10 +123,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             string clusterName,
             long? season,
+            string userId,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ClusterRankingReceivedReward>> fetchImpl
     #else
@@ -140,10 +138,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    userId
                 );
                 return item;
             }
@@ -151,10 +149,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 (null as ClusterRankingReceivedReward).PutCache(
                     cache,
                     namespaceName,
-                    userId,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    userId
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "clusterRankingReceivedReward") {
                     throw;
@@ -168,10 +166,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             string clusterName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -179,12 +177,12 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             return cache.Get<ClusterRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    clusterName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    clusterName,
-                    season
                 )
             );
         }
@@ -193,10 +191,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             string clusterName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -204,12 +202,12 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             var (value, find) = cache.Get<ClusterRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    clusterName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    clusterName,
-                    season
                 )
             );
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
@@ -218,12 +216,12 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    clusterName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    clusterName,
-                    season
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -234,10 +232,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
-            string userId,
             string rankingName,
             string clusterName,
-            long? season
+            long? season,
+            string userId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -245,12 +243,12 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Delete<ClusterRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    clusterName,
+                    season,
                     userId
                 ),
                 self.CacheKey(
-                    rankingName,
-                    clusterName,
-                    season
                 )
             );
         }
@@ -259,12 +257,18 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
+            string rankingName,
+            string clusterName,
+            long? season,
             string userId,
             Action<ClusterRankingReceivedReward[]> callback
         ) {
             cache.ListSubscribe<ClusterRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    clusterName,
+                    season,
                     userId
                 ),
                 callback,
@@ -276,12 +280,18 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             CacheDatabase cache,
             string namespaceName,
+            string rankingName,
+            string clusterName,
+            long? season,
             string userId,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ClusterRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
+                    rankingName,
+                    clusterName,
+                    season,
                     userId
                 ),
                 callbackId

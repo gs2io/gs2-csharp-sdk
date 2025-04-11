@@ -83,14 +83,31 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingSeasonDomain ClusterRankingSeason(
             string clusterName,
-            long? season = null
+            long? season,
+            string userId
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingSeasonDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.RankingName,
                 clusterName,
-                season
+                season,
+                userId
+            );
+        }
+
+        public Gs2.Gs2Ranking2.Domain.Model.ClusterRankingSeasonAccessTokenDomain ClusterRankingSeason(
+            string clusterName,
+            long? season,
+            AccessToken accessToken
+        ) {
+            return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingSeasonAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.RankingName,
+                clusterName,
+                season,
+                accessToken
             );
         }
 
@@ -190,22 +207,31 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public async Task<Gs2.Gs2Ranking2.Model.ClusterRankingModel> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingModel).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RankingName
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingModel>(
+                        (null as Gs2.Gs2Ranking2.Model.ClusterRankingModel).CacheParentKey(
+                            this.NamespaceName
+                        ),
+                        (null as Gs2.Gs2Ranking2.Model.ClusterRankingModel).CacheKey(
+                            this.RankingName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Ranking2.Model.ClusterRankingModel).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RankingName,
+                    () => this.GetAsync(
+                        new GetClusterRankingModelRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Ranking2.Model.ClusterRankingModel).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.RankingName,
-                () => this.GetAsync(
-                    new GetClusterRankingModelRequest()
-                )
-            );
         }
         #endif
 
@@ -253,7 +279,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

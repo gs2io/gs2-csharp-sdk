@@ -63,12 +63,13 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 var future = domain.Ranking2.Namespace(
                     request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).ClusterRankingScore(
-                    request.RankingName,
+                ).ClusterRankingModel(
+                    request.RankingName
+                ).ClusterRankingSeason(
                     request.ClusterName,
-                    request.Season
+                    request.Season,
+                    request.UserId
+                ).ClusterRankingScore(
                 ).ModelFuture();
                 yield return future;
                 if (future.Error != null) {
@@ -89,10 +90,10 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            accessToken.UserId,
                             request.RankingName,
                             request.ClusterName,
-                            request.Season
+                            request.Season,
+                            accessToken.UserId
                         );
                         return null;
                     });
@@ -120,12 +121,13 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Ranking2.Namespace(
                 request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).ClusterRankingScore(
-                request.RankingName,
+            ).ClusterRankingModel(
+                request.RankingName
+            ).ClusterRankingSeason(
                 request.ClusterName,
-                request.Season
+                request.Season,
+                request.UserId
+            ).ClusterRankingScore(
             ).ModelAsync();
 
             if (item == null) {

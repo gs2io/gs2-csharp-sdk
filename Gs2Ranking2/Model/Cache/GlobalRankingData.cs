@@ -12,12 +12,11 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 
+#pragma warning disable CS0618 // Obsolete with a message
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
@@ -43,7 +42,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GlobalRankingData self,
             string namespaceName,
             string rankingName,
-            long? season
+            long? season,
+            string userId
         ) {
             return string.Join(
                 ":",
@@ -51,18 +51,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 namespaceName,
                 rankingName,
                 season.ToString(),
+                userId,
                 "GlobalRankingData"
             );
         }
 
         public static string CacheKey(
-            this GlobalRankingData self,
-            string userId
+            this GlobalRankingData self
         ) {
-            return string.Join(
-                ":",
-                userId
-            );
+            return "Singleton";
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -172,10 +169,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 self.CacheKey(
-                    userId
                 )
             );
         }
@@ -195,10 +192,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 self.CacheKey(
-                    userId
                 )
             );
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
@@ -208,22 +205,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season
-                ),
-                self.CacheKey(
+                    season,
                     userId
                 ),
-                self,
-                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-            );
-            cache.Put(
-                self.CacheParentKey(
-                    namespaceName,
-                    rankingName,
-                    null
-                ),
                 self.CacheKey(
-                    userId
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -245,20 +230,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season
+                    season,
+                    userId
                 ),
                 self.CacheKey(
-                    userId
-                )
-            );
-            cache.Delete<GlobalRankingData>(
-                self.CacheParentKey(
-                    namespaceName,
-                    rankingName,
-                    null
-                ),
-                self.CacheKey(
-                    userId
                 )
             );
         }
@@ -269,22 +244,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
+            string userId,
             Action<GlobalRankingData[]> callback
         ) {
             cache.ListSubscribe<GlobalRankingData>(
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season
-                ),
-                callback,
-                () => {}
-            );
-            cache.ListSubscribe<GlobalRankingData>(
-                self.CacheParentKey(
-                    namespaceName,
-                    rankingName,
-                    null
+                    season,
+                    userId
                 ),
                 callback,
                 () => {}
@@ -297,21 +265,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
+            string userId,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<GlobalRankingData>(
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season
-                ),
-                callbackId
-            );
-            cache.ListUnsubscribe<GlobalRankingData>(
-                self.CacheParentKey(
-                    namespaceName,
-                    rankingName,
-                    null
+                    season,
+                    userId
                 ),
                 callbackId
             );

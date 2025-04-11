@@ -50,10 +50,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    userId,
-                    item.RankingName,
-                    item.ClusterName,
-                    item.Season
+                    request.RankingName,
+                    request.ClusterName,
+                    request.Season ?? default,
+                    userId
                 );
             }
         }
