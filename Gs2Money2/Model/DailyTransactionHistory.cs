@@ -41,6 +41,8 @@ namespace Gs2.Gs2Money2.Model
         public string Currency { set; get; }
         public double? DepositAmount { set; get; }
         public double? WithdrawAmount { set; get; }
+        public long? IssueCount { set; get; }
+        public long? ConsumeCount { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
         public DailyTransactionHistory WithDailyTransactionHistoryId(string dailyTransactionHistoryId) {
@@ -69,6 +71,14 @@ namespace Gs2.Gs2Money2.Model
         }
         public DailyTransactionHistory WithWithdrawAmount(double? withdrawAmount) {
             this.WithdrawAmount = withdrawAmount;
+            return this;
+        }
+        public DailyTransactionHistory WithIssueCount(long? issueCount) {
+            this.IssueCount = issueCount;
+            return this;
+        }
+        public DailyTransactionHistory WithConsumeCount(long? consumeCount) {
+            this.ConsumeCount = consumeCount;
             return this;
         }
         public DailyTransactionHistory WithUpdatedAt(long? updatedAt) {
@@ -215,6 +225,8 @@ namespace Gs2.Gs2Money2.Model
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
                 .WithDepositAmount(!data.Keys.Contains("depositAmount") || data["depositAmount"] == null ? null : (double?)double.Parse(data["depositAmount"].ToString()))
                 .WithWithdrawAmount(!data.Keys.Contains("withdrawAmount") || data["withdrawAmount"] == null ? null : (double?)double.Parse(data["withdrawAmount"].ToString()))
+                .WithIssueCount(!data.Keys.Contains("issueCount") || data["issueCount"] == null ? null : (long?)(data["issueCount"].ToString().Contains(".") ? (long)double.Parse(data["issueCount"].ToString()) : long.Parse(data["issueCount"].ToString())))
+                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : (long?)(data["consumeCount"].ToString().Contains(".") ? (long)double.Parse(data["consumeCount"].ToString()) : long.Parse(data["consumeCount"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -229,6 +241,8 @@ namespace Gs2.Gs2Money2.Model
                 ["currency"] = Currency,
                 ["depositAmount"] = DepositAmount,
                 ["withdrawAmount"] = WithdrawAmount,
+                ["issueCount"] = IssueCount,
+                ["consumeCount"] = ConsumeCount,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
             };
@@ -264,6 +278,14 @@ namespace Gs2.Gs2Money2.Model
             if (WithdrawAmount != null) {
                 writer.WritePropertyName("withdrawAmount");
                 writer.Write(double.Parse(WithdrawAmount.ToString()));
+            }
+            if (IssueCount != null) {
+                writer.WritePropertyName("issueCount");
+                writer.Write((IssueCount.ToString().Contains(".") ? (long)double.Parse(IssueCount.ToString()) : long.Parse(IssueCount.ToString())));
+            }
+            if (ConsumeCount != null) {
+                writer.WritePropertyName("consumeCount");
+                writer.Write((ConsumeCount.ToString().Contains(".") ? (long)double.Parse(ConsumeCount.ToString()) : long.Parse(ConsumeCount.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
@@ -335,6 +357,22 @@ namespace Gs2.Gs2Money2.Model
             else
             {
                 diff += (int)(WithdrawAmount - other.WithdrawAmount);
+            }
+            if (IssueCount == null && IssueCount == other.IssueCount)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(IssueCount - other.IssueCount);
+            }
+            if (ConsumeCount == null && ConsumeCount == other.ConsumeCount)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(ConsumeCount - other.ConsumeCount);
             }
             if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
             {
@@ -431,6 +469,30 @@ namespace Gs2.Gs2Money2.Model
                 }
             }
             {
+                if (IssueCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.issueCount.error.invalid"),
+                    });
+                }
+                if (IssueCount > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.issueCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ConsumeCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.consumeCount.error.invalid"),
+                    });
+                }
+                if (ConsumeCount > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.consumeCount.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (UpdatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("dailyTransactionHistory", "money2.dailyTransactionHistory.updatedAt.error.invalid"),
@@ -465,6 +527,8 @@ namespace Gs2.Gs2Money2.Model
                 Currency = Currency,
                 DepositAmount = DepositAmount,
                 WithdrawAmount = WithdrawAmount,
+                IssueCount = IssueCount,
+                ConsumeCount = ConsumeCount,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,
             };

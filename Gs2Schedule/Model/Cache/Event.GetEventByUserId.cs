@@ -51,13 +51,15 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.EventName
+                request.EventName,
+                request.IsInSchedule ?? true
             );
             self.RepeatSchedule?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.EventName
+                request.EventName,
+                request.IsInSchedule ?? true
             );
         }
 

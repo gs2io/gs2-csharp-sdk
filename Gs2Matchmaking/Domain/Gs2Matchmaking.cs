@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -621,19 +623,19 @@ namespace Gs2.Gs2Matchmaking.Domain
                 string payload
         ) {
             switch (action) {
-                case "JoinNotification": {
+                case "Join": {
     #if UNITY_2017_1_OR_NEWER
                     onJoinNotification.Invoke(JoinNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
                     break;
                 }
-                case "LeaveNotification": {
+                case "Leave": {
     #if UNITY_2017_1_OR_NEWER
                     onLeaveNotification.Invoke(LeaveNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
                     break;
                 }
-                case "CompleteNotification": {
+                case "Complete": {
     #if UNITY_2017_1_OR_NEWER
                     onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -194,13 +196,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Schedule.Model.Event> Events(
+            bool isInSchedule = true
         )
         {
             return new DescribeEventsIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.AccessToken
+                this.AccessToken,
+                isInSchedule
             );
         }
         #endif
@@ -211,13 +215,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
             #else
         public DescribeEventsIterator EventsAsync(
             #endif
+            bool isInSchedule = true
         )
         {
             return new DescribeEventsIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.AccessToken
+                this.AccessToken,
+                isInSchedule
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -227,13 +233,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
 
         public ulong SubscribeEvents(
-            Action<Gs2.Gs2Schedule.Model.Event[]> callback
+            Action<Gs2.Gs2Schedule.Model.Event[]> callback,
+            bool isInSchedule = true
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Event>(
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    isInSchedule
                 ),
                 callback,
                 () =>
@@ -257,13 +265,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeEventsWithInitialCallAsync(
-            Action<Gs2.Gs2Schedule.Model.Event[]> callback
+            Action<Gs2.Gs2Schedule.Model.Event[]> callback,
+            bool isInSchedule = true
         )
         {
             var items = await EventsAsync(
             ).ToArrayAsync();
             var callbackId = SubscribeEvents(
-                callback
+                callback,
+                isInSchedule
             );
             callback.Invoke(items);
             return callbackId;
@@ -277,7 +287,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Event>(
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    true
+                ),
+                callbackId
+            );
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Event>(
+                (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    false
                 ),
                 callbackId
             );
@@ -289,19 +308,29 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    true
+                )
+            );
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
+                (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    false
                 )
             );
         }
 
         public Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain Event(
-            string eventName
+            string eventName,
+            bool isInSchedule = true
         ) {
             return new Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.AccessToken,
-                eventName
+                eventName,
+                isInSchedule
             );
         }
 

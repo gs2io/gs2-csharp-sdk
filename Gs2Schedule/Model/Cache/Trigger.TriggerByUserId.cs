@@ -56,7 +56,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
             cache.ClearListCache<Event>(
                 (null as Event).CacheParentKey(
                     request.NamespaceName,
-                    request.UserId
+                    request.UserId,
+                    true
                 )
             );
         }
