@@ -54,7 +54,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     request.NamespaceName,
                     item.RankingName,
                     item.Season,
-                    request.UserId
+                    userId
                 );
             }
         }

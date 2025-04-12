@@ -122,8 +122,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         NamespaceName,
                         RankingName,
                         ClusterName,
-                        this.Season,
-                        UserId
+                        this.Season
                     ),
                     out var list
             )) {
@@ -174,8 +173,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                             NamespaceName,
                             RankingName,
                             ClusterName,
-                            this.Season,
-                            UserId
+                            this.Season
                         )
                     );
                 }
@@ -259,8 +257,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                             NamespaceName,
                             RankingName,
                             ClusterName,
-                            this.Season,
-                            UserId
+                            this.Season
                        ),
                        "ListClusterRankingData"
                    ).LockAsync()) {

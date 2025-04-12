@@ -42,8 +42,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingData self,
             string namespaceName,
             string rankingName,
-            long? season,
-            string userId
+            long? season
         ) {
             return string.Join(
                 ":",
@@ -51,17 +50,18 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 namespaceName,
                 rankingName,
                 season.ToString(),
-                userId,
                 "SubscribeRankingData"
             );
         }
 
         public static string CacheKey(
             this SubscribeRankingData self,
+            string rankingName,
             string scorerUserId
         ) {
             return string.Join(
                 ":",
+                rankingName,
                 scorerUserId
             );
         }
@@ -73,7 +73,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
-            string userId,
             string scorerUserId,
             Func<IFuture<SubscribeRankingData>> fetchImpl
         ) {
@@ -90,7 +89,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                             namespaceName,
                             rankingName,
                             season,
-                            userId,
                             scorerUserId
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "subscribeRankingData") {
@@ -107,7 +105,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     season,
-                    userId,
                     scorerUserId
                 );
                 self.OnComplete(item);
@@ -127,7 +124,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
-            string userId,
             string scorerUserId,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SubscribeRankingData>> fetchImpl
@@ -142,7 +138,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     season,
-                    userId,
                     scorerUserId
                 );
                 return item;
@@ -153,7 +148,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     season,
-                    userId,
                     scorerUserId
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "subscribeRankingData") {
@@ -170,20 +164,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
-            string userId,
             string scorerUserId
         ) {
-            if (userId == null) {
-                throw new NullReferenceException();
-            }
             return cache.Get<SubscribeRankingData>(
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    rankingName,
                     scorerUserId
                 )
             );
@@ -195,20 +185,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
-            string userId,
             string scorerUserId
         ) {
-            if (userId == null) {
-                throw new NullReferenceException();
-            }
             var (value, find) = cache.Get<SubscribeRankingData>(
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    rankingName,
                     scorerUserId
                 )
             );
@@ -219,10 +205,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    rankingName,
                     scorerUserId
                 ),
                 self,
@@ -236,20 +222,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
-            string userId,
             string scorerUserId
         ) {
-            if (userId == null) {
-                throw new NullReferenceException();
-            }
             cache.Delete<SubscribeRankingData>(
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    rankingName,
                     scorerUserId
                 )
             );
@@ -261,15 +243,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
-            string userId,
             Action<SubscribeRankingData[]> callback
         ) {
             cache.ListSubscribe<SubscribeRankingData>(
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season,
-                    userId
+                    season
                 ),
                 callback,
                 () => {}
@@ -282,15 +262,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             long? season,
-            string userId,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SubscribeRankingData>(
                 self.CacheParentKey(
                     namespaceName,
                     rankingName,
-                    season,
-                    userId
+                    season
                 ),
                 callbackId
             );

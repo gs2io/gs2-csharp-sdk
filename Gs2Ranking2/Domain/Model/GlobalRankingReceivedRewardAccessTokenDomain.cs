@@ -355,11 +355,12 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                             this.NamespaceName,
-                            this.RankingName,
-                            this.Season,
-                            this.UserId
+                            this.UserId,
+                            this.RankingName
                         ),
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheKey(
+                            this.Season,
+                            this.UserId
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).GetCache(
@@ -425,11 +426,12 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
-                    this.RankingName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.UserId,
+                    this.RankingName
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheKey(
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 callback,
                 () =>
@@ -462,11 +464,12 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>(
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
-                    this.RankingName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.UserId,
+                    this.RankingName
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheKey(
+                    this.Season ?? default,
+                    this.UserId
                 ),
                 callbackId
             );

@@ -120,10 +120,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                         NamespaceName,
-                        RankingName ?? default,
-                        ClusterName ?? default,
-                        this.Season,
-                        UserId
+                        UserId,
+                        RankingName
                     ),
                     out var list
             )) {
@@ -172,10 +170,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             NamespaceName,
-                            RankingName ?? default,
-                            ClusterName ?? default,
-                            this.Season,
-                            UserId
+                            UserId,
+                            RankingName
                         )
                     );
                 }
@@ -257,10 +253,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             NamespaceName,
-                            RankingName ?? default,
-                            ClusterName ?? default,
-                            this.Season,
-                            UserId
+                            UserId,
+                            RankingName
                        ),
                        "ListClusterRankingReceivedReward"
                    ).LockAsync()) {

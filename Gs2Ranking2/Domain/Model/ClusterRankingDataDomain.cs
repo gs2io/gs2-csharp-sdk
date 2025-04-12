@@ -203,10 +203,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                             this.NamespaceName,
                             this.RankingName,
                             this.ClusterName,
-                            this.Season,
-                            this.UserId
+                            this.Season
                         ),
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
+                            this.UserId
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).GetCache(
@@ -267,10 +267,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.Season ?? default
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
+                    this.UserId
                 ),
                 callback,
                 () =>
@@ -305,10 +305,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.Season ?? default
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
+                    this.UserId
                 ),
                 callbackId
             );

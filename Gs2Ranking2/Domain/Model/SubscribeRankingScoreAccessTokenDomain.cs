@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -243,11 +241,13 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.SubscribeRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheParentKey(
                             this.NamespaceName,
+                            this.UserId,
+                            this.RankingName
+                        ),
+                        (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheKey(
                             this.RankingName,
                             this.Season,
                             this.UserId
-                        ),
-                        (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheKey(
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).GetCache(
@@ -313,11 +313,13 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheParentKey(
                     this.NamespaceName,
+                    this.UserId,
+                    this.RankingName
+                ),
+                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheKey(
                     this.RankingName,
                     this.Season ?? default,
                     this.UserId
-                ),
-                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheKey(
                 ),
                 callback,
                 () =>
@@ -350,11 +352,13 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingScore>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheParentKey(
                     this.NamespaceName,
+                    this.UserId,
+                    this.RankingName
+                ),
+                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheKey(
                     this.RankingName,
                     this.Season ?? default,
                     this.UserId
-                ),
-                (null as Gs2.Gs2Ranking2.Model.SubscribeRankingScore).CacheKey(
                 ),
                 callbackId
             );

@@ -56,13 +56,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     item.Season,
                     userId
                 );
-                item.PutCache(
-                    cache,
-                    request.NamespaceName,
-                    request.RankingName,
-                    null,
-                    userId
-                );
             }
         }
 

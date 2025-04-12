@@ -51,16 +51,18 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 cache,
                 request.NamespaceName,
                 self.Item.RankingName,
-                self.Item.Season,
+                request.Season ?? default,
                 self.Item.UserId
             );
-            (null as SubscribeRankingScore).DeleteCache(
-                cache,
-                request.NamespaceName,
-                self.Item.RankingName,
-                null,
-                self.Item.UserId
-            );
+            if (request.Season == null) {
+                (null as SubscribeRankingScore).DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    self.Item.RankingName,
+                    null,
+                    self.Item.UserId
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

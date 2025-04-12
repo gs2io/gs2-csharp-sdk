@@ -43,8 +43,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             string clusterName,
-            long? season,
-            string userId
+            long? season
         ) {
             return string.Join(
                 ":",
@@ -53,15 +52,18 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 rankingName,
                 clusterName,
                 season.ToString(),
-                userId,
                 "ClusterRankingData"
             );
         }
 
         public static string CacheKey(
-            this ClusterRankingData self
+            this ClusterRankingData self,
+            string userId
         ) {
-            return "Singleton";
+            return string.Join(
+                ":",
+                userId
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -179,10 +181,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    userId
                 )
             );
         }
@@ -204,10 +206,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    userId
                 )
             );
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
@@ -218,10 +220,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    userId
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -245,10 +247,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season,
-                    userId
+                    season
                 ),
                 self.CacheKey(
+                    userId
                 )
             );
         }
@@ -260,7 +262,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId,
             Action<ClusterRankingData[]> callback
         ) {
             cache.ListSubscribe<ClusterRankingData>(
@@ -268,8 +269,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season,
-                    userId
+                    season
                 ),
                 callback,
                 () => {}
@@ -283,7 +283,6 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ClusterRankingData>(
@@ -291,8 +290,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season,
-                    userId
+                    season
                 ),
                 callbackId
             );

@@ -115,7 +115,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                var domain = this;
 
                 self.OnComplete(new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataAccessTokenDomain(
                     this._gs2,
@@ -197,10 +196,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                             this.NamespaceName,
                             this.RankingName,
                             this.ClusterName,
-                            this.Season,
-                            this.UserId
+                            this.Season
                         ),
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
+                            this.UserId
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).GetCache(
@@ -261,10 +260,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.Season ?? default
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
+                    this.UserId
                 ),
                 callback,
                 () =>
@@ -299,10 +298,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.Season ?? default
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
+                    this.UserId
                 ),
                 callbackId
             );

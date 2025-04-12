@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -117,9 +119,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                         NamespaceName,
-                        RankingName ?? default,
-                        this.Season,
-                        UserId
+                        UserId,
+                        RankingName
                     ),
                     out var list
             )) {
@@ -167,9 +168,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                             NamespaceName,
-                            RankingName ?? default,
-                            this.Season,
-                            UserId
+                            UserId,
+                            RankingName
                         )
                     );
                 }
@@ -251,9 +251,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                             NamespaceName,
-                            RankingName ?? default,
-                            this.Season,
-                            UserId
+                            UserId,
+                            RankingName
                        ),
                        "ListGlobalRankingReceivedReward"
                    ).LockAsync()) {

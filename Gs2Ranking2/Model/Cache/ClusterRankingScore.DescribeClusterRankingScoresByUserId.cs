@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -52,21 +50,11 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.RankingName,
+                    request.RankingName,
                     item.ClusterName,
                     item.Season,
-                    request.UserId
+                    item.UserId
                 );
-                if (request.Season == null) {
-                    item.PutCache(
-                        cache,
-                        request.NamespaceName,
-                        item.RankingName,
-                        item.ClusterName,
-                        null,
-                        request.UserId
-                    );
-                }
             }
         }
 

@@ -41,27 +41,31 @@ namespace Gs2.Gs2Ranking2.Model.Cache
         public static string CacheParentKey(
             this ClusterRankingScore self,
             string namespaceName,
-            string rankingName,
+            string userId,
+            string rankingName
+        ) {
+            return string.Join(
+                ":",
+                "ranking2",
+                namespaceName,
+                userId,
+                rankingName,
+                "ClusterRankingScore"
+            );
+        }
+
+        public static string CacheKey(
+            this ClusterRankingScore self,
             string clusterName,
             long? season,
             string userId
         ) {
             return string.Join(
                 ":",
-                "ranking2",
-                namespaceName,
-                rankingName,
                 clusterName,
                 season.ToString(),
-                userId,
-                "ClusterRankingScore"
+                userId
             );
-        }
-
-        public static string CacheKey(
-            this ClusterRankingScore self
-        ) {
-            return "Singleton";
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -177,12 +181,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             return cache.Get<ClusterRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    rankingName,
+                    userId,
+                    rankingName
+                ),
+                self.CacheKey(
                     clusterName,
                     season,
                     userId
-                ),
-                self.CacheKey(
                 )
             );
         }
@@ -202,12 +207,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             var (value, find) = cache.Get<ClusterRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    rankingName,
+                    userId,
+                    rankingName
+                ),
+                self.CacheKey(
                     clusterName,
                     season,
                     userId
-                ),
-                self.CacheKey(
                 )
             );
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
@@ -216,12 +222,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    rankingName,
+                    userId,
+                    rankingName
+                ),
+                self.CacheKey(
                     clusterName,
                     season,
                     userId
-                ),
-                self.CacheKey(
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -243,12 +250,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Delete<ClusterRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    rankingName,
+                    userId,
+                    rankingName
+                ),
+                self.CacheKey(
                     clusterName,
                     season,
                     userId
-                ),
-                self.CacheKey(
                 )
             );
         }
@@ -257,19 +265,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string rankingName,
-            string clusterName,
-            long? season,
             string userId,
+            string rankingName,
             Action<ClusterRankingScore[]> callback
         ) {
             cache.ListSubscribe<ClusterRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    rankingName,
-                    clusterName,
-                    season,
-                    userId
+                    userId,
+                    rankingName
                 ),
                 callback,
                 () => {}
@@ -280,19 +284,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingScore self,
             CacheDatabase cache,
             string namespaceName,
-            string rankingName,
-            string clusterName,
-            long? season,
             string userId,
+            string rankingName,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ClusterRankingScore>(
                 self.CacheParentKey(
                     namespaceName,
-                    rankingName,
-                    clusterName,
-                    season,
-                    userId
+                    userId,
+                    rankingName
                 ),
                 callbackId
             );

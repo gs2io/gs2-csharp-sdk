@@ -53,16 +53,18 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.Item.RankingName,
                 self.Item.ClusterName,
                 self.Item.Season,
-                self.Item.UserId
+                userId
             );
-            (null as ClusterRankingReceivedReward).DeleteCache(
-                cache,
-                request.NamespaceName,
-                self.Item.RankingName,
-                self.Item.ClusterName,
-                null,
-                self.Item.UserId
-            );
+            if (request.Season == null) {
+                (null as ClusterRankingReceivedReward).DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    self.Item.RankingName,
+                    self.Item.ClusterName,
+                    null,
+                    userId
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

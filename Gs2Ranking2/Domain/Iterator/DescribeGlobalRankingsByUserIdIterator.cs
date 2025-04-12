@@ -118,8 +118,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                         NamespaceName,
                         RankingName,
-                        this.Season,
-                        UserId
+                        this.Season
                     ),
                     out var list
             )) {
@@ -168,8 +167,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                             NamespaceName,
                             RankingName,
-                            this.Season,
-                            UserId
+                            this.Season
                         )
                     );
                 }
@@ -252,8 +250,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                             NamespaceName,
                             RankingName,
-                            this.Season,
-                            UserId
+                            this.Season
                        ),
                        "ListGlobalRankingData"
                    ).LockAsync()) {

@@ -194,10 +194,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                             this.NamespaceName,
                             this.RankingName,
-                            this.Season,
-                            this.UserId
+                            this.Season
                         ),
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheKey(
+                            this.UserId
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).GetCache(
@@ -255,10 +255,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.Season ?? default
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheKey(
+                    this.UserId
                 ),
                 callback,
                 () =>
@@ -292,10 +292,10 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
-                    this.UserId
+                    this.Season ?? default
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheKey(
+                    this.UserId
                 ),
                 callbackId
             );

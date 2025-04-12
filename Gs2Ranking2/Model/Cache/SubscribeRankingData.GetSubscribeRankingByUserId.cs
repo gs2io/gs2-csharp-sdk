@@ -52,17 +52,17 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 request.NamespaceName,
                 self.Item.RankingName,
                 self.Item.Season,
-                self.Item.UserId,
                 self.Item.ScorerUserId
             );
-            self.Item?.PutCache(
-                cache,
-                request.NamespaceName,
-                self.Item.RankingName,
-                null,
-                self.Item.UserId,
-                self.Item.ScorerUserId
-            );
+            if (request.Season == null) {
+                self.Item?.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    self.Item.RankingName,
+                    null,
+                    self.Item.ScorerUserId
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

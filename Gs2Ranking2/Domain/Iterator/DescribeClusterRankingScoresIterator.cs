@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -120,10 +118,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                         NamespaceName,
-                        RankingName ?? default,
-                        ClusterName ?? default,
-                        this.Season,
-                        UserId
+                        AccessToken?.UserId,
+                        RankingName ?? default
                     ),
                     out var list
             )) {
@@ -172,10 +168,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                             NamespaceName,
-                            RankingName ?? default,
-                            ClusterName ?? default,
-                            this.Season,
-                            UserId
+                            AccessToken?.UserId,
+                            RankingName ?? default
                         )
                     );
                 }
@@ -257,10 +251,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingScore>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                             NamespaceName,
-                            RankingName ?? default,
-                            ClusterName ?? default,
-                            this.Season,
-                            UserId
+                            AccessToken?.UserId,
+                            RankingName ?? default
                        ),
                        "ListClusterRankingScore"
                    ).LockAsync()) {
