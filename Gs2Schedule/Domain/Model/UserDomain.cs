@@ -199,7 +199,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Schedule.Model.Event> Events(
-            bool isInSchedule = true,
             string timeOffsetToken = null
         )
         {
@@ -208,7 +207,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                isInSchedule,
                 timeOffsetToken
             );
         }
@@ -229,7 +227,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                isInSchedule,
                 timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();

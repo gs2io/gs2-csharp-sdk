@@ -349,7 +349,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     .WithUserId(this.UserId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
-                    null,
+                    this.UserId,
                     () => this._client.PutSubscribeRankingScoreByUserIdFuture(request)
                 );
                 yield return future;

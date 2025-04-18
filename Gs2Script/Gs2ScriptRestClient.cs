@@ -1769,6 +1769,11 @@ namespace Gs2.Gs2Script
                     jsonWriter.WritePropertyName("args");
                     jsonWriter.Write(request.Args);
                 }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId);
+                }
                 if (request.RandomStatus != null)
                 {
                     jsonWriter.WritePropertyName("randomStatus");
@@ -1792,6 +1797,14 @@ namespace Gs2.Gs2Script
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
                 if (request.DryRun)
                 {
                     sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");

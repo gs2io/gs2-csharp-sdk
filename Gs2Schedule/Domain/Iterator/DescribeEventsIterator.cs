@@ -71,7 +71,6 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
         public string UserId => AccessToken?.UserId;
-        public bool IsInSchedule { get; }
         private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Schedule.Model.Event[] _result;
@@ -82,14 +81,12 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
             Gs2.Core.Domain.Gs2 gs2,
             Gs2ScheduleRestClient client,
             string namespaceName,
-            AccessToken accessToken,
-            bool isInSchedule
+            AccessToken accessToken
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
-            this.IsInSchedule = isInSchedule;
             this._last = false;
             this._result = new Gs2.Gs2Schedule.Model.Event[]{};
         }
@@ -110,8 +107,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
             (
                     (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId,
-                        IsInSchedule
+                        AccessToken?.UserId
                     ),
                     out var list
             )) {
@@ -153,8 +149,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Schedule.Model.Event>(
                         (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
-                            IsInSchedule
+                            AccessToken?.UserId
                         )
                     );
                 }
@@ -236,8 +231,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Event>(
                         (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
-                            IsInSchedule
+                            AccessToken?.UserId
                        ),
                        "ListEvent"
                    ).LockAsync()) {

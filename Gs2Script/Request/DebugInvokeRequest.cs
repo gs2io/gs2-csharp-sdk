@@ -38,8 +38,11 @@ namespace Gs2.Gs2Script.Request
 	{
          public string Script { set; get; } = null!;
          public string Args { set; get; } = null!;
+         public string UserId { set; get; } = null!;
          public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; } = null!;
          public bool? DisableStringNumberToNumber { set; get; } = null!;
+         public string TimeOffsetToken { set; get; } = null!;
+        public string DuplicationAvoider { set; get; } = null!;
         public DebugInvokeRequest WithScript(string script) {
             this.Script = script;
             return this;
@@ -48,12 +51,25 @@ namespace Gs2.Gs2Script.Request
             this.Args = args;
             return this;
         }
+        public DebugInvokeRequest WithUserId(string userId) {
+            this.UserId = userId;
+            return this;
+        }
         public DebugInvokeRequest WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
             this.RandomStatus = randomStatus;
             return this;
         }
         public DebugInvokeRequest WithDisableStringNumberToNumber(bool? disableStringNumberToNumber) {
             this.DisableStringNumberToNumber = disableStringNumberToNumber;
+            return this;
+        }
+        public DebugInvokeRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
+
+        public DebugInvokeRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 
@@ -68,8 +84,10 @@ namespace Gs2.Gs2Script.Request
             return new DebugInvokeRequest()
                 .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
-                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : (bool?)bool.Parse(data["disableStringNumberToNumber"].ToString()));
+                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : (bool?)bool.Parse(data["disableStringNumberToNumber"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -77,8 +95,10 @@ namespace Gs2.Gs2Script.Request
             return new JsonData {
                 ["script"] = Script,
                 ["args"] = Args,
+                ["userId"] = UserId,
                 ["randomStatus"] = RandomStatus?.ToJson(),
                 ["disableStringNumberToNumber"] = DisableStringNumberToNumber,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,12 +113,20 @@ namespace Gs2.Gs2Script.Request
                 writer.WritePropertyName("args");
                 writer.Write(Args.ToString());
             }
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
+            }
             if (RandomStatus != null) {
                 RandomStatus.WriteJson(writer);
             }
             if (DisableStringNumberToNumber != null) {
                 writer.WritePropertyName("disableStringNumberToNumber");
                 writer.Write(bool.Parse(DisableStringNumberToNumber.ToString()));
+            }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -107,8 +135,10 @@ namespace Gs2.Gs2Script.Request
             var key = "";
             key += Script + ":";
             key += Args + ":";
+            key += UserId + ":";
             key += RandomStatus + ":";
             key += DisableStringNumberToNumber + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

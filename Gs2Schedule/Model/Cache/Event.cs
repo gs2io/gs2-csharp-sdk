@@ -44,7 +44,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this Event self,
             string namespaceName,
             string userId,
-            bool isInSchedule
+            bool isInSchedule = true
         ) {
             return string.Join(
                 ":",

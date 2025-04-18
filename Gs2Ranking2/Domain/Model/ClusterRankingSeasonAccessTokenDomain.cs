@@ -104,7 +104,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     .WithAccessToken(this.AccessToken?.Token);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
-                    null,
+                    this.UserId,
                     () => this._client.PutClusterRankingScoreFuture(request)
                 );
                 yield return future;

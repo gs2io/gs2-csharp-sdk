@@ -203,8 +203,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.AccessToken,
-                isInSchedule
+                this.AccessToken
             );
         }
         #endif
@@ -222,8 +221,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.AccessToken,
-                isInSchedule
+                this.AccessToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
