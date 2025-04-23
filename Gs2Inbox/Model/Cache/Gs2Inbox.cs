@@ -186,6 +186,13 @@ namespace Gs2.Gs2Inbox.Model.Cache
                         Request.OpenMessageByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "closeMessageByUserId":
+                    Result.CloseMessageByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.CloseMessageByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "readMessage":
                     Result.ReadMessageResult.FromJson(resultPayload).PutCache(
                         cache,

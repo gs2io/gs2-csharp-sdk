@@ -2745,6 +2745,132 @@ namespace Gs2.Gs2Inbox
 #endif
 
 
+        public class CloseMessageByUserIdTask : Gs2RestSessionTask<CloseMessageByUserIdRequest, CloseMessageByUserIdResult>
+        {
+            public CloseMessageByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CloseMessageByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CloseMessageByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inbox")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/{messageName}/close";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{messageName}", !string.IsNullOrEmpty(request.MessageName) ? request.MessageName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CloseMessageByUserId(
+                Request.CloseMessageByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CloseMessageByUserIdResult>> callback
+        )
+		{
+			var task = new CloseMessageByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CloseMessageByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CloseMessageByUserIdResult> CloseMessageByUserIdFuture(
+                Request.CloseMessageByUserIdRequest request
+        )
+		{
+			return new CloseMessageByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CloseMessageByUserIdResult> CloseMessageByUserIdAsync(
+                Request.CloseMessageByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CloseMessageByUserIdResult> result = null;
+			await CloseMessageByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CloseMessageByUserIdTask CloseMessageByUserIdAsync(
+                Request.CloseMessageByUserIdRequest request
+        )
+		{
+			return new CloseMessageByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CloseMessageByUserIdResult> CloseMessageByUserIdAsync(
+                Request.CloseMessageByUserIdRequest request
+        )
+		{
+			var task = new CloseMessageByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ReadMessageTask : Gs2RestSessionTask<ReadMessageRequest, ReadMessageResult>
         {
             public ReadMessageTask(IGs2Session session, RestSessionRequestFactory factory, ReadMessageRequest request) : base(session, factory, request)
