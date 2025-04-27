@@ -172,6 +172,13 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                         Request.GetCurrentBonusMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentBonusMaster":
+                    Result.PreUpdateCurrentBonusMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentBonusMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentBonusMaster":
                     Result.UpdateCurrentBonusMasterResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -150,7 +150,7 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
-                if (VerifyRequest.Length > 1048576) {
+                if (VerifyRequest.Length > 524288) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("verifyActionResult", "distributor.verifyActionResult.verifyRequest.error.tooLong"),
                     });

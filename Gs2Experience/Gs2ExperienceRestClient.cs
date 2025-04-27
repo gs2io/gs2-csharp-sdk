@@ -3246,10 +3246,152 @@ namespace Gs2.Gs2Experience
 #endif
 
 
+        public class PreUpdateCurrentExperienceMasterTask : Gs2RestSessionTask<PreUpdateCurrentExperienceMasterRequest, PreUpdateCurrentExperienceMasterResult>
+        {
+            public PreUpdateCurrentExperienceMasterTask(IGs2Session session, RestSessionRequestFactory factory, PreUpdateCurrentExperienceMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreUpdateCurrentExperienceMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentExperienceMaster(
+                Request.PreUpdateCurrentExperienceMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentExperienceMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentExperienceMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentExperienceMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentExperienceMasterResult> PreUpdateCurrentExperienceMasterFuture(
+                Request.PreUpdateCurrentExperienceMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentExperienceMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentExperienceMasterResult> PreUpdateCurrentExperienceMasterAsync(
+                Request.PreUpdateCurrentExperienceMasterRequest request
+        )
+		{
+            AsyncResult<Result.PreUpdateCurrentExperienceMasterResult> result = null;
+			await PreUpdateCurrentExperienceMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreUpdateCurrentExperienceMasterTask PreUpdateCurrentExperienceMasterAsync(
+                Request.PreUpdateCurrentExperienceMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentExperienceMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentExperienceMasterResult> PreUpdateCurrentExperienceMasterAsync(
+                Request.PreUpdateCurrentExperienceMasterRequest request
+        )
+		{
+			var task = new PreUpdateCurrentExperienceMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateCurrentExperienceMasterTask : Gs2RestSessionTask<UpdateCurrentExperienceMasterRequest, UpdateCurrentExperienceMasterResult>
         {
             public UpdateCurrentExperienceMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentExperienceMasterRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Settings != null) {
+                    var preTask = new PreUpdateCurrentExperienceMasterTask(
+                        Session,
+                        Factory,
+                        new PreUpdateCurrentExperienceMasterRequest()
+                            .WithContextStack(Request.ContextStack)
+                            .WithNamespaceName(Request.NamespaceName)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Settings = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateCurrentExperienceMasterRequest request)
@@ -3266,10 +3408,20 @@ namespace Gs2.Gs2Experience
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
                     jsonWriter.Write(request.Settings);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -3357,6 +3509,24 @@ namespace Gs2.Gs2Experience
                 Request.UpdateCurrentExperienceMasterRequest request
         )
 		{
+            if (request.Settings != null) {
+                var res = await PreUpdateCurrentExperienceMasterAsync(
+                    new PreUpdateCurrentExperienceMasterRequest()
+                        .WithContextStack(request.ContextStack)
+                        .WithNamespaceName(request.NamespaceName)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Settings = null;
+            }
 			var task = new UpdateCurrentExperienceMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),

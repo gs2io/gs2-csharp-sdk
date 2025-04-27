@@ -270,6 +270,13 @@ namespace Gs2.Gs2Idle.Model.Cache
                         Request.GetCurrentCategoryMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentCategoryMaster":
+                    Result.PreUpdateCurrentCategoryMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentCategoryMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentCategoryMaster":
                     Result.UpdateCurrentCategoryMasterResult.FromJson(resultPayload).PutCache(
                         cache,

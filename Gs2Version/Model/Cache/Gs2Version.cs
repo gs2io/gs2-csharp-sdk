@@ -277,6 +277,13 @@ namespace Gs2.Gs2Version.Model.Cache
                         Request.GetCurrentVersionMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentVersionMaster":
+                    Result.PreUpdateCurrentVersionMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentVersionMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentVersionMaster":
                     Result.UpdateCurrentVersionMasterResult.FromJson(resultPayload).PutCache(
                         cache,

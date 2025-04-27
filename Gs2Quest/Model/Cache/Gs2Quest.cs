@@ -207,6 +207,13 @@ namespace Gs2.Gs2Quest.Model.Cache
                         Request.GetCurrentQuestMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentQuestMaster":
+                    Result.PreUpdateCurrentQuestMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentQuestMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentQuestMaster":
                     Result.UpdateCurrentQuestMasterResult.FromJson(resultPayload).PutCache(
                         cache,

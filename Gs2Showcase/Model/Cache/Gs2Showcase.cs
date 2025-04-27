@@ -242,6 +242,13 @@ namespace Gs2.Gs2Showcase.Model.Cache
                         Request.GetCurrentShowcaseMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentShowcaseMaster":
+                    Result.PreUpdateCurrentShowcaseMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentShowcaseMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentShowcaseMaster":
                     Result.UpdateCurrentShowcaseMasterResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -200,6 +200,13 @@ namespace Gs2.Gs2Buff.Model.Cache
                         Request.GetCurrentBuffMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentBuffMaster":
+                    Result.PreUpdateCurrentBuffMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentBuffMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentBuffMaster":
                     Result.UpdateCurrentBuffMasterResult.FromJson(resultPayload).PutCache(
                         cache,

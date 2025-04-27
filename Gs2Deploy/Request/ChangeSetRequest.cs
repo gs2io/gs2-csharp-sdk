@@ -37,13 +37,23 @@ namespace Gs2.Gs2Deploy.Request
 	public class ChangeSetRequest : Gs2Request<ChangeSetRequest>
 	{
          public string StackName { set; get; } = null!;
+         public string Mode { set; get; } = null!;
          public string Template { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
         public ChangeSetRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
+        public ChangeSetRequest WithMode(string mode) {
+            this.Mode = mode;
+            return this;
+        }
         public ChangeSetRequest WithTemplate(string template) {
             this.Template = template;
+            return this;
+        }
+        public ChangeSetRequest WithUploadToken(string uploadToken) {
+            this.UploadToken = uploadToken;
             return this;
         }
 
@@ -57,14 +67,18 @@ namespace Gs2.Gs2Deploy.Request
             }
             return new ChangeSetRequest()
                 .WithStackName(!data.Keys.Contains("stackName") || data["stackName"] == null ? null : data["stackName"].ToString())
-                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString());
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
+                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString())
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["stackName"] = StackName,
+                ["mode"] = Mode,
                 ["template"] = Template,
+                ["uploadToken"] = UploadToken,
             };
         }
 
@@ -75,9 +89,17 @@ namespace Gs2.Gs2Deploy.Request
                 writer.WritePropertyName("stackName");
                 writer.Write(StackName.ToString());
             }
+            if (Mode != null) {
+                writer.WritePropertyName("mode");
+                writer.Write(Mode.ToString());
+            }
             if (Template != null) {
                 writer.WritePropertyName("template");
                 writer.Write(Template.ToString());
+            }
+            if (UploadToken != null) {
+                writer.WritePropertyName("uploadToken");
+                writer.Write(UploadToken.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -85,7 +107,9 @@ namespace Gs2.Gs2Deploy.Request
         public override string UniqueKey() {
             var key = "";
             key += StackName + ":";
+            key += Mode + ":";
             key += Template + ":";
+            key += UploadToken + ":";
             return key;
         }
     }

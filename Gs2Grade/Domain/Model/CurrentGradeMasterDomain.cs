@@ -64,6 +64,8 @@ namespace Gs2.Gs2Grade.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GradeRestClient _client;
         public string NamespaceName { get; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public CurrentGradeMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -173,6 +175,58 @@ namespace Gs2.Gs2Grade.Domain.Model
                 () => this._client.GetCurrentGradeMasterAsync(request)
             );
             return result?.Item;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain> PreUpdateFuture(
+            PreUpdateCurrentGradeMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PreUpdateCurrentGradeMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.UploadToken = domain.UploadToken = result?.UploadToken;
+                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain> PreUpdateAsync(
+            #else
+        public async Task<Gs2.Gs2Grade.Domain.Model.CurrentGradeMasterDomain> PreUpdateAsync(
+            #endif
+            PreUpdateCurrentGradeMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PreUpdateCurrentGradeMasterAsync(request)
+            );
+            var domain = this;
+            this.UploadToken = domain.UploadToken = result?.UploadToken;
+            this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+            return domain;
         }
         #endif
 

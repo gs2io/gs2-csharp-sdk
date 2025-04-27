@@ -64,6 +64,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InboxRestClient _client;
         public string NamespaceName { get; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public CurrentMessageMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -173,6 +175,58 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 () => this._client.GetCurrentMessageMasterAsync(request)
             );
             return result?.Item;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain> PreUpdateFuture(
+            PreUpdateCurrentMessageMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PreUpdateCurrentMessageMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.UploadToken = domain.UploadToken = result?.UploadToken;
+                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain> PreUpdateAsync(
+            #else
+        public async Task<Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain> PreUpdateAsync(
+            #endif
+            PreUpdateCurrentMessageMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PreUpdateCurrentMessageMasterAsync(request)
+            );
+            var domain = this;
+            this.UploadToken = domain.UploadToken = result?.UploadToken;
+            this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+            return domain;
         }
         #endif
 

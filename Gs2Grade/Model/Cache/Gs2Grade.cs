@@ -298,6 +298,13 @@ namespace Gs2.Gs2Grade.Model.Cache
                         Request.GetCurrentGradeMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentGradeMaster":
+                    Result.PreUpdateCurrentGradeMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentGradeMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentGradeMaster":
                     Result.UpdateCurrentGradeMasterResult.FromJson(resultPayload).PutCache(
                         cache,

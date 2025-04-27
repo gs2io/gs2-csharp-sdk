@@ -340,6 +340,13 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                         Request.GetCurrentEntryMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentEntryMaster":
+                    Result.PreUpdateCurrentEntryMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentEntryMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentEntryMaster":
                     Result.UpdateCurrentEntryMasterResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -242,6 +242,13 @@ namespace Gs2.Gs2Limit.Model.Cache
                         Request.GetCurrentLimitMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentLimitMaster":
+                    Result.PreUpdateCurrentLimitMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentLimitMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentLimitMaster":
                     Result.UpdateCurrentLimitMasterResult.FromJson(resultPayload).PutCache(
                         cache,

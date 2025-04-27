@@ -1421,6 +1421,114 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
+        public class LoginTask : Gs2WebSocketSessionTask<Request.LoginRequest, Result.LoginResult>
+        {
+	        public LoginTask(IGs2Session session, Request.LoginRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.LoginRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.ClientId != null)
+                {
+                    jsonWriter.WritePropertyName("clientId");
+                    jsonWriter.Write(request.ClientId.ToString());
+                }
+                if (request.ClientSecret != null)
+                {
+                    jsonWriter.WritePropertyName("clientSecret");
+                    jsonWriter.Write(request.ClientSecret.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "identifier",
+                    "projectToken",
+                    "login",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Login(
+                Request.LoginRequest request,
+                UnityAction<AsyncResult<Result.LoginResult>> callback
+        )
+		{
+			var task = new LoginTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.LoginResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.LoginResult> LoginFuture(
+                Request.LoginRequest request
+        )
+		{
+			return new LoginTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.LoginResult> LoginAsync(
+            Request.LoginRequest request
+        )
+		{
+		    var task = new LoginTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public LoginTask LoginAsync(
+                Request.LoginRequest request
+        )
+		{
+			return new LoginTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.LoginResult> LoginAsync(
+            Request.LoginRequest request
+        )
+		{
+		    var task = new LoginTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class LoginByUserTask : Gs2WebSocketSessionTask<Request.LoginByUserRequest, Result.LoginByUserResult>
         {
 	        public LoginByUserTask(IGs2Session session, Request.LoginByUserRequest request) : base(session, request)

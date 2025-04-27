@@ -39,6 +39,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
                         Request.DescribeStacksRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preCreateStack":
+                    Result.PreCreateStackResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreCreateStackRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "createStack":
                     Result.CreateStackResult.FromJson(resultPayload).PutCache(
                         cache,
@@ -51,6 +58,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
                         cache,
                         userId,
                         Request.CreateStackFromGitHubRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "preValidate":
+                    Result.PreValidateResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreValidateRequest.FromJson(requestPayload)
                     );
                     break;
                 case "validate":
@@ -74,11 +88,25 @@ namespace Gs2.Gs2Deploy.Model.Cache
                         Request.GetStackRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateStack":
+                    Result.PreUpdateStackResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateStackRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateStack":
                     Result.UpdateStackResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
                         Request.UpdateStackRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "preChangeSet":
+                    Result.PreChangeSetResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreChangeSetRequest.FromJson(requestPayload)
                     );
                     break;
                 case "changeSet":

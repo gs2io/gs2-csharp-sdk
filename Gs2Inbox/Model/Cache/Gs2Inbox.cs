@@ -249,6 +249,13 @@ namespace Gs2.Gs2Inbox.Model.Cache
                         Request.GetCurrentMessageMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentMessageMaster":
+                    Result.PreUpdateCurrentMessageMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentMessageMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentMessageMaster":
                     Result.UpdateCurrentMessageMasterResult.FromJson(resultPayload).PutCache(
                         cache,

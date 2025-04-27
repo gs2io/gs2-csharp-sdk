@@ -326,6 +326,13 @@ namespace Gs2.Gs2Enhance.Model.Cache
                         Request.GetCurrentRateMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentRateMaster":
+                    Result.PreUpdateCurrentRateMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentRateMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentRateMaster":
                     Result.UpdateCurrentRateMasterResult.FromJson(resultPayload).PutCache(
                         cache,

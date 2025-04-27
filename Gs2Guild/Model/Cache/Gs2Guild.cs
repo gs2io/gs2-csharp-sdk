@@ -452,6 +452,13 @@ namespace Gs2.Gs2Guild.Model.Cache
                         Request.GetCurrentGuildMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentGuildMaster":
+                    Result.PreUpdateCurrentGuildMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentGuildMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentGuildMaster":
                     Result.UpdateCurrentGuildMasterResult.FromJson(resultPayload).PutCache(
                         cache,

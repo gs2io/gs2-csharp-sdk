@@ -3104,10 +3104,152 @@ namespace Gs2.Gs2Quest
 #endif
 
 
+        public class PreUpdateCurrentQuestMasterTask : Gs2RestSessionTask<PreUpdateCurrentQuestMasterRequest, PreUpdateCurrentQuestMasterResult>
+        {
+            public PreUpdateCurrentQuestMasterTask(IGs2Session session, RestSessionRequestFactory factory, PreUpdateCurrentQuestMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreUpdateCurrentQuestMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "quest")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentQuestMaster(
+                Request.PreUpdateCurrentQuestMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentQuestMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentQuestMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentQuestMasterResult> PreUpdateCurrentQuestMasterFuture(
+                Request.PreUpdateCurrentQuestMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentQuestMasterResult> PreUpdateCurrentQuestMasterAsync(
+                Request.PreUpdateCurrentQuestMasterRequest request
+        )
+		{
+            AsyncResult<Result.PreUpdateCurrentQuestMasterResult> result = null;
+			await PreUpdateCurrentQuestMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreUpdateCurrentQuestMasterTask PreUpdateCurrentQuestMasterAsync(
+                Request.PreUpdateCurrentQuestMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentQuestMasterResult> PreUpdateCurrentQuestMasterAsync(
+                Request.PreUpdateCurrentQuestMasterRequest request
+        )
+		{
+			var task = new PreUpdateCurrentQuestMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateCurrentQuestMasterTask : Gs2RestSessionTask<UpdateCurrentQuestMasterRequest, UpdateCurrentQuestMasterResult>
         {
             public UpdateCurrentQuestMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentQuestMasterRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Settings != null) {
+                    var preTask = new PreUpdateCurrentQuestMasterTask(
+                        Session,
+                        Factory,
+                        new PreUpdateCurrentQuestMasterRequest()
+                            .WithContextStack(Request.ContextStack)
+                            .WithNamespaceName(Request.NamespaceName)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Settings = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateCurrentQuestMasterRequest request)
@@ -3124,10 +3266,20 @@ namespace Gs2.Gs2Quest
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
                     jsonWriter.Write(request.Settings);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -3215,6 +3367,24 @@ namespace Gs2.Gs2Quest
                 Request.UpdateCurrentQuestMasterRequest request
         )
 		{
+            if (request.Settings != null) {
+                var res = await PreUpdateCurrentQuestMasterAsync(
+                    new PreUpdateCurrentQuestMasterRequest()
+                        .WithContextStack(request.ContextStack)
+                        .WithNamespaceName(request.NamespaceName)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Settings = null;
+            }
 			var task = new UpdateCurrentQuestMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),

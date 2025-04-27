@@ -431,6 +431,13 @@ namespace Gs2.Gs2Inventory.Model.Cache
                         Request.GetCurrentItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentItemModelMaster":
+                    Result.PreUpdateCurrentItemModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentItemModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentItemModelMaster":
                     Result.UpdateCurrentItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -52,6 +52,202 @@ namespace Gs2.Gs2Deploy
 		}
 
 
+        public class PreCreateStackTask : Gs2WebSocketSessionTask<Request.PreCreateStackRequest, Result.PreCreateStackResult>
+        {
+	        public PreCreateStackTask(IGs2Session session, Request.PreCreateStackRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PreCreateStackRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "deploy",
+                    "stack",
+                    "preCreateStack",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreCreateStack(
+                Request.PreCreateStackRequest request,
+                UnityAction<AsyncResult<Result.PreCreateStackResult>> callback
+        )
+		{
+			var task = new PreCreateStackTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreCreateStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreCreateStackResult> PreCreateStackFuture(
+                Request.PreCreateStackRequest request
+        )
+		{
+			return new PreCreateStackTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreCreateStackResult> PreCreateStackAsync(
+            Request.PreCreateStackRequest request
+        )
+		{
+		    var task = new PreCreateStackTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PreCreateStackTask PreCreateStackAsync(
+                Request.PreCreateStackRequest request
+        )
+		{
+			return new PreCreateStackTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreCreateStackResult> PreCreateStackAsync(
+            Request.PreCreateStackRequest request
+        )
+		{
+		    var task = new PreCreateStackTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreValidateTask : Gs2WebSocketSessionTask<Request.PreValidateRequest, Result.PreValidateResult>
+        {
+	        public PreValidateTask(IGs2Session session, Request.PreValidateRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PreValidateRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "deploy",
+                    "stack",
+                    "preValidate",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreValidate(
+                Request.PreValidateRequest request,
+                UnityAction<AsyncResult<Result.PreValidateResult>> callback
+        )
+		{
+			var task = new PreValidateTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreValidateResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreValidateResult> PreValidateFuture(
+                Request.PreValidateRequest request
+        )
+		{
+			return new PreValidateTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreValidateResult> PreValidateAsync(
+            Request.PreValidateRequest request
+        )
+		{
+		    var task = new PreValidateTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PreValidateTask PreValidateAsync(
+                Request.PreValidateRequest request
+        )
+		{
+			return new PreValidateTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreValidateResult> PreValidateAsync(
+            Request.PreValidateRequest request
+        )
+		{
+		    var task = new PreValidateTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ValidateTask : Gs2WebSocketSessionTask<Request.ValidateRequest, Result.ValidateResult>
         {
 	        public ValidateTask(IGs2Session session, Request.ValidateRequest request) : base(session, request)
@@ -65,10 +261,20 @@ namespace Gs2.Gs2Deploy
 
                 jsonWriter.WriteObjectStart();
 
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode.ToString());
+                }
                 if (request.Template != null)
                 {
                     jsonWriter.WritePropertyName("template");
                     jsonWriter.Write(request.Template.ToString());
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -147,6 +353,212 @@ namespace Gs2.Gs2Deploy
         )
 		{
 		    var task = new ValidateTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreUpdateStackTask : Gs2WebSocketSessionTask<Request.PreUpdateStackRequest, Result.PreUpdateStackResult>
+        {
+	        public PreUpdateStackTask(IGs2Session session, Request.PreUpdateStackRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PreUpdateStackRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StackName != null)
+                {
+                    jsonWriter.WritePropertyName("stackName");
+                    jsonWriter.Write(request.StackName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "deploy",
+                    "stack",
+                    "preUpdateStack",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateStack(
+                Request.PreUpdateStackRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateStackResult>> callback
+        )
+		{
+			var task = new PreUpdateStackTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateStackResult> PreUpdateStackFuture(
+                Request.PreUpdateStackRequest request
+        )
+		{
+			return new PreUpdateStackTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateStackResult> PreUpdateStackAsync(
+            Request.PreUpdateStackRequest request
+        )
+		{
+		    var task = new PreUpdateStackTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PreUpdateStackTask PreUpdateStackAsync(
+                Request.PreUpdateStackRequest request
+        )
+		{
+			return new PreUpdateStackTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateStackResult> PreUpdateStackAsync(
+            Request.PreUpdateStackRequest request
+        )
+		{
+		    var task = new PreUpdateStackTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreChangeSetTask : Gs2WebSocketSessionTask<Request.PreChangeSetRequest, Result.PreChangeSetResult>
+        {
+	        public PreChangeSetTask(IGs2Session session, Request.PreChangeSetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PreChangeSetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StackName != null)
+                {
+                    jsonWriter.WritePropertyName("stackName");
+                    jsonWriter.Write(request.StackName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "deploy",
+                    "stack",
+                    "preChangeSet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreChangeSet(
+                Request.PreChangeSetRequest request,
+                UnityAction<AsyncResult<Result.PreChangeSetResult>> callback
+        )
+		{
+			var task = new PreChangeSetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreChangeSetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreChangeSetResult> PreChangeSetFuture(
+                Request.PreChangeSetRequest request
+        )
+		{
+			return new PreChangeSetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreChangeSetResult> PreChangeSetAsync(
+            Request.PreChangeSetRequest request
+        )
+		{
+		    var task = new PreChangeSetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PreChangeSetTask PreChangeSetAsync(
+                Request.PreChangeSetRequest request
+        )
+		{
+			return new PreChangeSetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreChangeSetResult> PreChangeSetAsync(
+            Request.PreChangeSetRequest request
+        )
+		{
+		    var task = new PreChangeSetTask(
 		        Gs2WebSocketSession,
 		        request
             );

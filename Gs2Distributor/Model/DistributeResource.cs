@@ -112,7 +112,7 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
-                if (Request.Length > 1048576) {
+                if (Request.Length > 524288) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("distributeResource", "distributor.distributeResource.request.error.tooLong"),
                     });

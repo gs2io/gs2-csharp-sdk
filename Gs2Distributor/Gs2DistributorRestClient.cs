@@ -1784,10 +1784,152 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
+        public class PreUpdateCurrentDistributorMasterTask : Gs2RestSessionTask<PreUpdateCurrentDistributorMasterRequest, PreUpdateCurrentDistributorMasterResult>
+        {
+            public PreUpdateCurrentDistributorMasterTask(IGs2Session session, RestSessionRequestFactory factory, PreUpdateCurrentDistributorMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreUpdateCurrentDistributorMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentDistributorMaster(
+                Request.PreUpdateCurrentDistributorMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentDistributorMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentDistributorMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentDistributorMasterResult> PreUpdateCurrentDistributorMasterFuture(
+                Request.PreUpdateCurrentDistributorMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentDistributorMasterResult> PreUpdateCurrentDistributorMasterAsync(
+                Request.PreUpdateCurrentDistributorMasterRequest request
+        )
+		{
+            AsyncResult<Result.PreUpdateCurrentDistributorMasterResult> result = null;
+			await PreUpdateCurrentDistributorMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreUpdateCurrentDistributorMasterTask PreUpdateCurrentDistributorMasterAsync(
+                Request.PreUpdateCurrentDistributorMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentDistributorMasterResult> PreUpdateCurrentDistributorMasterAsync(
+                Request.PreUpdateCurrentDistributorMasterRequest request
+        )
+		{
+			var task = new PreUpdateCurrentDistributorMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateCurrentDistributorMasterTask : Gs2RestSessionTask<UpdateCurrentDistributorMasterRequest, UpdateCurrentDistributorMasterResult>
         {
             public UpdateCurrentDistributorMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentDistributorMasterRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Settings != null) {
+                    var preTask = new PreUpdateCurrentDistributorMasterTask(
+                        Session,
+                        Factory,
+                        new PreUpdateCurrentDistributorMasterRequest()
+                            .WithContextStack(Request.ContextStack)
+                            .WithNamespaceName(Request.NamespaceName)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Settings = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateCurrentDistributorMasterRequest request)
@@ -1804,10 +1946,20 @@ namespace Gs2.Gs2Distributor
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
                     jsonWriter.Write(request.Settings);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -1895,6 +2047,24 @@ namespace Gs2.Gs2Distributor
                 Request.UpdateCurrentDistributorMasterRequest request
         )
 		{
+            if (request.Settings != null) {
+                var res = await PreUpdateCurrentDistributorMasterAsync(
+                    new PreUpdateCurrentDistributorMasterRequest()
+                        .WithContextStack(request.ContextStack)
+                        .WithNamespaceName(request.NamespaceName)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Settings = null;
+            }
 			var task = new UpdateCurrentDistributorMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),

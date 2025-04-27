@@ -165,6 +165,109 @@ namespace Gs2.Gs2SerialKey
 #endif
 
 
+        public class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Request.GetNamespaceStatusRequest, Result.GetNamespaceStatusResult>
+        {
+	        public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceStatusRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "namespace",
+                    "getNamespaceStatus",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetNamespaceStatus(
+                Request.GetNamespaceStatusRequest request,
+                UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
+        )
+		{
+			var task = new GetNamespaceStatusTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+            Request.GetNamespaceStatusRequest request
+        )
+		{
+		    var task = new GetNamespaceStatusTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+            Request.GetNamespaceStatusRequest request
+        )
+		{
+		    var task = new GetNamespaceStatusTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
@@ -908,6 +1011,114 @@ namespace Gs2.Gs2SerialKey
         )
 		{
 		    var task = new CheckCleanUserDataByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PrepareImportUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.PrepareImportUserDataByUserIdRequest, Result.PrepareImportUserDataByUserIdResult>
+        {
+	        public PrepareImportUserDataByUserIdTask(IGs2Session session, Request.PrepareImportUserDataByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PrepareImportUserDataByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "namespace",
+                    "prepareImportUserDataByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PrepareImportUserDataByUserId(
+                Request.PrepareImportUserDataByUserIdRequest request,
+                UnityAction<AsyncResult<Result.PrepareImportUserDataByUserIdResult>> callback
+        )
+		{
+			var task = new PrepareImportUserDataByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
+                Request.PrepareImportUserDataByUserIdRequest request
+        )
+		{
+			return new PrepareImportUserDataByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+            Request.PrepareImportUserDataByUserIdRequest request
+        )
+		{
+		    var task = new PrepareImportUserDataByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
+                Request.PrepareImportUserDataByUserIdRequest request
+        )
+		{
+			return new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+            Request.PrepareImportUserDataByUserIdRequest request
+        )
+		{
+		    var task = new PrepareImportUserDataByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );
@@ -3133,6 +3344,109 @@ namespace Gs2.Gs2SerialKey
         )
 		{
 		    var task = new DeleteCampaignModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreUpdateCurrentCampaignMasterTask : Gs2WebSocketSessionTask<Request.PreUpdateCurrentCampaignMasterRequest, Result.PreUpdateCurrentCampaignMasterResult>
+        {
+	        public PreUpdateCurrentCampaignMasterTask(IGs2Session session, Request.PreUpdateCurrentCampaignMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PreUpdateCurrentCampaignMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "currentCampaignMaster",
+                    "preUpdateCurrentCampaignMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentCampaignMaster(
+                Request.PreUpdateCurrentCampaignMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentCampaignMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentCampaignMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentCampaignMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentCampaignMasterResult> PreUpdateCurrentCampaignMasterFuture(
+                Request.PreUpdateCurrentCampaignMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentCampaignMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentCampaignMasterResult> PreUpdateCurrentCampaignMasterAsync(
+            Request.PreUpdateCurrentCampaignMasterRequest request
+        )
+		{
+		    var task = new PreUpdateCurrentCampaignMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PreUpdateCurrentCampaignMasterTask PreUpdateCurrentCampaignMasterAsync(
+                Request.PreUpdateCurrentCampaignMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentCampaignMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentCampaignMasterResult> PreUpdateCurrentCampaignMasterAsync(
+            Request.PreUpdateCurrentCampaignMasterRequest request
+        )
+		{
+		    var task = new PreUpdateCurrentCampaignMasterTask(
 		        Gs2WebSocketSession,
 		        request
             );

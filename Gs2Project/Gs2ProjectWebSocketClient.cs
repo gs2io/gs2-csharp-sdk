@@ -3565,6 +3565,119 @@ namespace Gs2.Gs2Project
 #endif
 
 
+        public class PrepareImportUserDataTask : Gs2WebSocketSessionTask<Request.PrepareImportUserDataRequest, Result.PrepareImportUserDataResult>
+        {
+	        public PrepareImportUserDataTask(IGs2Session session, Request.PrepareImportUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PrepareImportUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "importProgress",
+                    "prepareImportUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PrepareImportUserData(
+                Request.PrepareImportUserDataRequest request,
+                UnityAction<AsyncResult<Result.PrepareImportUserDataResult>> callback
+        )
+		{
+			var task = new PrepareImportUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PrepareImportUserDataResult> PrepareImportUserDataFuture(
+                Request.PrepareImportUserDataRequest request
+        )
+		{
+			return new PrepareImportUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PrepareImportUserDataResult> PrepareImportUserDataAsync(
+            Request.PrepareImportUserDataRequest request
+        )
+		{
+		    var task = new PrepareImportUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PrepareImportUserDataTask PrepareImportUserDataAsync(
+                Request.PrepareImportUserDataRequest request
+        )
+		{
+			return new PrepareImportUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PrepareImportUserDataResult> PrepareImportUserDataAsync(
+            Request.PrepareImportUserDataRequest request
+        )
+		{
+		    var task = new PrepareImportUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ImportUserDataTask : Gs2WebSocketSessionTask<Request.ImportUserDataRequest, Result.ImportUserDataResult>
         {
 	        public ImportUserDataTask(IGs2Session session, Request.ImportUserDataRequest request) : base(session, request)

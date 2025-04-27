@@ -277,6 +277,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
                         Request.GetCurrentStaminaMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentStaminaMaster":
+                    Result.PreUpdateCurrentStaminaMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentStaminaMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentStaminaMaster":
                     Result.UpdateCurrentStaminaMasterResult.FromJson(resultPayload).PutCache(
                         cache,

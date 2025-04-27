@@ -214,6 +214,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                         Request.GetCurrentSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentSeasonModelMaster":
+                    Result.PreUpdateCurrentSeasonModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentSeasonModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentSeasonModelMaster":
                     Result.UpdateCurrentSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,

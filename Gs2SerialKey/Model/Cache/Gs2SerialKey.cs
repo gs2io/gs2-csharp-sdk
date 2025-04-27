@@ -270,6 +270,13 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                         Request.GetCurrentCampaignMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentCampaignMaster":
+                    Result.PreUpdateCurrentCampaignMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentCampaignMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentCampaignMaster":
                     Result.UpdateCurrentCampaignMasterResult.FromJson(resultPayload).PutCache(
                         cache,

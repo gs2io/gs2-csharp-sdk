@@ -277,6 +277,13 @@ namespace Gs2.Gs2Formation.Model.Cache
                         Request.GetCurrentFormMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentFormMaster":
+                    Result.PreUpdateCurrentFormMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentFormMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentFormMaster":
                     Result.UpdateCurrentFormMasterResult.FromJson(resultPayload).PutCache(
                         cache,

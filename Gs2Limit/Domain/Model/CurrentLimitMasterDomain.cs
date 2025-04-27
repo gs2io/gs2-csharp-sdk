@@ -64,6 +64,8 @@ namespace Gs2.Gs2Limit.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LimitRestClient _client;
         public string NamespaceName { get; } = null!;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public CurrentLimitMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -173,6 +175,58 @@ namespace Gs2.Gs2Limit.Domain.Model
                 () => this._client.GetCurrentLimitMasterAsync(request)
             );
             return result?.Item;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Limit.Domain.Model.CurrentLimitMasterDomain> PreUpdateFuture(
+            PreUpdateCurrentLimitMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CurrentLimitMasterDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PreUpdateCurrentLimitMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.UploadToken = domain.UploadToken = result?.UploadToken;
+                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Limit.Domain.Model.CurrentLimitMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Limit.Domain.Model.CurrentLimitMasterDomain> PreUpdateAsync(
+            #else
+        public async Task<Gs2.Gs2Limit.Domain.Model.CurrentLimitMasterDomain> PreUpdateAsync(
+            #endif
+            PreUpdateCurrentLimitMasterRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PreUpdateCurrentLimitMasterAsync(request)
+            );
+            var domain = this;
+            this.UploadToken = domain.UploadToken = result?.UploadToken;
+            this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+            return domain;
         }
         #endif
 

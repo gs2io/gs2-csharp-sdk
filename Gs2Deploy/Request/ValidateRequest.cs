@@ -36,9 +36,19 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class ValidateRequest : Gs2Request<ValidateRequest>
 	{
+         public string Mode { set; get; } = null!;
          public string Template { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
+        public ValidateRequest WithMode(string mode) {
+            this.Mode = mode;
+            return this;
+        }
         public ValidateRequest WithTemplate(string template) {
             this.Template = template;
+            return this;
+        }
+        public ValidateRequest WithUploadToken(string uploadToken) {
+            this.UploadToken = uploadToken;
             return this;
         }
 
@@ -51,29 +61,43 @@ namespace Gs2.Gs2Deploy.Request
                 return null;
             }
             return new ValidateRequest()
-                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString());
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
+                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString())
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
+                ["mode"] = Mode,
                 ["template"] = Template,
+                ["uploadToken"] = UploadToken,
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Mode != null) {
+                writer.WritePropertyName("mode");
+                writer.Write(Mode.ToString());
+            }
             if (Template != null) {
                 writer.WritePropertyName("template");
                 writer.Write(Template.ToString());
+            }
+            if (UploadToken != null) {
+                writer.WritePropertyName("uploadToken");
+                writer.Write(UploadToken.ToString());
             }
             writer.WriteObjectEnd();
         }
 
         public override string UniqueKey() {
             var key = "";
+            key += Mode + ":";
             key += Template + ":";
+            key += UploadToken + ":";
             return key;
         }
     }

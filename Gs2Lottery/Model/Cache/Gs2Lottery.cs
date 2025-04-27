@@ -277,6 +277,13 @@ namespace Gs2.Gs2Lottery.Model.Cache
                         Request.GetCurrentLotteryMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentLotteryMaster":
+                    Result.PreUpdateCurrentLotteryMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentLotteryMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentLotteryMaster":
                     Result.UpdateCurrentLotteryMasterResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -277,6 +277,13 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                         Request.GetCurrentTreeMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentTreeMaster":
+                    Result.PreUpdateCurrentTreeMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentTreeMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentTreeMaster":
                     Result.UpdateCurrentTreeMasterResult.FromJson(resultPayload).PutCache(
                         cache,

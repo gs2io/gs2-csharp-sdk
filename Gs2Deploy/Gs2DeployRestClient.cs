@@ -172,10 +172,149 @@ namespace Gs2.Gs2Deploy
 #endif
 
 
+        public class PreCreateStackTask : Gs2RestSessionTask<PreCreateStackRequest, PreCreateStackResult>
+        {
+            public PreCreateStackTask(IGs2Session session, RestSessionRequestFactory factory, PreCreateStackRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreCreateStackRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "deploy")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stack/pre";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreCreateStack(
+                Request.PreCreateStackRequest request,
+                UnityAction<AsyncResult<Result.PreCreateStackResult>> callback
+        )
+		{
+			var task = new PreCreateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreCreateStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreCreateStackResult> PreCreateStackFuture(
+                Request.PreCreateStackRequest request
+        )
+		{
+			return new PreCreateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreCreateStackResult> PreCreateStackAsync(
+                Request.PreCreateStackRequest request
+        )
+		{
+            AsyncResult<Result.PreCreateStackResult> result = null;
+			await PreCreateStack(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreCreateStackTask PreCreateStackAsync(
+                Request.PreCreateStackRequest request
+        )
+		{
+			return new PreCreateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreCreateStackResult> PreCreateStackAsync(
+                Request.PreCreateStackRequest request
+        )
+		{
+			var task = new PreCreateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class CreateStackTask : Gs2RestSessionTask<CreateStackRequest, CreateStackResult>
         {
             public CreateStackTask(IGs2Session session, RestSessionRequestFactory factory, CreateStackRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Template != null) {
+                    var preTask = new PreCreateStackTask(
+                        Session,
+                        Factory,
+                        new PreCreateStackRequest()
+                            .WithContextStack(Request.ContextStack)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Template);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Template = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(CreateStackRequest request)
@@ -200,10 +339,20 @@ namespace Gs2.Gs2Deploy
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Template != null)
                 {
                     jsonWriter.WritePropertyName("template");
                     jsonWriter.Write(request.Template);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -291,6 +440,23 @@ namespace Gs2.Gs2Deploy
                 Request.CreateStackRequest request
         )
 		{
+            if (request.Template != null) {
+                var res = await PreCreateStackAsync(
+                    new PreCreateStackRequest()
+                        .WithContextStack(request.ContextStack)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Template));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Template = null;
+            }
 			var task = new CreateStackTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
@@ -430,10 +596,149 @@ namespace Gs2.Gs2Deploy
 #endif
 
 
+        public class PreValidateTask : Gs2RestSessionTask<PreValidateRequest, PreValidateResult>
+        {
+            public PreValidateTask(IGs2Session session, RestSessionRequestFactory factory, PreValidateRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreValidateRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "deploy")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stack/validate/pre";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreValidate(
+                Request.PreValidateRequest request,
+                UnityAction<AsyncResult<Result.PreValidateResult>> callback
+        )
+		{
+			var task = new PreValidateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreValidateResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreValidateResult> PreValidateFuture(
+                Request.PreValidateRequest request
+        )
+		{
+			return new PreValidateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreValidateResult> PreValidateAsync(
+                Request.PreValidateRequest request
+        )
+		{
+            AsyncResult<Result.PreValidateResult> result = null;
+			await PreValidate(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreValidateTask PreValidateAsync(
+                Request.PreValidateRequest request
+        )
+		{
+			return new PreValidateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreValidateResult> PreValidateAsync(
+                Request.PreValidateRequest request
+        )
+		{
+			var task = new PreValidateTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ValidateTask : Gs2RestSessionTask<ValidateRequest, ValidateResult>
         {
             public ValidateTask(IGs2Session session, RestSessionRequestFactory factory, ValidateRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Template != null) {
+                    var preTask = new PreValidateTask(
+                        Session,
+                        Factory,
+                        new PreValidateRequest()
+                            .WithContextStack(Request.ContextStack)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Template);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Template = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(ValidateRequest request)
@@ -448,10 +753,20 @@ namespace Gs2.Gs2Deploy
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Template != null)
                 {
                     jsonWriter.WritePropertyName("template");
                     jsonWriter.Write(request.Template);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -539,6 +854,23 @@ namespace Gs2.Gs2Deploy
                 Request.ValidateRequest request
         )
 		{
+            if (request.Template != null) {
+                var res = await PreValidateAsync(
+                    new PreValidateRequest()
+                        .WithContextStack(request.ContextStack)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Template));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Template = null;
+            }
 			var task = new ValidateTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
@@ -755,10 +1087,152 @@ namespace Gs2.Gs2Deploy
 #endif
 
 
+        public class PreUpdateStackTask : Gs2RestSessionTask<PreUpdateStackRequest, PreUpdateStackResult>
+        {
+            public PreUpdateStackTask(IGs2Session session, RestSessionRequestFactory factory, PreUpdateStackRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreUpdateStackRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "deploy")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stack/{stackName}/pre";
+
+                url = url.Replace("{stackName}", !string.IsNullOrEmpty(request.StackName) ? request.StackName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateStack(
+                Request.PreUpdateStackRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateStackResult>> callback
+        )
+		{
+			var task = new PreUpdateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateStackResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateStackResult> PreUpdateStackFuture(
+                Request.PreUpdateStackRequest request
+        )
+		{
+			return new PreUpdateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateStackResult> PreUpdateStackAsync(
+                Request.PreUpdateStackRequest request
+        )
+		{
+            AsyncResult<Result.PreUpdateStackResult> result = null;
+			await PreUpdateStack(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreUpdateStackTask PreUpdateStackAsync(
+                Request.PreUpdateStackRequest request
+        )
+		{
+			return new PreUpdateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateStackResult> PreUpdateStackAsync(
+                Request.PreUpdateStackRequest request
+        )
+		{
+			var task = new PreUpdateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateStackTask : Gs2RestSessionTask<UpdateStackRequest, UpdateStackResult>
         {
             public UpdateStackTask(IGs2Session session, RestSessionRequestFactory factory, UpdateStackRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Template != null) {
+                    var preTask = new PreUpdateStackTask(
+                        Session,
+                        Factory,
+                        new PreUpdateStackRequest()
+                            .WithContextStack(Request.ContextStack)
+                            .WithStackName(Request.StackName)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Template);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Template = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateStackRequest request)
@@ -780,10 +1254,20 @@ namespace Gs2.Gs2Deploy
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Template != null)
                 {
                     jsonWriter.WritePropertyName("template");
                     jsonWriter.Write(request.Template);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -871,7 +1355,141 @@ namespace Gs2.Gs2Deploy
                 Request.UpdateStackRequest request
         )
 		{
+            if (request.Template != null) {
+                var res = await PreUpdateStackAsync(
+                    new PreUpdateStackRequest()
+                        .WithContextStack(request.ContextStack)
+                        .WithStackName(request.StackName)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Template));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Template = null;
+            }
 			var task = new UpdateStackTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreChangeSetTask : Gs2RestSessionTask<PreChangeSetRequest, PreChangeSetResult>
+        {
+            public PreChangeSetTask(IGs2Session session, RestSessionRequestFactory factory, PreChangeSetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreChangeSetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "deploy")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stack/{stackName}/pre";
+
+                url = url.Replace("{stackName}", !string.IsNullOrEmpty(request.StackName) ? request.StackName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreChangeSet(
+                Request.PreChangeSetRequest request,
+                UnityAction<AsyncResult<Result.PreChangeSetResult>> callback
+        )
+		{
+			var task = new PreChangeSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreChangeSetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreChangeSetResult> PreChangeSetFuture(
+                Request.PreChangeSetRequest request
+        )
+		{
+			return new PreChangeSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreChangeSetResult> PreChangeSetAsync(
+                Request.PreChangeSetRequest request
+        )
+		{
+            AsyncResult<Result.PreChangeSetResult> result = null;
+			await PreChangeSet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreChangeSetTask PreChangeSetAsync(
+                Request.PreChangeSetRequest request
+        )
+		{
+			return new PreChangeSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreChangeSetResult> PreChangeSetAsync(
+                Request.PreChangeSetRequest request
+        )
+		{
+			var task = new PreChangeSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -885,6 +1503,32 @@ namespace Gs2.Gs2Deploy
         {
             public ChangeSetTask(IGs2Session session, RestSessionRequestFactory factory, ChangeSetRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Template != null) {
+                    var preTask = new PreChangeSetTask(
+                        Session,
+                        Factory,
+                        new PreChangeSetRequest()
+                            .WithContextStack(Request.ContextStack)
+                            .WithStackName(Request.StackName)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Template);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Template = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(ChangeSetRequest request)
@@ -901,10 +1545,20 @@ namespace Gs2.Gs2Deploy
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Template != null)
                 {
                     jsonWriter.WritePropertyName("template");
                     jsonWriter.Write(request.Template);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -992,6 +1646,24 @@ namespace Gs2.Gs2Deploy
                 Request.ChangeSetRequest request
         )
 		{
+            if (request.Template != null) {
+                var res = await PreChangeSetAsync(
+                    new PreChangeSetRequest()
+                        .WithContextStack(request.ContextStack)
+                        .WithStackName(request.StackName)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Template));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Template = null;
+            }
 			var task = new ChangeSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),

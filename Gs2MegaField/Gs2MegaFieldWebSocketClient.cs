@@ -165,6 +165,109 @@ namespace Gs2.Gs2MegaField
 #endif
 
 
+        public class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Request.GetNamespaceStatusRequest, Result.GetNamespaceStatusResult>
+        {
+	        public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceStatusRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "megaField",
+                    "namespace",
+                    "getNamespaceStatus",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetNamespaceStatus(
+                Request.GetNamespaceStatusRequest request,
+                UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
+        )
+		{
+			var task = new GetNamespaceStatusTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+            Request.GetNamespaceStatusRequest request
+        )
+		{
+		    var task = new GetNamespaceStatusTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+                Request.GetNamespaceStatusRequest request
+        )
+		{
+			return new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+            Request.GetNamespaceStatusRequest request
+        )
+		{
+		    var task = new GetNamespaceStatusTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
 	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
@@ -1513,6 +1616,109 @@ namespace Gs2.Gs2MegaField
         )
 		{
 		    var task = new DeleteLayerModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreUpdateCurrentFieldMasterTask : Gs2WebSocketSessionTask<Request.PreUpdateCurrentFieldMasterRequest, Result.PreUpdateCurrentFieldMasterResult>
+        {
+	        public PreUpdateCurrentFieldMasterTask(IGs2Session session, Request.PreUpdateCurrentFieldMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PreUpdateCurrentFieldMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "megaField",
+                    "currentFieldMaster",
+                    "preUpdateCurrentFieldMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentFieldMaster(
+                Request.PreUpdateCurrentFieldMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentFieldMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentFieldMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentFieldMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentFieldMasterResult> PreUpdateCurrentFieldMasterFuture(
+                Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentFieldMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentFieldMasterResult> PreUpdateCurrentFieldMasterAsync(
+            Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+		    var task = new PreUpdateCurrentFieldMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PreUpdateCurrentFieldMasterTask PreUpdateCurrentFieldMasterAsync(
+                Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentFieldMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentFieldMasterResult> PreUpdateCurrentFieldMasterAsync(
+            Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+		    var task = new PreUpdateCurrentFieldMasterTask(
 		        Gs2WebSocketSession,
 		        request
             );

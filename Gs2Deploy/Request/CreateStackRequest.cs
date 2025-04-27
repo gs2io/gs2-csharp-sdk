@@ -38,7 +38,9 @@ namespace Gs2.Gs2Deploy.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public string Mode { set; get; } = null!;
          public string Template { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
         public CreateStackRequest WithName(string name) {
             this.Name = name;
             return this;
@@ -47,8 +49,16 @@ namespace Gs2.Gs2Deploy.Request
             this.Description = description;
             return this;
         }
+        public CreateStackRequest WithMode(string mode) {
+            this.Mode = mode;
+            return this;
+        }
         public CreateStackRequest WithTemplate(string template) {
             this.Template = template;
+            return this;
+        }
+        public CreateStackRequest WithUploadToken(string uploadToken) {
+            this.UploadToken = uploadToken;
             return this;
         }
 
@@ -63,7 +73,9 @@ namespace Gs2.Gs2Deploy.Request
             return new CreateStackRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString());
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
+                .WithTemplate(!data.Keys.Contains("template") || data["template"] == null ? null : data["template"].ToString())
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -71,7 +83,9 @@ namespace Gs2.Gs2Deploy.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["mode"] = Mode,
                 ["template"] = Template,
+                ["uploadToken"] = UploadToken,
             };
         }
 
@@ -86,9 +100,17 @@ namespace Gs2.Gs2Deploy.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (Mode != null) {
+                writer.WritePropertyName("mode");
+                writer.Write(Mode.ToString());
+            }
             if (Template != null) {
                 writer.WritePropertyName("template");
                 writer.Write(Template.ToString());
+            }
+            if (UploadToken != null) {
+                writer.WritePropertyName("uploadToken");
+                writer.Write(UploadToken.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -97,7 +119,9 @@ namespace Gs2.Gs2Deploy.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
+            key += Mode + ":";
             key += Template + ":";
+            key += UploadToken + ":";
             return key;
         }
     }

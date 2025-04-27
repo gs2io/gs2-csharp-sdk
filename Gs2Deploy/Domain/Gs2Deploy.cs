@@ -65,6 +65,8 @@ namespace Gs2.Gs2Deploy.Domain
     public class Gs2Deploy {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DeployRestClient _client;
+        public string UploadToken { get; set; } = null!;
+        public string UploadUrl { get; set; } = null!;
 
         public Gs2Deploy(
             Gs2.Core.Domain.Gs2 gs2
@@ -74,6 +76,52 @@ namespace Gs2.Gs2Deploy.Domain
                 gs2.RestSession
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Deploy> PreCreateStackFuture(
+            PreCreateStackRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2Deploy> self)
+            {
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PreCreateStackFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.UploadToken = domain.UploadToken = result?.UploadToken;
+                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Deploy>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Deploy> PreCreateStackAsync(
+            #else
+        public async Task<Gs2Deploy> PreCreateStackAsync(
+            #endif
+            PreCreateStackRequest request
+        ) {
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PreCreateStackAsync(request)
+            );
+            var domain = this;
+            this.UploadToken = domain.UploadToken = result?.UploadToken;
+            this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+            return domain;
+        }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFuture(
@@ -167,6 +215,52 @@ namespace Gs2.Gs2Deploy.Domain
                 this._gs2,
                 result?.Item?.Name
             );
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Deploy> PreValidateFuture(
+            PreValidateRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2Deploy> self)
+            {
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PreValidateFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.UploadToken = domain.UploadToken = result?.UploadToken;
+                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Deploy>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Deploy> PreValidateAsync(
+            #else
+        public async Task<Gs2Deploy> PreValidateAsync(
+            #endif
+            PreValidateRequest request
+        ) {
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PreValidateAsync(request)
+            );
+            var domain = this;
+            this.UploadToken = domain.UploadToken = result?.UploadToken;
+            this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
         }
         #endif

@@ -235,6 +235,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
                         Request.GetCurrentParameterMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentParameterMaster":
+                    Result.PreUpdateCurrentParameterMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentParameterMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentParameterMaster":
                     Result.UpdateCurrentParameterMasterResult.FromJson(resultPayload).PutCache(
                         cache,

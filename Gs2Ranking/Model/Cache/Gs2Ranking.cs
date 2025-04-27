@@ -284,6 +284,13 @@ namespace Gs2.Gs2Ranking.Model.Cache
                         Request.GetCurrentRankingMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentRankingMaster":
+                    Result.PreUpdateCurrentRankingMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentRankingMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentRankingMaster":
                     Result.UpdateCurrentRankingMasterResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -291,6 +291,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
                         Request.GetCurrentEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentEventMaster":
+                    Result.PreUpdateCurrentEventMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentEventMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentEventMaster":
                     Result.UpdateCurrentEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,

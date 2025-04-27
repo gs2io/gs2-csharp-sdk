@@ -37,13 +37,23 @@ namespace Gs2.Gs2Ranking.Request
 	public class UpdateCurrentRankingMasterRequest : Gs2Request<UpdateCurrentRankingMasterRequest>
 	{
          public string NamespaceName { set; get; } = null!;
+         public string Mode { set; get; } = null!;
          public string Settings { set; get; } = null!;
+         public string UploadToken { set; get; } = null!;
         public UpdateCurrentRankingMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+        public UpdateCurrentRankingMasterRequest WithMode(string mode) {
+            this.Mode = mode;
+            return this;
+        }
         public UpdateCurrentRankingMasterRequest WithSettings(string settings) {
             this.Settings = settings;
+            return this;
+        }
+        public UpdateCurrentRankingMasterRequest WithUploadToken(string uploadToken) {
+            this.UploadToken = uploadToken;
             return this;
         }
 
@@ -57,14 +67,18 @@ namespace Gs2.Gs2Ranking.Request
             }
             return new UpdateCurrentRankingMasterRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithSettings(!data.Keys.Contains("settings") || data["settings"] == null ? null : data["settings"].ToString());
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
+                .WithSettings(!data.Keys.Contains("settings") || data["settings"] == null ? null : data["settings"].ToString())
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
+                ["mode"] = Mode,
                 ["settings"] = Settings,
+                ["uploadToken"] = UploadToken,
             };
         }
 
@@ -75,9 +89,17 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
+            if (Mode != null) {
+                writer.WritePropertyName("mode");
+                writer.Write(Mode.ToString());
+            }
             if (Settings != null) {
                 writer.WritePropertyName("settings");
                 writer.Write(Settings.ToString());
+            }
+            if (UploadToken != null) {
+                writer.WritePropertyName("uploadToken");
+                writer.Write(UploadToken.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -85,7 +107,9 @@ namespace Gs2.Gs2Ranking.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
+            key += Mode + ":";
             key += Settings + ":";
+            key += UploadToken + ":";
             return key;
         }
     }

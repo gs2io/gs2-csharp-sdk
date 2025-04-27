@@ -2513,10 +2513,152 @@ namespace Gs2.Gs2MegaField
 #endif
 
 
+        public class PreUpdateCurrentFieldMasterTask : Gs2RestSessionTask<PreUpdateCurrentFieldMasterRequest, PreUpdateCurrentFieldMasterResult>
+        {
+            public PreUpdateCurrentFieldMasterTask(IGs2Session session, RestSessionRequestFactory factory, PreUpdateCurrentFieldMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreUpdateCurrentFieldMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "mega-field")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentFieldMaster(
+                Request.PreUpdateCurrentFieldMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentFieldMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentFieldMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentFieldMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentFieldMasterResult> PreUpdateCurrentFieldMasterFuture(
+                Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentFieldMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentFieldMasterResult> PreUpdateCurrentFieldMasterAsync(
+                Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+            AsyncResult<Result.PreUpdateCurrentFieldMasterResult> result = null;
+			await PreUpdateCurrentFieldMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreUpdateCurrentFieldMasterTask PreUpdateCurrentFieldMasterAsync(
+                Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentFieldMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentFieldMasterResult> PreUpdateCurrentFieldMasterAsync(
+                Request.PreUpdateCurrentFieldMasterRequest request
+        )
+		{
+			var task = new PreUpdateCurrentFieldMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateCurrentFieldMasterTask : Gs2RestSessionTask<UpdateCurrentFieldMasterRequest, UpdateCurrentFieldMasterResult>
         {
             public UpdateCurrentFieldMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentFieldMasterRequest request) : base(session, factory, request)
             {
+            }
+            public override IEnumerator Action() {
+                if (Request.Settings != null) {
+                    var preTask = new PreUpdateCurrentFieldMasterTask(
+                        Session,
+                        Factory,
+                        new PreUpdateCurrentFieldMasterRequest()
+                            .WithContextStack(Request.ContextStack)
+                            .WithNamespaceName(Request.NamespaceName)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Settings = null;
+                }
+                yield return base.Action();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateCurrentFieldMasterRequest request)
@@ -2533,10 +2675,20 @@ namespace Gs2.Gs2MegaField
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
                 if (request.Settings != null)
                 {
                     jsonWriter.WritePropertyName("settings");
                     jsonWriter.Write(request.Settings);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
                 }
                 if (request.ContextStack != null)
                 {
@@ -2624,6 +2776,24 @@ namespace Gs2.Gs2MegaField
                 Request.UpdateCurrentFieldMasterRequest request
         )
 		{
+            if (request.Settings != null) {
+                var res = await PreUpdateCurrentFieldMasterAsync(
+                    new PreUpdateCurrentFieldMasterRequest()
+                        .WithContextStack(request.ContextStack)
+                        .WithNamespaceName(request.NamespaceName)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Settings = null;
+            }
 			var task = new UpdateCurrentFieldMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),

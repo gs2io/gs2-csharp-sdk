@@ -417,6 +417,13 @@ namespace Gs2.Gs2Mission.Model.Cache
                         Request.GetCurrentMissionMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentMissionMaster":
+                    Result.PreUpdateCurrentMissionMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentMissionMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentMissionMaster":
                     Result.UpdateCurrentMissionMasterResult.FromJson(resultPayload).PutCache(
                         cache,

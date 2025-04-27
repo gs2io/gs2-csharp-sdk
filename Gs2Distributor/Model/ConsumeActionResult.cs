@@ -150,7 +150,7 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
-                if (ConsumeRequest.Length > 1048576) {
+                if (ConsumeRequest.Length > 524288) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("consumeActionResult", "distributor.consumeActionResult.consumeRequest.error.tooLong"),
                     });

@@ -389,6 +389,13 @@ namespace Gs2.Gs2Money2.Model.Cache
                         Request.GetCurrentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentModelMaster":
+                    Result.PreUpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentModelMaster":
                     Result.UpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,

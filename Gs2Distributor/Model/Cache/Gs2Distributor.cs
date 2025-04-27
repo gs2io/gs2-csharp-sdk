@@ -137,6 +137,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
                         Request.GetCurrentDistributorMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentDistributorMaster":
+                    Result.PreUpdateCurrentDistributorMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentDistributorMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentDistributorMaster":
                     Result.UpdateCurrentDistributorMasterResult.FromJson(resultPayload).PutCache(
                         cache,

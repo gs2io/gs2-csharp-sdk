@@ -186,6 +186,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
                         Request.GetCurrentFieldMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentFieldMaster":
+                    Result.PreUpdateCurrentFieldMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentFieldMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentFieldMaster":
                     Result.UpdateCurrentFieldMasterResult.FromJson(resultPayload).PutCache(
                         cache,

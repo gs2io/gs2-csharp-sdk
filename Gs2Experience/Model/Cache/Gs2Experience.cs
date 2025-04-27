@@ -221,6 +221,13 @@ namespace Gs2.Gs2Experience.Model.Cache
                         Request.GetCurrentExperienceMasterRequest.FromJson(requestPayload)
                     );
                     break;
+                case "preUpdateCurrentExperienceMaster":
+                    Result.PreUpdateCurrentExperienceMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.PreUpdateCurrentExperienceMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "updateCurrentExperienceMaster":
                     Result.UpdateCurrentExperienceMasterResult.FromJson(resultPayload).PutCache(
                         cache,
