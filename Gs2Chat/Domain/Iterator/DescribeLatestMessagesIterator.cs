@@ -73,6 +73,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         public string NamespaceName { get; }
         public string RoomName { get; }
         public string Password { get; }
+        public int? Category { get; }
         public AccessToken AccessToken { get; }
         public string UserId => AccessToken?.UserId;
         private long? _startAt;
@@ -86,15 +87,17 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             Gs2.Core.Domain.Gs2 gs2,
             Gs2ChatRestClient client,
             string namespaceName,
-            string roomName,
             AccessToken accessToken,
-            string password = null
+            string roomName = null,
+            string password = null,
+            int? category = null
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.RoomName = roomName;
             this.Password = password;
+            this.Category = category;
             this.AccessToken = accessToken;
             this._startAt = null;
             this._last = false;
@@ -118,7 +121,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
                         "Singleton",
-                        RoomName
+                        RoomName ?? default
                     ),
                     out var list,
                     out var listCacheContext
@@ -137,7 +140,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             "Singleton",
-                            RoomName
+                            RoomName ?? default
                         )
                     );
                 }
@@ -167,6 +170,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
+                    .Where(item => this.Category == null || item.Category == this.Category)
                     .ToArray();
                 if (this._result.Length > 0) {
                     this._startAt = this._result[this._result.Length-1].CreatedAt + 1;
@@ -184,7 +188,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             "Singleton",
-                            RoomName
+                            RoomName ?? default
                         ),
                         this._startAt
                     );
@@ -267,8 +271,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Message>(
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId,
-                            RoomName
+                            "Singleton",
+                            RoomName ?? default
                        ),
                        "ListMessage"
                    ).LockAsync()) {

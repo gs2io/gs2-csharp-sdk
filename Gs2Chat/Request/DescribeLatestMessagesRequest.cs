@@ -39,6 +39,7 @@ namespace Gs2.Gs2Chat.Request
          public string NamespaceName { set; get; } = null!;
          public string RoomName { set; get; } = null!;
          public string Password { set; get; } = null!;
+         public int? Category { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
         public DescribeLatestMessagesRequest WithNamespaceName(string namespaceName) {
@@ -51,6 +52,10 @@ namespace Gs2.Gs2Chat.Request
         }
         public DescribeLatestMessagesRequest WithPassword(string password) {
             this.Password = password;
+            return this;
+        }
+        public DescribeLatestMessagesRequest WithCategory(int? category) {
+            this.Category = category;
             return this;
         }
         public DescribeLatestMessagesRequest WithAccessToken(string accessToken) {
@@ -74,6 +79,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)(data["category"].ToString().Contains(".") ? (int)double.Parse(data["category"].ToString()) : int.Parse(data["category"].ToString())))
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
@@ -84,6 +90,7 @@ namespace Gs2.Gs2Chat.Request
                 ["namespaceName"] = NamespaceName,
                 ["roomName"] = RoomName,
                 ["password"] = Password,
+                ["category"] = Category,
                 ["accessToken"] = AccessToken,
                 ["limit"] = Limit,
             };
@@ -104,6 +111,10 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
             }
+            if (Category != null) {
+                writer.WritePropertyName("category");
+                writer.Write((Category.ToString().Contains(".") ? (int)double.Parse(Category.ToString()) : int.Parse(Category.ToString())));
+            }
             if (AccessToken != null) {
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
@@ -120,6 +131,7 @@ namespace Gs2.Gs2Chat.Request
             key += NamespaceName + ":";
             key += RoomName + ":";
             key += Password + ":";
+            key += Category + ":";
             key += AccessToken + ":";
             key += Limit + ":";
             return key;

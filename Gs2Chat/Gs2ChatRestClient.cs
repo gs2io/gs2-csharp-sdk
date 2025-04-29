@@ -2715,6 +2715,9 @@ namespace Gs2.Gs2Chat
                 if (request.Password != null) {
                     sessionRequest.AddQueryString("password", $"{request.Password}");
                 }
+                if (request.Category != null) {
+                    sessionRequest.AddQueryString("category", $"{request.Category}");
+                }
                 if (request.StartAt != null) {
                     sessionRequest.AddQueryString("startAt", $"{request.StartAt}");
                 }
@@ -2847,6 +2850,9 @@ namespace Gs2.Gs2Chat
                 }
                 if (request.Password != null) {
                     sessionRequest.AddQueryString("password", $"{request.Password}");
+                }
+                if (request.Category != null) {
+                    sessionRequest.AddQueryString("category", $"{request.Category}");
                 }
                 if (request.UserId != null) {
                     sessionRequest.AddQueryString("userId", $"{request.UserId}");
@@ -2984,6 +2990,9 @@ namespace Gs2.Gs2Chat
                 if (request.Password != null) {
                     sessionRequest.AddQueryString("password", $"{request.Password}");
                 }
+                if (request.Category != null) {
+                    sessionRequest.AddQueryString("category", $"{request.Category}");
+                }
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
@@ -3113,6 +3122,9 @@ namespace Gs2.Gs2Chat
                 }
                 if (request.Password != null) {
                     sessionRequest.AddQueryString("password", $"{request.Password}");
+                }
+                if (request.Category != null) {
+                    sessionRequest.AddQueryString("category", $"{request.Category}");
                 }
                 if (request.UserId != null) {
                     sessionRequest.AddQueryString("userId", $"{request.UserId}");

@@ -45,6 +45,7 @@ namespace Gs2.Gs2Log.Model
         public string AwsAccessKeyId { set; get; }
         public string AwsSecretAccessKey { set; get; }
         public string FirehoseStreamName { set; get; }
+        public string FirehoseCompressData { set; get; }
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -91,6 +92,10 @@ namespace Gs2.Gs2Log.Model
         }
         public Namespace WithFirehoseStreamName(string firehoseStreamName) {
             this.FirehoseStreamName = firehoseStreamName;
+            return this;
+        }
+        public Namespace WithFirehoseCompressData(string firehoseCompressData) {
+            this.FirehoseCompressData = firehoseCompressData;
             return this;
         }
         public Namespace WithStatus(string status) {
@@ -181,6 +186,7 @@ namespace Gs2.Gs2Log.Model
                 .WithAwsAccessKeyId(!data.Keys.Contains("awsAccessKeyId") || data["awsAccessKeyId"] == null ? null : data["awsAccessKeyId"].ToString())
                 .WithAwsSecretAccessKey(!data.Keys.Contains("awsSecretAccessKey") || data["awsSecretAccessKey"] == null ? null : data["awsSecretAccessKey"].ToString())
                 .WithFirehoseStreamName(!data.Keys.Contains("firehoseStreamName") || data["firehoseStreamName"] == null ? null : data["firehoseStreamName"].ToString())
+                .WithFirehoseCompressData(!data.Keys.Contains("firehoseCompressData") || data["firehoseCompressData"] == null ? null : data["firehoseCompressData"].ToString())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -201,6 +207,7 @@ namespace Gs2.Gs2Log.Model
                 ["awsAccessKeyId"] = AwsAccessKeyId,
                 ["awsSecretAccessKey"] = AwsSecretAccessKey,
                 ["firehoseStreamName"] = FirehoseStreamName,
+                ["firehoseCompressData"] = FirehoseCompressData,
                 ["status"] = Status,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -254,6 +261,10 @@ namespace Gs2.Gs2Log.Model
             if (FirehoseStreamName != null) {
                 writer.WritePropertyName("firehoseStreamName");
                 writer.Write(FirehoseStreamName.ToString());
+            }
+            if (FirehoseCompressData != null) {
+                writer.WritePropertyName("firehoseCompressData");
+                writer.Write(FirehoseCompressData.ToString());
             }
             if (Status != null) {
                 writer.WritePropertyName("status");
@@ -365,6 +376,14 @@ namespace Gs2.Gs2Log.Model
             else
             {
                 diff += FirehoseStreamName.CompareTo(other.FirehoseStreamName);
+            }
+            if (FirehoseCompressData == null && FirehoseCompressData == other.FirehoseCompressData)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += FirehoseCompressData.CompareTo(other.FirehoseCompressData);
             }
             if (Status == null && Status == other.Status)
             {
@@ -489,6 +508,17 @@ namespace Gs2.Gs2Log.Model
                     });
                 }
             }
+            if (Type == "firehose") {
+                switch (FirehoseCompressData) {
+                    case "none":
+                    case "gzip":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("namespace", "log.namespace.firehoseCompressData.error.invalid"),
+                        });
+                }
+            }
             {
                 if (Status.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
@@ -547,6 +577,7 @@ namespace Gs2.Gs2Log.Model
                 AwsAccessKeyId = AwsAccessKeyId,
                 AwsSecretAccessKey = AwsSecretAccessKey,
                 FirehoseStreamName = FirehoseStreamName,
+                FirehoseCompressData = FirehoseCompressData,
                 Status = Status,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

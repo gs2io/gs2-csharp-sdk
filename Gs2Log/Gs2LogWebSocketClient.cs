@@ -115,6 +115,11 @@ namespace Gs2.Gs2Log
                     jsonWriter.WritePropertyName("firehoseStreamName");
                     jsonWriter.Write(request.FirehoseStreamName.ToString());
                 }
+                if (request.FirehoseCompressData != null)
+                {
+                    jsonWriter.WritePropertyName("firehoseCompressData");
+                    jsonWriter.Write(request.FirehoseCompressData.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -468,6 +473,11 @@ namespace Gs2.Gs2Log
                 {
                     jsonWriter.WritePropertyName("firehoseStreamName");
                     jsonWriter.Write(request.FirehoseStreamName.ToString());
+                }
+                if (request.FirehoseCompressData != null)
+                {
+                    jsonWriter.WritePropertyName("firehoseCompressData");
+                    jsonWriter.Write(request.FirehoseCompressData.ToString());
                 }
                 if (request.ContextStack != null)
                 {

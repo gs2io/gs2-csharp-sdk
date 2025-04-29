@@ -46,6 +46,7 @@ namespace Gs2.Gs2Log.Request
          public string AwsAccessKeyId { set; get; } = null!;
          public string AwsSecretAccessKey { set; get; } = null!;
          public string FirehoseStreamName { set; get; } = null!;
+         public string FirehoseCompressData { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -86,6 +87,10 @@ namespace Gs2.Gs2Log.Request
             this.FirehoseStreamName = firehoseStreamName;
             return this;
         }
+        public UpdateNamespaceRequest WithFirehoseCompressData(string firehoseCompressData) {
+            this.FirehoseCompressData = firehoseCompressData;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -105,7 +110,8 @@ namespace Gs2.Gs2Log.Request
                 .WithAwsRegion(!data.Keys.Contains("awsRegion") || data["awsRegion"] == null ? null : data["awsRegion"].ToString())
                 .WithAwsAccessKeyId(!data.Keys.Contains("awsAccessKeyId") || data["awsAccessKeyId"] == null ? null : data["awsAccessKeyId"].ToString())
                 .WithAwsSecretAccessKey(!data.Keys.Contains("awsSecretAccessKey") || data["awsSecretAccessKey"] == null ? null : data["awsSecretAccessKey"].ToString())
-                .WithFirehoseStreamName(!data.Keys.Contains("firehoseStreamName") || data["firehoseStreamName"] == null ? null : data["firehoseStreamName"].ToString());
+                .WithFirehoseStreamName(!data.Keys.Contains("firehoseStreamName") || data["firehoseStreamName"] == null ? null : data["firehoseStreamName"].ToString())
+                .WithFirehoseCompressData(!data.Keys.Contains("firehoseCompressData") || data["firehoseCompressData"] == null ? null : data["firehoseCompressData"].ToString());
         }
 
         public override JsonData ToJson()
@@ -121,6 +127,7 @@ namespace Gs2.Gs2Log.Request
                 ["awsAccessKeyId"] = AwsAccessKeyId,
                 ["awsSecretAccessKey"] = AwsSecretAccessKey,
                 ["firehoseStreamName"] = FirehoseStreamName,
+                ["firehoseCompressData"] = FirehoseCompressData,
             };
         }
 
@@ -167,6 +174,10 @@ namespace Gs2.Gs2Log.Request
                 writer.WritePropertyName("firehoseStreamName");
                 writer.Write(FirehoseStreamName.ToString());
             }
+            if (FirehoseCompressData != null) {
+                writer.WritePropertyName("firehoseCompressData");
+                writer.Write(FirehoseCompressData.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -182,6 +193,7 @@ namespace Gs2.Gs2Log.Request
             key += AwsAccessKeyId + ":";
             key += AwsSecretAccessKey + ":";
             key += FirehoseStreamName + ":";
+            key += FirehoseCompressData + ":";
             return key;
         }
     }

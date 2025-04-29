@@ -319,15 +319,17 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Chat.Model.Message> Messages(
+            int? category = null
         )
         {
             return new DescribeMessagesIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.RoomName,
                 this.AccessToken,
-                this.Password
+                this.RoomName,
+                this.Password,
+                category
             );
         }
         #endif
@@ -338,15 +340,17 @@ namespace Gs2.Gs2Chat.Domain.Model
             #else
         public DescribeMessagesIterator MessagesAsync(
             #endif
+            int? category = null
         )
         {
             return new DescribeMessagesIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.RoomName,
                 this.AccessToken,
-                this.Password
+                this.RoomName,
+                this.Password,
+                category
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -356,7 +360,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public ulong SubscribeMessages(
-            Action<Gs2.Gs2Chat.Model.Message[]> callback
+            Action<Gs2.Gs2Chat.Model.Message[]> callback,
+            int? category = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Message>(
@@ -373,6 +378,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await MessagesAsync(
+                                category
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -387,13 +393,16 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMessagesWithInitialCallAsync(
-            Action<Gs2.Gs2Chat.Model.Message[]> callback
+            Action<Gs2.Gs2Chat.Model.Message[]> callback,
+            int? category = null
         )
         {
             var items = await MessagesAsync(
+                category
             ).ToArrayAsync();
             var callbackId = SubscribeMessages(
-                callback
+                callback,
+                category
             );
             callback.Invoke(items);
             return callbackId;
@@ -401,7 +410,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public void UnsubscribeMessages(
-            ulong callbackId
+            ulong callbackId,
+            int? category = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Message>(
@@ -415,6 +425,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
 
         public void InvalidateMessages(
+            int? category = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
@@ -427,15 +438,17 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Chat.Model.Message> LatestMessages(
+            int? category = null
         )
         {
             return new DescribeLatestMessagesIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.RoomName,
                 this.AccessToken,
-                this.Password
+                this.RoomName,
+                this.Password,
+                category
             );
         }
         #endif
@@ -446,15 +459,17 @@ namespace Gs2.Gs2Chat.Domain.Model
             #else
         public DescribeLatestMessagesIterator LatestMessagesAsync(
             #endif
+            int? category = null
         )
         {
             return new DescribeLatestMessagesIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.RoomName,
                 this.AccessToken,
-                this.Password
+                this.RoomName,
+                this.Password,
+                category
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -464,7 +479,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public ulong SubscribeLatestMessages(
-            Action<Gs2.Gs2Chat.Model.Message[]> callback
+            Action<Gs2.Gs2Chat.Model.Message[]> callback,
+            int? category = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Message>(
@@ -481,6 +497,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await LatestMessagesAsync(
+                                category
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -495,13 +512,16 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeLatestMessagesWithInitialCallAsync(
-            Action<Gs2.Gs2Chat.Model.Message[]> callback
+            Action<Gs2.Gs2Chat.Model.Message[]> callback,
+            int? category = null
         )
         {
             var items = await LatestMessagesAsync(
+                category
             ).ToArrayAsync();
             var callbackId = SubscribeLatestMessages(
-                callback
+                callback,
+                category
             );
             callback.Invoke(items);
             return callbackId;
@@ -509,7 +529,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public void UnsubscribeLatestMessages(
-            ulong callbackId
+            ulong callbackId,
+            int? category = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Message>(
@@ -523,6 +544,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
 
         public void InvalidateLatestMessages(
+            int? category = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
