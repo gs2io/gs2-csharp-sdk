@@ -382,6 +382,13 @@ namespace Gs2.Gs2Account.Model.Cache
                         Request.GetDataOwnerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "updateDataOwnerByUserId":
+                    Result.UpdateDataOwnerByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.UpdateDataOwnerByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteDataOwnerByUserId":
                     Result.DeleteDataOwnerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -5246,6 +5246,129 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class UpdateDataOwnerByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateDataOwnerByUserIdRequest, Result.UpdateDataOwnerByUserIdResult>
+        {
+	        public UpdateDataOwnerByUserIdTask(IGs2Session session, Request.UpdateDataOwnerByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateDataOwnerByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.DataOwnerName != null)
+                {
+                    jsonWriter.WritePropertyName("dataOwnerName");
+                    jsonWriter.Write(request.DataOwnerName.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "dataOwner",
+                    "updateDataOwnerByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateDataOwnerByUserId(
+                Request.UpdateDataOwnerByUserIdRequest request,
+                UnityAction<AsyncResult<Result.UpdateDataOwnerByUserIdResult>> callback
+        )
+		{
+			var task = new UpdateDataOwnerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateDataOwnerByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateDataOwnerByUserIdResult> UpdateDataOwnerByUserIdFuture(
+                Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+			return new UpdateDataOwnerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateDataOwnerByUserIdResult> UpdateDataOwnerByUserIdAsync(
+            Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+		    var task = new UpdateDataOwnerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateDataOwnerByUserIdTask UpdateDataOwnerByUserIdAsync(
+                Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+			return new UpdateDataOwnerByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateDataOwnerByUserIdResult> UpdateDataOwnerByUserIdAsync(
+            Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+		    var task = new UpdateDataOwnerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteDataOwnerByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteDataOwnerByUserIdRequest, Result.DeleteDataOwnerByUserIdResult>
         {
 	        public DeleteDataOwnerByUserIdTask(IGs2Session session, Request.DeleteDataOwnerByUserIdRequest request) : base(session, request)

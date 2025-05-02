@@ -6076,6 +6076,136 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class UpdateDataOwnerByUserIdTask : Gs2RestSessionTask<UpdateDataOwnerByUserIdRequest, UpdateDataOwnerByUserIdResult>
+        {
+            public UpdateDataOwnerByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UpdateDataOwnerByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateDataOwnerByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/dataOwner";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.DataOwnerName != null)
+                {
+                    jsonWriter.WritePropertyName("dataOwnerName");
+                    jsonWriter.Write(request.DataOwnerName);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateDataOwnerByUserId(
+                Request.UpdateDataOwnerByUserIdRequest request,
+                UnityAction<AsyncResult<Result.UpdateDataOwnerByUserIdResult>> callback
+        )
+		{
+			var task = new UpdateDataOwnerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateDataOwnerByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateDataOwnerByUserIdResult> UpdateDataOwnerByUserIdFuture(
+                Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+			return new UpdateDataOwnerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateDataOwnerByUserIdResult> UpdateDataOwnerByUserIdAsync(
+                Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.UpdateDataOwnerByUserIdResult> result = null;
+			await UpdateDataOwnerByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateDataOwnerByUserIdTask UpdateDataOwnerByUserIdAsync(
+                Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+			return new UpdateDataOwnerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateDataOwnerByUserIdResult> UpdateDataOwnerByUserIdAsync(
+                Request.UpdateDataOwnerByUserIdRequest request
+        )
+		{
+			var task = new UpdateDataOwnerByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteDataOwnerByUserIdTask : Gs2RestSessionTask<DeleteDataOwnerByUserIdRequest, DeleteDataOwnerByUserIdResult>
         {
             public DeleteDataOwnerByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteDataOwnerByUserIdRequest request) : base(session, factory, request)

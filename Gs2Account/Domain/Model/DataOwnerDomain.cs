@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -129,6 +131,67 @@ namespace Gs2.Gs2Account.Domain.Model
                 () => this._client.GetDataOwnerByUserIdAsync(request)
             );
             return result?.Item;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.DataOwnerDomain> UpdateFuture(
+            UpdateDataOwnerByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.DataOwnerDomain> self)
+            {
+                var future2 = ModelFuture();
+                yield return future2;
+                if (future2.Error != null)
+                {
+                    self.OnError(future2.Error);
+                    yield break;
+                }
+                var model = future2.Result;
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.UpdateDataOwnerByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.DataOwnerDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Account.Domain.Model.DataOwnerDomain> UpdateAsync(
+            #else
+        public async Task<Gs2.Gs2Account.Domain.Model.DataOwnerDomain> UpdateAsync(
+            #endif
+            UpdateDataOwnerByUserIdRequest request
+        ) {
+            var model = await ModelAsync();
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.UpdateDataOwnerByUserIdAsync(request)
+            );
+            var domain = this;
+
+            return domain;
         }
         #endif
 
