@@ -234,6 +234,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                        "ListIdentifier"
                    ).LockAsync()) {
                 while(this._hasNext()) {
+                    cancellationToken.ThrowIfCancellationRequested();
         #endif
                     if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
