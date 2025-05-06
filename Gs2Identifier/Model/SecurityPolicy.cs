@@ -236,7 +236,7 @@ namespace Gs2.Gs2Identifier.Model
                 }
             }
             {
-                if (Policy.Length > 5242880) {
+                if (Policy.Length > 524288) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("securityPolicy", "identifier.securityPolicy.policy.error.tooLong"),
                     });
