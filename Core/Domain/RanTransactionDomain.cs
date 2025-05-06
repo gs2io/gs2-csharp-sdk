@@ -76,6 +76,22 @@ namespace Gs2.Core.Domain
                 result.TransactionId
             );
 
+            if (result.VerifyResults != null) {
+                for (var i = 0; i < result.VerifyResults.Length; i++) {
+                    var consumeActionResult = result.VerifyResults[i];
+                    if (consumeActionResult.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
+                    }
+                    Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
+                        Gs2.Cache,
+                        this._transactionId + "[" + i + "]",
+                        consumeActionResult.Action,
+                        consumeActionResult.VerifyRequest,
+                        consumeActionResult.VerifyResult
+                    );
+                }
+            }
+
             if (result.ConsumeResults != null) {
                 for (var i = 0; i < result.ConsumeResults.Length; i++) {
                     var consumeActionResult = result.ConsumeResults[i];

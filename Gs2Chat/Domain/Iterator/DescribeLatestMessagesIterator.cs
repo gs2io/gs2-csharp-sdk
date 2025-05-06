@@ -113,87 +113,42 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            var isCacheChecked = this._isCacheChecked;
-            this._isCacheChecked = true;
-            if (!isCacheChecked && this._gs2.Cache.TryGetList
-                    <Gs2.Gs2Chat.Model.Message>
-            (
-                    (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
-                        NamespaceName,
-                        "Singleton",
-                        RoomName ?? default
-                    ),
-                    out var list,
-                    out var listCacheContext
-            )) {
-                if (listCacheContext == null)
-                {
-                    this._result = list;
-                    this._last = true;
-                }
-                else
-                {
-                    this._startAt = (long)listCacheContext;
-                    this._result = list.Where(message => message.CreatedAt < this._startAt).ToArray();
-                    this._last = false;
-                    this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
-                        (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
-                            NamespaceName,
-                            "Singleton",
-                            RoomName ?? default
-                        )
-                    );
-                }
-            } else {
-
-                var request = new Gs2.Gs2Chat.Request.DescribeLatestMessagesRequest()
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRoomName(this.RoomName)
-                    .WithPassword(this.Password)
-                    .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-                    .WithLimit(fetchSize);
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeLatestMessagesFuture(
-                #else
-                var r = await this._client.DescribeLatestMessagesAsync(
-                #endif
-                    request
-                );
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return future;
-                if (future.Error != null)
-                {
-                    Error = future.Error;
-                    yield break;
-                }
-                var r = future.Result;
-                #endif
-                this._result = r.Items
-                    .Where(item => this.Category == null || item.Category == this.Category)
-                    .ToArray();
-                if (this._result.Length > 0) {
-                    this._startAt = this._result[this._result.Length-1].CreatedAt + 1;
-                } else {
-                    this._last = true;
-                }
-                r.PutCache(
-                    this._gs2.Cache,
-                    UserId,
-                    request
-                );
-
-                if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
-                        (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
-                            NamespaceName,
-                            "Singleton",
-                            RoomName ?? default
-                        ),
-                        this._startAt
-                    );
-                }
+            var request = new Gs2.Gs2Chat.Request.DescribeLatestMessagesRequest()
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithRoomName(this.RoomName)
+                .WithPassword(this.Password)
+                .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+                .WithLimit(fetchSize);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.DescribeLatestMessagesFuture(
+            #else
+            var r = await this._client.DescribeLatestMessagesAsync(
+            #endif
+                request
+            );
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            yield return future;
+            if (future.Error != null)
+            {
+                Error = future.Error;
+                yield break;
             }
+            var r = future.Result;
+            #endif
+            this._result = r.Items
+                .Where(item => this.Category == null || item.Category == this.Category)
+                .ToArray();
+            if (this._result.Length > 0) {
+                this._startAt = this._result[this._result.Length-1].CreatedAt + 1;
+            } else {
+                this._last = true;
+            }
+            r.PutCache(
+                this._gs2.Cache,
+                UserId,
+                request
+            );
         }
 
         private bool _hasNext()
@@ -268,14 +223,6 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             #endif
         #endif
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-                using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Message>(
-                        (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
-                            NamespaceName,
-                            "Singleton",
-                            RoomName ?? default
-                       ),
-                       "ListMessage"
-                   ).LockAsync()) {
                 while(this._hasNext()) {
                     cancellationToken.ThrowIfCancellationRequested();
         #endif
@@ -325,11 +272,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-                }
                 });
             #endif
-        #else
-            }
         #endif
         }
     }

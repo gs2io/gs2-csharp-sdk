@@ -100,6 +100,7 @@ namespace Gs2.Core.Domain
         {
             this._sheetConfiguration = TransactionConfiguration.Builder()
                 .WithNamespaceName(distributorNamespaceName)
+                .WithVerifyActionEventHandler(UpdateCacheFromConsumeAction)
                 .WithConsumeActionEventHandler(UpdateCacheFromConsumeAction)
                 .WithAcquireActionEventHandler(UpdateCacheFromAcquireAction)
                 .Build();

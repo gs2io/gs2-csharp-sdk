@@ -11,15 +11,18 @@ namespace Gs2.Core.Domain
         public Action<CacheDatabase, string, string, string, string> StampTaskEventHandler => ConsumeActionEventHandler;
         [Obsolete("Use AcquireActionEventHandler property instead.")]
         public Action<CacheDatabase, string, string, string, string> StampSheetEventHandler => AcquireActionEventHandler;
+        public Action<CacheDatabase, string, string, string, string> VerifyActionEventHandler { get; set; }
         public Action<CacheDatabase, string, string, string, string> ConsumeActionEventHandler { get; set; }
         public Action<CacheDatabase, string, string, string, string> AcquireActionEventHandler { get; set; }
 
         private TransactionConfiguration(
             string namespaceName,
+            Action<CacheDatabase, string, string, string, string> verifyActionEventHandler,
             Action<CacheDatabase, string, string, string, string> consumeActionEventHandler,
             Action<CacheDatabase, string, string, string, string> acquireActionEventHandler
         ) {
             this.NamespaceName = namespaceName;
+            this.VerifyActionEventHandler = verifyActionEventHandler;
             this.ConsumeActionEventHandler = consumeActionEventHandler;
             this.AcquireActionEventHandler = acquireActionEventHandler;
         }
@@ -31,6 +34,7 @@ namespace Gs2.Core.Domain
         public class TransactionConfigurationBuilder {
 
             private string NamespaceName { get; set; }
+            private Action<CacheDatabase, string, string, string, string> VerifyActionEventHandler { get; set; }
             private Action<CacheDatabase, string, string, string, string> ConsumeActionEventHandler { get; set; }
             private Action<CacheDatabase, string, string, string, string> AcquireActionEventHandler { get; set; }
 
@@ -50,6 +54,10 @@ namespace Gs2.Core.Domain
                 this.AcquireActionEventHandler = stampSheetEventHandler;
                 return this;
             }
+            public TransactionConfigurationBuilder WithVerifyActionEventHandler(Action<CacheDatabase, string, string, string, string> verifyActionEventHandler) {
+                this.VerifyActionEventHandler = verifyActionEventHandler;
+                return this;
+            }
             public TransactionConfigurationBuilder WithConsumeActionEventHandler(Action<CacheDatabase, string, string, string, string> consumeActionEventHandler) {
                 this.ConsumeActionEventHandler = consumeActionEventHandler;
                 return this;
@@ -62,6 +70,7 @@ namespace Gs2.Core.Domain
             public TransactionConfiguration Build() {
                 return new TransactionConfiguration(
                     NamespaceName,
+                    VerifyActionEventHandler,
                     ConsumeActionEventHandler,
                     AcquireActionEventHandler
                 );
