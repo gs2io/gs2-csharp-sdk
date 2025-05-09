@@ -56,7 +56,8 @@ namespace Gs2.Core.Domain
             Gs2 gs2,
             string transactionId,
             string userId,
-            TransactionResult result
+            TransactionResult result,
+            ResultMetadata metadata
         ): base(
             gs2,
             userId,
@@ -141,7 +142,8 @@ namespace Gs2.Core.Domain
                             resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
                             resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
                             resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
-                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToJson())) : null
+                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToJson())) : null,
+                            resultJson.ContainsKey("metadata") && resultJson["metadata"] != null ? ResultMetadata.FromJson(JsonMapper.ToObject(resultJson["metadata"].ToJson())) : null
                         ));
                     }
                 }

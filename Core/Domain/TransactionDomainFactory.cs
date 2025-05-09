@@ -26,7 +26,8 @@ namespace Gs2.Core.Domain
             string stampSheet,
             string stampSheetEncryptionKeyId,
             bool? atomicCommit,
-            TransactionResult transactionResult
+            TransactionResult transactionResult,
+            ResultMetadata metadata
         ) {
             if (autoRun) {
                 if (atomicCommit ?? false) {
@@ -35,7 +36,8 @@ namespace Gs2.Core.Domain
                             gs2,
                             transactionId,
                             accessToken,
-                            transactionResult
+                            transactionResult,
+                            metadata
                         );
                     }
                     return new AutoTransactionAccessTokenDomain(
@@ -69,7 +71,8 @@ namespace Gs2.Core.Domain
             string stampSheet,
             string stampSheetEncryptionKeyId,
             bool? atomicCommit,
-            TransactionResult transactionResult
+            TransactionResult transactionResult,
+            ResultMetadata metadata
         ) {
             if (autoRun) {
                 if (atomicCommit ?? false) {
@@ -78,7 +81,8 @@ namespace Gs2.Core.Domain
                             gs2,
                             transactionId,
                             userId,
-                            transactionResult
+                            transactionResult,
+                            metadata
                         );
                     }
                     return new AutoTransactionDomain(

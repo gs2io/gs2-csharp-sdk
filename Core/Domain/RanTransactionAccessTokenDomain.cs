@@ -57,7 +57,8 @@ namespace Gs2.Core.Domain
             Gs2 gs2,
             string transactionId,
             AccessToken accessToken,
-            TransactionResult result
+            TransactionResult result,
+            ResultMetadata metadata
         ): base(
             gs2,
             accessToken,
@@ -142,13 +143,94 @@ namespace Gs2.Core.Domain
                             resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
                             resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
                             resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
-                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToJson())) : null
+                            resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToJson())) : null,
+                            resultJson.ContainsKey("metadata") && resultJson["metadata"] != null ? ResultMetadata.FromJson(JsonMapper.ToObject(resultJson["metadata"].ToJson())) : null
                         ));
                     }
                 }
             }
         }
 
+
+        private void HandleResult(
+            ResultMetadata metadata
+        ) {
+            if (metadata.ScriptTransactionResults != null) {
+                foreach (var result in metadata.ScriptTransactionResults) {
+                    if (result.TransactionResult?.VerifyResults != null) {
+                        for (var i = 0; i < result.TransactionResult.VerifyResults.Length; i++) {
+                            var consumeActionResult = result.TransactionResult.VerifyResults[i];
+                            if (consumeActionResult.StatusCode / 100 != 2) {
+                                throw Gs2Exception.ExtractError(consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
+                            }
+                            Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
+                                Gs2.Cache,
+                                this._transactionId + "[" + i + "]",
+                                consumeActionResult.Action,
+                                consumeActionResult.VerifyRequest,
+                                consumeActionResult.VerifyResult
+                            );
+                        }
+                    }
+
+                    if (result.TransactionResult?.ConsumeResults != null) {
+                        for (var i = 0; i < result.TransactionResult.ConsumeResults.Length; i++) {
+                            var consumeActionResult = result.TransactionResult.ConsumeResults[i];
+                            if (consumeActionResult.StatusCode / 100 != 2) {
+                                throw Gs2Exception.ExtractError(consumeActionResult.ConsumeResult, consumeActionResult.StatusCode ?? 999);
+                            }
+                            Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
+                                Gs2.Cache,
+                                this._transactionId + "[" + i + "]",
+                                consumeActionResult.Action,
+                                consumeActionResult.ConsumeRequest,
+                                consumeActionResult.ConsumeResult
+                            );
+                        }
+                    }
+
+                    if (result.TransactionResult?.AcquireResults != null) {
+                        for (var i = 0; i < result.TransactionResult.AcquireResults.Length; i++) {
+                            var acquireResult = result.TransactionResult.AcquireResults[i];
+                            if (acquireResult.StatusCode / 100 != 2) {
+                                throw Gs2Exception.ExtractError(acquireResult.AcquireResult, acquireResult.StatusCode ?? 999);
+                            }
+
+                            Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(
+                                Gs2.Cache,
+                                this._transactionId,
+                                acquireResult.Action,
+                                acquireResult.AcquireRequest,
+                                acquireResult.AcquireResult
+                            );
+
+                            if (acquireResult.Action == "Gs2JobQueue:PushByUserId") {
+                                this._nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
+                                    Gs2,
+                                    AccessToken,
+                                    PushByUserIdResult.FromJson(JsonMapper.ToObject(acquireResult.AcquireResult))
+                                ));
+                            }
+
+                            var resultJson = JsonMapper.ToObject(acquireResult.AcquireResult);
+                            if (resultJson.ContainsKey("autoRunStampSheet")) {
+                                this._nextTransactions.Add(TransactionDomainFactory.ToTransaction(
+                                    Gs2,
+                                    AccessToken,
+                                    resultJson.ContainsKey("autoRunStampSheet") && bool.Parse(resultJson["autoRunStampSheet"]?.ToString() ?? "false"),
+                                    resultJson.ContainsKey("transactionId") ? resultJson["transactionId"]?.ToString() : null,
+                                    resultJson.ContainsKey("stampSheet") ? resultJson["stampSheet"]?.ToString() : null,
+                                    resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null,
+                                    resultJson.ContainsKey("atomicCommit") && bool.Parse(resultJson["atomicCommit"]?.ToString() ?? "false"),
+                                    resultJson.ContainsKey("transactionResult") && resultJson["transactionResult"] != null ? TransactionResult.FromJson(JsonMapper.ToObject(resultJson["transactionResult"].ToJson())) : null,
+                                    resultJson.ContainsKey("metadata") && resultJson["metadata"] != null ? ResultMetadata.FromJson(JsonMapper.ToObject(resultJson["metadata"].ToJson())) : null
+                                ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 #if UNITY_2017_1_OR_NEWER
         public override IFuture<TransactionAccessTokenDomain> WaitFuture(
