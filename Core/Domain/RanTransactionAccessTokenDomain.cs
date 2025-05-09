@@ -66,6 +66,7 @@ namespace Gs2.Core.Domain
         ) {
             this._transactionId = transactionId;
             HandleResult(result);
+            HandleResult(metadata);
         }
 
         private void HandleResult(
@@ -151,11 +152,10 @@ namespace Gs2.Core.Domain
             }
         }
 
-
         private void HandleResult(
             ResultMetadata metadata
         ) {
-            if (metadata.ScriptTransactionResults != null) {
+            if (metadata?.ScriptTransactionResults != null) {
                 foreach (var result in metadata.ScriptTransactionResults) {
                     if (result.TransactionResult?.VerifyResults != null) {
                         for (var i = 0; i < result.TransactionResult.VerifyResults.Length; i++) {
