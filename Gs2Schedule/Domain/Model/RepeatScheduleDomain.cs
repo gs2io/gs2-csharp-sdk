@@ -114,7 +114,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithEventName(this.EventName)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithIsInSchedule(this.InSchedule);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -144,7 +145,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithEventName(this.EventName)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithIsInSchedule(this.InSchedule);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
