@@ -44,6 +44,7 @@ namespace Gs2.Gs2Account.Model
         public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting BanScript { set; get; }
+        public Gs2.Gs2Account.Model.ScriptSetting UnBanScript { set; get; }
         public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -86,6 +87,10 @@ namespace Gs2.Gs2Account.Model
         }
         public Namespace WithBanScript(Gs2.Gs2Account.Model.ScriptSetting banScript) {
             this.BanScript = banScript;
+            return this;
+        }
+        public Namespace WithUnBanScript(Gs2.Gs2Account.Model.ScriptSetting unBanScript) {
+            this.UnBanScript = unBanScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Account.Model.LogSetting logSetting) {
@@ -175,6 +180,7 @@ namespace Gs2.Gs2Account.Model
                 .WithCreateTakeOverScript(!data.Keys.Contains("createTakeOverScript") || data["createTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createTakeOverScript"]))
                 .WithDoTakeOverScript(!data.Keys.Contains("doTakeOverScript") || data["doTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["doTakeOverScript"]))
                 .WithBanScript(!data.Keys.Contains("banScript") || data["banScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["banScript"]))
+                .WithUnBanScript(!data.Keys.Contains("unBanScript") || data["unBanScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["unBanScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Account.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -194,6 +200,7 @@ namespace Gs2.Gs2Account.Model
                 ["createTakeOverScript"] = CreateTakeOverScript?.ToJson(),
                 ["doTakeOverScript"] = DoTakeOverScript?.ToJson(),
                 ["banScript"] = BanScript?.ToJson(),
+                ["unBanScript"] = UnBanScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -243,6 +250,10 @@ namespace Gs2.Gs2Account.Model
             if (BanScript != null) {
                 writer.WritePropertyName("banScript");
                 BanScript.WriteJson(writer);
+            }
+            if (UnBanScript != null) {
+                writer.WritePropertyName("unBanScript");
+                UnBanScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -347,6 +358,14 @@ namespace Gs2.Gs2Account.Model
             {
                 diff += BanScript.CompareTo(other.BanScript);
             }
+            if (UnBanScript == null && UnBanScript == other.UnBanScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += UnBanScript.CompareTo(other.UnBanScript);
+            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -421,6 +440,8 @@ namespace Gs2.Gs2Account.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "account.namespace.createdAt.error.invalid"),
@@ -470,6 +491,7 @@ namespace Gs2.Gs2Account.Model
                 CreateTakeOverScript = CreateTakeOverScript?.Clone() as Gs2.Gs2Account.Model.ScriptSetting,
                 DoTakeOverScript = DoTakeOverScript?.Clone() as Gs2.Gs2Account.Model.ScriptSetting,
                 BanScript = BanScript?.Clone() as Gs2.Gs2Account.Model.ScriptSetting,
+                UnBanScript = UnBanScript?.Clone() as Gs2.Gs2Account.Model.ScriptSetting,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Account.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

@@ -110,6 +110,11 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("banScript");
                     request.BanScript.WriteJson(jsonWriter);
                 }
+                if (request.UnBanScript != null)
+                {
+                    jsonWriter.WritePropertyName("unBanScript");
+                    request.UnBanScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -458,6 +463,11 @@ namespace Gs2.Gs2Account
                 {
                     jsonWriter.WritePropertyName("banScript");
                     request.BanScript.WriteJson(jsonWriter);
+                }
+                if (request.UnBanScript != null)
+                {
+                    jsonWriter.WritePropertyName("unBanScript");
+                    request.UnBanScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
