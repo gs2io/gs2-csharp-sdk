@@ -329,7 +329,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 );
                 if (find) {
@@ -341,7 +341,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId,
                     () => this.GetFuture(
                         new GetClusterRankingReceivedRewardRequest()
@@ -382,7 +382,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 );
                 if (find) {
@@ -393,7 +393,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId,
                     () => this.GetAsync(
                         new GetClusterRankingReceivedRewardRequest()
@@ -433,7 +433,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.RankingName,
                 this.ClusterName,
-                this.Season ?? default,
+                this.Season,
                 this.UserId
             );
         }
@@ -448,7 +448,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                     this.ClusterName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 ),
                 callback,
@@ -487,7 +487,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                     this.ClusterName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 ),
                 callbackId

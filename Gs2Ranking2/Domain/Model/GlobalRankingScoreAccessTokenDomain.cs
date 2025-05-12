@@ -203,7 +203,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 );
                 if (find) {
@@ -214,7 +214,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId,
                     () => this.GetFuture(
                         new GetGlobalRankingScoreRequest()
@@ -253,7 +253,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 );
                 if (find) {
@@ -263,7 +263,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId,
                     () => this.GetAsync(
                         new GetGlobalRankingScoreRequest()
@@ -302,7 +302,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.RankingName,
-                this.Season ?? default,
+                this.Season,
                 this.UserId
             );
         }
@@ -316,7 +316,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 ),
                 callback,
@@ -354,7 +354,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 ),
                 callbackId

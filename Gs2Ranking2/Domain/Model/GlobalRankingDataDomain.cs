@@ -170,7 +170,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 );
                 if (find) {
@@ -204,7 +204,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default,
+                    this.Season,
                     this.UserId
                 );
                 if (find) {
@@ -244,7 +244,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.RankingName,
-                this.Season ?? default,
+                this.Season,
                 this.UserId
             );
         }
@@ -255,7 +255,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default
+                    this.Season
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheKey(
                     this.UserId
@@ -292,7 +292,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season ?? default
+                    this.Season
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheKey(
                     this.UserId
