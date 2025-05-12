@@ -29,12 +29,12 @@ namespace Gs2.Core.Domain
             this._listCached.Clear();
             this._listCacheContexts.Clear();
             this._listCacheUpdateRequired.Clear();
-            foreach (var pair in this._cacheUpdateCallback) {
+            foreach (var pair in this._cacheUpdateCallback.ToArray()) {
                 var callbacksContainers = pair.Value;
-                foreach (var callbacksContainer in callbacksContainers) {
+                foreach (var callbacksContainer in callbacksContainers.ToArray()) {
                     var callbacks = callbacksContainer.Value;
-                    foreach (var callback in callbacks) {
-                        foreach (var c in callback.Value) {
+                    foreach (var callback in callbacks.ToArray()) {
+                        foreach (var c in callback.Value.ToArray()) {
                             c.Value.Item2.Invoke();
                         }
                     }
@@ -60,7 +60,7 @@ namespace Gs2.Core.Domain
             {
                 this._listCacheContexts.Ensure(typeof(TKind))[parentKey] = listCacheContext;
             }
-            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).ToArray()) {
                 (callback.Value.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
             }
         }
@@ -71,7 +71,7 @@ namespace Gs2.Core.Domain
             this._listCached.Get(typeof(TKind))?.Remove(parentKey);
             this._listCacheUpdateRequired.Get(typeof(TKind))?.Remove(parentKey);
             this._listCacheContexts.Get(typeof(TKind))?.Remove(parentKey);
-            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).ToArray()) {
                 callback.Value.Item2?.Invoke();
             }
         }
@@ -83,7 +83,7 @@ namespace Gs2.Core.Domain
                 ClearListCache<TKind>(parentKey);
             }
             else {
-                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).ToArray()) {
                     callback.Value.Item2?.Invoke();
                 }
             }
@@ -108,11 +108,11 @@ namespace Gs2.Core.Domain
             var parent = this._cache.Ensure(typeof(TKind)).Ensure(parentKey);
             var exists = parent.ContainsKey(key);
             parent[key] = new Tuple<object, long>(obj, ttl);
-            foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key)) {
-                (callback.Value.Item1 as Action<TKind>)?.Invoke(obj);
+            foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).ToArray()) {
+                (callback.Value?.Item1 as Action<TKind>)?.Invoke(obj);
             }
-            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                (callback.Value.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).ToArray()) {
+                (callback.Value?.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
             }
         }
 
@@ -123,11 +123,11 @@ namespace Gs2.Core.Domain
             async UniTaskVoid Invoke() {
                 await UniTask.SwitchToMainThread();
 #endif
-                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                    (callback.Value.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).ToArray()) {
+                    (callback.Value?.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
                 }
-                foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Values) {
-                    callback.Item2.Invoke();
+                foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Values.ToArray()) {
+                    callback.Item2?.Invoke();
                 }
 #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             }
