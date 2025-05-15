@@ -199,7 +199,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 var (value, find) = (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Version ?? default
+                    this.Version
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -208,7 +208,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 var future = (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Version ?? default,
+                    this.Version,
                     () => this.GetFuture(
                         new GetStateMachineMasterRequest()
                     )
@@ -242,7 +242,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 var (value, find) = (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Version ?? default
+                    this.Version
                 );
                 if (find) {
                     return value;
@@ -250,7 +250,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 return await (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Version ?? default,
+                    this.Version,
                     () => this.GetAsync(
                         new GetStateMachineMasterRequest()
                     )
@@ -287,7 +287,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.Version ?? default
+                this.Version
             );
         }
 
@@ -298,7 +298,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheKey(
-                    this.Version ?? default
+                    this.Version
                 ),
                 callback,
                 () =>
@@ -333,7 +333,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheKey(
-                    this.Version ?? default
+                    this.Version
                 ),
                 callbackId
             );

@@ -81,6 +81,26 @@ namespace Gs2.Core.Domain
                 }
             }
 
+            if (result.VerifyTaskRequests != null) {
+                for (var i = 0; i < result.VerifyTaskRequests.Length; i++) {
+                    var verifyTask = result.VerifyTaskRequests[i];
+                    if (i < result.VerifyTaskResults.Length) {
+                        if (result.VerifyTaskResultCodes[i] / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.VerifyTaskResults[i], result.VerifyTaskResultCodes[i]);
+                        }
+                        if (!skipCallback) {
+                            Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
+                                Gs2.Cache,
+                                this._transactionId + "[" + i + "]",
+                                verifyTask.Action,
+                                verifyTask.Request,
+                                result.VerifyTaskResults[i]
+                            );
+                        }
+                    }
+                }
+            }
+
             if (result.TaskRequests != null) {
                 for (var i = 0; i < result.TaskRequests.Length; i++) {
                     var stampTask = result.TaskRequests[i];

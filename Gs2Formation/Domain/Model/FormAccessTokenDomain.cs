@@ -382,7 +382,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MoldModelName,
-                    this.Index ?? default
+                    this.Index
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -393,7 +393,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MoldModelName,
-                    this.Index ?? default,
+                    this.Index,
                     () => this.GetFuture(
                         new GetFormRequest()
                     )
@@ -431,7 +431,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MoldModelName,
-                    this.Index ?? default
+                    this.Index
                 );
                 if (find) {
                     return value;
@@ -441,7 +441,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MoldModelName,
-                    this.Index ?? default,
+                    this.Index,
                     () => this.GetAsync(
                         new GetFormRequest()
                     )
@@ -480,7 +480,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.MoldModelName,
-                this.Index ?? default
+                this.Index
             );
         }
 
@@ -493,7 +493,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.MoldModelName
                 ),
                 (null as Gs2.Gs2Formation.Model.Form).CacheKey(
-                    this.Index ?? default
+                    this.Index
                 ),
                 callback,
                 () =>
@@ -530,7 +530,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.MoldModelName
                 ),
                 (null as Gs2.Gs2Formation.Model.Form).CacheKey(
-                    this.Index ?? default
+                    this.Index
                 ),
                 callbackId
             );

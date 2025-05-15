@@ -172,7 +172,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default
+                    this.WithProfile
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -204,7 +204,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default
+                    this.WithProfile
                 );
                 if (find) {
                     return value;
@@ -243,7 +243,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.WithProfile ?? default
+                this.WithProfile
             );
         }
 
@@ -255,7 +255,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2Friend.Model.Friend).CacheKey(
-                    this.WithProfile ?? default
+                    this.WithProfile
                 ),
                 callback,
                 () =>
@@ -291,7 +291,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2Friend.Model.Friend).CacheKey(
-                    this.WithProfile ?? default
+                    this.WithProfile
                 ),
                 callbackId
             );

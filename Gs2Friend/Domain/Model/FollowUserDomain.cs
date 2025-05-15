@@ -208,7 +208,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default,
+                    this.WithProfile,
                     this.TargetUserId
                 );
                 if (find) {
@@ -219,7 +219,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default,
+                    this.WithProfile,
                     this.TargetUserId,
                     () => this.GetFuture(
                         new GetFollowByUserIdRequest()
@@ -257,7 +257,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default,
+                    this.WithProfile,
                     this.TargetUserId
                 );
                 if (find) {
@@ -267,7 +267,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default,
+                    this.WithProfile,
                     this.TargetUserId,
                     () => this.GetAsync(
                         new GetFollowByUserIdRequest()
@@ -306,7 +306,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.WithProfile ?? default,
+                this.WithProfile,
                 this.TargetUserId
             );
         }
@@ -317,7 +317,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.FollowUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default
+                    this.WithProfile
                 ),
                 (null as Gs2.Gs2Friend.Model.FollowUser).CacheKey(
                     this.TargetUserId
@@ -354,7 +354,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.FollowUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default
+                    this.WithProfile
                 ),
                 (null as Gs2.Gs2Friend.Model.FollowUser).CacheKey(
                     this.TargetUserId

@@ -158,9 +158,9 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Year ?? default,
-                    this.Month ?? default,
-                    this.Day ?? default,
+                    this.Year,
+                    this.Month,
+                    this.Day,
                     this.Currency
                 );
                 if (find) {
@@ -170,9 +170,9 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Year ?? default,
-                    this.Month ?? default,
-                    this.Day ?? default,
+                    this.Year,
+                    this.Month,
+                    this.Day,
                     this.Currency,
                     () => this.GetFuture(
                         new GetDailyTransactionHistoryRequest()
@@ -210,9 +210,9 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Year ?? default,
-                    this.Month ?? default,
-                    this.Day ?? default,
+                    this.Year,
+                    this.Month,
+                    this.Day,
                     this.Currency
                 );
                 if (find) {
@@ -221,9 +221,9 @@ namespace Gs2.Gs2Money2.Domain.Model
                 return await (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Year ?? default,
-                    this.Month ?? default,
-                    this.Day ?? default,
+                    this.Year,
+                    this.Month,
+                    this.Day,
                     this.Currency,
                     () => this.GetAsync(
                         new GetDailyTransactionHistoryRequest()
@@ -261,9 +261,9 @@ namespace Gs2.Gs2Money2.Domain.Model
             (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.Year ?? default,
-                this.Month ?? default,
-                this.Day ?? default,
+                this.Year,
+                this.Month,
+                this.Day,
                 this.Currency
             );
         }
@@ -275,9 +275,9 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheKey(
-                    this.Year ?? default,
-                    this.Month ?? default,
-                    this.Day ?? default,
+                    this.Year,
+                    this.Month,
+                    this.Day,
                     this.Currency
                 ),
                 callback,
@@ -313,9 +313,9 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Money2.Model.DailyTransactionHistory).CacheKey(
-                    this.Year ?? default,
-                    this.Month ?? default,
-                    this.Day ?? default,
+                    this.Year,
+                    this.Month,
+                    this.Day,
                     this.Currency
                 ),
                 callbackId

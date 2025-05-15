@@ -158,7 +158,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName,
                     this.ScorerUserId,
-                    this.Index ?? default
+                    this.Index
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -171,7 +171,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName,
                     this.ScorerUserId,
-                    this.Index ?? default,
+                    this.Index,
                     () => this.GetFuture(
                         new GetRankingRequest()
                     )
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName,
                     this.ScorerUserId,
-                    this.Index ?? default
+                    this.Index
                 );
                 if (find) {
                     return value;
@@ -225,7 +225,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName,
                     this.ScorerUserId,
-                    this.Index ?? default,
+                    this.Index,
                     () => this.GetAsync(
                         new GetRankingRequest()
                     )
@@ -266,7 +266,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.CategoryName,
                 this.AdditionalScopeName,
                 this.ScorerUserId,
-                this.Index ?? default
+                this.Index
             );
         }
 
@@ -281,7 +281,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 ),
                 (null as Gs2.Gs2Ranking.Model.Ranking).CacheKey(
                     this.ScorerUserId,
-                    this.Index ?? default
+                    this.Index
                 ),
                 callback,
                 () =>
@@ -320,7 +320,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 ),
                 (null as Gs2.Gs2Ranking.Model.Ranking).CacheKey(
                     this.ScorerUserId,
-                    this.Index ?? default
+                    this.Index
                 ),
                 callbackId
             );

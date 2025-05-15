@@ -199,7 +199,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Slot ?? default
+                    this.Slot
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -209,7 +209,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Slot ?? default,
+                    this.Slot,
                     () => this.GetFuture(
                         new GetWalletRequest()
                     )
@@ -245,7 +245,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Slot ?? default
+                    this.Slot
                 );
                 if (find) {
                     return value;
@@ -254,7 +254,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Slot ?? default,
+                    this.Slot,
                     () => this.GetAsync(
                         new GetWalletRequest()
                     )
@@ -292,7 +292,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.Slot ?? default
+                this.Slot
             );
         }
 
@@ -304,7 +304,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2Money.Model.Wallet).CacheKey(
-                    this.Slot ?? default
+                    this.Slot
                 ),
                 callback,
                 () =>
@@ -340,7 +340,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2Money.Model.Wallet).CacheKey(
-                    this.Slot ?? default
+                    this.Slot
                 ),
                 callbackId
             );

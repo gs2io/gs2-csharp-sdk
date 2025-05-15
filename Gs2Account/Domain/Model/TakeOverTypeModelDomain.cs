@@ -143,7 +143,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.TakeOverTypeModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Type ?? default
+                    this.Type
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -152,7 +152,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = (null as Gs2.Gs2Account.Model.TakeOverTypeModel).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Type ?? default,
+                    this.Type,
                     () => this.GetFuture(
                         new GetTakeOverTypeModelRequest()
                     )
@@ -186,7 +186,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.TakeOverTypeModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Type ?? default
+                    this.Type
                 );
                 if (find) {
                     return value;
@@ -194,7 +194,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 return await (null as Gs2.Gs2Account.Model.TakeOverTypeModel).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Type ?? default,
+                    this.Type,
                     () => this.GetAsync(
                         new GetTakeOverTypeModelRequest()
                     )
@@ -231,7 +231,7 @@ namespace Gs2.Gs2Account.Domain.Model
             (null as Gs2.Gs2Account.Model.TakeOverTypeModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.Type ?? default
+                this.Type
             );
         }
 
@@ -242,7 +242,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheKey(
-                    this.Type ?? default
+                    this.Type
                 ),
                 callback,
                 () =>
@@ -277,7 +277,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName
                 ),
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheKey(
-                    this.Type ?? default
+                    this.Type
                 ),
                 callbackId
             );
