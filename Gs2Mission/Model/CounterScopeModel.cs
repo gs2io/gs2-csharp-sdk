@@ -248,7 +248,7 @@ namespace Gs2.Gs2Mission.Model
                         });
                 }
             }
-            if (ScopeType == "resetTiming") {
+            {
                 switch (ResetType) {
                     case "notReset":
                     case "daily":
