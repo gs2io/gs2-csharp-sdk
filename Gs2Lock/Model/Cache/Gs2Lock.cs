@@ -74,6 +74,13 @@ namespace Gs2.Gs2Lock.Model.Cache
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "lock":
                     Result.LockResult.FromJson(resultPayload).PutCache(
                         cache,

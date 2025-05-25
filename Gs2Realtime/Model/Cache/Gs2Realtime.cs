@@ -81,6 +81,13 @@ namespace Gs2.Gs2Realtime.Model.Cache
                         Request.NowRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeRooms":
                     Result.DescribeRoomsResult.FromJson(resultPayload).PutCache(
                         cache,

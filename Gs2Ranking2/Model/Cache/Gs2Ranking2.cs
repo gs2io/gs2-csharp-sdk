@@ -74,6 +74,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "dumpUserDataByUserId":
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,

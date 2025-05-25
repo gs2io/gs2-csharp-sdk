@@ -74,6 +74,13 @@ namespace Gs2.Gs2Key.Model.Cache
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeKeys":
                     Result.DescribeKeysResult.FromJson(resultPayload).PutCache(
                         cache,

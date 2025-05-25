@@ -74,6 +74,13 @@ namespace Gs2.Gs2Script.Model.Cache
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeScripts":
                     Result.DescribeScriptsResult.FromJson(resultPayload).PutCache(
                         cache,

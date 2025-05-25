@@ -285,7 +285,7 @@ namespace Gs2.Gs2Inventory.Model
                 }
             }
             {
-                if (Count < 1) {
+                if (Count < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("simpleItem", "inventory.simpleItem.count.error.invalid"),
                     });

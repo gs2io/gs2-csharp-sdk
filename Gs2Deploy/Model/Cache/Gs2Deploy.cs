@@ -151,6 +151,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
                         Request.DeleteStackEntityRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeResources":
                     Result.DescribeResourcesResult.FromJson(resultPayload).PutCache(
                         cache,

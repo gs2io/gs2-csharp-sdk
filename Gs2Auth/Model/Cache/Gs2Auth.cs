@@ -60,6 +60,13 @@ namespace Gs2.Gs2Auth.Model.Cache
                         Request.IssueTimeOffsetTokenByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
             }
         }
     }

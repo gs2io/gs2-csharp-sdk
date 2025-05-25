@@ -158,6 +158,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
                         Request.DetachGuardRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "createPassword":
                     Result.CreatePasswordResult.FromJson(resultPayload).PutCache(
                         cache,
