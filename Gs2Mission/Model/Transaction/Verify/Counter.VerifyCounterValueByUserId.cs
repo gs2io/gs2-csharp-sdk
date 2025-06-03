@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -34,17 +36,17 @@ namespace Gs2.Gs2Mission.Model.Transaction
         ) {
             switch (request.VerifyType) {
                 case "less":
-                    throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCounterValueByUserId");
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) < request.Value;
                 case "lessEqual":
-                    throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCounterValueByUserId");
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) <= request.Value;
                 case "greater":
-                    throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCounterValueByUserId");
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) > request.Value;
                 case "greaterEqual":
-                    throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCounterValueByUserId");
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) >= request.Value;
                 case "equal":
-                    throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCounterValueByUserId");
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) == request.Value;
                 case "notEqual":
-                    throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCounterValueByUserId");
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) != request.Value;
             }
             return false;
         }
@@ -60,7 +62,8 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this VerifyCounterValueByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Mission:VerifyCounterValueByUserId");
+            request.Value = (long?) (request.Value * rate);
+            return request;
         }
     }
 
@@ -70,7 +73,8 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this VerifyCounterValueByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Mission:VerifyCounterValueByUserId");
+            request.Value = (long?) ((request.Value ?? 0) * rate);
+            return request;
         }
     }
 }
