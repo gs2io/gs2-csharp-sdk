@@ -35,6 +35,7 @@ namespace Gs2.Core.Model
         public Gs2.Core.Model.VerifyActionResult[] VerifyResults { set; get; } = null!;
         public Gs2.Core.Model.ConsumeActionResult[] ConsumeResults { set; get; } = null!;
         public Gs2.Core.Model.AcquireActionResult[] AcquireResults { set; get; } = null!;
+        public bool? HasError;
         public TransactionResult WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
@@ -49,6 +50,10 @@ namespace Gs2.Core.Model
         }
         public TransactionResult WithAcquireResults(Gs2.Core.Model.AcquireActionResult[] acquireResults) {
             this.AcquireResults = acquireResults;
+            return this;
+        }
+        public TransactionResult WithHasError(bool? hasError) {
+            this.HasError = hasError;
             return this;
         }
 
@@ -70,7 +75,8 @@ namespace Gs2.Core.Model
                 }).ToArray())
                 .WithAcquireResults(!data.Keys.Contains("acquireResults") || data["acquireResults"] == null || !data["acquireResults"].IsArray ? new Gs2.Core.Model.AcquireActionResult[]{} : data["acquireResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireActionResult.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithHasError(!data.Keys.Contains("hasError") || data["hasError"] == null ? null : (bool?)bool.Parse(data["hasError"].ToString()));
         }
 
         public JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Core.Model
                 ["verifyResults"] = verifyResultsJsonData,
                 ["consumeResults"] = consumeResultsJsonData,
                 ["acquireResults"] = acquireResultsJsonData,
+                ["hasError"] = HasError
             };
         }
 
@@ -149,6 +156,10 @@ namespace Gs2.Core.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (HasError.HasValue) {
+                writer.WritePropertyName("hasError");
+                writer.Write(HasError.Value);
             }
             writer.WriteObjectEnd();
         }
@@ -201,6 +212,14 @@ namespace Gs2.Core.Model
                     diff += AcquireResults[i].CompareTo(other.AcquireResults[i]);
                 }
             }
+            if (HasError == null && HasError == other.HasError)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += HasError == other.HasError ? 0 : (HasError.Value ? 1 : -1);
+            }
             return diff;
         }
 
@@ -246,6 +265,7 @@ namespace Gs2.Core.Model
                 VerifyResults = VerifyResults?.Clone() as Gs2.Core.Model.VerifyActionResult[],
                 ConsumeResults = ConsumeResults?.Clone() as Gs2.Core.Model.ConsumeActionResult[],
                 AcquireResults = AcquireResults?.Clone() as Gs2.Core.Model.AcquireActionResult[],
+                HasError = HasError
             };
         }
     }

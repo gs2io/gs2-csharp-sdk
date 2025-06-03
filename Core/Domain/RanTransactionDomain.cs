@@ -33,11 +33,13 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor.Model.Cache;
+using Gs2.Gs2Exchange.Result;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
+using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
@@ -47,6 +49,28 @@ using System.Threading.Tasks;
 
 namespace Gs2.Core.Domain
 {
+    public class IssueTransactionApiResult : IResult
+    {
+        public Model.TransactionResult TransactionResult { set; get; }
+        
+        public IssueTransactionApiResult WithTransactionResult(Model.TransactionResult transactionResult) {
+            this.TransactionResult = transactionResult;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        [Preserve]
+#endif
+        public static IssueTransactionApiResult FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            return new IssueTransactionApiResult()
+                .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Model.TransactionResult.FromJson(data["transactionResult"]));
+        }
+    }
+    
     public partial class RanTransactionDomain : TransactionDomain
     {
         private readonly string _transactionId;
@@ -102,6 +126,19 @@ namespace Gs2.Core.Domain
                         throw Gs2Exception.ExtractError(acquireResult.AcquireResult, acquireResult.StatusCode ?? 999);
                     }
                 }
+            }
+
+            if (result.HasError ?? false) {
+                if (result.AcquireResults != null) {
+                    for (var i = 0; i < result.AcquireResults.Length; i++) {
+                        var acquireResult = result.AcquireResults[i];
+                        var res = IssueTransactionApiResult.FromJson(JsonMapper.ToObject(acquireResult.AcquireResult));
+                        if (res.TransactionResult != null && (res.TransactionResult.HasError ?? false)) {
+                            HandleResult(res.TransactionResult);
+                        }
+                    }
+                }
+                throw new UnknownException("Ran transaction failed.");
             }
 
             if (result.VerifyResults != null) {

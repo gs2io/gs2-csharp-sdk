@@ -105,6 +105,19 @@ namespace Gs2.Core.Domain
                 }
             }
 
+            if (result.HasError ?? false) {
+                if (result.AcquireResults != null) {
+                    for (var i = 0; i < result.AcquireResults.Length; i++) {
+                        var acquireResult = result.AcquireResults[i];
+                        var res = IssueTransactionApiResult.FromJson(JsonMapper.ToObject(acquireResult.AcquireResult));
+                        if (res.TransactionResult != null && (res.TransactionResult.HasError ?? false)) {
+                            HandleResult(res.TransactionResult);
+                        }
+                    }
+                }
+                throw new UnknownException("Ran transaction failed.");
+            }
+
             if (result.VerifyResults != null) {
                 for (var i = 0; i < result.VerifyResults.Length; i++) {
                     var consumeActionResult = result.VerifyResults[i];
