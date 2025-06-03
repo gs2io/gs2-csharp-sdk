@@ -85,6 +85,29 @@ namespace Gs2.Core.Domain
                     if (consumeActionResult.StatusCode / 100 != 2) {
                         throw Gs2Exception.ExtractError(consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
                     }
+                }
+            }
+
+            if (result.ConsumeResults != null) {
+                for (var i = 0; i < result.ConsumeResults.Length; i++) {
+                    var consumeActionResult = result.ConsumeResults[i];
+                    if (consumeActionResult.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(consumeActionResult.ConsumeResult, consumeActionResult.StatusCode ?? 999);
+                    }
+                }
+            }
+            if (result.AcquireResults != null) {
+                for (var i = 0; i < result.AcquireResults.Length; i++) {
+                    var acquireResult = result.AcquireResults[i];
+                    if (acquireResult.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(acquireResult.AcquireResult, acquireResult.StatusCode ?? 999);
+                    }
+                }
+            }
+
+            if (result.VerifyResults != null) {
+                for (var i = 0; i < result.VerifyResults.Length; i++) {
+                    var consumeActionResult = result.VerifyResults[i];
                     Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
                         Gs2.Cache,
                         this._transactionId + "[" + i + "]",
@@ -98,9 +121,6 @@ namespace Gs2.Core.Domain
             if (result.ConsumeResults != null) {
                 for (var i = 0; i < result.ConsumeResults.Length; i++) {
                     var consumeActionResult = result.ConsumeResults[i];
-                    if (consumeActionResult.StatusCode / 100 != 2) {
-                        throw Gs2Exception.ExtractError(consumeActionResult.ConsumeResult, consumeActionResult.StatusCode ?? 999);
-                    }
                     Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
                         Gs2.Cache,
                         this._transactionId + "[" + i + "]",
@@ -114,10 +134,6 @@ namespace Gs2.Core.Domain
             if (result.AcquireResults != null) {
                 for (var i = 0; i < result.AcquireResults.Length; i++) {
                     var acquireResult = result.AcquireResults[i];
-                    if (acquireResult.StatusCode / 100 != 2) {
-                        throw Gs2Exception.ExtractError(acquireResult.AcquireResult, acquireResult.StatusCode ?? 999);
-                    }
-
                     Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(
                         Gs2.Cache,
                         this._transactionId,

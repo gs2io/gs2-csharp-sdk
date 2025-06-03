@@ -240,7 +240,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             ).Showcase(
                 this.ShowcaseName
             ).ModelAsync();
-            return showcase.DisplayItems.FirstOrDefault(v => v.DisplayItemId == this.DisplayItemId);
+            return showcase?.DisplayItems?.FirstOrDefault(v => v.DisplayItemId == this.DisplayItemId);
         }
         #endif
 
