@@ -2721,6 +2721,252 @@ namespace Gs2.Gs2Friend
 #endif
 
 
+        public class AddFriendTask : Gs2WebSocketSessionTask<Request.AddFriendRequest, Result.AddFriendResult>
+        {
+	        public AddFriendTask(IGs2Session session, Request.AddFriendRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AddFriendRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.TargetUserId != null)
+                {
+                    jsonWriter.WritePropertyName("targetUserId");
+                    jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "friend",
+                    "friendUser",
+                    "addFriend",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddFriend(
+                Request.AddFriendRequest request,
+                UnityAction<AsyncResult<Result.AddFriendResult>> callback
+        )
+		{
+			var task = new AddFriendTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddFriendResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddFriendResult> AddFriendFuture(
+                Request.AddFriendRequest request
+        )
+		{
+			return new AddFriendTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddFriendResult> AddFriendAsync(
+            Request.AddFriendRequest request
+        )
+		{
+		    var task = new AddFriendTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AddFriendTask AddFriendAsync(
+                Request.AddFriendRequest request
+        )
+		{
+			return new AddFriendTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddFriendResult> AddFriendAsync(
+            Request.AddFriendRequest request
+        )
+		{
+		    var task = new AddFriendTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AddFriendByUserIdTask : Gs2WebSocketSessionTask<Request.AddFriendByUserIdRequest, Result.AddFriendByUserIdResult>
+        {
+	        public AddFriendByUserIdTask(IGs2Session session, Request.AddFriendByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AddFriendByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TargetUserId != null)
+                {
+                    jsonWriter.WritePropertyName("targetUserId");
+                    jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "friend",
+                    "friendUser",
+                    "addFriendByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddFriendByUserId(
+                Request.AddFriendByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AddFriendByUserIdResult>> callback
+        )
+		{
+			var task = new AddFriendByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddFriendByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddFriendByUserIdResult> AddFriendByUserIdFuture(
+                Request.AddFriendByUserIdRequest request
+        )
+		{
+			return new AddFriendByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+            Request.AddFriendByUserIdRequest request
+        )
+		{
+		    var task = new AddFriendByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AddFriendByUserIdTask AddFriendByUserIdAsync(
+                Request.AddFriendByUserIdRequest request
+        )
+		{
+			return new AddFriendByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+            Request.AddFriendByUserIdRequest request
+        )
+		{
+		    var task = new AddFriendByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteFriendTask : Gs2WebSocketSessionTask<Request.DeleteFriendRequest, Result.DeleteFriendResult>
         {
 	        public DeleteFriendTask(IGs2Session session, Request.DeleteFriendRequest request) : base(session, request)

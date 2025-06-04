@@ -4605,6 +4605,257 @@ namespace Gs2.Gs2Friend
 #endif
 
 
+        public class AddFriendTask : Gs2RestSessionTask<AddFriendRequest, AddFriendResult>
+        {
+            public AddFriendTask(IGs2Session session, RestSessionRequestFactory factory, AddFriendRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AddFriendRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "friend")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/friend/{targetUserId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{targetUserId}", !string.IsNullOrEmpty(request.TargetUserId) ? request.TargetUserId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddFriend(
+                Request.AddFriendRequest request,
+                UnityAction<AsyncResult<Result.AddFriendResult>> callback
+        )
+		{
+			var task = new AddFriendTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddFriendResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddFriendResult> AddFriendFuture(
+                Request.AddFriendRequest request
+        )
+		{
+			return new AddFriendTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddFriendResult> AddFriendAsync(
+                Request.AddFriendRequest request
+        )
+		{
+            AsyncResult<Result.AddFriendResult> result = null;
+			await AddFriend(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AddFriendTask AddFriendAsync(
+                Request.AddFriendRequest request
+        )
+		{
+			return new AddFriendTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddFriendResult> AddFriendAsync(
+                Request.AddFriendRequest request
+        )
+		{
+			var task = new AddFriendTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AddFriendByUserIdTask : Gs2RestSessionTask<AddFriendByUserIdRequest, AddFriendByUserIdResult>
+        {
+            public AddFriendByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, AddFriendByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AddFriendByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "friend")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/friend/{targetUserId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{targetUserId}", !string.IsNullOrEmpty(request.TargetUserId) ? request.TargetUserId.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddFriendByUserId(
+                Request.AddFriendByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AddFriendByUserIdResult>> callback
+        )
+		{
+			var task = new AddFriendByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddFriendByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddFriendByUserIdResult> AddFriendByUserIdFuture(
+                Request.AddFriendByUserIdRequest request
+        )
+		{
+			return new AddFriendByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+                Request.AddFriendByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.AddFriendByUserIdResult> result = null;
+			await AddFriendByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AddFriendByUserIdTask AddFriendByUserIdAsync(
+                Request.AddFriendByUserIdRequest request
+        )
+		{
+			return new AddFriendByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+                Request.AddFriendByUserIdRequest request
+        )
+		{
+			var task = new AddFriendByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteFriendTask : Gs2RestSessionTask<DeleteFriendRequest, DeleteFriendResult>
         {
             public DeleteFriendTask(IGs2Session session, RestSessionRequestFactory factory, DeleteFriendRequest request) : base(session, factory, request)

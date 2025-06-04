@@ -291,6 +291,20 @@ namespace Gs2.Gs2Friend.Model.Cache
                         Request.GetFriendByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "addFriend":
+                    Result.AddFriendResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.AddFriendRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "addFriendByUserId":
+                    Result.AddFriendByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.AddFriendByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteFriend":
                     Result.DeleteFriendResult.FromJson(resultPayload).PutCache(
                         cache,
