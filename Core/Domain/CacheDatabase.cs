@@ -127,7 +127,7 @@ namespace Gs2.Core.Domain
                     (callback.Value?.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
                 }
                 foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Values.ToArray()) {
-                    callback.Item2?.Invoke();
+                    callback?.Item2?.Invoke();
                 }
 #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             }
