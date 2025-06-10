@@ -84,7 +84,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             Gs2MatchmakingRestClient client,
             string namespaceName,
             string userId,
-            string seasonName,
+            string seasonName = null,
             string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
@@ -115,7 +115,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                     (null as Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        SeasonName,
+                        SeasonName ?? default,
                         default
                     ),
                     out var list
@@ -164,7 +164,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                         (null as Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            SeasonName,
+                            SeasonName ?? default,
                             default
                         )
                     );
@@ -248,7 +248,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                         (null as Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            SeasonName,
+                            SeasonName ?? default,
                             default
                        ),
                        "ListJoinedSeasonGathering"

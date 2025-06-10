@@ -201,7 +201,7 @@ namespace Gs2.Gs2Mission.Model
                 }
             }
             {
-                if (Value < 1) {
+                if (Value < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("targetCounterModel", "mission.targetCounterModel.value.error.invalid"),
                     });

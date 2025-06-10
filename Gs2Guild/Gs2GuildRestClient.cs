@@ -255,6 +255,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("changeRoleScript");
                     request.ChangeRoleScript.WriteJson(jsonWriter);
                 }
+                if (request.DeleteGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("deleteGuildScript");
+                    request.DeleteGuildScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -641,6 +646,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("changeRoleScript");
                     request.ChangeRoleScript.WriteJson(jsonWriter);
+                }
+                if (request.DeleteGuildScript != null)
+                {
+                    jsonWriter.WritePropertyName("deleteGuildScript");
+                    request.DeleteGuildScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

@@ -48,6 +48,7 @@ namespace Gs2.Gs2Guild.Model
         public Gs2.Gs2Guild.Model.ScriptSetting JoinGuildScript { set; get; }
         public Gs2.Gs2Guild.Model.ScriptSetting LeaveGuildScript { set; get; }
         public Gs2.Gs2Guild.Model.ScriptSetting ChangeRoleScript { set; get; }
+        public Gs2.Gs2Guild.Model.ScriptSetting DeleteGuildScript { set; get; }
         public Gs2.Gs2Guild.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -106,6 +107,10 @@ namespace Gs2.Gs2Guild.Model
         }
         public Namespace WithChangeRoleScript(Gs2.Gs2Guild.Model.ScriptSetting changeRoleScript) {
             this.ChangeRoleScript = changeRoleScript;
+            return this;
+        }
+        public Namespace WithDeleteGuildScript(Gs2.Gs2Guild.Model.ScriptSetting deleteGuildScript) {
+            this.DeleteGuildScript = deleteGuildScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Guild.Model.LogSetting logSetting) {
@@ -199,6 +204,7 @@ namespace Gs2.Gs2Guild.Model
                 .WithJoinGuildScript(!data.Keys.Contains("joinGuildScript") || data["joinGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["joinGuildScript"]))
                 .WithLeaveGuildScript(!data.Keys.Contains("leaveGuildScript") || data["leaveGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["leaveGuildScript"]))
                 .WithChangeRoleScript(!data.Keys.Contains("changeRoleScript") || data["changeRoleScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["changeRoleScript"]))
+                .WithDeleteGuildScript(!data.Keys.Contains("deleteGuildScript") || data["deleteGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["deleteGuildScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Guild.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -222,6 +228,7 @@ namespace Gs2.Gs2Guild.Model
                 ["joinGuildScript"] = JoinGuildScript?.ToJson(),
                 ["leaveGuildScript"] = LeaveGuildScript?.ToJson(),
                 ["changeRoleScript"] = ChangeRoleScript?.ToJson(),
+                ["deleteGuildScript"] = DeleteGuildScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -287,6 +294,10 @@ namespace Gs2.Gs2Guild.Model
             if (ChangeRoleScript != null) {
                 writer.WritePropertyName("changeRoleScript");
                 ChangeRoleScript.WriteJson(writer);
+            }
+            if (DeleteGuildScript != null) {
+                writer.WritePropertyName("deleteGuildScript");
+                DeleteGuildScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -423,6 +434,14 @@ namespace Gs2.Gs2Guild.Model
             {
                 diff += ChangeRoleScript.CompareTo(other.ChangeRoleScript);
             }
+            if (DeleteGuildScript == null && DeleteGuildScript == other.DeleteGuildScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += DeleteGuildScript.CompareTo(other.DeleteGuildScript);
+            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -505,6 +524,8 @@ namespace Gs2.Gs2Guild.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "guild.namespace.createdAt.error.invalid"),
@@ -558,6 +579,7 @@ namespace Gs2.Gs2Guild.Model
                 JoinGuildScript = JoinGuildScript?.Clone() as Gs2.Gs2Guild.Model.ScriptSetting,
                 LeaveGuildScript = LeaveGuildScript?.Clone() as Gs2.Gs2Guild.Model.ScriptSetting,
                 ChangeRoleScript = ChangeRoleScript?.Clone() as Gs2.Gs2Guild.Model.ScriptSetting,
+                DeleteGuildScript = DeleteGuildScript?.Clone() as Gs2.Gs2Guild.Model.ScriptSetting,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Guild.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
