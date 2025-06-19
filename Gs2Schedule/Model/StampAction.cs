@@ -54,6 +54,8 @@ namespace Gs2.Gs2Schedule.Model
             switch (action.Action) {
                 case "Gs2Schedule:TriggerByUserId":
                     return TriggerByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Schedule:ExtendTriggerByUserId":
+                    return ExtendTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

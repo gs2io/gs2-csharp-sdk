@@ -2397,6 +2397,134 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
+        public class ExtendTriggerByUserIdTask : Gs2WebSocketSessionTask<Request.ExtendTriggerByUserIdRequest, Result.ExtendTriggerByUserIdResult>
+        {
+	        public ExtendTriggerByUserIdTask(IGs2Session session, Request.ExtendTriggerByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ExtendTriggerByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.TriggerName != null)
+                {
+                    jsonWriter.WritePropertyName("triggerName");
+                    jsonWriter.Write(request.TriggerName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ExtendSeconds != null)
+                {
+                    jsonWriter.WritePropertyName("extendSeconds");
+                    jsonWriter.Write(request.ExtendSeconds.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "schedule",
+                    "trigger",
+                    "extendTriggerByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ExtendTriggerByUserId(
+                Request.ExtendTriggerByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ExtendTriggerByUserIdResult>> callback
+        )
+		{
+			var task = new ExtendTriggerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ExtendTriggerByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ExtendTriggerByUserIdResult> ExtendTriggerByUserIdFuture(
+                Request.ExtendTriggerByUserIdRequest request
+        )
+		{
+			return new ExtendTriggerByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExtendTriggerByUserIdResult> ExtendTriggerByUserIdAsync(
+            Request.ExtendTriggerByUserIdRequest request
+        )
+		{
+		    var task = new ExtendTriggerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ExtendTriggerByUserIdTask ExtendTriggerByUserIdAsync(
+                Request.ExtendTriggerByUserIdRequest request
+        )
+		{
+			return new ExtendTriggerByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ExtendTriggerByUserIdResult> ExtendTriggerByUserIdAsync(
+            Request.ExtendTriggerByUserIdRequest request
+        )
+		{
+		    var task = new ExtendTriggerByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class TriggerByStampSheetTask : Gs2WebSocketSessionTask<Request.TriggerByStampSheetRequest, Result.TriggerByStampSheetResult>
         {
 	        public TriggerByStampSheetTask(IGs2Session session, Request.TriggerByStampSheetRequest request) : base(session, request)
@@ -2497,6 +2625,114 @@ namespace Gs2.Gs2Schedule
         )
 		{
 		    var task = new TriggerByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ExtendTriggerByStampSheetTask : Gs2WebSocketSessionTask<Request.ExtendTriggerByStampSheetRequest, Result.ExtendTriggerByStampSheetResult>
+        {
+	        public ExtendTriggerByStampSheetTask(IGs2Session session, Request.ExtendTriggerByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ExtendTriggerByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "schedule",
+                    "trigger",
+                    "extendTriggerByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ExtendTriggerByStampSheet(
+                Request.ExtendTriggerByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.ExtendTriggerByStampSheetResult>> callback
+        )
+		{
+			var task = new ExtendTriggerByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ExtendTriggerByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ExtendTriggerByStampSheetResult> ExtendTriggerByStampSheetFuture(
+                Request.ExtendTriggerByStampSheetRequest request
+        )
+		{
+			return new ExtendTriggerByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExtendTriggerByStampSheetResult> ExtendTriggerByStampSheetAsync(
+            Request.ExtendTriggerByStampSheetRequest request
+        )
+		{
+		    var task = new ExtendTriggerByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ExtendTriggerByStampSheetTask ExtendTriggerByStampSheetAsync(
+                Request.ExtendTriggerByStampSheetRequest request
+        )
+		{
+			return new ExtendTriggerByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ExtendTriggerByStampSheetResult> ExtendTriggerByStampSheetAsync(
+            Request.ExtendTriggerByStampSheetRequest request
+        )
+		{
+		    var task = new ExtendTriggerByStampSheetTask(
 		        Gs2WebSocketSession,
 		        request
             );

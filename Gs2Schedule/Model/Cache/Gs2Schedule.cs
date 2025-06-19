@@ -200,6 +200,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
                         Request.TriggerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "extendTriggerByUserId":
+                    Result.ExtendTriggerByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        Request.ExtendTriggerByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteTrigger":
                     Result.DeleteTriggerResult.FromJson(resultPayload).PutCache(
                         cache,

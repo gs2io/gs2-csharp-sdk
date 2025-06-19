@@ -191,6 +191,60 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> ExtendFuture(
+            ExtendTriggerByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithTriggerName(this.TriggerName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ExtendTriggerByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> ExtendAsync(
+            #else
+        public async Task<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> ExtendAsync(
+            #endif
+            ExtendTriggerByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithTriggerName(this.TriggerName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ExtendTriggerByUserIdAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Schedule.Domain.Model.TriggerDomain> DeleteFuture(
             DeleteTriggerByUserIdRequest request
         ) {

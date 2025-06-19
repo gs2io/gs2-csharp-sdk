@@ -534,6 +534,12 @@ namespace Gs2.Gs2Schedule.Domain
         public static Action<string, TriggerByUserIdRequest, TriggerByUserIdResult> TriggerByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ExtendTriggerByUserIdRequest, ExtendTriggerByUserIdResult> ExtendTriggerByUserIdComplete = new UnityEvent<string, ExtendTriggerByUserIdRequest, ExtendTriggerByUserIdResult>();
+    #else
+        public static Action<string, ExtendTriggerByUserIdRequest, ExtendTriggerByUserIdResult> ExtendTriggerByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
@@ -552,6 +558,23 @@ namespace Gs2.Gs2Schedule.Domain
                         );
 
                         TriggerByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "ExtendTriggerByUserId": {
+                        var requestModel = ExtendTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ExtendTriggerByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        ExtendTriggerByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -611,6 +634,23 @@ namespace Gs2.Gs2Schedule.Domain
                     );
 
                     TriggerByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "extend_trigger_by_user_id": {
+                    var requestModel = ExtendTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = ExtendTriggerByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    ExtendTriggerByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel
