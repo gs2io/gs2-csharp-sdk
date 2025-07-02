@@ -43,6 +43,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this DescribeBillingsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeBillingsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Billing>())
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     default,
                     request.ProjectName,
                     item.Year,
-                    item.Month
+                    item.Month,
+                    timeOffset
                 );
             }
         }
@@ -62,6 +64,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this DescribeBillingsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeBillingsResult>> invokeImpl
         )
         {
@@ -77,6 +80,7 @@ namespace Gs2.Gs2Project.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -95,6 +99,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this DescribeBillingsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeBillingsResult>> invokeImpl
     #else
@@ -106,6 +111,7 @@ namespace Gs2.Gs2Project.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

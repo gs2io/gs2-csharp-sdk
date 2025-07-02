@@ -36,6 +36,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetFormModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFormModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeFormModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeFormModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CreateFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.UpdateFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeleteFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeMoldModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeMoldModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetMoldModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetMoldModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeMoldModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeMoldModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CreateMoldModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateMoldModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetMoldModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetMoldModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.UpdateMoldModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateMoldModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeleteMoldModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteMoldModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribePropertyFormModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribePropertyFormModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetPropertyFormModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPropertyFormModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribePropertyFormModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribePropertyFormModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.CreatePropertyFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreatePropertyFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetPropertyFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPropertyFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.UpdatePropertyFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdatePropertyFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeletePropertyFormModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeletePropertyFormModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetCurrentFormMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentFormMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.PreUpdateCurrentFormMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentFormMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.UpdateCurrentFormMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentFormMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.UpdateCurrentFormMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentFormMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeMoldsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeMoldsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeMoldsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeMoldsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetMoldResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetMoldRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetMoldByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetMoldByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SetMoldCapacityByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetMoldCapacityByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.AddMoldCapacityByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddMoldCapacityByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SubMoldCapacityResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SubMoldCapacityRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SubMoldCapacityByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SubMoldCapacityByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeleteMoldResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteMoldRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeleteMoldByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteMoldByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeFormsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeFormsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribeFormsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeFormsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetFormResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFormRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFormByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetFormWithSignatureResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFormWithSignatureRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetFormWithSignatureByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFormWithSignatureByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SetFormResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetFormRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SetFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetFormByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SetFormWithSignatureResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetFormWithSignatureRequest.FromJson(requestPayload)
                     );
                     break;
@@ -442,6 +500,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.AcquireActionsToFormPropertiesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcquireActionsToFormPropertiesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -449,6 +508,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeleteFormResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteFormRequest.FromJson(requestPayload)
                     );
                     break;
@@ -456,6 +516,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeleteFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteFormByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -463,6 +524,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribePropertyFormsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribePropertyFormsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -470,6 +532,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DescribePropertyFormsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribePropertyFormsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -477,6 +540,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetPropertyFormResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPropertyFormRequest.FromJson(requestPayload)
                     );
                     break;
@@ -484,6 +548,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetPropertyFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPropertyFormByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -491,6 +556,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetPropertyFormWithSignatureResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPropertyFormWithSignatureRequest.FromJson(requestPayload)
                     );
                     break;
@@ -498,6 +564,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.GetPropertyFormWithSignatureByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPropertyFormWithSignatureByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -505,6 +572,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SetPropertyFormResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetPropertyFormRequest.FromJson(requestPayload)
                     );
                     break;
@@ -512,6 +580,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SetPropertyFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetPropertyFormByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -519,6 +588,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.SetPropertyFormWithSignatureResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetPropertyFormWithSignatureRequest.FromJson(requestPayload)
                     );
                     break;
@@ -526,6 +596,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.AcquireActionsToPropertyFormPropertiesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcquireActionsToPropertyFormPropertiesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -533,6 +604,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeletePropertyFormResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeletePropertyFormRequest.FromJson(requestPayload)
                     );
                     break;
@@ -540,6 +612,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                     Result.DeletePropertyFormByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeletePropertyFormByUserIdRequest.FromJson(requestPayload)
                     );
                     break;

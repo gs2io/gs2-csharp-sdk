@@ -96,6 +96,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetInsightFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Log.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetInsightAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     .WithInsightName(this.InsightName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteInsightFuture(request)
                 );
@@ -178,6 +181,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteInsightAsync(request)
                 );
             }
@@ -199,7 +203,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Log.Model.Insight).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.InsightName
+                    this.InsightName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -209,6 +214,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.InsightName,
+                    null,
                     () => this.GetFuture(
                         new GetInsightRequest()
                     )
@@ -233,7 +239,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.Insight>(
                         (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Log.Model.Insight).CacheKey(
                             this.InsightName
@@ -242,7 +249,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Log.Model.Insight).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.InsightName
+                    this.InsightName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -251,6 +259,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.InsightName,
+                    null,
                     () => this.GetAsync(
                         new GetInsightRequest()
                     )
@@ -287,7 +296,8 @@ namespace Gs2.Gs2Log.Domain.Model
             (null as Gs2.Gs2Log.Model.Insight).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.InsightName
+                this.InsightName,
+                null
             );
         }
 
@@ -295,7 +305,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.Insight).CacheKey(
                     this.InsightName
@@ -330,7 +341,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Log.Model.Insight>(
                 (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.Insight).CacheKey(
                     this.InsightName

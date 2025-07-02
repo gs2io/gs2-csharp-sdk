@@ -97,6 +97,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SubscribeFuture(request)
                 );
                 yield return future;
@@ -129,6 +130,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SubscribeAsync(request)
             );
             var domain = this;
@@ -151,6 +153,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetSubscribeFuture(request)
                 );
                 yield return future;
@@ -181,6 +184,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetSubscribeAsync(request)
             );
             return result?.Item;
@@ -201,6 +205,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateNotificationTypeFuture(request)
                 );
                 yield return future;
@@ -233,6 +238,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateNotificationTypeAsync(request)
             );
             var domain = this;
@@ -255,6 +261,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UnsubscribeFuture(request)
                 );
                 yield return future;
@@ -287,6 +294,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UnsubscribeAsync(request)
             );
             var domain = this;
@@ -304,7 +312,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -315,6 +324,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetSubscribeRequest()
                     )
@@ -340,7 +350,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Subscribe>(
                         (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Chat.Model.Subscribe).CacheKey(
                             this.RoomName
@@ -350,7 +361,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -360,6 +372,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetSubscribeRequest()
                     )
@@ -397,7 +410,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.RoomName
+                this.RoomName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -406,7 +420,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheKey(
                     this.RoomName
@@ -442,7 +457,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheKey(
                     this.RoomName

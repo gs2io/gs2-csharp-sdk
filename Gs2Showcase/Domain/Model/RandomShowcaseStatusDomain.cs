@@ -101,6 +101,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.IncrementPurchaseCountByUserIdFuture(request)
                 );
                 yield return future;
@@ -138,6 +139,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.IncrementPurchaseCountByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
@@ -165,6 +167,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DecrementPurchaseCountByUserIdFuture(request)
                 );
                 yield return future;
@@ -202,6 +205,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DecrementPurchaseCountByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
@@ -229,6 +233,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ForceReDrawByUserIdFuture(request)
                 );
                 yield return future;
@@ -265,6 +270,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ForceReDrawByUserIdAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(

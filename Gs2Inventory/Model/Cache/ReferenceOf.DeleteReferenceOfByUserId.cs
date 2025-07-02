@@ -43,6 +43,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DeleteReferenceOfByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteReferenceOfByUserIdRequest request
         ) {
             (null as ItemSet).DeleteCache(
@@ -51,19 +52,22 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 request.UserId,
                 request.InventoryName,
                 request.ItemName,
-                request.ItemSetName
+                request.ItemSetName,
+                timeOffset
             );
             (null as ItemModel).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName,
-                request.ItemName
+                request.ItemName,
+                timeOffset
             );
             (null as Inventory).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.InventoryName
+                request.InventoryName,
+                timeOffset
             );
         }
 
@@ -72,6 +76,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DeleteReferenceOfByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteReferenceOfByUserIdResult>> invokeImpl
         )
         {
@@ -87,6 +92,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -105,6 +111,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DeleteReferenceOfByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteReferenceOfByUserIdResult>> invokeImpl
     #else
@@ -116,6 +123,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

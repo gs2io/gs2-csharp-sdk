@@ -102,6 +102,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetTransactionResultByUserIdFuture(request)
                 );
                 yield return future;
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetTransactionResultByUserIdAsync(request)
             );
             return result?.Item;
@@ -151,7 +153,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -162,6 +165,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TransactionId,
+                    null,
                     () => this.GetFuture(
                         new GetTransactionResultByUserIdRequest()
                     )
@@ -188,7 +192,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TransactionId
+                this.TransactionId,
+                null
             );
             if (find) {
                 return value;
@@ -198,6 +203,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.TransactionId,
+                null,
                 () => this.GetAsync(
                     new GetTransactionResultByUserIdRequest()
                 )
@@ -214,7 +220,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -225,6 +232,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TransactionId,
+                    null,
                     () => this.GetFuture(
                         new GetTransactionResultByUserIdRequest()
                     )
@@ -251,7 +259,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TransactionId
+                this.TransactionId,
+                null
             );
             if (find) {
                 return value;
@@ -261,6 +270,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.TransactionId,
+                null,
                 () => this.GetAsync(
                     new GetTransactionResultByUserIdRequest()
                 )
@@ -297,7 +307,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TransactionId
+                this.TransactionId,
+                null
             );
         }
 
@@ -306,7 +317,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheKey(
                     this.TransactionId
@@ -342,7 +354,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Distributor.Model.TransactionResult>(
                 (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheKey(
                     this.TransactionId

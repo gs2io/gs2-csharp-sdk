@@ -40,12 +40,14 @@ namespace Gs2.Gs2MegaField.Model.Cache
     {
         public static string CacheParentKey(
             this AreaModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "megaField",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "AreaModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string areaModelName,
+            int? timeOffset,
             Func<IFuture<AreaModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<AreaModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                         (null as AreaModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            areaModelName
+                            areaModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "areaModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    areaModelName
+                    areaModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string areaModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<AreaModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    areaModelName
+                    areaModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 (null as AreaModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    areaModelName
+                    areaModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "areaModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this AreaModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string areaModelName
+            string areaModelName,
+            int? timeOffset
         ) {
             return cache.Get<AreaModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     areaModelName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this AreaModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string areaModelName
+            string areaModelName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<AreaModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     areaModelName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     areaModelName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this AreaModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string areaModelName
+            string areaModelName,
+            int? timeOffset
         ) {
             cache.Delete<AreaModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     areaModelName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this AreaModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<AreaModelMaster[]> callback
         ) {
             cache.ListSubscribe<AreaModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this AreaModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<AreaModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

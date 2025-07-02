@@ -94,7 +94,8 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                             request.RankingName,
                             request.ClusterName,
                             request.Season,
-                            accessToken.UserId
+                            accessToken.UserId,
+                            accessToken.TimeOffset
                         );
                         item.PutCache(
                             domain.Cache,
@@ -102,7 +103,8 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                             request.RankingName,
                             request.ClusterName,
                             null,
-                            accessToken.UserId
+                            accessToken.UserId,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });
@@ -151,7 +153,8 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                     request.RankingName,
                     request.ClusterName,
                     request.Season,
-                    accessToken.UserId
+                    accessToken.UserId,
+                    accessToken.TimeOffset
                 );
                 item.PutCache(
                     domain.Cache,
@@ -159,7 +162,8 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                     request.RankingName,
                     request.ClusterName,
                     null,
-                    accessToken.UserId
+                    accessToken.UserId,
+                    accessToken.TimeOffset
                 );
                 return null;
             };

@@ -41,12 +41,14 @@ namespace Gs2.Gs2Log.Model.Cache
     {
         public static string CacheParentKey(
             this InGameLog self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "log",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "InGameLog"
             );
         }
@@ -68,6 +70,7 @@ namespace Gs2.Gs2Log.Model.Cache
             string namespaceName,
             string userId,
             string requestId,
+            int? timeOffset,
             Func<IFuture<InGameLog>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<InGameLog> self)
@@ -82,7 +85,8 @@ namespace Gs2.Gs2Log.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            requestId
+                            requestId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "inGameLog") {
                             self.OnComplete(default);
@@ -97,7 +101,8 @@ namespace Gs2.Gs2Log.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    requestId
+                    requestId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -116,6 +121,7 @@ namespace Gs2.Gs2Log.Model.Cache
             string namespaceName,
             string userId,
             string requestId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<InGameLog>> fetchImpl
     #else
@@ -128,7 +134,8 @@ namespace Gs2.Gs2Log.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    requestId
+                    requestId,
+                    timeOffset
                 );
                 return item;
             }
@@ -137,7 +144,8 @@ namespace Gs2.Gs2Log.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    requestId
+                    requestId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "inGameLog") {
                     throw;
@@ -152,14 +160,16 @@ namespace Gs2.Gs2Log.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string requestId
+            string requestId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
             return cache.Get<InGameLog>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     requestId
@@ -172,14 +182,16 @@ namespace Gs2.Gs2Log.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string requestId
+            string requestId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     requestId
@@ -194,14 +206,16 @@ namespace Gs2.Gs2Log.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string requestId
+            string requestId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
             cache.Delete<InGameLog>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     requestId
@@ -214,11 +228,13 @@ namespace Gs2.Gs2Log.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<InGameLog[]> callback
         ) {
             cache.ListSubscribe<InGameLog>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -230,11 +246,13 @@ namespace Gs2.Gs2Log.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<InGameLog>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

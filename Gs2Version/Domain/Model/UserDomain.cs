@@ -126,7 +126,8 @@ namespace Gs2.Gs2Version.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
                 (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -170,7 +171,8 @@ namespace Gs2.Gs2Version.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
                 (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -182,7 +184,8 @@ namespace Gs2.Gs2Version.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Version.Model.AcceptVersion>(
                 (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -223,6 +226,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CalculateSignatureFuture(request)
                 );
                 yield return future;
@@ -254,6 +258,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CalculateSignatureAsync(request)
             );
             var domain = this;

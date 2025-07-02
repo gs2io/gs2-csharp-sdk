@@ -43,12 +43,14 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this GetNodeModelResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetNodeModelRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.NodeModelName
+                request.NodeModelName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this GetNodeModelRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetNodeModelResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this GetNodeModelRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetNodeModelResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

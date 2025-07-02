@@ -36,6 +36,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.QueryAccessLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.QueryAccessLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.CountAccessLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CountAccessLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.QueryIssueStampSheetLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.QueryIssueStampSheetLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.CountIssueStampSheetLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CountIssueStampSheetLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.QueryExecuteStampSheetLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.QueryExecuteStampSheetLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.CountExecuteStampSheetLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CountExecuteStampSheetLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.QueryExecuteStampTaskLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.QueryExecuteStampTaskLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.CountExecuteStampTaskLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CountExecuteStampTaskLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.QueryInGameLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.QueryInGameLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.SendInGameLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SendInGameLogRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.SendInGameLogByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SendInGameLogByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.QueryAccessLogWithTelemetryResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.QueryAccessLogWithTelemetryRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.DescribeInsightsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeInsightsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.CreateInsightResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateInsightRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.GetInsightResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetInsightRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Log.Model.Cache
                     Result.DeleteInsightResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteInsightRequest.FromJson(requestPayload)
                     );
                     break;

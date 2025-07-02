@@ -119,6 +119,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetJobByUserIdFuture(request)
                 );
                 yield return future;
@@ -149,6 +150,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetJobByUserIdAsync(request)
             );
             return result?.Item;
@@ -169,6 +171,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteJobByUserIdFuture(request)
                 );
                 yield return future;
@@ -202,6 +205,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteJobByUserIdAsync(request)
                 );
             }
@@ -224,7 +228,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.JobName
+                    this.JobName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -235,6 +240,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.JobName,
+                    null,
                     () => this.GetFuture(
                         new GetJobByUserIdRequest()
                     )
@@ -261,7 +267,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.JobName
+                this.JobName,
+                null
             );
             if (find) {
                 return value;
@@ -271,6 +278,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.JobName,
+                null,
                 () => this.GetAsync(
                     new GetJobByUserIdRequest()
                 )
@@ -307,7 +315,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.JobName
+                this.JobName,
+                null
             );
         }
 
@@ -316,7 +325,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
                     this.JobName
@@ -352,7 +362,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2JobQueue.Model.Job>(
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
                     this.JobName

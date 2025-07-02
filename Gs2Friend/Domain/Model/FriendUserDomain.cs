@@ -104,6 +104,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetFriendByUserIdFuture(request)
                 );
                 yield return future;
@@ -135,6 +136,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetFriendByUserIdAsync(request)
             );
             return result?.Item;
@@ -155,7 +157,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.WithProfile,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -167,6 +170,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId,
                     this.WithProfile,
                     this.TargetUserId,
+                    null,
                     () => this.GetFuture(
                         new GetFriendByUserIdRequest()
                     )
@@ -193,7 +197,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.WithProfile
+                            this.WithProfile,
+                            null
                         ),
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
                             this.TargetUserId
@@ -204,7 +209,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.WithProfile,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -215,6 +221,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId,
                     this.WithProfile,
                     this.TargetUserId,
+                    null,
                     () => this.GetAsync(
                         new GetFriendByUserIdRequest()
                     )
@@ -253,7 +260,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.WithProfile,
-                this.TargetUserId
+                this.TargetUserId,
+                null
             );
         }
 
@@ -263,7 +271,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile
+                    this.WithProfile,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
                     this.TargetUserId
@@ -300,7 +309,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile
+                    this.WithProfile,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
                     this.TargetUserId

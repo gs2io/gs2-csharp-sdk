@@ -116,7 +116,8 @@ namespace Gs2.Gs2Freeze.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Freeze.Model.Output>(
                 (null as Gs2.Gs2Freeze.Model.Output).CacheParentKey(
-                    this.StageName
+                    this.StageName,
+                    null
                 ),
                 callback,
                 () =>
@@ -159,7 +160,8 @@ namespace Gs2.Gs2Freeze.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Freeze.Model.Output>(
                 (null as Gs2.Gs2Freeze.Model.Output).CacheParentKey(
-                    this.StageName
+                    this.StageName,
+                    null
                 ),
                 callbackId
             );
@@ -170,7 +172,8 @@ namespace Gs2.Gs2Freeze.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Freeze.Model.Output>(
                 (null as Gs2.Gs2Freeze.Model.Output).CacheParentKey(
-                    this.StageName
+                    this.StageName,
+                    null
                 )
             );
         }
@@ -201,6 +204,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetStageFuture(request)
                 );
                 yield return future;
@@ -229,6 +233,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetStageAsync(request)
             );
             return result?.Item;
@@ -246,6 +251,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
                     .WithStageName(this.StageName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PromoteStageFuture(request)
                 );
@@ -277,6 +283,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PromoteStageAsync(request)
             );
             var domain = this;
@@ -296,6 +303,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
                     .WithStageName(this.StageName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.RollbackStageFuture(request)
                 );
@@ -327,6 +335,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.RollbackStageAsync(request)
             );
             var domain = this;
@@ -346,7 +355,8 @@ namespace Gs2.Gs2Freeze.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Freeze.Model.Stage).GetCache(
                     this._gs2.Cache,
-                    this.StageName
+                    this.StageName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -355,6 +365,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 var future = (null as Gs2.Gs2Freeze.Model.Stage).FetchFuture(
                     this._gs2.Cache,
                     this.StageName,
+                    null,
                     () => this.GetFuture(
                         new GetStageRequest()
                     )
@@ -379,6 +390,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Freeze.Model.Stage>(
                         (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
+                            null
                         ),
                         (null as Gs2.Gs2Freeze.Model.Stage).CacheKey(
                             this.StageName
@@ -386,7 +398,8 @@ namespace Gs2.Gs2Freeze.Domain.Model
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Freeze.Model.Stage).GetCache(
                     this._gs2.Cache,
-                    this.StageName
+                    this.StageName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -394,6 +407,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 return await (null as Gs2.Gs2Freeze.Model.Stage).FetchAsync(
                     this._gs2.Cache,
                     this.StageName,
+                    null,
                     () => this.GetAsync(
                         new GetStageRequest()
                     )
@@ -429,7 +443,8 @@ namespace Gs2.Gs2Freeze.Domain.Model
         {
             (null as Gs2.Gs2Freeze.Model.Stage).DeleteCache(
                 this._gs2.Cache,
-                this.StageName
+                this.StageName,
+                null
             );
         }
 
@@ -437,6 +452,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Freeze.Model.Stage).CacheKey(
                     this.StageName
@@ -471,6 +487,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Freeze.Model.Stage>(
                 (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Freeze.Model.Stage).CacheKey(
                     this.StageName

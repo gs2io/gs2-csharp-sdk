@@ -43,12 +43,14 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this CreateSalesItemGroupMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             CreateSalesItemGroupMasterRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.Name
+                self.Item.Name,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this CreateSalesItemGroupMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<CreateSalesItemGroupMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this CreateSalesItemGroupMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CreateSalesItemGroupMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

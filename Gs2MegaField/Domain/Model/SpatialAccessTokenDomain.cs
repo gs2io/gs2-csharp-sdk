@@ -103,6 +103,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.PutPositionFuture(request)
                 );
                 yield return future;
@@ -136,6 +137,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.PutPositionAsync(request)
             );
             var domain = this;
@@ -159,6 +161,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.FetchPositionFuture(request)
                 );
                 yield return future;
@@ -197,6 +200,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.FetchPositionAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2MegaField.Domain.Model.SpatialAccessTokenDomain(
@@ -225,6 +229,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.NearUserIdsFuture(request)
                 );
                 yield return future;
@@ -267,6 +272,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.NearUserIdsAsync(request)
             );
             var domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
@@ -299,6 +305,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ActionFuture(request)
                 );
                 yield return future;
@@ -340,6 +347,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ActionAsync(request)
             );
             var domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];
@@ -367,7 +375,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.AreaModelName,
-                    this.LayerModelName
+                    this.LayerModelName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -391,7 +400,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.AreaModelName,
-                this.LayerModelName
+                this.LayerModelName,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -430,7 +440,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.AreaModelName,
-                this.LayerModelName
+                this.LayerModelName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -439,7 +450,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheKey(
                     this.AreaModelName,
@@ -476,7 +488,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2MegaField.Model.Spatial>(
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheKey(
                     this.AreaModelName,

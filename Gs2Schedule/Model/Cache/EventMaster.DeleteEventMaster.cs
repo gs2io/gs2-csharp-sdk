@@ -43,12 +43,14 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this DeleteEventMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteEventMasterRequest request
         ) {
             (null as EventMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.EventName
+                request.EventName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this DeleteEventMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteEventMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this DeleteEventMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteEventMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

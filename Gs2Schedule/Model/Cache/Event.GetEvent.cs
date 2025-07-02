@@ -45,6 +45,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this GetEventResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetEventRequest request
         ) {
             self.Item?.PutCache(
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 request.NamespaceName,
                 userId,
                 request.EventName,
-                request.IsInSchedule ?? true
+                request.IsInSchedule ?? true,
+                timeOffset
             );
             self.RepeatSchedule?.PutCache(
                 cache,
@@ -68,6 +70,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this GetEventRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetEventResult>> invokeImpl
         )
         {
@@ -83,6 +86,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -101,6 +105,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this GetEventRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetEventResult>> invokeImpl
     #else
@@ -112,6 +117,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

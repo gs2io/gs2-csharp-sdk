@@ -40,12 +40,14 @@ namespace Gs2.Gs2Experience.Model.Cache
     {
         public static string CacheParentKey(
             this ExperienceModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "experience",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "ExperienceModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Experience.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string experienceName,
+            int? timeOffset,
             Func<IFuture<ExperienceModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ExperienceModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Experience.Model.Cache
                         (null as ExperienceModel).PutCache(
                             cache,
                             namespaceName,
-                            experienceName
+                            experienceName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "experienceModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Experience.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    experienceName
+                    experienceName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Experience.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string experienceName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ExperienceModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Experience.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    experienceName
+                    experienceName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Experience.Model.Cache
                 (null as ExperienceModel).PutCache(
                     cache,
                     namespaceName,
-                    experienceName
+                    experienceName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "experienceModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Experience.Model.Cache
             this ExperienceModel self,
             CacheDatabase cache,
             string namespaceName,
-            string experienceName
+            string experienceName,
+            int? timeOffset
         ) {
             return cache.Get<ExperienceModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     experienceName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Experience.Model.Cache
             this ExperienceModel self,
             CacheDatabase cache,
             string namespaceName,
-            string experienceName
+            string experienceName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     experienceName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Experience.Model.Cache
             this ExperienceModel self,
             CacheDatabase cache,
             string namespaceName,
-            string experienceName
+            string experienceName,
+            int? timeOffset
         ) {
             cache.Delete<ExperienceModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     experienceName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Experience.Model.Cache
             this ExperienceModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<ExperienceModel[]> callback
         ) {
             cache.ListSubscribe<ExperienceModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Experience.Model.Cache
             this ExperienceModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ExperienceModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

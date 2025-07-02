@@ -129,7 +129,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
                 (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -183,7 +184,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
                 (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -197,7 +199,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2SerialKey.Model.SerialKey>(
                 (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -229,6 +232,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DownloadSerialCodesFuture(request)
                 );
                 yield return future;
@@ -259,6 +263,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DownloadSerialCodesAsync(request)
             );
             var domain = this;
@@ -279,6 +284,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.IssueOnceFuture(request)
                 );
                 yield return future;
@@ -314,6 +320,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.IssueOnceAsync(request)
             );
             var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
@@ -340,6 +347,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyCodeByUserIdFuture(request)
                 );
                 yield return future;
@@ -376,6 +384,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyCodeByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
@@ -402,6 +411,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RevertUseByUserIdFuture(request)
                 );
                 yield return future;
@@ -438,6 +448,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RevertUseByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(

@@ -43,12 +43,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DeleteRatingModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteRatingModelMasterRequest request
         ) {
             (null as RatingModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.RatingName
+                request.RatingName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DeleteRatingModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteRatingModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DeleteRatingModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteRatingModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

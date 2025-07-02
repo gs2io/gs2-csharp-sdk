@@ -40,12 +40,14 @@ namespace Gs2.Gs2Money2.Model.Cache
     {
         public static string CacheParentKey(
             this UnusedBalance self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "money2",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "UnusedBalance"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string currency,
+            int? timeOffset,
             Func<IFuture<UnusedBalance>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<UnusedBalance> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                         (null as UnusedBalance).PutCache(
                             cache,
                             namespaceName,
-                            currency
+                            currency,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "unusedBalance") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    currency
+                    currency,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string currency,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UnusedBalance>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    currency
+                    currency,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                 (null as UnusedBalance).PutCache(
                     cache,
                     namespaceName,
-                    currency
+                    currency,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "unusedBalance") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this UnusedBalance self,
             CacheDatabase cache,
             string namespaceName,
-            string currency
+            string currency,
+            int? timeOffset
         ) {
             return cache.Get<UnusedBalance>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     currency
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this UnusedBalance self,
             CacheDatabase cache,
             string namespaceName,
-            string currency
+            string currency,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<UnusedBalance>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     currency
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     currency
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this UnusedBalance self,
             CacheDatabase cache,
             string namespaceName,
-            string currency
+            string currency,
+            int? timeOffset
         ) {
             cache.Delete<UnusedBalance>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     currency
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this UnusedBalance self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<UnusedBalance[]> callback
         ) {
             cache.ListSubscribe<UnusedBalance>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this UnusedBalance self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<UnusedBalance>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -40,12 +40,14 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
     {
         public static string CacheParentKey(
             this MatchSession self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "seasonRating",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "MatchSession"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string sessionName,
+            int? timeOffset,
             Func<IFuture<MatchSession>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<MatchSession> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                         (null as MatchSession).PutCache(
                             cache,
                             namespaceName,
-                            sessionName
+                            sessionName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "matchSession") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    sessionName
+                    sessionName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string sessionName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<MatchSession>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    sessionName
+                    sessionName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 (null as MatchSession).PutCache(
                     cache,
                     namespaceName,
-                    sessionName
+                    sessionName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "matchSession") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this MatchSession self,
             CacheDatabase cache,
             string namespaceName,
-            string sessionName
+            string sessionName,
+            int? timeOffset
         ) {
             return cache.Get<MatchSession>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     sessionName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this MatchSession self,
             CacheDatabase cache,
             string namespaceName,
-            string sessionName
+            string sessionName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<MatchSession>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     sessionName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     sessionName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this MatchSession self,
             CacheDatabase cache,
             string namespaceName,
-            string sessionName
+            string sessionName,
+            int? timeOffset
         ) {
             cache.Delete<MatchSession>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     sessionName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this MatchSession self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<MatchSession[]> callback
         ) {
             cache.ListSubscribe<MatchSession>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this MatchSession self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<MatchSession>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

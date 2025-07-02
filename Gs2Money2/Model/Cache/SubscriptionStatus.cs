@@ -41,13 +41,15 @@ namespace Gs2.Gs2Money2.Model.Cache
         public static string CacheParentKey(
             this SubscriptionStatus self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "money2",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "SubscriptionStatus"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             string namespaceName,
             string userId,
             string contentName,
+            int? timeOffset,
             Func<IFuture<SubscriptionStatus>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SubscriptionStatus> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            contentName
+                            contentName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "subscriptionStatus") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    contentName
+                    contentName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             string namespaceName,
             string userId,
             string contentName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SubscriptionStatus>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    contentName
+                    contentName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    contentName
+                    contentName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "subscriptionStatus") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string contentName
+            string contentName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             return cache.Get<SubscriptionStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     contentName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string contentName
+            string contentName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     contentName
@@ -197,7 +209,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string contentName
+            string contentName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -205,7 +218,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             cache.Delete<SubscriptionStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     contentName
@@ -218,12 +232,14 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<SubscriptionStatus[]> callback
         ) {
             cache.ListSubscribe<SubscriptionStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -235,12 +251,14 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SubscriptionStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

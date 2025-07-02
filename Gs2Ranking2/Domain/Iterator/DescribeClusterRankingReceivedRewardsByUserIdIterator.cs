@@ -123,7 +123,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        RankingName ?? default
+                        RankingName ?? default,
+                        null
                     ),
                     out var list
             )) {
@@ -165,6 +166,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -173,7 +175,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            RankingName ?? default
+                            RankingName ?? default,
+                            null
                         )
                     );
                 }
@@ -256,7 +259,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            RankingName ?? default
+                            RankingName ?? default,
+                            null
                        ),
                        "ListClusterRankingReceivedReward"
                    ).LockAsync()) {

@@ -36,6 +36,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.DescribeJobsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeJobsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.GetJobByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetJobByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.PushByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PushByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.RunResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.RunByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.DeleteJobResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteJobRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.DeleteJobByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteJobByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.GetJobResultResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetJobResultRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     Result.GetJobResultByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetJobResultByUserIdRequest.FromJson(requestPayload)
                     );
                     break;

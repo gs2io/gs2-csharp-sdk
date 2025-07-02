@@ -96,6 +96,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetStaminaModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetStaminaModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     .WithStaminaName(this.StaminaName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateStaminaModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateStaminaModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     .WithStaminaName(this.StaminaName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteStaminaModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteStaminaModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.StaminaName
+                    this.StaminaName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.StaminaName,
+                    null,
                     () => this.GetFuture(
                         new GetStaminaModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
                         (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheKey(
                             this.StaminaName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.StaminaName
+                    this.StaminaName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.StaminaName,
+                    null,
                     () => this.GetAsync(
                         new GetStaminaModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.StaminaName
+                this.StaminaName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheKey(
                     this.StaminaName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
                 (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.StaminaModelMaster).CacheKey(
                     this.StaminaName

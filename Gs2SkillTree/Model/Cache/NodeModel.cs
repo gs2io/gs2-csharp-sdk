@@ -40,12 +40,14 @@ namespace Gs2.Gs2SkillTree.Model.Cache
     {
         public static string CacheParentKey(
             this NodeModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "skillTree",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "NodeModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string nodeModelName,
+            int? timeOffset,
             Func<IFuture<NodeModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<NodeModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                         (null as NodeModel).PutCache(
                             cache,
                             namespaceName,
-                            nodeModelName
+                            nodeModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "nodeModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    nodeModelName
+                    nodeModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string nodeModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<NodeModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    nodeModelName
+                    nodeModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 (null as NodeModel).PutCache(
                     cache,
                     namespaceName,
-                    nodeModelName
+                    nodeModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "nodeModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this NodeModel self,
             CacheDatabase cache,
             string namespaceName,
-            string nodeModelName
+            string nodeModelName,
+            int? timeOffset
         ) {
             return cache.Get<NodeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     nodeModelName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this NodeModel self,
             CacheDatabase cache,
             string namespaceName,
-            string nodeModelName
+            string nodeModelName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     nodeModelName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this NodeModel self,
             CacheDatabase cache,
             string namespaceName,
-            string nodeModelName
+            string nodeModelName,
+            int? timeOffset
         ) {
             cache.Delete<NodeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     nodeModelName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this NodeModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<NodeModel[]> callback
         ) {
             cache.ListSubscribe<NodeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this NodeModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<NodeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

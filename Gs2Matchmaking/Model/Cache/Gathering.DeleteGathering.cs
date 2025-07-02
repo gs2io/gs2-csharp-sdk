@@ -43,13 +43,15 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DeleteGatheringResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteGatheringRequest request
         ) {
             (null as Gathering).DeleteCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.GatheringName
+                request.GatheringName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DeleteGatheringRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteGatheringResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DeleteGatheringRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteGatheringResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

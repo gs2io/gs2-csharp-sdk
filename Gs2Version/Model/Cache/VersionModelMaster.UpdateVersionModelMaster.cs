@@ -43,12 +43,14 @@ namespace Gs2.Gs2Version.Model.Cache
             this UpdateVersionModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateVersionModelMasterRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.VersionName
+                request.VersionName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Version.Model.Cache
             this UpdateVersionModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateVersionModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Version.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Version.Model.Cache
             this UpdateVersionModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateVersionModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Version.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

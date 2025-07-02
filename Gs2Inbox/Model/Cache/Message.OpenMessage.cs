@@ -45,18 +45,21 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this OpenMessageResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             OpenMessageRequest request
         ) {
             (null as Message).DeleteCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.MessageName
+                request.MessageName,
+                timeOffset
             );
             cache.ClearListCache<Message>(
                 (null as Message).CacheParentKey(
                     request.NamespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 )
             );
         }
@@ -66,6 +69,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this OpenMessageRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<OpenMessageResult>> invokeImpl
         )
         {
@@ -81,6 +85,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -99,6 +104,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this OpenMessageRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<OpenMessageResult>> invokeImpl
     #else
@@ -110,6 +116,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

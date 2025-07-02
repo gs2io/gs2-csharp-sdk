@@ -113,7 +113,8 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                     (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        ShowcaseName
+                        ShowcaseName,
+                        null
                     ),
                     out var list
             )) {
@@ -149,6 +150,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -157,7 +159,8 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                         (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            ShowcaseName
+                            ShowcaseName,
+                            null
                         )
                     );
                 }
@@ -240,7 +243,8 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                         (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            ShowcaseName
+                            ShowcaseName,
+                            null
                        ),
                        "ListRandomDisplayItem"
                    ).LockAsync()) {

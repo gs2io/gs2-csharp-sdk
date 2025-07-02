@@ -100,6 +100,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetBigItemModelMasterFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetBigItemModelMasterAsync(request)
             );
             return result?.Item;
@@ -149,6 +151,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateBigItemModelMasterFuture(request)
                 );
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateBigItemModelMasterAsync(request)
             );
             var domain = this;
@@ -203,6 +207,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     .WithItemName(this.ItemName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteBigItemModelMasterFuture(request)
                 );
@@ -239,6 +244,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteBigItemModelMasterAsync(request)
                 );
             }
@@ -261,7 +267,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.InventoryName,
-                    this.ItemName
+                    this.ItemName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -272,6 +279,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.InventoryName,
                     this.ItemName,
+                    null,
                     () => this.GetFuture(
                         new GetBigItemModelMasterRequest()
                     )
@@ -297,7 +305,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigItemModelMaster>(
                         (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).CacheParentKey(
                             this.NamespaceName,
-                            this.InventoryName
+                            this.InventoryName,
+                            null
                         ),
                         (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).CacheKey(
                             this.ItemName
@@ -307,7 +316,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.InventoryName,
-                    this.ItemName
+                    this.ItemName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -317,6 +327,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.InventoryName,
                     this.ItemName,
+                    null,
                     () => this.GetAsync(
                         new GetBigItemModelMasterRequest()
                     )
@@ -354,7 +365,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.InventoryName,
-                this.ItemName
+                this.ItemName,
+                null
             );
         }
 
@@ -363,7 +375,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).CacheParentKey(
                     this.NamespaceName,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).CacheKey(
                     this.ItemName
@@ -399,7 +412,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Inventory.Model.BigItemModelMaster>(
                 (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).CacheParentKey(
                     this.NamespaceName,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).CacheKey(
                     this.ItemName

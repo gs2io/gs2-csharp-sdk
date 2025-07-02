@@ -43,12 +43,14 @@ namespace Gs2.Gs2News.Model.Cache
             this GetProgressResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetProgressRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UploadToken
+                self.Item.UploadToken,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2News.Model.Cache
             this GetProgressRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetProgressResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2News.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2News.Model.Cache
             this GetProgressRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetProgressResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2News.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

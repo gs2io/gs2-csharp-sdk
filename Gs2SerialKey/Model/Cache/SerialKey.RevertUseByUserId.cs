@@ -43,18 +43,21 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this RevertUseByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             RevertUseByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                self.Item.Code
+                self.Item.Code,
+                timeOffset
             );
             self.CampaignModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.CampaignModelName
+                self.Item.CampaignModelName,
+                timeOffset
             );
         }
 
@@ -63,6 +66,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this RevertUseByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<RevertUseByUserIdResult>> invokeImpl
         )
         {
@@ -78,6 +82,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +101,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this RevertUseByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RevertUseByUserIdResult>> invokeImpl
     #else
@@ -107,6 +113,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -111,6 +111,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetReferenceOfFuture(request)
                 );
                 yield return future;
@@ -144,6 +145,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetReferenceOfAsync(request)
             );
             return result?.Item;
@@ -167,6 +169,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyReferenceOfFuture(request)
                 );
                 yield return future;
@@ -210,6 +213,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyReferenceOfAsync(request)
             );
             var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
@@ -243,6 +247,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteReferenceOfFuture(request)
                 );
                 yield return future;
@@ -289,6 +294,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteReferenceOfAsync(request)
                 );
             }
@@ -309,7 +315,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
-                    this.ReferenceOf
+                    this.ReferenceOf,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -323,6 +330,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.ItemName,
                     this.ItemSetName,
                     this.ReferenceOf,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetReferenceOfRequest()
                     )
@@ -352,7 +360,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                this.ReferenceOf
+                this.ReferenceOf,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -365,6 +374,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.ItemName,
                 this.ItemSetName,
                 this.ReferenceOf,
+                this.AccessToken?.TimeOffset,
                 () => this.GetAsync(
                     new GetReferenceOfRequest()
                 )
@@ -404,7 +414,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                this.ReferenceOf
+                this.ReferenceOf,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -416,7 +427,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
-                    this.ItemSetName
+                    this.ItemSetName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheKey(
                     this.ReferenceOf
@@ -455,7 +467,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
-                    this.ItemSetName
+                    this.ItemSetName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheKey(
                     this.ReferenceOf

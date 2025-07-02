@@ -100,6 +100,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetTriggerByUserIdFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetTriggerByUserIdAsync(request)
             );
             return result?.Item;
@@ -150,6 +152,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.TriggerByUserIdFuture(request)
                 );
                 yield return future;
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.TriggerByUserIdAsync(request)
             );
             var domain = this;
@@ -204,6 +208,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ExtendTriggerByUserIdFuture(request)
                 );
                 yield return future;
@@ -236,6 +241,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ExtendTriggerByUserIdAsync(request)
             );
             var domain = this;
@@ -258,6 +264,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTriggerByUserIdFuture(request)
                 );
                 yield return future;
@@ -293,6 +300,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTriggerByUserIdAsync(request)
                 );
             }
@@ -316,6 +324,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyTriggerByUserIdFuture(request)
                 );
                 yield return future;
@@ -347,6 +356,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyTriggerByUserIdAsync(request)
             );
             var domain = this;
@@ -367,7 +377,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TriggerName
+                    this.TriggerName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -378,6 +389,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TriggerName,
+                    null,
                     () => this.GetFuture(
                         new GetTriggerByUserIdRequest()
                     )
@@ -403,7 +415,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Trigger>(
                         (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Schedule.Model.Trigger).CacheKey(
                             this.TriggerName
@@ -413,7 +426,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TriggerName
+                    this.TriggerName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -423,6 +437,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TriggerName,
+                    null,
                     () => this.GetAsync(
                         new GetTriggerByUserIdRequest()
                     )
@@ -460,7 +475,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TriggerName
+                this.TriggerName,
+                null
             );
         }
 
@@ -469,7 +485,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheKey(
                     this.TriggerName
@@ -505,7 +522,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheKey(
                     this.TriggerName

@@ -45,6 +45,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this GetBallotByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetBallotByUserIdRequest request
         ) {
             new SignedBallot {
@@ -55,7 +56,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 request.NamespaceName,
                 request.UserId,
                 request.SeasonName,
-                request.SessionName
+                request.SessionName,
+                timeOffset
             );
         }
 
@@ -64,6 +66,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this GetBallotByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetBallotByUserIdResult>> invokeImpl
         )
         {
@@ -79,6 +82,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +101,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this GetBallotByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetBallotByUserIdResult>> invokeImpl
     #else
@@ -108,6 +113,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

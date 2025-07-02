@@ -41,13 +41,15 @@ namespace Gs2.Gs2Lock.Model.Cache
         public static string CacheParentKey(
             this Mutex self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "lock",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Mutex"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Lock.Model.Cache
             string namespaceName,
             string userId,
             string propertyId,
+            int? timeOffset,
             Func<IFuture<Mutex>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Mutex> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Lock.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            propertyId
+                            propertyId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "mutex") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Lock.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Lock.Model.Cache
             string namespaceName,
             string userId,
             string propertyId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Mutex>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Lock.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Lock.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "mutex") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             return cache.Get<Mutex>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyId
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             var (value, find) = cache.Get<Mutex>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyId
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyId
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             cache.Delete<Mutex>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyId
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Lock.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Mutex[]> callback
         ) {
             cache.ListSubscribe<Mutex>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Lock.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Mutex>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

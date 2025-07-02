@@ -36,6 +36,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeBalanceParameterModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBalanceParameterModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetBalanceParameterModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBalanceParameterModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeBalanceParameterModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBalanceParameterModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.CreateBalanceParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateBalanceParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetBalanceParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBalanceParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.UpdateBalanceParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateBalanceParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DeleteBalanceParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteBalanceParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeRarityParameterModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRarityParameterModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetRarityParameterModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRarityParameterModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeRarityParameterModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRarityParameterModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.CreateRarityParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateRarityParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetRarityParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRarityParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.UpdateRarityParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateRarityParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DeleteRarityParameterModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRarityParameterModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetCurrentParameterMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentParameterMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.PreUpdateCurrentParameterMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentParameterMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.UpdateCurrentParameterMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentParameterMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.UpdateCurrentParameterMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentParameterMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeBalanceParameterStatusesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBalanceParameterStatusesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeBalanceParameterStatusesByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBalanceParameterStatusesByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetBalanceParameterStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBalanceParameterStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetBalanceParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBalanceParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DeleteBalanceParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteBalanceParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.ReDrawBalanceParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ReDrawBalanceParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.SetBalanceParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetBalanceParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeRarityParameterStatusesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRarityParameterStatusesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DescribeRarityParameterStatusesByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRarityParameterStatusesByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetRarityParameterStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRarityParameterStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.GetRarityParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRarityParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.DeleteRarityParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRarityParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.ReDrawRarityParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ReDrawRarityParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.AddRarityParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddRarityParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.VerifyRarityParameterStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyRarityParameterStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.VerifyRarityParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyRarityParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                     Result.SetRarityParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetRarityParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;

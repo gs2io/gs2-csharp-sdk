@@ -120,6 +120,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.FreezeMasterDataByUserIdFuture(request)
                 );
                 yield return future;
@@ -156,6 +157,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.FreezeMasterDataByUserIdAsync(request)
             );
             var domain = this;
@@ -182,6 +184,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RunTransactionFuture(request)
                 );
                 yield return future;
@@ -218,6 +221,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RunTransactionAsync(request)
             );
             var domain = new Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain(

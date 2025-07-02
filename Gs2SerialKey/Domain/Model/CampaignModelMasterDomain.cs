@@ -96,6 +96,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetCampaignModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetCampaignModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     .WithCampaignModelName(this.CampaignModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateCampaignModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateCampaignModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     .WithCampaignModelName(this.CampaignModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteCampaignModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteCampaignModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.CampaignModelName
+                    this.CampaignModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CampaignModelName,
+                    null,
                     () => this.GetFuture(
                         new GetCampaignModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
                         (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheKey(
                             this.CampaignModelName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.CampaignModelName
+                    this.CampaignModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CampaignModelName,
+                    null,
                     () => this.GetAsync(
                         new GetCampaignModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.CampaignModelName
+                this.CampaignModelName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheKey(
                     this.CampaignModelName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
                 (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheKey(
                     this.CampaignModelName

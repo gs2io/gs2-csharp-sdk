@@ -43,13 +43,15 @@ namespace Gs2.Gs2Log.Model.Cache
             this SendInGameLogResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             SendInGameLogRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.RequestId
+                self.Item.RequestId,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Log.Model.Cache
             this SendInGameLogRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<SendInGameLogResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Log.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Log.Model.Cache
             this SendInGameLogRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SendInGameLogResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Log.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

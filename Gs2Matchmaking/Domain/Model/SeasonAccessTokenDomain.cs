@@ -132,7 +132,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -178,7 +179,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -192,7 +194,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -256,7 +259,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -302,7 +306,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -316,7 +321,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

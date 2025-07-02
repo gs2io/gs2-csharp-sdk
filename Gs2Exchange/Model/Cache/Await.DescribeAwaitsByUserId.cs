@@ -43,6 +43,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this DescribeAwaitsByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeAwaitsByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Await>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this DescribeAwaitsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeAwaitsByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this DescribeAwaitsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeAwaitsByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

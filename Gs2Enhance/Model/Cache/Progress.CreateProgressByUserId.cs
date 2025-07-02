@@ -43,12 +43,14 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this CreateProgressByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             CreateProgressByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this CreateProgressByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<CreateProgressByUserIdResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this CreateProgressByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CreateProgressByUserIdResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

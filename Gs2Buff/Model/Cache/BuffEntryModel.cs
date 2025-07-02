@@ -40,12 +40,14 @@ namespace Gs2.Gs2Buff.Model.Cache
     {
         public static string CacheParentKey(
             this BuffEntryModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "buff",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "BuffEntryModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Buff.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string buffEntryName,
+            int? timeOffset,
             Func<IFuture<BuffEntryModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<BuffEntryModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Buff.Model.Cache
                         (null as BuffEntryModel).PutCache(
                             cache,
                             namespaceName,
-                            buffEntryName
+                            buffEntryName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "buffEntryModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Buff.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    buffEntryName
+                    buffEntryName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Buff.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string buffEntryName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BuffEntryModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Buff.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    buffEntryName
+                    buffEntryName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Buff.Model.Cache
                 (null as BuffEntryModel).PutCache(
                     cache,
                     namespaceName,
-                    buffEntryName
+                    buffEntryName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "buffEntryModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Buff.Model.Cache
             this BuffEntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string buffEntryName
+            string buffEntryName,
+            int? timeOffset
         ) {
             return cache.Get<BuffEntryModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     buffEntryName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Buff.Model.Cache
             this BuffEntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string buffEntryName
+            string buffEntryName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     buffEntryName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Buff.Model.Cache
             this BuffEntryModel self,
             CacheDatabase cache,
             string namespaceName,
-            string buffEntryName
+            string buffEntryName,
+            int? timeOffset
         ) {
             cache.Delete<BuffEntryModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     buffEntryName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Buff.Model.Cache
             this BuffEntryModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<BuffEntryModel[]> callback
         ) {
             cache.ListSubscribe<BuffEntryModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Buff.Model.Cache
             this BuffEntryModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<BuffEntryModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

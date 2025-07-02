@@ -100,6 +100,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetByUserIdAndTransactionIdFuture(request)
                 );
                 yield return future;
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Money.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetByUserIdAndTransactionIdAsync(request)
             );
             var domain = this;
@@ -153,7 +155,8 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -175,7 +178,8 @@ namespace Gs2.Gs2Money.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Receipt>(
                         (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Money.Model.Receipt).CacheKey(
                             this.TransactionId
@@ -185,7 +189,8 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -224,7 +229,8 @@ namespace Gs2.Gs2Money.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TransactionId
+                this.TransactionId,
+                null
             );
         }
 
@@ -233,7 +239,8 @@ namespace Gs2.Gs2Money.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Money.Model.Receipt).CacheKey(
                     this.TransactionId
@@ -269,7 +276,8 @@ namespace Gs2.Gs2Money.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Money.Model.Receipt>(
                 (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Money.Model.Receipt).CacheKey(
                     this.TransactionId

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this DescribeStaminasByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeStaminasByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Stamina>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.StaminaName
+                    item.StaminaName,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this DescribeStaminasByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeStaminasByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this DescribeStaminasByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeStaminasByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

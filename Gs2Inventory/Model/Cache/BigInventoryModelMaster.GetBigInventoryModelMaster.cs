@@ -43,12 +43,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this GetBigInventoryModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetBigInventoryModelMasterRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.InventoryName
+                request.InventoryName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this GetBigInventoryModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetBigInventoryModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this GetBigInventoryModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetBigInventoryModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

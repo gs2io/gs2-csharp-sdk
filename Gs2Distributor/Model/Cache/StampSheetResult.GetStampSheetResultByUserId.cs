@@ -43,13 +43,15 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this GetStampSheetResultByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetStampSheetResultByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.UserId,
-                self.Item.TransactionId
+                self.Item.TransactionId,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this GetStampSheetResultByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetStampSheetResultByUserIdResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this GetStampSheetResultByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetStampSheetResultByUserIdResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

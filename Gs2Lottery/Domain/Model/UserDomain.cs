@@ -135,7 +135,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -179,7 +180,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -191,7 +193,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.BoxItems>(
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }

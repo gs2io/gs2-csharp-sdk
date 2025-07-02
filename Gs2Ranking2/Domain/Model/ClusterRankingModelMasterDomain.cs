@@ -96,6 +96,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetClusterRankingModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetClusterRankingModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     .WithRankingName(this.RankingName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateClusterRankingModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateClusterRankingModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     .WithRankingName(this.RankingName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteClusterRankingModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteClusterRankingModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
+                    null,
                     () => this.GetFuture(
                         new GetClusterRankingModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheKey(
                             this.RankingName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
+                    null,
                     () => this.GetAsync(
                         new GetClusterRankingModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.RankingName
+                this.RankingName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheKey(
                     this.RankingName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster>(
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheKey(
                     this.RankingName

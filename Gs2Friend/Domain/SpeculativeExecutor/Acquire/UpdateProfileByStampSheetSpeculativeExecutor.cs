@@ -86,7 +86,8 @@ namespace Gs2.Gs2Friend.Domain.SpeculativeExecutor
                         item.PutCache(
                             domain.Cache,
                             request.NamespaceName,
-                            request.UserId
+                            request.UserId,
+                            null
                         );
                         return null;
                     });
@@ -129,7 +130,8 @@ namespace Gs2.Gs2Friend.Domain.SpeculativeExecutor
                 item.PutCache(
                     domain.Cache,
                     request.NamespaceName,
-                    request.UserId
+                    request.UserId,
+                    null
                 );
                 return null;
             };

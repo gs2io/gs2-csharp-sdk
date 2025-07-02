@@ -96,6 +96,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetIncrementalRateModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetIncrementalRateModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateIncrementalRateModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateIncrementalRateModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteIncrementalRateModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteIncrementalRateModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RateName
+                    this.RateName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RateName,
+                    null,
                     () => this.GetFuture(
                         new GetIncrementalRateModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
                         (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheKey(
                             this.RateName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RateName
+                    this.RateName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RateName,
+                    null,
                     () => this.GetAsync(
                         new GetIncrementalRateModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.RateName
+                this.RateName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheKey(
                     this.RateName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
                 (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheKey(
                     this.RateName

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             this DescribeQuestGroupModelsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeQuestGroupModelsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<QuestGroupModel>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Quest.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             this DescribeQuestGroupModelsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeQuestGroupModelsResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Quest.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             this DescribeQuestGroupModelsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeQuestGroupModelsResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

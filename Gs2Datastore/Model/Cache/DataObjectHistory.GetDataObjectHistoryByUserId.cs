@@ -43,6 +43,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this GetDataObjectHistoryByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetDataObjectHistoryByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 request.NamespaceName,
                 request.UserId,
                 self.Item.DataObjectName,
-                self.Item.Generation
+                self.Item.Generation,
+                timeOffset
             );
         }
 
@@ -59,6 +61,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this GetDataObjectHistoryByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetDataObjectHistoryByUserIdResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this GetDataObjectHistoryByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetDataObjectHistoryByUserIdResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

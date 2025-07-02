@@ -40,12 +40,14 @@ namespace Gs2.Gs2Money2.Model.Cache
     {
         public static string CacheParentKey(
             this SubscribeTransaction self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "money2",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "SubscribeTransaction"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             string namespaceName,
             string contentName,
             string transactionId,
+            int? timeOffset,
             Func<IFuture<SubscribeTransaction>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SubscribeTransaction> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                             cache,
                             namespaceName,
                             contentName,
-                            transactionId
+                            transactionId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "subscribeTransaction") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     contentName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             string namespaceName,
             string contentName,
             string transactionId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SubscribeTransaction>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     contentName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     contentName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "subscribeTransaction") {
                     throw;
@@ -153,11 +161,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string contentName,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             return cache.Get<SubscribeTransaction>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     contentName,
@@ -171,11 +181,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string contentName,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<SubscribeTransaction>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     contentName,
@@ -187,7 +199,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     contentName,
@@ -203,11 +216,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string contentName,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             cache.Delete<SubscribeTransaction>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     contentName,
@@ -220,11 +235,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this SubscribeTransaction self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<SubscribeTransaction[]> callback
         ) {
             cache.ListSubscribe<SubscribeTransaction>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -235,11 +252,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this SubscribeTransaction self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SubscribeTransaction>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

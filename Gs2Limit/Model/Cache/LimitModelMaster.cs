@@ -40,12 +40,14 @@ namespace Gs2.Gs2Limit.Model.Cache
     {
         public static string CacheParentKey(
             this LimitModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "limit",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "LimitModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string limitName,
+            int? timeOffset,
             Func<IFuture<LimitModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<LimitModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Limit.Model.Cache
                         (null as LimitModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            limitName
+                            limitName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "limitModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Limit.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    limitName
+                    limitName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string limitName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<LimitModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Limit.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    limitName
+                    limitName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Limit.Model.Cache
                 (null as LimitModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    limitName
+                    limitName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "limitModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Limit.Model.Cache
             this LimitModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string limitName
+            string limitName,
+            int? timeOffset
         ) {
             return cache.Get<LimitModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     limitName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Limit.Model.Cache
             this LimitModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string limitName
+            string limitName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<LimitModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     limitName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Limit.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     limitName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Limit.Model.Cache
             this LimitModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string limitName
+            string limitName,
+            int? timeOffset
         ) {
             cache.Delete<LimitModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     limitName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Limit.Model.Cache
             this LimitModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<LimitModelMaster[]> callback
         ) {
             cache.ListSubscribe<LimitModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Limit.Model.Cache
             this LimitModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<LimitModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

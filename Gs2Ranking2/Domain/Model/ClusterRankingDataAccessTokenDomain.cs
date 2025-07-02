@@ -107,6 +107,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetClusterRankingFuture(request)
                 );
                 yield return future;
@@ -147,6 +148,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetClusterRankingAsync(request)
             );
 
@@ -172,7 +174,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -196,7 +199,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                             this.NamespaceName,
                             this.RankingName,
                             this.ClusterName,
-                            this.Season
+                            this.Season,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
                             this.UserId
@@ -208,7 +212,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -249,7 +254,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.RankingName,
                 this.ClusterName,
                 this.Season,
-                this.UserId
+                this.UserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -260,7 +266,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
                     this.UserId
@@ -298,7 +305,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
                     this.UserId

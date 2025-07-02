@@ -36,6 +36,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DescribeEventMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeEventMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.CreateEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.UpdateEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DeleteEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DescribeTriggersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeTriggersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DescribeTriggersByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeTriggersByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetTriggerResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTriggerRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetTriggerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTriggerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.TriggerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.TriggerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.ExtendTriggerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExtendTriggerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DeleteTriggerResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteTriggerRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DeleteTriggerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteTriggerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.VerifyTriggerResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyTriggerRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.VerifyTriggerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyTriggerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DescribeEventsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeEventsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DescribeEventsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeEventsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.DescribeRawEventsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRawEventsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetEventResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetEventRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetEventByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetEventByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetRawEventResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRawEventRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.VerifyEventResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyEventRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.VerifyEventByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyEventByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.GetCurrentEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.PreUpdateCurrentEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.UpdateCurrentEventMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentEventMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     Result.UpdateCurrentEventMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentEventMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;

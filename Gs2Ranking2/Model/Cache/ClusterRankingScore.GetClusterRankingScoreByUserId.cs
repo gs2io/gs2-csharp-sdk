@@ -45,6 +45,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GetClusterRankingScoreByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetClusterRankingScoreByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.Item.RankingName,
                 self.Item.ClusterName,
                 self.Item.Season ?? default,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
             if (request.Season == null) {
                 self.Item?.PutCache(
@@ -62,7 +64,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     self.Item.RankingName,
                     self.Item.ClusterName,
                     null,
-                    self.Item.UserId
+                    self.Item.UserId,
+                    timeOffset
                 );
             }
         }
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GetClusterRankingScoreByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetClusterRankingScoreByUserIdResult>> invokeImpl
         )
         {
@@ -87,6 +91,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this GetClusterRankingScoreByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetClusterRankingScoreByUserIdResult>> invokeImpl
     #else
@@ -116,6 +122,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -96,6 +96,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetRandomShowcaseMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetRandomShowcaseMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     .WithShowcaseName(this.ShowcaseName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateRandomShowcaseMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateRandomShowcaseMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     .WithShowcaseName(this.ShowcaseName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteRandomShowcaseMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteRandomShowcaseMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ShowcaseName,
+                    null,
                     () => this.GetFuture(
                         new GetRandomShowcaseMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
                         (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheKey(
                             this.ShowcaseName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ShowcaseName,
+                    null,
                     () => this.GetAsync(
                         new GetRandomShowcaseMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ShowcaseName
+                this.ShowcaseName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheKey(
                     this.ShowcaseName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
                 (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheKey(
                     this.ShowcaseName

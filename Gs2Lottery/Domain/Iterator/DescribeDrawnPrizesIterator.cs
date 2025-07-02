@@ -104,7 +104,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     <Gs2.Gs2Lottery.Model.DrawnPrize>
             (
                     (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
-                        NamespaceName
+                        NamespaceName,
+                        null
                     ),
                     out var list
             )) {

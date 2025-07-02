@@ -105,6 +105,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetMessageFuture(request)
                 );
                 yield return future;
@@ -137,6 +138,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetMessageAsync(request)
             );
             return result?.Item;
@@ -153,7 +155,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
-                    this.MessageName
+                    this.MessageName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -165,6 +168,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.RoomName,
                     this.MessageName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetMessageRequest()
                     )
@@ -191,7 +195,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.RoomName
+                            this.RoomName,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Chat.Model.Message).CacheKey(
                             this.MessageName
@@ -202,7 +207,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
-                    this.MessageName
+                    this.MessageName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -213,6 +219,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.RoomName,
                     this.MessageName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetMessageRequest()
                     )
@@ -251,7 +258,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RoomName,
-                this.MessageName
+                this.MessageName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -261,7 +269,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Chat.Model.Message).CacheKey(
                     this.MessageName
@@ -298,7 +307,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Chat.Model.Message).CacheKey(
                     this.MessageName

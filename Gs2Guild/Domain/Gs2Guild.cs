@@ -87,6 +87,7 @@ namespace Gs2.Gs2Guild.Domain
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
@@ -116,6 +117,7 @@ namespace Gs2.Gs2Guild.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateNamespaceAsync(request)
             );
             var domain = new Gs2.Gs2Guild.Domain.Model.NamespaceDomain(
@@ -134,6 +136,7 @@ namespace Gs2.Gs2Guild.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DumpUserDataByUserIdFuture(request)
                 );
@@ -161,6 +164,7 @@ namespace Gs2.Gs2Guild.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.DumpUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -176,6 +180,7 @@ namespace Gs2.Gs2Guild.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckDumpUserDataByUserIdFuture(request)
                 );
@@ -204,6 +209,7 @@ namespace Gs2.Gs2Guild.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CheckDumpUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -220,6 +226,7 @@ namespace Gs2.Gs2Guild.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CleanUserDataByUserIdFuture(request)
                 );
@@ -247,6 +254,7 @@ namespace Gs2.Gs2Guild.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CleanUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -262,6 +270,7 @@ namespace Gs2.Gs2Guild.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckCleanUserDataByUserIdFuture(request)
                 );
@@ -289,6 +298,7 @@ namespace Gs2.Gs2Guild.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CheckCleanUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -304,6 +314,7 @@ namespace Gs2.Gs2Guild.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PrepareImportUserDataByUserIdFuture(request)
                 );
@@ -333,6 +344,7 @@ namespace Gs2.Gs2Guild.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PrepareImportUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -350,6 +362,7 @@ namespace Gs2.Gs2Guild.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.ImportUserDataByUserIdFuture(request)
                 );
@@ -377,6 +390,7 @@ namespace Gs2.Gs2Guild.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.ImportUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -392,6 +406,7 @@ namespace Gs2.Gs2Guild.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckImportUserDataByUserIdFuture(request)
                 );
@@ -419,6 +434,7 @@ namespace Gs2.Gs2Guild.Domain
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.CheckImportUserDataByUserIdAsync(request)
             );
@@ -463,6 +479,7 @@ namespace Gs2.Gs2Guild.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.Namespace>(
                 (null as Gs2.Gs2Guild.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -505,6 +522,7 @@ namespace Gs2.Gs2Guild.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Guild.Model.Namespace>(
                 (null as Gs2.Gs2Guild.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -515,6 +533,7 @@ namespace Gs2.Gs2Guild.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.Namespace>(
                 (null as Gs2.Gs2Guild.Model.Namespace).CacheParentKey(
+                    null
                 )
             );
         }
@@ -554,6 +573,7 @@ namespace Gs2.Gs2Guild.Domain
                         resultModel.PutCache(
                             _gs2.Cache,
                             requestModel.GuildName,
+                            null,
                             requestModel
                         );
 
@@ -571,6 +591,7 @@ namespace Gs2.Gs2Guild.Domain
                         resultModel.PutCache(
                             _gs2.Cache,
                             requestModel.GuildName,
+                            null,
                             requestModel
                         );
 
@@ -604,6 +625,7 @@ namespace Gs2.Gs2Guild.Domain
                         resultModel.PutCache(
                             _gs2.Cache,
                             requestModel.GuildName,
+                            null,
                             requestModel
                         );
 
@@ -630,6 +652,7 @@ namespace Gs2.Gs2Guild.Domain
                     resultModel.PutCache(
                         _gs2.Cache,
                         requestModel.GuildName,
+                        null,
                         requestModel
                     );
 
@@ -647,6 +670,7 @@ namespace Gs2.Gs2Guild.Domain
                     resultModel.PutCache(
                         _gs2.Cache,
                         requestModel.GuildName,
+                        null,
                         requestModel
                     );
 
@@ -768,7 +792,8 @@ namespace Gs2.Gs2Guild.Domain
                         (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.GuildModelName,
-                            notification.GuildName
+                            notification.GuildName,
+                            null
                         )
                     );
     #if UNITY_2017_1_OR_NEWER
@@ -783,27 +808,31 @@ namespace Gs2.Gs2Guild.Domain
                         notification.NamespaceName,
                         notification.GuildModelName,
                         notification.GuildName,
-                        notification.FromUserId
+                        notification.FromUserId,
+                        null
                     );
                     (null as Gs2.Gs2Guild.Model.SendMemberRequest).DeleteCache(
                         _gs2.Cache,
                         notification.NamespaceName,
                         notification.FromUserId,
                         notification.GuildModelName,
-                        notification.GuildName
+                        notification.GuildName,
+                        null
                     );
                     _gs2.Cache.ClearListCache<ReceiveMemberRequest>(
                         (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.GuildModelName,
-                            notification.GuildName
+                            notification.GuildName,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<SendMemberRequest>(
                         (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.GuildModelName,
-                            notification.FromUserId
+                            notification.FromUserId,
+                            null
                         )
                     );
     #if UNITY_2017_1_OR_NEWER
@@ -823,7 +852,8 @@ namespace Gs2.Gs2Guild.Domain
                         _gs2.Cache,
                         notification.NamespaceName,
                         notification.GuildModelName,
-                        notification.GuildName
+                        notification.GuildName,
+                        null
                     );
     #if UNITY_2017_1_OR_NEWER
                     onJoinNotification.Invoke(notification);
@@ -836,7 +866,8 @@ namespace Gs2.Gs2Guild.Domain
                         _gs2.Cache,
                         notification.NamespaceName,
                         notification.GuildModelName,
-                        notification.GuildName
+                        notification.GuildName,
+                        null
                     );
     #if UNITY_2017_1_OR_NEWER
                     onLeaveNotification.Invoke(notification);
@@ -849,7 +880,8 @@ namespace Gs2.Gs2Guild.Domain
                         _gs2.Cache,
                         notification.NamespaceName,
                         notification.GuildModelName,
-                        notification.GuildName
+                        notification.GuildName,
+                        null
                     );
     #if UNITY_2017_1_OR_NEWER
                     onChangeMemberNotification.Invoke(notification);

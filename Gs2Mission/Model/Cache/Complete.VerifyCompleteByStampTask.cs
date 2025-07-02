@@ -43,6 +43,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this VerifyCompleteByStampTaskResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             VerifyCompleteByStampTaskRequest request
         ) {
         }
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this VerifyCompleteByStampTaskRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<VerifyCompleteByStampTaskResult>> invokeImpl
         )
         {
@@ -67,6 +69,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this VerifyCompleteByStampTaskRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<VerifyCompleteByStampTaskResult>> invokeImpl
     #else
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

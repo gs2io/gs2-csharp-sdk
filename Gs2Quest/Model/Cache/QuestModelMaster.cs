@@ -41,13 +41,15 @@ namespace Gs2.Gs2Quest.Model.Cache
         public static string CacheParentKey(
             this QuestModelMaster self,
             string namespaceName,
-            string questGroupName
+            string questGroupName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "quest",
                 namespaceName,
                 questGroupName,
+                timeOffset?.ToString() ?? "0",
                 "QuestModelMaster"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             string namespaceName,
             string questGroupName,
             string questName,
+            int? timeOffset,
             Func<IFuture<QuestModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<QuestModelMaster> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Quest.Model.Cache
                             cache,
                             namespaceName,
                             questGroupName,
-                            questName
+                            questName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "questModelMaster") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Quest.Model.Cache
                     cache,
                     namespaceName,
                     questGroupName,
-                    questName
+                    questName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             string namespaceName,
             string questGroupName,
             string questName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<QuestModelMaster>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Quest.Model.Cache
                     cache,
                     namespaceName,
                     questGroupName,
-                    questName
+                    questName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Quest.Model.Cache
                     cache,
                     namespaceName,
                     questGroupName,
-                    questName
+                    questName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "questModelMaster") {
                     throw;
@@ -153,12 +161,14 @@ namespace Gs2.Gs2Quest.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string questGroupName,
-            string questName
+            string questName,
+            int? timeOffset
         ) {
             return cache.Get<QuestModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    questGroupName
+                    questGroupName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     questName
@@ -171,12 +181,14 @@ namespace Gs2.Gs2Quest.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string questGroupName,
-            string questName
+            string questName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<QuestModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    questGroupName
+                    questGroupName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     questName
@@ -188,7 +200,8 @@ namespace Gs2.Gs2Quest.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    questGroupName
+                    questGroupName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     questName
@@ -203,12 +216,14 @@ namespace Gs2.Gs2Quest.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string questGroupName,
-            string questName
+            string questName,
+            int? timeOffset
         ) {
             cache.Delete<QuestModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    questGroupName
+                    questGroupName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     questName
@@ -221,12 +236,14 @@ namespace Gs2.Gs2Quest.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string questGroupName,
+            int? timeOffset,
             Action<QuestModelMaster[]> callback
         ) {
             cache.ListSubscribe<QuestModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    questGroupName
+                    questGroupName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -238,12 +255,14 @@ namespace Gs2.Gs2Quest.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string questGroupName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<QuestModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    questGroupName
+                    questGroupName,
+                    timeOffset
                 ),
                 callbackId
             );

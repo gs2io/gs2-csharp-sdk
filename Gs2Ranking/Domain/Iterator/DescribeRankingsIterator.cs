@@ -117,7 +117,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                         NamespaceName,
                         AccessToken?.UserId,
                         CategoryName,
-                        AdditionalScopeName ?? default
+                        AdditionalScopeName ?? default,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -158,6 +159,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -167,7 +169,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                             NamespaceName,
                             AccessToken?.UserId,
                             CategoryName,
-                            AdditionalScopeName ?? default
+                            AdditionalScopeName ?? default,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -251,7 +254,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                             NamespaceName,
                             AccessToken?.UserId,
                             CategoryName,
-                            AdditionalScopeName ?? default
+                            AdditionalScopeName ?? default,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListRanking"
                    ).LockAsync()) {

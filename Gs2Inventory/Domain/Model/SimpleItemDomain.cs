@@ -106,6 +106,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetSimpleItemByUserIdFuture(request)
                 );
                 yield return future;
@@ -137,6 +138,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetSimpleItemByUserIdAsync(request)
             );
             return result?.Item;
@@ -158,6 +160,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetSimpleItemWithSignatureByUserIdFuture(request)
                 );
                 yield return future;
@@ -193,6 +196,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetSimpleItemWithSignatureByUserIdAsync(request)
             );
             var domain = this;
@@ -218,6 +222,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifySimpleItemByUserIdFuture(request)
                 );
                 yield return future;
@@ -250,6 +255,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifySimpleItemByUserIdAsync(request)
             );
             var domain = this;
@@ -271,7 +277,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.InventoryName,
-                    this.ItemName
+                    this.ItemName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -283,6 +290,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
+                    null,
                     () => this.GetFuture(
                         new GetSimpleItemByUserIdRequest()
                     )
@@ -309,7 +317,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.InventoryName
+                            this.InventoryName,
+                            null
                         ),
                         (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheKey(
                             this.ItemName
@@ -320,7 +329,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.InventoryName,
-                    this.ItemName
+                    this.ItemName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -331,6 +341,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
+                    null,
                     () => this.GetAsync(
                         new GetSimpleItemByUserIdRequest()
                     )
@@ -369,7 +380,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.InventoryName,
-                this.ItemName
+                this.ItemName,
+                null
             );
         }
 
@@ -379,7 +391,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheKey(
                     this.ItemName
@@ -416,7 +429,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheKey(
                     this.ItemName

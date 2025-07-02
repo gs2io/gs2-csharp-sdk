@@ -43,13 +43,15 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this MarkReleaseByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             MarkReleaseByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.UserId,
-                self.Item.PropertyId
+                self.Item.PropertyId,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this MarkReleaseByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<MarkReleaseByUserIdResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this MarkReleaseByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<MarkReleaseByUserIdResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

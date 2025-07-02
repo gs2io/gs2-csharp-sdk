@@ -43,6 +43,7 @@ namespace Gs2.Gs2Log.Model.Cache
             this QueryAccessLogWithTelemetryResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             QueryAccessLogWithTelemetryRequest request
         ) {
         }
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Log.Model.Cache
             this QueryAccessLogWithTelemetryRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<QueryAccessLogWithTelemetryResult>> invokeImpl
         )
         {
@@ -67,6 +69,7 @@ namespace Gs2.Gs2Log.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Log.Model.Cache
             this QueryAccessLogWithTelemetryRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<QueryAccessLogWithTelemetryResult>> invokeImpl
     #else
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Log.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

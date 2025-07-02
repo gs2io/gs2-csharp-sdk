@@ -40,12 +40,14 @@ namespace Gs2.Gs2Deploy.Model.Cache
     {
         public static string CacheParentKey(
             this Event self,
-            string stackName
+            string stackName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "deploy",
                 stackName,
+                timeOffset?.ToString() ?? "0",
                 "Event"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             CacheDatabase cache,
             string stackName,
             string eventName,
+            int? timeOffset,
             Func<IFuture<Event>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Event> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                         (null as Event).PutCache(
                             cache,
                             stackName,
-                            eventName
+                            eventName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "event") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 item.PutCache(
                     cache,
                     stackName,
-                    eventName
+                    eventName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             CacheDatabase cache,
             string stackName,
             string eventName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Event>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 item.PutCache(
                     cache,
                     stackName,
-                    eventName
+                    eventName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 (null as Event).PutCache(
                     cache,
                     stackName,
-                    eventName
+                    eventName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "event") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Event self,
             CacheDatabase cache,
             string stackName,
-            string eventName
+            string eventName,
+            int? timeOffset
         ) {
             return cache.Get<Event>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Event self,
             CacheDatabase cache,
             string stackName,
-            string eventName
+            string eventName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Event>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Event self,
             CacheDatabase cache,
             string stackName,
-            string eventName
+            string eventName,
+            int? timeOffset
         ) {
             cache.Delete<Event>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Event self,
             CacheDatabase cache,
             string stackName,
+            int? timeOffset,
             Action<Event[]> callback
         ) {
             cache.ListSubscribe<Event>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Event self,
             CacheDatabase cache,
             string stackName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Event>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 callbackId
             );

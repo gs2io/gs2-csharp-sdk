@@ -108,6 +108,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetMessageByUserIdFuture(request)
                 );
                 yield return future;
@@ -140,6 +141,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetMessageByUserIdAsync(request)
             );
             return result?.Item;
@@ -161,6 +163,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteMessageFuture(request)
                 );
                 yield return future;
@@ -197,6 +200,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteMessageAsync(request)
                 );
             }
@@ -220,7 +224,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
-                    this.MessageName
+                    this.MessageName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -232,6 +237,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.RoomName,
                     this.MessageName,
+                    null,
                     () => this.GetFuture(
                         new GetMessageByUserIdRequest()
                     )
@@ -258,7 +264,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.RoomName
+                            this.RoomName,
+                            null
                         ),
                         (null as Gs2.Gs2Chat.Model.Message).CacheKey(
                             this.MessageName
@@ -269,7 +276,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
-                    this.MessageName
+                    this.MessageName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -280,6 +288,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.RoomName,
                     this.MessageName,
+                    null,
                     () => this.GetAsync(
                         new GetMessageByUserIdRequest()
                     )
@@ -318,7 +327,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RoomName,
-                this.MessageName
+                this.MessageName,
+                null
             );
         }
 
@@ -328,7 +338,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 ),
                 (null as Gs2.Gs2Chat.Model.Message).CacheKey(
                     this.MessageName
@@ -365,7 +376,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 ),
                 (null as Gs2.Gs2Chat.Model.Message).CacheKey(
                     this.MessageName

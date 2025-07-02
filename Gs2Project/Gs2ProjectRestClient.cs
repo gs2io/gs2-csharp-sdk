@@ -1285,6 +1285,107 @@ namespace Gs2.Gs2Project
 #endif
 
 
+        public class GetServiceVersionTask : Gs2RestSessionTask<GetServiceVersionRequest, GetServiceVersionResult>
+        {
+            public GetServiceVersionTask(IGs2Session session, RestSessionRequestFactory factory, GetServiceVersionRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetServiceVersionRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "project")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/system/version";
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetServiceVersion(
+                Request.GetServiceVersionRequest request,
+                UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
+        )
+		{
+			var task = new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+                Request.GetServiceVersionRequest request
+        )
+		{
+			return new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+                Request.GetServiceVersionRequest request
+        )
+		{
+            AsyncResult<Result.GetServiceVersionResult> result = null;
+			await GetServiceVersion(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetServiceVersionTask GetServiceVersionAsync(
+                Request.GetServiceVersionRequest request
+        )
+		{
+			return new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+                Request.GetServiceVersionRequest request
+        )
+		{
+			var task = new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribeProjectsTask : Gs2RestSessionTask<DescribeProjectsRequest, DescribeProjectsResult>
         {
             public DescribeProjectsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeProjectsRequest request) : base(session, factory, request)
@@ -2198,8 +2299,9 @@ namespace Gs2.Gs2Project
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/account/me/project/{projectName}/region/{regionName}/activate/wait";
+                    + "/system/{ownerId}/project/region/{regionName}/activate/wait";
 
+                url = url.Replace("{ownerId}", !string.IsNullOrEmpty(request.OwnerId) ? request.OwnerId.ToString() : "null");
                 url = url.Replace("{projectName}", !string.IsNullOrEmpty(request.ProjectName) ? request.ProjectName.ToString() : "null");
                 url = url.Replace("{regionName}", !string.IsNullOrEmpty(request.RegionName) ? request.RegionName.ToString() : "null");
 
@@ -4131,8 +4233,9 @@ namespace Gs2.Gs2Project
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/account/me/project/clean/progress/{transactionId}/wait";
+                    + "/system/{ownerId}/project/clean/progress/{transactionId}/wait";
 
+                url = url.Replace("{ownerId}", !string.IsNullOrEmpty(request.OwnerId) ? request.OwnerId.ToString() : "null");
                 url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
@@ -4599,8 +4702,9 @@ namespace Gs2.Gs2Project
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "project")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/account/me/project/import/progress/{transactionId}/wait";
+                    + "/system/{ownerId}/project/import/progress/{transactionId}/wait";
 
+                url = url.Replace("{ownerId}", !string.IsNullOrEmpty(request.OwnerId) ? request.OwnerId.ToString() : "null");
                 url = url.Replace("{transactionId}", !string.IsNullOrEmpty(request.TransactionId) ? request.TransactionId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);

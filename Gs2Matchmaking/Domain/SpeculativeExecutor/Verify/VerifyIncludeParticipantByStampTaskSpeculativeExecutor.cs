@@ -95,7 +95,8 @@ namespace Gs2.Gs2Matchmaking.Domain.SpeculativeExecutor
                             request.SeasonName,
                             request.Season,
                             request.Tier,
-                            request.SeasonGatheringName
+                            request.SeasonGatheringName,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });

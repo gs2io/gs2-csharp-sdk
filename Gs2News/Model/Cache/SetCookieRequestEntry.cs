@@ -41,13 +41,15 @@ namespace Gs2.Gs2News.Model.Cache
         public static string CacheParentKey(
             this SetCookieRequestEntry self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "news",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "SetCookieRequestEntry"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2News.Model.Cache
             string userId,
             string key,
             string value,
+            int? timeOffset,
             Func<IFuture<SetCookieRequestEntry>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SetCookieRequestEntry> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2News.Model.Cache
                             namespaceName,
                             userId,
                             key,
-                            value
+                            value,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "setCookieRequestEntry") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2News.Model.Cache
                     namespaceName,
                     userId,
                     key,
-                    value
+                    value,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2News.Model.Cache
             string userId,
             string key,
             string value,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SetCookieRequestEntry>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2News.Model.Cache
                     namespaceName,
                     userId,
                     key,
-                    value
+                    value,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2News.Model.Cache
                     namespaceName,
                     userId,
                     key,
-                    value
+                    value,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "setCookieRequestEntry") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2News.Model.Cache
             string namespaceName,
             string userId,
             string key,
-            string value
+            string value,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -170,7 +179,8 @@ namespace Gs2.Gs2News.Model.Cache
             return cache.Get<SetCookieRequestEntry>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     key,
@@ -185,7 +195,8 @@ namespace Gs2.Gs2News.Model.Cache
             string namespaceName,
             string userId,
             string key,
-            string value
+            string value,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -193,7 +204,8 @@ namespace Gs2.Gs2News.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     key,
@@ -210,7 +222,8 @@ namespace Gs2.Gs2News.Model.Cache
             string namespaceName,
             string userId,
             string key,
-            string value
+            string value,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -218,7 +231,8 @@ namespace Gs2.Gs2News.Model.Cache
             cache.Delete<SetCookieRequestEntry>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     key,
@@ -232,12 +246,14 @@ namespace Gs2.Gs2News.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<SetCookieRequestEntry[]> callback
         ) {
             cache.ListSubscribe<SetCookieRequestEntry>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -249,12 +265,14 @@ namespace Gs2.Gs2News.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SetCookieRequestEntry>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

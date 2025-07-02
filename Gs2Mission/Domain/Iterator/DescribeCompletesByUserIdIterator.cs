@@ -111,7 +111,8 @@ namespace Gs2.Gs2Mission.Domain.Iterator
             (
                     (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
                         NamespaceName,
-                        UserId
+                        UserId,
+                        null
                     ),
                     out var list
             )) {
@@ -150,6 +151,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -157,7 +159,8 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Mission.Model.Complete>(
                         (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
                             NamespaceName,
-                            UserId
+                            UserId,
+                            null
                         )
                     );
                 }
@@ -239,7 +242,8 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.Complete>(
                         (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
                             NamespaceName,
-                            UserId
+                            UserId,
+                            null
                        ),
                        "ListComplete"
                    ).LockAsync()) {

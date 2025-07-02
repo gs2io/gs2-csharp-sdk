@@ -43,6 +43,7 @@ namespace Gs2.Gs2Version.Model.Cache
             this DescribeAcceptVersionsByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeAcceptVersionsByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<AcceptVersion>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Version.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.VersionName
+                    item.VersionName,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Version.Model.Cache
             this DescribeAcceptVersionsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeAcceptVersionsByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Version.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Version.Model.Cache
             this DescribeAcceptVersionsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeAcceptVersionsByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Version.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

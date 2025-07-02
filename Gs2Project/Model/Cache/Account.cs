@@ -39,11 +39,13 @@ namespace Gs2.Gs2Project.Model.Cache
     public static partial class AccountExt
     {
         public static string CacheParentKey(
-            this Account self
+            this Account self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "project",
+                timeOffset?.ToString() ?? "0",
                 "Account"
             );
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this Account self,
             CacheDatabase cache,
             string accountName,
+            int? timeOffset,
             Func<IFuture<Account>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Account> self)
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     {
                         (null as Account).PutCache(
                             cache,
-                            accountName
+                            accountName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "account") {
                             self.OnComplete(default);
@@ -88,7 +92,8 @@ namespace Gs2.Gs2Project.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    accountName
+                    accountName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this Account self,
             CacheDatabase cache,
             string accountName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Account>> fetchImpl
     #else
@@ -115,14 +121,16 @@ namespace Gs2.Gs2Project.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    accountName
+                    accountName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as Account).PutCache(
                     cache,
-                    accountName
+                    accountName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "account") {
                     throw;
@@ -135,10 +143,12 @@ namespace Gs2.Gs2Project.Model.Cache
         public static Tuple<Account, bool> GetCache(
             this Account self,
             CacheDatabase cache,
-            string accountName
+            string accountName,
+            int? timeOffset
         ) {
             return cache.Get<Account>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     accountName
@@ -149,10 +159,12 @@ namespace Gs2.Gs2Project.Model.Cache
         public static void PutCache(
             this Account self,
             CacheDatabase cache,
-            string accountName
+            string accountName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     accountName
@@ -165,10 +177,12 @@ namespace Gs2.Gs2Project.Model.Cache
         public static void DeleteCache(
             this Account self,
             CacheDatabase cache,
-            string accountName
+            string accountName,
+            int? timeOffset
         ) {
             cache.Delete<Account>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     accountName
@@ -179,10 +193,12 @@ namespace Gs2.Gs2Project.Model.Cache
         public static void ListSubscribe(
             this Account self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<Account[]> callback
         ) {
             cache.ListSubscribe<Account>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -192,10 +208,12 @@ namespace Gs2.Gs2Project.Model.Cache
         public static void ListUnsubscribe(
             this Account self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Account>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

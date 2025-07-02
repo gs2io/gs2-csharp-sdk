@@ -43,12 +43,14 @@ namespace Gs2.Gs2Version.Model.Cache
             this GetVersionModelResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetVersionModelRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.VersionName
+                request.VersionName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Version.Model.Cache
             this GetVersionModelRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetVersionModelResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Version.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Version.Model.Cache
             this GetVersionModelRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetVersionModelResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Version.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

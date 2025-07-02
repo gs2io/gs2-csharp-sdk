@@ -88,7 +88,8 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             request.UserId,
-                            request.PropertyId
+                            request.PropertyId,
+                            null
                         );
                         return null;
                     });
@@ -133,7 +134,8 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     request.UserId,
-                    request.PropertyId
+                    request.PropertyId,
+                    null
                 );
                 return null;
             };

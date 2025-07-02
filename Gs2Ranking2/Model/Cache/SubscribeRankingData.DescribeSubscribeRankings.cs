@@ -45,6 +45,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DescribeSubscribeRankingsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeSubscribeRankingsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<SubscribeRankingData>())
@@ -54,7 +55,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     request.NamespaceName,
                     request.RankingName,
                     item.Season,
-                    item.ScorerUserId
+                    item.ScorerUserId,
+                    timeOffset
                 );
                 if (request.Season == null) {
                     item.PutCache(
@@ -62,7 +64,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                         request.NamespaceName,
                         request.RankingName,
                         null,
-                        item.ScorerUserId
+                        item.ScorerUserId,
+                        timeOffset
                     );
                 }
             }
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DescribeSubscribeRankingsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeSubscribeRankingsResult>> invokeImpl
         )
         {
@@ -88,6 +92,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -106,6 +111,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DescribeSubscribeRankingsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeSubscribeRankingsResult>> invokeImpl
     #else
@@ -117,6 +123,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

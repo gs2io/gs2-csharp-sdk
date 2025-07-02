@@ -90,7 +90,8 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             request.UserId,
                             request.ParameterName,
-                            request.PropertyId
+                            request.PropertyId,
+                            null
                         );
                         return null;
                     });
@@ -137,7 +138,8 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                     request.NamespaceName,
                     request.UserId,
                     request.ParameterName,
-                    request.PropertyId
+                    request.PropertyId,
+                    null
                 );
                 return null;
             };

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this PreUpdateCurrentParameterMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             PreUpdateCurrentParameterMasterRequest request
         ) {
         }
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this PreUpdateCurrentParameterMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<PreUpdateCurrentParameterMasterResult>> invokeImpl
         )
         {
@@ -67,6 +69,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this PreUpdateCurrentParameterMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PreUpdateCurrentParameterMasterResult>> invokeImpl
     #else
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

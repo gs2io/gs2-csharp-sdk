@@ -43,13 +43,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DeleteGuildByGuildNameResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteGuildByGuildNameRequest request
         ) {
             (null as Guild).DeleteCache(
                 cache,
                 request.NamespaceName,
                 self.Item.GuildModelName,
-                request.GuildName
+                request.GuildName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DeleteGuildByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteGuildByGuildNameResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DeleteGuildByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteGuildByGuildNameResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

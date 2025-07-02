@@ -40,12 +40,14 @@ namespace Gs2.Gs2Stamina.Model.Cache
     {
         public static string CacheParentKey(
             this RecoverValueTableMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "stamina",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "RecoverValueTableMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string recoverValueTableName,
+            int? timeOffset,
             Func<IFuture<RecoverValueTableMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<RecoverValueTableMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                         (null as RecoverValueTableMaster).PutCache(
                             cache,
                             namespaceName,
-                            recoverValueTableName
+                            recoverValueTableName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "recoverValueTableMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    recoverValueTableName
+                    recoverValueTableName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string recoverValueTableName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RecoverValueTableMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    recoverValueTableName
+                    recoverValueTableName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 (null as RecoverValueTableMaster).PutCache(
                     cache,
                     namespaceName,
-                    recoverValueTableName
+                    recoverValueTableName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "recoverValueTableMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverValueTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string recoverValueTableName
+            string recoverValueTableName,
+            int? timeOffset
         ) {
             return cache.Get<RecoverValueTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverValueTableName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverValueTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string recoverValueTableName
+            string recoverValueTableName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<RecoverValueTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverValueTableName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverValueTableName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverValueTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string recoverValueTableName
+            string recoverValueTableName,
+            int? timeOffset
         ) {
             cache.Delete<RecoverValueTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverValueTableName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverValueTableMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<RecoverValueTableMaster[]> callback
         ) {
             cache.ListSubscribe<RecoverValueTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverValueTableMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<RecoverValueTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

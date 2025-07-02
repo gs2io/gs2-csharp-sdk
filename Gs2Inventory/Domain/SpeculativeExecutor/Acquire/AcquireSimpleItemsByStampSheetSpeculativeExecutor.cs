@@ -97,7 +97,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             accessToken.UserId,
                             request.InventoryName,
-                            item.ItemName
+                            item.ItemName,
+                            accessToken.TimeOffset
                         );
                     }
                     return null;
@@ -156,7 +157,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                         request.NamespaceName,
                         accessToken.UserId,
                         request.InventoryName,
-                        item.ItemName
+                        item.ItemName,
+                        accessToken.TimeOffset
                     );
                 }
                 return null;

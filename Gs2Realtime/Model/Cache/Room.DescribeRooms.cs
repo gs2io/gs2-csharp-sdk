@@ -43,6 +43,7 @@ namespace Gs2.Gs2Realtime.Model.Cache
             this DescribeRoomsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeRoomsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Room>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Realtime.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Realtime.Model.Cache
             this DescribeRoomsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeRoomsResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Realtime.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Realtime.Model.Cache
             this DescribeRoomsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeRoomsResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Realtime.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

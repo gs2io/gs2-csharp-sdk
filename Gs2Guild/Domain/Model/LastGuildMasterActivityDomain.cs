@@ -100,6 +100,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.GetLastGuildMasterActivityByGuildNameFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.GetLastGuildMasterActivityByGuildNameAsync(request)
             );
             return result?.Item;
@@ -150,6 +152,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.PromoteSeniorMemberByGuildNameFuture(request)
                 );
                 yield return future;
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.PromoteSeniorMemberByGuildNameAsync(request)
             );
             var domain = this;
@@ -203,7 +207,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -214,6 +219,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.GuildModelName,
                     this.GuildName,
+                    null,
                     () => this.GetFuture(
                         new GetLastGuildMasterActivityByGuildNameRequest()
                     )
@@ -240,7 +246,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                         (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheParentKey(
                             this.NamespaceName,
                             this.GuildModelName,
-                            this.GuildName
+                            this.GuildName,
+                            null
                         ),
                         (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheKey(
                         )
@@ -249,7 +256,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -259,6 +267,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.GuildModelName,
                     this.GuildName,
+                    null,
                     () => this.GetAsync(
                         new GetLastGuildMasterActivityByGuildNameRequest()
                     )
@@ -296,7 +305,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                null
             );
         }
 
@@ -306,7 +316,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheKey(
                 ),
@@ -342,7 +353,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.LastGuildMasterActivity).CacheKey(
                 ),

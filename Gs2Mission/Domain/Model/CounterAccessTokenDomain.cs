@@ -98,6 +98,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DecreaseCounterFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DecreaseCounterAsync(request)
             );
             var domain = this;
@@ -152,6 +154,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetCounterFuture(request)
                 );
                 yield return future;
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetCounterAsync(request)
             );
             return result?.Item;
@@ -202,6 +206,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyCounterValueFuture(request)
                 );
                 yield return future;
@@ -233,6 +238,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyCounterValueAsync(request)
             );
             var domain = this;
@@ -254,6 +260,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ResetCounterFuture(request)
                 );
                 yield return future;
@@ -286,6 +293,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ResetCounterAsync(request)
             );
             var domain = this;
@@ -308,6 +316,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteCounterFuture(request)
                 );
                 yield return future;
@@ -343,6 +352,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteCounterAsync(request)
                 );
             }
@@ -361,7 +371,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.CounterName
+                    this.CounterName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -372,6 +383,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CounterName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetCounterRequest()
                     )
@@ -397,7 +409,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.Counter>(
                         (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Mission.Model.Counter).CacheKey(
                             this.CounterName
@@ -407,7 +420,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.CounterName
+                    this.CounterName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -417,6 +431,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CounterName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetCounterRequest()
                     )
@@ -454,7 +469,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.CounterName
+                this.CounterName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -463,7 +479,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Mission.Model.Counter).CacheKey(
                     this.CounterName
@@ -499,7 +516,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Mission.Model.Counter>(
                 (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Mission.Model.Counter).CacheKey(
                     this.CounterName

@@ -104,6 +104,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetPropertyFormFuture(request)
                 );
                 yield return future;
@@ -135,6 +136,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetPropertyFormAsync(request)
             );
             return result?.Item;
@@ -156,6 +158,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetPropertyFormWithSignatureFuture(request)
                 );
                 yield return future;
@@ -191,6 +194,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetPropertyFormWithSignatureAsync(request)
             );
             var domain = this;
@@ -216,6 +220,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetPropertyFormFuture(request)
                 );
                 yield return future;
@@ -249,6 +254,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetPropertyFormAsync(request)
             );
             var domain = this;
@@ -272,6 +278,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetPropertyFormWithSignatureFuture(request)
                 );
                 yield return future;
@@ -305,6 +312,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetPropertyFormWithSignatureAsync(request)
             );
             var domain = this;
@@ -328,6 +336,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeletePropertyFormFuture(request)
                 );
                 yield return future;
@@ -364,6 +373,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeletePropertyFormAsync(request)
                 );
             }
@@ -383,7 +393,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PropertyFormModelName,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -395,6 +406,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.UserId,
                     this.PropertyFormModelName,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetPropertyFormRequest()
                     )
@@ -420,7 +432,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.PropertyForm>(
                         (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Formation.Model.PropertyForm).CacheKey(
                             this.PropertyFormModelName,
@@ -432,7 +445,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PropertyFormModelName,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -443,6 +457,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.UserId,
                     this.PropertyFormModelName,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetPropertyFormRequest()
                     )
@@ -481,7 +496,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.PropertyFormModelName,
-                this.PropertyId
+                this.PropertyId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -490,7 +506,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Formation.Model.PropertyForm).CacheKey(
                     this.PropertyFormModelName,
@@ -527,7 +544,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Formation.Model.PropertyForm>(
                 (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Formation.Model.PropertyForm).CacheKey(
                     this.PropertyFormModelName,

@@ -43,12 +43,14 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this DeleteBonusModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteBonusModelMasterRequest request
         ) {
             (null as BonusModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.BonusModelName
+                request.BonusModelName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this DeleteBonusModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteBonusModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this DeleteBonusModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteBonusModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

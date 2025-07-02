@@ -42,13 +42,15 @@ namespace Gs2.Gs2Money2.Model.Cache
         public static string CacheParentKey(
             this Event self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "money2",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Event"
             );
         }
@@ -70,6 +72,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             string namespaceName,
             string userId,
             string transactionId,
+            int? timeOffset,
             Func<IFuture<Event>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Event> self)
@@ -84,7 +87,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            transactionId
+                            transactionId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "event") {
                             self.OnComplete(default);
@@ -99,7 +103,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -118,6 +123,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             string namespaceName,
             string userId,
             string transactionId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Event>> fetchImpl
     #else
@@ -130,7 +136,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 return item;
             }
@@ -139,7 +146,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "event") {
                     throw;
@@ -154,12 +162,14 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             return cache.Get<Event>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -172,12 +182,14 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Event>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -189,7 +201,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -204,7 +217,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -212,7 +226,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             cache.Delete<Event>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -225,12 +240,14 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Event[]> callback
         ) {
             cache.ListSubscribe<Event>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -242,12 +259,14 @@ namespace Gs2.Gs2Money2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Event>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

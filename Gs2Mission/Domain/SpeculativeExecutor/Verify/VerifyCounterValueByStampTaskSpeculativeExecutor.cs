@@ -88,7 +88,8 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             accessToken.UserId,
-                            request.CounterName
+                            request.CounterName,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });

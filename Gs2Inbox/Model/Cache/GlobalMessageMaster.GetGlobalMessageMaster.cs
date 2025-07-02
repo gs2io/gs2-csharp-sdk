@@ -43,12 +43,14 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GetGlobalMessageMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetGlobalMessageMasterRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.GlobalMessageName
+                request.GlobalMessageName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GetGlobalMessageMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetGlobalMessageMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GetGlobalMessageMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetGlobalMessageMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

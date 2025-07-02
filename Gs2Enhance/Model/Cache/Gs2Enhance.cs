@@ -36,6 +36,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DescribeRateModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRateModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetRateModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRateModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DescribeRateModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRateModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CreateRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.UpdateRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DeleteRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DescribeUnleashRateModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeUnleashRateModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetUnleashRateModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetUnleashRateModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DescribeUnleashRateModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeUnleashRateModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CreateUnleashRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateUnleashRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetUnleashRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetUnleashRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.UpdateUnleashRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateUnleashRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DeleteUnleashRateModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteUnleashRateModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DirectEnhanceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DirectEnhanceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DirectEnhanceByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DirectEnhanceByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.UnleashResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UnleashRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.UnleashByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UnleashByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.CreateProgressByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateProgressByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetProgressResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetProgressRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetProgressByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetProgressByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.StartResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.StartRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.StartByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.StartByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.EndResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.EndRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.EndByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.EndByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DeleteProgressResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteProgressRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.DeleteProgressByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteProgressByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.GetCurrentRateMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentRateMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.PreUpdateCurrentRateMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentRateMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.UpdateCurrentRateMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentRateMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                     Result.UpdateCurrentRateMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentRateMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;

@@ -114,7 +114,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                         NamespaceName,
                         UserId,
                         CategoryName,
-                        default
+                        default,
+                        null
                     ),
                     out var list
             )) {
@@ -150,6 +151,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -159,7 +161,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                             NamespaceName,
                             UserId,
                             CategoryName,
-                            default
+                            default,
+                            null
                         )
                     );
                 }
@@ -243,7 +246,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                             NamespaceName,
                             UserId,
                             CategoryName,
-                            default
+                            default,
+                            null
                        ),
                        "ListSubscribeUser"
                    ).LockAsync()) {

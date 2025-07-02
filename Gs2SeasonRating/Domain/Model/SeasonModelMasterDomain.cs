@@ -96,6 +96,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetSeasonModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetSeasonModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     .WithSeasonName(this.SeasonName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateSeasonModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateSeasonModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     .WithSeasonName(this.SeasonName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteSeasonModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteSeasonModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.SeasonName
+                    this.SeasonName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.SeasonName,
+                    null,
                     () => this.GetFuture(
                         new GetSeasonModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SeasonRating.Model.SeasonModelMaster>(
                         (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheKey(
                             this.SeasonName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.SeasonName
+                    this.SeasonName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.SeasonName,
+                    null,
                     () => this.GetAsync(
                         new GetSeasonModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.SeasonName
+                this.SeasonName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheKey(
                     this.SeasonName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SeasonRating.Model.SeasonModelMaster>(
                 (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SeasonRating.Model.SeasonModelMaster).CacheKey(
                     this.SeasonName

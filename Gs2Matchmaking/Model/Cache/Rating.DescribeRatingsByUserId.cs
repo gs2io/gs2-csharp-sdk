@@ -43,6 +43,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DescribeRatingsByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeRatingsByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Rating>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DescribeRatingsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeRatingsByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DescribeRatingsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeRatingsByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

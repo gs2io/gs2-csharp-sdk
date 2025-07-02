@@ -84,6 +84,7 @@ namespace Gs2.Gs2Identifier.Domain
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CreateUserFuture(request)
                 );
                 yield return future;
@@ -113,6 +114,7 @@ namespace Gs2.Gs2Identifier.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateUserAsync(request)
             );
             var domain = new Gs2.Gs2Identifier.Domain.Model.UserDomain(
@@ -131,6 +133,7 @@ namespace Gs2.Gs2Identifier.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CreateSecurityPolicyFuture(request)
                 );
@@ -160,6 +163,7 @@ namespace Gs2.Gs2Identifier.Domain
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.CreateSecurityPolicyAsync(request)
             );
@@ -206,6 +210,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.User>(
                 (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -248,6 +253,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.User>(
                 (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -258,6 +264,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.User>(
                 (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                    null
                 )
             );
         }
@@ -306,6 +313,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -348,6 +356,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -358,6 +367,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                    null
                 )
             );
         }
@@ -397,6 +407,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -439,6 +450,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -449,6 +461,7 @@ namespace Gs2.Gs2Identifier.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                    null
                 )
             );
         }

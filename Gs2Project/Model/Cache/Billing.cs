@@ -41,13 +41,15 @@ namespace Gs2.Gs2Project.Model.Cache
         public static string CacheParentKey(
             this Billing self,
             string accountName,
-            string projectName
+            string projectName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "project",
                 accountName,
                 projectName,
+                timeOffset?.ToString() ?? "0",
                 "Billing"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Project.Model.Cache
             string projectName,
             int? year,
             int? month,
+            int? timeOffset,
             Func<IFuture<Billing>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Billing> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Project.Model.Cache
                             accountName,
                             projectName,
                             year,
-                            month
+                            month,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "billing") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     accountName,
                     projectName,
                     year,
-                    month
+                    month,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Project.Model.Cache
             string projectName,
             int? year,
             int? month,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Billing>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     accountName,
                     projectName,
                     year,
-                    month
+                    month,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     accountName,
                     projectName,
                     year,
-                    month
+                    month,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "billing") {
                     throw;
@@ -162,12 +170,14 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             int? year,
-            int? month
+            int? month,
+            int? timeOffset
         ) {
             return cache.Get<Billing>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     year,
@@ -182,12 +192,14 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             int? year,
-            int? month
+            int? month,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     year,
@@ -204,12 +216,14 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             int? year,
-            int? month
+            int? month,
+            int? timeOffset
         ) {
             cache.Delete<Billing>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     year,
@@ -223,12 +237,14 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string projectName,
+            int? timeOffset,
             Action<Billing[]> callback
         ) {
             cache.ListSubscribe<Billing>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -240,12 +256,14 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string projectName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Billing>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 callbackId
             );

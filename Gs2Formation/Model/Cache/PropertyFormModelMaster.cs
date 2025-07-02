@@ -40,12 +40,14 @@ namespace Gs2.Gs2Formation.Model.Cache
     {
         public static string CacheParentKey(
             this PropertyFormModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "formation",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "PropertyFormModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string propertyFormModelName,
+            int? timeOffset,
             Func<IFuture<PropertyFormModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<PropertyFormModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                         (null as PropertyFormModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            propertyFormModelName
+                            propertyFormModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "propertyFormModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    propertyFormModelName
+                    propertyFormModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string propertyFormModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PropertyFormModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    propertyFormModelName
+                    propertyFormModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                 (null as PropertyFormModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    propertyFormModelName
+                    propertyFormModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "propertyFormModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Formation.Model.Cache
             this PropertyFormModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string propertyFormModelName
+            string propertyFormModelName,
+            int? timeOffset
         ) {
             return cache.Get<PropertyFormModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Formation.Model.Cache
             this PropertyFormModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string propertyFormModelName
+            string propertyFormModelName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<PropertyFormModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Formation.Model.Cache
             this PropertyFormModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string propertyFormModelName
+            string propertyFormModelName,
+            int? timeOffset
         ) {
             cache.Delete<PropertyFormModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Formation.Model.Cache
             this PropertyFormModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<PropertyFormModelMaster[]> callback
         ) {
             cache.ListSubscribe<PropertyFormModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Formation.Model.Cache
             this PropertyFormModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<PropertyFormModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

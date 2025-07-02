@@ -96,6 +96,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetRateModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetRateModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateRateModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateRateModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     .WithRateName(this.RateName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteRateModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteRateModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enhance.Model.RateModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RateName
+                    this.RateName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RateName,
+                    null,
                     () => this.GetFuture(
                         new GetRateModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.RateModelMaster>(
                         (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheKey(
                             this.RateName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enhance.Model.RateModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RateName
+                    this.RateName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RateName,
+                    null,
                     () => this.GetAsync(
                         new GetRateModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
             (null as Gs2.Gs2Enhance.Model.RateModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.RateName
+                this.RateName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheKey(
                     this.RateName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enhance.Model.RateModelMaster>(
                 (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheKey(
                     this.RateName

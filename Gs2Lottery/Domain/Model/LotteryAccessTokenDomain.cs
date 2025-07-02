@@ -97,6 +97,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PredictionFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PredictionAsync(request)
             );
             return result?.Items;
@@ -176,7 +178,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -221,7 +224,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -234,7 +238,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

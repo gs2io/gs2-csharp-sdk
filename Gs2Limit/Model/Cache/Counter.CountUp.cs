@@ -43,6 +43,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             this CountUpResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             CountUpRequest request
         ) {
             self.Item?.PutCache(
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Limit.Model.Cache
                 request.NamespaceName,
                 userId,
                 self.Item.LimitName,
-                request.CounterName
+                request.CounterName,
+                timeOffset
             );
         }
 
@@ -59,6 +61,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             this CountUpRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<CountUpResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Limit.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             this CountUpRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CountUpResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

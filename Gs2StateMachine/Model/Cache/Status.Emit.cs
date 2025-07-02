@@ -43,13 +43,15 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this EmitResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             EmitRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.StatusName
+                request.StatusName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this EmitRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<EmitResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this EmitRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<EmitResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -43,13 +43,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             this UpdateMemberRoleResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateMemberRoleRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.GuildModelName,
-                self.Item.Name
+                self.Item.Name,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this UpdateMemberRoleRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateMemberRoleResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this UpdateMemberRoleRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateMemberRoleResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

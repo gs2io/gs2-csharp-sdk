@@ -45,13 +45,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseBuyResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             RandomShowcaseBuyRequest request
         ) {
             cache.ClearListCache<RandomDisplayItem>(
                 (null as RandomDisplayItem).CacheParentKey(
                     request.NamespaceName,
                     userId,
-                    request.ShowcaseName
+                    request.ShowcaseName,
+                    timeOffset
                 )
             );
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseBuyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<RandomShowcaseBuyResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseBuyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RandomShowcaseBuyResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

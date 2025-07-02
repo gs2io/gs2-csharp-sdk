@@ -164,7 +164,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheKey(
                     this.Index
@@ -199,7 +200,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheKey(
                     this.Index

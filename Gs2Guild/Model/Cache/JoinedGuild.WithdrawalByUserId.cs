@@ -43,6 +43,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this WithdrawalByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             WithdrawalByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -50,13 +51,15 @@ namespace Gs2.Gs2Guild.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 self.Item.GuildModelName,
-                self.Item.GuildName
+                self.Item.GuildName,
+                timeOffset
             );
             self.Guild?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.GuildModelName,
-                self.Item.GuildName
+                self.Item.GuildName,
+                timeOffset
             );
         }
 
@@ -65,6 +68,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this WithdrawalByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<WithdrawalByUserIdResult>> invokeImpl
         )
         {
@@ -80,6 +84,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -98,6 +103,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this WithdrawalByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<WithdrawalByUserIdResult>> invokeImpl
     #else
@@ -109,6 +115,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

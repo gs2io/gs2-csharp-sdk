@@ -39,11 +39,13 @@ namespace Gs2.Gs2Account.Model.Cache
     public static partial class BanStatusExt
     {
         public static string CacheParentKey(
-            this BanStatus self
+            this BanStatus self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "account",
+                timeOffset?.ToString() ?? "0",
                 "BanStatus"
             );
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this BanStatus self,
             CacheDatabase cache,
             string name,
+            int? timeOffset,
             Func<IFuture<BanStatus>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<BanStatus> self)
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Account.Model.Cache
                     {
                         (null as BanStatus).PutCache(
                             cache,
-                            name
+                            name,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "banStatus") {
                             self.OnComplete(default);
@@ -88,7 +92,8 @@ namespace Gs2.Gs2Account.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    name
+                    name,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this BanStatus self,
             CacheDatabase cache,
             string name,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BanStatus>> fetchImpl
     #else
@@ -115,14 +121,16 @@ namespace Gs2.Gs2Account.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    name
+                    name,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as BanStatus).PutCache(
                     cache,
-                    name
+                    name,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "banStatus") {
                     throw;
@@ -135,10 +143,12 @@ namespace Gs2.Gs2Account.Model.Cache
         public static Tuple<BanStatus, bool> GetCache(
             this BanStatus self,
             CacheDatabase cache,
-            string name
+            string name,
+            int? timeOffset
         ) {
             return cache.Get<BanStatus>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     name
@@ -149,10 +159,12 @@ namespace Gs2.Gs2Account.Model.Cache
         public static void PutCache(
             this BanStatus self,
             CacheDatabase cache,
-            string name
+            string name,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     name
@@ -165,10 +177,12 @@ namespace Gs2.Gs2Account.Model.Cache
         public static void DeleteCache(
             this BanStatus self,
             CacheDatabase cache,
-            string name
+            string name,
+            int? timeOffset
         ) {
             cache.Delete<BanStatus>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     name
@@ -179,10 +193,12 @@ namespace Gs2.Gs2Account.Model.Cache
         public static void ListSubscribe(
             this BanStatus self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<BanStatus[]> callback
         ) {
             cache.ListSubscribe<BanStatus>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -192,10 +208,12 @@ namespace Gs2.Gs2Account.Model.Cache
         public static void ListUnsubscribe(
             this BanStatus self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<BanStatus>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

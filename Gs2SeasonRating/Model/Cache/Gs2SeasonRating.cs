@@ -36,6 +36,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DescribeMatchSessionsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeMatchSessionsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CreateMatchSessionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateMatchSessionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetMatchSessionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetMatchSessionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DeleteMatchSessionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteMatchSessionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DescribeSeasonModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSeasonModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CreateSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.UpdateSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DeleteSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.DescribeSeasonModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSeasonModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetSeasonModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSeasonModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetCurrentSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.PreUpdateCurrentSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.UpdateCurrentSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.UpdateCurrentSeasonModelMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentSeasonModelMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetBallotResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBallotRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.GetBallotByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBallotByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.VoteResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VoteRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.VoteMultipleResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VoteMultipleRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     Result.CommitVoteResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CommitVoteRequest.FromJson(requestPayload)
                     );
                     break;

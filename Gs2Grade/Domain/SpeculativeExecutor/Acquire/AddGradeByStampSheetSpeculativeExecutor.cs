@@ -90,7 +90,8 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             request.UserId,
                             request.GradeName,
-                            request.PropertyId
+                            request.PropertyId,
+                            null
                         );
                         return null;
                     });
@@ -137,7 +138,8 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                     request.NamespaceName,
                     request.UserId,
                     request.GradeName,
-                    request.PropertyId
+                    request.PropertyId,
+                    null
                 );
                 return null;
             };

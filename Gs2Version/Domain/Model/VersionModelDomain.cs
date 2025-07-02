@@ -96,6 +96,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetVersionModelFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetVersionModelAsync(request)
             );
             return result?.Item;
@@ -143,7 +145,8 @@ namespace Gs2.Gs2Version.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Version.Model.VersionModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.VersionName
+                    this.VersionName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.VersionName,
+                    null,
                     () => this.GetFuture(
                         new GetVersionModelRequest()
                     )
@@ -177,7 +181,8 @@ namespace Gs2.Gs2Version.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.VersionModel>(
                         (null as Gs2.Gs2Version.Model.VersionModel).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Version.Model.VersionModel).CacheKey(
                             this.VersionName
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Version.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Version.Model.VersionModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.VersionName
+                    this.VersionName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -195,6 +201,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.VersionName,
+                    null,
                     () => this.GetAsync(
                         new GetVersionModelRequest()
                     )
@@ -231,7 +238,8 @@ namespace Gs2.Gs2Version.Domain.Model
             (null as Gs2.Gs2Version.Model.VersionModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.VersionName
+                this.VersionName,
+                null
             );
         }
 
@@ -239,7 +247,8 @@ namespace Gs2.Gs2Version.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Version.Model.VersionModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Version.Model.VersionModel).CacheKey(
                     this.VersionName
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Version.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Version.Model.VersionModel>(
                 (null as Gs2.Gs2Version.Model.VersionModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Version.Model.VersionModel).CacheKey(
                     this.VersionName

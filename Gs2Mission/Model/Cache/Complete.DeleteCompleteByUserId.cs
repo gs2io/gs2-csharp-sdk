@@ -43,13 +43,15 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DeleteCompleteByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteCompleteByUserIdRequest request
         ) {
             (null as Complete).DeleteCache(
                 cache,
                 request.NamespaceName,
                 self.Item.UserId,
-                self.Item.MissionGroupName
+                self.Item.MissionGroupName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DeleteCompleteByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteCompleteByUserIdResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DeleteCompleteByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteCompleteByUserIdResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

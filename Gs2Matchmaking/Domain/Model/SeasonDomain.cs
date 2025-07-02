@@ -136,7 +136,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callback,
                 () =>
@@ -187,7 +188,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callbackId
             );
@@ -202,7 +204,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 )
             );
         }
@@ -256,7 +259,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callback,
                 () =>
@@ -307,7 +311,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callbackId
             );
@@ -322,7 +327,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 )
             );
         }
@@ -375,7 +381,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callback,
                 () =>
@@ -421,7 +428,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callbackId
             );
@@ -435,7 +443,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 )
             );
         }
@@ -503,7 +512,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callback,
                 () =>
@@ -549,7 +559,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 callbackId
             );
@@ -563,7 +574,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 )
             );
         }

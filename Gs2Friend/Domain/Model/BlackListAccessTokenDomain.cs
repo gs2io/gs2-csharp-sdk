@@ -93,6 +93,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RegisterBlackListFuture(request)
                 );
                 yield return future;
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RegisterBlackListAsync(request)
             );
             var domain = this;
@@ -145,6 +147,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UnregisterBlackListFuture(request)
                 );
                 yield return future;
@@ -176,6 +179,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UnregisterBlackListAsync(request)
             );
             var domain = this;
@@ -192,7 +196,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Friend.Model.BlackList).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -214,7 +219,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.BlackList>(
                         (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Friend.Model.BlackList).CacheKey(
                         )
@@ -222,7 +228,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Friend.Model.BlackList).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -260,7 +267,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             (null as Gs2.Gs2Friend.Model.BlackList).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -269,7 +277,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.BlackList).CacheKey(
                 ),
@@ -304,7 +313,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.BlackList>(
                 (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.BlackList).CacheKey(
                 ),

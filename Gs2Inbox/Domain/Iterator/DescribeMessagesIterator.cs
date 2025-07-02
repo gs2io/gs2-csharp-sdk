@@ -112,7 +112,8 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
             (
                     (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -153,6 +154,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -160,7 +162,8 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Inbox.Model.Message>(
                         (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -246,7 +249,8 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inbox.Model.Message>(
                         (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListMessage"
                    ).LockAsync()) {

@@ -116,6 +116,7 @@ namespace Gs2.Gs2Auth.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.LoginAsync(request)
             );
             var domain = this;
@@ -160,6 +161,7 @@ namespace Gs2.Gs2Auth.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.LoginBySignatureAsync(request)
             );
             var domain = this;
@@ -178,6 +180,7 @@ namespace Gs2.Gs2Auth.Domain.Model
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.FederationFuture(request)
                 );
@@ -208,6 +211,7 @@ namespace Gs2.Gs2Auth.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.FederationAsync(request)
             );
             var domain = this;
@@ -226,6 +230,7 @@ namespace Gs2.Gs2Auth.Domain.Model
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.IssueTimeOffsetTokenByUserIdFuture(request)
                 );
@@ -255,6 +260,7 @@ namespace Gs2.Gs2Auth.Domain.Model
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.IssueTimeOffsetTokenByUserIdAsync(request)
             );
@@ -326,7 +332,8 @@ namespace Gs2.Gs2Auth.Domain.Model
         public void Invalidate()
         {
             (null as Gs2.Gs2Auth.Model.AccessToken).DeleteCache(
-                this._gs2.Cache
+                this._gs2.Cache,
+                null
             );
         }
 
@@ -334,6 +341,7 @@ namespace Gs2.Gs2Auth.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Auth.Model.AccessToken).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Auth.Model.AccessToken).CacheKey(
                 ),
@@ -367,6 +375,7 @@ namespace Gs2.Gs2Auth.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Auth.Model.AccessToken>(
                 (null as Gs2.Gs2Auth.Model.AccessToken).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Auth.Model.AccessToken).CacheKey(
                 ),

@@ -108,7 +108,8 @@ namespace Gs2.Gs2News.Domain.Iterator
             (
                     (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                         NamespaceName,
-                        UploadToken
+                        UploadToken,
+                        null
                     ),
                     out var list
             )) {
@@ -147,6 +148,7 @@ namespace Gs2.Gs2News.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -154,7 +156,8 @@ namespace Gs2.Gs2News.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2News.Model.Output>(
                         (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                             NamespaceName,
-                            UploadToken
+                            UploadToken,
+                            null
                         )
                     );
                 }
@@ -236,7 +239,8 @@ namespace Gs2.Gs2News.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.Output>(
                         (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                             NamespaceName,
-                            UploadToken
+                            UploadToken,
+                            null
                        ),
                        "ListOutput"
                    ).LockAsync()) {

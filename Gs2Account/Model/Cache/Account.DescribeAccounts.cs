@@ -43,6 +43,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DescribeAccountsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeAccountsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Account>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Account.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.UserId
+                    item.UserId,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DescribeAccountsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeAccountsResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Account.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DescribeAccountsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeAccountsResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Account.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

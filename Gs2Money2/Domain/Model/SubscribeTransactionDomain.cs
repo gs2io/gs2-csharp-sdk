@@ -99,7 +99,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ContentName,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -120,7 +121,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.SubscribeTransaction>(
                         (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheKey(
                             this.ContentName,
@@ -131,7 +133,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ContentName,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -170,7 +173,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.ContentName,
-                this.TransactionId
+                this.TransactionId,
+                null
             );
         }
 
@@ -178,7 +182,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheKey(
                     this.ContentName,
@@ -214,7 +219,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Money2.Model.SubscribeTransaction>(
                 (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.SubscribeTransaction).CacheKey(
                     this.ContentName,

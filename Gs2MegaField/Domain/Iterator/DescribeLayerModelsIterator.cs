@@ -106,7 +106,8 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
             (
                     (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
                         NamespaceName,
-                        AreaModelName
+                        AreaModelName,
+                        null
                     ),
                     out var list
             )) {
@@ -141,6 +142,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -148,7 +150,8 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2MegaField.Model.LayerModel>(
                         (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
                             NamespaceName,
-                            AreaModelName
+                            AreaModelName,
+                            null
                         )
                     );
                 }
@@ -230,7 +233,8 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.LayerModel>(
                         (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
                             NamespaceName,
-                            AreaModelName
+                            AreaModelName,
+                            null
                        ),
                        "ListLayerModel"
                    ).LockAsync()) {

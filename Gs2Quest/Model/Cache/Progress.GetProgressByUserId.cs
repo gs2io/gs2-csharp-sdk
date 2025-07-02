@@ -43,23 +43,27 @@ namespace Gs2.Gs2Quest.Model.Cache
             this GetProgressByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetProgressByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
             self.QuestGroup?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.QuestGroup.Name
+                self.QuestGroup.Name,
+                timeOffset
             );
             self.Quest?.PutCache(
                 cache,
                 request.NamespaceName,
                 default,
-                self.Quest.Name
+                self.Quest.Name,
+                timeOffset
             );
         }
 
@@ -68,6 +72,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             this GetProgressByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetProgressByUserIdResult>> invokeImpl
         )
         {
@@ -83,6 +88,7 @@ namespace Gs2.Gs2Quest.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -101,6 +107,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             this GetProgressByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetProgressByUserIdResult>> invokeImpl
     #else
@@ -112,6 +119,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

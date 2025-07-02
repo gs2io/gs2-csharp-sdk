@@ -45,6 +45,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this GetSeasonGatheringResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetSeasonGatheringRequest request
         ) {
             self.Item?.PutCache(
@@ -54,7 +55,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 self.Item.SeasonName,
                 self.Item.Season,
                 self.Item.Tier,
-                request.SeasonGatheringName
+                request.SeasonGatheringName,
+                timeOffset
             );
         }
 
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this GetSeasonGatheringRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetSeasonGatheringResult>> invokeImpl
         )
         {
@@ -78,6 +81,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this GetSeasonGatheringRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetSeasonGatheringResult>> invokeImpl
     #else
@@ -107,6 +112,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

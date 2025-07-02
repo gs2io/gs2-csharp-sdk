@@ -44,6 +44,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             this ApplyRankCapByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             ApplyRankCapByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -51,14 +52,16 @@ namespace Gs2.Gs2Grade.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 self.Item.GradeName,
-                self.Item.PropertyId
+                self.Item.PropertyId,
+                timeOffset
             );
             self.ExperienceStatus?.PutCache(
                 cache,
                 Gs2.Gs2Experience.Model.Status.GetNamespaceNameFromGrn(self.ExperienceStatus?.StatusId),
                 self.Item.UserId,
                 self.ExperienceStatus.ExperienceName,
-                self.Item.PropertyId
+                self.Item.PropertyId,
+                timeOffset
             );
         }
 
@@ -67,6 +70,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             this ApplyRankCapByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<ApplyRankCapByUserIdResult>> invokeImpl
         )
         {
@@ -82,6 +86,7 @@ namespace Gs2.Gs2Grade.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -100,6 +105,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             this ApplyRankCapByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ApplyRankCapByUserIdResult>> invokeImpl
     #else
@@ -111,6 +117,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

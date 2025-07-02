@@ -41,13 +41,15 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
         public static string CacheParentKey(
             this Gathering self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "matchmaking",
                 namespaceName,
                 "Singleton",
+                timeOffset?.ToString() ?? "0",
                 "Gathering"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string gatheringName,
+            int? timeOffset,
             Func<IFuture<Gathering>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Gathering> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            gatheringName
+                            gatheringName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "gathering") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    gatheringName
+                    gatheringName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string gatheringName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Gathering>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    gatheringName
+                    gatheringName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    gatheringName
+                    gatheringName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "gathering") {
                     throw;
@@ -153,12 +161,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string gatheringName
+            string gatheringName,
+            int? timeOffset
         ) {
             return cache.Get<Gathering>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gatheringName
@@ -171,12 +181,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string gatheringName
+            string gatheringName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Gathering>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gatheringName
@@ -188,7 +200,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gatheringName
@@ -203,12 +216,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string gatheringName
+            string gatheringName,
+            int? timeOffset
         ) {
             cache.Delete<Gathering>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gatheringName
@@ -221,12 +236,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Gathering[]> callback
         ) {
             cache.ListSubscribe<Gathering>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -238,12 +255,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Gathering>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

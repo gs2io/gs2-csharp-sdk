@@ -43,12 +43,14 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ReceiveGlobalRankingReceivedRewardResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             ReceiveGlobalRankingReceivedRewardRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.RankingName
+                request.RankingName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ReceiveGlobalRankingReceivedRewardRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<ReceiveGlobalRankingReceivedRewardResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ReceiveGlobalRankingReceivedRewardRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ReceiveGlobalRankingReceivedRewardResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

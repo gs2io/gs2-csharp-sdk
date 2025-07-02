@@ -43,12 +43,14 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this DeleteAreaModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteAreaModelMasterRequest request
         ) {
             (null as AreaModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.AreaModelName
+                request.AreaModelName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this DeleteAreaModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteAreaModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this DeleteAreaModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteAreaModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

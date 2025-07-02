@@ -43,18 +43,21 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this VerifyByStampTaskResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             VerifyByStampTaskRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 default,
                 userId,
-                self.Item.Code
+                self.Item.Code,
+                timeOffset
             );
             self.CampaignModel?.PutCache(
                 cache,
                 default,
-                self.Item.CampaignModelName
+                self.Item.CampaignModelName,
+                timeOffset
             );
         }
 
@@ -63,6 +66,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this VerifyByStampTaskRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<VerifyByStampTaskResult>> invokeImpl
         )
         {
@@ -78,6 +82,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +101,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this VerifyByStampTaskRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<VerifyByStampTaskResult>> invokeImpl
     #else
@@ -107,6 +113,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

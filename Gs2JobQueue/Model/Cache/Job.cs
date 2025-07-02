@@ -41,13 +41,15 @@ namespace Gs2.Gs2JobQueue.Model.Cache
         public static string CacheParentKey(
             this Job self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "jobQueue",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Job"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string namespaceName,
             string userId,
             string jobName,
+            int? timeOffset,
             Func<IFuture<Job>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Job> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            jobName
+                            jobName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "job") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string namespaceName,
             string userId,
             string jobName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Job>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "job") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string jobName
+            string jobName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             return cache.Get<Job>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     jobName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string jobName
+            string jobName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     jobName
@@ -197,7 +209,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string jobName
+            string jobName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -205,7 +218,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             cache.Delete<Job>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     jobName
@@ -218,12 +232,14 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Job[]> callback
         ) {
             cache.ListSubscribe<Job>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -235,12 +251,14 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Job>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

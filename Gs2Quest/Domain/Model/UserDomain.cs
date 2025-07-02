@@ -124,7 +124,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -168,7 +169,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -180,7 +182,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -240,7 +243,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.Progress>(
                 (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -284,7 +288,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.Progress>(
                 (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -296,7 +301,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.Progress>(
                 (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -327,6 +333,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CreateProgressByUserIdFuture(request)
                 );
                 yield return future;
@@ -362,6 +369,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CreateProgressByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Quest.Domain.Model.ProgressDomain(
@@ -387,6 +395,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.StartByUserIdFuture(request)
                 );
                 yield return future;
@@ -436,6 +445,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.StartByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

@@ -43,12 +43,14 @@ namespace Gs2.Gs2Key.Model.Cache
             this GetGitHubApiKeyResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetGitHubApiKeyRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.ApiKeyName
+                request.ApiKeyName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Key.Model.Cache
             this GetGitHubApiKeyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetGitHubApiKeyResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Key.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Key.Model.Cache
             this GetGitHubApiKeyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetGitHubApiKeyResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Key.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -101,6 +101,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetIssueJobFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetIssueJobAsync(request)
             );
             return result?.Item;
@@ -150,7 +152,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CampaignModelName,
-                    this.IssueJobName
+                    this.IssueJobName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -161,6 +164,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this.NamespaceName,
                     this.CampaignModelName,
                     this.IssueJobName,
+                    null,
                     () => this.GetFuture(
                         new GetIssueJobRequest()
                     )
@@ -186,7 +190,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.IssueJob>(
                         (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheParentKey(
                             this.NamespaceName,
-                            this.CampaignModelName
+                            this.CampaignModelName,
+                            null
                         ),
                         (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheKey(
                             this.IssueJobName
@@ -196,7 +201,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CampaignModelName,
-                    this.IssueJobName
+                    this.IssueJobName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -206,6 +212,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this.NamespaceName,
                     this.CampaignModelName,
                     this.IssueJobName,
+                    null,
                     () => this.GetAsync(
                         new GetIssueJobRequest()
                     )
@@ -243,7 +250,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.CampaignModelName,
-                this.IssueJobName
+                this.IssueJobName,
+                null
             );
         }
 
@@ -252,7 +260,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheParentKey(
                     this.NamespaceName,
-                    this.CampaignModelName
+                    this.CampaignModelName,
+                    null
                 ),
                 (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheKey(
                     this.IssueJobName
@@ -288,7 +297,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SerialKey.Model.IssueJob>(
                 (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheParentKey(
                     this.NamespaceName,
-                    this.CampaignModelName
+                    this.CampaignModelName,
+                    null
                 ),
                 (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheKey(
                     this.IssueJobName

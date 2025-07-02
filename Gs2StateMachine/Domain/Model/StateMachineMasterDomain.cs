@@ -96,6 +96,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetStateMachineMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetStateMachineMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                     .WithVersion(this.Version);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteStateMachineMasterFuture(request)
                 );
@@ -178,6 +181,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteStateMachineMasterAsync(request)
                 );
             }
@@ -199,7 +203,8 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 var (value, find) = (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Version
+                    this.Version,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -209,6 +214,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.Version,
+                    null,
                     () => this.GetFuture(
                         new GetStateMachineMasterRequest()
                     )
@@ -233,7 +239,8 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2StateMachine.Model.StateMachineMaster>(
                         (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheKey(
                             this.Version
@@ -242,7 +249,8 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 var (value, find) = (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Version
+                    this.Version,
+                    null
                 );
                 if (find) {
                     return value;
@@ -251,6 +259,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.Version,
+                    null,
                     () => this.GetAsync(
                         new GetStateMachineMasterRequest()
                     )
@@ -287,7 +296,8 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.Version
+                this.Version,
+                null
             );
         }
 
@@ -295,7 +305,8 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheKey(
                     this.Version
@@ -330,7 +341,8 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2StateMachine.Model.StateMachineMaster>(
                 (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheKey(
                     this.Version

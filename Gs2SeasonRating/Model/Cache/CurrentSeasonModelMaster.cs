@@ -40,12 +40,14 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
     {
         public static string CacheParentKey(
             this CurrentSeasonModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "seasonRating",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "CurrentSeasonModelMaster"
             );
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this CurrentSeasonModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Func<IFuture<CurrentSeasonModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<CurrentSeasonModelMaster> self)
@@ -73,7 +76,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     {
                         (null as CurrentSeasonModelMaster).PutCache(
                             cache,
-                            namespaceName
+                            namespaceName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "currentSeasonModelMaster") {
                             self.OnComplete(default);
@@ -86,7 +90,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -103,6 +108,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this CurrentSeasonModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CurrentSeasonModelMaster>> fetchImpl
     #else
@@ -113,14 +119,16 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as CurrentSeasonModelMaster).PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "currentSeasonModelMaster") {
                     throw;
@@ -133,11 +141,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
         public static Tuple<CurrentSeasonModelMaster, bool> GetCache(
             this CurrentSeasonModelMaster self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return cache.Get<CurrentSeasonModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -147,11 +157,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
         public static void PutCache(
             this CurrentSeasonModelMaster self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 ),
@@ -163,11 +175,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
         public static void DeleteCache(
             this CurrentSeasonModelMaster self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             cache.Delete<CurrentSeasonModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -178,11 +192,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this CurrentSeasonModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<CurrentSeasonModelMaster[]> callback
         ) {
             cache.ListSubscribe<CurrentSeasonModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -193,11 +209,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this CurrentSeasonModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<CurrentSeasonModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

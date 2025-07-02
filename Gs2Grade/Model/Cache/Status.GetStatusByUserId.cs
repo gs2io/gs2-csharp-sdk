@@ -43,6 +43,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GetStatusByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetStatusByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 self.Item.GradeName,
-                self.Item.PropertyId
+                self.Item.PropertyId,
+                timeOffset
             );
         }
 
@@ -59,6 +61,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GetStatusByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetStatusByUserIdResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Grade.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GetStatusByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetStatusByUserIdResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

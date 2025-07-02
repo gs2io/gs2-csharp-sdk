@@ -130,7 +130,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -174,7 +175,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -186,7 +188,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -226,6 +229,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SendNotificationFuture(request)
                 );
                 yield return future;
@@ -258,6 +262,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SendNotificationAsync(request)
             );
             var domain = this;
@@ -280,6 +285,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DisconnectByUserIdFuture(request)
                 );
                 yield return future;
@@ -314,6 +320,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DisconnectByUserIdAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain(
@@ -337,6 +344,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DisconnectAllFuture(request)
                 );
                 yield return future;
@@ -366,6 +374,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DisconnectAllAsync(request)
             );
             var domain = this;

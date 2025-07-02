@@ -100,6 +100,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetBoxByUserIdFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetBoxByUserIdAsync(request)
             );
             return result?.Item;
@@ -150,6 +152,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ResetBoxByUserIdFuture(request)
                 );
                 yield return future;
@@ -161,7 +164,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 _gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.BoxItems>(
                     (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                         this.NamespaceName,
-                        this.UserId
+                        this.UserId,
+                        null
                     )
                 );
                 var domain = this;
@@ -188,12 +192,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ResetBoxByUserIdAsync(request)
             );
             _gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.BoxItems>(
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
             var domain = this;
@@ -215,7 +221,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.PrizeTableName
+                    this.PrizeTableName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -226,6 +233,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PrizeTableName,
+                    null,
                     () => this.GetFuture(
                         new GetBoxByUserIdRequest()
                     )
@@ -251,7 +259,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.BoxItems>(
                         (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Lottery.Model.BoxItems).CacheKey(
                             this.PrizeTableName
@@ -261,7 +270,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.PrizeTableName
+                    this.PrizeTableName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -271,6 +281,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PrizeTableName,
+                    null,
                     () => this.GetAsync(
                         new GetBoxByUserIdRequest()
                     )
@@ -308,7 +319,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.PrizeTableName
+                this.PrizeTableName,
+                null
             );
         }
 
@@ -317,7 +329,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheKey(
                     this.PrizeTableName
@@ -353,7 +366,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.BoxItems).CacheKey(
                     this.PrizeTableName

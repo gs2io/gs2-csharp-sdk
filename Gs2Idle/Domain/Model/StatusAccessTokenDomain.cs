@@ -97,6 +97,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetStatusFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetStatusAsync(request)
             );
             return result?.Item;
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PredictionFuture(request)
                 );
                 yield return future;
@@ -177,6 +180,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PredictionAsync(request)
             );
             return result?.Items;
@@ -214,6 +218,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ReceiveFuture(request)
                 );
                 yield return future;
@@ -274,6 +279,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ReceiveAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -308,6 +314,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DecreaseMaximumIdleMinutesFuture(request)
                 );
                 yield return future;
@@ -340,6 +347,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DecreaseMaximumIdleMinutesAsync(request)
             );
             var domain = this;
@@ -357,7 +365,8 @@ namespace Gs2.Gs2Idle.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.CategoryName
+                    this.CategoryName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -368,6 +377,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetStatusRequest()
                     )
@@ -393,7 +403,8 @@ namespace Gs2.Gs2Idle.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Idle.Model.Status>(
                         (null as Gs2.Gs2Idle.Model.Status).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Idle.Model.Status).CacheKey(
                             this.CategoryName
@@ -403,7 +414,8 @@ namespace Gs2.Gs2Idle.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.CategoryName
+                    this.CategoryName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -413,6 +425,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetStatusRequest()
                     )
@@ -450,7 +463,8 @@ namespace Gs2.Gs2Idle.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.CategoryName
+                this.CategoryName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -459,7 +473,8 @@ namespace Gs2.Gs2Idle.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Idle.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Idle.Model.Status).CacheKey(
                     this.CategoryName
@@ -495,7 +510,8 @@ namespace Gs2.Gs2Idle.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Idle.Model.Status>(
                 (null as Gs2.Gs2Idle.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Idle.Model.Status).CacheKey(
                     this.CategoryName

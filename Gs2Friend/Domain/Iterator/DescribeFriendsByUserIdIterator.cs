@@ -115,7 +115,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        WithProfile ?? default
+                        WithProfile ?? default,
+                        null
                     ),
                     out var list
             )) {
@@ -155,6 +156,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -163,7 +165,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            WithProfile ?? default
+                            WithProfile ?? default,
+                            null
                         )
                     );
                 }
@@ -246,7 +249,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            WithProfile ?? default
+                            WithProfile ?? default,
+                            null
                        ),
                        "ListFriendUser"
                    ).LockAsync()) {

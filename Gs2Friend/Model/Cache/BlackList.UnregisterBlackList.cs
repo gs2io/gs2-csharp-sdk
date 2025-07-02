@@ -43,12 +43,14 @@ namespace Gs2.Gs2Friend.Model.Cache
             this UnregisterBlackListResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UnregisterBlackListRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                userId
+                userId,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this UnregisterBlackListRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UnregisterBlackListResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this UnregisterBlackListRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UnregisterBlackListResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

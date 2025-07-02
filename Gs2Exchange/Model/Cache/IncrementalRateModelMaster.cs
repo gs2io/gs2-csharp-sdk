@@ -40,12 +40,14 @@ namespace Gs2.Gs2Exchange.Model.Cache
     {
         public static string CacheParentKey(
             this IncrementalRateModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "exchange",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "IncrementalRateModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string rateName,
+            int? timeOffset,
             Func<IFuture<IncrementalRateModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<IncrementalRateModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                         (null as IncrementalRateModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            rateName
+                            rateName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "incrementalRateModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    rateName
+                    rateName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string rateName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<IncrementalRateModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    rateName
+                    rateName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                 (null as IncrementalRateModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    rateName
+                    rateName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "incrementalRateModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalRateModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string rateName
+            string rateName,
+            int? timeOffset
         ) {
             return cache.Get<IncrementalRateModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rateName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalRateModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string rateName
+            string rateName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<IncrementalRateModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rateName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rateName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalRateModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string rateName
+            string rateName,
+            int? timeOffset
         ) {
             cache.Delete<IncrementalRateModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rateName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalRateModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<IncrementalRateModelMaster[]> callback
         ) {
             cache.ListSubscribe<IncrementalRateModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalRateModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<IncrementalRateModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -115,7 +115,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        InventoryName
+                        InventoryName,
+                        null
                     ),
                     out var list
             )) {
@@ -155,6 +156,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -163,7 +165,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                         (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            InventoryName
+                            InventoryName,
+                            null
                         )
                     );
                 }
@@ -246,7 +249,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                         (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            InventoryName
+                            InventoryName,
+                            null
                        ),
                        "ListSimpleItem"
                    ).LockAsync()) {

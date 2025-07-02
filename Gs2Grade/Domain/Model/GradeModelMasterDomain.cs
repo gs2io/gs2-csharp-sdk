@@ -96,6 +96,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetGradeModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetGradeModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                     .WithGradeName(this.GradeName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateGradeModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateGradeModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                     .WithGradeName(this.GradeName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteGradeModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteGradeModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Grade.Model.GradeModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.GradeName
+                    this.GradeName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GradeName,
+                    null,
                     () => this.GetFuture(
                         new GetGradeModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Grade.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.GradeModelMaster>(
                         (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheKey(
                             this.GradeName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Grade.Model.GradeModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.GradeName
+                    this.GradeName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GradeName,
+                    null,
                     () => this.GetAsync(
                         new GetGradeModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Grade.Domain.Model
             (null as Gs2.Gs2Grade.Model.GradeModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.GradeName
+                this.GradeName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Grade.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheKey(
                     this.GradeName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Grade.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Grade.Model.GradeModelMaster>(
                 (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Grade.Model.GradeModelMaster).CacheKey(
                     this.GradeName

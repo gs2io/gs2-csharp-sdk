@@ -40,12 +40,14 @@ namespace Gs2.Gs2Enchant.Model.Cache
     {
         public static string CacheParentKey(
             this BalanceParameterModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "enchant",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "BalanceParameterModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string parameterName,
+            int? timeOffset,
             Func<IFuture<BalanceParameterModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<BalanceParameterModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                         (null as BalanceParameterModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            parameterName
+                            parameterName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "balanceParameterModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    parameterName
+                    parameterName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string parameterName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BalanceParameterModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    parameterName
+                    parameterName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 (null as BalanceParameterModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    parameterName
+                    parameterName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "balanceParameterModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this BalanceParameterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string parameterName
+            string parameterName,
+            int? timeOffset
         ) {
             return cache.Get<BalanceParameterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     parameterName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this BalanceParameterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string parameterName
+            string parameterName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<BalanceParameterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     parameterName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     parameterName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this BalanceParameterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string parameterName
+            string parameterName,
+            int? timeOffset
         ) {
             cache.Delete<BalanceParameterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     parameterName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this BalanceParameterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<BalanceParameterModelMaster[]> callback
         ) {
             cache.ListSubscribe<BalanceParameterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this BalanceParameterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<BalanceParameterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

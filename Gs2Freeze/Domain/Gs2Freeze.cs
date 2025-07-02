@@ -110,6 +110,7 @@ namespace Gs2.Gs2Freeze.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Freeze.Model.Stage>(
                 (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -152,6 +153,7 @@ namespace Gs2.Gs2Freeze.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Freeze.Model.Stage>(
                 (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -162,6 +164,7 @@ namespace Gs2.Gs2Freeze.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Freeze.Model.Stage>(
                 (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
+                    null
                 )
             );
         }

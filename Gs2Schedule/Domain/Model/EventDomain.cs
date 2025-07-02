@@ -109,6 +109,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetEventByUserIdFuture(request)
                 );
                 yield return future;
@@ -140,6 +141,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetEventByUserIdAsync(request)
             );
             return result?.Item;
@@ -160,6 +162,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyEventByUserIdFuture(request)
                 );
                 yield return future;
@@ -191,6 +194,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyEventByUserIdAsync(request)
             );
             var domain = this;
@@ -212,7 +216,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.EventName,
-                    this.IsInSchedule ?? true
+                    this.IsInSchedule ?? true,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -224,6 +229,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.UserId,
                     this.EventName,
                     this.IsInSchedule ?? true,
+                    null,
                     () => this.GetFuture(
                         new GetEventByUserIdRequest()
                     )
@@ -250,7 +256,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                         (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.IsInSchedule ?? true
+                            this.IsInSchedule ?? true,
+                            null
                         ),
                         (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
                             this.EventName
@@ -261,7 +268,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.EventName,
-                    this.IsInSchedule ?? true
+                    this.IsInSchedule ?? true,
+                    null
                 );
                 if (find) {
                     return value;
@@ -272,6 +280,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.UserId,
                     this.EventName,
                     this.IsInSchedule ?? true,
+                    null,
                     () => this.GetAsync(
                         new GetEventByUserIdRequest()
                     )
@@ -309,7 +318,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EventName
+                this.EventName,
+                null
             );
         }
 
@@ -319,7 +329,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.IsInSchedule ?? true
+                    this.IsInSchedule ?? true,
+                    null
                 ),
                 (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
                     this.EventName
@@ -356,7 +367,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.IsInSchedule ?? true
+                    this.IsInSchedule ?? true,
+                    null
                 ),
                 (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
                     this.EventName

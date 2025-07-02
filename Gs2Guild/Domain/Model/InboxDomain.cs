@@ -99,7 +99,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -122,7 +123,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                         (null as Gs2.Gs2Guild.Model.Inbox).CacheParentKey(
                             this.NamespaceName,
                             this.GuildModelName,
-                            this.GuildName
+                            this.GuildName,
+                            null
                         ),
                         (null as Gs2.Gs2Guild.Model.Inbox).CacheKey(
                         )
@@ -131,7 +133,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -170,7 +173,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                null
             );
         }
 
@@ -180,7 +184,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.Inbox).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.Inbox).CacheKey(
                 ),
@@ -216,7 +221,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.Inbox).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.Inbox).CacheKey(
                 ),

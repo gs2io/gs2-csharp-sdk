@@ -45,6 +45,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeIgnoreUsersResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeIgnoreUsersRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<IgnoreUser>())
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.GuildModelName,
-                    userId
+                    userId,
+                    timeOffset
                 );
             }
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeIgnoreUsersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeIgnoreUsersResult>> invokeImpl
         )
         {
@@ -78,6 +81,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeIgnoreUsersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeIgnoreUsersResult>> invokeImpl
     #else
@@ -107,6 +112,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

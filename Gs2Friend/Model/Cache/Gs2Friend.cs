@@ -36,6 +36,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetProfileResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetProfileRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetProfileByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetProfileByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.UpdateProfileResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateProfileRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.UpdateProfileByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateProfileByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DeleteProfileByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteProfileByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeFriendsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeFriendsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeFriendsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeFriendsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeBlackListResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBlackListRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeBlackListByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBlackListByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.RegisterBlackListResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RegisterBlackListRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.RegisterBlackListByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RegisterBlackListByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.UnregisterBlackListResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UnregisterBlackListRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.UnregisterBlackListByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UnregisterBlackListByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeFollowsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeFollowsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeFollowsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeFollowsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetFollowResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFollowRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetFollowByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFollowByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.FollowResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FollowRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.FollowByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FollowByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.UnfollowResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UnfollowRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.UnfollowByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UnfollowByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetFriendResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFriendRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetFriendByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetFriendByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.AddFriendResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddFriendRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.AddFriendByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddFriendByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DeleteFriendResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteFriendRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DeleteFriendByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteFriendByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeSendRequestsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSendRequestsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeSendRequestsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSendRequestsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetSendRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSendRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetSendRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSendRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.SendRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SendRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.SendRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SendRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DeleteRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DeleteRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeReceiveRequestsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeReceiveRequestsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.DescribeReceiveRequestsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeReceiveRequestsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetReceiveRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetReceiveRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetReceiveRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetReceiveRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.AcceptRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcceptRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.AcceptRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcceptRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.RejectRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RejectRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.RejectRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RejectRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     Result.GetPublicProfileResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPublicProfileRequest.FromJson(requestPayload)
                     );
                     break;

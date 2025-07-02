@@ -40,6 +40,7 @@ namespace Gs2.Gs2Distributor.Model
         public Gs2.Gs2Distributor.Model.VerifyActionResult[] VerifyResults { set; get; }
         public Gs2.Gs2Distributor.Model.ConsumeActionResult[] ConsumeResults { set; get; }
         public Gs2.Gs2Distributor.Model.AcquireActionResult[] AcquireResults { set; get; }
+        public bool? HasError { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
         public TransactionResult WithTransactionResultId(string transactionResultId) {
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Distributor.Model
         }
         public TransactionResult WithAcquireResults(Gs2.Gs2Distributor.Model.AcquireActionResult[] acquireResults) {
             this.AcquireResults = acquireResults;
+            return this;
+        }
+        public TransactionResult WithHasError(bool? hasError) {
+            this.HasError = hasError;
             return this;
         }
         public TransactionResult WithCreatedAt(long? createdAt) {
@@ -181,6 +186,7 @@ namespace Gs2.Gs2Distributor.Model
                 .WithAcquireResults(!data.Keys.Contains("acquireResults") || data["acquireResults"] == null || !data["acquireResults"].IsArray ? null : data["acquireResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Distributor.Model.AcquireActionResult.FromJson(v);
                 }).ToArray())
+                .WithHasError(!data.Keys.Contains("hasError") || data["hasError"] == null ? null : (bool?)bool.Parse(data["hasError"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -221,6 +227,7 @@ namespace Gs2.Gs2Distributor.Model
                 ["verifyResults"] = verifyResultsJsonData,
                 ["consumeResults"] = consumeResultsJsonData,
                 ["acquireResults"] = acquireResultsJsonData,
+                ["hasError"] = HasError,
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
@@ -273,6 +280,10 @@ namespace Gs2.Gs2Distributor.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (HasError != null) {
+                writer.WritePropertyName("hasError");
+                writer.Write(bool.Parse(HasError.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -349,6 +360,14 @@ namespace Gs2.Gs2Distributor.Model
                     diff += AcquireResults[i].CompareTo(other.AcquireResults[i]);
                 }
             }
+            if (HasError == null && HasError == other.HasError)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += HasError == other.HasError ? 0 : 1;
+            }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
@@ -417,6 +436,8 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("transactionResult", "distributor.transactionResult.createdAt.error.invalid"),
@@ -450,6 +471,7 @@ namespace Gs2.Gs2Distributor.Model
                 VerifyResults = VerifyResults?.Clone() as Gs2.Gs2Distributor.Model.VerifyActionResult[],
                 ConsumeResults = ConsumeResults?.Clone() as Gs2.Gs2Distributor.Model.ConsumeActionResult[],
                 AcquireResults = AcquireResults?.Clone() as Gs2.Gs2Distributor.Model.AcquireActionResult[],
+                HasError = HasError,
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

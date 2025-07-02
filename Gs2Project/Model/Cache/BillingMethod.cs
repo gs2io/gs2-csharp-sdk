@@ -40,12 +40,14 @@ namespace Gs2.Gs2Project.Model.Cache
     {
         public static string CacheParentKey(
             this BillingMethod self,
-            string accountName
+            string accountName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "project",
                 accountName,
+                timeOffset?.ToString() ?? "0",
                 "BillingMethod"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string billingMethodName,
+            int? timeOffset,
             Func<IFuture<BillingMethod>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<BillingMethod> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Project.Model.Cache
                         (null as BillingMethod).PutCache(
                             cache,
                             accountName,
-                            billingMethodName
+                            billingMethodName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "billingMethod") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Project.Model.Cache
                 item.PutCache(
                     cache,
                     accountName,
-                    billingMethodName
+                    billingMethodName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string billingMethodName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BillingMethod>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Project.Model.Cache
                 item.PutCache(
                     cache,
                     accountName,
-                    billingMethodName
+                    billingMethodName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Project.Model.Cache
                 (null as BillingMethod).PutCache(
                     cache,
                     accountName,
-                    billingMethodName
+                    billingMethodName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "billingMethod") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Project.Model.Cache
             this BillingMethod self,
             CacheDatabase cache,
             string accountName,
-            string billingMethodName
+            string billingMethodName,
+            int? timeOffset
         ) {
             return cache.Get<BillingMethod>(
                 self.CacheParentKey(
-                    accountName
+                    accountName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     billingMethodName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Project.Model.Cache
             this BillingMethod self,
             CacheDatabase cache,
             string accountName,
-            string billingMethodName
+            string billingMethodName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    accountName
+                    accountName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     billingMethodName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Project.Model.Cache
             this BillingMethod self,
             CacheDatabase cache,
             string accountName,
-            string billingMethodName
+            string billingMethodName,
+            int? timeOffset
         ) {
             cache.Delete<BillingMethod>(
                 self.CacheParentKey(
-                    accountName
+                    accountName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     billingMethodName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Project.Model.Cache
             this BillingMethod self,
             CacheDatabase cache,
             string accountName,
+            int? timeOffset,
             Action<BillingMethod[]> callback
         ) {
             cache.ListSubscribe<BillingMethod>(
                 self.CacheParentKey(
-                    accountName
+                    accountName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Project.Model.Cache
             this BillingMethod self,
             CacheDatabase cache,
             string accountName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<BillingMethod>(
                 self.CacheParentKey(
-                    accountName
+                    accountName,
+                    timeOffset
                 ),
                 callbackId
             );

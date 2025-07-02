@@ -90,7 +90,8 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             accessToken.UserId,
                             request.LimitName,
-                            request.CounterName
+                            request.CounterName,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });

@@ -40,12 +40,14 @@ namespace Gs2.Gs2Showcase.Model.Cache
     {
         public static string CacheParentKey(
             this RandomShowcaseMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "showcase",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "RandomShowcaseMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string showcaseName,
+            int? timeOffset,
             Func<IFuture<RandomShowcaseMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<RandomShowcaseMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                         (null as RandomShowcaseMaster).PutCache(
                             cache,
                             namespaceName,
-                            showcaseName
+                            showcaseName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "randomShowcaseMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string showcaseName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RandomShowcaseMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 (null as RandomShowcaseMaster).PutCache(
                     cache,
                     namespaceName,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "randomShowcaseMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             return cache.Get<RandomShowcaseMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     showcaseName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<RandomShowcaseMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     showcaseName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     showcaseName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             cache.Delete<RandomShowcaseMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     showcaseName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<RandomShowcaseMaster[]> callback
         ) {
             cache.ListSubscribe<RandomShowcaseMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomShowcaseMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<RandomShowcaseMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

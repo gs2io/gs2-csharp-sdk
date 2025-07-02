@@ -102,6 +102,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetBalanceParameterStatusFuture(request)
                 );
                 yield return future;
@@ -133,6 +134,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetBalanceParameterStatusAsync(request)
             );
             return result?.Item;
@@ -149,7 +151,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.ParameterName,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -161,6 +164,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.UserId,
                     this.ParameterName,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetBalanceParameterStatusRequest()
                     )
@@ -186,7 +190,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                         (null as Gs2.Gs2Enchant.Model.BalanceParameterStatus).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Enchant.Model.BalanceParameterStatus).CacheKey(
                             this.ParameterName,
@@ -198,7 +203,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.ParameterName,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -209,6 +215,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.UserId,
                     this.ParameterName,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetBalanceParameterStatusRequest()
                     )
@@ -247,7 +254,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.ParameterName,
-                this.PropertyId
+                this.PropertyId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -256,7 +264,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterStatus).CacheKey(
                     this.ParameterName,
@@ -293,7 +302,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterStatus).CacheKey(
                     this.ParameterName,

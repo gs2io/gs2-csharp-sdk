@@ -41,13 +41,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
         public static string CacheParentKey(
             this Subscribe self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "ranking2",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Subscribe"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string userId,
             string rankingName,
+            int? timeOffset,
             Func<IFuture<Subscribe>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Subscribe> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            rankingName
+                            rankingName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "subscribe") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string userId,
             string rankingName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Subscribe>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "subscribe") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string rankingName
+            string rankingName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             return cache.Get<Subscribe>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string rankingName
+            string rankingName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             var (value, find) = cache.Get<Subscribe>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string rankingName
+            string rankingName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             cache.Delete<Subscribe>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Subscribe[]> callback
         ) {
             cache.ListSubscribe<Subscribe>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Subscribe>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

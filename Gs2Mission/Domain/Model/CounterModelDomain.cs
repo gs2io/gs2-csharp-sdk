@@ -96,6 +96,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetCounterModelFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetCounterModelAsync(request)
             );
             return result?.Item;
@@ -143,7 +145,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Mission.Model.CounterModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.CounterName
+                    this.CounterName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CounterName,
+                    null,
                     () => this.GetFuture(
                         new GetCounterModelRequest()
                     )
@@ -177,7 +181,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.CounterModel>(
                         (null as Gs2.Gs2Mission.Model.CounterModel).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Mission.Model.CounterModel).CacheKey(
                             this.CounterName
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Mission.Model.CounterModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.CounterName
+                    this.CounterName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -195,6 +201,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CounterName,
+                    null,
                     () => this.GetAsync(
                         new GetCounterModelRequest()
                     )
@@ -231,7 +238,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             (null as Gs2.Gs2Mission.Model.CounterModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.CounterName
+                this.CounterName,
+                null
             );
         }
 
@@ -239,7 +247,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Mission.Model.CounterModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Mission.Model.CounterModel).CacheKey(
                     this.CounterName
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Mission.Model.CounterModel>(
                 (null as Gs2.Gs2Mission.Model.CounterModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Mission.Model.CounterModel).CacheKey(
                     this.CounterName

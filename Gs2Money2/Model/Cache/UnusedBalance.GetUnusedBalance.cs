@@ -43,12 +43,14 @@ namespace Gs2.Gs2Money2.Model.Cache
             this GetUnusedBalanceResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetUnusedBalanceRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.Currency
+                self.Item.Currency,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this GetUnusedBalanceRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetUnusedBalanceResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this GetUnusedBalanceRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetUnusedBalanceResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

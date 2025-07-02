@@ -86,6 +86,7 @@ namespace Gs2.Gs2Deploy.Domain
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.PreCreateStackFuture(request)
                 );
                 yield return future;
@@ -114,6 +115,7 @@ namespace Gs2.Gs2Deploy.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PreCreateStackAsync(request)
             );
             var domain = this;
@@ -131,6 +133,7 @@ namespace Gs2.Gs2Deploy.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CreateStackFuture(request)
                 );
@@ -161,6 +164,7 @@ namespace Gs2.Gs2Deploy.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateStackAsync(request)
             );
             var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
@@ -179,6 +183,7 @@ namespace Gs2.Gs2Deploy.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CreateStackFromGitHubFuture(request)
                 );
@@ -209,6 +214,7 @@ namespace Gs2.Gs2Deploy.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateStackFromGitHubAsync(request)
             );
             var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
@@ -227,6 +233,7 @@ namespace Gs2.Gs2Deploy.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PreValidateFuture(request)
                 );
@@ -256,6 +263,7 @@ namespace Gs2.Gs2Deploy.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PreValidateAsync(request)
             );
             var domain = this;
@@ -273,6 +281,7 @@ namespace Gs2.Gs2Deploy.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.ValidateFuture(request)
                 );
@@ -299,6 +308,7 @@ namespace Gs2.Gs2Deploy.Domain
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.ValidateAsync(request)
             );
@@ -342,6 +352,7 @@ namespace Gs2.Gs2Deploy.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Stack>(
                 (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -384,6 +395,7 @@ namespace Gs2.Gs2Deploy.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Deploy.Model.Stack>(
                 (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -394,6 +406,7 @@ namespace Gs2.Gs2Deploy.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Deploy.Model.Stack>(
                 (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
+                    null
                 )
             );
         }

@@ -42,7 +42,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this BigItem self,
             string namespaceName,
             string userId,
-            string inventoryName
+            string inventoryName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 namespaceName,
                 userId,
                 inventoryName,
+                timeOffset?.ToString() ?? "0",
                 "BigItem"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             string inventoryName,
             string itemName,
+            int? timeOffset,
             Func<IFuture<BigItem>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<BigItem> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                             namespaceName,
                             userId,
                             inventoryName,
-                            itemName
+                            itemName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "bigItem") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     namespaceName,
                     userId,
                     inventoryName,
-                    itemName
+                    itemName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             string inventoryName,
             string itemName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BigItem>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     namespaceName,
                     userId,
                     inventoryName,
-                    itemName
+                    itemName,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     namespaceName,
                     userId,
                     inventoryName,
-                    itemName
+                    itemName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "bigItem") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string namespaceName,
             string userId,
             string inventoryName,
-            string itemName
+            string itemName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string namespaceName,
             string userId,
             string inventoryName,
-            string itemName
+            string itemName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -207,7 +219,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -223,7 +236,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string namespaceName,
             string userId,
             string inventoryName,
-            string itemName
+            string itemName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -232,7 +246,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -246,13 +261,15 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string namespaceName,
             string userId,
             string inventoryName,
+            int? timeOffset,
             Action<BigItem[]> callback
         ) {
             cache.ListSubscribe<BigItem>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -265,13 +282,15 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string namespaceName,
             string userId,
             string inventoryName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<BigItem>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 callbackId
             );

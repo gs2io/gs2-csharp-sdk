@@ -41,13 +41,15 @@ namespace Gs2.Gs2Account.Model.Cache
         public static string CacheParentKey(
             this TakeOver self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "account",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "TakeOver"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Account.Model.Cache
             string namespaceName,
             string userId,
             int? type,
+            int? timeOffset,
             Func<IFuture<TakeOver>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<TakeOver> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Account.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            type
+                            type,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "takeOver") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Account.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    type
+                    type,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Account.Model.Cache
             string namespaceName,
             string userId,
             int? type,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<TakeOver>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Account.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    type
+                    type,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Account.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    type
+                    type,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "takeOver") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Account.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            int? type
+            int? type,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Account.Model.Cache
             return cache.Get<TakeOver>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Account.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            int? type
+            int? type,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Account.Model.Cache
             var (value, find) = cache.Get<TakeOver>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Account.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Account.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            int? type
+            int? type,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Account.Model.Cache
             cache.Delete<TakeOver>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Account.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<TakeOver[]> callback
         ) {
             cache.ListSubscribe<TakeOver>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Account.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<TakeOver>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

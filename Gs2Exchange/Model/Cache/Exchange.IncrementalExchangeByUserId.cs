@@ -43,12 +43,14 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalExchangeByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             IncrementalExchangeByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.RateName
+                request.RateName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalExchangeByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<IncrementalExchangeByUserIdResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this IncrementalExchangeByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<IncrementalExchangeByUserIdResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

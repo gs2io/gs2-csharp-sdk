@@ -119,7 +119,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        RankingName ?? default
+                        RankingName ?? default,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -161,6 +162,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -169,7 +171,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            RankingName ?? default
+                            RankingName ?? default,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -252,7 +255,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            RankingName ?? default
+                            RankingName ?? default,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListClusterRankingScore"
                    ).LockAsync()) {

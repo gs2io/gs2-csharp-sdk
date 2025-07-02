@@ -89,6 +89,7 @@ namespace Gs2.Gs2Distributor.Domain
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
@@ -117,6 +118,7 @@ namespace Gs2.Gs2Distributor.Domain
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.CreateNamespaceAsync(request)
             );
@@ -163,6 +165,7 @@ namespace Gs2.Gs2Distributor.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Distributor.Model.Namespace>(
                 (null as Gs2.Gs2Distributor.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -204,6 +207,7 @@ namespace Gs2.Gs2Distributor.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Distributor.Model.Namespace>(
                 (null as Gs2.Gs2Distributor.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -214,6 +218,7 @@ namespace Gs2.Gs2Distributor.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Distributor.Model.Namespace>(
                 (null as Gs2.Gs2Distributor.Model.Namespace).CacheParentKey(
+                    null
                 )
             );
         }
@@ -295,7 +300,8 @@ namespace Gs2.Gs2Distributor.Domain
                         _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
                             (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheParentKey(
                                 notification.NamespaceName,
-                                notification.UserId
+                                notification.UserId,
+                                null
                             ),
                             (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheKey(
                                 notification.TransactionId
@@ -315,7 +321,8 @@ namespace Gs2.Gs2Distributor.Domain
                         _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.TransactionResult>(
                             (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheParentKey(
                                 notification.NamespaceName,
-                                notification.UserId
+                                notification.UserId,
+                                null
                             ),
                             (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheKey(
                                 notification.TransactionId

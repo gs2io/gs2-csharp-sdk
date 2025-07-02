@@ -43,6 +43,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DescribeBigItemModelMastersResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeBigItemModelMastersRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<BigItemModelMaster>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.InventoryName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DescribeBigItemModelMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeBigItemModelMastersResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DescribeBigItemModelMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeBigItemModelMastersResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

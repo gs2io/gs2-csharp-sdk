@@ -43,13 +43,15 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DeleteCounterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteCounterRequest request
         ) {
             (null as Counter).DeleteCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.CounterName
+                request.CounterName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DeleteCounterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteCounterResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DeleteCounterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteCounterResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

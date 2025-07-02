@@ -40,12 +40,14 @@ namespace Gs2.Gs2Script.Model.Cache
     {
         public static string CacheParentKey(
             this Script self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "script",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "Script"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Script.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string scriptName,
+            int? timeOffset,
             Func<IFuture<Script>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Script> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Script.Model.Cache
                         (null as Script).PutCache(
                             cache,
                             namespaceName,
-                            scriptName
+                            scriptName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "script") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Script.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    scriptName
+                    scriptName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Script.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string scriptName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Script>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Script.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    scriptName
+                    scriptName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Script.Model.Cache
                 (null as Script).PutCache(
                     cache,
                     namespaceName,
-                    scriptName
+                    scriptName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "script") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Script.Model.Cache
             this Script self,
             CacheDatabase cache,
             string namespaceName,
-            string scriptName
+            string scriptName,
+            int? timeOffset
         ) {
             return cache.Get<Script>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     scriptName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Script.Model.Cache
             this Script self,
             CacheDatabase cache,
             string namespaceName,
-            string scriptName
+            string scriptName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Script>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     scriptName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Script.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     scriptName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Script.Model.Cache
             this Script self,
             CacheDatabase cache,
             string namespaceName,
-            string scriptName
+            string scriptName,
+            int? timeOffset
         ) {
             cache.Delete<Script>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     scriptName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Script.Model.Cache
             this Script self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<Script[]> callback
         ) {
             cache.ListSubscribe<Script>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Script.Model.Cache
             this Script self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Script>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -40,12 +40,14 @@ namespace Gs2.Gs2MegaField.Model.Cache
     {
         public static string CacheParentKey(
             this CurrentFieldMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "megaField",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "CurrentFieldMaster"
             );
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this CurrentFieldMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Func<IFuture<CurrentFieldMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<CurrentFieldMaster> self)
@@ -73,7 +76,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                     {
                         (null as CurrentFieldMaster).PutCache(
                             cache,
-                            namespaceName
+                            namespaceName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "currentFieldMaster") {
                             self.OnComplete(default);
@@ -86,7 +90,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -103,6 +108,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this CurrentFieldMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CurrentFieldMaster>> fetchImpl
     #else
@@ -113,14 +119,16 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as CurrentFieldMaster).PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "currentFieldMaster") {
                     throw;
@@ -133,11 +141,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
         public static Tuple<CurrentFieldMaster, bool> GetCache(
             this CurrentFieldMaster self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return cache.Get<CurrentFieldMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -147,11 +157,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
         public static void PutCache(
             this CurrentFieldMaster self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 ),
@@ -163,11 +175,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
         public static void DeleteCache(
             this CurrentFieldMaster self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             cache.Delete<CurrentFieldMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -178,11 +192,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this CurrentFieldMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<CurrentFieldMaster[]> callback
         ) {
             cache.ListSubscribe<CurrentFieldMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -193,11 +209,13 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this CurrentFieldMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<CurrentFieldMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

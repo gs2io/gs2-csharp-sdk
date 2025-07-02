@@ -43,6 +43,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DescribeCompletesByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeCompletesByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Complete>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.MissionGroupName
+                    item.MissionGroupName,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DescribeCompletesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeCompletesByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DescribeCompletesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeCompletesByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

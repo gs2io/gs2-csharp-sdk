@@ -45,6 +45,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this DescribeScoresResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeScoresRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Score>())
@@ -54,7 +55,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     request.NamespaceName,
                     item.ScorerUserId,
                     item.CategoryName,
-                    item.UniqueId
+                    item.UniqueId,
+                    timeOffset
                 );
             }
         }
@@ -64,6 +66,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this DescribeScoresRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeScoresResult>> invokeImpl
         )
         {
@@ -79,6 +82,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +101,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this DescribeScoresRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeScoresResult>> invokeImpl
     #else
@@ -108,6 +113,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

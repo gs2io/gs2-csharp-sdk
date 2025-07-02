@@ -45,6 +45,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this PutClusterRankingScoreResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             PutClusterRankingScoreRequest request
         ) {
             self.Item?.PutCache(
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.Item.RankingName,
                 self.Item.ClusterName,
                 self.Item.Season,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
             self.Item?.PutCache(
                 cache,
@@ -61,7 +63,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.Item.RankingName,
                 self.Item.ClusterName,
                 null,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
         }
 
@@ -70,6 +73,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this PutClusterRankingScoreRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<PutClusterRankingScoreResult>> invokeImpl
         )
         {
@@ -85,6 +89,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this PutClusterRankingScoreRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PutClusterRankingScoreResult>> invokeImpl
     #else
@@ -114,6 +120,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -39,11 +39,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
     public static partial class SecurityPolicyExt
     {
         public static string CacheParentKey(
-            this SecurityPolicy self
+            this SecurityPolicy self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "identifier",
+                timeOffset?.ToString() ?? "0",
                 "SecurityPolicy"
             );
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this SecurityPolicy self,
             CacheDatabase cache,
             string securityPolicyName,
+            int? timeOffset,
             Func<IFuture<SecurityPolicy>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SecurityPolicy> self)
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     {
                         (null as SecurityPolicy).PutCache(
                             cache,
-                            securityPolicyName
+                            securityPolicyName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "securityPolicy") {
                             self.OnComplete(default);
@@ -88,7 +92,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    securityPolicyName
+                    securityPolicyName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this SecurityPolicy self,
             CacheDatabase cache,
             string securityPolicyName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SecurityPolicy>> fetchImpl
     #else
@@ -115,14 +121,16 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    securityPolicyName
+                    securityPolicyName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as SecurityPolicy).PutCache(
                     cache,
-                    securityPolicyName
+                    securityPolicyName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "securityPolicy") {
                     throw;
@@ -135,10 +143,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static Tuple<SecurityPolicy, bool> GetCache(
             this SecurityPolicy self,
             CacheDatabase cache,
-            string securityPolicyName
+            string securityPolicyName,
+            int? timeOffset
         ) {
             return cache.Get<SecurityPolicy>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     securityPolicyName
@@ -149,10 +159,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void PutCache(
             this SecurityPolicy self,
             CacheDatabase cache,
-            string securityPolicyName
+            string securityPolicyName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     securityPolicyName
@@ -165,10 +177,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void DeleteCache(
             this SecurityPolicy self,
             CacheDatabase cache,
-            string securityPolicyName
+            string securityPolicyName,
+            int? timeOffset
         ) {
             cache.Delete<SecurityPolicy>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     securityPolicyName
@@ -179,10 +193,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void ListSubscribe(
             this SecurityPolicy self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<SecurityPolicy[]> callback
         ) {
             cache.ListSubscribe<SecurityPolicy>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -192,10 +208,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void ListUnsubscribe(
             this SecurityPolicy self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SecurityPolicy>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

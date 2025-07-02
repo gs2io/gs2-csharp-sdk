@@ -89,7 +89,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.DataOwner).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -111,7 +112,8 @@ namespace Gs2.Gs2Account.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.DataOwner>(
                         (null as Gs2.Gs2Account.Model.DataOwner).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Account.Model.DataOwner).CacheKey(
                         )
@@ -119,7 +121,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.DataOwner).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -157,7 +160,8 @@ namespace Gs2.Gs2Account.Domain.Model
             (null as Gs2.Gs2Account.Model.DataOwner).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -166,7 +170,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.DataOwner).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.DataOwner).CacheKey(
                 ),
@@ -201,7 +206,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.DataOwner>(
                 (null as Gs2.Gs2Account.Model.DataOwner).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.DataOwner).CacheKey(
                 ),

@@ -41,13 +41,15 @@ namespace Gs2.Gs2Exchange.Model.Cache
         public static string CacheParentKey(
             this Await self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "exchange",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Await"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             string namespaceName,
             string userId,
             string awaitName,
+            int? timeOffset,
             Func<IFuture<Await>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Await> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            awaitName
+                            awaitName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "await") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    awaitName
+                    awaitName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             string namespaceName,
             string userId,
             string awaitName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Await>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    awaitName
+                    awaitName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    awaitName
+                    awaitName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "await") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string awaitName
+            string awaitName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             return cache.Get<Await>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     awaitName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string awaitName
+            string awaitName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             var (value, find) = cache.Get<Await>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     awaitName
@@ -197,7 +209,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     awaitName
@@ -212,7 +225,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string awaitName
+            string awaitName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -220,7 +234,8 @@ namespace Gs2.Gs2Exchange.Model.Cache
             cache.Delete<Await>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     awaitName
@@ -233,12 +248,14 @@ namespace Gs2.Gs2Exchange.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Await[]> callback
         ) {
             cache.ListSubscribe<Await>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -250,12 +267,14 @@ namespace Gs2.Gs2Exchange.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Await>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -116,7 +116,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                         NamespaceName,
                         RankingName,
-                        this.Season
+                        this.Season,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -157,6 +158,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -165,7 +167,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                             NamespaceName,
                             RankingName,
-                            this.Season
+                            this.Season,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -248,7 +251,8 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                         (null as Gs2.Gs2Ranking2.Model.SubscribeRankingData).CacheParentKey(
                             NamespaceName,
                             RankingName,
-                            this.Season
+                            this.Season,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListSubscribeRankingData"
                    ).LockAsync()) {

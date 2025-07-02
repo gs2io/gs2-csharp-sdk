@@ -41,13 +41,15 @@ namespace Gs2.Gs2Mission.Model.Cache
         public static string CacheParentKey(
             this Complete self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "mission",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Complete"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             string namespaceName,
             string userId,
             string missionGroupName,
+            int? timeOffset,
             Func<IFuture<Complete>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Complete> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            missionGroupName
+                            missionGroupName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "complete") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    missionGroupName
+                    missionGroupName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             string namespaceName,
             string userId,
             string missionGroupName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Complete>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    missionGroupName
+                    missionGroupName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    missionGroupName
+                    missionGroupName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "complete") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName
+            string missionGroupName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             return cache.Get<Complete>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     missionGroupName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName
+            string missionGroupName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             var (value, find) = cache.Get<Complete>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     missionGroupName
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     missionGroupName
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string missionGroupName
+            string missionGroupName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             cache.Delete<Complete>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     missionGroupName
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Complete[]> callback
         ) {
             cache.ListSubscribe<Complete>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Complete>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

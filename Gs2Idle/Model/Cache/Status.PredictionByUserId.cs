@@ -43,13 +43,15 @@ namespace Gs2.Gs2Idle.Model.Cache
             this PredictionByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             PredictionByUserIdRequest request
         ) {
             self.Status?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.CategoryName
+                request.CategoryName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             this PredictionByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<PredictionByUserIdResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Idle.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             this PredictionByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PredictionByUserIdResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

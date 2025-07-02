@@ -89,7 +89,8 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             request.GuildModelName,
-                            request.GuildName
+                            request.GuildName,
+                            accessToken?.TimeOffset
                         );
                         return null;
                     });

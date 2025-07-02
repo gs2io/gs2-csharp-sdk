@@ -109,7 +109,8 @@ namespace Gs2.Gs2Version.Domain.Iterator
             (
                     (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -148,6 +149,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -155,7 +157,8 @@ namespace Gs2.Gs2Version.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Version.Model.AcceptVersion>(
                         (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -237,7 +240,8 @@ namespace Gs2.Gs2Version.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.AcceptVersion>(
                         (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListAcceptVersion"
                    ).LockAsync()) {

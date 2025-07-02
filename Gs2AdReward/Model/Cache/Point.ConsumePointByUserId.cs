@@ -43,12 +43,14 @@ namespace Gs2.Gs2AdReward.Model.Cache
             this ConsumePointByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             ConsumePointByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2AdReward.Model.Cache
             this ConsumePointByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<ConsumePointByUserIdResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2AdReward.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2AdReward.Model.Cache
             this ConsumePointByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ConsumePointByUserIdResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2AdReward.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

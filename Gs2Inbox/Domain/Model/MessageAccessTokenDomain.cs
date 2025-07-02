@@ -97,6 +97,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetMessageFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetMessageAsync(request)
             );
             return result?.Item;
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.OpenMessageFuture(request)
                 );
                 yield return future;
@@ -179,6 +182,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.OpenMessageAsync(request)
             );
             var domain = this;
@@ -218,6 +222,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ReadMessageFuture(request)
                 );
                 yield return future;
@@ -278,6 +283,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ReadMessageAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -312,6 +318,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteMessageFuture(request)
                 );
                 yield return future;
@@ -347,6 +354,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteMessageAsync(request)
                 );
             }
@@ -365,7 +373,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.MessageName
+                    this.MessageName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -376,6 +385,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MessageName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetMessageRequest()
                     )
@@ -401,7 +411,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inbox.Model.Message>(
                         (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Inbox.Model.Message).CacheKey(
                             this.MessageName
@@ -411,7 +422,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.MessageName
+                    this.MessageName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -421,6 +433,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MessageName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetMessageRequest()
                     )
@@ -458,7 +471,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.MessageName
+                this.MessageName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -467,7 +481,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Inbox.Model.Message).CacheKey(
                     this.MessageName
@@ -503,7 +518,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Inbox.Model.Message>(
                 (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Inbox.Model.Message).CacheKey(
                     this.MessageName

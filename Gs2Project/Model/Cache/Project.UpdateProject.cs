@@ -43,12 +43,14 @@ namespace Gs2.Gs2Project.Model.Cache
             this UpdateProjectResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateProjectRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 self.Item.AccountName,
-                request.ProjectName
+                request.ProjectName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this UpdateProjectRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateProjectResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Project.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this UpdateProjectRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateProjectResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Project.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

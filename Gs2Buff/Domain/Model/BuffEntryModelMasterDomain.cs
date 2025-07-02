@@ -96,6 +96,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetBuffEntryModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Buff.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetBuffEntryModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                     .WithBuffEntryName(this.BuffEntryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateBuffEntryModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Buff.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateBuffEntryModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                     .WithBuffEntryName(this.BuffEntryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteBuffEntryModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteBuffEntryModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Buff.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.BuffEntryName
+                    this.BuffEntryName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.BuffEntryName,
+                    null,
                     () => this.GetFuture(
                         new GetBuffEntryModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Buff.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Buff.Model.BuffEntryModelMaster>(
                         (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheKey(
                             this.BuffEntryName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Buff.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.BuffEntryName
+                    this.BuffEntryName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.BuffEntryName,
+                    null,
                     () => this.GetAsync(
                         new GetBuffEntryModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Buff.Domain.Model
             (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.BuffEntryName
+                this.BuffEntryName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Buff.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheKey(
                     this.BuffEntryName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Buff.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Buff.Model.BuffEntryModelMaster>(
                 (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Buff.Model.BuffEntryModelMaster).CacheKey(
                     this.BuffEntryName

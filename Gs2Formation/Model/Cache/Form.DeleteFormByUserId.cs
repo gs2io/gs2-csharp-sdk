@@ -43,6 +43,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DeleteFormByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteFormByUserIdRequest request
         ) {
             (null as Form).DeleteCache(
@@ -50,23 +51,27 @@ namespace Gs2.Gs2Formation.Model.Cache
                 request.NamespaceName,
                 request.UserId,
                 request.MoldModelName,
-                self.Item.Index ?? default
+                self.Item.Index ?? default,
+                timeOffset
             );
             (null as Mold).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
             (null as MoldModel).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
             (null as FormModel).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
         }
 
@@ -75,6 +80,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DeleteFormByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteFormByUserIdResult>> invokeImpl
         )
         {
@@ -90,6 +96,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -108,6 +115,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DeleteFormByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteFormByUserIdResult>> invokeImpl
     #else
@@ -119,6 +127,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

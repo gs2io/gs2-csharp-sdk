@@ -45,19 +45,22 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this DoneUploadByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DoneUploadByUserIdRequest request
         ) {
             self.Item.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.DataObjectName
+                request.DataObjectName,
+                timeOffset
             );
             cache.ClearListCache<DataObjectHistory>(
                 (null as DataObjectHistory).CacheParentKey(
                     request.NamespaceName,
                     request.UserId,
-                    request.DataObjectName
+                    request.DataObjectName,
+                    timeOffset
                 )
             );
         }
@@ -67,6 +70,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this DoneUploadByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DoneUploadByUserIdResult>> invokeImpl
         )
         {
@@ -82,6 +86,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -100,6 +105,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this DoneUploadByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DoneUploadByUserIdResult>> invokeImpl
     #else
@@ -111,6 +117,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

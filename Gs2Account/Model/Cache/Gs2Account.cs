@@ -36,6 +36,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribeAccountsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeAccountsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreateAccountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateAccountRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateTimeOffsetResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateTimeOffsetRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateBannedResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateBannedRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.AddBanResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddBanRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.RemoveBanResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RemoveBanRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetAccountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetAccountRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeleteAccountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteAccountRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.AuthenticationResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AuthenticationRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribeTakeOversResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeTakeOversRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribeTakeOversByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeTakeOversByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreateTakeOverResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateTakeOverRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreateTakeOverByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateTakeOverByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreateTakeOverOpenIdConnectResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateTakeOverOpenIdConnectRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreateTakeOverOpenIdConnectAndByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateTakeOverOpenIdConnectAndByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetTakeOverResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTakeOverRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetTakeOverByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTakeOverByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateTakeOverResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateTakeOverRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateTakeOverByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateTakeOverByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeleteTakeOverResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteTakeOverRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeleteTakeOverByUserIdentifierResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteTakeOverByUserIdentifierRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeleteTakeOverByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteTakeOverByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DoTakeOverResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DoTakeOverRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DoTakeOverOpenIdConnectResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DoTakeOverOpenIdConnectRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetAuthorizationUrlResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetAuthorizationUrlRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribePlatformIdsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribePlatformIdsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribePlatformIdsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribePlatformIdsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreatePlatformIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreatePlatformIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreatePlatformIdByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreatePlatformIdByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetPlatformIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPlatformIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetPlatformIdByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPlatformIdByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.FindPlatformIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FindPlatformIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.FindPlatformIdByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FindPlatformIdByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeletePlatformIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeletePlatformIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeletePlatformIdByUserIdentifierResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeletePlatformIdByUserIdentifierRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeletePlatformIdByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeletePlatformIdByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetDataOwnerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetDataOwnerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateDataOwnerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateDataOwnerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeleteDataOwnerByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteDataOwnerByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribeTakeOverTypeModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeTakeOverTypeModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetTakeOverTypeModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTakeOverTypeModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DescribeTakeOverTypeModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeTakeOverTypeModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.CreateTakeOverTypeModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateTakeOverTypeModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetTakeOverTypeModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTakeOverTypeModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -442,6 +500,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateTakeOverTypeModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateTakeOverTypeModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -449,6 +508,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.DeleteTakeOverTypeModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteTakeOverTypeModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -456,6 +516,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -463,6 +524,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.GetCurrentModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -470,6 +532,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.PreUpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -477,6 +540,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -484,6 +548,7 @@ namespace Gs2.Gs2Account.Model.Cache
                     Result.UpdateCurrentModelMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentModelMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;

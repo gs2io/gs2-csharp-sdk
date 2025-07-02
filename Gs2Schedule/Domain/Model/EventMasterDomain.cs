@@ -96,6 +96,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetEventMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetEventMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     .WithEventName(this.EventName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateEventMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateEventMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     .WithEventName(this.EventName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteEventMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteEventMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Schedule.Model.EventMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.EventName
+                    this.EventName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.EventName,
+                    null,
                     () => this.GetFuture(
                         new GetEventMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.EventMaster>(
                         (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Schedule.Model.EventMaster).CacheKey(
                             this.EventName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Schedule.Model.EventMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.EventName
+                    this.EventName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.EventName,
+                    null,
                     () => this.GetAsync(
                         new GetEventMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             (null as Gs2.Gs2Schedule.Model.EventMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.EventName
+                this.EventName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Schedule.Model.EventMaster).CacheKey(
                     this.EventName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Schedule.Model.EventMaster>(
                 (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Schedule.Model.EventMaster).CacheKey(
                     this.EventName

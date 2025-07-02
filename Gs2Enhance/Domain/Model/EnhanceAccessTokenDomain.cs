@@ -112,6 +112,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DirectEnhanceFuture(request)
                 );
                 yield return future;
@@ -172,6 +173,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DirectEnhanceAsync(request)
             );
             BonusRate = result.BonusRate;
@@ -223,6 +225,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UnleashFuture(request)
                 );
                 yield return future;
@@ -282,6 +285,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UnleashAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

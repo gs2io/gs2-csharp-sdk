@@ -101,6 +101,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PutGlobalRankingScoreFuture(request)
                 );
                 yield return future;
@@ -139,6 +140,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PutGlobalRankingScoreAsync(request)
             );
             var domain = new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingScoreAccessTokenDomain(
@@ -196,7 +198,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -241,7 +244,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -254,7 +258,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -315,7 +320,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -360,7 +366,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -373,7 +380,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                     this.NamespaceName,
                     this.RankingName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -434,7 +442,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -479,7 +488,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -492,7 +502,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

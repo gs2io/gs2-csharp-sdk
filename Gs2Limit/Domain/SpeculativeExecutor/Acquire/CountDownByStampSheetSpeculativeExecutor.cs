@@ -90,7 +90,8 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             request.UserId,
                             request.LimitName,
-                            request.CounterName
+                            request.CounterName,
+                            null
                         );
                         return null;
                     });
@@ -137,7 +138,8 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                     request.NamespaceName,
                     request.UserId,
                     request.LimitName,
-                    request.CounterName
+                    request.CounterName,
+                    null
                 );
                 return null;
             };

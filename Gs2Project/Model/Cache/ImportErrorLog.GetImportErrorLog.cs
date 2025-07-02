@@ -43,6 +43,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this GetImportErrorLogResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetImportErrorLogRequest request
         ) {
             self.Item?.PutCache(
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Project.Model.Cache
                 default,
                 default,
                 request.TransactionId,
-                request.ErrorLogName
+                request.ErrorLogName,
+                timeOffset
             );
         }
 
@@ -59,6 +61,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this GetImportErrorLogRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetImportErrorLogResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Project.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this GetImportErrorLogRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetImportErrorLogResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Project.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

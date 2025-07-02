@@ -36,8 +36,13 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class WaitActivateRegionRequest : Gs2Request<WaitActivateRegionRequest>
 	{
+         public string OwnerId { set; get; } = null!;
          public string ProjectName { set; get; } = null!;
          public string RegionName { set; get; } = null!;
+        public WaitActivateRegionRequest WithOwnerId(string ownerId) {
+            this.OwnerId = ownerId;
+            return this;
+        }
         public WaitActivateRegionRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
@@ -56,6 +61,7 @@ namespace Gs2.Gs2Project.Request
                 return null;
             }
             return new WaitActivateRegionRequest()
+                .WithOwnerId(!data.Keys.Contains("ownerId") || data["ownerId"] == null ? null : data["ownerId"].ToString())
                 .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
                 .WithRegionName(!data.Keys.Contains("regionName") || data["regionName"] == null ? null : data["regionName"].ToString());
         }
@@ -63,6 +69,7 @@ namespace Gs2.Gs2Project.Request
         public override JsonData ToJson()
         {
             return new JsonData {
+                ["ownerId"] = OwnerId,
                 ["projectName"] = ProjectName,
                 ["regionName"] = RegionName,
             };
@@ -71,6 +78,10 @@ namespace Gs2.Gs2Project.Request
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (OwnerId != null) {
+                writer.WritePropertyName("ownerId");
+                writer.Write(OwnerId.ToString());
+            }
             if (ProjectName != null) {
                 writer.WritePropertyName("projectName");
                 writer.Write(ProjectName.ToString());
@@ -84,6 +95,7 @@ namespace Gs2.Gs2Project.Request
 
         public override string UniqueKey() {
             var key = "";
+            key += OwnerId + ":";
             key += ProjectName + ":";
             key += RegionName + ":";
             return key;

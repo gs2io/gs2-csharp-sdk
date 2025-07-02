@@ -110,7 +110,8 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             accessToken.UserId,
                             request.ExperienceName,
-                            request.PropertyId
+                            request.PropertyId,
+                            accessToken?.TimeOffset
                         );
                         return null;
                     });
@@ -163,7 +164,8 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     request.NamespaceName,
                     accessToken.UserId,
                     request.ExperienceName,
-                    request.PropertyId
+                    request.PropertyId,
+                    accessToken?.TimeOffset
                 );
                 return null;
             };

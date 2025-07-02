@@ -97,6 +97,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.GetIgnoreUserFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.GetIgnoreUserAsync(request)
             );
             return result?.Item;
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.DeleteIgnoreUserFuture(request)
                 );
                 yield return future;
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.DeleteIgnoreUserAsync(request)
                 );
             }
@@ -200,7 +204,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -211,6 +216,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.GuildModelName,
                     this.GuildName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetIgnoreUserRequest()
                     )
@@ -237,7 +243,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                         (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                             this.NamespaceName,
                             this.GuildModelName,
-                            this.GuildName
+                            this.GuildName,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheKey(
                         )
@@ -246,7 +253,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -256,6 +264,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.GuildModelName,
                     this.GuildName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetIgnoreUserRequest()
                     )
@@ -293,7 +302,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -303,7 +313,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheKey(
                 ),
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheKey(
                 ),

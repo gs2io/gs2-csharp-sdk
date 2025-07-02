@@ -114,7 +114,8 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
             (
                     (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                         NamespaceName,
-                        UserId
+                        UserId,
+                        null
                     ),
                     out var list
             )) {
@@ -155,6 +156,7 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -162,7 +164,8 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Exchange.Model.Await>(
                         (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                             NamespaceName,
-                            UserId
+                            UserId,
+                            null
                         )
                     );
                 }
@@ -244,7 +247,8 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.Await>(
                         (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                             NamespaceName,
-                            UserId
+                            UserId,
+                            null
                        ),
                        "ListAwait"
                    ).LockAsync()) {

@@ -97,6 +97,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetTriggerFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetTriggerAsync(request)
             );
             return result?.Item;
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTriggerFuture(request)
                 );
                 yield return future;
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTriggerAsync(request)
                 );
             }
@@ -205,6 +209,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyTriggerFuture(request)
                 );
                 yield return future;
@@ -236,6 +241,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyTriggerAsync(request)
             );
             var domain = this;
@@ -252,7 +258,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TriggerName
+                    this.TriggerName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -263,6 +270,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TriggerName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetTriggerRequest()
                     )
@@ -288,7 +296,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Trigger>(
                         (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Schedule.Model.Trigger).CacheKey(
                             this.TriggerName
@@ -298,7 +307,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TriggerName
+                    this.TriggerName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -308,6 +318,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TriggerName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetTriggerRequest()
                     )
@@ -345,7 +356,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TriggerName
+                this.TriggerName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -354,7 +366,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheKey(
                     this.TriggerName
@@ -390,7 +403,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheKey(
                     this.TriggerName

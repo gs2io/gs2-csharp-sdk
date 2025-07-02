@@ -149,6 +149,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             r.PutCache(
                 this._gs2.Cache,
                 UserId,
+                null,
                 request
             );
         }

@@ -43,12 +43,14 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DeleteDistributorModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteDistributorModelMasterRequest request
         ) {
             (null as DistributorModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.DistributorName
+                request.DistributorName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DeleteDistributorModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteDistributorModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DeleteDistributorModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteDistributorModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

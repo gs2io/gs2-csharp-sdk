@@ -43,12 +43,14 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DeleteIdentifierResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteIdentifierRequest request
         ) {
             (null as Identifier).DeleteCache(
                 cache,
                 self.Item.UserName,
-                self.Item.ClientId
+                self.Item.ClientId,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DeleteIdentifierRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteIdentifierResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DeleteIdentifierRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteIdentifierResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -43,12 +43,14 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DeleteMatchSessionResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteMatchSessionRequest request
         ) {
             (null as MatchSession).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.SessionName
+                request.SessionName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DeleteMatchSessionRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteMatchSessionResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DeleteMatchSessionRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteMatchSessionResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

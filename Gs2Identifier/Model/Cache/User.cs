@@ -39,11 +39,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
     public static partial class UserExt
     {
         public static string CacheParentKey(
-            this User self
+            this User self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "identifier",
+                timeOffset?.ToString() ?? "0",
                 "User"
             );
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this User self,
             CacheDatabase cache,
             string userName,
+            int? timeOffset,
             Func<IFuture<User>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<User> self)
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     {
                         (null as User).PutCache(
                             cache,
-                            userName
+                            userName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "user") {
                             self.OnComplete(default);
@@ -88,7 +92,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    userName
+                    userName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this User self,
             CacheDatabase cache,
             string userName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<User>> fetchImpl
     #else
@@ -115,14 +121,16 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    userName
+                    userName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as User).PutCache(
                     cache,
-                    userName
+                    userName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "user") {
                     throw;
@@ -135,10 +143,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static Tuple<User, bool> GetCache(
             this User self,
             CacheDatabase cache,
-            string userName
+            string userName,
+            int? timeOffset
         ) {
             return cache.Get<User>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     userName
@@ -149,10 +159,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void PutCache(
             this User self,
             CacheDatabase cache,
-            string userName
+            string userName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<User>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     userName
@@ -163,6 +175,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     userName
@@ -175,10 +188,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void DeleteCache(
             this User self,
             CacheDatabase cache,
-            string userName
+            string userName,
+            int? timeOffset
         ) {
             cache.Delete<User>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     userName
@@ -189,10 +204,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void ListSubscribe(
             this User self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<User[]> callback
         ) {
             cache.ListSubscribe<User>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -202,10 +219,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void ListUnsubscribe(
             this User self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<User>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

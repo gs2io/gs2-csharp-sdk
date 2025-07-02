@@ -42,7 +42,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this Probability self,
             string namespaceName,
             string userId,
-            string lotteryName
+            string lotteryName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 namespaceName,
                 userId,
                 lotteryName,
+                timeOffset?.ToString() ?? "0",
                 "Probability"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string userId,
             string lotteryName,
             string prizeId,
+            int? timeOffset,
             Func<IFuture<Probability>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Probability> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                             namespaceName,
                             userId,
                             lotteryName,
-                            prizeId
+                            prizeId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "probability") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                     namespaceName,
                     userId,
                     lotteryName,
-                    prizeId
+                    prizeId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string userId,
             string lotteryName,
             string prizeId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Probability>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                     namespaceName,
                     userId,
                     lotteryName,
-                    prizeId
+                    prizeId,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                     namespaceName,
                     userId,
                     lotteryName,
-                    prizeId
+                    prizeId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "probability") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string namespaceName,
             string userId,
             string lotteryName,
-            string prizeId
+            string prizeId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     prizeId
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string namespaceName,
             string userId,
             string lotteryName,
-            string prizeId
+            string prizeId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     prizeId
@@ -210,7 +222,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string namespaceName,
             string userId,
             string lotteryName,
-            string prizeId
+            string prizeId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -219,7 +232,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     prizeId
@@ -233,13 +247,15 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string namespaceName,
             string userId,
             string lotteryName,
+            int? timeOffset,
             Action<Probability[]> callback
         ) {
             cache.ListSubscribe<Probability>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -252,13 +268,15 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string namespaceName,
             string userId,
             string lotteryName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Probability>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 ),
                 callbackId
             );

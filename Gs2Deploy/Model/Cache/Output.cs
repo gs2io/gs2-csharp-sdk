@@ -40,12 +40,14 @@ namespace Gs2.Gs2Deploy.Model.Cache
     {
         public static string CacheParentKey(
             this Output self,
-            string stackName
+            string stackName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "deploy",
                 stackName,
+                timeOffset?.ToString() ?? "0",
                 "Output"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             CacheDatabase cache,
             string stackName,
             string outputName,
+            int? timeOffset,
             Func<IFuture<Output>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Output> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                         (null as Output).PutCache(
                             cache,
                             stackName,
-                            outputName
+                            outputName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "output") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 item.PutCache(
                     cache,
                     stackName,
-                    outputName
+                    outputName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             CacheDatabase cache,
             string stackName,
             string outputName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Output>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 item.PutCache(
                     cache,
                     stackName,
-                    outputName
+                    outputName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 (null as Output).PutCache(
                     cache,
                     stackName,
-                    outputName
+                    outputName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "output") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Output self,
             CacheDatabase cache,
             string stackName,
-            string outputName
+            string outputName,
+            int? timeOffset
         ) {
             return cache.Get<Output>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     outputName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Output self,
             CacheDatabase cache,
             string stackName,
-            string outputName
+            string outputName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     outputName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Output self,
             CacheDatabase cache,
             string stackName,
-            string outputName
+            string outputName,
+            int? timeOffset
         ) {
             cache.Delete<Output>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     outputName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Output self,
             CacheDatabase cache,
             string stackName,
+            int? timeOffset,
             Action<Output[]> callback
         ) {
             cache.ListSubscribe<Output>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Output self,
             CacheDatabase cache,
             string stackName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Output>(
                 self.CacheParentKey(
-                    stackName
+                    stackName,
+                    timeOffset
                 ),
                 callbackId
             );

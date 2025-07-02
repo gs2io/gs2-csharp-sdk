@@ -146,7 +146,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 callback,
                 () =>
@@ -192,7 +193,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 callbackId
             );
@@ -206,7 +208,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 )
             );
         }
@@ -274,7 +277,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 callback,
                 () =>
@@ -320,7 +324,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 callbackId
             );
@@ -334,7 +339,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 )
             );
         }
@@ -388,7 +394,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 callback,
                 () =>
@@ -439,7 +446,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 callbackId
             );
@@ -454,7 +462,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 )
             );
         }
@@ -492,6 +501,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SubscribeByUserIdFuture(request)
                 );
                 yield return future;
@@ -531,6 +541,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SubscribeByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain(
@@ -560,6 +571,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PutScoreByUserIdFuture(request)
                 );
                 yield return future;
@@ -599,6 +611,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PutScoreByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Ranking.Domain.Model.ScoreDomain(

@@ -40,12 +40,14 @@ namespace Gs2.Gs2Version.Model.Cache
     {
         public static string CacheParentKey(
             this VersionModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "version",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "VersionModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Version.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string versionName,
+            int? timeOffset,
             Func<IFuture<VersionModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<VersionModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Version.Model.Cache
                         (null as VersionModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            versionName
+                            versionName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "versionModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Version.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    versionName
+                    versionName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Version.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string versionName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<VersionModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Version.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    versionName
+                    versionName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Version.Model.Cache
                 (null as VersionModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    versionName
+                    versionName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "versionModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Version.Model.Cache
             this VersionModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string versionName
+            string versionName,
+            int? timeOffset
         ) {
             return cache.Get<VersionModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     versionName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Version.Model.Cache
             this VersionModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string versionName
+            string versionName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<VersionModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     versionName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Version.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     versionName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Version.Model.Cache
             this VersionModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string versionName
+            string versionName,
+            int? timeOffset
         ) {
             cache.Delete<VersionModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     versionName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Version.Model.Cache
             this VersionModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<VersionModelMaster[]> callback
         ) {
             cache.ListSubscribe<VersionModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Version.Model.Cache
             this VersionModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<VersionModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

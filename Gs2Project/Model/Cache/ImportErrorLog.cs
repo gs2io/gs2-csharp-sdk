@@ -42,7 +42,8 @@ namespace Gs2.Gs2Project.Model.Cache
             this ImportErrorLog self,
             string accountName,
             string projectName,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Project.Model.Cache
                 accountName,
                 projectName,
                 transactionId,
+                timeOffset?.ToString() ?? "0",
                 "ImportErrorLog"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Project.Model.Cache
             string projectName,
             string transactionId,
             string errorLogName,
+            int? timeOffset,
             Func<IFuture<ImportErrorLog>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ImportErrorLog> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Project.Model.Cache
                             accountName,
                             projectName,
                             transactionId,
-                            errorLogName
+                            errorLogName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "importErrorLog") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     accountName,
                     projectName,
                     transactionId,
-                    errorLogName
+                    errorLogName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Project.Model.Cache
             string projectName,
             string transactionId,
             string errorLogName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ImportErrorLog>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     accountName,
                     projectName,
                     transactionId,
-                    errorLogName
+                    errorLogName,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     accountName,
                     projectName,
                     transactionId,
-                    errorLogName
+                    errorLogName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "importErrorLog") {
                     throw;
@@ -162,13 +170,15 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             string transactionId,
-            string errorLogName
+            string errorLogName,
+            int? timeOffset
         ) {
             return cache.Get<ImportErrorLog>(
                 self.CacheParentKey(
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     errorLogName
@@ -182,13 +192,15 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             string transactionId,
-            string errorLogName
+            string errorLogName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<ImportErrorLog>(
                 self.CacheParentKey(
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     errorLogName
@@ -201,7 +213,8 @@ namespace Gs2.Gs2Project.Model.Cache
                 self.CacheParentKey(
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     errorLogName
@@ -217,13 +230,15 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             string transactionId,
-            string errorLogName
+            string errorLogName,
+            int? timeOffset
         ) {
             cache.Delete<ImportErrorLog>(
                 self.CacheParentKey(
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     errorLogName
@@ -237,13 +252,15 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             string transactionId,
+            int? timeOffset,
             Action<ImportErrorLog[]> callback
         ) {
             cache.ListSubscribe<ImportErrorLog>(
                 self.CacheParentKey(
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -256,13 +273,15 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             string transactionId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ImportErrorLog>(
                 self.CacheParentKey(
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 ),
                 callbackId
             );

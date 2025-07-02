@@ -43,6 +43,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DescribePrizeLimitsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribePrizeLimitsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<PrizeLimit>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.PrizeTableName,
-                    item.PrizeId
+                    item.PrizeId,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DescribePrizeLimitsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribePrizeLimitsResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DescribePrizeLimitsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribePrizeLimitsResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

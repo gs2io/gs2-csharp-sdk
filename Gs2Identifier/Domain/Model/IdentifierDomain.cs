@@ -100,6 +100,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetIdentifierFuture(request)
                 );
                 yield return future;
@@ -129,6 +130,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetIdentifierAsync(request)
             );
             return result?.Item;
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     .WithClientId(this.ClientId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteIdentifierFuture(request)
                 );
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteIdentifierAsync(request)
                 );
             }
@@ -203,6 +207,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     .WithClientId(this.ClientId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.AttachGuardFuture(request)
                 );
@@ -238,6 +243,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.AttachGuardAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
@@ -261,6 +267,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     .WithClientId(this.ClientId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DetachGuardFuture(request)
                 );
@@ -296,6 +303,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.DetachGuardAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
@@ -319,7 +327,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Identifier.Model.Identifier).GetCache(
                     this._gs2.Cache,
                     this.UserName,
-                    this.ClientId
+                    this.ClientId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -329,6 +338,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     this._gs2.Cache,
                     this.UserName,
                     this.ClientId,
+                    null,
                     () => this.GetFuture(
                         new GetIdentifierRequest()
                     )
@@ -354,7 +364,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var (value, find) = (null as Gs2.Gs2Identifier.Model.Identifier).GetCache(
                 this._gs2.Cache,
                 this.UserName,
-                this.ClientId
+                this.ClientId,
+                null
             );
             if (find) {
                 return value;
@@ -363,6 +374,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this._gs2.Cache,
                 this.UserName,
                 this.ClientId,
+                null,
                 () => this.GetAsync(
                     new GetIdentifierRequest()
                 )
@@ -398,7 +410,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
             (null as Gs2.Gs2Identifier.Model.Identifier).DeleteCache(
                 this._gs2.Cache,
                 this.UserName,
-                this.ClientId
+                this.ClientId,
+                null
             );
         }
 
@@ -406,7 +419,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                    this.UserName
+                    this.UserName,
+                    null
                 ),
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheKey(
                     this.ClientId
@@ -441,7 +455,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Identifier.Model.Identifier>(
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                    this.UserName
+                    this.UserName,
+                    null
                 ),
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheKey(
                     this.ClientId

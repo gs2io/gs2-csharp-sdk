@@ -40,12 +40,14 @@ namespace Gs2.Gs2Schedule.Model.Cache
     {
         public static string CacheParentKey(
             this EventMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "schedule",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "EventMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string eventName,
+            int? timeOffset,
             Func<IFuture<EventMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<EventMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
                         (null as EventMaster).PutCache(
                             cache,
                             namespaceName,
-                            eventName
+                            eventName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "eventMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    eventName
+                    eventName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string eventName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<EventMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    eventName
+                    eventName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 (null as EventMaster).PutCache(
                     cache,
                     namespaceName,
-                    eventName
+                    eventName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "eventMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this EventMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string eventName
+            string eventName,
+            int? timeOffset
         ) {
             return cache.Get<EventMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this EventMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string eventName
+            string eventName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<EventMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this EventMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string eventName
+            string eventName,
+            int? timeOffset
         ) {
             cache.Delete<EventMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     eventName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this EventMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<EventMaster[]> callback
         ) {
             cache.ListSubscribe<EventMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this EventMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<EventMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

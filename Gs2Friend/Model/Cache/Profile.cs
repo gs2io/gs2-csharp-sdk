@@ -41,13 +41,15 @@ namespace Gs2.Gs2Friend.Model.Cache
         public static string CacheParentKey(
             this Profile self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "friend",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Profile"
             );
         }
@@ -64,6 +66,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Func<IFuture<Profile>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Profile> self)
@@ -77,7 +80,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                         (null as Profile).PutCache(
                             cache,
                             namespaceName,
-                            userId
+                            userId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "profile") {
                             self.OnComplete(default);
@@ -91,7 +95,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -109,6 +114,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Profile>> fetchImpl
     #else
@@ -120,7 +126,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 return item;
             }
@@ -128,7 +135,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 (null as Profile).PutCache(
                     cache,
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "profile") {
                     throw;
@@ -142,7 +150,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             this Profile self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -150,7 +159,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             return cache.Get<Profile>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -161,7 +171,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             this Profile self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -169,7 +180,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             var (value, find) = cache.Get<Profile>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -180,7 +192,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                 ),
@@ -193,7 +206,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             this Profile self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -201,7 +215,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Delete<Profile>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -213,12 +228,14 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Profile[]> callback
         ) {
             cache.ListSubscribe<Profile>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -230,12 +247,14 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Profile>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

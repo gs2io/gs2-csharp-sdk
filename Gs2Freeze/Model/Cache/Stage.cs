@@ -39,11 +39,13 @@ namespace Gs2.Gs2Freeze.Model.Cache
     public static partial class StageExt
     {
         public static string CacheParentKey(
-            this Stage self
+            this Stage self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "freeze",
+                timeOffset?.ToString() ?? "0",
                 "Stage"
             );
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
             this Stage self,
             CacheDatabase cache,
             string stageName,
+            int? timeOffset,
             Func<IFuture<Stage>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Stage> self)
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Freeze.Model.Cache
                     {
                         (null as Stage).PutCache(
                             cache,
-                            stageName
+                            stageName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "stage") {
                             self.OnComplete(default);
@@ -88,7 +92,8 @@ namespace Gs2.Gs2Freeze.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    stageName
+                    stageName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
             this Stage self,
             CacheDatabase cache,
             string stageName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Stage>> fetchImpl
     #else
@@ -115,14 +121,16 @@ namespace Gs2.Gs2Freeze.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    stageName
+                    stageName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as Stage).PutCache(
                     cache,
-                    stageName
+                    stageName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "stage") {
                     throw;
@@ -135,10 +143,12 @@ namespace Gs2.Gs2Freeze.Model.Cache
         public static Tuple<Stage, bool> GetCache(
             this Stage self,
             CacheDatabase cache,
-            string stageName
+            string stageName,
+            int? timeOffset
         ) {
             return cache.Get<Stage>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stageName
@@ -149,10 +159,12 @@ namespace Gs2.Gs2Freeze.Model.Cache
         public static void PutCache(
             this Stage self,
             CacheDatabase cache,
-            string stageName
+            string stageName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Stage>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stageName
@@ -163,6 +175,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stageName
@@ -175,10 +188,12 @@ namespace Gs2.Gs2Freeze.Model.Cache
         public static void DeleteCache(
             this Stage self,
             CacheDatabase cache,
-            string stageName
+            string stageName,
+            int? timeOffset
         ) {
             cache.Delete<Stage>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stageName
@@ -189,10 +204,12 @@ namespace Gs2.Gs2Freeze.Model.Cache
         public static void ListSubscribe(
             this Stage self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<Stage[]> callback
         ) {
             cache.ListSubscribe<Stage>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -202,10 +219,12 @@ namespace Gs2.Gs2Freeze.Model.Cache
         public static void ListUnsubscribe(
             this Stage self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Stage>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

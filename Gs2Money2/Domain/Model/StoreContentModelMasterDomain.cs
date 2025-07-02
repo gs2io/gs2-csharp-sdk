@@ -96,6 +96,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetStoreContentModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetStoreContentModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     .WithContentName(this.ContentName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateStoreContentModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateStoreContentModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     .WithContentName(this.ContentName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteStoreContentModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteStoreContentModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ContentName
+                    this.ContentName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ContentName,
+                    null,
                     () => this.GetFuture(
                         new GetStoreContentModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.StoreContentModelMaster>(
                         (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheKey(
                             this.ContentName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ContentName
+                    this.ContentName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ContentName,
+                    null,
                     () => this.GetAsync(
                         new GetStoreContentModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ContentName
+                this.ContentName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheKey(
                     this.ContentName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Money2.Model.StoreContentModelMaster>(
                 (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.StoreContentModelMaster).CacheKey(
                     this.ContentName

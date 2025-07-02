@@ -114,6 +114,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CompleteFuture(request)
                 );
                 yield return future;
@@ -174,6 +175,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CompleteAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -225,6 +227,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.BatchCompleteFuture(request)
                 );
                 yield return future;
@@ -285,6 +288,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.BatchCompleteAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -319,6 +323,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetCompleteFuture(request)
                 );
                 yield return future;
@@ -349,6 +354,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetCompleteAsync(request)
             );
             return result?.Item;
@@ -369,6 +375,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.EvaluateCompleteFuture(request)
                 );
                 yield return future;
@@ -401,6 +408,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.EvaluateCompleteAsync(request)
             );
             var domain = this;
@@ -423,6 +431,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyCompleteFuture(request)
                 );
                 yield return future;
@@ -454,6 +463,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyCompleteAsync(request)
             );
             var domain = this;
@@ -470,7 +480,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.MissionGroupName
+                    this.MissionGroupName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -481,6 +492,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MissionGroupName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetCompleteRequest()
                     )
@@ -506,7 +518,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.Complete>(
                         (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Mission.Model.Complete).CacheKey(
                             this.MissionGroupName
@@ -516,7 +529,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.MissionGroupName
+                    this.MissionGroupName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -526,6 +540,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MissionGroupName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetCompleteRequest()
                     )
@@ -563,7 +578,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.MissionGroupName
+                this.MissionGroupName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -572,7 +588,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Mission.Model.Complete).CacheKey(
                     this.MissionGroupName
@@ -608,7 +625,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Mission.Model.Complete>(
                 (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Mission.Model.Complete).CacheKey(
                     this.MissionGroupName

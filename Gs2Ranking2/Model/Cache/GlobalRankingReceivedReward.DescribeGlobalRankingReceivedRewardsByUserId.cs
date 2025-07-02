@@ -45,6 +45,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DescribeGlobalRankingReceivedRewardsByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeGlobalRankingReceivedRewardsByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<GlobalRankingReceivedReward>())
@@ -54,7 +55,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     request.NamespaceName,
                     request.RankingName,
                     item.Season,
-                    item.UserId
+                    item.UserId,
+                    timeOffset
                 );
             }
         }
@@ -64,6 +66,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DescribeGlobalRankingReceivedRewardsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeGlobalRankingReceivedRewardsByUserIdResult>> invokeImpl
         )
         {
@@ -79,6 +82,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +101,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DescribeGlobalRankingReceivedRewardsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeGlobalRankingReceivedRewardsByUserIdResult>> invokeImpl
     #else
@@ -108,6 +113,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

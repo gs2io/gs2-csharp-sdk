@@ -133,7 +133,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.DataObjectName
+                    this.DataObjectName,
+                    null
                 ),
                 callback,
                 () =>
@@ -178,7 +179,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.DataObjectName
+                    this.DataObjectName,
+                    null
                 ),
                 callbackId
             );
@@ -191,7 +193,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.DataObjectName
+                    this.DataObjectName,
+                    null
                 )
             );
         }
@@ -226,6 +229,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateDataObjectByUserIdFuture(request)
                 );
                 yield return future;
@@ -258,6 +262,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateDataObjectByUserIdAsync(request)
             );
             var domain = this;
@@ -280,6 +285,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PrepareReUploadByUserIdFuture(request)
                 );
                 yield return future;
@@ -313,6 +319,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PrepareReUploadByUserIdAsync(request)
             );
             var domain = this;
@@ -336,6 +343,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DoneUploadByUserIdFuture(request)
                 );
                 yield return future;
@@ -368,6 +376,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DoneUploadByUserIdAsync(request)
             );
             var domain = this;
@@ -390,6 +399,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteDataObjectByUserIdFuture(request)
                 );
                 yield return future;
@@ -425,6 +435,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteDataObjectByUserIdAsync(request)
                 );
             }
@@ -448,6 +459,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PrepareDownloadByUserIdAndDataObjectNameFuture(request)
                 );
                 yield return future;
@@ -482,6 +494,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PrepareDownloadByUserIdAndDataObjectNameAsync(request)
             );
             var domain = this;
@@ -506,6 +519,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PrepareDownloadByUserIdAndDataObjectNameAndGenerationFuture(request)
                 );
                 yield return future;
@@ -540,6 +554,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PrepareDownloadByUserIdAndDataObjectNameAndGenerationAsync(request)
             );
             var domain = this;
@@ -563,7 +578,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.DataObjectName
+                    this.DataObjectName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -585,7 +601,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Datastore.Model.DataObject>(
                         (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Datastore.Model.DataObject).CacheKey(
                             this.DataObjectName
@@ -595,7 +612,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.DataObjectName
+                    this.DataObjectName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -634,7 +652,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.DataObjectName
+                this.DataObjectName,
+                null
             );
         }
 
@@ -643,7 +662,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Datastore.Model.DataObject).CacheKey(
                     this.DataObjectName
@@ -679,7 +699,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Datastore.Model.DataObject>(
                 (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Datastore.Model.DataObject).CacheKey(
                     this.DataObjectName

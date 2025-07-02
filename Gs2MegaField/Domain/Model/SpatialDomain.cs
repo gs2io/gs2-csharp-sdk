@@ -104,6 +104,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PutPositionByUserIdFuture(request)
                 );
                 yield return future;
@@ -137,6 +138,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PutPositionByUserIdAsync(request)
             );
             var domain = this;
@@ -160,6 +162,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ActionByUserIdFuture(request)
                 );
                 yield return future;
@@ -198,6 +201,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ActionByUserIdAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
@@ -225,7 +229,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.AreaModelName,
-                    this.LayerModelName
+                    this.LayerModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -247,7 +252,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.Spatial>(
                         (null as Gs2.Gs2MegaField.Model.Spatial).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2MegaField.Model.Spatial).CacheKey(
                             this.AreaModelName,
@@ -259,7 +265,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.AreaModelName,
-                    this.LayerModelName
+                    this.LayerModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -299,7 +306,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.AreaModelName,
-                this.LayerModelName
+                this.LayerModelName,
+                null
             );
         }
 
@@ -308,7 +316,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheKey(
                     this.AreaModelName,
@@ -345,7 +354,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2MegaField.Model.Spatial>(
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2MegaField.Model.Spatial).CacheKey(
                     this.AreaModelName,

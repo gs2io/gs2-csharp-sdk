@@ -40,12 +40,14 @@ namespace Gs2.Gs2Key.Model.Cache
     {
         public static string CacheParentKey(
             this Key self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "key",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "Key"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Key.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string keyName,
+            int? timeOffset,
             Func<IFuture<Key>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Key> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Key.Model.Cache
                         (null as Key).PutCache(
                             cache,
                             namespaceName,
-                            keyName
+                            keyName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "key") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Key.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    keyName
+                    keyName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Key.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string keyName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Key>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Key.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    keyName
+                    keyName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Key.Model.Cache
                 (null as Key).PutCache(
                     cache,
                     namespaceName,
-                    keyName
+                    keyName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "key") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this Key self,
             CacheDatabase cache,
             string namespaceName,
-            string keyName
+            string keyName,
+            int? timeOffset
         ) {
             return cache.Get<Key>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     keyName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this Key self,
             CacheDatabase cache,
             string namespaceName,
-            string keyName
+            string keyName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Key>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     keyName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Key.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     keyName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this Key self,
             CacheDatabase cache,
             string namespaceName,
-            string keyName
+            string keyName,
+            int? timeOffset
         ) {
             cache.Delete<Key>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     keyName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this Key self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<Key[]> callback
         ) {
             cache.ListSubscribe<Key>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this Key self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Key>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -99,6 +99,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetStampSheetResultFuture(request)
                 );
                 yield return future;
@@ -129,6 +130,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetStampSheetResultAsync(request)
             );
             return result?.Item;
@@ -144,7 +146,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TransactionId
+                    this.TransactionId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -155,6 +158,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TransactionId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetStampSheetResultRequest()
                     )
@@ -181,7 +185,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TransactionId
+                this.TransactionId,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -191,6 +196,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.TransactionId,
+                this.AccessToken?.TimeOffset,
                 () => this.GetAsync(
                     new GetStampSheetResultRequest()
                 )
@@ -208,6 +214,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TransactionId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetStampSheetResultRequest()
                     )
@@ -234,6 +241,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.TransactionId,
+                this.AccessToken?.TimeOffset,
                 () => this.GetAsync(
                     new GetStampSheetResultRequest()
                 )
@@ -270,7 +278,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TransactionId
+                this.TransactionId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -279,7 +288,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheKey(
                     this.TransactionId
@@ -315,7 +325,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Distributor.Model.StampSheetResult>(
                 (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheKey(
                     this.TransactionId

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this ConsumeSimpleItemsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             ConsumeSimpleItemsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<SimpleItem>())
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     request.NamespaceName,
                     userId,
                     request.InventoryName,
-                    item.ItemName
+                    item.ItemName,
+                    timeOffset
                 );
             }
         }
@@ -62,6 +64,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this ConsumeSimpleItemsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<ConsumeSimpleItemsResult>> invokeImpl
         )
         {
@@ -77,6 +80,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -95,6 +99,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this ConsumeSimpleItemsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ConsumeSimpleItemsResult>> invokeImpl
     #else
@@ -106,6 +111,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

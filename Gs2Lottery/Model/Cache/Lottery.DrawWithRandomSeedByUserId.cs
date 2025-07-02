@@ -43,6 +43,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DrawWithRandomSeedByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DrawWithRandomSeedByUserIdRequest request
         ) {
         }
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DrawWithRandomSeedByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DrawWithRandomSeedByUserIdResult>> invokeImpl
         )
         {
@@ -67,6 +69,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DrawWithRandomSeedByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DrawWithRandomSeedByUserIdResult>> invokeImpl
     #else
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

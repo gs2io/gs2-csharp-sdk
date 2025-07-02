@@ -94,6 +94,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.ExportMasterFuture(request)
                 );
                 yield return future;
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.ExportMasterAsync(request)
             );
             var domain = this;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.GetCurrentCategoryMasterFuture(request)
                 );
@@ -172,6 +175,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetCurrentCategoryMasterAsync(request)
             );
             return result?.Item;
@@ -189,6 +193,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PreUpdateCurrentCategoryMasterFuture(request)
                 );
@@ -221,6 +226,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PreUpdateCurrentCategoryMasterAsync(request)
             );
             var domain = this;
@@ -241,6 +247,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateCurrentCategoryMasterFuture(request)
                 );
@@ -272,6 +279,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateCurrentCategoryMasterAsync(request)
             );
             var domain = this;
@@ -291,6 +299,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateCurrentCategoryMasterFromGitHubFuture(request)
                 );
@@ -322,6 +331,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateCurrentCategoryMasterFromGitHubAsync(request)
             );
             var domain = this;
@@ -341,7 +351,8 @@ namespace Gs2.Gs2Idle.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -350,6 +361,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 var future = (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
+                    null,
                     () => this.GetFuture(
                         new GetCurrentCategoryMasterRequest()
                     )
@@ -374,14 +386,16 @@ namespace Gs2.Gs2Idle.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
                         (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).CacheKey(
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -389,6 +403,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 return await (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
+                    null,
                     () => this.GetAsync(
                         new GetCurrentCategoryMasterRequest()
                     )
@@ -424,7 +439,8 @@ namespace Gs2.Gs2Idle.Domain.Model
         {
             (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).DeleteCache(
                 this._gs2.Cache,
-                this.NamespaceName
+                this.NamespaceName,
+                null
             );
         }
 
@@ -432,7 +448,8 @@ namespace Gs2.Gs2Idle.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).CacheKey(
                 ),
@@ -466,7 +483,8 @@ namespace Gs2.Gs2Idle.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
                 (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Idle.Model.CurrentCategoryMaster).CacheKey(
                 ),

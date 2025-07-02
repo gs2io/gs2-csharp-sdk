@@ -43,11 +43,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this ForceDeleteStackResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             ForceDeleteStackRequest request
         ) {
             self.Item?.PutCache(
                 cache,
-                request.StackName
+                request.StackName,
+                timeOffset
             );
         }
 
@@ -56,6 +58,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this ForceDeleteStackRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<ForceDeleteStackResult>> invokeImpl
         )
         {
@@ -71,6 +74,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -89,6 +93,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this ForceDeleteStackRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ForceDeleteStackResult>> invokeImpl
     #else
@@ -100,6 +105,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this UnsubscribeResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UnsubscribeRequest request
         ) {
             (null as SubscribeUser).DeleteCache(
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 userId,
                 self.Item.CategoryName,
                 default,
-                self.Item.TargetUserId
+                self.Item.TargetUserId,
+                timeOffset
             );
         }
 
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this UnsubscribeRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UnsubscribeResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this UnsubscribeRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UnsubscribeResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

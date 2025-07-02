@@ -95,6 +95,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CreateGuildFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CreateGuildAsync(request)
             );
             var domain = new Gs2.Gs2Guild.Domain.Model.GuildDomain(
@@ -157,6 +159,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.AssumeFuture(request)
                 );
                 yield return future;
@@ -190,6 +193,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.AssumeAsync(request)
             );
             var domain = this._gs2.Auth.AccessToken();
@@ -213,6 +217,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SendRequestFuture(request)
                 );
                 yield return future;
@@ -249,6 +254,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SendRequestAsync(request)
             );
             var domain = new Gs2.Gs2Guild.Domain.Model.GuildDomain(
@@ -275,6 +281,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteRequestFuture(request)
                 );
                 yield return future;
@@ -315,6 +322,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteRequestAsync(request)
                 );
             }
@@ -376,7 +384,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     guildModelName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -426,7 +435,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     guildModelName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -440,7 +450,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     guildModelName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -573,7 +584,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.JoinedGuild>(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -622,7 +634,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Guild.Model.JoinedGuild>(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -635,7 +648,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.JoinedGuild>(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             this DescribeWebSocketSessionsByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeWebSocketSessionsByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<WebSocketSession>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Gateway.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    request.UserId
+                    request.UserId,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             this DescribeWebSocketSessionsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeWebSocketSessionsByUserIdResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             this DescribeWebSocketSessionsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeWebSocketSessionsByUserIdResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

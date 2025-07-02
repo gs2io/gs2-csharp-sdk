@@ -98,6 +98,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ConsumeSimpleItemsFuture(request)
                 );
                 yield return future;
@@ -135,6 +136,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ConsumeSimpleItemsAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain(
@@ -191,7 +193,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -236,7 +239,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -249,7 +253,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -275,7 +280,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -297,7 +303,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.SimpleInventory>(
                         (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheKey(
                             this.InventoryName
@@ -307,7 +314,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -346,7 +354,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.InventoryName
+                this.InventoryName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -355,7 +364,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheKey(
                     this.InventoryName
@@ -391,7 +401,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Inventory.Model.SimpleInventory>(
                 (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheKey(
                     this.InventoryName

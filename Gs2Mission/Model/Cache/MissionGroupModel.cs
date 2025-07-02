@@ -40,12 +40,14 @@ namespace Gs2.Gs2Mission.Model.Cache
     {
         public static string CacheParentKey(
             this MissionGroupModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "mission",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "MissionGroupModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string missionGroupName,
+            int? timeOffset,
             Func<IFuture<MissionGroupModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<MissionGroupModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                         (null as MissionGroupModel).PutCache(
                             cache,
                             namespaceName,
-                            missionGroupName
+                            missionGroupName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "missionGroupModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    missionGroupName
+                    missionGroupName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string missionGroupName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<MissionGroupModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    missionGroupName
+                    missionGroupName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                 (null as MissionGroupModel).PutCache(
                     cache,
                     namespaceName,
-                    missionGroupName
+                    missionGroupName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "missionGroupModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this MissionGroupModel self,
             CacheDatabase cache,
             string namespaceName,
-            string missionGroupName
+            string missionGroupName,
+            int? timeOffset
         ) {
             return cache.Get<MissionGroupModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     missionGroupName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this MissionGroupModel self,
             CacheDatabase cache,
             string namespaceName,
-            string missionGroupName
+            string missionGroupName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     missionGroupName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this MissionGroupModel self,
             CacheDatabase cache,
             string namespaceName,
-            string missionGroupName
+            string missionGroupName,
+            int? timeOffset
         ) {
             cache.Delete<MissionGroupModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     missionGroupName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this MissionGroupModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<MissionGroupModel[]> callback
         ) {
             cache.ListSubscribe<MissionGroupModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this MissionGroupModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<MissionGroupModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

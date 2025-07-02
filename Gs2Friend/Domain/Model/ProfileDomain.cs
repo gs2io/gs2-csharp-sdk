@@ -96,6 +96,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetProfileByUserIdFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetProfileByUserIdAsync(request)
             );
             return result?.Item;
@@ -144,6 +146,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateProfileByUserIdFuture(request)
                 );
                 yield return future;
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateProfileByUserIdAsync(request)
             );
             var domain = this;
@@ -196,6 +200,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteProfileByUserIdFuture(request)
                 );
                 yield return future;
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteProfileByUserIdAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Friend.Model.Profile).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    null,
                     () => this.GetFuture(
                         new GetProfileByUserIdRequest()
                     )
@@ -286,7 +294,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.Profile>(
                         (null as Gs2.Gs2Friend.Model.Profile).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Friend.Model.Profile).CacheKey(
                         )
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Friend.Model.Profile).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    null,
                     () => this.GetAsync(
                         new GetProfileByUserIdRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             (null as Gs2.Gs2Friend.Model.Profile).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -348,7 +360,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Friend.Model.Profile).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.Profile).CacheKey(
                 ),
@@ -383,7 +396,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.Profile>(
                 (null as Gs2.Gs2Friend.Model.Profile).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.Profile).CacheKey(
                 ),

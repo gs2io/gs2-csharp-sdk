@@ -107,7 +107,8 @@ namespace Gs2.Gs2Money2.Domain.Iterator
             (
                     (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -142,6 +143,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -149,7 +151,8 @@ namespace Gs2.Gs2Money2.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Money2.Model.SubscriptionStatus>(
                         (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -231,7 +234,8 @@ namespace Gs2.Gs2Money2.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.SubscriptionStatus>(
                         (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListSubscriptionStatus"
                    ).LockAsync()) {

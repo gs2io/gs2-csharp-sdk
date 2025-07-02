@@ -103,6 +103,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetFriendFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetFriendAsync(request)
             );
             return result?.Item;
@@ -153,6 +155,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteFriendFuture(request)
                 );
                 yield return future;
@@ -187,6 +190,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteFriendAsync(request)
                 );
             }
@@ -206,7 +210,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.WithProfile ?? default,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -218,6 +223,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId,
                     this.WithProfile ?? default,
                     this.TargetUserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetFriendRequest()
                     )
@@ -244,7 +250,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.WithProfile
+                            this.WithProfile,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
                             this.TargetUserId
@@ -255,7 +262,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.WithProfile ?? default,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -266,6 +274,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.UserId,
                     this.WithProfile ?? default,
                     this.TargetUserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetFriendRequest()
                     )
@@ -304,7 +313,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.WithProfile ?? default,
-                this.TargetUserId
+                this.TargetUserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -314,7 +324,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default
+                    this.WithProfile ?? default,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
                     this.TargetUserId
@@ -351,7 +362,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default
+                    this.WithProfile ?? default,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.FriendUser).CacheKey(
                     this.TargetUserId

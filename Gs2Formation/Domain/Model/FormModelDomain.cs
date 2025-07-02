@@ -96,6 +96,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetFormModelFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetFormModelAsync(request)
             );
             return result?.Item;
@@ -143,7 +145,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Formation.Model.FormModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.MoldModelName,
+                    null,
                     () => this.GetFuture(
                         new GetFormModelRequest()
                     )
@@ -178,7 +182,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.FormModel>(
                         (null as Gs2.Gs2Formation.Model.FormModel).CacheParentKey(
                             this.NamespaceName,
-                            this.MoldModelName
+                            this.MoldModelName,
+                            null
                         ),
                         (null as Gs2.Gs2Formation.Model.FormModel).CacheKey(
                         )
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Formation.Model.FormModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -195,6 +201,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.MoldModelName,
+                    null,
                     () => this.GetAsync(
                         new GetFormModelRequest()
                     )
@@ -231,7 +238,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             (null as Gs2.Gs2Formation.Model.FormModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.MoldModelName
+                this.MoldModelName,
+                null
             );
         }
 
@@ -240,7 +248,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Formation.Model.FormModel).CacheParentKey(
                     this.NamespaceName,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    null
                 ),
                 (null as Gs2.Gs2Formation.Model.FormModel).CacheKey(
                 ),
@@ -275,7 +284,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Formation.Model.FormModel>(
                 (null as Gs2.Gs2Formation.Model.FormModel).CacheParentKey(
                     this.NamespaceName,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    null
                 ),
                 (null as Gs2.Gs2Formation.Model.FormModel).CacheKey(
                 ),

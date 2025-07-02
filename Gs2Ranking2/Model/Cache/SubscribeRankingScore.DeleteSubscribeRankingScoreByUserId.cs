@@ -45,6 +45,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DeleteSubscribeRankingScoreByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteSubscribeRankingScoreByUserIdRequest request
         ) {
             (null as SubscribeRankingScore).DeleteCache(
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 request.NamespaceName,
                 self.Item.RankingName,
                 request.Season ?? default,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
             if (request.Season == null) {
                 (null as SubscribeRankingScore).DeleteCache(
@@ -60,7 +62,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     request.NamespaceName,
                     self.Item.RankingName,
                     null,
-                    self.Item.UserId
+                    self.Item.UserId,
+                    timeOffset
                 );
             }
         }
@@ -70,6 +73,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DeleteSubscribeRankingScoreByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteSubscribeRankingScoreByUserIdResult>> invokeImpl
         )
         {
@@ -85,6 +89,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DeleteSubscribeRankingScoreByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteSubscribeRankingScoreByUserIdResult>> invokeImpl
     #else
@@ -114,6 +120,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -97,7 +97,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.LotteryName,
-                    this.PrizeId
+                    this.PrizeId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -121,7 +122,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.LotteryName,
-                this.PrizeId
+                this.PrizeId,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -160,7 +162,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.LotteryName,
-                this.PrizeId
+                this.PrizeId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -170,7 +173,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheKey(
                     this.PrizeId
@@ -207,7 +211,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheKey(
                     this.PrizeId

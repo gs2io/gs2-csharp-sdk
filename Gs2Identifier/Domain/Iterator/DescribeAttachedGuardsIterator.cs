@@ -107,7 +107,8 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                     <string>
             (
                     (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                        UserName
+                        UserName,
+                        null
                     ),
                     out var list
             )) {
@@ -142,13 +143,15 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Identifier.Model.Identifier>(
                         (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                            UserName
+                            UserName,
+                            null
                         )
                     );
                 }
@@ -229,7 +232,8 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 using (await this._gs2.Cache.GetLockObject<string>(
                         (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                            UserName
+                            UserName,
+                            null
                        ),
                        "ListNamespaceGrn"
                    ).LockAsync()) {

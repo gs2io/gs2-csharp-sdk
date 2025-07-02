@@ -139,7 +139,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     <Gs2.Gs2Guild.Model.Guild>
             (
                     (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
-                        NamespaceName
+                        NamespaceName,
+                        null
                     ),
                     out var list
             )) {
@@ -187,6 +188,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
             }
@@ -266,7 +268,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.Guild>(
                         (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                        ),
                        "ListGuild"
                    ).LockAsync()) {

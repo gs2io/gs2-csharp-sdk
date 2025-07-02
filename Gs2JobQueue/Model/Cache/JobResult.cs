@@ -42,7 +42,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             this JobResult self,
             string namespaceName,
             string userId,
-            string jobName
+            string jobName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 namespaceName,
                 userId,
                 jobName,
+                timeOffset?.ToString() ?? "0",
                 "JobResult"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string userId,
             string jobName,
             int? tryNumber,
+            int? timeOffset,
             Func<IFuture<JobResult>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<JobResult> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                             namespaceName,
                             userId,
                             jobName,
-                            tryNumber
+                            tryNumber,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "jobResult") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     namespaceName,
                     userId,
                     jobName,
-                    tryNumber
+                    tryNumber,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string userId,
             string jobName,
             int? tryNumber,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<JobResult>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     namespaceName,
                     userId,
                     jobName,
-                    tryNumber
+                    tryNumber,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     namespaceName,
                     userId,
                     jobName,
-                    tryNumber
+                    tryNumber,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "jobResult") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string namespaceName,
             string userId,
             string jobName,
-            int? tryNumber
+            int? tryNumber,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     tryNumber
@@ -185,7 +195,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string namespaceName,
             string userId,
             string jobName,
-            int? tryNumber
+            int? tryNumber,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     tryNumber
@@ -210,7 +222,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string namespaceName,
             string userId,
             string jobName,
-            int? tryNumber
+            int? tryNumber,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -219,7 +232,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     tryNumber
@@ -233,13 +247,15 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string namespaceName,
             string userId,
             string jobName,
+            int? timeOffset,
             Action<JobResult[]> callback
         ) {
             cache.ListSubscribe<JobResult>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -252,13 +268,15 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string namespaceName,
             string userId,
             string jobName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<JobResult>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    jobName
+                    jobName,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -91,7 +91,8 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             request.RankingName,
                             request.Season,
-                            accessToken.UserId
+                            accessToken.UserId,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });
@@ -139,7 +140,8 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                     request.NamespaceName,
                     request.RankingName,
                     request.Season,
-                    accessToken.UserId
+                    accessToken.UserId,
+                    accessToken.TimeOffset
                 );
                 return null;
             };

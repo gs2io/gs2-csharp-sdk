@@ -43,12 +43,14 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this DeleteSalesItemGroupMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteSalesItemGroupMasterRequest request
         ) {
             (null as SalesItemGroupMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.SalesItemGroupName
+                request.SalesItemGroupName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this DeleteSalesItemGroupMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteSalesItemGroupMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this DeleteSalesItemGroupMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteSalesItemGroupMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -109,7 +109,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () => {}
@@ -122,7 +123,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );

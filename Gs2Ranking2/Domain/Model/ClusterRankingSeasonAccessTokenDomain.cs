@@ -105,6 +105,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PutClusterRankingScoreFuture(request)
                 );
                 yield return future;
@@ -145,6 +146,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PutClusterRankingScoreAsync(request)
             );
             var domain = new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain(
@@ -208,7 +210,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -254,7 +257,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -268,7 +272,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.ClusterName,
-                    this.Season
+                    this.Season,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -332,7 +337,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -377,7 +383,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -390,7 +397,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -454,7 +462,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -499,7 +508,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -512,7 +522,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

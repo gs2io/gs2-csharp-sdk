@@ -45,18 +45,21 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DrawByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DrawByUserIdRequest request
         ) {
             self.BoxItems.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                self.BoxItems?.PrizeTableName
+                self.BoxItems?.PrizeTableName,
+                timeOffset
             );
             cache.ClearListCache<PrizeLimit>(
                 (null as PrizeLimit).CacheParentKey(
                     request.NamespaceName,
-                    request.LotteryName
+                    request.LotteryName,
+                    timeOffset
                 )
             );
         }
@@ -66,6 +69,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DrawByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DrawByUserIdResult>> invokeImpl
         )
         {
@@ -81,6 +85,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -99,6 +104,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this DrawByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DrawByUserIdResult>> invokeImpl
     #else
@@ -110,6 +116,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

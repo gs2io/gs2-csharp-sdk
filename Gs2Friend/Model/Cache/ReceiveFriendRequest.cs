@@ -42,13 +42,15 @@ namespace Gs2.Gs2Friend.Model.Cache
         public static string CacheParentKey(
             this ReceiveFriendRequest self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "friend",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "ReceiveFriendRequest"
             );
         }
@@ -70,6 +72,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             string namespaceName,
             string userId,
             string fromUserId,
+            int? timeOffset,
             Func<IFuture<ReceiveFriendRequest>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ReceiveFriendRequest> self)
@@ -84,7 +87,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            fromUserId
+                            fromUserId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "receiveFriendRequest") {
                             self.OnComplete(default);
@@ -102,7 +106,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    fromUserId
+                    fromUserId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -121,6 +126,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             string namespaceName,
             string userId,
             string fromUserId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ReceiveFriendRequest>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    fromUserId
+                    fromUserId,
+                    timeOffset
                 );
                 return item;
             }
@@ -145,7 +152,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    fromUserId
+                    fromUserId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "receiveFriendRequest") {
                     throw;
@@ -160,7 +168,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string fromUserId
+            string fromUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -168,7 +177,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             return cache.Get<ReceiveFriendRequest>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     fromUserId
@@ -181,7 +191,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string fromUserId
+            string fromUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -189,7 +200,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     fromUserId
@@ -204,7 +216,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string fromUserId
+            string fromUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -212,7 +225,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Delete<ReceiveFriendRequest>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     fromUserId
@@ -225,12 +239,14 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<ReceiveFriendRequest[]> callback
         ) {
             cache.ListSubscribe<ReceiveFriendRequest>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -242,12 +258,14 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ReceiveFriendRequest>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

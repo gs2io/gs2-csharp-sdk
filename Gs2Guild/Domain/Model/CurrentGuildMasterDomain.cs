@@ -94,6 +94,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.ExportMasterFuture(request)
                 );
                 yield return future;
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.ExportMasterAsync(request)
             );
             var domain = this;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.GetCurrentGuildMasterFuture(request)
                 );
@@ -172,6 +175,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetCurrentGuildMasterAsync(request)
             );
             return result?.Item;
@@ -189,6 +193,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PreUpdateCurrentGuildMasterFuture(request)
                 );
@@ -221,6 +226,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PreUpdateCurrentGuildMasterAsync(request)
             );
             var domain = this;
@@ -241,6 +247,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateCurrentGuildMasterFuture(request)
                 );
@@ -272,6 +279,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateCurrentGuildMasterAsync(request)
             );
             var domain = this;
@@ -291,6 +299,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateCurrentGuildMasterFromGitHubFuture(request)
                 );
@@ -322,6 +331,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateCurrentGuildMasterFromGitHubAsync(request)
             );
             var domain = this;
@@ -341,7 +351,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -350,6 +361,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
+                    null,
                     () => this.GetFuture(
                         new GetCurrentGuildMasterRequest()
                     )
@@ -374,14 +386,16 @@ namespace Gs2.Gs2Guild.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.CurrentGuildMaster>(
                         (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).CacheKey(
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -389,6 +403,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 return await (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
+                    null,
                     () => this.GetAsync(
                         new GetCurrentGuildMasterRequest()
                     )
@@ -424,7 +439,8 @@ namespace Gs2.Gs2Guild.Domain.Model
         {
             (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).DeleteCache(
                 this._gs2.Cache,
-                this.NamespaceName
+                this.NamespaceName,
+                null
             );
         }
 
@@ -432,7 +448,8 @@ namespace Gs2.Gs2Guild.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).CacheKey(
                 ),
@@ -466,7 +483,8 @@ namespace Gs2.Gs2Guild.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Guild.Model.CurrentGuildMaster>(
                 (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.CurrentGuildMaster).CacheKey(
                 ),

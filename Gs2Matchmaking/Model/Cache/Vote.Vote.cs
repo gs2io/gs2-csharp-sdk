@@ -43,6 +43,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this VoteResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             VoteRequest request
         ) {
         }
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this VoteRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<VoteResult>> invokeImpl
         )
         {
@@ -67,6 +69,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this VoteRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<VoteResult>> invokeImpl
     #else
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

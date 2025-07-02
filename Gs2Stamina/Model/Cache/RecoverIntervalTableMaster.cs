@@ -40,12 +40,14 @@ namespace Gs2.Gs2Stamina.Model.Cache
     {
         public static string CacheParentKey(
             this RecoverIntervalTableMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "stamina",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "RecoverIntervalTableMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string recoverIntervalTableName,
+            int? timeOffset,
             Func<IFuture<RecoverIntervalTableMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<RecoverIntervalTableMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                         (null as RecoverIntervalTableMaster).PutCache(
                             cache,
                             namespaceName,
-                            recoverIntervalTableName
+                            recoverIntervalTableName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "recoverIntervalTableMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    recoverIntervalTableName
+                    recoverIntervalTableName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string recoverIntervalTableName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RecoverIntervalTableMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    recoverIntervalTableName
+                    recoverIntervalTableName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 (null as RecoverIntervalTableMaster).PutCache(
                     cache,
                     namespaceName,
-                    recoverIntervalTableName
+                    recoverIntervalTableName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "recoverIntervalTableMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverIntervalTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string recoverIntervalTableName
+            string recoverIntervalTableName,
+            int? timeOffset
         ) {
             return cache.Get<RecoverIntervalTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverIntervalTableName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverIntervalTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string recoverIntervalTableName
+            string recoverIntervalTableName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<RecoverIntervalTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverIntervalTableName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverIntervalTableName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverIntervalTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string recoverIntervalTableName
+            string recoverIntervalTableName,
+            int? timeOffset
         ) {
             cache.Delete<RecoverIntervalTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     recoverIntervalTableName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverIntervalTableMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<RecoverIntervalTableMaster[]> callback
         ) {
             cache.ListSubscribe<RecoverIntervalTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this RecoverIntervalTableMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<RecoverIntervalTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

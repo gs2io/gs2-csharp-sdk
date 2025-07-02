@@ -43,6 +43,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this DescribeLayerModelMastersResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeLayerModelMastersRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<LayerModelMaster>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.AreaModelName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this DescribeLayerModelMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeLayerModelMastersResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this DescribeLayerModelMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeLayerModelMastersResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

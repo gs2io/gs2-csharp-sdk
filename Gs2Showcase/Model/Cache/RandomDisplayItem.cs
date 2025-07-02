@@ -42,7 +42,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this RandomDisplayItem self,
             string namespaceName,
             string userId,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 namespaceName,
                 userId,
                 showcaseName,
+                timeOffset?.ToString() ?? "0",
                 "RandomDisplayItem"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string userId,
             string showcaseName,
             string displayItemName,
+            int? timeOffset,
             Func<IFuture<RandomDisplayItem>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<RandomDisplayItem> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                             namespaceName,
                             userId,
                             showcaseName,
-                            displayItemName
+                            displayItemName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "randomDisplayItem") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     namespaceName,
                     userId,
                     showcaseName,
-                    displayItemName
+                    displayItemName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string userId,
             string showcaseName,
             string displayItemName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RandomDisplayItem>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     namespaceName,
                     userId,
                     showcaseName,
-                    displayItemName
+                    displayItemName,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     namespaceName,
                     userId,
                     showcaseName,
-                    displayItemName
+                    displayItemName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "randomDisplayItem") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
-            string displayItemName
+            string displayItemName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     displayItemName
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
-            string displayItemName
+            string displayItemName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     displayItemName
@@ -210,7 +222,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
-            string displayItemName
+            string displayItemName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -219,7 +232,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     displayItemName
@@ -233,13 +247,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
+            int? timeOffset,
             Action<RandomDisplayItem[]> callback
         ) {
             cache.ListSubscribe<RandomDisplayItem>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -252,13 +268,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<RandomDisplayItem>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 callbackId
             );

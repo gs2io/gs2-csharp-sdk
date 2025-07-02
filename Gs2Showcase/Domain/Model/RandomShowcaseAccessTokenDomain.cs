@@ -126,7 +126,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -171,7 +172,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -184,7 +186,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -210,7 +213,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -232,7 +236,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.RandomShowcase>(
                         (null as Gs2.Gs2Showcase.Model.RandomShowcase).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Showcase.Model.RandomShowcase).CacheKey(
                             this.ShowcaseName
@@ -242,7 +247,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -281,7 +287,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.ShowcaseName
+                this.ShowcaseName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -290,7 +297,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Showcase.Model.RandomShowcase).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Showcase.Model.RandomShowcase).CacheKey(
                     this.ShowcaseName
@@ -326,7 +334,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.RandomShowcase>(
                 (null as Gs2.Gs2Showcase.Model.RandomShowcase).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Showcase.Model.RandomShowcase).CacheKey(
                     this.ShowcaseName

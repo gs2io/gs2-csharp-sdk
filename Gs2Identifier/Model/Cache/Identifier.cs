@@ -40,12 +40,14 @@ namespace Gs2.Gs2Identifier.Model.Cache
     {
         public static string CacheParentKey(
             this Identifier self,
-            string userName
+            string userName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "identifier",
                 userName,
+                timeOffset?.ToString() ?? "0",
                 "Identifier"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             CacheDatabase cache,
             string userName,
             string clientId,
+            int? timeOffset,
             Func<IFuture<Identifier>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Identifier> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                         (null as Identifier).PutCache(
                             cache,
                             userName,
-                            clientId
+                            clientId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "identifier") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 item.PutCache(
                     cache,
                     userName,
-                    clientId
+                    clientId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             CacheDatabase cache,
             string userName,
             string clientId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Identifier>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 item.PutCache(
                     cache,
                     userName,
-                    clientId
+                    clientId,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 (null as Identifier).PutCache(
                     cache,
                     userName,
-                    clientId
+                    clientId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "identifier") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this Identifier self,
             CacheDatabase cache,
             string userName,
-            string clientId
+            string clientId,
+            int? timeOffset
         ) {
             return cache.Get<Identifier>(
                 self.CacheParentKey(
-                    userName
+                    userName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clientId
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this Identifier self,
             CacheDatabase cache,
             string userName,
-            string clientId
+            string clientId,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Identifier>(
                 self.CacheParentKey(
-                    userName
+                    userName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clientId
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    userName
+                    userName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clientId
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this Identifier self,
             CacheDatabase cache,
             string userName,
-            string clientId
+            string clientId,
+            int? timeOffset
         ) {
             cache.Delete<Identifier>(
                 self.CacheParentKey(
-                    userName
+                    userName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clientId
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this Identifier self,
             CacheDatabase cache,
             string userName,
+            int? timeOffset,
             Action<Identifier[]> callback
         ) {
             cache.ListSubscribe<Identifier>(
                 self.CacheParentKey(
-                    userName
+                    userName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this Identifier self,
             CacheDatabase cache,
             string userName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Identifier>(
                 self.CacheParentKey(
-                    userName
+                    userName,
+                    timeOffset
                 ),
                 callbackId
             );

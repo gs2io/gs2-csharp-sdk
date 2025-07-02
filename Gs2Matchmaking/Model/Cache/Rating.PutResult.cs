@@ -45,6 +45,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this PutResultResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             PutResultRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Rating>())
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     cache,
                     request.NamespaceName,
                     item.UserId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this PutResultRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<PutResultResult>> invokeImpl
         )
         {
@@ -78,6 +81,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this PutResultRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PutResultResult>> invokeImpl
     #else
@@ -107,6 +112,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

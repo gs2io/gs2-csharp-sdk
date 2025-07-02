@@ -43,13 +43,15 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this GetEntryResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetEntryRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.EntryModelName
+                request.EntryModelName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this GetEntryRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetEntryResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this GetEntryRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetEntryResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

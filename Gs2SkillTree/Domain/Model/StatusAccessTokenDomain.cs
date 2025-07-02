@@ -115,6 +115,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ReleaseFuture(request)
                 );
                 yield return future;
@@ -175,6 +176,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ReleaseAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -209,6 +211,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.MarkRestrainFuture(request)
                 );
                 yield return future;
@@ -241,6 +244,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.MarkRestrainAsync(request)
             );
             var domain = this;
@@ -280,6 +284,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RestrainFuture(request)
                 );
                 yield return future;
@@ -340,6 +345,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RestrainAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -374,6 +380,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetStatusFuture(request)
                 );
                 yield return future;
@@ -404,6 +411,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetStatusAsync(request)
             );
             return result?.Item;
@@ -441,6 +449,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ResetFuture(request)
                 );
                 yield return future;
@@ -501,6 +510,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ResetAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -530,7 +540,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -541,6 +552,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetStatusRequest()
                     )
@@ -566,7 +578,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SkillTree.Model.Status>(
                         (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
                             this.PropertyId
@@ -576,7 +589,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -586,6 +600,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetStatusRequest()
                     )
@@ -623,7 +638,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.PropertyId
+                this.PropertyId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -632,7 +648,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
                     this.PropertyId
@@ -668,7 +685,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SkillTree.Model.Status>(
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
                     this.PropertyId

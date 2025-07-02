@@ -106,6 +106,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetJoinedGuildByUserIdFuture(request)
                 );
                 yield return future;
@@ -137,6 +138,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetJoinedGuildByUserIdAsync(request)
             );
             return result?.Item;
@@ -158,6 +160,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateMemberMetadataByUserIdFuture(request)
                 );
                 yield return future;
@@ -196,6 +199,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateMemberMetadataByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Guild.Domain.Model.GuildDomain(
@@ -224,6 +228,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.WithdrawalByUserIdFuture(request)
                 );
                 yield return future;
@@ -257,6 +262,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.WithdrawalByUserIdAsync(request)
             );
             var domain = this;
@@ -279,7 +285,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -291,6 +298,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.UserId,
                     this.GuildModelName,
                     this.GuildName,
+                    null,
                     () => this.GetFuture(
                         new GetJoinedGuildByUserIdRequest()
                     )
@@ -316,7 +324,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.JoinedGuild>(
                         (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheKey(
                             this.GuildModelName,
@@ -328,7 +337,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -339,6 +349,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.UserId,
                     this.GuildModelName,
                     this.GuildName,
+                    null,
                     () => this.GetAsync(
                         new GetJoinedGuildByUserIdRequest()
                     )
@@ -377,7 +388,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                null
             );
         }
 
@@ -386,7 +398,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheKey(
                     this.GuildModelName,
@@ -423,7 +436,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Guild.Model.JoinedGuild>(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheKey(
                     this.GuildModelName,

@@ -43,13 +43,15 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DetachSecurityPolicyResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DetachSecurityPolicyRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<SecurityPolicy>())
             {
                 item.PutCache(
                     cache,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -59,6 +61,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DetachSecurityPolicyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DetachSecurityPolicyResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DetachSecurityPolicyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DetachSecurityPolicyResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -130,7 +130,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 ),
                 callback,
                 () =>
@@ -175,7 +176,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 ),
                 callbackId
             );
@@ -188,7 +190,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 )
             );
         }
@@ -222,7 +225,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -244,7 +248,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigInventory>(
                         (null as Gs2.Gs2Inventory.Model.BigInventory).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Inventory.Model.BigInventory).CacheKey(
                             this.InventoryName
@@ -254,7 +259,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName
+                    this.InventoryName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -293,7 +299,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.InventoryName
+                this.InventoryName,
+                null
             );
         }
 
@@ -302,7 +309,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Inventory.Model.BigInventory).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.BigInventory).CacheKey(
                     this.InventoryName
@@ -338,7 +346,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Inventory.Model.BigInventory>(
                 (null as Gs2.Gs2Inventory.Model.BigInventory).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.BigInventory).CacheKey(
                     this.InventoryName

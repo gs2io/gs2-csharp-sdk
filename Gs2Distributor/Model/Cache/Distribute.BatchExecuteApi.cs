@@ -47,6 +47,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this BatchExecuteApiResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             BatchExecuteApiRequest request
         ) {
             foreach (var res in self.Results) {
@@ -487,6 +488,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this BatchExecuteApiRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<BatchExecuteApiResult>> invokeImpl
         )
         {
@@ -502,6 +504,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -520,6 +523,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this BatchExecuteApiRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BatchExecuteApiResult>> invokeImpl
     #else
@@ -531,6 +535,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

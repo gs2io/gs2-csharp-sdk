@@ -96,6 +96,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetExperienceModelFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetExperienceModelAsync(request)
             );
             return result?.Item;
@@ -143,7 +145,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Experience.Model.ExperienceModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ExperienceName
+                    this.ExperienceName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ExperienceName,
+                    null,
                     () => this.GetFuture(
                         new GetExperienceModelRequest()
                     )
@@ -177,7 +181,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.ExperienceModel>(
                         (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheKey(
                             this.ExperienceName
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Experience.Model.ExperienceModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ExperienceName
+                    this.ExperienceName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -195,6 +201,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ExperienceName,
+                    null,
                     () => this.GetAsync(
                         new GetExperienceModelRequest()
                     )
@@ -231,7 +238,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             (null as Gs2.Gs2Experience.Model.ExperienceModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ExperienceName
+                this.ExperienceName,
+                null
             );
         }
 
@@ -239,7 +247,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheKey(
                     this.ExperienceName
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Experience.Model.ExperienceModel>(
                 (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheKey(
                     this.ExperienceName

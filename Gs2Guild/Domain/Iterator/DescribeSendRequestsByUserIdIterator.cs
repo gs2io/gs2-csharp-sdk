@@ -117,7 +117,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                         NamespaceName,
                         GuildModelName,
-                        UserId
+                        UserId,
+                        null
                     ),
                     out var list
             )) {
@@ -157,6 +158,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -165,7 +167,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                         (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                             NamespaceName,
                             GuildModelName,
-                            UserId
+                            UserId,
+                            null
                         )
                     );
                 }
@@ -248,6 +251,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                         (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                             NamespaceName,
                             GuildModelName,
+                            null,
                             null
                        ),
                        "ListSendMemberRequest"

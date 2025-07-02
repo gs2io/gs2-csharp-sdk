@@ -81,7 +81,8 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                         domain.Cache,
                         request.NamespaceName,
                         accessToken.UserId,
-                        request.PropertyId
+                        request.PropertyId,
+                        accessToken.TimeOffset
                     );
                     return null;
                 });
@@ -116,7 +117,8 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     accessToken.UserId,
-                    request.PropertyId
+                    request.PropertyId,
+                    accessToken.TimeOffset
                 );
                 return null;
             };

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this DescribeEntryModelMastersResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeEntryModelMastersRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<EntryModelMaster>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this DescribeEntryModelMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeEntryModelMastersResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this DescribeEntryModelMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeEntryModelMastersResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -42,13 +42,15 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
         public static string CacheParentKey(
             this SignedBallot self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "matchmaking",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "SignedBallot"
             );
         }
@@ -73,6 +75,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string ratingName,
             string gatheringName,
+            int? timeOffset,
             Func<IFuture<SignedBallot>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SignedBallot> self)
@@ -88,7 +91,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                             namespaceName,
                             userId,
                             ratingName,
-                            gatheringName
+                            gatheringName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "ballot") {
                             self.OnComplete(default);
@@ -104,7 +108,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     ratingName,
-                    gatheringName
+                    gatheringName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -124,6 +129,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string ratingName,
             string gatheringName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SignedBallot>> fetchImpl
     #else
@@ -137,7 +143,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     ratingName,
-                    gatheringName
+                    gatheringName,
+                    timeOffset
                 );
                 return item;
             }
@@ -147,7 +154,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     ratingName,
-                    gatheringName
+                    gatheringName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "ballot") {
                     throw;
@@ -163,7 +171,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string ratingName,
-            string gatheringName
+            string gatheringName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             return cache.Get<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     ratingName,
@@ -186,7 +196,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string ratingName,
-            string gatheringName
+            string gatheringName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     ratingName,
@@ -211,7 +223,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string ratingName,
-            string gatheringName
+            string gatheringName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -219,7 +232,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             cache.Delete<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     ratingName,
@@ -233,12 +247,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<SignedBallot[]> callback
         ) {
             cache.ListSubscribe<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -250,12 +266,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

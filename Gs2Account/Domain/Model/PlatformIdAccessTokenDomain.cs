@@ -99,6 +99,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetPlatformIdFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetPlatformIdAsync(request)
             );
 
@@ -151,6 +153,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CreatePlatformIdFuture(request)
                 );
                 yield return future;
@@ -183,6 +186,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CreatePlatformIdAsync(request)
             );
             var domain = this;
@@ -205,6 +209,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.FindPlatformIdFuture(request)
                 );
                 yield return future;
@@ -236,6 +241,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.FindPlatformIdAsync(request)
             );
 
@@ -257,6 +263,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeletePlatformIdFuture(request)
                 );
                 yield return future;
@@ -292,6 +299,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeletePlatformIdAsync(request)
                 );
             }
@@ -310,7 +318,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Type ?? default
+                    this.Type ?? default,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -321,6 +330,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Type ?? default,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetPlatformIdRequest()
                     )
@@ -346,7 +356,8 @@ namespace Gs2.Gs2Account.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.PlatformId>(
                         (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Account.Model.PlatformId).CacheKey(
                             this.Type
@@ -356,7 +367,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Type ?? default
+                    this.Type ?? default,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -366,6 +378,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Type ?? default,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetPlatformIdRequest()
                     )
@@ -403,7 +416,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.Type ?? default
+                this.Type ?? default,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -412,7 +426,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheKey(
                     this.Type ?? default
@@ -448,7 +463,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheKey(
                     this.Type ?? default

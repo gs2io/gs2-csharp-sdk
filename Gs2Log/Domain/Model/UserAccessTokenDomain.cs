@@ -98,6 +98,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SendInGameLogFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Log.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SendInGameLogAsync(request)
             );
             var domain = new Gs2.Gs2Log.Domain.Model.InGameLogAccessTokenDomain(

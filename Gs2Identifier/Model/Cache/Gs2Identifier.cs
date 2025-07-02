@@ -36,6 +36,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DescribeUsersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeUsersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.CreateUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateUserRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.UpdateUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateUserRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.GetUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetUserRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DeleteUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteUserRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DescribeSecurityPoliciesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSecurityPoliciesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DescribeCommonSecurityPoliciesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeCommonSecurityPoliciesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.CreateSecurityPolicyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateSecurityPolicyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.UpdateSecurityPolicyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateSecurityPolicyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.GetSecurityPolicyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSecurityPolicyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DeleteSecurityPolicyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSecurityPolicyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DescribeIdentifiersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeIdentifiersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.CreateIdentifierResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateIdentifierRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.GetIdentifierResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetIdentifierRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DeleteIdentifierResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteIdentifierRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DescribeAttachedGuardsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeAttachedGuardsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.AttachGuardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AttachGuardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DetachGuardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DetachGuardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.CreatePasswordResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreatePasswordRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.GetPasswordResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetPasswordRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.EnableMfaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.EnableMfaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.ChallengeMfaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ChallengeMfaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DisableMfaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DisableMfaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DeletePasswordResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeletePasswordRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.GetHasSecurityPolicyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetHasSecurityPolicyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.AttachSecurityPolicyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AttachSecurityPolicyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.DetachSecurityPolicyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DetachSecurityPolicyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.LoginResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.LoginRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     Result.LoginByUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.LoginByUserRequest.FromJson(requestPayload)
                     );
                     break;

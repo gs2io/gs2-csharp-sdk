@@ -40,12 +40,14 @@ namespace Gs2.Gs2Stamina.Model.Cache
     {
         public static string CacheParentKey(
             this MaxStaminaTableMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "stamina",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "MaxStaminaTableMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string maxStaminaTableName,
+            int? timeOffset,
             Func<IFuture<MaxStaminaTableMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<MaxStaminaTableMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                         (null as MaxStaminaTableMaster).PutCache(
                             cache,
                             namespaceName,
-                            maxStaminaTableName
+                            maxStaminaTableName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "maxStaminaTableMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    maxStaminaTableName
+                    maxStaminaTableName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string maxStaminaTableName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<MaxStaminaTableMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    maxStaminaTableName
+                    maxStaminaTableName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 (null as MaxStaminaTableMaster).PutCache(
                     cache,
                     namespaceName,
-                    maxStaminaTableName
+                    maxStaminaTableName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "maxStaminaTableMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this MaxStaminaTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string maxStaminaTableName
+            string maxStaminaTableName,
+            int? timeOffset
         ) {
             return cache.Get<MaxStaminaTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     maxStaminaTableName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this MaxStaminaTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string maxStaminaTableName
+            string maxStaminaTableName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<MaxStaminaTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     maxStaminaTableName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     maxStaminaTableName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this MaxStaminaTableMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string maxStaminaTableName
+            string maxStaminaTableName,
+            int? timeOffset
         ) {
             cache.Delete<MaxStaminaTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     maxStaminaTableName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this MaxStaminaTableMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<MaxStaminaTableMaster[]> callback
         ) {
             cache.ListSubscribe<MaxStaminaTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this MaxStaminaTableMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<MaxStaminaTableMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

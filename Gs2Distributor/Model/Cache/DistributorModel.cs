@@ -40,12 +40,14 @@ namespace Gs2.Gs2Distributor.Model.Cache
     {
         public static string CacheParentKey(
             this DistributorModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "distributor",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "DistributorModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string distributorName,
+            int? timeOffset,
             Func<IFuture<DistributorModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<DistributorModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                         (null as DistributorModel).PutCache(
                             cache,
                             namespaceName,
-                            distributorName
+                            distributorName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "distributorModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    distributorName
+                    distributorName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string distributorName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DistributorModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    distributorName
+                    distributorName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 (null as DistributorModel).PutCache(
                     cache,
                     namespaceName,
-                    distributorName
+                    distributorName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "distributorModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributorModel self,
             CacheDatabase cache,
             string namespaceName,
-            string distributorName
+            string distributorName,
+            int? timeOffset
         ) {
             return cache.Get<DistributorModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     distributorName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributorModel self,
             CacheDatabase cache,
             string namespaceName,
-            string distributorName
+            string distributorName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     distributorName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributorModel self,
             CacheDatabase cache,
             string namespaceName,
-            string distributorName
+            string distributorName,
+            int? timeOffset
         ) {
             cache.Delete<DistributorModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     distributorName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributorModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<DistributorModel[]> callback
         ) {
             cache.ListSubscribe<DistributorModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributorModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<DistributorModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

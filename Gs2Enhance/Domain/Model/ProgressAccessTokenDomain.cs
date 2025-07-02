@@ -95,6 +95,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetProgressFuture(request)
                 );
                 yield return future;
@@ -124,6 +125,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetProgressAsync(request)
             );
             return result?.Item;
@@ -160,6 +162,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.StartFuture(request)
                 );
                 yield return future;
@@ -219,6 +222,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.StartAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -269,6 +273,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.EndFuture(request)
                 );
                 yield return future;
@@ -328,6 +333,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.EndAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -361,6 +367,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteProgressFuture(request)
                 );
                 yield return future;
@@ -395,6 +402,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteProgressAsync(request)
                 );
             }
@@ -412,7 +420,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enhance.Model.Progress).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -422,6 +431,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetProgressRequest()
                     )
@@ -447,7 +457,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.Progress>(
                         (null as Gs2.Gs2Enhance.Model.Progress).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Enhance.Model.Progress).CacheKey(
                         )
@@ -455,7 +466,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enhance.Model.Progress).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -464,6 +476,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetProgressRequest()
                     )
@@ -500,7 +513,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
             (null as Gs2.Gs2Enhance.Model.Progress).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -509,7 +523,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Enhance.Model.Progress).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Enhance.Model.Progress).CacheKey(
                 ),
@@ -544,7 +559,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enhance.Model.Progress>(
                 (null as Gs2.Gs2Enhance.Model.Progress).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Enhance.Model.Progress).CacheKey(
                 ),

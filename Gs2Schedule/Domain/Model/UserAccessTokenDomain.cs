@@ -123,7 +123,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -167,7 +168,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -179,7 +181,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -239,7 +242,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    isInSchedule
+                    isInSchedule,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -286,7 +290,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    true
+                    true,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -294,7 +299,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    false
+                    false,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -307,14 +313,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    true
+                    true,
+                    this.AccessToken?.TimeOffset
                 )
             );
             this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    false
+                    false,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

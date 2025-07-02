@@ -111,7 +111,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             (
                     (null as Gs2.Gs2Inventory.Model.Inventory).CacheParentKey(
                         NamespaceName,
-                        UserId
+                        UserId,
+                        null
                     ),
                     out var list
             )) {
@@ -150,6 +151,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -157,7 +159,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Inventory.Model.Inventory>(
                         (null as Gs2.Gs2Inventory.Model.Inventory).CacheParentKey(
                             NamespaceName,
-                            UserId
+                            UserId,
+                            null
                         )
                     );
                 }
@@ -239,7 +242,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.Inventory>(
                         (null as Gs2.Gs2Inventory.Model.Inventory).CacheParentKey(
                             NamespaceName,
-                            UserId
+                            UserId,
+                            null
                        ),
                        "ListInventory"
                    ).LockAsync()) {

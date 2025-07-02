@@ -104,7 +104,8 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                     <Gs2.Gs2SerialKey.Model.CampaignModelMaster>
             (
                     (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
-                        NamespaceName
+                        NamespaceName,
+                        null
                     ),
                     out var list
             )) {
@@ -142,13 +143,15 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
                         (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                         )
                     );
                 }
@@ -229,7 +232,8 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
                         (null as Gs2.Gs2SerialKey.Model.CampaignModelMaster).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                        ),
                        "ListCampaignModelMaster"
                    ).LockAsync()) {

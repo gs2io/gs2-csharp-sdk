@@ -114,6 +114,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetReferenceOfByUserIdFuture(request)
                 );
                 yield return future;
@@ -147,6 +148,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetReferenceOfByUserIdAsync(request)
             );
             return result?.Item;
@@ -170,6 +172,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyReferenceOfByUserIdFuture(request)
                 );
                 yield return future;
@@ -213,6 +216,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyReferenceOfByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain(
@@ -246,6 +250,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteReferenceOfByUserIdFuture(request)
                 );
                 yield return future;
@@ -292,6 +297,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteReferenceOfByUserIdAsync(request)
                 );
             }
@@ -316,7 +322,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
-                    this.ReferenceOf
+                    this.ReferenceOf,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -330,6 +337,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.ItemName,
                     this.ItemSetName,
                     this.ReferenceOf,
+                    null,
                     () => this.GetFuture(
                         new GetReferenceOfByUserIdRequest()
                     )
@@ -359,7 +367,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                this.ReferenceOf
+                this.ReferenceOf,
+                null
             );
             if (find) {
                 return value;
@@ -372,6 +381,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.ItemName,
                 this.ItemSetName,
                 this.ReferenceOf,
+                null,
                 () => this.GetAsync(
                     new GetReferenceOfByUserIdRequest()
                 )
@@ -411,7 +421,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                this.ReferenceOf
+                this.ReferenceOf,
+                null
             );
         }
 
@@ -423,7 +434,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
-                    this.ItemSetName
+                    this.ItemSetName,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheKey(
                     this.ReferenceOf
@@ -462,7 +474,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
-                    this.ItemSetName
+                    this.ItemSetName,
+                    null
                 ),
                 (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheKey(
                     this.ReferenceOf

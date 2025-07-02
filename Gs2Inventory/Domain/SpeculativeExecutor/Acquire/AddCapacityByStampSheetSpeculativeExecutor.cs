@@ -88,7 +88,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             request.UserId,
-                            request.InventoryName
+                            request.InventoryName,
+                            null
                         );
                         return null;
                     });
@@ -133,7 +134,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     request.UserId,
-                    request.InventoryName
+                    request.InventoryName,
+                    null
                 );
                 return null;
             };

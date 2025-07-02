@@ -43,6 +43,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DeleteItemSetByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteItemSetByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<ItemSet>())
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     request.UserId,
                     request.InventoryName,
                     item.ItemName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
             self.Items?.PutCache(
@@ -61,19 +63,22 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 request.NamespaceName,
                 request.UserId,
                 request.InventoryName,
-                request.ItemName
+                request.ItemName,
+                timeOffset
             );
             (null as ItemModel).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName,
-                request.ItemName
+                request.ItemName,
+                timeOffset
             );
             (null as Inventory).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.InventoryName
+                request.InventoryName,
+                timeOffset
             );
         }
 
@@ -82,6 +87,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DeleteItemSetByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteItemSetByUserIdResult>> invokeImpl
         )
         {
@@ -97,6 +103,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -115,6 +122,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this DeleteItemSetByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteItemSetByUserIdResult>> invokeImpl
     #else
@@ -126,6 +134,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

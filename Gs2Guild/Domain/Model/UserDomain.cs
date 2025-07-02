@@ -144,7 +144,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     guildModelName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -194,7 +195,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     guildModelName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -208,7 +210,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     guildModelName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -275,7 +278,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.JoinedGuild>(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -324,7 +328,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Guild.Model.JoinedGuild>(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -337,7 +342,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.JoinedGuild>(
                 (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -446,6 +452,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CreateGuildByUserIdFuture(request)
                 );
                 yield return future;
@@ -482,6 +489,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CreateGuildByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Guild.Domain.Model.GuildDomain(
@@ -508,6 +516,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AssumeByUserIdFuture(request)
                 );
                 yield return future;
@@ -541,6 +550,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AssumeByUserIdAsync(request)
             );
             var domain = this._gs2.Auth.AccessToken();
@@ -564,6 +574,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SendRequestByUserIdFuture(request)
                 );
                 yield return future;
@@ -600,6 +611,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SendRequestByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Guild.Domain.Model.GuildDomain(
@@ -626,6 +638,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteRequestByUserIdFuture(request)
                 );
                 yield return future;
@@ -666,6 +679,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteRequestByUserIdAsync(request)
                 );
             }

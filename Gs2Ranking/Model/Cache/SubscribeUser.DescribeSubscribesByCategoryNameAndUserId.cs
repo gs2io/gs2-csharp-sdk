@@ -43,6 +43,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this DescribeSubscribesByCategoryNameAndUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeSubscribesByCategoryNameAndUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<SubscribeUser>())
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     request.UserId,
                     request.CategoryName,
                     default,
-                    item.TargetUserId
+                    item.TargetUserId,
+                    timeOffset
                 );
             }
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this DescribeSubscribesByCategoryNameAndUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeSubscribesByCategoryNameAndUserIdResult>> invokeImpl
         )
         {
@@ -78,6 +81,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             this DescribeSubscribesByCategoryNameAndUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeSubscribesByCategoryNameAndUserIdResult>> invokeImpl
     #else
@@ -107,6 +112,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

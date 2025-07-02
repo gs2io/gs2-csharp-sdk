@@ -45,7 +45,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             string inventoryName,
             string itemName,
-            string itemSetName
+            string itemSetName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -55,6 +56,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 inventoryName,
                 itemName,
                 itemSetName,
+                timeOffset?.ToString() ?? "0",
                 "ReferenceOf"
             );
         }
@@ -79,6 +81,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string itemName,
             string itemSetName,
             string referenceOf,
+            int? timeOffset,
             Func<IFuture<string>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<string> self)
@@ -96,7 +99,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                             inventoryName,
                             itemName,
                             itemSetName,
-                            referenceOf
+                            referenceOf,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "referenceOf") {
                             self.OnComplete(default);
@@ -116,7 +120,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     inventoryName,
                     itemName,
                     itemSetName,
-                    referenceOf
+                    referenceOf,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -138,6 +143,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string itemName,
             string itemSetName,
             string referenceOf,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<string>> fetchImpl
     #else
@@ -155,7 +161,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     inventoryName,
                     itemName,
                     itemSetName,
-                    referenceOf
+                    referenceOf,
+                    timeOffset
                 );
                 return item;
             }
@@ -167,7 +174,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     inventoryName,
                     itemName,
                     itemSetName,
-                    referenceOf
+                    referenceOf,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "referenceOf") {
                     throw;
@@ -185,7 +193,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string inventoryName,
             string itemName,
             string itemSetName,
-            string referenceOf
+            string referenceOf,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -196,7 +205,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     userId,
                     inventoryName,
                     itemName,
-                    itemSetName
+                    itemSetName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     referenceOf
@@ -216,7 +226,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string inventoryName,
             string itemName,
             string itemSetName,
-            string referenceOf
+            string referenceOf,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -227,7 +238,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     userId,
                     inventoryName,
                     itemName,
-                    itemSetName
+                    itemSetName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     referenceOf
@@ -245,7 +257,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string inventoryName,
             string itemName,
             string itemSetName,
-            string referenceOf
+            string referenceOf,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -256,7 +269,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     userId,
                     inventoryName,
                     itemName,
-                    itemSetName
+                    itemSetName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     referenceOf
@@ -272,6 +286,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string inventoryName,
             string itemName,
             string itemSetName,
+            int? timeOffset,
             Action<ReferenceOf[]> callback
         ) {
             cache.ListSubscribe<ReferenceOf>(
@@ -280,7 +295,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     userId,
                     inventoryName,
                     itemName,
-                    itemSetName
+                    itemSetName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -295,6 +311,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string inventoryName,
             string itemName,
             string itemSetName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ReferenceOf>(
@@ -303,7 +320,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     userId,
                     inventoryName,
                     itemName,
-                    itemSetName
+                    itemSetName,
+                    timeOffset
                 ),
                 callbackId
             );

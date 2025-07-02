@@ -40,12 +40,14 @@ namespace Gs2.Gs2Ranking2.Model.Cache
     {
         public static string CacheParentKey(
             this SubscribeRankingModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "ranking2",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "SubscribeRankingModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string rankingName,
+            int? timeOffset,
             Func<IFuture<SubscribeRankingModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SubscribeRankingModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                         (null as SubscribeRankingModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            rankingName
+                            rankingName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "subscribeRankingModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string rankingName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SubscribeRankingModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 (null as SubscribeRankingModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "subscribeRankingModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string rankingName
+            string rankingName,
+            int? timeOffset
         ) {
             return cache.Get<SubscribeRankingModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string rankingName
+            string rankingName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<SubscribeRankingModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string rankingName
+            string rankingName,
+            int? timeOffset
         ) {
             cache.Delete<SubscribeRankingModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rankingName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<SubscribeRankingModelMaster[]> callback
         ) {
             cache.ListSubscribe<SubscribeRankingModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this SubscribeRankingModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SubscribeRankingModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

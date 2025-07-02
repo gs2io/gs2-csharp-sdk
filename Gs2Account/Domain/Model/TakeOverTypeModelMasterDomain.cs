@@ -96,6 +96,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CreateTakeOverTypeModelMasterFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateTakeOverTypeModelMasterAsync(request)
             );
             var domain = this;
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     .WithType(this.Type);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.GetTakeOverTypeModelMasterFuture(request)
                 );
@@ -177,6 +180,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetTakeOverTypeModelMasterAsync(request)
             );
             return result?.Item;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     .WithType(this.Type);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateTakeOverTypeModelMasterFuture(request)
                 );
@@ -227,6 +232,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateTakeOverTypeModelMasterAsync(request)
             );
             var domain = this;
@@ -247,6 +253,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     .WithType(this.Type);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteTakeOverTypeModelMasterFuture(request)
                 );
@@ -282,6 +289,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteTakeOverTypeModelMasterAsync(request)
                 );
             }
@@ -303,7 +311,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Type
+                    this.Type,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -313,6 +322,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.Type,
+                    null,
                     () => this.GetFuture(
                         new GetTakeOverTypeModelMasterRequest()
                     )
@@ -337,7 +347,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.TakeOverTypeModelMaster>(
                         (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheKey(
                             this.Type
@@ -346,7 +357,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Type
+                    this.Type,
+                    null
                 );
                 if (find) {
                     return value;
@@ -355,6 +367,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.Type,
+                    null,
                     () => this.GetAsync(
                         new GetTakeOverTypeModelMasterRequest()
                     )
@@ -391,7 +404,8 @@ namespace Gs2.Gs2Account.Domain.Model
             (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.Type
+                this.Type,
+                null
             );
         }
 
@@ -399,7 +413,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheKey(
                     this.Type
@@ -434,7 +449,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.TakeOverTypeModelMaster>(
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.TakeOverTypeModelMaster).CacheKey(
                     this.Type

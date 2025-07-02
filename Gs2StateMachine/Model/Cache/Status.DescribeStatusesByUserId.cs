@@ -43,6 +43,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this DescribeStatusesByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeStatusesByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Status>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this DescribeStatusesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeStatusesByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this DescribeStatusesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeStatusesByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

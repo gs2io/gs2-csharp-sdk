@@ -43,11 +43,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this UpdateNamespaceResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateNamespaceRequest request
         ) {
             self.Item?.PutCache(
                 cache,
-                request.NamespaceName
+                request.NamespaceName,
+                timeOffset
             );
         }
 
@@ -56,6 +58,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this UpdateNamespaceRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateNamespaceResult>> invokeImpl
         )
         {
@@ -71,6 +74,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -89,6 +93,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this UpdateNamespaceRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateNamespaceResult>> invokeImpl
     #else
@@ -100,6 +105,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DescribeReceiveRequestsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeReceiveRequestsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<ReceiveFriendRequest>())
@@ -56,7 +57,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     cache,
                     request.NamespaceName,
                     item.TargetUserId,
-                    item.UserId
+                    item.UserId,
+                    timeOffset
                 );
             }
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DescribeReceiveRequestsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeReceiveRequestsResult>> invokeImpl
         )
         {
@@ -81,6 +84,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -99,6 +103,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DescribeReceiveRequestsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeReceiveRequestsResult>> invokeImpl
     #else
@@ -110,6 +115,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -40,12 +40,14 @@ namespace Gs2.Gs2SerialKey.Model.Cache
     {
         public static string CacheParentKey(
             this CampaignModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "serialKey",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "CampaignModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string campaignModelName,
+            int? timeOffset,
             Func<IFuture<CampaignModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<CampaignModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                         (null as CampaignModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            campaignModelName
+                            campaignModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "campaignModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string campaignModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CampaignModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                 (null as CampaignModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "campaignModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this CampaignModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string campaignModelName
+            string campaignModelName,
+            int? timeOffset
         ) {
             return cache.Get<CampaignModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     campaignModelName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this CampaignModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string campaignModelName
+            string campaignModelName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<CampaignModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     campaignModelName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     campaignModelName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this CampaignModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string campaignModelName
+            string campaignModelName,
+            int? timeOffset
         ) {
             cache.Delete<CampaignModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     campaignModelName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this CampaignModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<CampaignModelMaster[]> callback
         ) {
             cache.ListSubscribe<CampaignModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this CampaignModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<CampaignModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

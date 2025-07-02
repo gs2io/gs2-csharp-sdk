@@ -1039,6 +1039,104 @@ namespace Gs2.Gs2Project
 #endif
 
 
+        public class GetServiceVersionTask : Gs2WebSocketSessionTask<Request.GetServiceVersionRequest, Result.GetServiceVersionResult>
+        {
+	        public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetServiceVersionRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "account",
+                    "getServiceVersion",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetServiceVersion(
+                Request.GetServiceVersionRequest request,
+                UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
+        )
+		{
+			var task = new GetServiceVersionTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+                Request.GetServiceVersionRequest request
+        )
+		{
+			return new GetServiceVersionTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+            Request.GetServiceVersionRequest request
+        )
+		{
+		    var task = new GetServiceVersionTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetServiceVersionTask GetServiceVersionAsync(
+                Request.GetServiceVersionRequest request
+        )
+		{
+			return new GetServiceVersionTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+            Request.GetServiceVersionRequest request
+        )
+		{
+		    var task = new GetServiceVersionTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class CreateProjectTask : Gs2WebSocketSessionTask<Request.CreateProjectRequest, Result.CreateProjectResult>
         {
 	        public CreateProjectTask(IGs2Session session, Request.CreateProjectRequest request) : base(session, request)
@@ -1790,6 +1888,11 @@ namespace Gs2.Gs2Project
 
                 jsonWriter.WriteObjectStart();
 
+                if (request.OwnerId != null)
+                {
+                    jsonWriter.WritePropertyName("ownerId");
+                    jsonWriter.Write(request.OwnerId.ToString());
+                }
                 if (request.ProjectName != null)
                 {
                     jsonWriter.WritePropertyName("projectName");
@@ -3116,6 +3219,11 @@ namespace Gs2.Gs2Project
 
                 jsonWriter.WriteObjectStart();
 
+                if (request.OwnerId != null)
+                {
+                    jsonWriter.WritePropertyName("ownerId");
+                    jsonWriter.Write(request.OwnerId.ToString());
+                }
                 if (request.TransactionId != null)
                 {
                     jsonWriter.WritePropertyName("transactionId");
@@ -3455,6 +3563,11 @@ namespace Gs2.Gs2Project
 
                 jsonWriter.WriteObjectStart();
 
+                if (request.OwnerId != null)
+                {
+                    jsonWriter.WritePropertyName("ownerId");
+                    jsonWriter.Write(request.OwnerId.ToString());
+                }
                 if (request.TransactionId != null)
                 {
                     jsonWriter.WritePropertyName("transactionId");

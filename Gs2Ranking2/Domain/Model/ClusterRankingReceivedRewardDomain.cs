@@ -111,6 +111,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CreateClusterRankingReceivedRewardByUserIdFuture(request)
                 );
                 yield return future;
@@ -145,6 +146,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CreateClusterRankingReceivedRewardByUserIdAsync(request)
             );
             var domain = this;
@@ -169,6 +171,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ReceiveClusterRankingReceivedRewardByUserIdFuture(request)
                 );
                 yield return future;
@@ -221,6 +224,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ReceiveClusterRankingReceivedRewardByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -257,6 +261,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetClusterRankingReceivedRewardByUserIdFuture(request)
                 );
                 yield return future;
@@ -289,6 +294,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetClusterRankingReceivedRewardByUserIdAsync(request)
             );
             return result?.Item;
@@ -311,6 +317,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteClusterRankingReceivedRewardByUserIdFuture(request)
                 );
                 yield return future;
@@ -348,6 +355,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteClusterRankingReceivedRewardByUserIdAsync(request)
                 );
             }
@@ -372,7 +380,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -385,6 +394,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.ClusterName,
                     this.Season,
                     this.UserId,
+                    null,
                     () => this.GetFuture(
                         new GetClusterRankingReceivedRewardByUserIdRequest()
                     )
@@ -411,7 +421,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.RankingName
+                            this.RankingName,
+                            null
                         ),
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                             this.ClusterName,
@@ -425,7 +436,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -437,6 +449,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.ClusterName,
                     this.Season,
                     this.UserId,
+                    null,
                     () => this.GetAsync(
                         new GetClusterRankingReceivedRewardByUserIdRequest()
                     )
@@ -476,7 +489,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.RankingName,
                 this.ClusterName,
                 this.Season,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -486,7 +500,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                     this.ClusterName,
@@ -525,7 +540,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                     this.ClusterName,

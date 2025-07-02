@@ -130,7 +130,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -173,7 +174,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -185,7 +187,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.TakeOver>(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -254,7 +257,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -297,7 +301,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -309,7 +314,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -342,6 +348,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateTimeOffsetFuture(request)
                 );
                 yield return future;
@@ -373,6 +380,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateTimeOffsetAsync(request)
             );
             var domain = this;
@@ -394,6 +402,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateBannedFuture(request)
                 );
                 yield return future;
@@ -425,6 +434,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateBannedAsync(request)
             );
             var domain = this;
@@ -446,6 +456,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AddBanFuture(request)
                 );
                 yield return future;
@@ -477,6 +488,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AddBanAsync(request)
             );
             var domain = this;
@@ -498,6 +510,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RemoveBanFuture(request)
                 );
                 yield return future;
@@ -529,6 +542,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RemoveBanAsync(request)
             );
             var domain = this;
@@ -550,6 +564,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetAccountFuture(request)
                 );
                 yield return future;
@@ -579,6 +594,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetAccountAsync(request)
             );
             return result?.Item;
@@ -598,6 +614,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAccountFuture(request)
                 );
                 yield return future;
@@ -632,6 +649,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAccountAsync(request)
                 );
             }
@@ -654,6 +672,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AuthenticationFuture(request)
                 );
                 yield return future;
@@ -688,6 +707,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AuthenticationAsync(request)
             );
             var domain = this;
@@ -712,6 +732,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CreateTakeOverOpenIdConnectAndByUserIdFuture(request)
                 );
                 yield return future;
@@ -748,6 +769,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CreateTakeOverOpenIdConnectAndByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
@@ -773,6 +795,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTakeOverByUserIdentifierFuture(request)
                 );
                 yield return future;
@@ -811,6 +834,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTakeOverByUserIdentifierAsync(request)
                 );
                 var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
@@ -840,6 +864,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTakeOverByUserIdFuture(request)
                 );
                 yield return future;
@@ -879,6 +904,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteTakeOverByUserIdAsync(request)
                 );
                 var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
@@ -908,6 +934,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteDataOwnerByUserIdFuture(request)
                 );
                 yield return future;
@@ -946,6 +973,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteDataOwnerByUserIdAsync(request)
                 );
                 var domain = new Gs2.Gs2Account.Domain.Model.DataOwnerDomain(
@@ -974,6 +1002,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeletePlatformIdByUserIdFuture(request)
                 );
                 yield return future;
@@ -1013,6 +1042,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeletePlatformIdByUserIdAsync(request)
                 );
                 var domain = new Gs2.Gs2Account.Domain.Model.PlatformIdDomain(
@@ -1041,7 +1071,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -1051,6 +1082,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    null,
                     () => this.GetFuture(
                         new GetAccountRequest()
                     )
@@ -1075,7 +1107,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.Account>(
                        (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
-                           this.NamespaceName
+                           this.NamespaceName,
+                           null
                        ),
                        (null as Gs2.Gs2Account.Model.Account).CacheKey(
                            this.UserId
@@ -1084,7 +1117,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -1093,6 +1127,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    null,
                     () => this.GetAsync(
                         new GetAccountRequest()
                     )
@@ -1129,7 +1164,8 @@ namespace Gs2.Gs2Account.Domain.Model
             (null as Gs2.Gs2Account.Model.Account).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -1137,7 +1173,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.Account).CacheKey(
                     this.UserId
@@ -1165,7 +1202,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.Account>(
                 (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.Account).CacheKey(
                     this.UserId

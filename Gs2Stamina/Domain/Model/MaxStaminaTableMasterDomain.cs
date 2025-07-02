@@ -96,6 +96,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetMaxStaminaTableMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetMaxStaminaTableMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     .WithMaxStaminaTableName(this.MaxStaminaTableName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateMaxStaminaTableMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateMaxStaminaTableMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     .WithMaxStaminaTableName(this.MaxStaminaTableName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteMaxStaminaTableMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteMaxStaminaTableMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.MaxStaminaTableName
+                    this.MaxStaminaTableName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.MaxStaminaTableName,
+                    null,
                     () => this.GetFuture(
                         new GetMaxStaminaTableMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
                         (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheKey(
                             this.MaxStaminaTableName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.MaxStaminaTableName
+                    this.MaxStaminaTableName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.MaxStaminaTableName,
+                    null,
                     () => this.GetAsync(
                         new GetMaxStaminaTableMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.MaxStaminaTableName
+                this.MaxStaminaTableName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheKey(
                     this.MaxStaminaTableName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
                 (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheKey(
                     this.MaxStaminaTableName

@@ -42,7 +42,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             this ReceiveMemberRequest self,
             string namespaceName,
             string guildModelName,
-            string guildName
+            string guildName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 namespaceName,
                 guildModelName,
                 guildName,
+                timeOffset?.ToString() ?? "0",
                 "ReceiveMemberRequest"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             string guildModelName,
             string guildName,
             string fromUserId,
+            int? timeOffset,
             Func<IFuture<ReceiveMemberRequest>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ReceiveMemberRequest> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                             namespaceName,
                             guildModelName,
                             guildName,
-                            fromUserId
+                            fromUserId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "receiveMemberRequest") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     namespaceName,
                     guildModelName,
                     guildName,
-                    fromUserId
+                    fromUserId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             string guildModelName,
             string guildName,
             string fromUserId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ReceiveMemberRequest>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     namespaceName,
                     guildModelName,
                     guildName,
-                    fromUserId
+                    fromUserId,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     namespaceName,
                     guildModelName,
                     guildName,
-                    fromUserId
+                    fromUserId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "receiveMemberRequest") {
                     throw;
@@ -162,13 +170,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             string namespaceName,
             string guildModelName,
             string guildName,
-            string fromUserId
+            string fromUserId,
+            int? timeOffset
         ) {
             return cache.Get<ReceiveMemberRequest>(
                 self.CacheParentKey(
                     namespaceName,
                     guildModelName,
-                    guildName
+                    guildName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     fromUserId
@@ -182,13 +192,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             string namespaceName,
             string guildModelName,
             string guildName,
-            string fromUserId
+            string fromUserId,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
                     guildModelName,
-                    guildName
+                    guildName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     fromUserId
@@ -204,13 +216,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             string namespaceName,
             string guildModelName,
             string guildName,
-            string fromUserId
+            string fromUserId,
+            int? timeOffset
         ) {
             cache.Delete<ReceiveMemberRequest>(
                 self.CacheParentKey(
                     namespaceName,
                     guildModelName,
-                    guildName
+                    guildName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     fromUserId
@@ -224,13 +238,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             string namespaceName,
             string guildModelName,
             string guildName,
+            int? timeOffset,
             Action<ReceiveMemberRequest[]> callback
         ) {
             cache.ListSubscribe<ReceiveMemberRequest>(
                 self.CacheParentKey(
                     namespaceName,
                     guildModelName,
-                    guildName
+                    guildName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -243,13 +259,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             string namespaceName,
             string guildModelName,
             string guildName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ReceiveMemberRequest>(
                 self.CacheParentKey(
                     namespaceName,
                     guildModelName,
-                    guildName
+                    guildName,
+                    timeOffset
                 ),
                 callbackId
             );

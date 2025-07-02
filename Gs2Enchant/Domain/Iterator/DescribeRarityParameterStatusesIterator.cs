@@ -112,7 +112,8 @@ namespace Gs2.Gs2Enchant.Domain.Iterator
             (
                     (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -153,6 +154,7 @@ namespace Gs2.Gs2Enchant.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -160,7 +162,8 @@ namespace Gs2.Gs2Enchant.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
                         (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -242,7 +245,8 @@ namespace Gs2.Gs2Enchant.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
                         (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListRarityParameterStatus"
                    ).LockAsync()) {

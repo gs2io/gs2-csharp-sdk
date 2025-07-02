@@ -41,7 +41,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
     {
         public static string CacheParentKey(
             this DrawnPrize self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -149,7 +150,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
         ) {
             return cache.Get<DrawnPrize>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    null
                 ),
                 self.CacheKey(
                     index
@@ -165,7 +167,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    null
                 ),
                 self.CacheKey(
                     index
@@ -183,7 +186,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
         ) {
             cache.Delete<DrawnPrize>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    null
                 ),
                 self.CacheKey(
                     index
@@ -199,7 +203,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
         ) {
             cache.ListSubscribe<DrawnPrize>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    null
                 ),
                 callback,
                 () => {}
@@ -214,7 +219,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
         ) {
             cache.ListUnsubscribe<DrawnPrize>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    null
                 ),
                 callbackId
             );

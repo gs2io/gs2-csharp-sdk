@@ -45,6 +45,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this DescribeEventsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeEventsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Event>())
@@ -54,7 +55,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     request.NamespaceName,
                     userId,
                     item.Name,
-                    true
+                    true,
+                    timeOffset
                 );
             }
         }
@@ -64,6 +66,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this DescribeEventsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeEventsResult>> invokeImpl
         )
         {
@@ -79,6 +82,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +101,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this DescribeEventsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeEventsResult>> invokeImpl
     #else
@@ -108,6 +113,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

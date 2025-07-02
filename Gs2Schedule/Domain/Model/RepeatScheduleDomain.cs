@@ -119,6 +119,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetEventByUserIdFuture(request)
                 );
                 yield return future;
@@ -150,6 +151,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetEventByUserIdAsync(request)
             );
             return result?.RepeatSchedule;

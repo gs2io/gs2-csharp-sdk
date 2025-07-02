@@ -108,6 +108,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.FreezeMasterDataFuture(request)
                 );
                 yield return future;
@@ -144,6 +145,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.FreezeMasterDataAsync(request)
             );
             var domain = this;
@@ -170,6 +172,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.FreezeMasterDataBySignedTimestampFuture(request)
                 );
                 yield return future;
@@ -206,6 +209,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.FreezeMasterDataBySignedTimestampAsync(request)
             );
             var domain = this;

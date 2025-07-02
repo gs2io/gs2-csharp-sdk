@@ -43,13 +43,15 @@ namespace Gs2.Gs2Guild.Model.Cache
             this UpdateGuildByGuildNameResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateGuildByGuildNameRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.GuildModelName,
-                request.GuildName
+                request.GuildName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this UpdateGuildByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateGuildByGuildNameResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this UpdateGuildByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateGuildByGuildNameResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

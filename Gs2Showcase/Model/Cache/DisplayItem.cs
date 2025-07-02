@@ -42,7 +42,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this DisplayItem self,
             string namespaceName,
             string userId,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 namespaceName,
                 userId,
                 showcaseName,
+                timeOffset?.ToString() ?? "0",
                 "DisplayItem"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string userId,
             string showcaseName,
             string displayItemId,
+            int? timeOffset,
             Func<IFuture<DisplayItem>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<DisplayItem> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                             namespaceName,
                             userId,
                             showcaseName,
-                            displayItemId
+                            displayItemId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "displayItem") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     namespaceName,
                     userId,
                     showcaseName,
-                    displayItemId
+                    displayItemId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string userId,
             string showcaseName,
             string displayItemId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DisplayItem>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     namespaceName,
                     userId,
                     showcaseName,
-                    displayItemId
+                    displayItemId,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     namespaceName,
                     userId,
                     showcaseName,
-                    displayItemId
+                    displayItemId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "displayItem") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
-            string displayItemId
+            string displayItemId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     displayItemId
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
-            string displayItemId
+            string displayItemId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     displayItemId
@@ -210,7 +222,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
-            string displayItemId
+            string displayItemId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -219,7 +232,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     displayItemId
@@ -233,13 +247,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
+            int? timeOffset,
             Action<DisplayItem[]> callback
         ) {
             cache.ListSubscribe<DisplayItem>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -252,13 +268,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<DisplayItem>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 ),
                 callbackId
             );

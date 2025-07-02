@@ -43,13 +43,15 @@ namespace Gs2.Gs2Lock.Model.Cache
             this LockResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             LockRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.PropertyId
+                self.Item.PropertyId,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Lock.Model.Cache
             this LockRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<LockResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Lock.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Lock.Model.Cache
             this LockRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<LockResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Lock.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

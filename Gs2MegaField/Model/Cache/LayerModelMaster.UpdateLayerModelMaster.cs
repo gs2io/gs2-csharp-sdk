@@ -43,13 +43,15 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this UpdateLayerModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateLayerModelMasterRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.AreaModelName,
-                request.LayerModelName
+                request.LayerModelName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this UpdateLayerModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateLayerModelMasterResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this UpdateLayerModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateLayerModelMasterResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

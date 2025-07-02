@@ -95,6 +95,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyReceiptFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyReceiptAsync(request)
             );
             var domain = new Gs2.Gs2Money2.Domain.Model.EventAccessTokenDomain(
@@ -157,6 +159,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AllocateSubscriptionStatusFuture(request)
                 );
                 yield return future;
@@ -193,6 +196,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AllocateSubscriptionStatusAsync(request)
             );
             var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusAccessTokenDomain(
@@ -219,6 +223,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.TakeoverSubscriptionStatusFuture(request)
                 );
                 yield return future;
@@ -255,6 +260,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.TakeoverSubscriptionStatusAsync(request)
             );
             var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusAccessTokenDomain(
@@ -308,7 +314,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.Wallet>(
                 (null as Gs2.Gs2Money2.Model.Wallet).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -352,7 +359,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.Wallet>(
                 (null as Gs2.Gs2Money2.Model.Wallet).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -364,7 +372,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.Wallet>(
                 (null as Gs2.Gs2Money2.Model.Wallet).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -431,7 +440,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.SubscriptionStatus>(
                 (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -475,7 +485,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.SubscriptionStatus>(
                 (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -487,7 +498,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.SubscriptionStatus>(
                 (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

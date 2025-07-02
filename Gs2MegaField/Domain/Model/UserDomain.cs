@@ -108,6 +108,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.FetchPositionFromSystemFuture(request)
                 );
                 yield return future;
@@ -142,6 +143,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.FetchPositionFromSystemAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
@@ -166,6 +168,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.NearUserIdsFromSystemFuture(request)
                 );
                 yield return future;
@@ -204,6 +207,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.NearUserIdsFromSystemAsync(request)
             );
             var domain = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain[result?.Items.Length ?? 0];

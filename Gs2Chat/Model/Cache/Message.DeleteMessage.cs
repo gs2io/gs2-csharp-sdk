@@ -43,6 +43,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             this DeleteMessageResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteMessageRequest request
         ) {
             (null as Message).DeleteCache(
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Chat.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 self.Item.RoomName,
-                request.MessageName
+                request.MessageName,
+                timeOffset
             );
         }
 
@@ -59,6 +61,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             this DeleteMessageRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteMessageResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Chat.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             this DeleteMessageRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteMessageResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -128,7 +128,8 @@ namespace Gs2.Gs2Log.Domain.Iterator
                     <Gs2.Gs2Log.Model.ExecuteStampTaskLog>
             (
                     (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
-                        NamespaceName
+                        NamespaceName,
+                        null
                     ),
                     out var list
             )) {
@@ -181,13 +182,15 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                         (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                         )
                     );
                 }
@@ -268,7 +271,8 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                         (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                        ),
                        "ListExecuteStampTaskLog"
                    ).LockAsync()) {

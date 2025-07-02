@@ -43,13 +43,15 @@ namespace Gs2.Gs2Project.Model.Cache
             this WaitImportUserDataResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             WaitImportUserDataRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 default,
                 default,
-                self.Item.TransactionId
+                self.Item.TransactionId,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this WaitImportUserDataRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<WaitImportUserDataResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Project.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this WaitImportUserDataRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<WaitImportUserDataResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Project.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -115,7 +115,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             (
                     (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -160,6 +161,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -167,7 +169,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking.Model.Score>(
                         (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -249,7 +252,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.Score>(
                         (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListScore"
                    ).LockAsync()) {

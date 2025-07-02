@@ -43,13 +43,15 @@ namespace Gs2.Gs2Quest.Model.Cache
             this GetCompletedQuestListResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetCompletedQuestListRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.QuestGroupName
+                self.Item.QuestGroupName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             this GetCompletedQuestListRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetCompletedQuestListResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Quest.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             this GetCompletedQuestListRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetCompletedQuestListResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

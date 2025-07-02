@@ -43,6 +43,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this DescribeUnleashRateModelsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeUnleashRateModelsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<UnleashRateModel>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Enhance.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this DescribeUnleashRateModelsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeUnleashRateModelsResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this DescribeUnleashRateModelsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeUnleashRateModelsResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

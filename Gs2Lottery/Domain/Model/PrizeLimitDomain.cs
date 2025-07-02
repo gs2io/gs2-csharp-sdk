@@ -100,6 +100,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetPrizeLimitFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetPrizeLimitAsync(request)
             );
             return result?.Item;
@@ -149,6 +151,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     .WithPrizeId(this.PrizeId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.ResetPrizeLimitFuture(request)
                 );
@@ -181,6 +184,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.ResetPrizeLimitAsync(request)
             );
             var domain = this;
@@ -201,7 +205,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.PrizeTableName,
-                    this.PrizeId
+                    this.PrizeId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -212,6 +217,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName,
                     this.PrizeTableName,
                     this.PrizeId,
+                    null,
                     () => this.GetFuture(
                         new GetPrizeLimitRequest()
                     )
@@ -237,7 +243,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.PrizeLimit>(
                         (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
                             this.NamespaceName,
-                            this.PrizeTableName
+                            this.PrizeTableName,
+                            null
                         ),
                         (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheKey(
                             this.PrizeId
@@ -247,7 +254,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.PrizeTableName,
-                    this.PrizeId
+                    this.PrizeId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -257,6 +265,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this.NamespaceName,
                     this.PrizeTableName,
                     this.PrizeId,
+                    null,
                     () => this.GetAsync(
                         new GetPrizeLimitRequest()
                     )
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.PrizeTableName,
-                this.PrizeId
+                this.PrizeId,
+                null
             );
         }
 
@@ -303,7 +313,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
                     this.NamespaceName,
-                    this.PrizeTableName
+                    this.PrizeTableName,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheKey(
                     this.PrizeId
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.PrizeLimit>(
                 (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
                     this.NamespaceName,
-                    this.PrizeTableName
+                    this.PrizeTableName,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheKey(
                     this.PrizeId

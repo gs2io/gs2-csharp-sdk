@@ -45,6 +45,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this RejectRequestByGuildNameResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             RejectRequestByGuildNameRequest request
         ) {
             (null as ReceiveMemberRequest).DeleteCache(
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                 request.NamespaceName,
                 request.GuildModelName,
                 request.GuildName,
-                request.FromUserId
+                request.FromUserId,
+                timeOffset
             );
         }
 
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this RejectRequestByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<RejectRequestByGuildNameResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this RejectRequestByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RejectRequestByGuildNameResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

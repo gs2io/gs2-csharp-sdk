@@ -111,6 +111,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.StartFuture(request)
                 );
                 yield return future;
@@ -170,6 +171,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.StartAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -230,7 +232,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -274,7 +277,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -286,7 +290,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

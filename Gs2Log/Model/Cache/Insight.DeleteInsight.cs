@@ -43,12 +43,14 @@ namespace Gs2.Gs2Log.Model.Cache
             this DeleteInsightResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteInsightRequest request
         ) {
             (null as Insight).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.InsightName
+                request.InsightName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Log.Model.Cache
             this DeleteInsightRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteInsightResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Log.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Log.Model.Cache
             this DeleteInsightRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteInsightResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Log.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -100,6 +100,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetQuestModelMasterFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetQuestModelMasterAsync(request)
             );
             return result?.Item;
@@ -149,6 +151,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     .WithQuestName(this.QuestName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateQuestModelMasterFuture(request)
                 );
@@ -182,6 +185,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateQuestModelMasterAsync(request)
             );
             var domain = this;
@@ -203,6 +207,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     .WithQuestName(this.QuestName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteQuestModelMasterFuture(request)
                 );
@@ -239,6 +244,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteQuestModelMasterAsync(request)
                 );
             }
@@ -261,7 +267,8 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.QuestGroupName,
-                    this.QuestName
+                    this.QuestName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -272,6 +279,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.NamespaceName,
                     this.QuestGroupName,
                     this.QuestName,
+                    null,
                     () => this.GetFuture(
                         new GetQuestModelMasterRequest()
                     )
@@ -297,7 +305,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.QuestModelMaster>(
                         (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheParentKey(
                             this.NamespaceName,
-                            this.QuestGroupName
+                            this.QuestGroupName,
+                            null
                         ),
                         (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheKey(
                             this.QuestName
@@ -307,7 +316,8 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.QuestGroupName,
-                    this.QuestName
+                    this.QuestName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -317,6 +327,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.NamespaceName,
                     this.QuestGroupName,
                     this.QuestName,
+                    null,
                     () => this.GetAsync(
                         new GetQuestModelMasterRequest()
                     )
@@ -354,7 +365,8 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.QuestGroupName,
-                this.QuestName
+                this.QuestName,
+                null
             );
         }
 
@@ -363,7 +375,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheParentKey(
                     this.NamespaceName,
-                    this.QuestGroupName
+                    this.QuestGroupName,
+                    null
                 ),
                 (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheKey(
                     this.QuestName
@@ -399,7 +412,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Quest.Model.QuestModelMaster>(
                 (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheParentKey(
                     this.NamespaceName,
-                    this.QuestGroupName
+                    this.QuestGroupName,
+                    null
                 ),
                 (null as Gs2.Gs2Quest.Model.QuestModelMaster).CacheKey(
                     this.QuestName

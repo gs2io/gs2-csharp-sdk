@@ -106,6 +106,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetJoinedSeasonGatheringByUserIdFuture(request)
                 );
                 yield return future;
@@ -137,6 +138,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetJoinedSeasonGatheringByUserIdAsync(request)
             );
             return result?.Item;
@@ -157,7 +159,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -169,6 +172,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId,
                     this.SeasonName,
                     this.Season,
+                    null,
                     () => this.GetFuture(
                         new GetJoinedSeasonGatheringByUserIdRequest()
                     )
@@ -196,7 +200,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.SeasonName,
-                this.Season
+                this.Season,
+                null
             );
             if (find) {
                 return value;
@@ -207,6 +212,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.UserId,
                 this.SeasonName,
                 this.Season,
+                null,
                 () => this.GetAsync(
                     new GetJoinedSeasonGatheringByUserIdRequest()
                 )
@@ -244,7 +250,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.SeasonName,
-                this.Season
+                this.Season,
+                null
             );
         }
 
@@ -255,7 +262,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering).CacheKey(
                 ),
@@ -292,7 +300,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.Season
+                    this.Season,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering).CacheKey(
                 ),

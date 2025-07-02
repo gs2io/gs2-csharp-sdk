@@ -43,12 +43,14 @@ namespace Gs2.Gs2Script.Model.Cache
             this UpdateScriptResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateScriptRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.ScriptName
+                request.ScriptName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Script.Model.Cache
             this UpdateScriptRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateScriptResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Script.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Script.Model.Cache
             this UpdateScriptRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateScriptResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Script.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -101,6 +101,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetCounterFuture(request)
                 );
                 yield return future;
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetCounterAsync(request)
             );
             return result?.Item;
@@ -153,6 +155,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CountUpFuture(request)
                 );
                 yield return future;
@@ -186,6 +189,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CountUpAsync(request)
             );
             var domain = this;
@@ -209,6 +213,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyCounterFuture(request)
                 );
                 yield return future;
@@ -241,6 +246,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyCounterAsync(request)
             );
             var domain = this;
@@ -258,7 +264,8 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.LimitName,
-                    this.CounterName
+                    this.CounterName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -270,6 +277,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this.UserId,
                     this.LimitName,
                     this.CounterName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetCounterRequest()
                     )
@@ -295,7 +303,8 @@ namespace Gs2.Gs2Limit.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.Counter>(
                         (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Limit.Model.Counter).CacheKey(
                             this.LimitName,
@@ -307,7 +316,8 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.LimitName,
-                    this.CounterName
+                    this.CounterName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -318,6 +328,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this.UserId,
                     this.LimitName,
                     this.CounterName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetCounterRequest()
                     )
@@ -356,7 +367,8 @@ namespace Gs2.Gs2Limit.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.LimitName,
-                this.CounterName
+                this.CounterName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -365,7 +377,8 @@ namespace Gs2.Gs2Limit.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Limit.Model.Counter).CacheKey(
                     this.LimitName,
@@ -402,7 +415,8 @@ namespace Gs2.Gs2Limit.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Limit.Model.Counter>(
                 (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Limit.Model.Counter).CacheKey(
                     this.LimitName,

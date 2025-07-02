@@ -100,6 +100,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateGatheringByUserIdFuture(request)
                 );
                 yield return future;
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateGatheringByUserIdAsync(request)
             );
             var domain = this;
@@ -154,6 +156,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PingByUserIdFuture(request)
                 );
                 yield return future;
@@ -186,6 +189,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PingByUserIdAsync(request)
             );
             var domain = this;
@@ -207,6 +211,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetGatheringFuture(request)
                 );
                 yield return future;
@@ -236,6 +241,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetGatheringAsync(request)
             );
             return result?.Item;
@@ -256,6 +262,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CancelMatchmakingByUserIdFuture(request)
                 );
                 yield return future;
@@ -288,6 +295,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CancelMatchmakingByUserIdAsync(request)
             );
             var domain = this;
@@ -310,6 +318,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.EarlyCompleteByUserIdFuture(request)
                 );
                 yield return future;
@@ -342,6 +351,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.EarlyCompleteByUserIdAsync(request)
             );
             var domain = this;
@@ -363,7 +373,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.GatheringName
+                    this.GatheringName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -374,6 +385,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.GatheringName,
+                    null,
                     () => this.GetFuture(
                         new GetGatheringRequest()
                     )
@@ -399,7 +411,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Gathering>(
                         (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheKey(
                             this.GatheringName
@@ -409,7 +422,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.GatheringName
+                    this.GatheringName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -419,6 +433,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.GatheringName,
+                    null,
                     () => this.GetAsync(
                         new GetGatheringRequest()
                     )
@@ -456,7 +471,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.GatheringName
+                this.GatheringName,
+                null
             );
         }
 
@@ -465,7 +481,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheKey(
                     this.GatheringName
@@ -501,7 +518,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheKey(
                     this.GatheringName

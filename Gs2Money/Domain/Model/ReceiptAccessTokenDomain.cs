@@ -92,7 +92,8 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TransactionId
+                    this.TransactionId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -114,7 +115,8 @@ namespace Gs2.Gs2Money.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Receipt>(
                         (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Money.Model.Receipt).CacheKey(
                             this.TransactionId
@@ -124,7 +126,8 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TransactionId
+                    this.TransactionId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -163,7 +166,8 @@ namespace Gs2.Gs2Money.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TransactionId
+                this.TransactionId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -172,7 +176,8 @@ namespace Gs2.Gs2Money.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Money.Model.Receipt).CacheKey(
                     this.TransactionId
@@ -208,7 +213,8 @@ namespace Gs2.Gs2Money.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Money.Model.Receipt>(
                 (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Money.Model.Receipt).CacheKey(
                     this.TransactionId

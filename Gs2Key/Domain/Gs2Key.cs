@@ -84,6 +84,7 @@ namespace Gs2.Gs2Key.Domain
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
@@ -112,6 +113,7 @@ namespace Gs2.Gs2Key.Domain
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.CreateNamespaceAsync(request)
             );
@@ -158,6 +160,7 @@ namespace Gs2.Gs2Key.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Key.Model.Namespace>(
                 (null as Gs2.Gs2Key.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -200,6 +203,7 @@ namespace Gs2.Gs2Key.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Key.Model.Namespace>(
                 (null as Gs2.Gs2Key.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -210,6 +214,7 @@ namespace Gs2.Gs2Key.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Key.Model.Namespace>(
                 (null as Gs2.Gs2Key.Model.Namespace).CacheParentKey(
+                    null
                 )
             );
         }

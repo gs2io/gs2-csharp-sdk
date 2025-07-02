@@ -101,6 +101,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.IncreaseCounterByUserIdFuture(request)
                 );
                 yield return future;
@@ -133,6 +134,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.IncreaseCounterByUserIdAsync(request)
             );
             var domain = this;
@@ -155,6 +157,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetCounterByUserIdFuture(request)
                 );
                 yield return future;
@@ -187,6 +190,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetCounterByUserIdAsync(request)
             );
             var domain = this;
@@ -209,6 +213,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DecreaseCounterByUserIdFuture(request)
                 );
                 yield return future;
@@ -241,6 +246,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DecreaseCounterByUserIdAsync(request)
             );
             var domain = this;
@@ -263,6 +269,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetCounterByUserIdFuture(request)
                 );
                 yield return future;
@@ -293,6 +300,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetCounterByUserIdAsync(request)
             );
             return result?.Item;
@@ -313,6 +321,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyCounterValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -344,6 +353,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyCounterValueByUserIdAsync(request)
             );
             var domain = this;
@@ -365,6 +375,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ResetCounterByUserIdFuture(request)
                 );
                 yield return future;
@@ -397,6 +408,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ResetCounterByUserIdAsync(request)
             );
             var domain = this;
@@ -419,6 +431,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteCounterByUserIdFuture(request)
                 );
                 yield return future;
@@ -454,6 +467,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteCounterByUserIdAsync(request)
                 );
             }
@@ -476,7 +490,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.CounterName
+                    this.CounterName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -487,6 +502,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CounterName,
+                    null,
                     () => this.GetFuture(
                         new GetCounterByUserIdRequest()
                     )
@@ -512,7 +528,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.Counter>(
                         (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Mission.Model.Counter).CacheKey(
                             this.CounterName
@@ -522,7 +539,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.CounterName
+                    this.CounterName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -532,6 +550,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CounterName,
+                    null,
                     () => this.GetAsync(
                         new GetCounterByUserIdRequest()
                     )
@@ -569,7 +588,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.CounterName
+                this.CounterName,
+                null
             );
         }
 
@@ -578,7 +598,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Mission.Model.Counter).CacheKey(
                     this.CounterName
@@ -614,7 +635,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Mission.Model.Counter>(
                 (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Mission.Model.Counter).CacheKey(
                     this.CounterName

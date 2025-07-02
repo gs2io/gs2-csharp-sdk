@@ -39,11 +39,13 @@ namespace Gs2.Gs2Deploy.Model.Cache
     public static partial class StackExt
     {
         public static string CacheParentKey(
-            this Stack self
+            this Stack self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "deploy",
+                timeOffset?.ToString() ?? "0",
                 "Stack"
             );
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Stack self,
             CacheDatabase cache,
             string stackName,
+            int? timeOffset,
             Func<IFuture<Stack>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Stack> self)
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                     {
                         (null as Stack).PutCache(
                             cache,
-                            stackName
+                            stackName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "stack") {
                             self.OnComplete(default);
@@ -88,7 +92,8 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    stackName
+                    stackName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this Stack self,
             CacheDatabase cache,
             string stackName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Stack>> fetchImpl
     #else
@@ -115,14 +121,16 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    stackName
+                    stackName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as Stack).PutCache(
                     cache,
-                    stackName
+                    stackName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "stack") {
                     throw;
@@ -135,10 +143,12 @@ namespace Gs2.Gs2Deploy.Model.Cache
         public static Tuple<Stack, bool> GetCache(
             this Stack self,
             CacheDatabase cache,
-            string stackName
+            string stackName,
+            int? timeOffset
         ) {
             return cache.Get<Stack>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stackName
@@ -149,10 +159,12 @@ namespace Gs2.Gs2Deploy.Model.Cache
         public static void PutCache(
             this Stack self,
             CacheDatabase cache,
-            string stackName
+            string stackName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Stack>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stackName
@@ -163,6 +175,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stackName
@@ -175,10 +188,12 @@ namespace Gs2.Gs2Deploy.Model.Cache
         public static void DeleteCache(
             this Stack self,
             CacheDatabase cache,
-            string stackName
+            string stackName,
+            int? timeOffset
         ) {
             cache.Delete<Stack>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     stackName
@@ -189,10 +204,12 @@ namespace Gs2.Gs2Deploy.Model.Cache
         public static void ListSubscribe(
             this Stack self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<Stack[]> callback
         ) {
             cache.ListSubscribe<Stack>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -202,10 +219,12 @@ namespace Gs2.Gs2Deploy.Model.Cache
         public static void ListUnsubscribe(
             this Stack self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Stack>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

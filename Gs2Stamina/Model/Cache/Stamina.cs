@@ -41,13 +41,15 @@ namespace Gs2.Gs2Stamina.Model.Cache
         public static string CacheParentKey(
             this Stamina self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "stamina",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Stamina"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             string namespaceName,
             string userId,
             string staminaName,
+            int? timeOffset,
             Func<IFuture<Stamina>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Stamina> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            staminaName
+                            staminaName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "stamina") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    staminaName
+                    staminaName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             string namespaceName,
             string userId,
             string staminaName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Stamina>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    staminaName
+                    staminaName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    staminaName
+                    staminaName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "stamina") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string staminaName
+            string staminaName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             return cache.Get<Stamina>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     staminaName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string staminaName
+            string staminaName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             var (value, find) = cache.Get<Stamina>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     staminaName
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     staminaName
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string staminaName
+            string staminaName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             cache.Delete<Stamina>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     staminaName
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Stamina[]> callback
         ) {
             cache.ListSubscribe<Stamina>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Stamina.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Stamina>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

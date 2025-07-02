@@ -96,7 +96,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -120,7 +121,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             this.NamespaceName,
                             this.UserId,
                             this.CategoryName,
-                            this.AdditionalScopeName
+                            this.AdditionalScopeName,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Ranking.Model.Subscribe).CacheKey(
                         )
@@ -130,7 +132,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -170,7 +173,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.CategoryName,
-                this.AdditionalScopeName
+                this.AdditionalScopeName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -181,7 +185,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking.Model.Subscribe).CacheKey(
                 ),
@@ -218,7 +223,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking.Model.Subscribe).CacheKey(
                 ),

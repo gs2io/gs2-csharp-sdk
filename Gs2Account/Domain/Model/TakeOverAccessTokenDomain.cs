@@ -102,6 +102,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CreateTakeOverFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CreateTakeOverAsync(request)
             );
             var domain = this;
@@ -156,6 +158,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CreateTakeOverOpenIdConnectFuture(request)
                 );
                 yield return future;
@@ -188,6 +191,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CreateTakeOverOpenIdConnectAsync(request)
             );
             var domain = this;
@@ -210,6 +214,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetTakeOverFuture(request)
                 );
                 yield return future;
@@ -240,6 +245,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetTakeOverAsync(request)
             );
             return result?.Item;
@@ -260,6 +266,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UpdateTakeOverFuture(request)
                 );
                 yield return future;
@@ -292,6 +299,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UpdateTakeOverAsync(request)
             );
             var domain = this;
@@ -314,6 +322,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteTakeOverFuture(request)
                 );
                 yield return future;
@@ -349,6 +358,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteTakeOverAsync(request)
                 );
             }
@@ -367,7 +377,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Type ?? default
+                    this.Type ?? default,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -378,6 +389,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Type ?? default,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetTakeOverRequest()
                     )
@@ -403,7 +415,8 @@ namespace Gs2.Gs2Account.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.TakeOver>(
                         (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
                             this.Type
@@ -413,7 +426,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Type ?? default
+                    this.Type ?? default,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -423,6 +437,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Type ?? default,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetTakeOverRequest()
                     )
@@ -460,7 +475,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.Type ?? default
+                this.Type ?? default,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -469,7 +485,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
                     this.Type ?? default
@@ -505,7 +522,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
                     this.Type ?? default

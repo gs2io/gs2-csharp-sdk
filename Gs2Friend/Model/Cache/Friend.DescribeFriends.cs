@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DescribeFriendsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeFriendsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<FriendUser>())
@@ -55,7 +56,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                         request.NamespaceName,
                         userId,
                         true,
-                        item.UserId
+                        item.UserId,
+                        timeOffset
                     );
                 }
                 if (item != null) {
@@ -66,7 +68,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                         request.NamespaceName,
                         userId,
                         false,
-                        item.UserId
+                        item.UserId,
+                        timeOffset
                     );
                     new FriendUser {
                         UserId = item.UserId,
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                         request.NamespaceName,
                         userId,
                         null,
-                        item.UserId
+                        item.UserId,
+                        timeOffset
                     );
                     if (request.WithProfile ?? false) {
                         new PublicProfile {
@@ -84,7 +88,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                         }.PutCache(
                             cache,
                             request.NamespaceName,
-                            item.UserId
+                            item.UserId,
+                            timeOffset
                         );
                     }
                 }
@@ -96,6 +101,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DescribeFriendsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeFriendsResult>> invokeImpl
         )
         {
@@ -111,6 +117,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -129,6 +136,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DescribeFriendsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeFriendsResult>> invokeImpl
     #else
@@ -140,6 +148,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

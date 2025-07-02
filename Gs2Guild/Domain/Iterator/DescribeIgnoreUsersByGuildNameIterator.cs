@@ -112,7 +112,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                         NamespaceName,
                         GuildModelName,
-                        GuildName
+                        GuildName,
+                        null
                     ),
                     out var list
             )) {
@@ -152,6 +153,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -160,7 +162,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                         (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                             NamespaceName,
                             GuildModelName,
-                            GuildName
+                            GuildName,
+                            null
                         )
                     );
                 }
@@ -243,7 +246,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                         (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                             NamespaceName,
                             GuildModelName,
-                            GuildName
+                            GuildName,
+                            null
                        ),
                        "ListIgnoreUser"
                    ).LockAsync()) {

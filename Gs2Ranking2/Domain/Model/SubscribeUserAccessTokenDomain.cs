@@ -101,6 +101,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetSubscribeFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetSubscribeAsync(request)
             );
             var domain = this;
@@ -157,6 +159,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteSubscribeFuture(request)
                 );
                 yield return future;
@@ -193,6 +196,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteSubscribeAsync(request)
                 );
             }
@@ -212,7 +216,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -235,7 +240,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.RankingName
+                            this.RankingName,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheKey(
                             this.TargetUserId
@@ -246,7 +252,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RankingName,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -286,7 +293,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RankingName,
-                this.TargetUserId
+                this.TargetUserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -296,7 +304,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheKey(
                     this.TargetUserId
@@ -333,7 +342,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheKey(
                     this.TargetUserId

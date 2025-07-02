@@ -170,6 +170,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetItemSetByUserIdFuture(request)
                 );
                 yield return future;
@@ -202,6 +203,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetItemSetByUserIdAsync(request)
             );
             return result?.Items;
@@ -224,6 +226,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetItemWithSignatureByUserIdFuture(request)
                 );
                 yield return future;
@@ -259,6 +262,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetItemWithSignatureByUserIdAsync(request)
             );
             var domain = this;
@@ -284,6 +288,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AcquireItemSetByUserIdFuture(request)
                 );
                 yield return future;
@@ -318,6 +323,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AcquireItemSetByUserIdAsync(request)
             );
             var domain = this;
@@ -342,6 +348,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ConsumeItemSetByUserIdFuture(request)
                 );
                 yield return future;
@@ -375,6 +382,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ConsumeItemSetByUserIdAsync(request)
             );
             var domain = this;
@@ -398,6 +406,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteItemSetByUserIdFuture(request)
                 );
                 yield return future;
@@ -434,6 +443,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteItemSetByUserIdAsync(request)
                 );
             }
@@ -459,6 +469,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyItemSetByUserIdFuture(request)
                 );
                 yield return future;
@@ -492,6 +503,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyItemSetByUserIdAsync(request)
             );
             var domain = this;
@@ -515,6 +527,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AddReferenceOfByUserIdFuture(request)
                 );
                 yield return future;
@@ -557,6 +570,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AddReferenceOfByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain(
@@ -588,7 +602,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         this.NamespaceName,
                         this.UserId,
                         this.InventoryName,
-                        this.ItemName
+                        this.ItemName,
+                        null
                     );
                     if (find) {
                         self.OnComplete(value);
@@ -600,6 +615,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         this.UserId,
                         this.InventoryName,
                         this.ItemName,
+                        null,
                         () => this.GetFuture(
                             new GetItemSetByUserIdRequest()
                         )
@@ -618,7 +634,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         this.UserId,
                         this.InventoryName,
                         this.ItemName,
-                        this.ItemSetName
+                        this.ItemSetName,
+                        null
                     );
                     if (find) {
                         self.OnComplete(value != null ? new []{ value } : Array.Empty<Gs2.Gs2Inventory.Model.ItemSet>());
@@ -631,6 +648,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         this.InventoryName,
                         this.ItemName,
                         this.ItemSetName,
+                        null,
                         () => this.GetFuture(
                             new GetItemSetByUserIdRequest()
                         )
@@ -660,7 +678,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.InventoryName,
-                    this.ItemName
+                    this.ItemName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -671,6 +690,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
+                    null,
                     () => this.GetAsync(
                         new GetItemSetByUserIdRequest()
                     )
@@ -683,7 +703,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
-                    this.ItemSetName
+                    this.ItemSetName,
+                    null
                 );
                 if (find) {
                     return value != null ? new []{ value } : Array.Empty<Gs2.Gs2Inventory.Model.ItemSet>();
@@ -695,6 +716,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
+                    null,
                     () => this.GetAsync(
                         new GetItemSetByUserIdRequest()
                     )
@@ -735,7 +757,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
-                    this.ItemSetName
+                    this.ItemSetName,
+                    null
                 );
             }
             else {
@@ -744,7 +767,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.InventoryName,
-                    this.ItemName
+                    this.ItemName,
+                    null
                 );
             }
         }
@@ -756,7 +780,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     (null as Gs2.Gs2Inventory.Model.ItemSet[]).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.InventoryName
+                        this.InventoryName,
+                        null
                     ),
                     (null as Gs2.Gs2Inventory.Model.ItemSet[]).CacheKey(
                         this.ItemName
@@ -779,7 +804,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     (null as Gs2.Gs2Inventory.Model.ItemSet).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.InventoryName
+                        this.InventoryName,
+                        null
                     ),
                     (null as Gs2.Gs2Inventory.Model.ItemSet).CacheKey(
                         this.ItemName,
@@ -807,7 +833,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     (null as Gs2.Gs2Inventory.Model.ItemSet[]).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.InventoryName
+                        this.InventoryName,
+                        null
                     ),
                     (null as Gs2.Gs2Inventory.Model.ItemSet[]).CacheKey(
                         this.ItemName
@@ -820,7 +847,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     (null as Gs2.Gs2Inventory.Model.ItemSet[]).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.InventoryName
+                        this.InventoryName,
+                        null
                     ),
                     (null as Gs2.Gs2Inventory.Model.ItemSet).CacheKey(
                         this.ItemName,

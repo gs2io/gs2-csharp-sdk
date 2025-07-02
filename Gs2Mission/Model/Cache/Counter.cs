@@ -42,13 +42,15 @@ namespace Gs2.Gs2Mission.Model.Cache
         public static string CacheParentKey(
             this Counter self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "mission",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Counter"
             );
         }
@@ -70,6 +72,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             string namespaceName,
             string userId,
             string counterName,
+            int? timeOffset,
             Func<IFuture<Counter>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Counter> self)
@@ -84,7 +87,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            counterName
+                            counterName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "counter") {
                             self.OnComplete(default);
@@ -99,7 +103,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    counterName
+                    counterName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -118,6 +123,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             string namespaceName,
             string userId,
             string counterName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Counter>> fetchImpl
     #else
@@ -130,7 +136,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    counterName
+                    counterName,
+                    timeOffset
                 );
                 return item;
             }
@@ -139,7 +146,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    counterName
+                    counterName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "counter") {
                     throw;
@@ -154,7 +162,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string counterName
+            string counterName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -162,7 +171,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             return cache.Get<Counter>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -175,7 +185,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string counterName
+            string counterName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -183,7 +194,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             var (value, find) = cache.Get<Counter>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -195,7 +207,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -206,7 +219,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             cache.ClearListCache<Complete>(
                 (null as Complete).CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 )
             );
         }
@@ -216,7 +230,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string counterName
+            string counterName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -224,7 +239,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             cache.Delete<Counter>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -237,12 +253,14 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Counter[]> callback
         ) {
             cache.ListSubscribe<Counter>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -254,12 +272,14 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Counter>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -126,7 +126,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.Entry>(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -169,7 +170,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.Entry>(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -181,7 +183,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.Entry>(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -241,7 +244,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.Like>(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -284,7 +288,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.Like>(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -296,7 +301,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.Like>(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -329,6 +335,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AddEntriesByUserIdFuture(request)
                 );
                 yield return future;
@@ -364,6 +371,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AddEntriesByUserIdAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
@@ -389,6 +397,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ResetByUserIdFuture(request)
                 );
                 yield return future;
@@ -419,6 +428,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ResetByUserIdAsync(request)
             );
             var domain = this;
@@ -439,6 +449,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteEntriesByUserIdFuture(request)
                 );
                 yield return future;
@@ -478,6 +489,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteEntriesByUserIdAsync(request)
                 );
                 items = result.Items;
@@ -506,6 +518,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AddLikesByUserIdFuture(request)
                 );
                 yield return future;
@@ -541,6 +554,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AddLikesByUserIdAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.LikeDomain(
@@ -566,6 +580,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ResetLikesByUserIdFuture(request)
                 );
                 yield return future;
@@ -596,6 +611,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ResetLikesByUserIdAsync(request)
             );
             var domain = this;
@@ -616,6 +632,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteLikesByUserIdFuture(request)
                 );
                 yield return future;
@@ -655,6 +672,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteLikesByUserIdAsync(request)
                 );
                 items = result?.Items;

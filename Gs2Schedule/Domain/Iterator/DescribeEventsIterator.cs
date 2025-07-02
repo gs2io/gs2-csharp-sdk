@@ -107,7 +107,9 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
             (
                     (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        true,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -142,6 +144,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -149,7 +152,9 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Schedule.Model.Event>(
                         (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            true,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -231,7 +236,9 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Event>(
                         (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            true,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListEvent"
                    ).LockAsync()) {

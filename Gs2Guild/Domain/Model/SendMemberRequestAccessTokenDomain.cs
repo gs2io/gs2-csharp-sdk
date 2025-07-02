@@ -103,6 +103,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetSendRequestFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetSendRequestAsync(request)
             );
             return result?.Item;
@@ -150,7 +152,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -162,6 +165,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.UserId,
                     this.GuildModelName,
                     this.GuildName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetSendRequestRequest()
                     )
@@ -189,7 +193,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -200,6 +205,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.UserId,
                 this.GuildModelName,
                 this.GuildName,
+                this.AccessToken?.TimeOffset,
                 () => this.GetAsync(
                     new GetSendRequestRequest()
                 )
@@ -237,7 +243,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -247,7 +254,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheKey(
                     this.GuildName
@@ -284,7 +292,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheKey(
                     this.GuildName

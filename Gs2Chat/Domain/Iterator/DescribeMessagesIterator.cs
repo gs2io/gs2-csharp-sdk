@@ -119,7 +119,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        RoomName ?? default
+                        RoomName ?? default,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list,
                     out var listCacheContext
@@ -138,7 +139,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            RoomName ?? default
+                            RoomName ?? default,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -179,6 +181,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -187,7 +190,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            RoomName ?? default
+                            RoomName ?? default,
+                            this.AccessToken?.TimeOffset
                         ),
                         this._startAt
                     );
@@ -271,7 +275,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            RoomName ?? default
+                            RoomName ?? default,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListMessage"
                    ).LockAsync()) {

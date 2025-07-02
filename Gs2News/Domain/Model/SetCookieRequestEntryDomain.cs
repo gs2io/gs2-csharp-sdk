@@ -103,7 +103,8 @@ namespace Gs2.Gs2News.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Key,
-                    this.Value
+                    this.Value,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -125,7 +126,8 @@ namespace Gs2.Gs2News.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.SetCookieRequestEntry>(
                         (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheKey(
                             this.Key,
@@ -137,7 +139,8 @@ namespace Gs2.Gs2News.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Key,
-                    this.Value
+                    this.Value,
+                    null
                 );
                 if (find) {
                     return value;
@@ -177,7 +180,8 @@ namespace Gs2.Gs2News.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.Key,
-                this.Value
+                this.Value,
+                null
             );
         }
 
@@ -186,7 +190,8 @@ namespace Gs2.Gs2News.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheKey(
                     this.Key,
@@ -223,7 +228,8 @@ namespace Gs2.Gs2News.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2News.Model.SetCookieRequestEntry>(
                 (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.SetCookieRequestEntry).CacheKey(
                     this.Key,

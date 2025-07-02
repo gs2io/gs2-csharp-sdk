@@ -39,11 +39,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
     public static partial class ProjectTokenExt
     {
         public static string CacheParentKey(
-            this ProjectToken self
+            this ProjectToken self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "identifier",
+                timeOffset?.ToString() ?? "0",
                 "ProjectToken"
             );
         }
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static IFuture<ProjectToken> FetchFuture(
             this ProjectToken self,
             CacheDatabase cache,
+            int? timeOffset,
             Func<IFuture<ProjectToken>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ProjectToken> self)
@@ -69,7 +72,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                     if (future.Error is Gs2.Core.Exception.NotFoundException e)
                     {
                         (null as ProjectToken).PutCache(
-                            cache
+                            cache,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "projectToken") {
                             self.OnComplete(default);
@@ -81,7 +85,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 }
                 var item = future.Result;
                 item.PutCache(
-                    cache
+                    cache,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -97,6 +102,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
     #endif
             this ProjectToken self,
             CacheDatabase cache,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ProjectToken>> fetchImpl
     #else
@@ -106,13 +112,15 @@ namespace Gs2.Gs2Identifier.Model.Cache
             try {
                 var item = await fetchImpl();
                 item.PutCache(
-                    cache
+                    cache,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as ProjectToken).PutCache(
-                    cache
+                    cache,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "projectToken") {
                     throw;
@@ -124,10 +132,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
 
         public static Tuple<ProjectToken, bool> GetCache(
             this ProjectToken self,
-            CacheDatabase cache
+            CacheDatabase cache,
+            int? timeOffset
         ) {
             return cache.Get<ProjectToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -136,10 +146,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
 
         public static void PutCache(
             this ProjectToken self,
-            CacheDatabase cache
+            CacheDatabase cache,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                 ),
@@ -150,10 +162,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
 
         public static void DeleteCache(
             this ProjectToken self,
-            CacheDatabase cache
+            CacheDatabase cache,
+            int? timeOffset
         ) {
             cache.Delete<ProjectToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -163,10 +177,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void ListSubscribe(
             this ProjectToken self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<ProjectToken[]> callback
         ) {
             cache.ListSubscribe<ProjectToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -176,10 +192,12 @@ namespace Gs2.Gs2Identifier.Model.Cache
         public static void ListUnsubscribe(
             this ProjectToken self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ProjectToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

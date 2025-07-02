@@ -111,7 +111,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.JobName
+                    this.JobName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -134,7 +135,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.JobName
+                this.JobName,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -172,7 +174,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.JobName
+                this.JobName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -181,7 +184,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
                     this.JobName
@@ -217,7 +221,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2JobQueue.Model.Job>(
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
                     this.JobName

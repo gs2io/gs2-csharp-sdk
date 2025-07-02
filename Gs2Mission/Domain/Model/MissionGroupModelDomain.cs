@@ -119,7 +119,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.MissionTaskModel>(
                 (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheParentKey(
                     this.NamespaceName,
-                    this.MissionGroupName
+                    this.MissionGroupName,
+                    null
                 ),
                 callback,
                 () =>
@@ -163,7 +164,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.MissionTaskModel>(
                 (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheParentKey(
                     this.NamespaceName,
-                    this.MissionGroupName
+                    this.MissionGroupName,
+                    null
                 ),
                 callbackId
             );
@@ -175,7 +177,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Mission.Model.MissionTaskModel>(
                 (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheParentKey(
                     this.NamespaceName,
-                    this.MissionGroupName
+                    this.MissionGroupName,
+                    null
                 )
             );
         }
@@ -208,6 +211,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetMissionGroupModelFuture(request)
                 );
                 yield return future;
@@ -237,6 +241,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetMissionGroupModelAsync(request)
             );
             return result?.Item;
@@ -255,7 +260,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Mission.Model.MissionGroupModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.MissionGroupName
+                    this.MissionGroupName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -265,6 +271,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.MissionGroupName,
+                    null,
                     () => this.GetFuture(
                         new GetMissionGroupModelRequest()
                     )
@@ -289,7 +296,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.MissionGroupModel>(
                         (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheKey(
                             this.MissionGroupName
@@ -298,7 +306,8 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Mission.Model.MissionGroupModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.MissionGroupName
+                    this.MissionGroupName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -307,6 +316,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.MissionGroupName,
+                    null,
                     () => this.GetAsync(
                         new GetMissionGroupModelRequest()
                     )
@@ -343,7 +353,8 @@ namespace Gs2.Gs2Mission.Domain.Model
             (null as Gs2.Gs2Mission.Model.MissionGroupModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.MissionGroupName
+                this.MissionGroupName,
+                null
             );
         }
 
@@ -351,7 +362,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheKey(
                     this.MissionGroupName
@@ -386,7 +398,8 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Mission.Model.MissionGroupModel>(
                 (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Mission.Model.MissionGroupModel).CacheKey(
                     this.MissionGroupName

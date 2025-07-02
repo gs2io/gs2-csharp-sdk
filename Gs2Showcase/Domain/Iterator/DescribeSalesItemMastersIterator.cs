@@ -104,7 +104,8 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                     <Gs2.Gs2Showcase.Model.SalesItemMaster>
             (
                     (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheParentKey(
-                        NamespaceName
+                        NamespaceName,
+                        null
                     ),
                     out var list
             )) {
@@ -142,13 +143,15 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Showcase.Model.SalesItemMaster>(
                         (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                         )
                     );
                 }
@@ -229,7 +232,8 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.SalesItemMaster>(
                         (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                        ),
                        "ListSalesItemMaster"
                    ).LockAsync()) {

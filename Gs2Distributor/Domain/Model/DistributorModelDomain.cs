@@ -96,6 +96,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetDistributorModelFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetDistributorModelAsync(request)
             );
             return result?.Item;
@@ -143,7 +145,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.DistributorName
+                    this.DistributorName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.DistributorName,
+                    null,
                     () => this.GetFuture(
                         new GetDistributorModelRequest()
                     )
@@ -177,7 +181,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.DistributorModel>(
                         (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheKey(
                             this.DistributorName
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.DistributorName
+                    this.DistributorName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -195,6 +201,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.DistributorName,
+                    null,
                     () => this.GetAsync(
                         new GetDistributorModelRequest()
                     )
@@ -231,7 +238,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
             (null as Gs2.Gs2Distributor.Model.DistributorModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.DistributorName
+                this.DistributorName,
+                null
             );
         }
 
@@ -239,7 +247,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheKey(
                     this.DistributorName
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Distributor.Model.DistributorModel>(
                 (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheKey(
                     this.DistributorName

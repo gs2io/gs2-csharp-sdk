@@ -43,6 +43,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeDailyTransactionHistoriesResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeDailyTransactionHistoriesRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<DailyTransactionHistory>())
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     item.Year,
                     item.Month,
                     item.Day,
-                    item.Currency
+                    item.Currency,
+                    timeOffset
                 );
             }
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeDailyTransactionHistoriesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeDailyTransactionHistoriesResult>> invokeImpl
         )
         {
@@ -78,6 +81,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeDailyTransactionHistoriesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeDailyTransactionHistoriesResult>> invokeImpl
     #else
@@ -107,6 +112,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

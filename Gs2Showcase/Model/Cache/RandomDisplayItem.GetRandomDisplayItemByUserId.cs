@@ -43,6 +43,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this GetRandomDisplayItemByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetRandomDisplayItemByUserIdRequest request
         ) {
         }
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this GetRandomDisplayItemByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetRandomDisplayItemByUserIdResult>> invokeImpl
         )
         {
@@ -67,6 +69,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this GetRandomDisplayItemByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetRandomDisplayItemByUserIdResult>> invokeImpl
     #else
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

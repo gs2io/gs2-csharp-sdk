@@ -36,6 +36,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
                     Result.DescribeStagesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeStagesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
                     Result.GetStageResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetStageRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
                     Result.PromoteStageResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PromoteStageRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
                     Result.RollbackStageResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RollbackStageRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
                     Result.DescribeOutputsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeOutputsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Freeze.Model.Cache
                     Result.GetOutputResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetOutputRequest.FromJson(requestPayload)
                     );
                     break;

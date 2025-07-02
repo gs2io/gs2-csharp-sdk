@@ -98,6 +98,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetEntryModelMasterFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetEntryModelMasterAsync(request)
             );
             return result?.Item;
@@ -145,6 +147,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     .WithEntryName(this.EntryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateEntryModelMasterFuture(request)
                 );
@@ -177,6 +180,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateEntryModelMasterAsync(request)
             );
             var domain = this;
@@ -197,6 +201,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     .WithEntryName(this.EntryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteEntryModelMasterFuture(request)
                 );
@@ -232,6 +237,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteEntryModelMasterAsync(request)
                 );
             }
@@ -253,7 +259,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.EntryName
+                    this.EntryName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -263,6 +270,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.EntryName,
+                    null,
                     () => this.GetFuture(
                         new GetEntryModelMasterRequest()
                     )
@@ -288,7 +296,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.EntryName
+                this.EntryName,
+                null
             );
             if (find) {
                 return value;
@@ -297,6 +306,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.EntryName,
+                null,
                 () => this.GetAsync(
                     new GetEntryModelMasterRequest()
                 )
@@ -332,7 +342,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.EntryName
+                this.EntryName,
+                null
             );
         }
 
@@ -340,7 +351,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheKey(
                     this.EntryName
@@ -363,7 +375,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
                 (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheKey(
                     this.EntryName

@@ -41,13 +41,15 @@ namespace Gs2.Gs2Inventory.Model.Cache
         public static string CacheParentKey(
             this ItemModelMaster self,
             string namespaceName,
-            string inventoryName
+            string inventoryName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "inventory",
                 namespaceName,
                 inventoryName,
+                timeOffset?.ToString() ?? "0",
                 "ItemModelMaster"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string namespaceName,
             string inventoryName,
             string itemName,
+            int? timeOffset,
             Func<IFuture<ItemModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ItemModelMaster> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                             cache,
                             namespaceName,
                             inventoryName,
-                            itemName
+                            itemName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "itemModelMaster") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     cache,
                     namespaceName,
                     inventoryName,
-                    itemName
+                    itemName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string namespaceName,
             string inventoryName,
             string itemName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ItemModelMaster>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     cache,
                     namespaceName,
                     inventoryName,
-                    itemName
+                    itemName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     cache,
                     namespaceName,
                     inventoryName,
-                    itemName
+                    itemName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "itemModelMaster") {
                     throw;
@@ -153,12 +161,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string inventoryName,
-            string itemName
+            string itemName,
+            int? timeOffset
         ) {
             return cache.Get<ItemModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -171,12 +181,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string inventoryName,
-            string itemName
+            string itemName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<ItemModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -188,7 +200,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -203,12 +216,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string inventoryName,
-            string itemName
+            string itemName,
+            int? timeOffset
         ) {
             cache.Delete<ItemModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     itemName
@@ -221,12 +236,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string inventoryName,
+            int? timeOffset,
             Action<ItemModelMaster[]> callback
         ) {
             cache.ListSubscribe<ItemModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -238,12 +255,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string inventoryName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ItemModelMaster>(
                 self.CacheParentKey(
                     namespaceName,
-                    inventoryName
+                    inventoryName,
+                    timeOffset
                 ),
                 callbackId
             );

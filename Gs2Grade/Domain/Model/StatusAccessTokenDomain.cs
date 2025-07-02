@@ -103,6 +103,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetStatusFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetStatusAsync(request)
             );
             return result?.Item;
@@ -155,6 +157,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SubGradeFuture(request)
                 );
                 yield return future;
@@ -189,6 +192,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SubGradeAsync(request)
             );
             var domain = this;
@@ -213,6 +217,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ApplyRankCapFuture(request)
                 );
                 yield return future;
@@ -247,6 +252,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ApplyRankCapAsync(request)
             );
             var domain = this;
@@ -271,6 +277,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyGradeFuture(request)
                 );
                 yield return future;
@@ -303,6 +310,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyGradeAsync(request)
             );
             var domain = this;
@@ -325,6 +333,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyGradeUpMaterialFuture(request)
                 );
                 yield return future;
@@ -357,6 +366,7 @@ namespace Gs2.Gs2Grade.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyGradeUpMaterialAsync(request)
             );
             var domain = this;
@@ -374,7 +384,8 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.GradeName,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -386,6 +397,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this.UserId,
                     this.GradeName,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetStatusRequest()
                     )
@@ -411,7 +423,8 @@ namespace Gs2.Gs2Grade.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.Status>(
                         (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Grade.Model.Status).CacheKey(
                             this.GradeName,
@@ -423,7 +436,8 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.GradeName,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -434,6 +448,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this.UserId,
                     this.GradeName,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetStatusRequest()
                     )
@@ -472,7 +487,8 @@ namespace Gs2.Gs2Grade.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.GradeName,
-                this.PropertyId
+                this.PropertyId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -481,7 +497,8 @@ namespace Gs2.Gs2Grade.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Grade.Model.Status).CacheKey(
                     this.GradeName,
@@ -518,7 +535,8 @@ namespace Gs2.Gs2Grade.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Grade.Model.Status>(
                 (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Grade.Model.Status).CacheKey(
                     this.GradeName,

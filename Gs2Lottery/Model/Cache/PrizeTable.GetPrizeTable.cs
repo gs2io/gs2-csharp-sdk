@@ -43,12 +43,14 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this GetPrizeTableResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetPrizeTableRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.PrizeTableName
+                request.PrizeTableName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this GetPrizeTableRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetPrizeTableResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this GetPrizeTableRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetPrizeTableResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -40,12 +40,14 @@ namespace Gs2.Gs2Account.Model.Cache
     {
         public static string CacheParentKey(
             this TakeOverTypeModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "account",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "TakeOverTypeModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Account.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             int? type,
+            int? timeOffset,
             Func<IFuture<TakeOverTypeModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<TakeOverTypeModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Account.Model.Cache
                         (null as TakeOverTypeModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            type
+                            type,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "takeOverTypeModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Account.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    type
+                    type,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Account.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             int? type,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<TakeOverTypeModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Account.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    type
+                    type,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Account.Model.Cache
                 (null as TakeOverTypeModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    type
+                    type,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "takeOverTypeModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Account.Model.Cache
             this TakeOverTypeModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            int? type
+            int? type,
+            int? timeOffset
         ) {
             return cache.Get<TakeOverTypeModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Account.Model.Cache
             this TakeOverTypeModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            int? type
+            int? type,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<TakeOverTypeModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Account.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Account.Model.Cache
             this TakeOverTypeModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            int? type
+            int? type,
+            int? timeOffset
         ) {
             cache.Delete<TakeOverTypeModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     type
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Account.Model.Cache
             this TakeOverTypeModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<TakeOverTypeModelMaster[]> callback
         ) {
             cache.ListSubscribe<TakeOverTypeModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Account.Model.Cache
             this TakeOverTypeModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<TakeOverTypeModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

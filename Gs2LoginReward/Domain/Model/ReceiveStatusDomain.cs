@@ -100,6 +100,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetReceiveStatusByUserIdFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetReceiveStatusByUserIdAsync(request)
             );
             return result?.Item;
@@ -150,6 +152,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteReceiveStatusByUserIdFuture(request)
                 );
                 yield return future;
@@ -185,6 +188,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteReceiveStatusByUserIdAsync(request)
                 );
             }
@@ -208,6 +212,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.MarkReceivedByUserIdFuture(request)
                 );
                 yield return future;
@@ -240,6 +245,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.MarkReceivedByUserIdAsync(request)
             );
             var domain = this;
@@ -262,6 +268,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UnmarkReceivedByUserIdFuture(request)
                 );
                 yield return future;
@@ -294,6 +301,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UnmarkReceivedByUserIdAsync(request)
             );
             var domain = this;
@@ -315,7 +323,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.BonusModelName
+                    this.BonusModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -326,6 +335,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.BonusModelName,
+                    null,
                     () => this.GetFuture(
                         new GetReceiveStatusByUserIdRequest()
                     )
@@ -351,7 +361,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                         (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheKey(
                             this.BonusModelName
@@ -361,7 +372,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.BonusModelName
+                    this.BonusModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -371,6 +383,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.BonusModelName,
+                    null,
                     () => this.GetAsync(
                         new GetReceiveStatusByUserIdRequest()
                     )
@@ -408,7 +421,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.BonusModelName
+                this.BonusModelName,
+                null
             );
         }
 
@@ -417,7 +431,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheKey(
                     this.BonusModelName
@@ -453,7 +468,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                 (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheKey(
                     this.BonusModelName

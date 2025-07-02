@@ -43,6 +43,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this DescribeShowcaseMastersResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeShowcaseMastersRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<ShowcaseMaster>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this DescribeShowcaseMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeShowcaseMastersResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this DescribeShowcaseMastersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeShowcaseMastersResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

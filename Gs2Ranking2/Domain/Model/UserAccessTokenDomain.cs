@@ -127,7 +127,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    rankingName
+                    rankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -177,7 +178,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    rankingName
+                    rankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -191,7 +193,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.SubscribeUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    rankingName
+                    rankingName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

@@ -117,7 +117,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.Identifier>(
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                    this.UserName
+                    this.UserName,
+                    null
                 ),
                 callback,
                 () =>
@@ -159,7 +160,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.Identifier>(
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                    this.UserName
+                    this.UserName,
+                    null
                 ),
                 callbackId
             );
@@ -170,7 +172,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Identifier.Model.Identifier>(
                 (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
-                    this.UserName
+                    this.UserName,
+                    null
                 )
             );
         }
@@ -252,6 +255,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.UpdateUserFuture(request)
                 );
                 yield return future;
@@ -282,6 +286,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateUserAsync(request)
             );
             var domain = this;
@@ -301,6 +306,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.GetUserFuture(request)
                 );
@@ -330,6 +336,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetUserAsync(request)
             );
             return result?.Item;
@@ -347,6 +354,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteUserFuture(request)
                 );
@@ -381,6 +389,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteUserAsync(request)
                 );
             }
@@ -401,6 +410,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     .WithUserName(this.UserName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CreateIdentifierFuture(request)
                 );
@@ -437,6 +447,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateIdentifierAsync(request)
             );
             var domain = new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
@@ -461,7 +472,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Identifier.Model.User).GetCache(
                     this._gs2.Cache,
-                    this.UserName
+                    this.UserName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -470,6 +482,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var future = (null as Gs2.Gs2Identifier.Model.User).FetchFuture(
                     this._gs2.Cache,
                     this.UserName,
+                    null,
                     () => this.GetFuture(
                         new GetUserRequest()
                     )
@@ -494,7 +507,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             var (value, find) = (null as Gs2.Gs2Identifier.Model.User).GetCache(
                 this._gs2.Cache,
-                this.UserName
+                this.UserName,
+                null
             );
             if (find) {
                 return value;
@@ -502,6 +516,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             return await (null as Gs2.Gs2Identifier.Model.User).FetchAsync(
                 this._gs2.Cache,
                 this.UserName,
+                null,
                 () => this.GetAsync(
                     new GetUserRequest()
                 )
@@ -536,7 +551,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             (null as Gs2.Gs2Identifier.Model.User).DeleteCache(
                 this._gs2.Cache,
-                this.UserName
+                this.UserName,
+                null
             );
         }
 
@@ -544,6 +560,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Identifier.Model.User).CacheKey(
                     this.UserName
@@ -578,6 +595,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Identifier.Model.User>(
                 (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Identifier.Model.User).CacheKey(
                     this.UserName

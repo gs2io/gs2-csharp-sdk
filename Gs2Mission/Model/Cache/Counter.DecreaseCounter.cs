@@ -43,13 +43,15 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DecreaseCounterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DecreaseCounterRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.CounterName
+                request.CounterName,
+                timeOffset
             );
             foreach (var item in self.ChangedCompletes ?? Array.Empty<Complete>())
             {
@@ -57,7 +59,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     request.NamespaceName,
                     userId,
-                    item.MissionGroupName
+                    item.MissionGroupName,
+                    timeOffset
                 );
             }
         }
@@ -67,6 +70,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DecreaseCounterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DecreaseCounterResult>> invokeImpl
         )
         {
@@ -82,6 +86,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -100,6 +105,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DecreaseCounterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DecreaseCounterResult>> invokeImpl
     #else
@@ -111,6 +117,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

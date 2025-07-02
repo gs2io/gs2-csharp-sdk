@@ -40,12 +40,14 @@ namespace Gs2.Gs2News.Model.Cache
     {
         public static string CacheParentKey(
             this Progress self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "news",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "Progress"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2News.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string uploadToken,
+            int? timeOffset,
             Func<IFuture<Progress>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Progress> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2News.Model.Cache
                         (null as Progress).PutCache(
                             cache,
                             namespaceName,
-                            uploadToken
+                            uploadToken,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "progress") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2News.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    uploadToken
+                    uploadToken,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2News.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string uploadToken,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Progress>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2News.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    uploadToken
+                    uploadToken,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2News.Model.Cache
                 (null as Progress).PutCache(
                     cache,
                     namespaceName,
-                    uploadToken
+                    uploadToken,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "progress") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2News.Model.Cache
             this Progress self,
             CacheDatabase cache,
             string namespaceName,
-            string uploadToken
+            string uploadToken,
+            int? timeOffset
         ) {
             return cache.Get<Progress>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     uploadToken
@@ -160,11 +170,13 @@ namespace Gs2.Gs2News.Model.Cache
             this Progress self,
             CacheDatabase cache,
             string namespaceName,
-            string uploadToken
+            string uploadToken,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Progress>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     uploadToken
@@ -175,7 +187,8 @@ namespace Gs2.Gs2News.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     uploadToken
@@ -189,11 +202,13 @@ namespace Gs2.Gs2News.Model.Cache
             this Progress self,
             CacheDatabase cache,
             string namespaceName,
-            string uploadToken
+            string uploadToken,
+            int? timeOffset
         ) {
             cache.Delete<Progress>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     uploadToken
@@ -205,11 +220,13 @@ namespace Gs2.Gs2News.Model.Cache
             this Progress self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<Progress[]> callback
         ) {
             cache.ListSubscribe<Progress>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2News.Model.Cache
             this Progress self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Progress>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

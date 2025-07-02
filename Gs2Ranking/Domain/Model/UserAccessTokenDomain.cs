@@ -144,7 +144,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking.Model.Score>(
                 (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -198,7 +199,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Score>(
                 (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -212,7 +214,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking.Model.Score>(
                 (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

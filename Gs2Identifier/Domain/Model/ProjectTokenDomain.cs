@@ -90,6 +90,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.LoginFuture(request)
                 );
                 yield return future;
@@ -120,6 +121,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.LoginAsync(request)
             );
             var domain = this;
@@ -139,6 +141,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.LoginByUserFuture(request)
                 );
@@ -167,6 +170,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.LoginByUserAsync(request)
             );
             var domain = this;
@@ -185,7 +189,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.ProjectToken> self)
             {
                 var (value, find) = (null as Gs2.Gs2Identifier.Model.ProjectToken).GetCache(
-                    this._gs2.Cache
+                    this._gs2.Cache,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -206,12 +211,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.ProjectToken>(
                         (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheParentKey(
+                            null
                         ),
                         (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheKey(
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Identifier.Model.ProjectToken).GetCache(
-                    this._gs2.Cache
+                    this._gs2.Cache,
+                    null
                 );
                 if (find) {
                     return value;
@@ -247,7 +254,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public void Invalidate()
         {
             (null as Gs2.Gs2Identifier.Model.ProjectToken).DeleteCache(
-                this._gs2.Cache
+                this._gs2.Cache,
+                null
             );
         }
 
@@ -255,6 +263,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheKey(
                 ),
@@ -288,6 +297,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Identifier.Model.ProjectToken>(
                 (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheKey(
                 ),

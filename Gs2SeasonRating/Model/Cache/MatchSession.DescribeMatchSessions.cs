@@ -43,6 +43,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DescribeMatchSessionsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeMatchSessionsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<MatchSession>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DescribeMatchSessionsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeMatchSessionsResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DescribeMatchSessionsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeMatchSessionsResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

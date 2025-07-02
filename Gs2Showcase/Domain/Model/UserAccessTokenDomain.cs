@@ -120,7 +120,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.Showcase>(
                 (null as Gs2.Gs2Showcase.Model.Showcase).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -164,7 +165,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.Showcase>(
                 (null as Gs2.Gs2Showcase.Model.Showcase).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -176,7 +178,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.Showcase>(
                 (null as Gs2.Gs2Showcase.Model.Showcase).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

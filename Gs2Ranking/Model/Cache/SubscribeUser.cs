@@ -43,7 +43,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string namespaceName,
             string userId,
             string categoryName,
-            string additionalScopeName
+            string additionalScopeName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 userId,
                 categoryName,
                 additionalScopeName,
+                timeOffset?.ToString() ?? "0",
                 "SubscribeUser"
             );
         }
@@ -75,6 +77,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string categoryName,
             string additionalScopeName,
             string targetUserId,
+            int? timeOffset,
             Func<IFuture<SubscribeUser>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SubscribeUser> self)
@@ -91,7 +94,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                             userId,
                             categoryName,
                             additionalScopeName,
-                            targetUserId
+                            targetUserId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "subscribeUser") {
                             self.OnComplete(default);
@@ -108,7 +112,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     userId,
                     categoryName,
                     additionalScopeName,
-                    targetUserId
+                    targetUserId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -129,6 +134,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string categoryName,
             string additionalScopeName,
             string targetUserId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SubscribeUser>> fetchImpl
     #else
@@ -143,7 +149,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     userId,
                     categoryName,
                     additionalScopeName,
-                    targetUserId
+                    targetUserId,
+                    timeOffset
                 );
                 return item;
             }
@@ -154,7 +161,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     userId,
                     categoryName,
                     additionalScopeName,
-                    targetUserId
+                    targetUserId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "subscribeUser") {
                     throw;
@@ -171,7 +179,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string userId,
             string categoryName,
             string additionalScopeName,
-            string targetUserId
+            string targetUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -181,7 +190,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     namespaceName,
                     userId,
                     categoryName,
-                    additionalScopeName
+                    additionalScopeName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     targetUserId
@@ -196,7 +206,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string userId,
             string categoryName,
             string additionalScopeName,
-            string targetUserId
+            string targetUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -206,7 +217,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     namespaceName,
                     userId,
                     categoryName,
-                    additionalScopeName
+                    additionalScopeName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     targetUserId
@@ -223,7 +235,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string userId,
             string categoryName,
             string additionalScopeName,
-            string targetUserId
+            string targetUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -233,7 +246,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     namespaceName,
                     userId,
                     categoryName,
-                    additionalScopeName
+                    additionalScopeName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     targetUserId
@@ -248,6 +262,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string userId,
             string categoryName,
             string additionalScopeName,
+            int? timeOffset,
             Action<SubscribeUser[]> callback
         ) {
             cache.ListSubscribe<SubscribeUser>(
@@ -255,7 +270,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     namespaceName,
                     userId,
                     categoryName,
-                    additionalScopeName
+                    additionalScopeName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -269,6 +285,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string userId,
             string categoryName,
             string additionalScopeName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SubscribeUser>(
@@ -276,7 +293,8 @@ namespace Gs2.Gs2Ranking.Model.Cache
                     namespaceName,
                     userId,
                     categoryName,
-                    additionalScopeName
+                    additionalScopeName,
+                    timeOffset
                 ),
                 callbackId
             );

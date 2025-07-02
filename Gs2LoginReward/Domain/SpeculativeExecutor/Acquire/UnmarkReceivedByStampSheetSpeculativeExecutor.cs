@@ -88,7 +88,8 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             request.UserId,
-                            request.BonusModelName
+                            request.BonusModelName,
+                            null
                         );
                         return null;
                     });
@@ -133,7 +134,8 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     request.UserId,
-                    request.BonusModelName
+                    request.BonusModelName,
+                    null
                 );
                 return null;
             };

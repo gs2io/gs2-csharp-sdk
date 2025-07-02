@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DeleteFriendResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteFriendRequest request
         ) {
             (null as FriendUser).DeleteCache(
@@ -52,42 +53,48 @@ namespace Gs2.Gs2Friend.Model.Cache
                 request.NamespaceName,
                 userId,
                 true,
-                request.TargetUserId
+                request.TargetUserId,
+                timeOffset
             );
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
                 userId,
                 false,
-                request.TargetUserId
+                request.TargetUserId,
+                timeOffset
             );
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
                 userId,
                 null,
-                request.TargetUserId
+                request.TargetUserId,
+                timeOffset
             );
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.TargetUserId,
                 false,
-                userId
+                userId,
+                timeOffset
             );
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.TargetUserId,
                 false,
-                userId
+                userId,
+                timeOffset
             );
             (null as FriendUser).DeleteCache(
                 cache,
                 request.NamespaceName,
                 request.TargetUserId,
                 null,
-                userId
+                userId,
+                timeOffset
             );
         }
 
@@ -96,6 +103,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DeleteFriendRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteFriendResult>> invokeImpl
         )
         {
@@ -111,6 +119,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -129,6 +138,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DeleteFriendRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteFriendResult>> invokeImpl
     #else
@@ -140,6 +150,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

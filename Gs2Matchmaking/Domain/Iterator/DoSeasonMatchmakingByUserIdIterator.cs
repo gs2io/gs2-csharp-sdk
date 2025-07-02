@@ -142,7 +142,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                     NamespaceName,
                     UserId,
                     SeasonName,
-                    default
+                    default,
+                    null
                 )
             );
         }
@@ -224,7 +225,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                             NamespaceName,
                             UserId,
                             SeasonName,
-                            default
+                            default,
+                            null
                        ),
                        "ListSeasonGathering"
                    ).LockAsync()) {

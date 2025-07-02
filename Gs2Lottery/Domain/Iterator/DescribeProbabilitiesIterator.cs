@@ -111,7 +111,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        LotteryName
+                        LotteryName,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -147,6 +148,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -155,7 +157,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                         (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            LotteryName
+                            LotteryName,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -238,7 +241,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                         (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            LotteryName
+                            LotteryName,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListProbability"
                    ).LockAsync()) {

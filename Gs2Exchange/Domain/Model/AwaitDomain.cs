@@ -100,6 +100,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetAwaitByUserIdFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetAwaitByUserIdAsync(request)
             );
             return result?.Item;
@@ -150,6 +152,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AcquireByUserIdFuture(request)
                 );
                 yield return future;
@@ -200,6 +203,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AcquireByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -234,6 +238,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AcquireForceByUserIdFuture(request)
                 );
                 yield return future;
@@ -284,6 +289,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AcquireForceByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -318,6 +324,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SkipByUserIdFuture(request)
                 );
                 yield return future;
@@ -350,6 +357,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SkipByUserIdAsync(request)
             );
             var domain = this;
@@ -372,6 +380,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAwaitByUserIdFuture(request)
                 );
                 yield return future;
@@ -407,6 +416,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAwaitByUserIdAsync(request)
                 );
             }
@@ -429,7 +439,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.AwaitName
+                    this.AwaitName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -440,6 +451,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.AwaitName,
+                    null,
                     () => this.GetFuture(
                         new GetAwaitByUserIdRequest()
                     )
@@ -465,7 +477,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.Await>(
                         (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Exchange.Model.Await).CacheKey(
                             this.AwaitName
@@ -475,7 +488,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.AwaitName
+                    this.AwaitName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -485,6 +499,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.AwaitName,
+                    null,
                     () => this.GetAsync(
                         new GetAwaitByUserIdRequest()
                     )
@@ -522,7 +537,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.AwaitName
+                this.AwaitName,
+                null
             );
         }
 
@@ -531,7 +547,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Exchange.Model.Await).CacheKey(
                     this.AwaitName
@@ -567,7 +584,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Exchange.Model.Await>(
                 (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Exchange.Model.Await).CacheKey(
                     this.AwaitName

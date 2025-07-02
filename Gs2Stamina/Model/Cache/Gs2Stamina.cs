@@ -36,6 +36,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeStaminaModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeStaminaModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CreateStaminaModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateStaminaModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetStaminaModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetStaminaModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateStaminaModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateStaminaModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DeleteStaminaModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteStaminaModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeMaxStaminaTableMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeMaxStaminaTableMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CreateMaxStaminaTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateMaxStaminaTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetMaxStaminaTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetMaxStaminaTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateMaxStaminaTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateMaxStaminaTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DeleteMaxStaminaTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteMaxStaminaTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeRecoverIntervalTableMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRecoverIntervalTableMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CreateRecoverIntervalTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateRecoverIntervalTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetRecoverIntervalTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRecoverIntervalTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateRecoverIntervalTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateRecoverIntervalTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DeleteRecoverIntervalTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRecoverIntervalTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeRecoverValueTableMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRecoverValueTableMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.CreateRecoverValueTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateRecoverValueTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetRecoverValueTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRecoverValueTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateRecoverValueTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateRecoverValueTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DeleteRecoverValueTableMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRecoverValueTableMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetCurrentStaminaMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentStaminaMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.PreUpdateCurrentStaminaMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentStaminaMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateCurrentStaminaMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentStaminaMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateCurrentStaminaMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentStaminaMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeStaminaModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeStaminaModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetStaminaModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetStaminaModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeStaminasResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeStaminasRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DescribeStaminasByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeStaminasByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetStaminaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetStaminaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.GetStaminaByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.UpdateStaminaByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.ConsumeStaminaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeStaminaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.ConsumeStaminaByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.ApplyStaminaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ApplyStaminaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.ApplyStaminaByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ApplyStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.RecoverStaminaByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RecoverStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.RaiseMaxValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RaiseMaxValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DecreaseMaxValueResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DecreaseMaxValueRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DecreaseMaxValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DecreaseMaxValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.SetMaxValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetMaxValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.SetRecoverIntervalByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetRecoverIntervalByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.SetRecoverValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetRecoverValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.SetMaxValueByStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetMaxValueByStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -442,6 +500,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.SetRecoverIntervalByStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetRecoverIntervalByStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -449,6 +508,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.SetRecoverValueByStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetRecoverValueByStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -456,6 +516,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.DeleteStaminaByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteStaminaByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -463,6 +524,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaValueResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaValueRequest.FromJson(requestPayload)
                     );
                     break;
@@ -470,6 +532,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -477,6 +540,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaMaxValueResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaMaxValueRequest.FromJson(requestPayload)
                     );
                     break;
@@ -484,6 +548,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaMaxValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaMaxValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -491,6 +556,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaRecoverIntervalMinutesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaRecoverIntervalMinutesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -498,6 +564,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaRecoverIntervalMinutesByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaRecoverIntervalMinutesByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -505,6 +572,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaRecoverValueResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaRecoverValueRequest.FromJson(requestPayload)
                     );
                     break;
@@ -512,6 +580,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaRecoverValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaRecoverValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -519,6 +588,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaOverflowValueResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaOverflowValueRequest.FromJson(requestPayload)
                     );
                     break;
@@ -526,6 +596,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                     Result.VerifyStaminaOverflowValueByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyStaminaOverflowValueByUserIdRequest.FromJson(requestPayload)
                     );
                     break;

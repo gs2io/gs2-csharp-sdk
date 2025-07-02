@@ -101,7 +101,8 @@ namespace Gs2.Gs2Log.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.RequestId
+                    this.RequestId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -124,7 +125,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.RequestId
+                this.RequestId,
+                null
             );
             if (find) {
                 return value;
@@ -162,7 +164,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.RequestId
+                this.RequestId,
+                null
             );
         }
 
@@ -170,7 +173,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.InGameLog).CacheKey(
                     this.RequestId
@@ -205,7 +209,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Log.Model.InGameLog>(
                 (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.InGameLog).CacheKey(
                     this.RequestId

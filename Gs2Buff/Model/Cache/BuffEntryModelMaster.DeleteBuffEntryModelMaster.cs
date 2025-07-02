@@ -43,12 +43,14 @@ namespace Gs2.Gs2Buff.Model.Cache
             this DeleteBuffEntryModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteBuffEntryModelMasterRequest request
         ) {
             (null as BuffEntryModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.BuffEntryName
+                request.BuffEntryName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Buff.Model.Cache
             this DeleteBuffEntryModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteBuffEntryModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Buff.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Buff.Model.Cache
             this DeleteBuffEntryModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteBuffEntryModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Buff.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

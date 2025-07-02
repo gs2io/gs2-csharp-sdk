@@ -97,6 +97,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.UpdateKeyFuture(request)
                 );
                 yield return future;
@@ -128,6 +129,7 @@ namespace Gs2.Gs2Key.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateKeyAsync(request)
             );
             var domain = this;
@@ -148,6 +150,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.GetKeyFuture(request)
                 );
@@ -178,6 +181,7 @@ namespace Gs2.Gs2Key.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetKeyAsync(request)
             );
             return result?.Item;
@@ -196,6 +200,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteKeyFuture(request)
                 );
@@ -231,6 +236,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteKeyAsync(request)
                 );
             }
@@ -252,6 +258,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.EncryptFuture(request)
                 );
@@ -284,6 +291,7 @@ namespace Gs2.Gs2Key.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.EncryptAsync(request)
             );
             var domain = this;
@@ -304,6 +312,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     .WithKeyName(this.KeyName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DecryptFuture(request)
                 );
@@ -336,6 +345,7 @@ namespace Gs2.Gs2Key.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.DecryptAsync(request)
             );
             var domain = this;
@@ -356,7 +366,8 @@ namespace Gs2.Gs2Key.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Key.Model.Key).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.KeyName
+                    this.KeyName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -366,6 +377,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.KeyName,
+                    null,
                     () => this.GetFuture(
                         new GetKeyRequest()
                     )
@@ -390,7 +402,8 @@ namespace Gs2.Gs2Key.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.Key>(
                         (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Key.Model.Key).CacheKey(
                             this.KeyName
@@ -399,7 +412,8 @@ namespace Gs2.Gs2Key.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Key.Model.Key).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.KeyName
+                    this.KeyName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -408,6 +422,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.KeyName,
+                    null,
                     () => this.GetAsync(
                         new GetKeyRequest()
                     )
@@ -444,7 +459,8 @@ namespace Gs2.Gs2Key.Domain.Model
             (null as Gs2.Gs2Key.Model.Key).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.KeyName
+                this.KeyName,
+                null
             );
         }
 
@@ -452,7 +468,8 @@ namespace Gs2.Gs2Key.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Key.Model.Key).CacheKey(
                     this.KeyName
@@ -487,7 +504,8 @@ namespace Gs2.Gs2Key.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Key.Model.Key>(
                 (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Key.Model.Key).CacheKey(
                     this.KeyName

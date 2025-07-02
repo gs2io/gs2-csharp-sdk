@@ -123,7 +123,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                         UserId,
                         InventoryName,
                         ItemName,
-                        ItemSetName ?? default
+                        ItemSetName ?? default,
+                        null
                     ),
                     out var list
             )) {
@@ -161,6 +162,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -171,7 +173,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                             UserId,
                             InventoryName,
                             ItemName,
-                            ItemSetName
+                            ItemSetName,
+                            null
                         )
                     );
                 }
@@ -256,7 +259,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                             UserId,
                             InventoryName,
                             ItemName,
-                            ItemSetName ?? default
+                            ItemSetName ?? default,
+                            null
                        ),
                        "ListString"
                    ).LockAsync()) {

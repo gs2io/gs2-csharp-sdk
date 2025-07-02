@@ -39,11 +39,13 @@ namespace Gs2.Gs2Auth.Model.Cache
     public static partial class AccessTokenExt
     {
         public static string CacheParentKey(
-            this AccessToken self
+            this AccessToken self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "auth",
+                timeOffset?.ToString() ?? "0",
                 "AccessToken"
             );
         }
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Auth.Model.Cache
         public static IFuture<AccessToken> FetchFuture(
             this AccessToken self,
             CacheDatabase cache,
+            int? timeOffset,
             Func<IFuture<AccessToken>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<AccessToken> self)
@@ -69,7 +72,8 @@ namespace Gs2.Gs2Auth.Model.Cache
                     if (future.Error is Gs2.Core.Exception.NotFoundException e)
                     {
                         (null as AccessToken).PutCache(
-                            cache
+                            cache,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "accessToken") {
                             self.OnComplete(default);
@@ -81,7 +85,8 @@ namespace Gs2.Gs2Auth.Model.Cache
                 }
                 var item = future.Result;
                 item.PutCache(
-                    cache
+                    cache,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -97,6 +102,7 @@ namespace Gs2.Gs2Auth.Model.Cache
     #endif
             this AccessToken self,
             CacheDatabase cache,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<AccessToken>> fetchImpl
     #else
@@ -106,13 +112,15 @@ namespace Gs2.Gs2Auth.Model.Cache
             try {
                 var item = await fetchImpl();
                 item.PutCache(
-                    cache
+                    cache,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as AccessToken).PutCache(
-                    cache
+                    cache,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "accessToken") {
                     throw;
@@ -124,10 +132,12 @@ namespace Gs2.Gs2Auth.Model.Cache
 
         public static Tuple<AccessToken, bool> GetCache(
             this AccessToken self,
-            CacheDatabase cache
+            CacheDatabase cache,
+            int? timeOffset
         ) {
             return cache.Get<AccessToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -136,10 +146,12 @@ namespace Gs2.Gs2Auth.Model.Cache
 
         public static void PutCache(
             this AccessToken self,
-            CacheDatabase cache
+            CacheDatabase cache,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                 ),
@@ -150,10 +162,12 @@ namespace Gs2.Gs2Auth.Model.Cache
 
         public static void DeleteCache(
             this AccessToken self,
-            CacheDatabase cache
+            CacheDatabase cache,
+            int? timeOffset
         ) {
             cache.Delete<AccessToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -163,10 +177,12 @@ namespace Gs2.Gs2Auth.Model.Cache
         public static void ListSubscribe(
             this AccessToken self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<AccessToken[]> callback
         ) {
             cache.ListSubscribe<AccessToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -176,10 +192,12 @@ namespace Gs2.Gs2Auth.Model.Cache
         public static void ListUnsubscribe(
             this AccessToken self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<AccessToken>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

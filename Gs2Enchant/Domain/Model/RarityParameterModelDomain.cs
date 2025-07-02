@@ -96,6 +96,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetRarityParameterModelFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetRarityParameterModelAsync(request)
             );
             return result?.Item;
@@ -143,7 +145,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ParameterName
+                    this.ParameterName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ParameterName,
+                    null,
                     () => this.GetFuture(
                         new GetRarityParameterModelRequest()
                     )
@@ -177,7 +181,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.RarityParameterModel>(
                         (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheKey(
                             this.ParameterName
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ParameterName
+                    this.ParameterName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -195,6 +201,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ParameterName,
+                    null,
                     () => this.GetAsync(
                         new GetRarityParameterModelRequest()
                     )
@@ -231,7 +238,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             (null as Gs2.Gs2Enchant.Model.RarityParameterModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ParameterName
+                this.ParameterName,
+                null
             );
         }
 
@@ -239,7 +247,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheKey(
                     this.ParameterName
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
                 (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Enchant.Model.RarityParameterModel).CacheKey(
                     this.ParameterName

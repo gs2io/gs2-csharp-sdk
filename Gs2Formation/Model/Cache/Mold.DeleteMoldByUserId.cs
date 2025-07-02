@@ -43,13 +43,15 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DeleteMoldByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteMoldByUserIdRequest request
         ) {
             (null as Mold).DeleteCache(
                 cache,
                 request.NamespaceName,
                 self.Item.UserId,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DeleteMoldByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteMoldByUserIdResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DeleteMoldByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteMoldByUserIdResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

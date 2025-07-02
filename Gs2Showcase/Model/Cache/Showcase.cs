@@ -41,13 +41,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
         public static string CacheParentKey(
             this Showcase self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "showcase",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Showcase"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
+            int? timeOffset,
             Func<IFuture<Showcase>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Showcase> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            showcaseName
+                            showcaseName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "showcase") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string namespaceName,
             string userId,
             string showcaseName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Showcase>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    showcaseName
+                    showcaseName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "showcase") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             return cache.Get<Showcase>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     showcaseName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     showcaseName
@@ -197,7 +209,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string showcaseName
+            string showcaseName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -205,7 +218,8 @@ namespace Gs2.Gs2Showcase.Model.Cache
             cache.Delete<Showcase>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     showcaseName
@@ -218,12 +232,14 @@ namespace Gs2.Gs2Showcase.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Showcase[]> callback
         ) {
             cache.ListSubscribe<Showcase>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -235,12 +251,14 @@ namespace Gs2.Gs2Showcase.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Showcase>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

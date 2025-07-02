@@ -88,7 +88,8 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             accessToken.UserId,
-                            request.StaminaName
+                            request.StaminaName,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });
@@ -133,7 +134,8 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     accessToken.UserId,
-                    request.StaminaName
+                    request.StaminaName,
+                    accessToken.TimeOffset
                 );
                 return null;
             };

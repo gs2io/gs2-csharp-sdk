@@ -104,6 +104,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SubscribeFuture(request)
                 );
                 yield return future;
@@ -143,6 +144,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SubscribeAsync(request)
             );
             var domain = new Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain(
@@ -172,6 +174,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.PutScoreFuture(request)
                 );
                 yield return future;
@@ -211,6 +214,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.PutScoreAsync(request)
             );
             var domain = new Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain(
@@ -281,7 +285,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -326,7 +331,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -340,7 +346,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -404,7 +411,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -449,7 +457,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -463,7 +472,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

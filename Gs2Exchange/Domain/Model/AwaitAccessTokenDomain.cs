@@ -97,6 +97,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetAwaitFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetAwaitAsync(request)
             );
             return result?.Item;
@@ -164,6 +166,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AcquireFuture(request)
                 );
                 yield return future;
@@ -224,6 +227,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AcquireAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -258,6 +262,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAwaitFuture(request)
                 );
                 yield return future;
@@ -293,6 +298,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAwaitAsync(request)
                 );
             }
@@ -311,7 +317,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.AwaitName
+                    this.AwaitName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -322,6 +329,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.AwaitName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetAwaitRequest()
                     )
@@ -347,7 +355,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.Await>(
                         (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Exchange.Model.Await).CacheKey(
                             this.AwaitName
@@ -357,7 +366,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.AwaitName
+                    this.AwaitName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -367,6 +377,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.AwaitName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetAwaitRequest()
                     )
@@ -404,7 +415,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.AwaitName
+                this.AwaitName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -413,7 +425,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Exchange.Model.Await).CacheKey(
                     this.AwaitName
@@ -449,7 +462,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Exchange.Model.Await>(
                 (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Exchange.Model.Await).CacheKey(
                     this.AwaitName

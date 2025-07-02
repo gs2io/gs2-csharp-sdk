@@ -89,6 +89,7 @@ namespace Gs2.Gs2Friend.Domain
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Friend.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateNamespaceAsync(request)
             );
             var domain = new Gs2.Gs2Friend.Domain.Model.NamespaceDomain(
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Friend.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DumpUserDataByUserIdFuture(request)
                 );
@@ -163,6 +166,7 @@ namespace Gs2.Gs2Friend.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.DumpUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -178,6 +182,7 @@ namespace Gs2.Gs2Friend.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckDumpUserDataByUserIdFuture(request)
                 );
@@ -206,6 +211,7 @@ namespace Gs2.Gs2Friend.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CheckDumpUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -222,6 +228,7 @@ namespace Gs2.Gs2Friend.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CleanUserDataByUserIdFuture(request)
                 );
@@ -249,6 +256,7 @@ namespace Gs2.Gs2Friend.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CleanUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -264,6 +272,7 @@ namespace Gs2.Gs2Friend.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckCleanUserDataByUserIdFuture(request)
                 );
@@ -291,6 +300,7 @@ namespace Gs2.Gs2Friend.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CheckCleanUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -306,6 +316,7 @@ namespace Gs2.Gs2Friend.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PrepareImportUserDataByUserIdFuture(request)
                 );
@@ -335,6 +346,7 @@ namespace Gs2.Gs2Friend.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PrepareImportUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -352,6 +364,7 @@ namespace Gs2.Gs2Friend.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.ImportUserDataByUserIdFuture(request)
                 );
@@ -379,6 +392,7 @@ namespace Gs2.Gs2Friend.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.ImportUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -394,6 +408,7 @@ namespace Gs2.Gs2Friend.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckImportUserDataByUserIdFuture(request)
                 );
@@ -421,6 +436,7 @@ namespace Gs2.Gs2Friend.Domain
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.CheckImportUserDataByUserIdAsync(request)
             );
@@ -488,6 +504,7 @@ namespace Gs2.Gs2Friend.Domain
                         resultModel.PutCache(
                             _gs2.Cache,
                             requestModel.UserId,
+                            null,
                             requestModel
                         );
 
@@ -522,6 +539,7 @@ namespace Gs2.Gs2Friend.Domain
                     resultModel.PutCache(
                         _gs2.Cache,
                         requestModel.UserId,
+                        null,
                         requestModel
                     );
 
@@ -648,33 +666,38 @@ namespace Gs2.Gs2Friend.Domain
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
-                            notification.UserId
+                            notification.UserId,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             notification.NamespaceName,
-                            notification.TargetUserId
+                            notification.TargetUserId,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
-                            false
+                            false,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
-                            true
+                            true,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
+                            null,
                             null
                         )
                     );
@@ -682,20 +705,23 @@ namespace Gs2.Gs2Friend.Domain
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
-                            false
+                            false,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
-                            true
+                            true,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
+                            null,
                             null
                         )
                     );
@@ -709,33 +735,38 @@ namespace Gs2.Gs2Friend.Domain
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
-                            notification.UserId
+                            notification.UserId,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             notification.NamespaceName,
-                            notification.TargetUserId
+                            notification.TargetUserId,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
-                            false
+                            false,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
-                            true
+                            true,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
+                            null,
                             null
                         )
                     );
@@ -743,20 +774,23 @@ namespace Gs2.Gs2Friend.Domain
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
-                            false
+                            false,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
-                            true
+                            true,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
+                            null,
                             null
                         )
                     );
@@ -770,31 +804,12 @@ namespace Gs2.Gs2Friend.Domain
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
-                            notification.FromUserId
+                            notification.FromUserId,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
-                            notification.NamespaceName,
-                            notification.UserId
-                        )
-                    );
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                            notification.NamespaceName,
-                            notification.UserId,
-                            false
-                        )
-                    );
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
-                            notification.NamespaceName,
-                            notification.UserId,
-                            true
-                        )
-                    );
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
-                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
                             null
@@ -803,21 +818,48 @@ namespace Gs2.Gs2Friend.Domain
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
-                            notification.FromUserId,
-                            false
+                            notification.UserId,
+                            false,
+                            null
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId,
+                            true,
+                            null
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.UserId,
+                            null,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.FromUserId,
-                            true
+                            false,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.FromUserId,
+                            true,
+                            null
+                        )
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
+                        (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.FromUserId,
+                            null,
                             null
                         )
                     );
@@ -832,20 +874,23 @@ namespace Gs2.Gs2Friend.Domain
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
-                            false
+                            false,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
-                            true
+                            true,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
+                            null,
                             null
                         )
                     );
@@ -856,13 +901,15 @@ namespace Gs2.Gs2Friend.Domain
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
-                            notification.UserId
+                            notification.UserId,
+                            null
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             notification.NamespaceName,
-                            notification.FromUserId
+                            notification.FromUserId,
+                            null
                         )
                     );
     #if UNITY_2017_1_OR_NEWER

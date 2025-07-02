@@ -116,7 +116,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                         NamespaceName,
                         default,
                         SeasonName,
-                        Season
+                        Season,
+                        null
                     ),
                     out var list
             )) {
@@ -158,6 +159,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -167,7 +169,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                             NamespaceName,
                             default,
                             SeasonName,
-                            Season
+                            Season,
+                            null
                         )
                     );
                 }
@@ -251,7 +254,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                             NamespaceName,
                             default,
                             SeasonName,
-                            Season
+                            Season,
+                            null
                        ),
                        "ListSeasonGathering"
                    ).LockAsync()) {

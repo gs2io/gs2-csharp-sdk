@@ -112,6 +112,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SendInGameLogByUserIdFuture(request)
                 );
                 yield return future;
@@ -148,6 +149,7 @@ namespace Gs2.Gs2Log.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SendInGameLogByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Log.Domain.Model.InGameLogDomain(

@@ -42,7 +42,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this DataObjectHistory self,
             string namespaceName,
             string userId,
-            string dataObjectName
+            string dataObjectName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 namespaceName,
                 userId,
                 dataObjectName,
+                timeOffset?.ToString() ?? "0",
                 "DataObjectHistory"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string userId,
             string dataObjectName,
             string generation,
+            int? timeOffset,
             Func<IFuture<DataObjectHistory>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<DataObjectHistory> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                             namespaceName,
                             userId,
                             dataObjectName,
-                            generation
+                            generation,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "dataObjectHistory") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                     namespaceName,
                     userId,
                     dataObjectName,
-                    generation
+                    generation,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string userId,
             string dataObjectName,
             string generation,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DataObjectHistory>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                     namespaceName,
                     userId,
                     dataObjectName,
-                    generation
+                    generation,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                     namespaceName,
                     userId,
                     dataObjectName,
-                    generation
+                    generation,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "dataObjectHistory") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string namespaceName,
             string userId,
             string dataObjectName,
-            string generation
+            string generation,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    dataObjectName
+                    dataObjectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     generation
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string namespaceName,
             string userId,
             string dataObjectName,
-            string generation
+            string generation,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    dataObjectName
+                    dataObjectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     generation
@@ -207,7 +219,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    dataObjectName
+                    dataObjectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     generation
@@ -223,7 +236,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string namespaceName,
             string userId,
             string dataObjectName,
-            string generation
+            string generation,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -232,7 +246,8 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    dataObjectName
+                    dataObjectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     generation
@@ -246,13 +261,15 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string namespaceName,
             string userId,
             string dataObjectName,
+            int? timeOffset,
             Action<DataObjectHistory[]> callback
         ) {
             cache.ListSubscribe<DataObjectHistory>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    dataObjectName
+                    dataObjectName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -265,13 +282,15 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string namespaceName,
             string userId,
             string dataObjectName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<DataObjectHistory>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    dataObjectName
+                    dataObjectName,
+                    timeOffset
                 ),
                 callbackId
             );

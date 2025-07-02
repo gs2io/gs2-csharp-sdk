@@ -42,7 +42,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             this Form self,
             string namespaceName,
             string userId,
-            string moldModelName
+            string moldModelName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 namespaceName,
                 userId,
                 moldModelName,
+                timeOffset?.ToString() ?? "0",
                 "Form"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             string moldModelName,
             int? index,
+            int? timeOffset,
             Func<IFuture<Form>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Form> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                             namespaceName,
                             userId,
                             moldModelName,
-                            index
+                            index,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "form") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     namespaceName,
                     userId,
                     moldModelName,
-                    index
+                    index,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             string moldModelName,
             int? index,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Form>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     namespaceName,
                     userId,
                     moldModelName,
-                    index
+                    index,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     namespaceName,
                     userId,
                     moldModelName,
-                    index
+                    index,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "form") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string moldModelName,
-            int? index
+            int? index,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     index
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string moldModelName,
-            int? index
+            int? index,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     index
@@ -207,7 +219,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     index
@@ -223,7 +236,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string moldModelName,
-            int? index
+            int? index,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -232,7 +246,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     index
@@ -246,13 +261,15 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string moldModelName,
+            int? timeOffset,
             Action<Form[]> callback
         ) {
             cache.ListSubscribe<Form>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -265,13 +282,15 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string moldModelName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Form>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 ),
                 callbackId
             );

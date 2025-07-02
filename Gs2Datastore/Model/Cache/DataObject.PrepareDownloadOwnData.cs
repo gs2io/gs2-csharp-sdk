@@ -43,13 +43,15 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this PrepareDownloadOwnDataResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             PrepareDownloadOwnDataRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.DataObjectName
+                request.DataObjectName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this PrepareDownloadOwnDataRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<PrepareDownloadOwnDataResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this PrepareDownloadOwnDataRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PrepareDownloadOwnDataResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

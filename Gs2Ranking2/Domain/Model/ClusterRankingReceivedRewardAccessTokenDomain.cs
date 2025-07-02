@@ -108,6 +108,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CreateClusterRankingReceivedRewardFuture(request)
                 );
                 yield return future;
@@ -142,6 +143,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CreateClusterRankingReceivedRewardAsync(request)
             );
             var domain = this;
@@ -183,6 +185,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ReceiveClusterRankingReceivedRewardFuture(request)
                 );
                 yield return future;
@@ -245,6 +248,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ReceiveClusterRankingReceivedRewardAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -281,6 +285,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetClusterRankingReceivedRewardFuture(request)
                 );
                 yield return future;
@@ -313,6 +318,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetClusterRankingReceivedRewardAsync(request)
             );
             return result?.Item;
@@ -330,7 +336,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -343,6 +350,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.ClusterName,
                     this.Season,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetClusterRankingReceivedRewardRequest()
                     )
@@ -369,7 +377,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.RankingName
+                            this.RankingName,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                             this.ClusterName,
@@ -383,7 +392,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -395,6 +405,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.ClusterName,
                     this.Season,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetClusterRankingReceivedRewardRequest()
                     )
@@ -434,7 +445,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.RankingName,
                 this.ClusterName,
                 this.Season,
-                this.UserId
+                this.UserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -444,7 +456,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                     this.ClusterName,
@@ -483,7 +496,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheKey(
                     this.ClusterName,

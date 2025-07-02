@@ -96,6 +96,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetRecoverIntervalTableMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetRecoverIntervalTableMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     .WithRecoverIntervalTableName(this.RecoverIntervalTableName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateRecoverIntervalTableMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateRecoverIntervalTableMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     .WithRecoverIntervalTableName(this.RecoverIntervalTableName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteRecoverIntervalTableMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteRecoverIntervalTableMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RecoverIntervalTableName
+                    this.RecoverIntervalTableName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RecoverIntervalTableName,
+                    null,
                     () => this.GetFuture(
                         new GetRecoverIntervalTableMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
                         (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheKey(
                             this.RecoverIntervalTableName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RecoverIntervalTableName
+                    this.RecoverIntervalTableName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RecoverIntervalTableName,
+                    null,
                     () => this.GetAsync(
                         new GetRecoverIntervalTableMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.RecoverIntervalTableName
+                this.RecoverIntervalTableName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheKey(
                     this.RecoverIntervalTableName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
                 (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster).CacheKey(
                     this.RecoverIntervalTableName

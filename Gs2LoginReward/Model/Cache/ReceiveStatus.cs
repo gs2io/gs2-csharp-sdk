@@ -41,13 +41,15 @@ namespace Gs2.Gs2LoginReward.Model.Cache
         public static string CacheParentKey(
             this ReceiveStatus self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "loginReward",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "ReceiveStatus"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             string namespaceName,
             string userId,
             string bonusModelName,
+            int? timeOffset,
             Func<IFuture<ReceiveStatus>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ReceiveStatus> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            bonusModelName
+                            bonusModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "receiveStatus") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    bonusModelName
+                    bonusModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             string namespaceName,
             string userId,
             string bonusModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ReceiveStatus>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    bonusModelName
+                    bonusModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    bonusModelName
+                    bonusModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "receiveStatus") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string bonusModelName
+            string bonusModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             return cache.Get<ReceiveStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     bonusModelName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string bonusModelName
+            string bonusModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             var (value, find) = cache.Get<ReceiveStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     bonusModelName
@@ -194,7 +206,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     bonusModelName
@@ -209,7 +222,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string bonusModelName
+            string bonusModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             cache.Delete<ReceiveStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     bonusModelName
@@ -230,12 +245,14 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<ReceiveStatus[]> callback
         ) {
             cache.ListSubscribe<ReceiveStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ReceiveStatus>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

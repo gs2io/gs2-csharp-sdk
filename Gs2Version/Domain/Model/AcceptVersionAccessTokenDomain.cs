@@ -97,6 +97,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AcceptFuture(request)
                 );
                 yield return future;
@@ -129,6 +130,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AcceptAsync(request)
             );
             var domain = this;
@@ -151,6 +153,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RejectFuture(request)
                 );
                 yield return future;
@@ -183,6 +186,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RejectAsync(request)
             );
             var domain = this;
@@ -205,6 +209,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetAcceptVersionFuture(request)
                 );
                 yield return future;
@@ -235,6 +240,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetAcceptVersionAsync(request)
             );
             return result?.Item;
@@ -255,6 +261,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAcceptVersionFuture(request)
                 );
                 yield return future;
@@ -290,6 +297,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteAcceptVersionAsync(request)
                 );
             }
@@ -308,7 +316,8 @@ namespace Gs2.Gs2Version.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.VersionName
+                    this.VersionName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -319,6 +328,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.VersionName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetAcceptVersionRequest()
                     )
@@ -344,7 +354,8 @@ namespace Gs2.Gs2Version.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.AcceptVersion>(
                         (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Version.Model.AcceptVersion).CacheKey(
                             this.VersionName
@@ -354,7 +365,8 @@ namespace Gs2.Gs2Version.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.VersionName
+                    this.VersionName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -364,6 +376,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.VersionName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetAcceptVersionRequest()
                     )
@@ -401,7 +414,8 @@ namespace Gs2.Gs2Version.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.VersionName
+                this.VersionName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -410,7 +424,8 @@ namespace Gs2.Gs2Version.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Version.Model.AcceptVersion).CacheKey(
                     this.VersionName
@@ -446,7 +461,8 @@ namespace Gs2.Gs2Version.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
                 (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Version.Model.AcceptVersion).CacheKey(
                     this.VersionName

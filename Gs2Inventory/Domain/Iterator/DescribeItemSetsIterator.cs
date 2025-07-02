@@ -113,7 +113,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     (null as Gs2.Gs2Inventory.Model.ItemSet).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        InventoryName
+                        InventoryName,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -153,6 +154,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -161,7 +163,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                         (null as Gs2.Gs2Inventory.Model.ItemSet).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            InventoryName
+                            InventoryName,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -244,7 +247,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                         (null as Gs2.Gs2Inventory.Model.ItemSet).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            InventoryName
+                            InventoryName,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListItemSet"
                    ).LockAsync()) {

@@ -43,13 +43,15 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             this DeleteJobResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteJobRequest request
         ) {
             (null as Job).DeleteCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.JobName
+                request.JobName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             this DeleteJobRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteJobResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             this DeleteJobRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteJobResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

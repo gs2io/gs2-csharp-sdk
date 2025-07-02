@@ -43,19 +43,22 @@ namespace Gs2.Gs2Guild.Model.Cache
             this GetLastGuildMasterActivityByGuildNameResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetLastGuildMasterActivityByGuildNameRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.GuildModelName,
-                request.GuildName
+                request.GuildName,
+                timeOffset
             );
             self.Guild?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.GuildModelName,
-                request.GuildName
+                request.GuildName,
+                timeOffset
             );
         }
 
@@ -64,6 +67,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this GetLastGuildMasterActivityByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetLastGuildMasterActivityByGuildNameResult>> invokeImpl
         )
         {
@@ -79,6 +83,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +102,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this GetLastGuildMasterActivityByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetLastGuildMasterActivityByGuildNameResult>> invokeImpl
     #else
@@ -108,6 +114,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

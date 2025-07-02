@@ -91,7 +91,8 @@ namespace Gs2.Gs2Account.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Account.Model.BanStatus).GetCache(
                     this._gs2.Cache,
-                    this.Name
+                    this.Name,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -112,6 +113,7 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.BanStatus>(
                         (null as Gs2.Gs2Account.Model.BanStatus).CacheParentKey(
+                            null
                         ),
                         (null as Gs2.Gs2Account.Model.BanStatus).CacheKey(
                             this.Name
@@ -119,7 +121,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Account.Model.BanStatus).GetCache(
                     this._gs2.Cache,
-                    this.Name
+                    this.Name,
+                    null
                 );
                 if (find) {
                     return value;
@@ -156,7 +159,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             (null as Gs2.Gs2Account.Model.BanStatus).DeleteCache(
                 this._gs2.Cache,
-                this.Name
+                this.Name,
+                null
             );
         }
 
@@ -164,6 +168,7 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.BanStatus).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.BanStatus).CacheKey(
                     this.Name
@@ -198,6 +203,7 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.BanStatus>(
                 (null as Gs2.Gs2Account.Model.BanStatus).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.BanStatus).CacheKey(
                     this.Name

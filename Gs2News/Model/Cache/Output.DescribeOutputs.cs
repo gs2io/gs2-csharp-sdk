@@ -43,6 +43,7 @@ namespace Gs2.Gs2News.Model.Cache
             this DescribeOutputsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeOutputsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Output>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2News.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UploadToken,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2News.Model.Cache
             this DescribeOutputsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeOutputsResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2News.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2News.Model.Cache
             this DescribeOutputsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeOutputsResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2News.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

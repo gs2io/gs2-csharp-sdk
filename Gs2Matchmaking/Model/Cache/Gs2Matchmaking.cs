@@ -36,6 +36,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeGatheringsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGatheringsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CreateGatheringResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGatheringRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CreateGatheringByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGatheringByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.UpdateGatheringResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateGatheringRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.UpdateGatheringByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateGatheringByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DoMatchmakingByPlayerResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DoMatchmakingByPlayerRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DoMatchmakingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DoMatchmakingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DoMatchmakingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DoMatchmakingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.PingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.PingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetGatheringResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGatheringRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CancelMatchmakingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CancelMatchmakingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CancelMatchmakingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CancelMatchmakingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.EarlyCompleteResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.EarlyCompleteRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.EarlyCompleteByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.EarlyCompleteByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DeleteGatheringResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteGatheringRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeRatingModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRatingModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CreateRatingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateRatingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetRatingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRatingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.UpdateRatingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateRatingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DeleteRatingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRatingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeRatingModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRatingModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetRatingModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRatingModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetCurrentModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.PreUpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.UpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.UpdateCurrentModelMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentModelMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeSeasonModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSeasonModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetSeasonModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSeasonModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeSeasonModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSeasonModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CreateSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.UpdateSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DeleteSeasonModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSeasonModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeSeasonGatheringsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSeasonGatheringsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeMatchmakingSeasonGatheringsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeMatchmakingSeasonGatheringsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DoSeasonMatchmakingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DoSeasonMatchmakingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DoSeasonMatchmakingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DoSeasonMatchmakingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetSeasonGatheringResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSeasonGatheringRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.VerifyIncludeParticipantResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyIncludeParticipantRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.VerifyIncludeParticipantByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyIncludeParticipantByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DeleteSeasonGatheringResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSeasonGatheringRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeJoinedSeasonGatheringsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeJoinedSeasonGatheringsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -442,6 +500,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeJoinedSeasonGatheringsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeJoinedSeasonGatheringsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -449,6 +508,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetJoinedSeasonGatheringResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetJoinedSeasonGatheringRequest.FromJson(requestPayload)
                     );
                     break;
@@ -456,6 +516,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetJoinedSeasonGatheringByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetJoinedSeasonGatheringByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -463,6 +524,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeRatingsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRatingsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -470,6 +532,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DescribeRatingsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeRatingsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -477,6 +540,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetRatingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRatingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -484,6 +548,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetRatingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetRatingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -491,6 +556,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.PutResultResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PutResultRequest.FromJson(requestPayload)
                     );
                     break;
@@ -498,6 +564,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.DeleteRatingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRatingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -505,6 +572,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetBallotResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBallotRequest.FromJson(requestPayload)
                     );
                     break;
@@ -512,6 +580,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.GetBallotByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBallotByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -519,6 +588,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.VoteResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VoteRequest.FromJson(requestPayload)
                     );
                     break;
@@ -526,6 +596,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.VoteMultipleResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VoteMultipleRequest.FromJson(requestPayload)
                     );
                     break;
@@ -533,6 +604,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     Result.CommitVoteResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CommitVoteRequest.FromJson(requestPayload)
                     );
                     break;

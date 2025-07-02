@@ -43,13 +43,15 @@ namespace Gs2.Gs2Idle.Model.Cache
             this DecreaseMaximumIdleMinutesResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DecreaseMaximumIdleMinutesRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.CategoryName
+                self.Item.CategoryName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             this DecreaseMaximumIdleMinutesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DecreaseMaximumIdleMinutesResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Idle.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             this DecreaseMaximumIdleMinutesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DecreaseMaximumIdleMinutesResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

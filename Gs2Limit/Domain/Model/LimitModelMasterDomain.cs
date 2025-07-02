@@ -96,6 +96,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetLimitModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetLimitModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                     .WithLimitName(this.LimitName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateLimitModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateLimitModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                     .WithLimitName(this.LimitName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteLimitModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteLimitModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Limit.Model.LimitModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.LimitName
+                    this.LimitName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.LimitName,
+                    null,
                     () => this.GetFuture(
                         new GetLimitModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Limit.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.LimitModelMaster>(
                         (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheKey(
                             this.LimitName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Limit.Model.LimitModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.LimitName
+                    this.LimitName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.LimitName,
+                    null,
                     () => this.GetAsync(
                         new GetLimitModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Limit.Domain.Model
             (null as Gs2.Gs2Limit.Model.LimitModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.LimitName
+                this.LimitName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Limit.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheKey(
                     this.LimitName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Limit.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Limit.Model.LimitModelMaster>(
                 (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Limit.Model.LimitModelMaster).CacheKey(
                     this.LimitName

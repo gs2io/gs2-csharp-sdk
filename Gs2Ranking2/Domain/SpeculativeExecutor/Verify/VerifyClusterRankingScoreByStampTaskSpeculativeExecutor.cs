@@ -93,7 +93,8 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                             request.RankingName,
                             request.ClusterName,
                             request.Season,
-                            accessToken.UserId
+                            accessToken.UserId,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });

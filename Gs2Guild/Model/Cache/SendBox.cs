@@ -41,13 +41,15 @@ namespace Gs2.Gs2Guild.Model.Cache
         public static string CacheParentKey(
             this SendBox self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "guild",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "SendBox"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             string namespaceName,
             string userId,
             string guildModelName,
+            int? timeOffset,
             Func<IFuture<SendBox>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SendBox> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            guildModelName
+                            guildModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "sendBox") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    guildModelName
+                    guildModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             string namespaceName,
             string userId,
             string guildModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SendBox>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    guildModelName
+                    guildModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    guildModelName
+                    guildModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "sendBox") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string guildModelName
+            string guildModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             return cache.Get<SendBox>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     guildModelName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string guildModelName
+            string guildModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             var (value, find) = cache.Get<SendBox>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     guildModelName
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     guildModelName
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string guildModelName
+            string guildModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Guild.Model.Cache
             cache.Delete<SendBox>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     guildModelName
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Guild.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<SendBox[]> callback
         ) {
             cache.ListSubscribe<SendBox>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Guild.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SendBox>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

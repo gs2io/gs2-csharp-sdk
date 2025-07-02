@@ -95,6 +95,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CreateGatheringFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CreateGatheringAsync(request)
             );
             var domain = new Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain(
@@ -189,7 +191,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -238,7 +241,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -251,7 +255,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
                 (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -307,7 +312,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
                 (null as Gs2.Gs2Matchmaking.Model.Rating).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -351,7 +357,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
                 (null as Gs2.Gs2Matchmaking.Model.Rating).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -363,7 +370,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Rating>(
                 (null as Gs2.Gs2Matchmaking.Model.Rating).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

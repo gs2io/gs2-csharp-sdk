@@ -87,6 +87,7 @@ namespace Gs2.Gs2Quest.Domain
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
@@ -116,6 +117,7 @@ namespace Gs2.Gs2Quest.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateNamespaceAsync(request)
             );
             var domain = new Gs2.Gs2Quest.Domain.Model.NamespaceDomain(
@@ -134,6 +136,7 @@ namespace Gs2.Gs2Quest.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DumpUserDataByUserIdFuture(request)
                 );
@@ -161,6 +164,7 @@ namespace Gs2.Gs2Quest.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.DumpUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -176,6 +180,7 @@ namespace Gs2.Gs2Quest.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckDumpUserDataByUserIdFuture(request)
                 );
@@ -204,6 +209,7 @@ namespace Gs2.Gs2Quest.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CheckDumpUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -220,6 +226,7 @@ namespace Gs2.Gs2Quest.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CleanUserDataByUserIdFuture(request)
                 );
@@ -247,6 +254,7 @@ namespace Gs2.Gs2Quest.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CleanUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -262,6 +270,7 @@ namespace Gs2.Gs2Quest.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckCleanUserDataByUserIdFuture(request)
                 );
@@ -289,6 +298,7 @@ namespace Gs2.Gs2Quest.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CheckCleanUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -304,6 +314,7 @@ namespace Gs2.Gs2Quest.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PrepareImportUserDataByUserIdFuture(request)
                 );
@@ -333,6 +344,7 @@ namespace Gs2.Gs2Quest.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PrepareImportUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -350,6 +362,7 @@ namespace Gs2.Gs2Quest.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.ImportUserDataByUserIdFuture(request)
                 );
@@ -377,6 +390,7 @@ namespace Gs2.Gs2Quest.Domain
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.ImportUserDataByUserIdAsync(request)
             );
             var domain = this;
@@ -392,6 +406,7 @@ namespace Gs2.Gs2Quest.Domain
             {
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CheckImportUserDataByUserIdFuture(request)
                 );
@@ -419,6 +434,7 @@ namespace Gs2.Gs2Quest.Domain
         ) {
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.CheckImportUserDataByUserIdAsync(request)
             );
@@ -463,6 +479,7 @@ namespace Gs2.Gs2Quest.Domain
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.Namespace>(
                 (null as Gs2.Gs2Quest.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callback,
                 () =>
@@ -505,6 +522,7 @@ namespace Gs2.Gs2Quest.Domain
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.Namespace>(
                 (null as Gs2.Gs2Quest.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 callbackId
             );
@@ -515,6 +533,7 @@ namespace Gs2.Gs2Quest.Domain
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.Namespace>(
                 (null as Gs2.Gs2Quest.Model.Namespace).CacheParentKey(
+                    null
                 )
             );
         }
@@ -548,6 +567,7 @@ namespace Gs2.Gs2Quest.Domain
                         resultModel.PutCache(
                             _gs2.Cache,
                             requestModel.UserId,
+                            null,
                             requestModel
                         );
 
@@ -581,6 +601,7 @@ namespace Gs2.Gs2Quest.Domain
                         resultModel.PutCache(
                             _gs2.Cache,
                             requestModel.UserId,
+                            null,
                             requestModel
                         );
 
@@ -607,6 +628,7 @@ namespace Gs2.Gs2Quest.Domain
                     resultModel.PutCache(
                         _gs2.Cache,
                         requestModel.UserId,
+                        null,
                         requestModel
                     );
 

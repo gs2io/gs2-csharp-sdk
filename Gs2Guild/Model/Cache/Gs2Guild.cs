@@ -36,6 +36,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeGuildModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGuildModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CreateGuildModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGuildModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetGuildModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGuildModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateGuildModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateGuildModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteGuildModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteGuildModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeGuildModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGuildModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetGuildModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGuildModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.SearchGuildsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SearchGuildsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.SearchGuildsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SearchGuildsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CreateGuildResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGuildRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.CreateGuildByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGuildByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetGuildResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGuildRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetGuildByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGuildByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateGuildResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateGuildRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateGuildByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateGuildByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteMemberResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteMemberRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteMemberByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteMemberByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateMemberRoleResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateMemberRoleRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateMemberRoleByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateMemberRoleByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.BatchUpdateMemberRoleResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.BatchUpdateMemberRoleRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.BatchUpdateMemberRoleByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.BatchUpdateMemberRoleByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteGuildResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteGuildRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteGuildByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteGuildByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.IncreaseMaximumCurrentMaximumMemberCountByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.IncreaseMaximumCurrentMaximumMemberCountByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DecreaseMaximumCurrentMaximumMemberCountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DecreaseMaximumCurrentMaximumMemberCountRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DecreaseMaximumCurrentMaximumMemberCountByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.VerifyCurrentMaximumMemberCountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyCurrentMaximumMemberCountRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.VerifyCurrentMaximumMemberCountByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.VerifyIncludeMemberResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyIncludeMemberRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.VerifyIncludeMemberByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyIncludeMemberByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.SetMaximumCurrentMaximumMemberCountByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetMaximumCurrentMaximumMemberCountByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.AssumeResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AssumeRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.AssumeByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AssumeByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeJoinedGuildsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeJoinedGuildsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeJoinedGuildsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeJoinedGuildsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetJoinedGuildResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetJoinedGuildRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetJoinedGuildByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetJoinedGuildByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateMemberMetadataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateMemberMetadataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateMemberMetadataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateMemberMetadataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.WithdrawalResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.WithdrawalRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.WithdrawalByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.WithdrawalByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetLastGuildMasterActivityResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetLastGuildMasterActivityRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetLastGuildMasterActivityByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetLastGuildMasterActivityByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.PromoteSeniorMemberResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PromoteSeniorMemberRequest.FromJson(requestPayload)
                     );
                     break;
@@ -442,6 +500,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.PromoteSeniorMemberByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PromoteSeniorMemberByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -449,6 +508,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -456,6 +516,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetCurrentGuildMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentGuildMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -463,6 +524,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.PreUpdateCurrentGuildMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentGuildMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -470,6 +532,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateCurrentGuildMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentGuildMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -477,6 +540,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.UpdateCurrentGuildMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentGuildMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -484,6 +548,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeReceiveRequestsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeReceiveRequestsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -491,6 +556,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeReceiveRequestsByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeReceiveRequestsByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -498,6 +564,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetReceiveRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetReceiveRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -505,6 +572,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetReceiveRequestByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetReceiveRequestByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -512,6 +580,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.AcceptRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcceptRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -519,6 +588,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.AcceptRequestByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcceptRequestByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -526,6 +596,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.RejectRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RejectRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -533,6 +604,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.RejectRequestByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RejectRequestByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -540,6 +612,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeSendRequestsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSendRequestsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -547,6 +620,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeSendRequestsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSendRequestsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -554,6 +628,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetSendRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSendRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -561,6 +636,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetSendRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSendRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -568,6 +644,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.SendRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SendRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -575,6 +652,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.SendRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SendRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -582,6 +660,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteRequestResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRequestRequest.FromJson(requestPayload)
                     );
                     break;
@@ -589,6 +668,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteRequestByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteRequestByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -596,6 +676,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeIgnoreUsersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeIgnoreUsersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -603,6 +684,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DescribeIgnoreUsersByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeIgnoreUsersByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -610,6 +692,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetIgnoreUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetIgnoreUserRequest.FromJson(requestPayload)
                     );
                     break;
@@ -617,6 +700,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.GetIgnoreUserByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetIgnoreUserByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -624,6 +708,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.AddIgnoreUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddIgnoreUserRequest.FromJson(requestPayload)
                     );
                     break;
@@ -631,6 +716,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.AddIgnoreUserByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddIgnoreUserByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;
@@ -638,6 +724,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteIgnoreUserResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteIgnoreUserRequest.FromJson(requestPayload)
                     );
                     break;
@@ -645,6 +732,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                     Result.DeleteIgnoreUserByGuildNameResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteIgnoreUserByGuildNameRequest.FromJson(requestPayload)
                     );
                     break;

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DeleteClusterRankingScoreByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteClusterRankingScoreByUserIdRequest request
         ) {
             (null as ClusterRankingScore).DeleteCache(
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.Item.RankingName,
                 self.Item.ClusterName,
                 request.Season ?? default,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
         }
 
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DeleteClusterRankingScoreByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteClusterRankingScoreByUserIdResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this DeleteClusterRankingScoreByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteClusterRankingScoreByUserIdResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

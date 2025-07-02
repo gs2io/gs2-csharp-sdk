@@ -43,12 +43,14 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DeleteSeasonModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteSeasonModelMasterRequest request
         ) {
             (null as SeasonModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.SeasonName
+                request.SeasonName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DeleteSeasonModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteSeasonModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             this DeleteSeasonModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteSeasonModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

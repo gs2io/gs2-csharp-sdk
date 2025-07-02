@@ -45,6 +45,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeSendRequestsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeSendRequestsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<SendMemberRequest>())
@@ -54,7 +55,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     request.NamespaceName,
                     userId,
                     request.GuildModelName,
-                    item.TargetGuildName
+                    item.TargetGuildName,
+                    timeOffset
                 );
             }
         }
@@ -64,6 +66,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeSendRequestsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeSendRequestsResult>> invokeImpl
         )
         {
@@ -79,6 +82,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +101,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeSendRequestsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeSendRequestsResult>> invokeImpl
     #else
@@ -108,6 +113,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -41,13 +41,15 @@ namespace Gs2.Gs2Formation.Model.Cache
         public static string CacheParentKey(
             this Mold self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "formation",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Mold"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string moldModelName,
+            int? timeOffset,
             Func<IFuture<Mold>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Mold> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            moldModelName
+                            moldModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "mold") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string moldModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Mold>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    moldModelName
+                    moldModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "mold") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string moldModelName
+            string moldModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             return cache.Get<Mold>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     moldModelName
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string moldModelName
+            string moldModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             var (value, find) = cache.Get<Mold>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     moldModelName
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     moldModelName
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string moldModelName
+            string moldModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             cache.Delete<Mold>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     moldModelName
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Mold[]> callback
         ) {
             cache.ListSubscribe<Mold>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Mold>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

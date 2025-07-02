@@ -45,13 +45,15 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this RestoreDataObjectResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             RestoreDataObjectRequest request
         ) {
             self.Item.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item?.UserId,
-                self.Item?.Name
+                self.Item?.Name,
+                timeOffset
             );
         }
 
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this RestoreDataObjectRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<RestoreDataObjectResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             this RestoreDataObjectRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RestoreDataObjectResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

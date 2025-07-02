@@ -40,12 +40,14 @@ namespace Gs2.Gs2StateMachine.Model.Cache
     {
         public static string CacheParentKey(
             this StateMachineMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "stateMachine",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "StateMachineMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             long? version,
+            int? timeOffset,
             Func<IFuture<StateMachineMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<StateMachineMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                         (null as StateMachineMaster).PutCache(
                             cache,
                             namespaceName,
-                            version
+                            version,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "stateMachineMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    version
+                    version,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             long? version,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<StateMachineMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    version
+                    version,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                 (null as StateMachineMaster).PutCache(
                     cache,
                     namespaceName,
-                    version
+                    version,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "stateMachineMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this StateMachineMaster self,
             CacheDatabase cache,
             string namespaceName,
-            long? version
+            long? version,
+            int? timeOffset
         ) {
             return cache.Get<StateMachineMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     version
@@ -160,11 +170,13 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this StateMachineMaster self,
             CacheDatabase cache,
             string namespaceName,
-            long? version
+            long? version,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<StateMachineMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     version
@@ -175,7 +187,8 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     version
@@ -189,11 +202,13 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this StateMachineMaster self,
             CacheDatabase cache,
             string namespaceName,
-            long? version
+            long? version,
+            int? timeOffset
         ) {
             cache.Delete<StateMachineMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     version
@@ -205,11 +220,13 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this StateMachineMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<StateMachineMaster[]> callback
         ) {
             cache.ListSubscribe<StateMachineMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this StateMachineMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<StateMachineMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

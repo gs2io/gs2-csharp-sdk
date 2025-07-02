@@ -112,7 +112,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             (
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -154,6 +155,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    AccessToken?.TimeOffset,
                     request
                 );
 
@@ -161,7 +163,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.FriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -243,7 +246,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            AccessToken?.TimeOffset
                        ),
                        "ListSendFriendRequest"
                    ).LockAsync()) {

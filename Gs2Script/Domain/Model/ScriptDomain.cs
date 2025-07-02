@@ -101,6 +101,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetScriptFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetScriptAsync(request)
             );
             return result?.Item;
@@ -148,6 +150,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     .WithScriptName(this.ScriptName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateScriptFuture(request)
                 );
@@ -180,6 +183,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateScriptAsync(request)
             );
             var domain = this;
@@ -200,6 +204,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     .WithScriptName(this.ScriptName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateScriptFromGitHubFuture(request)
                 );
@@ -232,6 +237,7 @@ namespace Gs2.Gs2Script.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateScriptFromGitHubAsync(request)
             );
             var domain = this;
@@ -252,6 +258,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     .WithScriptName(this.ScriptName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteScriptFuture(request)
                 );
@@ -287,6 +294,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteScriptAsync(request)
                 );
             }
@@ -308,7 +316,8 @@ namespace Gs2.Gs2Script.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Script.Model.Script).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ScriptName
+                    this.ScriptName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -318,6 +327,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ScriptName,
+                    null,
                     () => this.GetFuture(
                         new GetScriptRequest()
                     )
@@ -342,7 +352,8 @@ namespace Gs2.Gs2Script.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Script.Model.Script>(
                         (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Script.Model.Script).CacheKey(
                             this.ScriptName
@@ -351,7 +362,8 @@ namespace Gs2.Gs2Script.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Script.Model.Script).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ScriptName
+                    this.ScriptName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -360,6 +372,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ScriptName,
+                    null,
                     () => this.GetAsync(
                         new GetScriptRequest()
                     )
@@ -396,7 +409,8 @@ namespace Gs2.Gs2Script.Domain.Model
             (null as Gs2.Gs2Script.Model.Script).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ScriptName
+                this.ScriptName,
+                null
             );
         }
 
@@ -404,7 +418,8 @@ namespace Gs2.Gs2Script.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Script.Model.Script).CacheKey(
                     this.ScriptName
@@ -439,7 +454,8 @@ namespace Gs2.Gs2Script.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Script.Model.Script>(
                 (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Script.Model.Script).CacheKey(
                     this.ScriptName

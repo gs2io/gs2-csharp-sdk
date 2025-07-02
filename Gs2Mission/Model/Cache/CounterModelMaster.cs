@@ -40,12 +40,14 @@ namespace Gs2.Gs2Mission.Model.Cache
     {
         public static string CacheParentKey(
             this CounterModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "mission",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "CounterModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string counterName,
+            int? timeOffset,
             Func<IFuture<CounterModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<CounterModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                         (null as CounterModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            counterName
+                            counterName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "counterModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    counterName
+                    counterName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string counterName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CounterModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    counterName
+                    counterName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                 (null as CounterModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    counterName
+                    counterName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "counterModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this CounterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string counterName
+            string counterName,
+            int? timeOffset
         ) {
             return cache.Get<CounterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this CounterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string counterName
+            string counterName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<CounterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this CounterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string counterName
+            string counterName,
+            int? timeOffset
         ) {
             cache.Delete<CounterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     counterName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this CounterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<CounterModelMaster[]> callback
         ) {
             cache.ListSubscribe<CounterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             this CounterModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<CounterModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

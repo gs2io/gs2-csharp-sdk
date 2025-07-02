@@ -43,6 +43,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this VerifyReferenceOfByStampTaskResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             VerifyReferenceOfByStampTaskRequest request
         ) {
             self.ItemSet?.PutCache(
@@ -51,19 +52,22 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 userId,
                 default,
                 self.ItemSet.ItemName,
-                self.ItemSet.Name
+                self.ItemSet.Name,
+                timeOffset
             );
             self.ItemModel?.PutCache(
                 cache,
                 default,
                 default,
-                self.ItemModel.Name
+                self.ItemModel.Name,
+                timeOffset
             );
             self.Inventory?.PutCache(
                 cache,
                 default,
                 userId,
-                self.Inventory.InventoryName
+                self.Inventory.InventoryName,
+                timeOffset
             );
         }
 
@@ -72,6 +76,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this VerifyReferenceOfByStampTaskRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<VerifyReferenceOfByStampTaskResult>> invokeImpl
         )
         {
@@ -87,6 +92,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -105,6 +111,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this VerifyReferenceOfByStampTaskRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<VerifyReferenceOfByStampTaskResult>> invokeImpl
     #else
@@ -116,6 +123,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

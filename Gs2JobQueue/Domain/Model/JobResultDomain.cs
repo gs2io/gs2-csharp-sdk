@@ -106,6 +106,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetJobResultByUserIdFuture(request)
                 );
                 yield return future;
@@ -137,6 +138,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetJobResultByUserIdAsync(request)
             );
             return result?.Item;
@@ -157,7 +159,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.JobName,
-                    this.TryNumber ?? default
+                    this.TryNumber ?? default,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -169,6 +172,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this.UserId,
                     this.JobName,
                     this.TryNumber ?? default,
+                    null,
                     () => this.GetFuture(
                         new GetJobResultByUserIdRequest()
                     )
@@ -196,7 +200,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.JobName,
-                this.TryNumber ?? default
+                this.TryNumber ?? default,
+                null
             );
             if (find) {
                 return value;
@@ -207,6 +212,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this.UserId,
                 this.JobName,
                 this.TryNumber ?? default,
+                null,
                 () => this.GetAsync(
                     new GetJobResultByUserIdRequest()
                 )
@@ -225,6 +231,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this.UserId,
                     this.JobName,
                     this.TryNumber ?? default,
+                    null,
                     () => this.GetFuture(
                         new GetJobResultByUserIdRequest()
                     )
@@ -253,6 +260,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this.UserId,
                 this.JobName,
                 this.TryNumber ?? default,
+                null,
                 () => this.GetAsync(
                     new GetJobResultByUserIdRequest()
                 )
@@ -290,7 +298,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.JobName,
-                this.TryNumber ?? default
+                this.TryNumber ?? default,
+                null
             );
         }
 
@@ -300,7 +309,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 (null as Gs2.Gs2JobQueue.Model.JobResult).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.JobName
+                    this.JobName,
+                    null
                 ),
                 (null as Gs2.Gs2JobQueue.Model.JobResult).CacheKey(
                     this.TryNumber ?? default
@@ -337,7 +347,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 (null as Gs2.Gs2JobQueue.Model.JobResult).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.JobName
+                    this.JobName,
+                    null
                 ),
                 (null as Gs2.Gs2JobQueue.Model.JobResult).CacheKey(
                     this.TryNumber ?? default

@@ -111,7 +111,8 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
             (
                     (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                         NamespaceName,
-                        default
+                        default,
+                        null
                     ),
                     out var list
             )) {
@@ -153,6 +154,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -160,7 +162,8 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2SerialKey.Model.SerialKey>(
                         (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                             NamespaceName,
-                            default
+                            default,
+                            null
                         )
                     );
                 }
@@ -242,7 +245,8 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.SerialKey>(
                         (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                             NamespaceName,
-                            default
+                            default,
+                            null
                        ),
                        "ListSerialKey"
                    ).LockAsync()) {

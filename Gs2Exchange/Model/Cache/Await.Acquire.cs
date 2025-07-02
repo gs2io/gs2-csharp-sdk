@@ -43,13 +43,15 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this AcquireResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             AcquireRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.AwaitName
+                request.AwaitName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this AcquireRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<AcquireResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             this AcquireRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<AcquireResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

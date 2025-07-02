@@ -43,13 +43,15 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this ResetBoxResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             ResetBoxRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.PrizeTableName
+                self.Item.PrizeTableName,
+                timeOffset
             );
         }
 
@@ -58,6 +60,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this ResetBoxRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<ResetBoxResult>> invokeImpl
         )
         {
@@ -73,6 +76,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -91,6 +95,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this ResetBoxRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ResetBoxResult>> invokeImpl
     #else
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

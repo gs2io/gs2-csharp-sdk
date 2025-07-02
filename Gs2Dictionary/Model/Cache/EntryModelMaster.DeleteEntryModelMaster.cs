@@ -43,12 +43,14 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this DeleteEntryModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteEntryModelMasterRequest request
         ) {
             (null as EntryModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                default
+                default,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this DeleteEntryModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteEntryModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             this DeleteEntryModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteEntryModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

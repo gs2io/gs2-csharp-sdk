@@ -43,6 +43,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeSubscriptionStatusesResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeSubscriptionStatusesRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<SubscriptionStatus>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     request.NamespaceName,
                     userId,
-                    item.ContentName
+                    item.ContentName,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeSubscriptionStatusesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeSubscriptionStatusesResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeSubscriptionStatusesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeSubscriptionStatusesResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

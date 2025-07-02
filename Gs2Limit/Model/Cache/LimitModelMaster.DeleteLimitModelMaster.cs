@@ -43,12 +43,14 @@ namespace Gs2.Gs2Limit.Model.Cache
             this DeleteLimitModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteLimitModelMasterRequest request
         ) {
             (null as LimitModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.LimitName
+                request.LimitName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             this DeleteLimitModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteLimitModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Limit.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             this DeleteLimitModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteLimitModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

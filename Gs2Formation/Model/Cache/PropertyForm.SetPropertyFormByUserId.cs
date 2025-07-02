@@ -43,6 +43,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this SetPropertyFormByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             SetPropertyFormByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -50,12 +51,14 @@ namespace Gs2.Gs2Formation.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 request.PropertyFormModelName,
-                self.Item.PropertyId
+                self.Item.PropertyId,
+                timeOffset
             );
             self.PropertyFormModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.PropertyFormModelName
+                request.PropertyFormModelName,
+                timeOffset
             );
         }
 
@@ -64,6 +67,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this SetPropertyFormByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<SetPropertyFormByUserIdResult>> invokeImpl
         )
         {
@@ -79,6 +83,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +102,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this SetPropertyFormByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SetPropertyFormByUserIdResult>> invokeImpl
     #else
@@ -108,6 +114,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

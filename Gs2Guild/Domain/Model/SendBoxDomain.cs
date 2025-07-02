@@ -99,7 +99,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.GuildModelName
+                    this.GuildModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -121,7 +122,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.SendBox>(
                         (null as Gs2.Gs2Guild.Model.SendBox).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Guild.Model.SendBox).CacheKey(
                             this.GuildModelName
@@ -131,7 +133,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.GuildModelName
+                    this.GuildModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -170,7 +173,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.GuildModelName
+                this.GuildModelName,
+                null
             );
         }
 
@@ -179,7 +183,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Guild.Model.SendBox).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.SendBox).CacheKey(
                     this.GuildModelName
@@ -215,7 +220,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Guild.Model.SendBox>(
                 (null as Gs2.Gs2Guild.Model.SendBox).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.SendBox).CacheKey(
                     this.GuildModelName

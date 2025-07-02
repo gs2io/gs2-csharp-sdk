@@ -39,11 +39,13 @@ namespace Gs2.Gs2Experience.Model.Cache
     public static partial class NamespaceExt
     {
         public static string CacheParentKey(
-            this Namespace self
+            this Namespace self,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "experience",
+                timeOffset?.ToString() ?? "0",
                 "Namespace"
             );
         }
@@ -63,6 +65,7 @@ namespace Gs2.Gs2Experience.Model.Cache
             this Namespace self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Func<IFuture<Namespace>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Namespace> self)
@@ -75,7 +78,8 @@ namespace Gs2.Gs2Experience.Model.Cache
                     {
                         (null as Namespace).PutCache(
                             cache,
-                            namespaceName
+                            namespaceName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "namespace") {
                             self.OnComplete(default);
@@ -88,7 +92,8 @@ namespace Gs2.Gs2Experience.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Experience.Model.Cache
             this Namespace self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Namespace>> fetchImpl
     #else
@@ -115,14 +121,16 @@ namespace Gs2.Gs2Experience.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as Namespace).PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "namespace") {
                     throw;
@@ -135,10 +143,12 @@ namespace Gs2.Gs2Experience.Model.Cache
         public static Tuple<Namespace, bool> GetCache(
             this Namespace self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return cache.Get<Namespace>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     namespaceName
@@ -149,10 +159,12 @@ namespace Gs2.Gs2Experience.Model.Cache
         public static void PutCache(
             this Namespace self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<Namespace>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     namespaceName
@@ -163,6 +175,7 @@ namespace Gs2.Gs2Experience.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     namespaceName
@@ -175,10 +188,12 @@ namespace Gs2.Gs2Experience.Model.Cache
         public static void DeleteCache(
             this Namespace self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             cache.Delete<Namespace>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 self.CacheKey(
                     namespaceName
@@ -189,10 +204,12 @@ namespace Gs2.Gs2Experience.Model.Cache
         public static void ListSubscribe(
             this Namespace self,
             CacheDatabase cache,
+            int? timeOffset,
             Action<Namespace[]> callback
         ) {
             cache.ListSubscribe<Namespace>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -202,10 +219,12 @@ namespace Gs2.Gs2Experience.Model.Cache
         public static void ListUnsubscribe(
             this Namespace self,
             CacheDatabase cache,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Namespace>(
                 self.CacheParentKey(
+                    timeOffset
                 ),
                 callbackId
             );

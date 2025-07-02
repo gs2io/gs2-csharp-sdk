@@ -42,7 +42,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             this ClusterRankingReceivedReward self,
             string namespaceName,
             string userId,
-            string rankingName
+            string rankingName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 namespaceName,
                 userId,
                 rankingName,
+                timeOffset?.ToString() ?? "0",
                 "ClusterRankingReceivedReward"
             );
         }
@@ -77,6 +79,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string clusterName,
             long? season,
             string userId,
+            int? timeOffset,
             Func<IFuture<ClusterRankingReceivedReward>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ClusterRankingReceivedReward> self)
@@ -93,7 +96,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                             rankingName,
                             clusterName,
                             season,
-                            userId
+                            userId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "clusterRankingReceivedReward") {
                             self.OnComplete(default);
@@ -110,7 +114,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -131,6 +136,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string clusterName,
             long? season,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ClusterRankingReceivedReward>> fetchImpl
     #else
@@ -145,7 +151,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 return item;
             }
@@ -156,7 +163,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "clusterRankingReceivedReward") {
                     throw;
@@ -173,7 +181,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +191,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clusterName,
@@ -199,7 +209,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -208,7 +219,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clusterName,
@@ -223,7 +235,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clusterName,
@@ -242,7 +255,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -251,7 +265,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     clusterName,
@@ -267,13 +282,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string userId,
             string rankingName,
+            int? timeOffset,
             Action<ClusterRankingReceivedReward[]> callback
         ) {
             cache.ListSubscribe<ClusterRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -286,13 +303,15 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string userId,
             string rankingName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ClusterRankingReceivedReward>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    rankingName
+                    rankingName,
+                    timeOffset
                 ),
                 callbackId
             );

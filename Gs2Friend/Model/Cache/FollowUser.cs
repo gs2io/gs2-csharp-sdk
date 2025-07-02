@@ -42,7 +42,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             this FollowUser self,
             string namespaceName,
             string userId,
-            bool? withProfile
+            bool? withProfile,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 namespaceName,
                 userId,
                 withProfile.ToString(),
+                timeOffset?.ToString() ?? "0",
                 "FollowUser"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             bool? withProfile,
             string targetUserId,
+            int? timeOffset,
             Func<IFuture<FollowUser>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<FollowUser> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                             namespaceName,
                             userId,
                             withProfile,
-                            targetUserId
+                            targetUserId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "followUser") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     namespaceName,
                     userId,
                     withProfile,
-                    targetUserId
+                    targetUserId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             bool? withProfile,
             string targetUserId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<FollowUser>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     namespaceName,
                     userId,
                     withProfile,
-                    targetUserId
+                    targetUserId,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     namespaceName,
                     userId,
                     withProfile,
-                    targetUserId
+                    targetUserId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "followUser") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             string namespaceName,
             string userId,
             bool? withProfile,
-            string targetUserId
+            string targetUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -171,7 +180,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    withProfile
+                    withProfile,
+                    timeOffset
                 ),
                 self.CacheKey(
                     targetUserId
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             string namespaceName,
             string userId,
             bool? withProfile,
-            string targetUserId
+            string targetUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -194,7 +205,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    withProfile
+                    withProfile,
+                    timeOffset
                 ),
                 self.CacheKey(
                     targetUserId
@@ -210,7 +222,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             string namespaceName,
             string userId,
             bool? withProfile,
-            string targetUserId
+            string targetUserId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -219,7 +232,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    withProfile
+                    withProfile,
+                    timeOffset
                 ),
                 self.CacheKey(
                     targetUserId
@@ -233,13 +247,15 @@ namespace Gs2.Gs2Friend.Model.Cache
             string namespaceName,
             string userId,
             bool? withProfile,
+            int? timeOffset,
             Action<FollowUser[]> callback
         ) {
             cache.ListSubscribe<FollowUser>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    withProfile
+                    withProfile,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -252,13 +268,15 @@ namespace Gs2.Gs2Friend.Model.Cache
             string namespaceName,
             string userId,
             bool? withProfile,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<FollowUser>(
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    withProfile
+                    withProfile,
+                    timeOffset
                 ),
                 callbackId
             );

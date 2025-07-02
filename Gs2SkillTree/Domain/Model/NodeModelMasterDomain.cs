@@ -96,6 +96,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetNodeModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetNodeModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithNodeModelName(this.NodeModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateNodeModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateNodeModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithNodeModelName(this.NodeModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteNodeModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteNodeModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.NodeModelName
+                    this.NodeModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.NodeModelName,
+                    null,
                     () => this.GetFuture(
                         new GetNodeModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
                         (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheKey(
                             this.NodeModelName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.NodeModelName
+                    this.NodeModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.NodeModelName,
+                    null,
                     () => this.GetAsync(
                         new GetNodeModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.NodeModelName
+                this.NodeModelName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheKey(
                     this.NodeModelName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
                 (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SkillTree.Model.NodeModelMaster).CacheKey(
                     this.NodeModelName

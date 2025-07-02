@@ -114,6 +114,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetBallotFuture(request)
                 );
                 yield return future;
@@ -150,6 +151,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetBallotAsync(request)
             );
             return new SignedBallot {
@@ -169,7 +171,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.SeasonName,
-                    this.SessionName
+                    this.SessionName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -181,6 +184,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this.UserId,
                     this.SeasonName,
                     this.SessionName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetBallotRequest()
                     )
@@ -208,7 +212,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.SeasonName,
-                this.SessionName
+                this.SessionName,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -219,6 +224,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 this.UserId,
                 this.SeasonName,
                 this.SessionName,
+                this.AccessToken?.TimeOffset,
                 () => this.GetAsync(
                     new GetBallotRequest()
                 )
@@ -256,7 +262,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.SeasonName,
-                this.SessionName
+                this.SessionName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -265,7 +272,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheKey(
                     this.SeasonName,
@@ -302,7 +310,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SeasonRating.Model.SignedBallot>(
                 (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheKey(
                     this.SeasonName,

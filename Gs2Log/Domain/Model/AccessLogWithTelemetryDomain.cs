@@ -91,7 +91,8 @@ namespace Gs2.Gs2Log.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -112,7 +113,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             var (value, find) = (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).GetCache(
                 this._gs2.Cache,
-                this.NamespaceName
+                this.NamespaceName,
+                null
             );
             if (find) {
                 return value;
@@ -148,7 +150,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).DeleteCache(
                 this._gs2.Cache,
-                this.NamespaceName
+                this.NamespaceName,
+                null
             );
         }
 
@@ -156,7 +159,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheKey(
                 ),
@@ -190,7 +194,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheKey(
                 ),

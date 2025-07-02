@@ -40,12 +40,14 @@ namespace Gs2.Gs2Enchant.Model.Cache
     {
         public static string CacheParentKey(
             this RarityParameterModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "enchant",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "RarityParameterModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string parameterName,
+            int? timeOffset,
             Func<IFuture<RarityParameterModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<RarityParameterModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                         (null as RarityParameterModel).PutCache(
                             cache,
                             namespaceName,
-                            parameterName
+                            parameterName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "rarityParameterModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    parameterName
+                    parameterName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string parameterName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RarityParameterModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    parameterName
+                    parameterName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 (null as RarityParameterModel).PutCache(
                     cache,
                     namespaceName,
-                    parameterName
+                    parameterName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "rarityParameterModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this RarityParameterModel self,
             CacheDatabase cache,
             string namespaceName,
-            string parameterName
+            string parameterName,
+            int? timeOffset
         ) {
             return cache.Get<RarityParameterModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     parameterName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this RarityParameterModel self,
             CacheDatabase cache,
             string namespaceName,
-            string parameterName
+            string parameterName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     parameterName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this RarityParameterModel self,
             CacheDatabase cache,
             string namespaceName,
-            string parameterName
+            string parameterName,
+            int? timeOffset
         ) {
             cache.Delete<RarityParameterModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     parameterName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this RarityParameterModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<RarityParameterModel[]> callback
         ) {
             cache.ListSubscribe<RarityParameterModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this RarityParameterModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<RarityParameterModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

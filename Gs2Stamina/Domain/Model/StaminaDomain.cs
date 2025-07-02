@@ -101,6 +101,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetStaminaByUserIdFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetStaminaByUserIdAsync(request)
             );
             return result?.Item;
@@ -151,6 +153,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateStaminaByUserIdFuture(request)
                 );
                 yield return future;
@@ -183,6 +186,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateStaminaByUserIdAsync(request)
             );
             var domain = this;
@@ -205,6 +209,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ConsumeStaminaByUserIdFuture(request)
                 );
                 yield return future;
@@ -237,6 +242,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ConsumeStaminaByUserIdAsync(request)
             );
             var domain = this;
@@ -259,6 +265,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ApplyStaminaByUserIdFuture(request)
                 );
                 yield return future;
@@ -291,6 +298,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ApplyStaminaByUserIdAsync(request)
             );
             var domain = this;
@@ -313,6 +321,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RecoverStaminaByUserIdFuture(request)
                 );
                 yield return future;
@@ -346,6 +355,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RecoverStaminaByUserIdAsync(request)
             );
             var domain = this;
@@ -369,6 +379,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RaiseMaxValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -401,6 +412,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RaiseMaxValueByUserIdAsync(request)
             );
             var domain = this;
@@ -423,6 +435,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DecreaseMaxValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -455,6 +468,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DecreaseMaxValueByUserIdAsync(request)
             );
             var domain = this;
@@ -477,6 +491,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetMaxValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -509,6 +524,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetMaxValueByUserIdAsync(request)
             );
             var domain = this;
@@ -531,6 +547,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetRecoverIntervalByUserIdFuture(request)
                 );
                 yield return future;
@@ -563,6 +580,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetRecoverIntervalByUserIdAsync(request)
             );
             var domain = this;
@@ -585,6 +603,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetRecoverValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -617,6 +636,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetRecoverValueByUserIdAsync(request)
             );
             var domain = this;
@@ -639,6 +659,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteStaminaByUserIdFuture(request)
                 );
                 yield return future;
@@ -674,6 +695,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteStaminaByUserIdAsync(request)
                 );
             }
@@ -697,6 +719,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyStaminaValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -728,6 +751,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyStaminaValueByUserIdAsync(request)
             );
             var domain = this;
@@ -749,6 +773,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyStaminaMaxValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -780,6 +805,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyStaminaMaxValueByUserIdAsync(request)
             );
             var domain = this;
@@ -801,6 +827,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyStaminaRecoverIntervalMinutesByUserIdFuture(request)
                 );
                 yield return future;
@@ -832,6 +859,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyStaminaRecoverIntervalMinutesByUserIdAsync(request)
             );
             var domain = this;
@@ -853,6 +881,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyStaminaRecoverValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -884,6 +913,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyStaminaRecoverValueByUserIdAsync(request)
             );
             var domain = this;
@@ -905,6 +935,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyStaminaOverflowValueByUserIdFuture(request)
                 );
                 yield return future;
@@ -936,6 +967,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyStaminaOverflowValueByUserIdAsync(request)
             );
             var domain = this;
@@ -956,7 +988,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.StaminaName
+                    this.StaminaName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -967,6 +1000,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.StaminaName,
+                    null,
                     () => this.GetFuture(
                         new GetStaminaByUserIdRequest()
                     )
@@ -992,7 +1026,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.Stamina>(
                         (null as Gs2.Gs2Stamina.Model.Stamina).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Stamina.Model.Stamina).CacheKey(
                             this.StaminaName
@@ -1002,7 +1037,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.StaminaName
+                    this.StaminaName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -1012,6 +1048,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.StaminaName,
+                    null,
                     () => this.GetAsync(
                         new GetStaminaByUserIdRequest()
                     )
@@ -1049,7 +1086,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.StaminaName
+                this.StaminaName,
+                null
             );
         }
 
@@ -1058,7 +1096,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Stamina.Model.Stamina).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.Stamina).CacheKey(
                     this.StaminaName
@@ -1094,7 +1133,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Stamina.Model.Stamina>(
                 (null as Gs2.Gs2Stamina.Model.Stamina).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Stamina.Model.Stamina).CacheKey(
                     this.StaminaName

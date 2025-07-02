@@ -44,6 +44,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributeResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DistributeRequest request
         ) {
         }
@@ -53,6 +54,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributeRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DistributeResult>> invokeImpl
         )
         {
@@ -68,6 +70,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -86,6 +89,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             this DistributeRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DistributeResult>> invokeImpl
     #else
@@ -97,6 +101,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

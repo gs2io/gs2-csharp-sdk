@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this AcceptRequestByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             AcceptRequestByUserIdRequest request
         ) {
             if (userId == null) {
@@ -55,7 +56,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Delete<ReceiveFriendRequest>(
                 (null as ReceiveFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    self.Item.TargetUserId
+                    self.Item.TargetUserId,
+                    timeOffset
                 ),
                 (null as ReceiveFriendRequest).CacheKey(
                     self.Item.UserId
@@ -66,7 +68,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Delete<SendFriendRequest>(
                 (null as SendFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    self.Item.UserId
+                    self.Item.UserId,
+                    timeOffset
                 ),
                 (null as SendFriendRequest).CacheKey(
                     self.Item.TargetUserId
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     (null as FriendUser).CacheParentKey(
                         request.NamespaceName,
                         self.Item.UserId,
-                        withProfile
+                        withProfile,
+                        timeOffset
                     )
                 );
                 // 受信したユーザー側のフレンドリストのキャッシュを削除
@@ -87,7 +91,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     (null as FriendUser).CacheParentKey(
                         request.NamespaceName,
                         self.Item.TargetUserId,
-                        withProfile
+                        withProfile,
+                        timeOffset
                     )
                 );
             }
@@ -98,6 +103,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this AcceptRequestByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<AcceptRequestByUserIdResult>> invokeImpl
         )
         {
@@ -113,6 +119,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -131,6 +138,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this AcceptRequestByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<AcceptRequestByUserIdResult>> invokeImpl
     #else
@@ -142,6 +150,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

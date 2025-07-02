@@ -120,7 +120,8 @@ namespace Gs2.Gs2News.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2News.Model.Output>(
                 (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                     this.NamespaceName,
-                    this.UploadToken
+                    this.UploadToken,
+                    null
                 ),
                 callback,
                 () =>
@@ -164,7 +165,8 @@ namespace Gs2.Gs2News.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2News.Model.Output>(
                 (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                     this.NamespaceName,
-                    this.UploadToken
+                    this.UploadToken,
+                    null
                 ),
                 callbackId
             );
@@ -176,7 +178,8 @@ namespace Gs2.Gs2News.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2News.Model.Output>(
                 (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                     this.NamespaceName,
-                    this.UploadToken
+                    this.UploadToken,
+                    null
                 )
             );
         }
@@ -209,6 +212,7 @@ namespace Gs2.Gs2News.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetProgressFuture(request)
                 );
                 yield return future;
@@ -238,6 +242,7 @@ namespace Gs2.Gs2News.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetProgressAsync(request)
             );
             return result?.Item;
@@ -256,7 +261,8 @@ namespace Gs2.Gs2News.Domain.Model
                 var (value, find) = (null as Gs2.Gs2News.Model.Progress).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UploadToken
+                    this.UploadToken,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -266,6 +272,7 @@ namespace Gs2.Gs2News.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UploadToken,
+                    null,
                     () => this.GetFuture(
                         new GetProgressRequest()
                     )
@@ -290,7 +297,8 @@ namespace Gs2.Gs2News.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.Progress>(
                         (null as Gs2.Gs2News.Model.Progress).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2News.Model.Progress).CacheKey(
                             this.UploadToken
@@ -299,7 +307,8 @@ namespace Gs2.Gs2News.Domain.Model
                 var (value, find) = (null as Gs2.Gs2News.Model.Progress).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UploadToken
+                    this.UploadToken,
+                    null
                 );
                 if (find) {
                     return value;
@@ -308,6 +317,7 @@ namespace Gs2.Gs2News.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UploadToken,
+                    null,
                     () => this.GetAsync(
                         new GetProgressRequest()
                     )
@@ -344,7 +354,8 @@ namespace Gs2.Gs2News.Domain.Model
             (null as Gs2.Gs2News.Model.Progress).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UploadToken
+                this.UploadToken,
+                null
             );
         }
 
@@ -352,7 +363,8 @@ namespace Gs2.Gs2News.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2News.Model.Progress).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.Progress).CacheKey(
                     this.UploadToken
@@ -387,7 +399,8 @@ namespace Gs2.Gs2News.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2News.Model.Progress>(
                 (null as Gs2.Gs2News.Model.Progress).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.Progress).CacheKey(
                     this.UploadToken

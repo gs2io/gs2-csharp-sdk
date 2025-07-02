@@ -43,11 +43,13 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this GetSecurityPolicyResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetSecurityPolicyRequest request
         ) {
             self.Item?.PutCache(
                 cache,
-                request.SecurityPolicyName
+                request.SecurityPolicyName,
+                timeOffset
             );
         }
 
@@ -56,6 +58,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this GetSecurityPolicyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetSecurityPolicyResult>> invokeImpl
         )
         {
@@ -71,6 +74,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -89,6 +93,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this GetSecurityPolicyRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetSecurityPolicyResult>> invokeImpl
     #else
@@ -100,6 +105,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

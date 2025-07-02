@@ -41,13 +41,15 @@ namespace Gs2.Gs2Formation.Model.Cache
         public static string CacheParentKey(
             this PropertyForm self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "formation",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "PropertyForm"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             string propertyFormModelName,
             string propertyId,
+            int? timeOffset,
             Func<IFuture<PropertyForm>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<PropertyForm> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                             namespaceName,
                             userId,
                             propertyFormModelName,
-                            propertyId
+                            propertyId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "propertyForm") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     namespaceName,
                     userId,
                     propertyFormModelName,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             string propertyFormModelName,
             string propertyId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PropertyForm>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     namespaceName,
                     userId,
                     propertyFormModelName,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     namespaceName,
                     userId,
                     propertyFormModelName,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "propertyForm") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string propertyFormModelName,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -170,7 +179,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             return cache.Get<PropertyForm>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName,
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string propertyFormModelName,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -193,7 +204,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             var (value, find) = cache.Get<PropertyForm>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName,
@@ -206,7 +218,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName,
@@ -223,7 +236,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             string namespaceName,
             string userId,
             string propertyFormModelName,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -231,7 +245,8 @@ namespace Gs2.Gs2Formation.Model.Cache
             cache.Delete<PropertyForm>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     propertyFormModelName,
@@ -245,12 +260,14 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<PropertyForm[]> callback
         ) {
             cache.ListSubscribe<PropertyForm>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -262,12 +279,14 @@ namespace Gs2.Gs2Formation.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<PropertyForm>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

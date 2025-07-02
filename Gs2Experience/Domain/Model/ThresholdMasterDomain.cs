@@ -96,6 +96,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetThresholdMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetThresholdMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     .WithThresholdName(this.ThresholdName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateThresholdMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateThresholdMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     .WithThresholdName(this.ThresholdName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteThresholdMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteThresholdMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Experience.Model.ThresholdMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ThresholdName
+                    this.ThresholdName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ThresholdName,
+                    null,
                     () => this.GetFuture(
                         new GetThresholdMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.ThresholdMaster>(
                         (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheKey(
                             this.ThresholdName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Experience.Model.ThresholdMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ThresholdName
+                    this.ThresholdName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ThresholdName,
+                    null,
                     () => this.GetAsync(
                         new GetThresholdMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             (null as Gs2.Gs2Experience.Model.ThresholdMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ThresholdName
+                this.ThresholdName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheKey(
                     this.ThresholdName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
                 (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Experience.Model.ThresholdMaster).CacheKey(
                     this.ThresholdName

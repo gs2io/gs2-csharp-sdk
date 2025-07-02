@@ -40,12 +40,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
     {
         public static string CacheParentKey(
             this RatingModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "matchmaking",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "RatingModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string ratingName,
+            int? timeOffset,
             Func<IFuture<RatingModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<RatingModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                         (null as RatingModel).PutCache(
                             cache,
                             namespaceName,
-                            ratingName
+                            ratingName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "ratingModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    ratingName
+                    ratingName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string ratingName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<RatingModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    ratingName
+                    ratingName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 (null as RatingModel).PutCache(
                     cache,
                     namespaceName,
-                    ratingName
+                    ratingName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "ratingModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this RatingModel self,
             CacheDatabase cache,
             string namespaceName,
-            string ratingName
+            string ratingName,
+            int? timeOffset
         ) {
             return cache.Get<RatingModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     ratingName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this RatingModel self,
             CacheDatabase cache,
             string namespaceName,
-            string ratingName
+            string ratingName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     ratingName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this RatingModel self,
             CacheDatabase cache,
             string namespaceName,
-            string ratingName
+            string ratingName,
+            int? timeOffset
         ) {
             cache.Delete<RatingModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     ratingName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this RatingModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<RatingModel[]> callback
         ) {
             cache.ListSubscribe<RatingModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this RatingModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<RatingModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

@@ -43,6 +43,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this BatchReadMessagesByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             BatchReadMessagesByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Message>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Inbox.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this BatchReadMessagesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<BatchReadMessagesByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this BatchReadMessagesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BatchReadMessagesByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

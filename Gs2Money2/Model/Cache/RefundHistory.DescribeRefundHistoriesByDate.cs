@@ -43,6 +43,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeRefundHistoriesByDateResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeRefundHistoriesByDateRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<RefundHistory>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.TransactionId
+                    item.TransactionId,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeRefundHistoriesByDateRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeRefundHistoriesByDateResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeRefundHistoriesByDateRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeRefundHistoriesByDateResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

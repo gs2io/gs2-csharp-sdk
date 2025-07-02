@@ -76,7 +76,8 @@ namespace Gs2.Core.Domain
                 Gs2.Cache,
                 Gs2.TransactionConfiguration.NamespaceName,
                 AccessToken.UserId,
-                result.TransactionId
+                result.TransactionId,
+                this.AccessToken?.TimeOffset
             );
             
             if (result.VerifyResults != null) {

@@ -118,7 +118,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Room>(
                 (null as Gs2.Gs2Chat.Model.Room).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -162,7 +163,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Room>(
                 (null as Gs2.Gs2Chat.Model.Room).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -174,7 +176,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Room>(
                 (null as Gs2.Gs2Chat.Model.Room).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -236,7 +239,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -280,7 +284,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -292,7 +297,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Subscribe>(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -340,7 +346,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -389,7 +396,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -402,7 +410,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Subscribe>(
                 (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }

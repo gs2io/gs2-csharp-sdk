@@ -97,6 +97,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PrepareUploadFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PrepareUploadAsync(request)
             );
             var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
@@ -161,6 +163,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PrepareDownloadFuture(request)
                 );
                 yield return future;
@@ -199,6 +202,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PrepareDownloadAsync(request)
             );
             var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
@@ -227,6 +231,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PrepareDownloadByGenerationFuture(request)
                 );
                 yield return future;
@@ -265,6 +270,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PrepareDownloadByGenerationAsync(request)
             );
             var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
@@ -325,7 +331,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Datastore.Model.DataObject>(
                 (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -374,7 +381,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Datastore.Model.DataObject>(
                 (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -387,7 +395,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Datastore.Model.DataObject>(
                 (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }

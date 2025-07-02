@@ -121,7 +121,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        RoomName ?? default
+                        RoomName ?? default,
+                        null
                     ),
                     out var list,
                     out var listCacheContext
@@ -140,7 +141,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            RoomName ?? default
+                            RoomName ?? default,
+                            null
                         )
                     );
                 }
@@ -181,6 +183,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    null,
                     request
                 );
 
@@ -189,7 +192,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            RoomName ?? default
+                            RoomName ?? default,
+                            null
                         ),
                         this._startAt
                     );
@@ -273,7 +277,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                         (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            RoomName ?? default
+                            RoomName ?? default,
+                            null
                        ),
                        "ListMessage"
                    ).LockAsync()) {

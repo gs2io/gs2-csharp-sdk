@@ -124,7 +124,8 @@ namespace Gs2.Gs2Log.Domain.Iterator
                     <Gs2.Gs2Log.Model.InGameLog>
             (
                     (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
-                        NamespaceName
+                        NamespaceName,
+                        null
                     ),
                     out var list
             )) {
@@ -173,14 +174,16 @@ namespace Gs2.Gs2Log.Domain.Iterator
                         this._gs2.Cache,
                         NamespaceName,
                         UserId ?? default,
-                        item.RequestId
+                        item.RequestId,
+                        null
                     );
                 }
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.InGameLog>(
                         (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
-                            NamespaceName
+                            NamespaceName,
+                            null
                         )
                     );
                 }

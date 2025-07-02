@@ -43,12 +43,14 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this DeleteNodeModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteNodeModelMasterRequest request
         ) {
             (null as NodeModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.NodeModelName
+                request.NodeModelName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this DeleteNodeModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteNodeModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this DeleteNodeModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteNodeModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

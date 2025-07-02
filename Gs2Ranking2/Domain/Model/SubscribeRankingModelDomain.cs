@@ -124,6 +124,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetSubscribeRankingModelFuture(request)
                 );
                 yield return future;
@@ -153,6 +154,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetSubscribeRankingModelAsync(request)
             );
             return result?.Item;
@@ -171,7 +173,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -181,6 +184,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
+                    null,
                     () => this.GetFuture(
                         new GetSubscribeRankingModelRequest()
                     )
@@ -205,7 +209,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.SubscribeRankingModel>(
                         (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheKey(
                             this.RankingName
@@ -214,7 +219,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -223,6 +229,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RankingName,
+                    null,
                     () => this.GetAsync(
                         new GetSubscribeRankingModelRequest()
                     )
@@ -259,7 +266,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.RankingName
+                this.RankingName,
+                null
             );
         }
 
@@ -267,7 +275,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheKey(
                     this.RankingName
@@ -302,7 +311,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingModel>(
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.SubscribeRankingModel).CacheKey(
                     this.RankingName

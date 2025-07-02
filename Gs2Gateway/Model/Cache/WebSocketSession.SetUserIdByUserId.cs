@@ -43,12 +43,14 @@ namespace Gs2.Gs2Gateway.Model.Cache
             this SetUserIdByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             SetUserIdByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 self.Item.NamespaceName,
-                self.Item.UserId
+                self.Item.UserId,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             this SetUserIdByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<SetUserIdByUserIdResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             this SetUserIdByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SetUserIdByUserIdResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

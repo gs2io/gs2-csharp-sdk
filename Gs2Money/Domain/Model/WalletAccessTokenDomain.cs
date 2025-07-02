@@ -98,6 +98,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetWalletFuture(request)
                 );
                 yield return future;
@@ -128,6 +129,7 @@ namespace Gs2.Gs2Money.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetWalletAsync(request)
             );
             return result?.Item;
@@ -148,6 +150,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.WithdrawFuture(request)
                 );
                 yield return future;
@@ -181,6 +184,7 @@ namespace Gs2.Gs2Money.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.WithdrawAsync(request)
             );
             var domain = this;
@@ -199,7 +203,8 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Slot
+                    this.Slot,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -210,6 +215,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Slot,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetWalletRequest()
                     )
@@ -235,7 +241,8 @@ namespace Gs2.Gs2Money.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Wallet>(
                         (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Money.Model.Wallet).CacheKey(
                             this.Slot
@@ -245,7 +252,8 @@ namespace Gs2.Gs2Money.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Slot
+                    this.Slot,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -255,6 +263,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Slot,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetWalletRequest()
                     )
@@ -292,7 +301,8 @@ namespace Gs2.Gs2Money.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.Slot
+                this.Slot,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -301,7 +311,8 @@ namespace Gs2.Gs2Money.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Money.Model.Wallet).CacheKey(
                     this.Slot
@@ -337,7 +348,8 @@ namespace Gs2.Gs2Money.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Money.Model.Wallet>(
                 (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Money.Model.Wallet).CacheKey(
                     this.Slot

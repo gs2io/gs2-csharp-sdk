@@ -40,12 +40,14 @@ namespace Gs2.Gs2Money2.Model.Cache
     {
         public static string CacheParentKey(
             this DailyTransactionHistory self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "money2",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "DailyTransactionHistory"
             );
         }
@@ -75,6 +77,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             int? month,
             int? day,
             string currency,
+            int? timeOffset,
             Func<IFuture<DailyTransactionHistory>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<DailyTransactionHistory> self)
@@ -91,7 +94,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                             year,
                             month,
                             day,
-                            currency
+                            currency,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "dailyTransactionHistory") {
                             self.OnComplete(default);
@@ -108,7 +112,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     year,
                     month,
                     day,
-                    currency
+                    currency,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -129,6 +134,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             int? month,
             int? day,
             string currency,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DailyTransactionHistory>> fetchImpl
     #else
@@ -143,7 +149,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     year,
                     month,
                     day,
-                    currency
+                    currency,
+                    timeOffset
                 );
                 return item;
             }
@@ -154,7 +161,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     year,
                     month,
                     day,
-                    currency
+                    currency,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "dailyTransactionHistory") {
                     throw;
@@ -171,11 +179,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             int? year,
             int? month,
             int? day,
-            string currency
+            string currency,
+            int? timeOffset
         ) {
             return cache.Get<DailyTransactionHistory>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     year,
@@ -193,11 +203,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             int? year,
             int? month,
             int? day,
-            string currency
+            string currency,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<DailyTransactionHistory>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     year,
@@ -211,7 +223,8 @@ namespace Gs2.Gs2Money2.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     year,
@@ -231,11 +244,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             int? year,
             int? month,
             int? day,
-            string currency
+            string currency,
+            int? timeOffset
         ) {
             cache.Delete<DailyTransactionHistory>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     year,
@@ -250,11 +265,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DailyTransactionHistory self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<DailyTransactionHistory[]> callback
         ) {
             cache.ListSubscribe<DailyTransactionHistory>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -265,11 +282,13 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DailyTransactionHistory self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<DailyTransactionHistory>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

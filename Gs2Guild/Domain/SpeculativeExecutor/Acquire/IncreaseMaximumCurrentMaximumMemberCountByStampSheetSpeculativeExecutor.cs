@@ -91,7 +91,8 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             request.GuildModelName,
-                            request.GuildName
+                            request.GuildName,
+                            null
                         );
                         return null;
                     });
@@ -137,7 +138,8 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     request.GuildModelName,
-                    request.GuildName
+                    request.GuildName,
+                    null
                 );
                 return null;
             };

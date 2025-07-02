@@ -103,6 +103,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetSendRequestByUserIdFuture(request)
                 );
                 yield return future;
@@ -136,6 +137,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetSendRequestByUserIdAsync(request)
             );
             return result?.Item == null ? null : new SendFriendRequest {
@@ -159,6 +161,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteRequestByUserIdFuture(request)
                 );
                 yield return future;
@@ -199,6 +202,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteRequestByUserIdAsync(request)
                 );
             }
@@ -228,7 +232,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.SendFriendRequest>(
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         this.NamespaceName,
-                        this.UserId
+                        this.UserId,
+                        null
                     ),
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
                         this.TargetUserId
@@ -243,6 +248,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TargetUserId,
+                    null,
                     () => this.GetFuture(
                         new GetSendRequestByUserIdRequest()
                     )
@@ -268,7 +274,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
                             this.TargetUserId
@@ -280,7 +287,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.SendFriendRequest>(
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         this.NamespaceName,
-                        this.UserId
+                        this.UserId,
+                        null
                     ),
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
                         this.TargetUserId
@@ -294,6 +302,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.TargetUserId,
+                    null,
                     () => this.GetAsync(
                         new GetSendRequestByUserIdRequest()
                     )
@@ -331,7 +340,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.TargetUserId
+                this.TargetUserId,
+                null
             );
         }
 
@@ -340,7 +350,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
                     this.TargetUserId
@@ -376,7 +387,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
                     this.TargetUserId

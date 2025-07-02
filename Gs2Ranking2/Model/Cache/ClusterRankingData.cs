@@ -43,7 +43,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string namespaceName,
             string rankingName,
             string clusterName,
-            long? season
+            long? season,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 rankingName,
                 clusterName,
                 season.ToString(),
+                timeOffset?.ToString() ?? "0",
                 "ClusterRankingData"
             );
         }
@@ -75,6 +77,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string clusterName,
             long? season,
             string userId,
+            int? timeOffset,
             Func<IFuture<ClusterRankingData>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<ClusterRankingData> self)
@@ -91,7 +94,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                             rankingName,
                             clusterName,
                             season,
-                            userId
+                            userId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "clusterRankingData") {
                             self.OnComplete(default);
@@ -108,7 +112,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -129,6 +134,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string clusterName,
             long? season,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ClusterRankingData>> fetchImpl
     #else
@@ -143,7 +149,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 return item;
             }
@@ -154,7 +161,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     rankingName,
                     clusterName,
                     season,
-                    userId
+                    userId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "clusterRankingData") {
                     throw;
@@ -171,7 +179,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -181,7 +190,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     userId
@@ -196,7 +206,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -206,7 +217,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     userId
@@ -220,7 +232,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     userId
@@ -237,7 +250,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -247,7 +261,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     userId
@@ -262,6 +277,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
+            int? timeOffset,
             Action<ClusterRankingData[]> callback
         ) {
             cache.ListSubscribe<ClusterRankingData>(
@@ -269,7 +285,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -283,6 +300,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             string rankingName,
             string clusterName,
             long? season,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<ClusterRankingData>(
@@ -290,7 +308,8 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     namespaceName,
                     rankingName,
                     clusterName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 callbackId
             );

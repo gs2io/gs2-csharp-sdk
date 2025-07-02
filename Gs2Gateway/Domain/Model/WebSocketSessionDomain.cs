@@ -112,6 +112,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._wsclient.SetUserIdByUserIdFuture(request)
                 );
                 yield return future;
@@ -144,6 +145,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._wsclient.SetUserIdByUserIdAsync(request)
             );
             var domain = this;
@@ -164,7 +166,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Gateway.Model.WebSocketSession).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -186,7 +189,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var (value, find) = (null as Gs2.Gs2Gateway.Model.WebSocketSession).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                null
             );
             if (find) {
                 return value;
@@ -223,7 +227,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             (null as Gs2.Gs2Gateway.Model.WebSocketSession).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -232,7 +237,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheKey(
                 ),
@@ -267,7 +273,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheKey(
                 ),

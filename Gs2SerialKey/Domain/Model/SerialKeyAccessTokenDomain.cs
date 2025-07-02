@@ -100,6 +100,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UseFuture(request)
                 );
                 yield return future;
@@ -132,6 +133,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UseAsync(request)
             );
             var domain = this;
@@ -149,7 +151,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.SerialKeyCode
+                    this.SerialKeyCode,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -172,7 +175,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.SerialKeyCode
+                this.SerialKeyCode,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -210,7 +214,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.SerialKeyCode
+                this.SerialKeyCode,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -219,7 +224,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheKey(
                     this.SerialKeyCode
@@ -255,7 +261,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
                 (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheKey(
                     this.SerialKeyCode

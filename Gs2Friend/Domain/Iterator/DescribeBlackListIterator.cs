@@ -109,7 +109,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             (
                     (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
                         NamespaceName,
-                        AccessToken?.UserId
+                        AccessToken?.UserId,
+                        this.AccessToken?.TimeOffset
                     ),
                     out var list
             )) {
@@ -148,6 +149,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
+                    this.AccessToken?.TimeOffset,
                     request
                 );
 
@@ -155,7 +157,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.BlackList>(
                         (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                         )
                     );
                 }
@@ -237,7 +240,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<string>(
                         (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
                             NamespaceName,
-                            AccessToken?.UserId
+                            AccessToken?.UserId,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListUserId"
                    ).LockAsync()) {

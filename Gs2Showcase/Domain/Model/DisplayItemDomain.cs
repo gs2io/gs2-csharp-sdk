@@ -106,6 +106,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.BuyByUserIdFuture(request)
                 );
                 yield return future;
@@ -157,6 +158,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.BuyByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -191,7 +193,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.ShowcaseName,
-                    this.DisplayItemId
+                    this.DisplayItemId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -228,7 +231,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.ShowcaseName,
-                this.DisplayItemId
+                this.DisplayItemId,
+                null
             );
             if (find) {
                 return value;
@@ -274,7 +278,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.ShowcaseName,
-                this.DisplayItemId
+                this.DisplayItemId,
+                null
             );
         }
 
@@ -284,7 +289,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheKey(
                     this.DisplayItemId
@@ -321,7 +327,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheKey(
                     this.DisplayItemId

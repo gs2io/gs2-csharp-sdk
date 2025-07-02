@@ -96,6 +96,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetRefundHistoryFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetRefundHistoryAsync(request)
             );
             return result?.Item;
@@ -143,7 +145,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Money2.Model.RefundHistory).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.TransactionId,
+                    null,
                     () => this.GetFuture(
                         new GetRefundHistoryRequest()
                     )
@@ -177,7 +181,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.RefundHistory>(
                         (null as Gs2.Gs2Money2.Model.RefundHistory).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Money2.Model.RefundHistory).CacheKey(
                             this.TransactionId
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Money2.Model.RefundHistory).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.TransactionId
+                    this.TransactionId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -195,6 +201,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.TransactionId,
+                    null,
                     () => this.GetAsync(
                         new GetRefundHistoryRequest()
                     )
@@ -231,7 +238,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             (null as Gs2.Gs2Money2.Model.RefundHistory).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.TransactionId
+                this.TransactionId,
+                null
             );
         }
 
@@ -239,7 +247,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Money2.Model.RefundHistory).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.RefundHistory).CacheKey(
                     this.TransactionId
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Money2.Model.RefundHistory>(
                 (null as Gs2.Gs2Money2.Model.RefundHistory).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.RefundHistory).CacheKey(
                     this.TransactionId

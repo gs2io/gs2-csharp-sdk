@@ -73,6 +73,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 var future = request.InvokeFuture(
                     this.Gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SetTransactionDefaultConfigFuture(request)
                 );
                 yield return future;
@@ -107,6 +108,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             var result = await request.InvokeAsync(
                 this.Gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SetTransactionDefaultConfigAsync(request)
             );
             var newGs2 =  new Core.Domain.Gs2(

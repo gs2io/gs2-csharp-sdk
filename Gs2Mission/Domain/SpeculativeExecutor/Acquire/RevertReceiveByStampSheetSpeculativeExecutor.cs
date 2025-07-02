@@ -88,7 +88,8 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             request.UserId,
-                            request.MissionGroupName
+                            request.MissionGroupName,
+                            null
                         );
                         return null;
                     });
@@ -133,7 +134,8 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     request.UserId,
-                    request.MissionGroupName
+                    request.MissionGroupName,
+                    null
                 );
                 return null;
             };

@@ -40,12 +40,14 @@ namespace Gs2.Gs2Lottery.Model.Cache
     {
         public static string CacheParentKey(
             this LotteryModelMaster self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "lottery",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "LotteryModelMaster"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string lotteryName,
+            int? timeOffset,
             Func<IFuture<LotteryModelMaster>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<LotteryModelMaster> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                         (null as LotteryModelMaster).PutCache(
                             cache,
                             namespaceName,
-                            lotteryName
+                            lotteryName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "lotteryModelMaster") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string lotteryName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<LotteryModelMaster>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
                 (null as LotteryModelMaster).PutCache(
                     cache,
                     namespaceName,
-                    lotteryName
+                    lotteryName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "lotteryModelMaster") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this LotteryModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string lotteryName
+            string lotteryName,
+            int? timeOffset
         ) {
             return cache.Get<LotteryModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     lotteryName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this LotteryModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string lotteryName
+            string lotteryName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<LotteryModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     lotteryName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Lottery.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     lotteryName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this LotteryModelMaster self,
             CacheDatabase cache,
             string namespaceName,
-            string lotteryName
+            string lotteryName,
+            int? timeOffset
         ) {
             cache.Delete<LotteryModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     lotteryName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this LotteryModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<LotteryModelMaster[]> callback
         ) {
             cache.ListSubscribe<LotteryModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Lottery.Model.Cache
             this LotteryModelMaster self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<LotteryModelMaster>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

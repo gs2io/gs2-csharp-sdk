@@ -43,6 +43,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this DescribeStatusesResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeStatusesRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Status>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     cache,
                     request.NamespaceName,
                     userId,
-                    item.PropertyId
+                    item.PropertyId,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this DescribeStatusesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeStatusesResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this DescribeStatusesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeStatusesResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

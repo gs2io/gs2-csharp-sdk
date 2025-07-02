@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this GetFollowResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetFollowRequest request
         ) {
             if (request.WithProfile ?? false) {
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     request.NamespaceName,
                     userId,
                     true,
-                    request.TargetUserId
+                    request.TargetUserId,
+                    timeOffset
                 );
             }
             if (self.Item != null) {
@@ -64,7 +66,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     request.NamespaceName,
                     userId,
                     false,
-                    request.TargetUserId
+                    request.TargetUserId,
+                    timeOffset
                 );
                 new FollowUser {
                     UserId = request.TargetUserId,
@@ -73,7 +76,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     request.NamespaceName,
                     userId,
                     null,
-                    request.TargetUserId
+                    request.TargetUserId,
+                    timeOffset
                 );
                 if (request.WithProfile ?? false) {
                     new PublicProfile {
@@ -82,7 +86,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     }.PutCache(
                         cache,
                         request.NamespaceName,
-                        self.Item.UserId
+                        self.Item.UserId,
+                        timeOffset
                     );
                 }
             }
@@ -93,6 +98,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this GetFollowRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetFollowResult>> invokeImpl
         )
         {
@@ -108,6 +114,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -126,6 +133,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this GetFollowRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetFollowResult>> invokeImpl
     #else
@@ -137,6 +145,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

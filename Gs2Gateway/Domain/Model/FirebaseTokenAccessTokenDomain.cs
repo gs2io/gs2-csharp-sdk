@@ -97,6 +97,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetFirebaseTokenFuture(request)
                 );
                 yield return future;
@@ -128,6 +129,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetFirebaseTokenAsync(request)
             );
             var domain = this;
@@ -149,6 +151,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetFirebaseTokenFuture(request)
                 );
                 yield return future;
@@ -178,6 +181,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetFirebaseTokenAsync(request)
             );
             return result?.Item;
@@ -197,6 +201,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteFirebaseTokenFuture(request)
                 );
                 yield return future;
@@ -231,6 +236,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteFirebaseTokenAsync(request)
                 );
             }
@@ -248,7 +254,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Gateway.Model.FirebaseToken).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -258,6 +265,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetFirebaseTokenRequest()
                     )
@@ -283,7 +291,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Gateway.Model.FirebaseToken>(
                         (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheKey(
                         )
@@ -291,7 +300,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Gateway.Model.FirebaseToken).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -300,6 +310,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetFirebaseTokenRequest()
                     )
@@ -336,7 +347,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             (null as Gs2.Gs2Gateway.Model.FirebaseToken).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -345,7 +357,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheKey(
                 ),
@@ -380,7 +393,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Gateway.Model.FirebaseToken>(
                 (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Gateway.Model.FirebaseToken).CacheKey(
                 ),

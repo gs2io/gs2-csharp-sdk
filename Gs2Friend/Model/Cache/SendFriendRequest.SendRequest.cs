@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this SendRequestResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             SendRequestRequest request
         ) {
             if (userId == null) {
@@ -53,7 +54,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Put(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    self.Item.UserId
+                    self.Item.UserId,
+                    timeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
                     self.Item.TargetUserId
@@ -67,7 +69,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Put(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    self.Item.TargetUserId
+                    self.Item.TargetUserId,
+                    timeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
                     self.Item.UserId
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this SendRequestRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<SendRequestResult>> invokeImpl
         )
         {
@@ -100,6 +104,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -118,6 +123,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this SendRequestRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SendRequestResult>> invokeImpl
     #else
@@ -129,6 +135,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

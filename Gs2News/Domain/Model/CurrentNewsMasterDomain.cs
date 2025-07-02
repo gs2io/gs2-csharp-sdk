@@ -94,6 +94,7 @@ namespace Gs2.Gs2News.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.PrepareUpdateCurrentNewsMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2News.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.PrepareUpdateCurrentNewsMasterAsync(request)
             );
             var domain = this;
@@ -145,6 +147,7 @@ namespace Gs2.Gs2News.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateCurrentNewsMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2News.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateCurrentNewsMasterAsync(request)
             );
             var domain = this;
@@ -193,6 +197,7 @@ namespace Gs2.Gs2News.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.PrepareUpdateCurrentNewsMasterFromGitHubFuture(request)
                 );
@@ -223,6 +228,7 @@ namespace Gs2.Gs2News.Domain.Model
                 .WithNamespaceName(this.NamespaceName);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
+                null,
                 null,
                 () => this._client.PrepareUpdateCurrentNewsMasterFromGitHubAsync(request)
             );

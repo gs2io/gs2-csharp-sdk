@@ -45,6 +45,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this BuyByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             BuyByUserIdRequest request
         ) {
             self.Item.PutCache(
@@ -58,13 +59,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 (null as DisplayItem).CacheParentKey(
                     request.NamespaceName,
                     request.UserId,
-                    request.ShowcaseName
+                    request.ShowcaseName,
+                    timeOffset
                 )
             );
             cache.ClearListCache<Showcase>(
                 (null as Showcase).CacheParentKey(
                     request.NamespaceName,
-                    request.UserId
+                    request.UserId,
+                    timeOffset
                 )
             );
         }
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this BuyByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<BuyByUserIdResult>> invokeImpl
         )
         {
@@ -89,6 +93,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -107,6 +112,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this BuyByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BuyByUserIdResult>> invokeImpl
     #else
@@ -118,6 +124,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

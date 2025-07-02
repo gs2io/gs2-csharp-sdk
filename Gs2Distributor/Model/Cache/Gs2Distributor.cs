@@ -36,6 +36,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.DescribeDistributorModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeDistributorModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.CreateDistributorModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateDistributorModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetDistributorModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetDistributorModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.UpdateDistributorModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateDistributorModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.DeleteDistributorModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteDistributorModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.DescribeDistributorModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeDistributorModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetDistributorModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetDistributorModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetCurrentDistributorMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentDistributorMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.PreUpdateCurrentDistributorMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentDistributorMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.UpdateCurrentDistributorMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentDistributorMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.UpdateCurrentDistributorMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentDistributorMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.DistributeResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DistributeRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.DistributeWithoutOverflowProcessResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DistributeWithoutOverflowProcessRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunVerifyTaskResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunVerifyTaskRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunStampTaskResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunStampTaskRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunStampSheetResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunStampSheetRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunStampSheetExpressResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunStampSheetExpressRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunVerifyTaskWithoutNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunVerifyTaskWithoutNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunStampTaskWithoutNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunStampTaskWithoutNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunStampSheetWithoutNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunStampSheetWithoutNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunStampSheetExpressWithoutNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunStampSheetExpressWithoutNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.SetTransactionDefaultConfigResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetTransactionDefaultConfigRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.SetTransactionDefaultConfigByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetTransactionDefaultConfigByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.FreezeMasterDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FreezeMasterDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.FreezeMasterDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FreezeMasterDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.SignFreezeMasterDataTimestampResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SignFreezeMasterDataTimestampRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.FreezeMasterDataBySignedTimestampResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FreezeMasterDataBySignedTimestampRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.FreezeMasterDataByTimestampResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FreezeMasterDataByTimestampRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.BatchExecuteApiResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.BatchExecuteApiRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.IfExpressionByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.IfExpressionByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.AndExpressionByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AndExpressionByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.OrExpressionByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.OrExpressionByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetStampSheetResultResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetStampSheetResultRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetStampSheetResultByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetStampSheetResultByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.RunTransactionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.RunTransactionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetTransactionResultResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTransactionResultRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     Result.GetTransactionResultByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetTransactionResultByUserIdRequest.FromJson(requestPayload)
                     );
                     break;

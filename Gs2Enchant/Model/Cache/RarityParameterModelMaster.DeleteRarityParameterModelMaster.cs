@@ -43,12 +43,14 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this DeleteRarityParameterModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteRarityParameterModelMasterRequest request
         ) {
             (null as RarityParameterModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.ParameterName
+                request.ParameterName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this DeleteRarityParameterModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteRarityParameterModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this DeleteRarityParameterModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteRarityParameterModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this AddFriendResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             AddFriendRequest request
         ) {
             self.Item?.PutCache(
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 request.NamespaceName,
                 userId,
                 true,
-                request.TargetUserId
+                request.TargetUserId,
+                timeOffset
             );
             if (self.Item != null) {
                 new FriendUser {
@@ -62,7 +64,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     request.NamespaceName,
                     userId,
                     false,
-                    request.TargetUserId
+                    request.TargetUserId,
+                    timeOffset
                 );
                 new FriendUser {
                     UserId = request.TargetUserId,
@@ -71,7 +74,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                     request.NamespaceName,
                     userId,
                     null,
-                    request.TargetUserId
+                    request.TargetUserId,
+                    timeOffset
                 );
             }
         }
@@ -81,6 +85,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this AddFriendRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<AddFriendResult>> invokeImpl
         )
         {
@@ -96,6 +101,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -114,6 +120,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this AddFriendRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<AddFriendResult>> invokeImpl
     #else
@@ -125,6 +132,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

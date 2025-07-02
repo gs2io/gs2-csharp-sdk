@@ -43,6 +43,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             this DescribeSubscribesResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeSubscribesRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Subscribe>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Chat.Model.Cache
                     cache,
                     request.NamespaceName,
                     userId,
-                    item.RoomName
+                    item.RoomName,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             this DescribeSubscribesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeSubscribesResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Chat.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             this DescribeSubscribesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeSubscribesResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

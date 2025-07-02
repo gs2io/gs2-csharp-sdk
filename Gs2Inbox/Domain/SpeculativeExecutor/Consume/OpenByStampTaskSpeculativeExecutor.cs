@@ -88,7 +88,8 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             accessToken.UserId,
-                            request.MessageName
+                            request.MessageName,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });
@@ -133,7 +134,8 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     accessToken.UserId,
-                    request.MessageName
+                    request.MessageName,
+                    accessToken.TimeOffset
                 );
                 return null;
             };

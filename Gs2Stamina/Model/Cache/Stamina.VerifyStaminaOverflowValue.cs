@@ -43,6 +43,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this VerifyStaminaOverflowValueResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             VerifyStaminaOverflowValueRequest request
         ) {
         }
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this VerifyStaminaOverflowValueRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<VerifyStaminaOverflowValueResult>> invokeImpl
         )
         {
@@ -67,6 +69,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -85,6 +88,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this VerifyStaminaOverflowValueRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<VerifyStaminaOverflowValueResult>> invokeImpl
     #else
@@ -96,6 +100,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

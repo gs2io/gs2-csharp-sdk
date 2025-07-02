@@ -41,13 +41,15 @@ namespace Gs2.Gs2Grade.Model.Cache
         public static string CacheParentKey(
             this Status self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "grade",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Status"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             string userId,
             string gradeName,
             string propertyId,
+            int? timeOffset,
             Func<IFuture<Status>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Status> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                             namespaceName,
                             userId,
                             gradeName,
-                            propertyId
+                            propertyId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "status") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                     namespaceName,
                     userId,
                     gradeName,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             string userId,
             string gradeName,
             string propertyId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Status>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                     namespaceName,
                     userId,
                     gradeName,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                     namespaceName,
                     userId,
                     gradeName,
-                    propertyId
+                    propertyId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "status") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2Grade.Model.Cache
             string namespaceName,
             string userId,
             string gradeName,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -170,7 +179,8 @@ namespace Gs2.Gs2Grade.Model.Cache
             return cache.Get<Status>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gradeName,
@@ -185,7 +195,8 @@ namespace Gs2.Gs2Grade.Model.Cache
             string namespaceName,
             string userId,
             string gradeName,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -193,7 +204,8 @@ namespace Gs2.Gs2Grade.Model.Cache
             var (value, find) = cache.Get<Status>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gradeName,
@@ -206,7 +218,8 @@ namespace Gs2.Gs2Grade.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gradeName,
@@ -223,7 +236,8 @@ namespace Gs2.Gs2Grade.Model.Cache
             string namespaceName,
             string userId,
             string gradeName,
-            string propertyId
+            string propertyId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -231,7 +245,8 @@ namespace Gs2.Gs2Grade.Model.Cache
             cache.Delete<Status>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gradeName,
@@ -245,12 +260,14 @@ namespace Gs2.Gs2Grade.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Status[]> callback
         ) {
             cache.ListSubscribe<Status>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -262,12 +279,14 @@ namespace Gs2.Gs2Grade.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Status>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

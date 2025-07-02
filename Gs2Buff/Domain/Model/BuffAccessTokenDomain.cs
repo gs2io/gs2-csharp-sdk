@@ -96,6 +96,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                 var future = request.InvokeFuture(
                     Gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ApplyBuffFuture(request)
                 );
                 yield return future;
@@ -132,6 +133,7 @@ namespace Gs2.Gs2Buff.Domain.Model
             var result = await request.InvokeAsync(
                 Gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ApplyBuffAsync(request)
             );
             this.BuffEntryModels = result?.Items;

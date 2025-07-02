@@ -99,7 +99,8 @@ namespace Gs2.Core.Domain
                 Gs2.Cache,
                 Gs2.TransactionConfiguration.NamespaceName,
                 UserId,
-                result.TransactionId
+                result.TransactionId,
+                null
             );
 
             if (result.VerifyResults != null) {

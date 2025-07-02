@@ -43,6 +43,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DescribeCountersResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeCountersRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Counter>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Mission.Model.Cache
                     cache,
                     request.NamespaceName,
                     userId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DescribeCountersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeCountersResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             this DescribeCountersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeCountersResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

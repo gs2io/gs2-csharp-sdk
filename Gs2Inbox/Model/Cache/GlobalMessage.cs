@@ -40,12 +40,14 @@ namespace Gs2.Gs2Inbox.Model.Cache
     {
         public static string CacheParentKey(
             this GlobalMessage self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "inbox",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "GlobalMessage"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string globalMessageName,
+            int? timeOffset,
             Func<IFuture<GlobalMessage>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<GlobalMessage> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Inbox.Model.Cache
                         (null as GlobalMessage).PutCache(
                             cache,
                             namespaceName,
-                            globalMessageName
+                            globalMessageName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "globalMessage") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Inbox.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    globalMessageName
+                    globalMessageName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string globalMessageName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GlobalMessage>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Inbox.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    globalMessageName
+                    globalMessageName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Inbox.Model.Cache
                 (null as GlobalMessage).PutCache(
                     cache,
                     namespaceName,
-                    globalMessageName
+                    globalMessageName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "globalMessage") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GlobalMessage self,
             CacheDatabase cache,
             string namespaceName,
-            string globalMessageName
+            string globalMessageName,
+            int? timeOffset
         ) {
             return cache.Get<GlobalMessage>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     globalMessageName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GlobalMessage self,
             CacheDatabase cache,
             string namespaceName,
-            string globalMessageName
+            string globalMessageName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     globalMessageName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GlobalMessage self,
             CacheDatabase cache,
             string namespaceName,
-            string globalMessageName
+            string globalMessageName,
+            int? timeOffset
         ) {
             cache.Delete<GlobalMessage>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     globalMessageName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GlobalMessage self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<GlobalMessage[]> callback
         ) {
             cache.ListSubscribe<GlobalMessage>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Inbox.Model.Cache
             this GlobalMessage self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<GlobalMessage>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

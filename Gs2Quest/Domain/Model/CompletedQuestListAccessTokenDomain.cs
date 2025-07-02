@@ -97,6 +97,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetCompletedQuestListFuture(request)
                 );
                 yield return future;
@@ -127,6 +128,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetCompletedQuestListAsync(request)
             );
             return result?.Item;
@@ -142,7 +144,8 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.QuestGroupName
+                    this.QuestGroupName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -153,6 +156,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.QuestGroupName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetCompletedQuestListRequest()
                     )
@@ -178,7 +182,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.CompletedQuestList>(
                         (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheKey(
                             this.QuestGroupName
@@ -188,7 +193,8 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.QuestGroupName
+                    this.QuestGroupName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -198,6 +204,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.QuestGroupName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetCompletedQuestListRequest()
                     )
@@ -235,7 +242,8 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.QuestGroupName
+                this.QuestGroupName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -244,7 +252,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheKey(
                     this.QuestGroupName
@@ -280,7 +289,8 @@ namespace Gs2.Gs2Quest.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheKey(
                     this.QuestGroupName

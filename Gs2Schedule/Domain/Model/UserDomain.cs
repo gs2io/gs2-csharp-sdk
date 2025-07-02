@@ -126,7 +126,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callback,
                 () =>
@@ -170,7 +171,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 callbackId
             );
@@ -182,7 +184,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Trigger>(
                 (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 )
             );
         }
@@ -245,7 +248,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    isInSchedule
+                    isInSchedule,
+                    null
                 ),
                 callback,
                 () =>
@@ -292,7 +296,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    true
+                    true,
+                    null
                 ),
                 callbackId
             );
@@ -300,7 +305,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    false
+                    false,
+                    null
                 ),
                 callbackId
             );
@@ -313,14 +319,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    true
+                    true,
+                    null
                 )
             );
             this._gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    false
+                    false,
+                    null
                 )
             );
         }

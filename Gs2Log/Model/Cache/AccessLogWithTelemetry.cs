@@ -39,12 +39,14 @@ namespace Gs2.Gs2Log.Model.Cache
     {
         public static string CacheParentKey(
             this AccessLogWithTelemetry self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "log",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "AccessLogWithTelemetry"
             );
         }
@@ -72,7 +74,8 @@ namespace Gs2.Gs2Log.Model.Cache
                     {
                         (null as AccessLogWithTelemetry).PutCache(
                             cache,
-                            namespaceName
+                            namespaceName,
+                            null
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "accessLog") {
                             self.OnComplete(default);
@@ -85,7 +88,8 @@ namespace Gs2.Gs2Log.Model.Cache
                 var item = future.Result;
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    null
                 );
                 self.OnComplete(item);
             }
@@ -112,14 +116,16 @@ namespace Gs2.Gs2Log.Model.Cache
                 var item = await fetchImpl();
                 item.PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    null
                 );
                 return item;
             }
             catch (Gs2.Core.Exception.NotFoundException e) {
                 (null as AccessLogWithTelemetry).PutCache(
                     cache,
-                    namespaceName
+                    namespaceName,
+                    null
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "accessLog") {
                     throw;
@@ -132,11 +138,13 @@ namespace Gs2.Gs2Log.Model.Cache
         public static Tuple<AccessLogWithTelemetry, bool> GetCache(
             this AccessLogWithTelemetry self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return cache.Get<AccessLogWithTelemetry>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -146,11 +154,13 @@ namespace Gs2.Gs2Log.Model.Cache
         public static void PutCache(
             this AccessLogWithTelemetry self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 ),
@@ -162,11 +172,13 @@ namespace Gs2.Gs2Log.Model.Cache
         public static void DeleteCache(
             this AccessLogWithTelemetry self,
             CacheDatabase cache,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             cache.Delete<AccessLogWithTelemetry>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -177,11 +189,13 @@ namespace Gs2.Gs2Log.Model.Cache
             this AccessLogWithTelemetry self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<AccessLogWithTelemetry[]> callback
         ) {
             cache.ListSubscribe<AccessLogWithTelemetry>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 
                 callback,
@@ -193,11 +207,13 @@ namespace Gs2.Gs2Log.Model.Cache
             this AccessLogWithTelemetry self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<AccessLogWithTelemetry>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

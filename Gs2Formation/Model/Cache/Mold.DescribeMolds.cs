@@ -43,6 +43,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DescribeMoldsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeMoldsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Mold>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Formation.Model.Cache
                     cache,
                     request.NamespaceName,
                     userId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DescribeMoldsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeMoldsResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this DescribeMoldsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeMoldsResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

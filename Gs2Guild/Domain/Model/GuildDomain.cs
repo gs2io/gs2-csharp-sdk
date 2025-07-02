@@ -127,7 +127,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 callback,
                 () =>
@@ -171,7 +172,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 callbackId
             );
@@ -184,7 +186,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 )
             );
         }
@@ -244,7 +247,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 callback,
                 () =>
@@ -288,7 +292,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 callbackId
             );
@@ -301,7 +306,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.IgnoreUser).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 )
             );
         }
@@ -344,6 +350,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.GetGuildFuture(request)
                 );
                 yield return future;
@@ -374,6 +381,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.GetGuildAsync(request)
             );
             return result?.Item;
@@ -394,6 +402,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.UpdateGuildByGuildNameFuture(request)
                 );
                 yield return future;
@@ -426,6 +435,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.UpdateGuildByGuildNameAsync(request)
             );
             var domain = this;
@@ -448,6 +458,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.DeleteMemberByGuildNameFuture(request)
                 );
                 yield return future;
@@ -483,6 +494,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.DeleteMemberByGuildNameAsync(request)
                 );
             }
@@ -506,6 +518,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.UpdateMemberRoleByGuildNameFuture(request)
                 );
                 yield return future;
@@ -538,6 +551,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.UpdateMemberRoleByGuildNameAsync(request)
             );
             var domain = this;
@@ -560,6 +574,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.BatchUpdateMemberRoleByGuildNameFuture(request)
                 );
                 yield return future;
@@ -592,6 +607,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.BatchUpdateMemberRoleByGuildNameAsync(request)
             );
             var domain = this;
@@ -614,6 +630,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.DeleteGuildByGuildNameFuture(request)
                 );
                 yield return future;
@@ -649,6 +666,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.DeleteGuildByGuildNameAsync(request)
                 );
             }
@@ -672,6 +690,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.IncreaseMaximumCurrentMaximumMemberCountByGuildNameFuture(request)
                 );
                 yield return future;
@@ -704,6 +723,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.IncreaseMaximumCurrentMaximumMemberCountByGuildNameAsync(request)
             );
             var domain = this;
@@ -726,6 +746,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.DecreaseMaximumCurrentMaximumMemberCountByGuildNameFuture(request)
                 );
                 yield return future;
@@ -758,6 +779,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.DecreaseMaximumCurrentMaximumMemberCountByGuildNameAsync(request)
             );
             var domain = this;
@@ -780,6 +802,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.VerifyCurrentMaximumMemberCountByGuildNameFuture(request)
                 );
                 yield return future;
@@ -811,6 +834,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.VerifyCurrentMaximumMemberCountByGuildNameAsync(request)
             );
             var domain = this;
@@ -832,6 +856,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.VerifyIncludeMemberByUserIdFuture(request)
                 );
                 yield return future;
@@ -863,6 +888,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.VerifyIncludeMemberByUserIdAsync(request)
             );
             var domain = this;
@@ -884,6 +910,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.SetMaximumCurrentMaximumMemberCountByGuildNameFuture(request)
                 );
                 yield return future;
@@ -916,6 +943,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.SetMaximumCurrentMaximumMemberCountByGuildNameAsync(request)
             );
             var domain = this;
@@ -939,7 +967,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -950,6 +979,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.GuildModelName,
                     this.GuildName,
+                    null,
                     () => this.GetFuture(
                         new GetGuildRequest()
                             .WithAccessToken(accessToken.Token)
@@ -978,7 +1008,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                null
             );
             if (find) {
                 return value;
@@ -988,6 +1019,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.GuildModelName,
                 this.GuildName,
+                null,
                 () => this.GetAsync(
                     new GetGuildRequest()
                         .WithAccessToken(accessToken.Token)
@@ -1031,7 +1063,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.GuildModelName,
-                this.GuildName
+                this.GuildName,
+                null
             );
         }
 
@@ -1042,7 +1075,8 @@ namespace Gs2.Gs2Guild.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.Guild).CacheKey(
                     this.GuildModelName,
@@ -1068,7 +1102,8 @@ namespace Gs2.Gs2Guild.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Guild.Model.Guild>(
                 (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.Guild).CacheKey(
                     this.GuildModelName,

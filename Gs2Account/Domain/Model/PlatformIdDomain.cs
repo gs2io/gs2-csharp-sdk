@@ -102,6 +102,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetPlatformIdByUserIdFuture(request)
                 );
                 yield return future;
@@ -133,6 +134,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetPlatformIdByUserIdAsync(request)
             );
 
@@ -154,6 +156,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.CreatePlatformIdByUserIdFuture(request)
                 );
                 yield return future;
@@ -186,6 +189,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.CreatePlatformIdByUserIdAsync(request)
             );
             var domain = this;
@@ -208,6 +212,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.FindPlatformIdByUserIdFuture(request)
                 );
                 yield return future;
@@ -239,6 +244,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.FindPlatformIdByUserIdAsync(request)
             );
 
@@ -259,7 +265,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Type ?? default
+                    this.Type ?? default,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -270,6 +277,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Type ?? default,
+                    null,
                     () => this.GetFuture(
                         new GetPlatformIdByUserIdRequest()
                     )
@@ -295,7 +303,8 @@ namespace Gs2.Gs2Account.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.PlatformId>(
                         (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Account.Model.PlatformId).CacheKey(
                             this.Type
@@ -305,7 +314,8 @@ namespace Gs2.Gs2Account.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Type ?? default
+                    this.Type ?? default,
+                    null
                 );
                 if (find) {
                     return value;
@@ -315,6 +325,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Type ?? default,
+                    null,
                     () => this.GetAsync(
                         new GetPlatformIdByUserIdRequest()
                     )
@@ -352,7 +363,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.Type ?? default
+                this.Type ?? default,
+                null
             );
         }
 
@@ -361,7 +373,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheKey(
                     this.Type ?? default
@@ -397,7 +410,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheKey(
                     this.Type ?? default

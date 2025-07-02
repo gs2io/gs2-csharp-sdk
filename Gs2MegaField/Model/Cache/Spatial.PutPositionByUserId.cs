@@ -43,6 +43,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this PutPositionByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             PutPositionByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -50,7 +51,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 self.Item.AreaModelName,
-                self.Item.LayerModelName
+                self.Item.LayerModelName,
+                timeOffset
             );
         }
 
@@ -59,6 +61,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this PutPositionByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<PutPositionByUserIdResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this PutPositionByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PutPositionByUserIdResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -106,7 +106,8 @@ namespace Gs2.Gs2Quest.Domain.Iterator
             (
                     (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
                         NamespaceName,
-                        QuestGroupName
+                        QuestGroupName,
+                        null
                     ),
                     out var list
             )) {
@@ -141,6 +142,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -148,7 +150,8 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Quest.Model.QuestModel>(
                         (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
                             NamespaceName,
-                            QuestGroupName
+                            QuestGroupName,
+                            null
                         )
                     );
                 }
@@ -230,7 +233,8 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.QuestModel>(
                         (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
                             NamespaceName,
-                            QuestGroupName
+                            QuestGroupName,
+                            null
                        ),
                        "ListQuestModel"
                    ).LockAsync()) {

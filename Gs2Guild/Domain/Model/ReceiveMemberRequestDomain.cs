@@ -104,6 +104,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.GetReceiveRequestByGuildNameFuture(request)
                 );
                 yield return future;
@@ -137,6 +138,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.GetReceiveRequestByGuildNameAsync(request)
             );
             var domain = this;
@@ -160,6 +162,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.AcceptRequestByGuildNameFuture(request)
                 );
                 yield return future;
@@ -193,6 +196,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.AcceptRequestByGuildNameAsync(request)
             );
             var domain = this;
@@ -216,6 +220,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
+                    null,
                     () => this._client.RejectRequestByGuildNameFuture(request)
                 );
                 yield return future;
@@ -249,6 +254,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
+                null,
                 () => this._client.RejectRequestByGuildNameAsync(request)
             );
             var domain = this;
@@ -271,7 +277,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.GuildModelName,
                     this.GuildName,
-                    this.FromUserId
+                    this.FromUserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -294,7 +301,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                         (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                             this.NamespaceName,
                             this.GuildModelName,
-                            this.GuildName
+                            this.GuildName,
+                            null
                         ),
                         (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheKey(
                             this.FromUserId
@@ -305,7 +313,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     this.NamespaceName,
                     this.GuildModelName,
                     this.GuildName,
-                    this.FromUserId
+                    this.FromUserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -345,7 +354,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.GuildModelName,
                 this.GuildName,
-                this.FromUserId
+                this.FromUserId,
+                null
             );
         }
 
@@ -355,7 +365,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheKey(
                     this.FromUserId
@@ -392,7 +403,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                     this.NamespaceName,
                     this.GuildModelName,
-                    this.GuildName
+                    this.GuildName,
+                    null
                 ),
                 (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheKey(
                     this.FromUserId

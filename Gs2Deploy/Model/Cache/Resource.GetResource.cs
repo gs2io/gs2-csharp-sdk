@@ -43,12 +43,14 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this GetResourceResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetResourceRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.StackName,
-                request.ResourceName
+                request.ResourceName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this GetResourceRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetResourceResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             this GetResourceRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetResourceResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

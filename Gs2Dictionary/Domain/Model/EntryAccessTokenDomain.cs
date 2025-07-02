@@ -101,6 +101,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetEntryFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetEntryAsync(request)
             );
             return result?.Item;
@@ -151,6 +153,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetEntryWithSignatureFuture(request)
                 );
                 yield return future;
@@ -185,6 +188,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetEntryWithSignatureAsync(request)
             );
             var domain = this;
@@ -209,6 +213,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyEntryFuture(request)
                 );
                 yield return future;
@@ -240,6 +245,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyEntryAsync(request)
             );
             var domain = this;
@@ -256,7 +262,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.EntryModelName
+                    this.EntryModelName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -267,6 +274,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.EntryModelName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetEntryRequest()
                     )
@@ -293,7 +301,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EntryModelName
+                this.EntryModelName,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -303,6 +312,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.EntryModelName,
+                this.AccessToken?.TimeOffset,
                 () => this.GetAsync(
                     new GetEntryRequest()
                 )
@@ -339,7 +349,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EntryModelName
+                this.EntryModelName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -348,7 +359,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheKey(
                     this.EntryModelName
@@ -384,7 +396,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Dictionary.Model.Entry>(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheKey(
                     this.EntryModelName

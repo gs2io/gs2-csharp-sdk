@@ -43,18 +43,21 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this SetRecoverValueByStatusResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             SetRecoverValueByStatusRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.StaminaName
+                self.Item.StaminaName,
+                timeOffset
             );
             self.StaminaModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.StaminaName
+                self.Item.StaminaName,
+                timeOffset
             );
         }
 
@@ -63,6 +66,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this SetRecoverValueByStatusRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<SetRecoverValueByStatusResult>> invokeImpl
         )
         {
@@ -78,6 +82,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +101,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this SetRecoverValueByStatusRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SetRecoverValueByStatusResult>> invokeImpl
     #else
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

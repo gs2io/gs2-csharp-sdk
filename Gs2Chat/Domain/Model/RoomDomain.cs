@@ -139,7 +139,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 ),
                 callback,
                 () =>
@@ -189,7 +190,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 ),
                 callbackId
             );
@@ -203,7 +205,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 )
             );
         }
@@ -262,7 +265,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 ),
                 callback,
                 () =>
@@ -312,7 +316,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 ),
                 callbackId
             );
@@ -326,7 +331,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 )
             );
         }
@@ -361,6 +367,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetRoomFuture(request)
                 );
                 yield return future;
@@ -390,6 +397,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetRoomAsync(request)
             );
             return result?.Item;
@@ -411,6 +419,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UpdateRoomFromBackendFuture(request)
                 );
                 yield return future;
@@ -444,6 +453,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UpdateRoomFromBackendAsync(request)
             );
             var domain = this;
@@ -466,6 +476,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteRoomFromBackendFuture(request)
                 );
                 yield return future;
@@ -501,6 +512,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteRoomFromBackendAsync(request)
                 );
             }
@@ -525,6 +537,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PostByUserIdFuture(request)
                 );
                 yield return future;
@@ -565,6 +578,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PostByUserIdAsync(request)
             );
             var domain = new Gs2.Gs2Chat.Domain.Model.MessageDomain(
@@ -593,7 +607,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -604,6 +619,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
+                    null,
                     () => this.GetFuture(
                         new GetRoomRequest()
                     )
@@ -629,7 +645,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Room>(
                         (null as Gs2.Gs2Chat.Model.Room).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Chat.Model.Room).CacheKey(
                             this.RoomName
@@ -639,7 +656,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.RoomName
+                    this.RoomName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -649,6 +667,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RoomName,
+                    null,
                     () => this.GetAsync(
                         new GetRoomRequest()
                     )
@@ -686,7 +705,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.RoomName
+                this.RoomName,
+                null
             );
         }
 
@@ -695,7 +715,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Chat.Model.Room).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Chat.Model.Room).CacheKey(
                     this.RoomName
@@ -731,7 +752,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Chat.Model.Room>(
                 (null as Gs2.Gs2Chat.Model.Room).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Chat.Model.Room).CacheKey(
                     this.RoomName

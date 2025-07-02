@@ -107,6 +107,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetSubscribeByUserIdFuture(request)
                 );
                 yield return future;
@@ -138,6 +139,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetSubscribeByUserIdAsync(request)
             );
             return result?.Item;
@@ -159,6 +161,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UnsubscribeByUserIdFuture(request)
                 );
                 yield return future;
@@ -192,6 +195,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UnsubscribeByUserIdAsync(request)
             );
             var domain = this;
@@ -215,7 +219,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.UserId,
                     this.CategoryName,
                     this.AdditionalScopeName,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -228,6 +233,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName,
                     this.TargetUserId,
+                    null,
                     () => this.GetFuture(
                         new GetSubscribeByUserIdRequest()
                     )
@@ -255,7 +261,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             this.NamespaceName,
                             this.UserId,
                             this.CategoryName,
-                            this.AdditionalScopeName
+                            this.AdditionalScopeName,
+                            null
                         ),
                         (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheKey(
                             this.TargetUserId
@@ -267,7 +274,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.UserId,
                     this.CategoryName,
                     this.AdditionalScopeName,
-                    this.TargetUserId
+                    this.TargetUserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -279,6 +287,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     this.AdditionalScopeName,
                     this.TargetUserId,
+                    null,
                     () => this.GetAsync(
                         new GetSubscribeByUserIdRequest()
                     )
@@ -318,7 +327,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.UserId,
                 this.CategoryName,
                 this.AdditionalScopeName,
-                this.TargetUserId
+                this.TargetUserId,
+                null
             );
         }
 
@@ -329,7 +339,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheKey(
                     this.TargetUserId
@@ -367,7 +378,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.CategoryName,
-                    this.AdditionalScopeName
+                    this.AdditionalScopeName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking.Model.SubscribeUser).CacheKey(
                     this.TargetUserId

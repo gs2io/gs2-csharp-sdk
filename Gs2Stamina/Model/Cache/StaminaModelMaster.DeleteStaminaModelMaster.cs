@@ -43,12 +43,14 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this DeleteStaminaModelMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteStaminaModelMasterRequest request
         ) {
             (null as StaminaModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.StaminaName
+                request.StaminaName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this DeleteStaminaModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteStaminaModelMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this DeleteStaminaModelMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteStaminaModelMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

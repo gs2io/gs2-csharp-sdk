@@ -96,6 +96,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetShowcaseMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetShowcaseMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     .WithShowcaseName(this.ShowcaseName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateShowcaseMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateShowcaseMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     .WithShowcaseName(this.ShowcaseName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteShowcaseMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteShowcaseMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ShowcaseName,
+                    null,
                     () => this.GetFuture(
                         new GetShowcaseMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
                         (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheKey(
                             this.ShowcaseName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ShowcaseName,
+                    null,
                     () => this.GetAsync(
                         new GetShowcaseMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ShowcaseName
+                this.ShowcaseName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheKey(
                     this.ShowcaseName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
                 (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheKey(
                     this.ShowcaseName

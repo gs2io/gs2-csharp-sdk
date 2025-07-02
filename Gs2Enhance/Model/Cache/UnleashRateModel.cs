@@ -40,12 +40,14 @@ namespace Gs2.Gs2Enhance.Model.Cache
     {
         public static string CacheParentKey(
             this UnleashRateModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "enhance",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "UnleashRateModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string rateName,
+            int? timeOffset,
             Func<IFuture<UnleashRateModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<UnleashRateModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Enhance.Model.Cache
                         (null as UnleashRateModel).PutCache(
                             cache,
                             namespaceName,
-                            rateName
+                            rateName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "unleashRateModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Enhance.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    rateName
+                    rateName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string rateName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UnleashRateModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Enhance.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    rateName
+                    rateName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Enhance.Model.Cache
                 (null as UnleashRateModel).PutCache(
                     cache,
                     namespaceName,
-                    rateName
+                    rateName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "unleashRateModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this UnleashRateModel self,
             CacheDatabase cache,
             string namespaceName,
-            string rateName
+            string rateName,
+            int? timeOffset
         ) {
             return cache.Get<UnleashRateModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rateName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this UnleashRateModel self,
             CacheDatabase cache,
             string namespaceName,
-            string rateName
+            string rateName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rateName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this UnleashRateModel self,
             CacheDatabase cache,
             string namespaceName,
-            string rateName
+            string rateName,
+            int? timeOffset
         ) {
             cache.Delete<UnleashRateModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     rateName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this UnleashRateModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<UnleashRateModel[]> callback
         ) {
             cache.ListSubscribe<UnleashRateModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Enhance.Model.Cache
             this UnleashRateModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<UnleashRateModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

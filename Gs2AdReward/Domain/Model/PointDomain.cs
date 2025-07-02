@@ -96,6 +96,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetPointByUserIdFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetPointByUserIdAsync(request)
             );
             return result?.Item;
@@ -144,6 +146,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AcquirePointByUserIdFuture(request)
                 );
                 yield return future;
@@ -175,6 +178,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AcquirePointByUserIdAsync(request)
             );
             var domain = this;
@@ -196,6 +200,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.ConsumePointByUserIdFuture(request)
                 );
                 yield return future;
@@ -227,6 +232,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.ConsumePointByUserIdAsync(request)
             );
             var domain = this;
@@ -248,6 +254,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeletePointByUserIdFuture(request)
                 );
                 yield return future;
@@ -282,6 +289,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeletePointByUserIdAsync(request)
                 );
             }
@@ -303,7 +311,8 @@ namespace Gs2.Gs2AdReward.Domain.Model
                 var (value, find) = (null as Gs2.Gs2AdReward.Model.Point).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -313,6 +322,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    null,
                     () => this.GetFuture(
                         new GetPointByUserIdRequest()
                     )
@@ -338,7 +348,8 @@ namespace Gs2.Gs2AdReward.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2AdReward.Model.Point>(
                         (null as Gs2.Gs2AdReward.Model.Point).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2AdReward.Model.Point).CacheKey(
                         )
@@ -346,7 +357,8 @@ namespace Gs2.Gs2AdReward.Domain.Model
                 var (value, find) = (null as Gs2.Gs2AdReward.Model.Point).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -355,6 +367,7 @@ namespace Gs2.Gs2AdReward.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    null,
                     () => this.GetAsync(
                         new GetPointByUserIdRequest()
                     )
@@ -391,7 +404,8 @@ namespace Gs2.Gs2AdReward.Domain.Model
             (null as Gs2.Gs2AdReward.Model.Point).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -400,7 +414,8 @@ namespace Gs2.Gs2AdReward.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2AdReward.Model.Point).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2AdReward.Model.Point).CacheKey(
                 ),
@@ -435,7 +450,8 @@ namespace Gs2.Gs2AdReward.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2AdReward.Model.Point>(
                 (null as Gs2.Gs2AdReward.Model.Point).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2AdReward.Model.Point).CacheKey(
                 ),

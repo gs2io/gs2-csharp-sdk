@@ -43,6 +43,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeEventsByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeEventsByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Event>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Money2.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.TransactionId
+                    item.TransactionId,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeEventsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeEventsByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             this DescribeEventsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeEventsByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Money2.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -36,6 +36,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.CreateAccountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateAccountRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.VerifyResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.SignInResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SignInRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.ForgetResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ForgetRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.IssuePasswordResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.IssuePasswordRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.UpdateAccountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateAccountRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.EnableMfaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.EnableMfaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.ChallengeMfaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ChallengeMfaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DisableMfaResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DisableMfaRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,13 +108,23 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DeleteAccountResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteAccountRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getServiceVersion":
+                    Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
                 case "describeProjects":
                     Result.DescribeProjectsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeProjectsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +132,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.CreateProjectResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateProjectRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +140,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetProjectResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetProjectRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +148,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetProjectTokenResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetProjectTokenRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +156,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetProjectTokenByIdentifierResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetProjectTokenByIdentifierRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +164,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.UpdateProjectResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateProjectRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +172,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.ActivateRegionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ActivateRegionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +180,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.WaitActivateRegionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.WaitActivateRegionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +188,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DeleteProjectResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteProjectRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +196,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DescribeBillingMethodsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBillingMethodsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +204,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.CreateBillingMethodResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateBillingMethodRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +212,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetBillingMethodResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBillingMethodRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +220,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.UpdateBillingMethodResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateBillingMethodRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +228,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DeleteBillingMethodResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteBillingMethodRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +236,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DescribeReceiptsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeReceiptsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +244,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DescribeBillingsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBillingsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +252,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DescribeDumpProgressesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeDumpProgressesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +260,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetDumpProgressResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetDumpProgressRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +268,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.WaitDumpUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.WaitDumpUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +276,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.ArchiveDumpUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ArchiveDumpUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +284,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DumpUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +292,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetDumpUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetDumpUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +300,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DescribeCleanProgressesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeCleanProgressesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +308,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetCleanProgressResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCleanProgressRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +316,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.WaitCleanUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.WaitCleanUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +324,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.CleanUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +332,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DescribeImportProgressesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeImportProgressesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +340,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetImportProgressResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetImportProgressRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +348,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.WaitImportUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.WaitImportUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +356,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.PrepareImportUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +364,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.ImportUserDataResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +372,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.DescribeImportErrorLogsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeImportErrorLogsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +380,7 @@ namespace Gs2.Gs2Project.Model.Cache
                     Result.GetImportErrorLogResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetImportErrorLogRequest.FromJson(requestPayload)
                     );
                     break;

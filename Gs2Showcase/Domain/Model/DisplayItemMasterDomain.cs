@@ -91,7 +91,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -112,14 +113,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.DisplayItemMaster>(
                         (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheKey(
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -156,7 +159,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).DeleteCache(
                 this._gs2.Cache,
-                this.NamespaceName
+                this.NamespaceName,
+                null
             );
         }
 
@@ -164,7 +168,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheKey(
                 ),
@@ -198,7 +203,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.DisplayItemMaster>(
                 (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.DisplayItemMaster).CacheKey(
                 ),

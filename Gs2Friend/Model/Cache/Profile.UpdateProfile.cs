@@ -45,12 +45,14 @@ namespace Gs2.Gs2Friend.Model.Cache
             this UpdateProfileResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateProfileRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                userId
+                userId,
+                timeOffset
             );
             if (self.Item != null) {
                 new PublicProfile {
@@ -59,7 +61,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 }.PutCache(
                     cache,
                     request.NamespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 );
             }
         }
@@ -69,6 +72,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this UpdateProfileRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateProfileResult>> invokeImpl
         )
         {
@@ -84,6 +88,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -102,6 +107,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this UpdateProfileRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateProfileResult>> invokeImpl
     #else
@@ -113,6 +119,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

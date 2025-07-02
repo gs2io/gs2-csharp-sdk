@@ -40,12 +40,14 @@ namespace Gs2.Gs2Grade.Model.Cache
     {
         public static string CacheParentKey(
             this GradeModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "grade",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "GradeModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string gradeName,
+            int? timeOffset,
             Func<IFuture<GradeModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<GradeModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                         (null as GradeModel).PutCache(
                             cache,
                             namespaceName,
-                            gradeName
+                            gradeName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "gradeModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    gradeName
+                    gradeName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string gradeName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GradeModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    gradeName
+                    gradeName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Grade.Model.Cache
                 (null as GradeModel).PutCache(
                     cache,
                     namespaceName,
-                    gradeName
+                    gradeName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "gradeModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GradeModel self,
             CacheDatabase cache,
             string namespaceName,
-            string gradeName
+            string gradeName,
+            int? timeOffset
         ) {
             return cache.Get<GradeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gradeName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GradeModel self,
             CacheDatabase cache,
             string namespaceName,
-            string gradeName
+            string gradeName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gradeName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GradeModel self,
             CacheDatabase cache,
             string namespaceName,
-            string gradeName
+            string gradeName,
+            int? timeOffset
         ) {
             cache.Delete<GradeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     gradeName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GradeModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<GradeModel[]> callback
         ) {
             cache.ListSubscribe<GradeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Grade.Model.Cache
             this GradeModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<GradeModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

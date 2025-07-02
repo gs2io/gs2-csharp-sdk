@@ -100,6 +100,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetAuthorizationUrlFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2Account.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetAuthorizationUrlAsync(request)
             );
             var domain = this;
@@ -179,7 +181,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -223,7 +226,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -235,7 +239,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.TakeOver>(
                 (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -300,7 +305,8 @@ namespace Gs2.Gs2Account.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -344,7 +350,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -356,7 +363,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Account.Model.PlatformId>(
                 (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -380,7 +388,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -401,7 +410,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.Account>(
                         (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Account.Model.Account).CacheKey(
                             this.UserId
@@ -410,7 +420,8 @@ namespace Gs2.Gs2Account.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -448,7 +459,8 @@ namespace Gs2.Gs2Account.Domain.Model
             (null as Gs2.Gs2Account.Model.Account).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -456,7 +468,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.Account).CacheKey(
                     this.UserId
@@ -491,7 +504,8 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.Account>(
                 (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Account.Model.Account).CacheKey(
                     this.UserId

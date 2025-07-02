@@ -98,6 +98,7 @@ namespace Gs2.Gs2News.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.WantGrantByUserIdFuture(request)
                 );
                 yield return future;
@@ -136,6 +137,7 @@ namespace Gs2.Gs2News.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.WantGrantByUserIdAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain(
@@ -163,7 +165,8 @@ namespace Gs2.Gs2News.Domain.Model
                 var (value, find) = (null as Gs2.Gs2News.Model.News).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -185,7 +188,8 @@ namespace Gs2.Gs2News.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.News>(
                         (null as Gs2.Gs2News.Model.News).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2News.Model.News).CacheKey(
                         )
@@ -193,7 +197,8 @@ namespace Gs2.Gs2News.Domain.Model
                 var (value, find) = (null as Gs2.Gs2News.Model.News).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -231,7 +236,8 @@ namespace Gs2.Gs2News.Domain.Model
             (null as Gs2.Gs2News.Model.News).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -240,7 +246,8 @@ namespace Gs2.Gs2News.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2News.Model.News).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.News).CacheKey(
                 ),
@@ -275,7 +282,8 @@ namespace Gs2.Gs2News.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2News.Model.News>(
                 (null as Gs2.Gs2News.Model.News).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.News).CacheKey(
                 ),

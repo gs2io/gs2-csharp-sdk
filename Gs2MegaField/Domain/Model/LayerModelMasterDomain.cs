@@ -100,6 +100,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetLayerModelMasterFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetLayerModelMasterAsync(request)
             );
             return result?.Item;
@@ -149,6 +151,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     .WithLayerModelName(this.LayerModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateLayerModelMasterFuture(request)
                 );
@@ -182,6 +185,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateLayerModelMasterAsync(request)
             );
             var domain = this;
@@ -203,6 +207,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     .WithLayerModelName(this.LayerModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteLayerModelMasterFuture(request)
                 );
@@ -239,6 +244,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteLayerModelMasterAsync(request)
                 );
             }
@@ -261,7 +267,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.AreaModelName,
-                    this.LayerModelName
+                    this.LayerModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -272,6 +279,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this.NamespaceName,
                     this.AreaModelName,
                     this.LayerModelName,
+                    null,
                     () => this.GetFuture(
                         new GetLayerModelMasterRequest()
                     )
@@ -297,7 +305,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.LayerModelMaster>(
                         (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheParentKey(
                             this.NamespaceName,
-                            this.AreaModelName
+                            this.AreaModelName,
+                            null
                         ),
                         (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheKey(
                             this.LayerModelName
@@ -307,7 +316,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.AreaModelName,
-                    this.LayerModelName
+                    this.LayerModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -317,6 +327,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this.NamespaceName,
                     this.AreaModelName,
                     this.LayerModelName,
+                    null,
                     () => this.GetAsync(
                         new GetLayerModelMasterRequest()
                     )
@@ -354,7 +365,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.AreaModelName,
-                this.LayerModelName
+                this.LayerModelName,
+                null
             );
         }
 
@@ -363,7 +375,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheParentKey(
                     this.NamespaceName,
-                    this.AreaModelName
+                    this.AreaModelName,
+                    null
                 ),
                 (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheKey(
                     this.LayerModelName
@@ -399,7 +412,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2MegaField.Model.LayerModelMaster>(
                 (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheParentKey(
                     this.NamespaceName,
-                    this.AreaModelName
+                    this.AreaModelName,
+                    null
                 ),
                 (null as Gs2.Gs2MegaField.Model.LayerModelMaster).CacheKey(
                     this.LayerModelName

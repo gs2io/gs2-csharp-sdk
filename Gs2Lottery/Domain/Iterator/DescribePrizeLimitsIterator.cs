@@ -108,7 +108,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
             (
                     (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
                         NamespaceName,
-                        PrizeTableName
+                        PrizeTableName,
+                        null
                     ),
                     out var list
             )) {
@@ -147,6 +148,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -154,7 +156,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     this._gs2.Cache.SetListCached<Gs2.Gs2Lottery.Model.PrizeLimit>(
                         (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
                             NamespaceName,
-                            PrizeTableName
+                            PrizeTableName,
+                            null
                         )
                     );
                 }
@@ -236,7 +239,8 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.PrizeLimit>(
                         (null as Gs2.Gs2Lottery.Model.PrizeLimit).CacheParentKey(
                             NamespaceName,
-                            PrizeTableName
+                            PrizeTableName,
+                            null
                        ),
                        "ListPrizeLimit"
                    ).LockAsync()) {

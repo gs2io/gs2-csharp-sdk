@@ -44,7 +44,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string seasonName,
-            long? season
+            long? season,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -53,6 +54,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 "Singleton",
                 seasonName,
                 season.ToString(),
+                timeOffset?.ToString() ?? "0",
                 "SeasonGathering"
             );
         }
@@ -79,6 +81,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             long? season,
             long? tier,
             string seasonGatheringName,
+            int? timeOffset,
             Func<IFuture<SeasonGathering>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SeasonGathering> self)
@@ -96,7 +99,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                             seasonName,
                             season,
                             tier,
-                            seasonGatheringName
+                            seasonGatheringName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "seasonGathering") {
                             self.OnComplete(default);
@@ -114,7 +118,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     seasonName,
                     season,
                     tier,
-                    seasonGatheringName
+                    seasonGatheringName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -136,6 +141,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             long? season,
             long? tier,
             string seasonGatheringName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SeasonGathering>> fetchImpl
     #else
@@ -151,7 +157,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     seasonName,
                     season,
                     tier,
-                    seasonGatheringName
+                    seasonGatheringName,
+                    timeOffset
                 );
                 return item;
             }
@@ -163,7 +170,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     seasonName,
                     season,
                     tier,
-                    seasonGatheringName
+                    seasonGatheringName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "seasonGathering") {
                     throw;
@@ -181,14 +189,16 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string seasonName,
             long? season,
             long? tier,
-            string seasonGatheringName
+            string seasonGatheringName,
+            int? timeOffset
         ) {
             return cache.Get<SeasonGathering>(
                 self.CacheParentKey(
                     namespaceName,
                     "Singleton",
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     tier,
@@ -205,14 +215,16 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string seasonName,
             long? season,
             long? tier,
-            string seasonGatheringName
+            string seasonGatheringName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<SeasonGathering>(
                 self.CacheParentKey(
                     namespaceName,
                     "Singleton",
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     tier,
@@ -227,7 +239,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     "Singleton",
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     tier,
@@ -246,14 +259,16 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string seasonName,
             long? season,
             long? tier,
-            string seasonGatheringName
+            string seasonGatheringName,
+            int? timeOffset
         ) {
             cache.Delete<SeasonGathering>(
                 self.CacheParentKey(
                     namespaceName,
                     "Singleton",
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                     tier,
@@ -269,6 +284,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string seasonName,
             long? season,
+            int? timeOffset,
             Action<SeasonGathering[]> callback
         ) {
             cache.ListSubscribe<SeasonGathering>(
@@ -276,7 +292,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     "Singleton",
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -290,6 +307,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string seasonName,
             long? season,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SeasonGathering>(
@@ -297,7 +315,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     "Singleton",
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 callbackId
             );

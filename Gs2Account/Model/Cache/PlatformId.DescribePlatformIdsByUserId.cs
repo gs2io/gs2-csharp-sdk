@@ -43,6 +43,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DescribePlatformIdsByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribePlatformIdsByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<PlatformId>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Account.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.Type
+                    item.Type,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DescribePlatformIdsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribePlatformIdsByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Account.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DescribePlatformIdsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribePlatformIdsByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Account.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

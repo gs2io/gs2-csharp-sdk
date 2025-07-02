@@ -43,6 +43,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DescribeIdentifiersResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeIdentifiersRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Identifier>())
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 item.PutCache(
                     cache,
                     request.UserName,
-                    item.ClientId
+                    item.ClientId,
+                    timeOffset
                 );
             }
         }
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DescribeIdentifiersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeIdentifiersResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             this DescribeIdentifiersRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeIdentifiersResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

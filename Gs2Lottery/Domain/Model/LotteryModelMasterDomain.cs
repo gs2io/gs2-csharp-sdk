@@ -96,6 +96,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetLotteryModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetLotteryModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     .WithLotteryName(this.LotteryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateLotteryModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateLotteryModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     .WithLotteryName(this.LotteryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteLotteryModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteLotteryModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.LotteryName
+                    this.LotteryName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.LotteryName,
+                    null,
                     () => this.GetFuture(
                         new GetLotteryModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
                         (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheKey(
                             this.LotteryName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.LotteryName
+                    this.LotteryName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.LotteryName,
+                    null,
                     () => this.GetAsync(
                         new GetLotteryModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.LotteryName
+                this.LotteryName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheKey(
                     this.LotteryName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
                 (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheKey(
                     this.LotteryName

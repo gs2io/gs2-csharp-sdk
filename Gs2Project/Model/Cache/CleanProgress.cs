@@ -41,13 +41,15 @@ namespace Gs2.Gs2Project.Model.Cache
         public static string CacheParentKey(
             this CleanProgress self,
             string accountName,
-            string projectName
+            string projectName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "project",
                 accountName,
                 projectName,
+                timeOffset?.ToString() ?? "0",
                 "CleanProgress"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             string transactionId,
+            int? timeOffset,
             Func<IFuture<CleanProgress>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<CleanProgress> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Project.Model.Cache
                             cache,
                             accountName,
                             projectName,
-                            transactionId
+                            transactionId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "cleanProgress") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     cache,
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Project.Model.Cache
             string accountName,
             string projectName,
             string transactionId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<CleanProgress>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     cache,
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     cache,
                     accountName,
                     projectName,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "cleanProgress") {
                     throw;
@@ -153,12 +161,14 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string projectName,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             return cache.Get<CleanProgress>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -171,12 +181,14 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string projectName,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<CleanProgress>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -188,7 +200,8 @@ namespace Gs2.Gs2Project.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -203,12 +216,14 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string projectName,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             cache.Delete<CleanProgress>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -221,12 +236,14 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string projectName,
+            int? timeOffset,
             Action<CleanProgress[]> callback
         ) {
             cache.ListSubscribe<CleanProgress>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -238,12 +255,14 @@ namespace Gs2.Gs2Project.Model.Cache
             CacheDatabase cache,
             string accountName,
             string projectName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<CleanProgress>(
                 self.CacheParentKey(
                     accountName,
-                    projectName
+                    projectName,
+                    timeOffset
                 ),
                 callbackId
             );

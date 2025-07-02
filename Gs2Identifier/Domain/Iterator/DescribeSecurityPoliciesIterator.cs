@@ -101,6 +101,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                     <Gs2.Gs2Identifier.Model.SecurityPolicy>
             (
                     (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                        null
                     ),
                     out var list
             )) {
@@ -137,12 +138,14 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
                 if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                         (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                            null
                         )
                     );
                 }
@@ -223,6 +226,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                         (null as Gs2.Gs2Identifier.Model.SecurityPolicy).CacheParentKey(
+                            null
                        ),
                        "ListSecurityPolicy"
                    ).LockAsync()) {

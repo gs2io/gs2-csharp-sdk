@@ -98,6 +98,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.RunFuture(request)
                 );
                 yield return future;
@@ -142,6 +143,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.RunAsync(request)
             );
             if (result?.Item != null) {

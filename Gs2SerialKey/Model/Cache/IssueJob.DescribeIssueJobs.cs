@@ -43,6 +43,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this DescribeIssueJobsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeIssueJobsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<IssueJob>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.CampaignModelName,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this DescribeIssueJobsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeIssueJobsResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             this DescribeIssueJobsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeIssueJobsResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

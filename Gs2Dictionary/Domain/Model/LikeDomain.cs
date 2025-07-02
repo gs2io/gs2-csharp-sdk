@@ -100,6 +100,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetLikeByUserIdFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetLikeByUserIdAsync(request)
             );
             return result?.Item;
@@ -149,7 +151,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.EntryModelName
+                    this.EntryModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -160,6 +163,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.EntryModelName,
+                    null,
                     () => this.GetFuture(
                         new GetLikeByUserIdRequest()
                     )
@@ -185,7 +189,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.Like>(
                         (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Dictionary.Model.Like).CacheKey(
                             this.EntryModelName
@@ -195,7 +200,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.EntryModelName
+                    this.EntryModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -205,6 +211,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.EntryModelName,
+                    null,
                     () => this.GetAsync(
                         new GetLikeByUserIdRequest()
                     )
@@ -242,7 +249,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EntryModelName
+                this.EntryModelName,
+                null
             );
         }
 
@@ -251,7 +259,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheKey(
                     this.EntryModelName
@@ -287,7 +296,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Dictionary.Model.Like>(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheKey(
                     this.EntryModelName

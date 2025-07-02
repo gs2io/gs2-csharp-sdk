@@ -43,6 +43,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this ActionResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             ActionRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Spatial>())
@@ -52,7 +53,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                     request.NamespaceName,
                     userId,
                     item.AreaModelName,
-                    item.LayerModelName
+                    item.LayerModelName,
+                    timeOffset
                 );
             }
         }
@@ -62,6 +64,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this ActionRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<ActionResult>> invokeImpl
         )
         {
@@ -77,6 +80,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -95,6 +99,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             this ActionRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<ActionResult>> invokeImpl
     #else
@@ -106,6 +111,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

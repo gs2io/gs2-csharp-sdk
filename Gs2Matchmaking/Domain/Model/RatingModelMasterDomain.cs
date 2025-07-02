@@ -96,6 +96,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetRatingModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetRatingModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     .WithRatingName(this.RatingName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateRatingModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateRatingModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     .WithRatingName(this.RatingName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteRatingModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteRatingModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RatingName
+                    this.RatingName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RatingName,
+                    null,
                     () => this.GetFuture(
                         new GetRatingModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                         (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheKey(
                             this.RatingName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.RatingName
+                    this.RatingName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.RatingName,
+                    null,
                     () => this.GetAsync(
                         new GetRatingModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.RatingName
+                this.RatingName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheKey(
                     this.RatingName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                 (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.RatingModelMaster).CacheKey(
                     this.RatingName

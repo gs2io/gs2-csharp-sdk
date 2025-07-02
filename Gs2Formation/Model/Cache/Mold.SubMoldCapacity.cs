@@ -43,18 +43,21 @@ namespace Gs2.Gs2Formation.Model.Cache
             this SubMoldCapacityResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             SubMoldCapacityRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
             self.MoldModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
         }
 
@@ -63,6 +66,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this SubMoldCapacityRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<SubMoldCapacityResult>> invokeImpl
         )
         {
@@ -78,6 +82,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +101,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this SubMoldCapacityRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SubMoldCapacityResult>> invokeImpl
     #else
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

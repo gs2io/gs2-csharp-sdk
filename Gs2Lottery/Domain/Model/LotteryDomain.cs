@@ -129,7 +129,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    null
                 ),
                 callback,
                 () =>
@@ -174,7 +175,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    null
                 ),
                 callbackId
             );
@@ -187,7 +189,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.LotteryName
+                    this.LotteryName,
+                    null
                 )
             );
         }
@@ -222,6 +225,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DrawByUserIdFuture(request)
                 );
                 yield return future;
@@ -272,6 +276,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DrawByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -306,6 +311,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.PredictionByUserIdFuture(request)
                 );
                 yield return future;
@@ -336,6 +342,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.PredictionByUserIdAsync(request)
             );
             return result?.Items;
@@ -356,6 +363,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DrawWithRandomSeedByUserIdFuture(request)
                 );
                 yield return future;
@@ -406,6 +414,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DrawWithRandomSeedByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

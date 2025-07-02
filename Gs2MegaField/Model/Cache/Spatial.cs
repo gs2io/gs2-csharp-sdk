@@ -41,13 +41,15 @@ namespace Gs2.Gs2MegaField.Model.Cache
         public static string CacheParentKey(
             this Spatial self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "megaField",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "Spatial"
             );
         }
@@ -72,6 +74,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string userId,
             string areaModelName,
             string layerModelName,
+            int? timeOffset,
             Func<IFuture<Spatial>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Spatial> self)
@@ -87,7 +90,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                             namespaceName,
                             userId,
                             areaModelName,
-                            layerModelName
+                            layerModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "spatial") {
                             self.OnComplete(default);
@@ -103,7 +107,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                     namespaceName,
                     userId,
                     areaModelName,
-                    layerModelName
+                    layerModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -123,6 +128,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string userId,
             string areaModelName,
             string layerModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Spatial>> fetchImpl
     #else
@@ -136,7 +142,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                     namespaceName,
                     userId,
                     areaModelName,
-                    layerModelName
+                    layerModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -146,7 +153,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
                     namespaceName,
                     userId,
                     areaModelName,
-                    layerModelName
+                    layerModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "spatial") {
                     throw;
@@ -162,7 +170,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string namespaceName,
             string userId,
             string areaModelName,
-            string layerModelName
+            string layerModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -170,7 +179,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
             return cache.Get<Spatial>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     areaModelName,
@@ -185,7 +195,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string namespaceName,
             string userId,
             string areaModelName,
-            string layerModelName
+            string layerModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -193,7 +204,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     areaModelName,
@@ -210,7 +222,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string namespaceName,
             string userId,
             string areaModelName,
-            string layerModelName
+            string layerModelName,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -218,7 +231,8 @@ namespace Gs2.Gs2MegaField.Model.Cache
             cache.Delete<Spatial>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     areaModelName,
@@ -232,12 +246,14 @@ namespace Gs2.Gs2MegaField.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<Spatial[]> callback
         ) {
             cache.ListSubscribe<Spatial>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -249,12 +265,14 @@ namespace Gs2.Gs2MegaField.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<Spatial>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

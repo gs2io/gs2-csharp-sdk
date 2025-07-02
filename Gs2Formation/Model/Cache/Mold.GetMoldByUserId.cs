@@ -43,18 +43,21 @@ namespace Gs2.Gs2Formation.Model.Cache
             this GetMoldByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetMoldByUserIdRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.UserId,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
             self.MoldModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.MoldModelName
+                request.MoldModelName,
+                timeOffset
             );
         }
 
@@ -63,6 +66,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this GetMoldByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetMoldByUserIdResult>> invokeImpl
         )
         {
@@ -78,6 +82,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -96,6 +101,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             this GetMoldByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetMoldByUserIdResult>> invokeImpl
     #else
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

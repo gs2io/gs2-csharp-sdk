@@ -40,12 +40,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
     {
         public static string CacheParentKey(
             this SeasonModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "matchmaking",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "SeasonModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string seasonName,
+            int? timeOffset,
             Func<IFuture<SeasonModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<SeasonModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                         (null as SeasonModel).PutCache(
                             cache,
                             namespaceName,
-                            seasonName
+                            seasonName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "seasonModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    seasonName
+                    seasonName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string seasonName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<SeasonModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    seasonName
+                    seasonName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 (null as SeasonModel).PutCache(
                     cache,
                     namespaceName,
-                    seasonName
+                    seasonName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "seasonModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this SeasonModel self,
             CacheDatabase cache,
             string namespaceName,
-            string seasonName
+            string seasonName,
+            int? timeOffset
         ) {
             return cache.Get<SeasonModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     seasonName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this SeasonModel self,
             CacheDatabase cache,
             string namespaceName,
-            string seasonName
+            string seasonName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     seasonName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this SeasonModel self,
             CacheDatabase cache,
             string namespaceName,
-            string seasonName
+            string seasonName,
+            int? timeOffset
         ) {
             cache.Delete<SeasonModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     seasonName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this SeasonModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<SeasonModel[]> callback
         ) {
             cache.ListSubscribe<SeasonModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this SeasonModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<SeasonModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

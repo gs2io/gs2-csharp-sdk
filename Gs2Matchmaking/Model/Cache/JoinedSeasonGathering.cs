@@ -43,7 +43,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string seasonName,
-            long? season
+            long? season,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
@@ -52,6 +53,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 userId,
                 seasonName,
                 season.ToString(),
+                timeOffset?.ToString() ?? "0",
                 "JoinedSeasonGathering"
             );
         }
@@ -70,6 +72,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string seasonName,
             long? season,
+            int? timeOffset,
             Func<IFuture<JoinedSeasonGathering>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<JoinedSeasonGathering> self)
@@ -85,7 +88,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                             namespaceName,
                             userId,
                             seasonName,
-                            season
+                            season,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "joinedSeasonGathering") {
                             self.OnComplete(default);
@@ -101,7 +105,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -121,6 +126,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string seasonName,
             long? season,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<JoinedSeasonGathering>> fetchImpl
     #else
@@ -134,7 +140,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 );
                 return item;
             }
@@ -144,7 +151,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "joinedSeasonGathering") {
                     throw;
@@ -160,7 +168,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string seasonName,
-            long? season
+            long? season,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -170,7 +179,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -183,7 +193,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string seasonName,
-            long? season
+            long? season,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -193,7 +204,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                 ),
@@ -208,7 +220,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string namespaceName,
             string userId,
             string seasonName,
-            long? season
+            long? season,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -218,7 +231,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 self.CacheKey(
                 )
@@ -232,6 +246,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string seasonName,
             long? season,
+            int? timeOffset,
             Action<JoinedSeasonGathering[]> callback
         ) {
             cache.ListSubscribe<JoinedSeasonGathering>(
@@ -239,7 +254,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -253,6 +269,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             string seasonName,
             long? season,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<JoinedSeasonGathering>(
@@ -260,7 +277,8 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     namespaceName,
                     userId,
                     seasonName,
-                    season
+                    season,
+                    timeOffset
                 ),
                 callbackId
             );

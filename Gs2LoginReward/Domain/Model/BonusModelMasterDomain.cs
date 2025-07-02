@@ -96,6 +96,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetBonusModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetBonusModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     .WithBonusModelName(this.BonusModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateBonusModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateBonusModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     .WithBonusModelName(this.BonusModelName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteBonusModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteBonusModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var (value, find) = (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.BonusModelName
+                    this.BonusModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.BonusModelName,
+                    null,
                     () => this.GetFuture(
                         new GetBonusModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                         (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheKey(
                             this.BonusModelName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var (value, find) = (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.BonusModelName
+                    this.BonusModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.BonusModelName,
+                    null,
                     () => this.GetAsync(
                         new GetBonusModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.BonusModelName
+                this.BonusModelName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheKey(
                     this.BonusModelName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                 (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2LoginReward.Model.BonusModelMaster).CacheKey(
                     this.BonusModelName

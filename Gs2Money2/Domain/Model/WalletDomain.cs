@@ -103,6 +103,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetWalletByUserIdFuture(request)
                 );
                 yield return future;
@@ -133,6 +134,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetWalletByUserIdAsync(request)
             );
             return result?.Item;
@@ -153,6 +155,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DepositByUserIdFuture(request)
                 );
                 yield return future;
@@ -185,6 +188,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.DepositByUserIdAsync(request)
             );
             var domain = this;
@@ -207,6 +211,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.WithdrawByUserIdFuture(request)
                 );
                 yield return future;
@@ -240,6 +245,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.WithdrawByUserIdAsync(request)
             );
             this.WithdrawTransactions = result.WithdrawTransactions;
@@ -262,7 +268,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.Slot ?? default
+                    this.Slot ?? default,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -273,6 +280,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.Slot ?? default,
+                    null,
                     () => this.GetFuture(
                         new GetWalletByUserIdRequest()
                     )
@@ -299,7 +307,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.Slot ?? default
+                this.Slot ?? default,
+                null
             );
             if (find) {
                 return value;
@@ -309,6 +318,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.Slot ?? default,
+                null,
                 () => this.GetAsync(
                     new GetWalletByUserIdRequest()
                 )
@@ -345,7 +355,8 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.Slot ?? default
+                this.Slot ?? default,
+                null
             );
         }
 
@@ -354,7 +365,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Money2.Model.Wallet).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.Wallet).CacheKey(
                     this.Slot ?? default
@@ -390,7 +402,8 @@ namespace Gs2.Gs2Money2.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Money2.Model.Wallet>(
                 (null as Gs2.Gs2Money2.Model.Wallet).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Money2.Model.Wallet).CacheKey(
                     this.Slot ?? default

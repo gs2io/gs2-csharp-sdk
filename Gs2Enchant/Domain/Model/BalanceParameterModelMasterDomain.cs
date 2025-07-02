@@ -96,6 +96,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetBalanceParameterModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetBalanceParameterModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     .WithParameterName(this.ParameterName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateBalanceParameterModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateBalanceParameterModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     .WithParameterName(this.ParameterName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteBalanceParameterModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteBalanceParameterModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ParameterName
+                    this.ParameterName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ParameterName,
+                    null,
                     () => this.GetFuture(
                         new GetBalanceParameterModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                         (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheKey(
                             this.ParameterName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ParameterName
+                    this.ParameterName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.ParameterName,
+                    null,
                     () => this.GetAsync(
                         new GetBalanceParameterModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ParameterName
+                this.ParameterName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheKey(
                     this.ParameterName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Enchant.Model.BalanceParameterModelMaster).CacheKey(
                     this.ParameterName

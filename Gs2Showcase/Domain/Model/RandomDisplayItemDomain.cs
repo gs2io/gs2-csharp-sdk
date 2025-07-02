@@ -104,6 +104,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetRandomDisplayItemByUserIdFuture(request)
                 );
                 yield return future;
@@ -135,6 +136,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetRandomDisplayItemByUserIdAsync(request)
             );
             return result?.Item;
@@ -156,6 +158,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.RandomShowcaseBuyByUserIdFuture(request)
                 );
                 yield return future;
@@ -207,6 +210,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.RandomShowcaseBuyByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -241,7 +245,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.ShowcaseName,
-                    this.DisplayItemName
+                    this.DisplayItemName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -253,6 +258,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.UserId,
                     this.ShowcaseName,
                     this.DisplayItemName,
+                    null,
                     () => this.GetFuture(
                         new GetRandomDisplayItemByUserIdRequest()
                     )
@@ -279,7 +285,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.ShowcaseName
+                            this.ShowcaseName,
+                            null
                         ),
                         (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheKey(
                             this.DisplayItemName
@@ -290,7 +297,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.ShowcaseName,
-                    this.DisplayItemName
+                    this.DisplayItemName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -301,6 +309,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     this.UserId,
                     this.ShowcaseName,
                     this.DisplayItemName,
+                    null,
                     () => this.GetAsync(
                         new GetRandomDisplayItemByUserIdRequest()
                     )
@@ -339,7 +348,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.ShowcaseName,
-                this.DisplayItemName
+                this.DisplayItemName,
+                null
             );
         }
 
@@ -349,7 +359,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheKey(
                     this.DisplayItemName
@@ -386,7 +397,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.ShowcaseName
+                    this.ShowcaseName,
+                    null
                 ),
                 (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheKey(
                     this.DisplayItemName

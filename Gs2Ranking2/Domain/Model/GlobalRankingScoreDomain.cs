@@ -104,6 +104,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetGlobalRankingScoreByUserIdFuture(request)
                 );
                 yield return future;
@@ -135,6 +136,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetGlobalRankingScoreByUserIdAsync(request)
             );
             return result?.Item;
@@ -156,6 +158,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteGlobalRankingScoreByUserIdFuture(request)
                 );
                 yield return future;
@@ -192,6 +195,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteGlobalRankingScoreByUserIdAsync(request)
                 );
             }
@@ -216,6 +220,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyGlobalRankingScoreByUserIdFuture(request)
                 );
                 yield return future;
@@ -249,6 +254,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyGlobalRankingScoreByUserIdAsync(request)
             );
             var domain = this;
@@ -271,7 +277,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -283,6 +290,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.Season,
                     this.UserId,
+                    null,
                     () => this.GetFuture(
                         new GetGlobalRankingScoreByUserIdRequest()
                     )
@@ -309,7 +317,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.RankingName
+                            this.RankingName,
+                            null
                         ),
                         (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
                             this.Season,
@@ -321,7 +330,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.NamespaceName,
                     this.RankingName,
                     this.Season,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -332,6 +342,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.Season,
                     this.UserId,
+                    null,
                     () => this.GetAsync(
                         new GetGlobalRankingScoreByUserIdRequest()
                     )
@@ -370,7 +381,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.RankingName,
                 this.Season,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -380,7 +392,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
                     this.Season,
@@ -418,7 +431,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.RankingName
+                    this.RankingName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.GlobalRankingScore).CacheKey(
                     this.Season,

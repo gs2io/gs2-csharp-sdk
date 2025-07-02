@@ -45,6 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DeleteRequestResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteRequestRequest request
         ) {
             if (userId == null) {
@@ -55,7 +56,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Delete<ReceiveFriendRequest>(
                 (null as ReceiveFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    self.Item.TargetUserId
+                    self.Item.TargetUserId,
+                    timeOffset
                 ),
                 (null as ReceiveFriendRequest).CacheKey(
                     self.Item.UserId
@@ -66,7 +68,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             cache.Delete<SendFriendRequest>(
                 (null as SendFriendRequest).CacheParentKey(
                     request.NamespaceName,
-                    self.Item.UserId
+                    self.Item.UserId,
+                    timeOffset
                 ),
                 (null as SendFriendRequest).CacheKey(
                     self.Item.TargetUserId
@@ -79,6 +82,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DeleteRequestRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteRequestResult>> invokeImpl
         )
         {
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -112,6 +117,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this DeleteRequestRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteRequestResult>> invokeImpl
     #else
@@ -123,6 +129,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

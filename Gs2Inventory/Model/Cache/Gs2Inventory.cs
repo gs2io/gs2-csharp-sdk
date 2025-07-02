@@ -36,6 +36,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeInventoryModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeInventoryModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CreateInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeInventoryModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeInventoryModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetInventoryModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetInventoryModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeItemModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeItemModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CreateItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeItemModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeItemModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetItemModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetItemModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeSimpleInventoryModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSimpleInventoryModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CreateSimpleInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateSimpleInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateSimpleInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateSimpleInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteSimpleInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSimpleInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeSimpleInventoryModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSimpleInventoryModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleInventoryModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleInventoryModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeSimpleItemModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSimpleItemModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CreateSimpleItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateSimpleItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateSimpleItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateSimpleItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteSimpleItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSimpleItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeSimpleItemModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSimpleItemModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleItemModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleItemModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeBigInventoryModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBigInventoryModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CreateBigInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateBigInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetBigInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBigInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateBigInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateBigInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteBigInventoryModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteBigInventoryModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeBigInventoryModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBigInventoryModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetBigInventoryModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBigInventoryModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeBigItemModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBigItemModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.CreateBigItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateBigItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetBigItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBigItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateBigItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateBigItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteBigItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteBigItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeBigItemModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBigItemModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetBigItemModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBigItemModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetCurrentItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -442,6 +500,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.PreUpdateCurrentItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -449,6 +508,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateCurrentItemModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentItemModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -456,6 +516,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.UpdateCurrentItemModelMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentItemModelMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -463,6 +524,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeInventoriesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeInventoriesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -470,6 +532,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeInventoriesByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeInventoriesByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -477,6 +540,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetInventoryResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetInventoryRequest.FromJson(requestPayload)
                     );
                     break;
@@ -484,6 +548,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetInventoryByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetInventoryByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -491,6 +556,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.AddCapacityByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddCapacityByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -498,6 +564,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.SetCapacityByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetCapacityByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -505,6 +572,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteInventoryByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteInventoryByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -512,6 +580,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyInventoryCurrentMaxCapacityResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyInventoryCurrentMaxCapacityRequest.FromJson(requestPayload)
                     );
                     break;
@@ -519,6 +588,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyInventoryCurrentMaxCapacityByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -526,6 +596,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeItemSetsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeItemSetsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -533,6 +604,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeItemSetsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeItemSetsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -540,6 +612,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetItemSetResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetItemSetRequest.FromJson(requestPayload)
                     );
                     break;
@@ -547,6 +620,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetItemSetByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetItemSetByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -554,6 +628,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetItemWithSignatureResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetItemWithSignatureRequest.FromJson(requestPayload)
                     );
                     break;
@@ -561,6 +636,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetItemWithSignatureByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetItemWithSignatureByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -568,6 +644,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.AcquireItemSetByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcquireItemSetByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -575,6 +652,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.AcquireItemSetWithGradeByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcquireItemSetWithGradeByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -582,6 +660,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ConsumeItemSetResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeItemSetRequest.FromJson(requestPayload)
                     );
                     break;
@@ -589,6 +668,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ConsumeItemSetByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeItemSetByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -596,6 +676,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteItemSetByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteItemSetByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -603,6 +684,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyItemSetResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyItemSetRequest.FromJson(requestPayload)
                     );
                     break;
@@ -610,6 +692,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyItemSetByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyItemSetByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -617,6 +700,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeReferenceOfResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeReferenceOfRequest.FromJson(requestPayload)
                     );
                     break;
@@ -624,6 +708,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeReferenceOfByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeReferenceOfByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -631,6 +716,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetReferenceOfResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetReferenceOfRequest.FromJson(requestPayload)
                     );
                     break;
@@ -638,6 +724,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetReferenceOfByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetReferenceOfByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -645,6 +732,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyReferenceOfResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyReferenceOfRequest.FromJson(requestPayload)
                     );
                     break;
@@ -652,6 +740,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyReferenceOfByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyReferenceOfByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -659,6 +748,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.AddReferenceOfResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddReferenceOfRequest.FromJson(requestPayload)
                     );
                     break;
@@ -666,6 +756,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.AddReferenceOfByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddReferenceOfByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -673,6 +764,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteReferenceOfResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteReferenceOfRequest.FromJson(requestPayload)
                     );
                     break;
@@ -680,6 +772,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteReferenceOfByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteReferenceOfByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -687,6 +780,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeSimpleItemsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSimpleItemsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -694,6 +788,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeSimpleItemsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSimpleItemsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -701,6 +796,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleItemResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleItemRequest.FromJson(requestPayload)
                     );
                     break;
@@ -708,6 +804,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -715,6 +812,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleItemWithSignatureResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleItemWithSignatureRequest.FromJson(requestPayload)
                     );
                     break;
@@ -722,6 +820,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetSimpleItemWithSignatureByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSimpleItemWithSignatureByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -729,6 +828,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.AcquireSimpleItemsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcquireSimpleItemsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -736,6 +836,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ConsumeSimpleItemsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeSimpleItemsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -743,6 +844,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ConsumeSimpleItemsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeSimpleItemsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -750,6 +852,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.SetSimpleItemsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetSimpleItemsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -757,6 +860,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteSimpleItemsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSimpleItemsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -764,6 +868,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifySimpleItemResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifySimpleItemRequest.FromJson(requestPayload)
                     );
                     break;
@@ -771,6 +876,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifySimpleItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifySimpleItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -778,6 +884,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeBigItemsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBigItemsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -785,6 +892,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DescribeBigItemsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeBigItemsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -792,6 +900,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetBigItemResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBigItemRequest.FromJson(requestPayload)
                     );
                     break;
@@ -799,6 +908,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.GetBigItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetBigItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -806,6 +916,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.AcquireBigItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AcquireBigItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -813,6 +924,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ConsumeBigItemResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeBigItemRequest.FromJson(requestPayload)
                     );
                     break;
@@ -820,6 +932,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.ConsumeBigItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ConsumeBigItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -827,6 +940,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.SetBigItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.SetBigItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -834,6 +948,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.DeleteBigItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteBigItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -841,6 +956,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyBigItemResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyBigItemRequest.FromJson(requestPayload)
                     );
                     break;
@@ -848,6 +964,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     Result.VerifyBigItemByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyBigItemByUserIdRequest.FromJson(requestPayload)
                     );
                     break;

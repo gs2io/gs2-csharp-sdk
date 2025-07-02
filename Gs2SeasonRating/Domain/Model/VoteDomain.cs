@@ -100,6 +100,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.CommitVoteFuture(request)
                 );
                 yield return future;
@@ -131,6 +132,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CommitVoteAsync(request)
             );
             var domain = this;
@@ -151,7 +153,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.SeasonName,
-                    this.SessionName
+                    this.SessionName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -172,7 +175,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SeasonRating.Model.Vote>(
                         (null as Gs2.Gs2SeasonRating.Model.Vote).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2SeasonRating.Model.Vote).CacheKey(
                             this.SeasonName,
@@ -183,7 +187,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.SeasonName,
-                    this.SessionName
+                    this.SessionName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -222,7 +227,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.SeasonName,
-                this.SessionName
+                this.SessionName,
+                null
             );
         }
 
@@ -230,7 +236,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2SeasonRating.Model.Vote).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SeasonRating.Model.Vote).CacheKey(
                     this.SeasonName,
@@ -266,7 +273,8 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SeasonRating.Model.Vote>(
                 (null as Gs2.Gs2SeasonRating.Model.Vote).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2SeasonRating.Model.Vote).CacheKey(
                     this.SeasonName,

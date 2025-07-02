@@ -43,6 +43,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this DescribeImportProgressesResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeImportProgressesRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<ImportProgress>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2Project.Model.Cache
                     cache,
                     default,
                     default,
-                    item.TransactionId
+                    item.TransactionId,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this DescribeImportProgressesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeImportProgressesResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Project.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Project.Model.Cache
             this DescribeImportProgressesRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeImportProgressesResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Project.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

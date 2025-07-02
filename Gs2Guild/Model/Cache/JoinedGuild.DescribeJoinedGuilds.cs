@@ -43,6 +43,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeJoinedGuildsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeJoinedGuildsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<JoinedGuild>())
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                     request.NamespaceName,
                     userId,
                     item.GuildModelName,
-                    item.GuildName
+                    item.GuildName,
+                    timeOffset
                 );
             }
         }
@@ -62,6 +64,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeJoinedGuildsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeJoinedGuildsResult>> invokeImpl
         )
         {
@@ -77,6 +80,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -95,6 +99,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this DescribeJoinedGuildsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeJoinedGuildsResult>> invokeImpl
     #else
@@ -106,6 +111,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

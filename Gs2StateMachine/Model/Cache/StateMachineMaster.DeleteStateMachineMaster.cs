@@ -43,12 +43,14 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this DeleteStateMachineMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteStateMachineMasterRequest request
         ) {
             (null as StateMachineMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                self.Item.Version ?? default
+                self.Item.Version ?? default,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this DeleteStateMachineMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteStateMachineMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             this DeleteStateMachineMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteStateMachineMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

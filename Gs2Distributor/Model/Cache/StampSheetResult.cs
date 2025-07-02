@@ -41,13 +41,15 @@ namespace Gs2.Gs2Distributor.Model.Cache
         public static string CacheParentKey(
             this StampSheetResult self,
             string namespaceName,
-            string userId
+            string userId,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "distributor",
                 namespaceName,
                 userId,
+                timeOffset?.ToString() ?? "0",
                 "StampSheetResult"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             string namespaceName,
             string userId,
             string transactionId,
+            int? timeOffset,
             Func<IFuture<StampSheetResult>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<StampSheetResult> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                             cache,
                             namespaceName,
                             userId,
-                            transactionId
+                            transactionId,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "stampSheetResult") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             string namespaceName,
             string userId,
             string transactionId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<StampSheetResult>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     cache,
                     namespaceName,
                     userId,
-                    transactionId
+                    transactionId,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "stampSheetResult") {
                     throw;
@@ -153,7 +161,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,7 +170,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             return cache.Get<StampSheetResult>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -174,7 +184,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -182,7 +193,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             var (value, find) = cache.Get<StampSheetResult>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -194,7 +206,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -209,7 +222,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            string transactionId
+            string transactionId,
+            int? timeOffset
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -217,7 +231,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
             cache.Delete<StampSheetResult>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 self.CacheKey(
                     transactionId
@@ -230,12 +245,14 @@ namespace Gs2.Gs2Distributor.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             Action<StampSheetResult[]> callback
         ) {
             cache.ListSubscribe<StampSheetResult>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -247,12 +264,14 @@ namespace Gs2.Gs2Distributor.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<StampSheetResult>(
                 self.CacheParentKey(
                     namespaceName,
-                    userId
+                    userId,
+                    timeOffset
                 ),
                 callbackId
             );

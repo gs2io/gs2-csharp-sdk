@@ -40,12 +40,14 @@ namespace Gs2.Gs2LoginReward.Model.Cache
     {
         public static string CacheParentKey(
             this BonusModel self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "loginReward",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "BonusModel"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string bonusModelName,
+            int? timeOffset,
             Func<IFuture<BonusModel>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<BonusModel> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                         (null as BonusModel).PutCache(
                             cache,
                             namespaceName,
-                            bonusModelName
+                            bonusModelName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "bonusModel") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    bonusModelName
+                    bonusModelName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string bonusModelName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<BonusModel>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    bonusModelName
+                    bonusModelName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                 (null as BonusModel).PutCache(
                     cache,
                     namespaceName,
-                    bonusModelName
+                    bonusModelName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "bonusModel") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this BonusModel self,
             CacheDatabase cache,
             string namespaceName,
-            string bonusModelName
+            string bonusModelName,
+            int? timeOffset
         ) {
             return cache.Get<BonusModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     bonusModelName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this BonusModel self,
             CacheDatabase cache,
             string namespaceName,
-            string bonusModelName
+            string bonusModelName,
+            int? timeOffset
         ) {
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     bonusModelName
@@ -178,11 +190,13 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this BonusModel self,
             CacheDatabase cache,
             string namespaceName,
-            string bonusModelName
+            string bonusModelName,
+            int? timeOffset
         ) {
             cache.Delete<BonusModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     bonusModelName
@@ -194,11 +208,13 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this BonusModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<BonusModel[]> callback
         ) {
             cache.ListSubscribe<BonusModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -209,11 +225,13 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this BonusModel self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<BonusModel>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

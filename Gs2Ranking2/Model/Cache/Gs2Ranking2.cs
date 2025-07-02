@@ -36,6 +36,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeNamespacesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeNamespacesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetNamespaceStatusResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceStatusRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.UpdateNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteNamespaceResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteNamespaceRequest.FromJson(requestPayload)
                     );
                     break;
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;
@@ -85,6 +92,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -92,6 +100,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CheckDumpUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckDumpUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -99,6 +108,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -106,6 +116,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CheckCleanUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckCleanUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PrepareImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PrepareImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -120,6 +132,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.ImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -127,6 +140,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CheckImportUserDataByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CheckImportUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -134,6 +148,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -141,6 +156,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -148,6 +164,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -155,6 +172,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateGlobalRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGlobalRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -162,6 +180,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -169,6 +188,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.UpdateGlobalRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateGlobalRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -176,6 +196,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteGlobalRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteGlobalRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -183,6 +204,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingScoresResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingScoresRequest.FromJson(requestPayload)
                     );
                     break;
@@ -190,6 +212,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingScoresByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingScoresByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -197,6 +220,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PutGlobalRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PutGlobalRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -204,6 +228,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PutGlobalRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PutGlobalRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -211,6 +236,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -218,6 +244,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -225,6 +252,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteGlobalRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteGlobalRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -232,6 +260,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.VerifyGlobalRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyGlobalRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -239,6 +268,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.VerifyGlobalRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyGlobalRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -246,6 +276,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingReceivedRewardsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingReceivedRewardsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -253,6 +284,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingReceivedRewardsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -260,6 +292,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateGlobalRankingReceivedRewardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGlobalRankingReceivedRewardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -267,6 +300,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateGlobalRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateGlobalRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -274,6 +308,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.ReceiveGlobalRankingReceivedRewardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ReceiveGlobalRankingReceivedRewardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -281,6 +316,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.ReceiveGlobalRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ReceiveGlobalRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -288,6 +324,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingReceivedRewardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingReceivedRewardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -295,6 +332,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -302,6 +340,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteGlobalRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteGlobalRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -309,6 +348,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -316,6 +356,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeGlobalRankingsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeGlobalRankingsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -323,6 +364,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -330,6 +372,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetGlobalRankingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetGlobalRankingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -337,6 +380,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -344,6 +388,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -351,6 +396,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -358,6 +404,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateClusterRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateClusterRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -365,6 +412,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -372,6 +420,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.UpdateClusterRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateClusterRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -379,6 +428,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteClusterRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteClusterRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -386,6 +436,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingScoresResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingScoresRequest.FromJson(requestPayload)
                     );
                     break;
@@ -393,6 +444,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingScoresByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingScoresByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -400,6 +452,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PutClusterRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PutClusterRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -407,6 +460,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PutClusterRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PutClusterRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -414,6 +468,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -421,6 +476,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -428,6 +484,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteClusterRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteClusterRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -435,6 +492,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.VerifyClusterRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyClusterRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -442,6 +500,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.VerifyClusterRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifyClusterRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -449,6 +508,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingReceivedRewardsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingReceivedRewardsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -456,6 +516,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingReceivedRewardsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingReceivedRewardsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -463,6 +524,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateClusterRankingReceivedRewardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateClusterRankingReceivedRewardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -470,6 +532,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateClusterRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateClusterRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -477,6 +540,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.ReceiveClusterRankingReceivedRewardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ReceiveClusterRankingReceivedRewardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -484,6 +548,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.ReceiveClusterRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ReceiveClusterRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -491,6 +556,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingReceivedRewardResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingReceivedRewardRequest.FromJson(requestPayload)
                     );
                     break;
@@ -498,6 +564,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -505,6 +572,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteClusterRankingReceivedRewardByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteClusterRankingReceivedRewardByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -512,6 +580,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -519,6 +588,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeClusterRankingsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeClusterRankingsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -526,6 +596,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -533,6 +604,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetClusterRankingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetClusterRankingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -540,6 +612,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribeRankingModelsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribeRankingModelsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -547,6 +620,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeRankingModelResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeRankingModelRequest.FromJson(requestPayload)
                     );
                     break;
@@ -554,6 +628,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribeRankingModelMastersResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribeRankingModelMastersRequest.FromJson(requestPayload)
                     );
                     break;
@@ -561,6 +636,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.CreateSubscribeRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.CreateSubscribeRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -568,6 +644,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -575,6 +652,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.UpdateSubscribeRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateSubscribeRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -582,6 +660,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteSubscribeRankingModelMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSubscribeRankingModelMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -589,6 +668,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribesResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribesRequest.FromJson(requestPayload)
                     );
                     break;
@@ -596,6 +676,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribesByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribesByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -603,6 +684,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.AddSubscribeResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddSubscribeRequest.FromJson(requestPayload)
                     );
                     break;
@@ -610,6 +692,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.AddSubscribeByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.AddSubscribeByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -617,6 +700,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribeRankingScoresResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribeRankingScoresRequest.FromJson(requestPayload)
                     );
                     break;
@@ -624,6 +708,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribeRankingScoresByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribeRankingScoresByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -631,6 +716,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PutSubscribeRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PutSubscribeRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -638,6 +724,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PutSubscribeRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PutSubscribeRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -645,6 +732,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -652,6 +740,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -659,6 +748,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteSubscribeRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSubscribeRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -666,6 +756,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.VerifySubscribeRankingScoreResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifySubscribeRankingScoreRequest.FromJson(requestPayload)
                     );
                     break;
@@ -673,6 +764,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.VerifySubscribeRankingScoreByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.VerifySubscribeRankingScoreByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -680,6 +772,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribeRankingsResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribeRankingsRequest.FromJson(requestPayload)
                     );
                     break;
@@ -687,6 +780,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DescribeSubscribeRankingsByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DescribeSubscribeRankingsByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -694,6 +788,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeRankingResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeRankingRequest.FromJson(requestPayload)
                     );
                     break;
@@ -701,6 +796,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeRankingByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeRankingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -708,6 +804,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.ExportMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.ExportMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -715,6 +812,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetCurrentRankingMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetCurrentRankingMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -722,6 +820,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.PreUpdateCurrentRankingMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.PreUpdateCurrentRankingMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -729,6 +828,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.UpdateCurrentRankingMasterResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentRankingMasterRequest.FromJson(requestPayload)
                     );
                     break;
@@ -736,6 +836,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.UpdateCurrentRankingMasterFromGitHubResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.UpdateCurrentRankingMasterFromGitHubRequest.FromJson(requestPayload)
                     );
                     break;
@@ -743,6 +844,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeRequest.FromJson(requestPayload)
                     );
                     break;
@@ -750,6 +852,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.GetSubscribeByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetSubscribeByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -757,6 +860,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteSubscribeResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSubscribeRequest.FromJson(requestPayload)
                     );
                     break;
@@ -764,6 +868,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     Result.DeleteSubscribeByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.DeleteSubscribeByUserIdRequest.FromJson(requestPayload)
                     );
                     break;

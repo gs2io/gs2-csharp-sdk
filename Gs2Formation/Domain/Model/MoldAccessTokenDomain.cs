@@ -98,6 +98,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetMoldFuture(request)
                 );
                 yield return future;
@@ -128,6 +129,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetMoldAsync(request)
             );
             return result?.Item;
@@ -148,6 +150,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SubMoldCapacityFuture(request)
                 );
                 yield return future;
@@ -180,6 +183,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SubMoldCapacityAsync(request)
             );
             var domain = this;
@@ -202,6 +206,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteMoldFuture(request)
                 );
                 yield return future;
@@ -237,6 +242,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteMoldAsync(request)
                 );
             }
@@ -289,7 +295,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.Form).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -334,7 +341,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.Form).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -347,7 +355,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (null as Gs2.Gs2Formation.Model.Form).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -373,7 +382,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -384,6 +394,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MoldModelName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetMoldRequest()
                     )
@@ -409,7 +420,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.Mold>(
                         (null as Gs2.Gs2Formation.Model.Mold).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Formation.Model.Mold).CacheKey(
                             this.MoldModelName
@@ -419,7 +431,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.MoldModelName
+                    this.MoldModelName,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -429,6 +442,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.MoldModelName,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetMoldRequest()
                     )
@@ -466,7 +480,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.MoldModelName
+                this.MoldModelName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -475,7 +490,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Formation.Model.Mold).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Formation.Model.Mold).CacheKey(
                     this.MoldModelName
@@ -511,7 +527,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Formation.Model.Mold>(
                 (null as Gs2.Gs2Formation.Model.Mold).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Formation.Model.Mold).CacheKey(
                     this.MoldModelName

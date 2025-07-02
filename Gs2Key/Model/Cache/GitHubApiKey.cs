@@ -40,12 +40,14 @@ namespace Gs2.Gs2Key.Model.Cache
     {
         public static string CacheParentKey(
             this GitHubApiKey self,
-            string namespaceName
+            string namespaceName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "key",
                 namespaceName,
+                timeOffset?.ToString() ?? "0",
                 "GitHubApiKey"
             );
         }
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Key.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string apiKeyName,
+            int? timeOffset,
             Func<IFuture<GitHubApiKey>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<GitHubApiKey> self)
@@ -79,7 +82,8 @@ namespace Gs2.Gs2Key.Model.Cache
                         (null as GitHubApiKey).PutCache(
                             cache,
                             namespaceName,
-                            apiKeyName
+                            apiKeyName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "gitHubApiKey") {
                             self.OnComplete(default);
@@ -93,7 +97,8 @@ namespace Gs2.Gs2Key.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    apiKeyName
+                    apiKeyName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -111,6 +116,7 @@ namespace Gs2.Gs2Key.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string apiKeyName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GitHubApiKey>> fetchImpl
     #else
@@ -122,7 +128,8 @@ namespace Gs2.Gs2Key.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    apiKeyName
+                    apiKeyName,
+                    timeOffset
                 );
                 return item;
             }
@@ -130,7 +137,8 @@ namespace Gs2.Gs2Key.Model.Cache
                 (null as GitHubApiKey).PutCache(
                     cache,
                     namespaceName,
-                    apiKeyName
+                    apiKeyName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "gitHubApiKey") {
                     throw;
@@ -144,11 +152,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this GitHubApiKey self,
             CacheDatabase cache,
             string namespaceName,
-            string apiKeyName
+            string apiKeyName,
+            int? timeOffset
         ) {
             return cache.Get<GitHubApiKey>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     apiKeyName
@@ -160,11 +170,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this GitHubApiKey self,
             CacheDatabase cache,
             string namespaceName,
-            string apiKeyName
+            string apiKeyName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<GitHubApiKey>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     apiKeyName
@@ -175,7 +187,8 @@ namespace Gs2.Gs2Key.Model.Cache
             }
             cache.Put(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     apiKeyName
@@ -189,11 +202,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this GitHubApiKey self,
             CacheDatabase cache,
             string namespaceName,
-            string apiKeyName
+            string apiKeyName,
+            int? timeOffset
         ) {
             cache.Delete<GitHubApiKey>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     apiKeyName
@@ -205,11 +220,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this GitHubApiKey self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             Action<GitHubApiKey[]> callback
         ) {
             cache.ListSubscribe<GitHubApiKey>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -220,11 +237,13 @@ namespace Gs2.Gs2Key.Model.Cache
             this GitHubApiKey self,
             CacheDatabase cache,
             string namespaceName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<GitHubApiKey>(
                 self.CacheParentKey(
-                    namespaceName
+                    namespaceName,
+                    timeOffset
                 ),
                 callbackId
             );

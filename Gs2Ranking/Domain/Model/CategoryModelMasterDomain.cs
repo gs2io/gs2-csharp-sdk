@@ -96,6 +96,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetCategoryModelMasterFuture(request)
                 );
                 yield return future;
@@ -125,6 +126,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetCategoryModelMasterAsync(request)
             );
             return result?.Item;
@@ -143,6 +145,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     .WithCategoryName(this.CategoryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateCategoryModelMasterFuture(request)
                 );
@@ -175,6 +178,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateCategoryModelMasterAsync(request)
             );
             var domain = this;
@@ -195,6 +199,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     .WithCategoryName(this.CategoryName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteCategoryModelMasterFuture(request)
                 );
@@ -230,6 +235,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteCategoryModelMasterAsync(request)
                 );
             }
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.CategoryName
+                    this.CategoryName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -261,6 +268,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CategoryName,
+                    null,
                     () => this.GetFuture(
                         new GetCategoryModelMasterRequest()
                     )
@@ -285,7 +293,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
                         (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheKey(
                             this.CategoryName
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.CategoryName
+                    this.CategoryName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -303,6 +313,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.CategoryName,
+                    null,
                     () => this.GetAsync(
                         new GetCategoryModelMasterRequest()
                     )
@@ -339,7 +350,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.CategoryName
+                this.CategoryName,
+                null
             );
         }
 
@@ -347,7 +359,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheKey(
                     this.CategoryName
@@ -382,7 +395,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking.Model.CategoryModelMaster>(
                 (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2Ranking.Model.CategoryModelMaster).CacheKey(
                     this.CategoryName

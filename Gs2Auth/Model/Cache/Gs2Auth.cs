@@ -36,6 +36,7 @@ namespace Gs2.Gs2Auth.Model.Cache
                     Result.LoginResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.LoginRequest.FromJson(requestPayload)
                     );
                     break;
@@ -43,6 +44,7 @@ namespace Gs2.Gs2Auth.Model.Cache
                     Result.LoginBySignatureResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.LoginBySignatureRequest.FromJson(requestPayload)
                     );
                     break;
@@ -50,6 +52,7 @@ namespace Gs2.Gs2Auth.Model.Cache
                     Result.FederationResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.FederationRequest.FromJson(requestPayload)
                     );
                     break;
@@ -57,6 +60,7 @@ namespace Gs2.Gs2Auth.Model.Cache
                     Result.IssueTimeOffsetTokenByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.IssueTimeOffsetTokenByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
@@ -64,6 +68,7 @@ namespace Gs2.Gs2Auth.Model.Cache
                     Result.GetServiceVersionResult.FromJson(resultPayload).PutCache(
                         cache,
                         userId,
+                        null,
                         Request.GetServiceVersionRequest.FromJson(requestPayload)
                     );
                     break;

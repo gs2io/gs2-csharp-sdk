@@ -45,6 +45,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DescribeJoinedSeasonGatheringsResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeJoinedSeasonGatheringsRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<JoinedSeasonGathering>())
@@ -54,14 +55,16 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     request.NamespaceName,
                     userId,
                     request.SeasonName,
-                    item.Season
+                    item.Season,
+                    timeOffset
                 );
                 item.PutCache(
                     cache,
                     request.NamespaceName,
                     userId,
                     request.SeasonName,
-                    default
+                    default,
+                    timeOffset
                 );
             }
         }
@@ -71,6 +74,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DescribeJoinedSeasonGatheringsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeJoinedSeasonGatheringsResult>> invokeImpl
         )
         {
@@ -86,6 +90,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             this DescribeJoinedSeasonGatheringsRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeJoinedSeasonGatheringsResult>> invokeImpl
     #else
@@ -115,6 +121,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

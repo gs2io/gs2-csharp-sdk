@@ -43,6 +43,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this GetRarityParameterStatusResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetRarityParameterStatusRequest request
         ) {
             self.Item?.PutCache(
@@ -50,7 +51,8 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 request.NamespaceName,
                 userId,
                 self.Item.ParameterName,
-                self.Item.PropertyId
+                self.Item.PropertyId,
+                timeOffset
             );
         }
 
@@ -59,6 +61,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this GetRarityParameterStatusRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetRarityParameterStatusResult>> invokeImpl
         )
         {
@@ -74,6 +77,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -92,6 +96,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             this GetRarityParameterStatusRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetRarityParameterStatusResult>> invokeImpl
     #else
@@ -103,6 +108,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

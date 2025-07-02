@@ -45,13 +45,15 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this GetShowcaseByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetShowcaseByUserIdRequest request
         ) {
             self.Item.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.ShowcaseName
+                request.ShowcaseName,
+                timeOffset
             );
             foreach (var displayItem in self.Item.DisplayItems) {
                 displayItem.PutCache(
@@ -59,14 +61,16 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     request.NamespaceName,
                     request.UserId,
                     request.ShowcaseName,
-                    displayItem.DisplayItemId
+                    displayItem.DisplayItemId,
+                    timeOffset
                 );
             }
             cache.SetListCached<DisplayItem>(
                 (null as DisplayItem).CacheParentKey(
                     request.NamespaceName,
                     request.UserId,
-                    request.ShowcaseName
+                    request.ShowcaseName,
+                    timeOffset
                 )
             );
         }
@@ -76,6 +80,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this GetShowcaseByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetShowcaseByUserIdResult>> invokeImpl
         )
         {
@@ -91,6 +96,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -109,6 +115,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             this GetShowcaseByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetShowcaseByUserIdResult>> invokeImpl
     #else
@@ -120,6 +127,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

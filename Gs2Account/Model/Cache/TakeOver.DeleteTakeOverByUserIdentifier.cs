@@ -45,13 +45,15 @@ namespace Gs2.Gs2Account.Model.Cache
             this DeleteTakeOverByUserIdentifierResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DeleteTakeOverByUserIdentifierRequest request
         ) {
             (null as TakeOver).DeleteCache(
                 cache,
                 request.NamespaceName,
                 self?.Item?.UserId,
-                request.Type ?? default
+                request.Type ?? default,
+                timeOffset
             );
         }
 
@@ -60,6 +62,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DeleteTakeOverByUserIdentifierRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DeleteTakeOverByUserIdentifierResult>> invokeImpl
         )
         {
@@ -75,6 +78,7 @@ namespace Gs2.Gs2Account.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Account.Model.Cache
             this DeleteTakeOverByUserIdentifierRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DeleteTakeOverByUserIdentifierResult>> invokeImpl
     #else
@@ -104,6 +109,7 @@ namespace Gs2.Gs2Account.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

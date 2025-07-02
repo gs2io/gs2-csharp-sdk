@@ -90,7 +90,8 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
                             domain.Cache,
                             request.NamespaceName,
                             accessToken.UserId,
-                            request.Code
+                            request.Code,
+                            accessToken?.TimeOffset
                         );
                         return null;
                     });
@@ -135,7 +136,8 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
                     domain.Cache,
                     request.NamespaceName,
                     accessToken.UserId,
-                    request.Code
+                    request.Code,
+                    accessToken?.TimeOffset
                 );
                 return null;
             };

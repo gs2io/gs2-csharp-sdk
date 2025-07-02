@@ -99,7 +99,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.AreaModelName,
-                    this.LayerModelName
+                    this.LayerModelName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -120,7 +121,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.Layer>(
                         (null as Gs2.Gs2MegaField.Model.Layer).CacheParentKey(
-                            this.NamespaceName
+                            this.NamespaceName,
+                            null
                         ),
                         (null as Gs2.Gs2MegaField.Model.Layer).CacheKey(
                             this.AreaModelName,
@@ -131,7 +133,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.AreaModelName,
-                    this.LayerModelName
+                    this.LayerModelName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -170,7 +173,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.AreaModelName,
-                this.LayerModelName
+                this.LayerModelName,
+                null
             );
         }
 
@@ -178,7 +182,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2MegaField.Model.Layer).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2MegaField.Model.Layer).CacheKey(
                     this.AreaModelName,
@@ -214,7 +219,8 @@ namespace Gs2.Gs2MegaField.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2MegaField.Model.Layer>(
                 (null as Gs2.Gs2MegaField.Model.Layer).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 (null as Gs2.Gs2MegaField.Model.Layer).CacheKey(
                     this.AreaModelName,

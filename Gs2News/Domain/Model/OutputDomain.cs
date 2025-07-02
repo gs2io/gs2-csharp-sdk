@@ -100,6 +100,7 @@ namespace Gs2.Gs2News.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetOutputFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2News.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetOutputAsync(request)
             );
             return result?.Item;
@@ -149,7 +151,8 @@ namespace Gs2.Gs2News.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UploadToken,
-                    this.OutputName
+                    this.OutputName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -160,6 +163,7 @@ namespace Gs2.Gs2News.Domain.Model
                     this.NamespaceName,
                     this.UploadToken,
                     this.OutputName,
+                    null,
                     () => this.GetFuture(
                         new GetOutputRequest()
                     )
@@ -185,7 +189,8 @@ namespace Gs2.Gs2News.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.Output>(
                         (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                             this.NamespaceName,
-                            this.UploadToken
+                            this.UploadToken,
+                            null
                         ),
                         (null as Gs2.Gs2News.Model.Output).CacheKey(
                             this.OutputName
@@ -195,7 +200,8 @@ namespace Gs2.Gs2News.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UploadToken,
-                    this.OutputName
+                    this.OutputName,
+                    null
                 );
                 if (find) {
                     return value;
@@ -205,6 +211,7 @@ namespace Gs2.Gs2News.Domain.Model
                     this.NamespaceName,
                     this.UploadToken,
                     this.OutputName,
+                    null,
                     () => this.GetAsync(
                         new GetOutputRequest()
                     )
@@ -242,7 +249,8 @@ namespace Gs2.Gs2News.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UploadToken,
-                this.OutputName
+                this.OutputName,
+                null
             );
         }
 
@@ -251,7 +259,8 @@ namespace Gs2.Gs2News.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                     this.NamespaceName,
-                    this.UploadToken
+                    this.UploadToken,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.Output).CacheKey(
                     this.OutputName
@@ -287,7 +296,8 @@ namespace Gs2.Gs2News.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2News.Model.Output>(
                 (null as Gs2.Gs2News.Model.Output).CacheParentKey(
                     this.NamespaceName,
-                    this.UploadToken
+                    this.UploadToken,
+                    null
                 ),
                 (null as Gs2.Gs2News.Model.Output).CacheKey(
                     this.OutputName

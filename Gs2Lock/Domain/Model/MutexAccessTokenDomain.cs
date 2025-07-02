@@ -98,6 +98,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.LockFuture(request)
                 );
                 yield return future;
@@ -130,6 +131,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.LockAsync(request)
             );
             var domain = this;
@@ -152,6 +154,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.UnlockFuture(request)
                 );
                 yield return future;
@@ -184,6 +187,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.UnlockAsync(request)
             );
             var domain = this;
@@ -206,6 +210,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetMutexFuture(request)
                 );
                 yield return future;
@@ -236,6 +241,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetMutexAsync(request)
             );
             return result?.Item;
@@ -251,7 +257,8 @@ namespace Gs2.Gs2Lock.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -262,6 +269,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetFuture(
                         new GetMutexRequest()
                     )
@@ -287,7 +295,8 @@ namespace Gs2.Gs2Lock.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lock.Model.Mutex>(
                         (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Lock.Model.Mutex).CacheKey(
                             this.PropertyId
@@ -297,7 +306,8 @@ namespace Gs2.Gs2Lock.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.PropertyId
+                    this.PropertyId,
+                    this.AccessToken?.TimeOffset
                 );
                 if (find) {
                     return value;
@@ -307,6 +317,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.PropertyId,
+                    this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
                         new GetMutexRequest()
                     )
@@ -344,7 +355,8 @@ namespace Gs2.Gs2Lock.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.PropertyId
+                this.PropertyId,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -353,7 +365,8 @@ namespace Gs2.Gs2Lock.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Lock.Model.Mutex).CacheKey(
                     this.PropertyId
@@ -389,7 +402,8 @@ namespace Gs2.Gs2Lock.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Lock.Model.Mutex>(
                 (null as Gs2.Gs2Lock.Model.Mutex).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Lock.Model.Mutex).CacheKey(
                     this.PropertyId

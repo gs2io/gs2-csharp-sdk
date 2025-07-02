@@ -43,6 +43,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this DescribeReceiveStatusesByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             DescribeReceiveStatusesByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<ReceiveStatus>())
@@ -51,7 +52,8 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.BonusModelName
+                    item.BonusModelName,
+                    timeOffset
                 );
             }
         }
@@ -61,6 +63,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this DescribeReceiveStatusesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<DescribeReceiveStatusesByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             this DescribeReceiveStatusesByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<DescribeReceiveStatusesByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

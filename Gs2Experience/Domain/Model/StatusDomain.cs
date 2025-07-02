@@ -107,6 +107,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetStatusByUserIdFuture(request)
                 );
                 yield return future;
@@ -138,6 +139,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetStatusByUserIdAsync(request)
             );
             return result?.Item;
@@ -159,6 +161,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetStatusWithSignatureByUserIdFuture(request)
                 );
                 yield return future;
@@ -194,6 +197,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetStatusWithSignatureByUserIdAsync(request)
             );
             var domain = this;
@@ -219,6 +223,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AddExperienceByUserIdFuture(request)
                 );
                 yield return future;
@@ -252,6 +257,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AddExperienceByUserIdAsync(request)
             );
             var domain = this;
@@ -275,6 +281,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SubExperienceByUserIdFuture(request)
                 );
                 yield return future;
@@ -308,6 +315,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SubExperienceByUserIdAsync(request)
             );
             var domain = this;
@@ -331,6 +339,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetExperienceByUserIdFuture(request)
                 );
                 yield return future;
@@ -364,6 +373,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetExperienceByUserIdAsync(request)
             );
             var domain = this;
@@ -387,6 +397,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.AddRankCapByUserIdFuture(request)
                 );
                 yield return future;
@@ -420,6 +431,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.AddRankCapByUserIdAsync(request)
             );
             var domain = this;
@@ -443,6 +455,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SubRankCapByUserIdFuture(request)
                 );
                 yield return future;
@@ -476,6 +489,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SubRankCapByUserIdAsync(request)
             );
             var domain = this;
@@ -499,6 +513,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.SetRankCapByUserIdFuture(request)
                 );
                 yield return future;
@@ -532,6 +547,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.SetRankCapByUserIdAsync(request)
             );
             var domain = this;
@@ -555,6 +571,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteStatusByUserIdFuture(request)
                 );
                 yield return future;
@@ -591,6 +608,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteStatusByUserIdAsync(request)
                 );
             }
@@ -615,6 +633,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyRankByUserIdFuture(request)
                 );
                 yield return future;
@@ -647,6 +666,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyRankByUserIdAsync(request)
             );
             var domain = this;
@@ -669,6 +689,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.VerifyRankCapByUserIdFuture(request)
                 );
                 yield return future;
@@ -701,6 +722,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.VerifyRankCapByUserIdAsync(request)
             );
             var domain = this;
@@ -723,6 +745,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.MultiplyAcquireActionsByUserIdFuture(request)
                 );
                 yield return future;
@@ -774,6 +797,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.MultiplyAcquireActionsByUserIdAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -808,7 +832,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.ExperienceName,
-                    this.PropertyId
+                    this.PropertyId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -820,6 +845,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.UserId,
                     this.ExperienceName,
                     this.PropertyId,
+                    null,
                     () => this.GetFuture(
                         new GetStatusByUserIdRequest()
                     )
@@ -845,7 +871,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.Status>(
                         (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Experience.Model.Status).CacheKey(
                             this.ExperienceName,
@@ -857,7 +884,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.ExperienceName,
-                    this.PropertyId
+                    this.PropertyId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -868,6 +896,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.UserId,
                     this.ExperienceName,
                     this.PropertyId,
+                    null,
                     () => this.GetAsync(
                         new GetStatusByUserIdRequest()
                     )
@@ -906,7 +935,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.ExperienceName,
-                this.PropertyId
+                this.PropertyId,
+                null
             );
         }
 
@@ -915,7 +945,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Experience.Model.Status).CacheKey(
                     this.ExperienceName,
@@ -952,7 +983,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Experience.Model.Status>(
                 (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Experience.Model.Status).CacheKey(
                     this.ExperienceName,

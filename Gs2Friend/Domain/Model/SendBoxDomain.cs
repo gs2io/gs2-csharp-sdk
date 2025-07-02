@@ -95,7 +95,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Friend.Model.SendBox).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -117,7 +118,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.SendBox>(
                         (null as Gs2.Gs2Friend.Model.SendBox).CacheParentKey(
                             this.NamespaceName,
-                            this.UserId
+                            this.UserId,
+                            null
                         ),
                         (null as Gs2.Gs2Friend.Model.SendBox).CacheKey(
                         )
@@ -125,7 +127,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var (value, find) = (null as Gs2.Gs2Friend.Model.SendBox).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 );
                 if (find) {
                     return value;
@@ -163,7 +166,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             (null as Gs2.Gs2Friend.Model.SendBox).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                null
             );
         }
 
@@ -172,7 +176,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Friend.Model.SendBox).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.SendBox).CacheKey(
                 ),
@@ -207,7 +212,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.SendBox>(
                 (null as Gs2.Gs2Friend.Model.SendBox).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.SendBox).CacheKey(
                 ),

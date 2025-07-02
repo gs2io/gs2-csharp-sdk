@@ -45,6 +45,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             this PushByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             PushByUserIdRequest request
         ) {
             foreach (var item in self.Items ?? Array.Empty<Job>())
@@ -53,7 +54,8 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.UserId,
-                    item.Name
+                    item.Name,
+                    timeOffset
                 );
                 Telemetry.StartJob(item.Name);
             }
@@ -64,6 +66,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             this PushByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<PushByUserIdResult>> invokeImpl
         )
         {
@@ -79,6 +82,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -97,6 +101,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             this PushByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<PushByUserIdResult>> invokeImpl
     #else
@@ -108,6 +113,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

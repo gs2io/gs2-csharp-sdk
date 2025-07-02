@@ -45,6 +45,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this GetSendRequestByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             GetSendRequestByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -52,7 +53,8 @@ namespace Gs2.Gs2Guild.Model.Cache
                 request.NamespaceName,
                 self.Item.UserId,
                 request.GuildModelName,
-                self.Item.TargetGuildName
+                self.Item.TargetGuildName,
+                timeOffset
             );
         }
 
@@ -61,6 +63,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this GetSendRequestByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<GetSendRequestByUserIdResult>> invokeImpl
         )
         {
@@ -76,6 +79,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -94,6 +98,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             this GetSendRequestByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<GetSendRequestByUserIdResult>> invokeImpl
     #else
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Guild.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

@@ -43,12 +43,14 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this UpdateMaxStaminaTableMasterResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             UpdateMaxStaminaTableMasterRequest request
         ) {
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.MaxStaminaTableName
+                request.MaxStaminaTableName,
+                timeOffset
             );
         }
 
@@ -57,6 +59,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this UpdateMaxStaminaTableMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<UpdateMaxStaminaTableMasterResult>> invokeImpl
         )
         {
@@ -72,6 +75,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -90,6 +94,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             this UpdateMaxStaminaTableMasterRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<UpdateMaxStaminaTableMasterResult>> invokeImpl
     #else
@@ -101,6 +106,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

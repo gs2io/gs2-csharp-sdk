@@ -154,7 +154,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLog>(
                 (null as Gs2.Gs2Log.Model.AccessLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () =>
@@ -227,7 +228,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLog>(
                 (null as Gs2.Gs2Log.Model.AccessLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );
@@ -244,7 +246,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.AccessLog>(
                 (null as Gs2.Gs2Log.Model.AccessLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 )
             );
         }
@@ -499,7 +502,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
                 (null as Gs2.Gs2Log.Model.ExecuteStampSheetLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () =>
@@ -577,7 +581,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
                 (null as Gs2.Gs2Log.Model.ExecuteStampSheetLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );
@@ -595,7 +600,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
                 (null as Gs2.Gs2Log.Model.ExecuteStampSheetLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 )
             );
         }
@@ -861,7 +867,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                 (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () =>
@@ -939,7 +946,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                 (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );
@@ -957,7 +965,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                 (null as Gs2.Gs2Log.Model.ExecuteStampTaskLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 )
             );
         }
@@ -1223,7 +1232,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                 (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () =>
@@ -1301,7 +1311,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                 (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );
@@ -1319,7 +1330,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                 (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 )
             );
         }
@@ -1546,7 +1558,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.Insight>(
                 (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () =>
@@ -1588,7 +1601,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.Insight>(
                 (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );
@@ -1599,7 +1613,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.Insight>(
                 (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 )
             );
         }
@@ -1675,7 +1690,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () =>
@@ -1738,7 +1754,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );
@@ -1753,7 +1770,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.AccessLogWithTelemetry>(
                 (null as Gs2.Gs2Log.Model.AccessLogWithTelemetry).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 )
             );
         }
@@ -1802,6 +1820,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.GetNamespaceStatusFuture(request)
                 );
                 yield return future;
@@ -1832,6 +1851,7 @@ namespace Gs2.Gs2Log.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetNamespaceStatusAsync(request)
             );
             var domain = this;
@@ -1851,6 +1871,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.GetNamespaceFuture(request)
                 );
@@ -1880,6 +1901,7 @@ namespace Gs2.Gs2Log.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.GetNamespaceAsync(request)
             );
             return result?.Item;
@@ -1897,6 +1919,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.UpdateNamespaceFuture(request)
                 );
@@ -1928,6 +1951,7 @@ namespace Gs2.Gs2Log.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.UpdateNamespaceAsync(request)
             );
             var domain = this;
@@ -1947,6 +1971,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.DeleteNamespaceFuture(request)
                 );
@@ -1981,6 +2006,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     null,
+                    null,
                     () => this._client.DeleteNamespaceAsync(request)
                 );
             }
@@ -2001,6 +2027,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     .WithNamespaceName(this.NamespaceName);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
+                    null,
                     null,
                     () => this._client.CreateInsightFuture(request)
                 );
@@ -2036,6 +2063,7 @@ namespace Gs2.Gs2Log.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
+                null,
                 () => this._client.CreateInsightAsync(request)
             );
             var domain = new Gs2.Gs2Log.Domain.Model.InsightDomain(
@@ -2059,7 +2087,8 @@ namespace Gs2.Gs2Log.Domain.Model
             {
                 var (value, find) = (null as Gs2.Gs2Log.Model.Namespace).GetCache(
                     this._gs2.Cache,
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -2068,6 +2097,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var future = (null as Gs2.Gs2Log.Model.Namespace).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
+                    null,
                     () => this.GetFuture(
                         new GetNamespaceRequest()
                     )
@@ -2092,7 +2122,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             var (value, find) = (null as Gs2.Gs2Log.Model.Namespace).GetCache(
                 this._gs2.Cache,
-                this.NamespaceName
+                this.NamespaceName,
+                null
             );
             if (find) {
                 return value;
@@ -2100,6 +2131,7 @@ namespace Gs2.Gs2Log.Domain.Model
             return await (null as Gs2.Gs2Log.Model.Namespace).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
+                null,
                 () => this.GetAsync(
                     new GetNamespaceRequest()
                 )
@@ -2134,7 +2166,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             (null as Gs2.Gs2Log.Model.Namespace).DeleteCache(
                 this._gs2.Cache,
-                this.NamespaceName
+                this.NamespaceName,
+                null
             );
         }
 
@@ -2142,6 +2175,7 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Log.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.Namespace).CacheKey(
                     this.NamespaceName
@@ -2176,6 +2210,7 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Log.Model.Namespace>(
                 (null as Gs2.Gs2Log.Model.Namespace).CacheParentKey(
+                    null
                 ),
                 (null as Gs2.Gs2Log.Model.Namespace).CacheKey(
                     this.NamespaceName
@@ -2280,7 +2315,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.InGameLog>(
                 (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callback,
                 () => {}
@@ -2318,7 +2354,8 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.InGameLog>(
                 (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
-                    this.NamespaceName
+                    this.NamespaceName,
+                    null
                 ),
                 callbackId
             );

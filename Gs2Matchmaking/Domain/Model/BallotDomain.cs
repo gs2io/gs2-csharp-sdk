@@ -117,6 +117,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.GetBallotByUserIdFuture(request)
                 );
                 yield return future;
@@ -153,6 +154,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                null,
                 () => this._client.GetBallotByUserIdAsync(request)
             );
             return new SignedBallot {
@@ -176,7 +178,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.RatingName,
-                    this.GatheringName
+                    this.GatheringName,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -188,6 +191,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.UserId,
                     this.RatingName,
                     this.GatheringName,
+                    null,
                     () => this.GetFuture(
                         new GetBallotByUserIdRequest()
                     )
@@ -215,7 +219,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RatingName,
-                this.GatheringName
+                this.GatheringName,
+                null
             );
             if (find) {
                 return value;
@@ -226,6 +231,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.UserId,
                 this.RatingName,
                 this.GatheringName,
+                null,
                 () => this.GetAsync(
                     new GetBallotByUserIdRequest()
                 )
@@ -263,7 +269,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.RatingName,
-                this.GatheringName
+                this.GatheringName,
+                null
             );
         }
 
@@ -272,7 +279,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheKey(
                     this.RatingName,
@@ -309,7 +317,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.SignedBallot>(
                 (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheKey(
                     this.RatingName,

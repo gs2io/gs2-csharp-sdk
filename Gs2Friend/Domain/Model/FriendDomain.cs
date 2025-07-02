@@ -113,6 +113,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteFriendByUserIdFuture(request)
                 );
                 yield return future;
@@ -153,6 +154,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    null,
                     () => this._client.DeleteFriendByUserIdAsync(request)
                 );
             }
@@ -181,7 +183,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile ?? default
+                    this.WithProfile ?? default,
+                    null
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -204,7 +207,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.WithProfile ?? default
+                this.WithProfile ?? default,
+                null
             );
             if (find) {
                 return value;
@@ -242,7 +246,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.WithProfile ?? default
+                this.WithProfile ?? default,
+                null
             );
         }
 
@@ -251,7 +256,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.Friend).CacheKey(
                     this.WithProfile ?? default
@@ -287,7 +293,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.Friend>(
                 (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    null
                 ),
                 (null as Gs2.Gs2Friend.Model.Friend).CacheKey(
                     this.WithProfile ?? default

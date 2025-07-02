@@ -44,6 +44,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this AcquireItemSetWithGradeByUserIdResult self,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             AcquireItemSetWithGradeByUserIdRequest request
         ) {
             self.Item?.PutCache(
@@ -52,26 +53,30 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 self.Item.UserId,
                 self.Item.InventoryName,
                 self.Item.ItemName,
-                self.Item.Name
+                self.Item.Name,
+                timeOffset
             );
             self.Status?.PutCache(
                 cache,
                 Gs2.Gs2Grade.Model.Status.GetNamespaceNameFromGrn(self.Status?.StatusId),
                 self.Item.UserId,
                 self.Status.GradeName,
-                self.Status.PropertyId
+                self.Status.PropertyId,
+                timeOffset
             );
             self.ItemModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.InventoryName,
-                self.Item.ItemName
+                self.Item.ItemName,
+                timeOffset
             );
             self.Inventory?.PutCache(
                 cache,
                 request.NamespaceName,
                 self.Item.UserId,
-                self.Item.InventoryName
+                self.Item.InventoryName,
+                timeOffset
             );
         }
 
@@ -80,6 +85,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this AcquireItemSetWithGradeByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
             Func<IFuture<AcquireItemSetWithGradeByUserIdResult>> invokeImpl
         )
         {
@@ -95,6 +101,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 future.Result.PutCache(
                     cache,
                     userId,
+                    timeOffset,
                     request
                 );
 
@@ -113,6 +120,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             this AcquireItemSetWithGradeByUserIdRequest request,
             CacheDatabase cache,
             string userId,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<AcquireItemSetWithGradeByUserIdResult>> invokeImpl
     #else
@@ -124,6 +132,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             result.PutCache(
                 cache,
                 userId,
+                timeOffset,
                 request
             );
             return result;

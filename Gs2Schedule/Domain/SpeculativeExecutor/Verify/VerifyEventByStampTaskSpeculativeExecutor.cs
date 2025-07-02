@@ -91,7 +91,8 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
                             request.NamespaceName,
                             accessToken.UserId,
                             request.EventName,
-                            true
+                            true,
+                            accessToken.TimeOffset
                         );
                         return null;
                     });

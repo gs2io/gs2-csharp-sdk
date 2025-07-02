@@ -140,7 +140,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                     NamespaceName,
                     AccessToken?.UserId,
                     SeasonName,
-                    default
+                    default,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -222,7 +223,8 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                             NamespaceName,
                             AccessToken?.UserId,
                             SeasonName,
-                            default
+                            default,
+                            this.AccessToken?.TimeOffset
                        ),
                        "ListSeasonGathering"
                    ).LockAsync()) {

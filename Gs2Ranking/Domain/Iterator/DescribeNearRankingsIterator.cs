@@ -116,7 +116,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                         NamespaceName,
                         default,
                         CategoryName + ":NearRanking",
-                        AdditionalScopeName ?? default
+                        AdditionalScopeName ?? default,
+                        null
                     ),
                     out var list
             )) {
@@ -155,6 +156,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 r.PutCache(
                     this._gs2.Cache,
                     null,
+                    null,
                     request
                 );
 
@@ -164,7 +166,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                             NamespaceName,
                             default,
                             CategoryName + ":NearRanking",
-                            AdditionalScopeName ?? default
+                            AdditionalScopeName ?? default,
+                            null
                         )
                     );
                 }
@@ -248,7 +251,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                             NamespaceName,
                             default,
                             CategoryName,
-                            AdditionalScopeName ?? default
+                            AdditionalScopeName ?? default,
+                            null
                        ),
                        "ListRanking"
                    ).LockAsync()) {

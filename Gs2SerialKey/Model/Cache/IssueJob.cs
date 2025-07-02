@@ -41,13 +41,15 @@ namespace Gs2.Gs2SerialKey.Model.Cache
         public static string CacheParentKey(
             this IssueJob self,
             string namespaceName,
-            string campaignModelName
+            string campaignModelName,
+            int? timeOffset
         ) {
             return string.Join(
                 ":",
                 "serialKey",
                 namespaceName,
                 campaignModelName,
+                timeOffset?.ToString() ?? "0",
                 "IssueJob"
             );
         }
@@ -69,6 +71,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             string namespaceName,
             string campaignModelName,
             string issueJobName,
+            int? timeOffset,
             Func<IFuture<IssueJob>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<IssueJob> self)
@@ -83,7 +86,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                             cache,
                             namespaceName,
                             campaignModelName,
-                            issueJobName
+                            issueJobName,
+                            timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "issueJob") {
                             self.OnComplete(default);
@@ -98,7 +102,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                     cache,
                     namespaceName,
                     campaignModelName,
-                    issueJobName
+                    issueJobName,
+                    timeOffset
                 );
                 self.OnComplete(item);
             }
@@ -117,6 +122,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             string namespaceName,
             string campaignModelName,
             string issueJobName,
+            int? timeOffset,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<IssueJob>> fetchImpl
     #else
@@ -129,7 +135,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                     cache,
                     namespaceName,
                     campaignModelName,
-                    issueJobName
+                    issueJobName,
+                    timeOffset
                 );
                 return item;
             }
@@ -138,7 +145,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
                     cache,
                     namespaceName,
                     campaignModelName,
-                    issueJobName
+                    issueJobName,
+                    timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "issueJob") {
                     throw;
@@ -153,12 +161,14 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string campaignModelName,
-            string issueJobName
+            string issueJobName,
+            int? timeOffset
         ) {
             return cache.Get<IssueJob>(
                 self.CacheParentKey(
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     issueJobName
@@ -171,12 +181,14 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string campaignModelName,
-            string issueJobName
+            string issueJobName,
+            int? timeOffset
         ) {
             var (value, find) = cache.Get<IssueJob>(
                 self.CacheParentKey(
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     issueJobName
@@ -188,7 +200,8 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     issueJobName
@@ -203,12 +216,14 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string campaignModelName,
-            string issueJobName
+            string issueJobName,
+            int? timeOffset
         ) {
             cache.Delete<IssueJob>(
                 self.CacheParentKey(
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 ),
                 self.CacheKey(
                     issueJobName
@@ -221,12 +236,14 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string campaignModelName,
+            int? timeOffset,
             Action<IssueJob[]> callback
         ) {
             cache.ListSubscribe<IssueJob>(
                 self.CacheParentKey(
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 ),
                 callback,
                 () => {}
@@ -238,12 +255,14 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string campaignModelName,
+            int? timeOffset,
             ulong callbackId
         ) {
             cache.ListUnsubscribe<IssueJob>(
                 self.CacheParentKey(
                     namespaceName,
-                    campaignModelName
+                    campaignModelName,
+                    timeOffset
                 ),
                 callbackId
             );

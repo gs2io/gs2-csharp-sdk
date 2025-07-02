@@ -96,6 +96,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteEntriesFuture(request)
                 );
                 yield return future;
@@ -134,6 +135,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteEntriesAsync(request)
                 );
                 var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryAccessTokenDomain(
@@ -162,6 +164,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.AddLikesFuture(request)
                 );
                 yield return future;
@@ -197,6 +200,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.AddLikesAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.LikeAccessTokenDomain(
@@ -222,6 +226,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ResetLikesFuture(request)
                 );
                 yield return future;
@@ -252,6 +257,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ResetLikesAsync(request)
             );
             var domain = this;
@@ -272,6 +278,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteLikesFuture(request)
                 );
                 yield return future;
@@ -310,6 +317,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteLikesAsync(request)
                 );
                 var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.LikeAccessTokenDomain(
@@ -365,7 +373,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.Entry>(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -408,7 +417,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.Entry>(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -420,7 +430,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.Entry>(
                 (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
@@ -476,7 +487,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.Like>(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callback,
                 () =>
@@ -519,7 +531,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.Like>(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 ),
                 callbackId
             );
@@ -531,7 +544,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.Like>(
                 (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
                 )
             );
         }
