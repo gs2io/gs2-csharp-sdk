@@ -90,6 +90,7 @@ namespace Gs2.Core.Domain
             
             if (!skipCallback) {
                 Gs2.UpdateCacheFromJobResult(
+                    null,
                     job,
                     result
                 );

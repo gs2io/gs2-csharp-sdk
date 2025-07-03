@@ -8,18 +8,18 @@ namespace Gs2.Core.Domain
     {
         public string NamespaceName { get; set; }
         [Obsolete("Use ConsumeActionEventHandler property instead.")]
-        public Action<CacheDatabase, string, string, string, string> StampTaskEventHandler => ConsumeActionEventHandler;
+        public Action<CacheDatabase, string, int?, string, string, string> StampTaskEventHandler => ConsumeActionEventHandler;
         [Obsolete("Use AcquireActionEventHandler property instead.")]
-        public Action<CacheDatabase, string, string, string, string> StampSheetEventHandler => AcquireActionEventHandler;
-        public Action<CacheDatabase, string, string, string, string> VerifyActionEventHandler { get; set; }
-        public Action<CacheDatabase, string, string, string, string> ConsumeActionEventHandler { get; set; }
-        public Action<CacheDatabase, string, string, string, string> AcquireActionEventHandler { get; set; }
+        public Action<CacheDatabase, string, int?, string, string, string> StampSheetEventHandler => AcquireActionEventHandler;
+        public Action<CacheDatabase, string, int?, string, string, string> VerifyActionEventHandler { get; set; }
+        public Action<CacheDatabase, string, int?, string, string, string> ConsumeActionEventHandler { get; set; }
+        public Action<CacheDatabase, string, int?, string, string, string> AcquireActionEventHandler { get; set; }
 
         private TransactionConfiguration(
             string namespaceName,
-            Action<CacheDatabase, string, string, string, string> verifyActionEventHandler,
-            Action<CacheDatabase, string, string, string, string> consumeActionEventHandler,
-            Action<CacheDatabase, string, string, string, string> acquireActionEventHandler
+            Action<CacheDatabase, string, int?, string, string, string> verifyActionEventHandler,
+            Action<CacheDatabase, string, int?, string, string, string> consumeActionEventHandler,
+            Action<CacheDatabase, string, int?, string, string, string> acquireActionEventHandler
         ) {
             this.NamespaceName = namespaceName;
             this.VerifyActionEventHandler = verifyActionEventHandler;
@@ -34,9 +34,9 @@ namespace Gs2.Core.Domain
         public class TransactionConfigurationBuilder {
 
             private string NamespaceName { get; set; }
-            private Action<CacheDatabase, string, string, string, string> VerifyActionEventHandler { get; set; }
-            private Action<CacheDatabase, string, string, string, string> ConsumeActionEventHandler { get; set; }
-            private Action<CacheDatabase, string, string, string, string> AcquireActionEventHandler { get; set; }
+            private Action<CacheDatabase, string, int?, string, string, string> VerifyActionEventHandler { get; set; }
+            private Action<CacheDatabase, string, int?, string, string, string> ConsumeActionEventHandler { get; set; }
+            private Action<CacheDatabase, string, int?, string, string, string> AcquireActionEventHandler { get; set; }
 
             internal TransactionConfigurationBuilder(){}
 
@@ -45,24 +45,24 @@ namespace Gs2.Core.Domain
                 return this;
             }
             [Obsolete("Use WithConsumeActionEventHandler property instead.")]
-            public TransactionConfigurationBuilder WithStampTaskEventHandler(Action<CacheDatabase, string, string, string, string> stampTaskEventHandler) {
+            public TransactionConfigurationBuilder WithStampTaskEventHandler(Action<CacheDatabase, string, int?, string, string, string> stampTaskEventHandler) {
                 this.ConsumeActionEventHandler = stampTaskEventHandler;
                 return this;
             }
             [Obsolete("Use WithAcquireActionEventHandler property instead.")]
-            public TransactionConfigurationBuilder WithStampSheetEventHandler(Action<CacheDatabase, string, string, string, string> stampSheetEventHandler) {
+            public TransactionConfigurationBuilder WithStampSheetEventHandler(Action<CacheDatabase, string, int?, string, string, string> stampSheetEventHandler) {
                 this.AcquireActionEventHandler = stampSheetEventHandler;
                 return this;
             }
-            public TransactionConfigurationBuilder WithVerifyActionEventHandler(Action<CacheDatabase, string, string, string, string> verifyActionEventHandler) {
+            public TransactionConfigurationBuilder WithVerifyActionEventHandler(Action<CacheDatabase, string, int?, string, string, string> verifyActionEventHandler) {
                 this.VerifyActionEventHandler = verifyActionEventHandler;
                 return this;
             }
-            public TransactionConfigurationBuilder WithConsumeActionEventHandler(Action<CacheDatabase, string, string, string, string> consumeActionEventHandler) {
+            public TransactionConfigurationBuilder WithConsumeActionEventHandler(Action<CacheDatabase, string, int?, string, string, string> consumeActionEventHandler) {
                 this.ConsumeActionEventHandler = consumeActionEventHandler;
                 return this;
             }
-            public TransactionConfigurationBuilder WithAcquireActionEventHandler(Action<CacheDatabase, string, string, string, string> acquireActionEventHandler) {
+            public TransactionConfigurationBuilder WithAcquireActionEventHandler(Action<CacheDatabase, string, int?, string, string, string> acquireActionEventHandler) {
                 this.AcquireActionEventHandler = acquireActionEventHandler;
                 return this;
             }

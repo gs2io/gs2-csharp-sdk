@@ -91,6 +91,7 @@ namespace Gs2.Core.Domain
             
             if (!skipCallback) {
                 Gs2.UpdateCacheFromJobResult(
+                    this.AccessToken?.TimeOffset,
                     job,
                     new JobResultBody {
                         TryNumber = result.TryNumber,

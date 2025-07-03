@@ -234,6 +234,7 @@ namespace Gs2.Gs2Distributor.Domain
 
         public void UpdateCacheFromStampSheet(
                 string transactionId,
+                int? timeOffset,
                 string method,
                 string request,
                 string result
@@ -242,6 +243,7 @@ namespace Gs2.Gs2Distributor.Domain
 
         public void UpdateCacheFromStampTask(
                 string taskId,
+                int? timeOffset,
                 string method,
                 string request,
                 string result
@@ -250,6 +252,7 @@ namespace Gs2.Gs2Distributor.Domain
 
         public void UpdateCacheFromJobResult(
                 string method,
+                int? timeOffset,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {

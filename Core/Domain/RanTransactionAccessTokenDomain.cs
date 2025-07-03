@@ -125,6 +125,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
                         Gs2.Cache,
                         this._transactionId + "[" + i + "]",
+                        AccessToken?.TimeOffset,
                         consumeActionResult.Action,
                         consumeActionResult.VerifyRequest,
                         consumeActionResult.VerifyResult
@@ -138,6 +139,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
                         Gs2.Cache,
                         this._transactionId + "[" + i + "]",
+                        AccessToken?.TimeOffset,
                         consumeActionResult.Action,
                         consumeActionResult.ConsumeRequest,
                         consumeActionResult.ConsumeResult
@@ -151,6 +153,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(
                         Gs2.Cache,
                         this._transactionId,
+                        AccessToken?.TimeOffset,
                         acquireResult.Action,
                         acquireResult.AcquireRequest,
                         acquireResult.AcquireResult
@@ -196,6 +199,7 @@ namespace Gs2.Core.Domain
                             Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
                                 Gs2.Cache,
                                 this._transactionId + "[" + i + "]",
+                                AccessToken?.TimeOffset,
                                 consumeActionResult.Action,
                                 consumeActionResult.VerifyRequest,
                                 consumeActionResult.VerifyResult
@@ -212,6 +216,7 @@ namespace Gs2.Core.Domain
                             Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
                                 Gs2.Cache,
                                 this._transactionId + "[" + i + "]",
+                                AccessToken?.TimeOffset,
                                 consumeActionResult.Action,
                                 consumeActionResult.ConsumeRequest,
                                 consumeActionResult.ConsumeResult
@@ -229,6 +234,7 @@ namespace Gs2.Core.Domain
                             Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(
                                 Gs2.Cache,
                                 this._transactionId,
+                                AccessToken?.TimeOffset,
                                 acquireResult.Action,
                                 acquireResult.AcquireRequest,
                                 acquireResult.AcquireResult

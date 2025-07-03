@@ -92,6 +92,7 @@ namespace Gs2.Core.Domain
                             Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
                                 Gs2.Cache,
                                 this._transactionId + "[" + i + "]",
+                                null,
                                 verifyTask.Action,
                                 verifyTask.Request,
                                 result.VerifyTaskResults[i]
@@ -112,6 +113,7 @@ namespace Gs2.Core.Domain
                             Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
                                 Gs2.Cache,
                                 this._transactionId + "[" + i + "]",
+                                null,
                                 stampTask.Action,
                                 stampTask.Request,
                                 result.TaskResults[i]
@@ -129,6 +131,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(
                         Gs2.Cache,
                         this._transactionId,
+                        null,
                         result.SheetRequest.Action,
                         result.SheetRequest.Request,
                         result.SheetResult

@@ -306,6 +306,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 var result = future.Result;
                 if (result?.Item != null) {
                     this._gs2.UpdateCacheFromJobResult(
+                        null,
                         result?.Item,
                         result?.Result
                     );
@@ -345,6 +346,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
             if (result?.Item != null) {
                 this._gs2.UpdateCacheFromJobResult(
+                    null,
                     result?.Item,
                     result?.Result
                 );

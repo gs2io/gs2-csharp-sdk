@@ -184,6 +184,7 @@ namespace Gs2.Core.Domain
                         Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            this.AccessToken?.TimeOffset,
                             verifyTaskPayloadJson["action"].ToString(),
                             verifyTaskPayloadJson["args"].ToString(),
                             result.Result
@@ -217,6 +218,7 @@ namespace Gs2.Core.Domain
                         Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            this.AccessToken?.TimeOffset,
                             stampTaskPayloadJson["action"].ToString(),
                             stampTaskPayloadJson["args"].ToString(),
                             result.Result
@@ -257,6 +259,7 @@ namespace Gs2.Core.Domain
                         Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            this.AccessToken?.TimeOffset,
                             stampTaskPayloadJson["action"].ToString(),
                             stampTaskPayloadJson["args"].ToString(),
                             result.Result
@@ -286,6 +289,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
+                        this.AccessToken?.TimeOffset,
                         stampSheetPayloadJson["action"].ToString(),
                         stampSheetPayloadJson["args"].ToString(),
                         result.Result
@@ -327,6 +331,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
+                        this.AccessToken?.TimeOffset,
                         stampSheetPayloadJson["action"].ToString(),
                         stampSheetPayloadJson["args"].ToString(),
                         result.Result
@@ -434,6 +439,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                        this.AccessToken?.TimeOffset,
                         stampTaskPayloadJson["action"].ToString(),
                         stampTaskPayloadJson["args"].ToString(),
                         result.Result
@@ -456,6 +462,7 @@ namespace Gs2.Core.Domain
                         Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            this.AccessToken?.TimeOffset,
                             stampTaskPayloadJson["action"].ToString(),
                             stampTaskPayloadJson["args"].ToString(),
                             result.Result
@@ -486,6 +493,7 @@ namespace Gs2.Core.Domain
                 Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                     Gs2.Cache,
                     stampSheetPayloadJson["transactionId"].ToString(),
+                    this.AccessToken?.TimeOffset,
                     stampSheetPayloadJson["action"].ToString(),
                     stampSheetPayloadJson["args"].ToString(),
                     result.Result
@@ -509,6 +517,7 @@ namespace Gs2.Core.Domain
                     Gs2.TransactionConfiguration?.AcquireActionEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
+                        this.AccessToken?.TimeOffset,
                         stampSheetPayloadJson["action"].ToString(),
                         stampSheetPayloadJson["args"].ToString(),
                         result.Result

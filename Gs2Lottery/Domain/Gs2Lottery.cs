@@ -574,6 +574,7 @@ namespace Gs2.Gs2Lottery.Domain
 
         public void UpdateCacheFromStampSheet(
                 string transactionId,
+                int? timeOffset,
                 string method,
                 string request,
                 string result
@@ -615,7 +616,7 @@ namespace Gs2.Gs2Lottery.Domain
                         resultModel.PutCache(
                             _gs2.Cache,
                             requestModel.UserId,
-                            null,
+                            timeOffset,
                             requestModel
                         );
 
@@ -631,6 +632,7 @@ namespace Gs2.Gs2Lottery.Domain
 
         public void UpdateCacheFromStampTask(
                 string taskId,
+                int? timeOffset,
                 string method,
                 string request,
                 string result
@@ -639,6 +641,7 @@ namespace Gs2.Gs2Lottery.Domain
 
         public void UpdateCacheFromJobResult(
                 string method,
+                int? timeOffset,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
@@ -651,7 +654,7 @@ namespace Gs2.Gs2Lottery.Domain
                         _gs2.Cache.Put(
                             (null as DrawnPrize).CacheParentKey(
                                 requestModel.NamespaceName,
-                                null
+                                timeOffset
                             ),
                             (null as DrawnPrize).CacheKey(
                                 _drawPrizeIndex++
@@ -662,7 +665,7 @@ namespace Gs2.Gs2Lottery.Domain
                     }
                     _gs2.Cache.SetListCached<DrawnPrize>((null as DrawnPrize).CacheParentKey(
                         requestModel.NamespaceName,
-                        null
+                        timeOffset
                     ));
 
                     DrawByUserIdComplete?.Invoke(
@@ -679,7 +682,7 @@ namespace Gs2.Gs2Lottery.Domain
                     resultModel.PutCache(
                         _gs2.Cache,
                         requestModel.UserId,
-                        null,
+                        timeOffset,
                         requestModel
                     );
 
