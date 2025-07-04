@@ -666,18 +666,24 @@ namespace Gs2.Gs2Friend.Domain
                 }
                 case "AcceptRequestNotification": {
                     var notification = AcceptRequestNotification.FromJson(JsonMapper.ToObject(payload));
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
+                    _gs2.Cache.Delete<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
                             null
+                        ),
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                            notification.TargetUserId
                         )
                     );
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
+                    _gs2.Cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
                             null
+                        ),
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                            notification.UserId
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
@@ -735,18 +741,24 @@ namespace Gs2.Gs2Friend.Domain
                 }
                 case "RejectRequestNotification": {
                     var notification = RejectRequestNotification.FromJson(JsonMapper.ToObject(payload));
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
+                    _gs2.Cache.Delete<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.UserId,
                             null
+                        ),
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                            notification.TargetUserId
                         )
                     );
-                    _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
+                    _gs2.Cache.Delete<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             notification.NamespaceName,
                             notification.TargetUserId,
                             null
+                        ),
+                        (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
+                            notification.UserId
                         )
                     );
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
