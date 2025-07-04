@@ -440,7 +440,7 @@ namespace Gs2.Gs2Deploy
                 Request.CreateStackRequest request
         )
 		{
-            if (request.Template != null) {
+            if (request.Mode == null && request.Template != null) {
                 var res = await PreCreateStackAsync(
                     new PreCreateStackRequest()
                         .WithContextStack(request.ContextStack)
@@ -854,7 +854,7 @@ namespace Gs2.Gs2Deploy
                 Request.ValidateRequest request
         )
 		{
-            if (request.Template != null) {
+            if (request.Mode == null && request.Template != null) {
                 var res = await PreValidateAsync(
                     new PreValidateRequest()
                         .WithContextStack(request.ContextStack)
@@ -1355,7 +1355,7 @@ namespace Gs2.Gs2Deploy
                 Request.UpdateStackRequest request
         )
 		{
-            if (request.Template != null) {
+            if (request.Mode == null && request.Template != null) {
                 var res = await PreUpdateStackAsync(
                     new PreUpdateStackRequest()
                         .WithContextStack(request.ContextStack)
@@ -1646,7 +1646,7 @@ namespace Gs2.Gs2Deploy
                 Request.ChangeSetRequest request
         )
 		{
-            if (request.Template != null) {
+            if (request.Mode == null && request.Template != null) {
                 var res = await PreChangeSetAsync(
                     new PreChangeSetRequest()
                         .WithContextStack(request.ContextStack)
