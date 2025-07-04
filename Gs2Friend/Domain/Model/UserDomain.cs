@@ -376,7 +376,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             ulong callbackId
         )
         {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -389,7 +389,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         public void InvalidateSendRequests(
         )
         {
-            this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendRequest>(
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,

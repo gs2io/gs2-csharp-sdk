@@ -292,7 +292,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreCreateStackTask(
                         Session,
                         Factory,
@@ -716,7 +716,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreValidateTask(
                         Session,
                         Factory,
@@ -1209,7 +1209,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreUpdateStackTask(
                         Session,
                         Factory,
@@ -1505,7 +1505,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreChangeSetTask(
                         Session,
                         Factory,

@@ -160,7 +160,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 );
 
                 if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.FriendRequest>(
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
