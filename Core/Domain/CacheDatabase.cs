@@ -107,12 +107,17 @@ namespace Gs2.Core.Domain
             }
             var parent = this._cache.Ensure(typeof(TKind)).Ensure(parentKey);
             var exists = parent.ContainsKey(key);
+            var changed = !exists || parent[key].Item1 == null || !parent[key].Item1.Equals(obj);
             parent[key] = new Tuple<object, long>(obj, ttl);
-            foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).ToArray()) {
-                (callback.Value?.Item1 as Action<TKind>)?.Invoke(obj);
-            }
-            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).ToArray()) {
-                (callback.Value?.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+            if (changed) {
+                foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)
+                             .Ensure(key).ToArray()) {
+                    (callback.Value?.Item1 as Action<TKind>)?.Invoke(obj);
+                }
+                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)
+                             .ToArray()) {
+                    (callback.Value?.Item1 as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+                }
             }
         }
 
