@@ -99,7 +99,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetInventoryFuture(request)
                 );
                 yield return future;
@@ -130,7 +130,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetInventoryAsync(request)
             );
             return result?.Item;
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyInventoryCurrentMaxCapacityFuture(request)
                 );
                 yield return future;
@@ -183,7 +183,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyInventoryCurrentMaxCapacityAsync(request)
             );
             var domain = this;

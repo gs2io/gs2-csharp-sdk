@@ -115,7 +115,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ReleaseFuture(request)
                 );
                 yield return future;
@@ -176,7 +176,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ReleaseAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -211,7 +211,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.MarkRestrainFuture(request)
                 );
                 yield return future;
@@ -244,7 +244,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.MarkRestrainAsync(request)
             );
             var domain = this;
@@ -284,7 +284,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.RestrainFuture(request)
                 );
                 yield return future;
@@ -345,7 +345,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.RestrainAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -380,7 +380,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetStatusFuture(request)
                 );
                 yield return future;
@@ -411,7 +411,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetStatusAsync(request)
             );
             return result?.Item;
@@ -449,7 +449,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ResetFuture(request)
                 );
                 yield return future;
@@ -510,7 +510,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ResetAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

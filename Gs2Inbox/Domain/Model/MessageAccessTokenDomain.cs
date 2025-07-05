@@ -97,7 +97,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetMessageFuture(request)
                 );
                 yield return future;
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetMessageAsync(request)
             );
             return result?.Item;
@@ -149,7 +149,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.OpenMessageFuture(request)
                 );
                 yield return future;
@@ -182,7 +182,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.OpenMessageAsync(request)
             );
             var domain = this;
@@ -222,7 +222,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ReadMessageFuture(request)
                 );
                 yield return future;
@@ -283,7 +283,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ReadMessageAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -318,7 +318,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteMessageFuture(request)
                 );
                 yield return future;
@@ -354,7 +354,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteMessageAsync(request)
                 );
             }

@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -70,6 +68,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         public string ClusterName { get; } = null!;
         public long? Season { get; } = null!;
         public string UserId { get; } = null!;
+        public string ScorerUserId { get; } = null!;
 
         public ClusterRankingDataDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,7 +76,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             string rankingName,
             string clusterName,
             long? season,
-            string userId
+            string userId,
+            string scorerUserId
         ) {
             this._gs2 = gs2;
             this._client = new Gs2Ranking2RestClient(
@@ -88,83 +88,12 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             this.ClusterName = clusterName;
             this.Season = season;
             this.UserId = userId;
+            this.ScorerUserId = scorerUserId;
         }
 
     }
 
     public partial class ClusterRankingDataDomain {
-
-        #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain> GetClusterRankingFuture(
-            GetClusterRankingByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRankingName(this.RankingName)
-                    .WithClusterName(this.ClusterName)
-                    .WithUserId(this.UserId)
-                    .WithSeason(this.Season);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetClusterRankingByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-
-                self.OnComplete(new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.RankingName,
-                    this.ClusterName,
-                    result.Item.Season,
-                    this.UserId
-                ));
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain> GetClusterRankingAsync(
-            #else
-        public async Task<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain> GetClusterRankingAsync(
-            #endif
-            GetClusterRankingByUserIdRequest request
-        ) {
-            request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                .WithNamespaceName(this.NamespaceName)
-                .WithRankingName(this.RankingName)
-                .WithClusterName(this.ClusterName)
-                .WithUserId(this.UserId)
-                .WithSeason(this.Season);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                this.UserId,
-                null,
-                () => this._client.GetClusterRankingByUserIdAsync(request)
-            );
-
-            return new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.RankingName,
-                this.ClusterName,
-                result.Item.Season,
-                this.UserId
-            );
-        }
-        #endif
 
     }
 
@@ -181,7 +110,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId,
+                    this.ScorerUserId,
                     null
                 );
                 if (find) {
@@ -210,7 +139,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                             null
                         ),
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
-                            this.UserId
+                            this.ScorerUserId
                         )
                     ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).GetCache(
@@ -219,7 +148,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     this.RankingName,
                     this.ClusterName,
                     this.Season,
-                    this.UserId,
+                    this.ScorerUserId,
                     null
                 );
                 if (find) {
@@ -261,7 +190,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.RankingName,
                 this.ClusterName,
                 this.Season,
-                this.UserId,
+                this.ScorerUserId,
                 null
             );
         }
@@ -277,7 +206,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
-                    this.UserId
+                    this.ScorerUserId
                 ),
                 callback,
                 () =>
@@ -316,7 +245,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     null
                 ),
                 (null as Gs2.Gs2Ranking2.Model.ClusterRankingData).CacheKey(
-                    this.UserId
+                    this.ScorerUserId
                 ),
                 callbackId
             );

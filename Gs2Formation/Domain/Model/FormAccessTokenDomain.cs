@@ -103,7 +103,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetFormFuture(request)
                 );
                 yield return future;
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetFormAsync(request)
             );
             return result?.Item;
@@ -157,7 +157,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetFormWithSignatureFuture(request)
                 );
                 yield return future;
@@ -193,7 +193,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetFormWithSignatureAsync(request)
             );
             var domain = this;
@@ -219,7 +219,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SetFormFuture(request)
                 );
                 yield return future;
@@ -253,7 +253,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SetFormAsync(request)
             );
             var domain = this;
@@ -277,7 +277,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SetFormWithSignatureFuture(request)
                 );
                 yield return future;
@@ -311,7 +311,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SetFormWithSignatureAsync(request)
             );
             var domain = this;
@@ -335,7 +335,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteFormFuture(request)
                 );
                 yield return future;
@@ -372,7 +372,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteFormAsync(request)
                 );
             }

@@ -104,7 +104,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetStatusFuture(request)
                 );
                 yield return future;
@@ -136,7 +136,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetStatusAsync(request)
             );
             return result?.Item;
@@ -158,7 +158,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetStatusWithSignatureFuture(request)
                 );
                 yield return future;
@@ -194,7 +194,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetStatusWithSignatureAsync(request)
             );
             var domain = this;
@@ -220,7 +220,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SubExperienceFuture(request)
                 );
                 yield return future;
@@ -254,7 +254,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SubExperienceAsync(request)
             );
             var domain = this;
@@ -278,7 +278,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SubRankCapFuture(request)
                 );
                 yield return future;
@@ -312,7 +312,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SubRankCapAsync(request)
             );
             var domain = this;
@@ -336,7 +336,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyRankFuture(request)
                 );
                 yield return future;
@@ -369,7 +369,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyRankAsync(request)
             );
             var domain = this;
@@ -392,7 +392,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyRankCapFuture(request)
                 );
                 yield return future;
@@ -425,7 +425,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyRankCapAsync(request)
             );
             var domain = this;

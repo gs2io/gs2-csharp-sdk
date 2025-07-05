@@ -97,7 +97,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SetFirebaseTokenFuture(request)
                 );
                 yield return future;
@@ -129,7 +129,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SetFirebaseTokenAsync(request)
             );
             var domain = this;
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetFirebaseTokenFuture(request)
                 );
                 yield return future;
@@ -181,7 +181,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetFirebaseTokenAsync(request)
             );
             return result?.Item;
@@ -201,7 +201,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteFirebaseTokenFuture(request)
                 );
                 yield return future;
@@ -236,7 +236,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteFirebaseTokenAsync(request)
                 );
             }

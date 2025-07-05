@@ -97,7 +97,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetLikeFuture(request)
                 );
                 yield return future;
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetLikeAsync(request)
             );
             return result?.Item;

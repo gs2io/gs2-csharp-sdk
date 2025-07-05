@@ -97,7 +97,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetTriggerFuture(request)
                 );
                 yield return future;
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetTriggerAsync(request)
             );
             return result?.Item;
@@ -149,7 +149,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteTriggerFuture(request)
                 );
                 yield return future;
@@ -185,7 +185,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteTriggerAsync(request)
                 );
             }
@@ -209,7 +209,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyTriggerFuture(request)
                 );
                 yield return future;
@@ -241,7 +241,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyTriggerAsync(request)
             );
             var domain = this;

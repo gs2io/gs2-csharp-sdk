@@ -101,7 +101,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetCounterFuture(request)
                 );
                 yield return future;
@@ -133,7 +133,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetCounterAsync(request)
             );
             return result?.Item;
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CountUpFuture(request)
                 );
                 yield return future;
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CountUpAsync(request)
             );
             var domain = this;
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyCounterFuture(request)
                 );
                 yield return future;
@@ -246,7 +246,7 @@ namespace Gs2.Gs2Limit.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyCounterAsync(request)
             );
             var domain = this;

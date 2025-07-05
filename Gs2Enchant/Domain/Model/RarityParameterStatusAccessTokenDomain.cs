@@ -102,7 +102,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetRarityParameterStatusFuture(request)
                 );
                 yield return future;
@@ -134,7 +134,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetRarityParameterStatusAsync(request)
             );
             return result?.Item;
@@ -156,7 +156,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyRarityParameterStatusFuture(request)
                 );
                 yield return future;
@@ -190,7 +190,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyRarityParameterStatusAsync(request)
             );
             var domain = this;

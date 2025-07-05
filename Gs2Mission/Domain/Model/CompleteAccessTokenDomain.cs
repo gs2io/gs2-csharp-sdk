@@ -114,7 +114,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CompleteFuture(request)
                 );
                 yield return future;
@@ -175,7 +175,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CompleteAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -227,7 +227,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.BatchCompleteFuture(request)
                 );
                 yield return future;
@@ -288,7 +288,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.BatchCompleteAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -323,7 +323,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetCompleteFuture(request)
                 );
                 yield return future;
@@ -354,7 +354,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetCompleteAsync(request)
             );
             return result?.Item;
@@ -375,7 +375,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.EvaluateCompleteFuture(request)
                 );
                 yield return future;
@@ -408,7 +408,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.EvaluateCompleteAsync(request)
             );
             var domain = this;
@@ -431,7 +431,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyCompleteFuture(request)
                 );
                 yield return future;
@@ -463,7 +463,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyCompleteAsync(request)
             );
             var domain = this;

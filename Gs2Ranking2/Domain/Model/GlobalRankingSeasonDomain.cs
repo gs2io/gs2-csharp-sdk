@@ -326,13 +326,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain GlobalRankingData(
+            string scorerUserId
         ) {
             return new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.RankingName,
                 this.Season,
-                this.UserId
+                this.UserId,
+                scorerUserId
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -527,6 +529,78 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 result?.Item?.RankingName,
                 result?.Item?.Season,
+                result?.Item?.UserId
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain> GetGlobalRankingFuture(
+            GetGlobalRankingByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithRankingName(this.RankingName)
+                    .WithUserId(this.UserId)
+                    .WithSeason(this.Season);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    null,
+                    () => this._client.GetGlobalRankingByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.RankingName,
+                    result?.Item?.Season,
+                    result?.Item?.UserId,
+                    result?.Item?.UserId
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain> GetGlobalRankingAsync(
+            #else
+        public async Task<Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain> GetGlobalRankingAsync(
+            #endif
+            GetGlobalRankingByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithRankingName(this.RankingName)
+                .WithUserId(this.UserId)
+                .WithSeason(this.Season);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.GetGlobalRankingByUserIdAsync(request)
+            );
+            var domain = new Gs2.Gs2Ranking2.Domain.Model.GlobalRankingDataDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.RankingName,
+                result?.Item?.Season,
+                result?.Item?.UserId,
                 result?.Item?.UserId
             );
 

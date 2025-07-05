@@ -101,7 +101,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetSubscribeFuture(request)
                 );
                 yield return future;
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetSubscribeAsync(request)
             );
             var domain = this;
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteSubscribeFuture(request)
                 );
                 yield return future;
@@ -196,7 +196,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteSubscribeAsync(request)
                 );
             }

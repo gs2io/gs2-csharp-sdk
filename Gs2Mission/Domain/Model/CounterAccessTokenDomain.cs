@@ -98,7 +98,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DecreaseCounterFuture(request)
                 );
                 yield return future;
@@ -131,7 +131,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.DecreaseCounterAsync(request)
             );
             var domain = this;
@@ -154,7 +154,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetCounterFuture(request)
                 );
                 yield return future;
@@ -185,7 +185,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetCounterAsync(request)
             );
             return result?.Item;
@@ -206,7 +206,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyCounterValueFuture(request)
                 );
                 yield return future;
@@ -238,7 +238,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyCounterValueAsync(request)
             );
             var domain = this;
@@ -260,7 +260,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ResetCounterFuture(request)
                 );
                 yield return future;
@@ -293,7 +293,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ResetCounterAsync(request)
             );
             var domain = this;
@@ -316,7 +316,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteCounterFuture(request)
                 );
                 yield return future;
@@ -352,7 +352,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteCounterAsync(request)
                 );
             }

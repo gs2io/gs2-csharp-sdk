@@ -101,7 +101,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UpdateDataObjectFuture(request)
                 );
                 yield return future;
@@ -134,7 +134,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UpdateDataObjectAsync(request)
             );
             var domain = this;
@@ -157,7 +157,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.PrepareReUploadFuture(request)
                 );
                 yield return future;
@@ -191,7 +191,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.PrepareReUploadAsync(request)
             );
             var domain = this;
@@ -215,7 +215,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DoneUploadFuture(request)
                 );
                 yield return future;
@@ -248,7 +248,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.DoneUploadAsync(request)
             );
             var domain = this;
@@ -271,7 +271,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteDataObjectFuture(request)
                 );
                 yield return future;
@@ -307,7 +307,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteDataObjectAsync(request)
                 );
             }
@@ -331,7 +331,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.PrepareDownloadOwnDataFuture(request)
                 );
                 yield return future;
@@ -366,7 +366,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.PrepareDownloadOwnDataAsync(request)
             );
             var domain = this;
@@ -391,7 +391,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.PrepareDownloadOwnDataByGenerationFuture(request)
                 );
                 yield return future;
@@ -426,7 +426,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.PrepareDownloadOwnDataByGenerationAsync(request)
             );
             var domain = this;

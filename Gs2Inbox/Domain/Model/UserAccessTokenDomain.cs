@@ -94,7 +94,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ReceiveGlobalMessageFuture(request)
                 );
                 yield return future;
@@ -146,7 +146,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ReceiveGlobalMessageAsync(request)
             );
             _gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
@@ -205,7 +205,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.BatchReadMessagesFuture(request)
                 );
                 yield return future;
@@ -265,7 +265,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.BatchReadMessagesAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

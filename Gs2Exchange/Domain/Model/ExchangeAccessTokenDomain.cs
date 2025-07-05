@@ -110,7 +110,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ExchangeFuture(request)
                 );
                 yield return future;
@@ -170,7 +170,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ExchangeAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -221,7 +221,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.IncrementalExchangeFuture(request)
                 );
                 yield return future;
@@ -281,7 +281,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.IncrementalExchangeAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

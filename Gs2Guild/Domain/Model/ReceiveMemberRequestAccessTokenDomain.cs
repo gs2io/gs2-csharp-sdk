@@ -101,7 +101,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetReceiveRequestFuture(request)
                 );
                 yield return future;
@@ -133,7 +133,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetReceiveRequestAsync(request)
             );
             return result?.Item;
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.AcceptRequestFuture(request)
                 );
                 yield return future;
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.AcceptRequestAsync(request)
             );
             var domain = this;
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.RejectRequestFuture(request)
                 );
                 yield return future;
@@ -247,7 +247,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.RejectRequestAsync(request)
             );
             var domain = this;

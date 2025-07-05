@@ -95,7 +95,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetProgressFuture(request)
                 );
                 yield return future;
@@ -125,7 +125,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetProgressAsync(request)
             );
             return result?.Item;
@@ -162,7 +162,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.StartFuture(request)
                 );
                 yield return future;
@@ -222,7 +222,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.StartAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -273,7 +273,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.EndFuture(request)
                 );
                 yield return future;
@@ -333,7 +333,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.EndAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -367,7 +367,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteProgressFuture(request)
                 );
                 yield return future;
@@ -402,7 +402,7 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteProgressAsync(request)
                 );
             }

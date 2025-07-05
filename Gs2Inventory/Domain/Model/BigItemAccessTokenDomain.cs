@@ -101,7 +101,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetBigItemFuture(request)
                 );
                 yield return future;
@@ -133,7 +133,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetBigItemAsync(request)
             );
             return result?.Item;
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ConsumeBigItemFuture(request)
                 );
                 yield return future;
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ConsumeBigItemAsync(request)
             );
             var domain = this;
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyBigItemFuture(request)
                 );
                 yield return future;
@@ -246,7 +246,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyBigItemAsync(request)
             );
             var domain = this;

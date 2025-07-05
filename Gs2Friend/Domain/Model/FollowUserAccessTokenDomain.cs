@@ -101,7 +101,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetFollowFuture(request)
                 );
                 yield return future;
@@ -133,7 +133,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetFollowAsync(request)
             );
             return result?.Item;
@@ -154,7 +154,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UnfollowFuture(request)
                 );
                 yield return future;
@@ -187,7 +187,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UnfollowAsync(request)
             );
             var domain = this;

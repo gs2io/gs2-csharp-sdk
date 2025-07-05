@@ -97,7 +97,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetAwaitFuture(request)
                 );
                 yield return future;
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetAwaitAsync(request)
             );
             return result?.Item;
@@ -166,7 +166,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.AcquireFuture(request)
                 );
                 yield return future;
@@ -227,7 +227,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.AcquireAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -262,7 +262,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteAwaitFuture(request)
                 );
                 yield return future;
@@ -298,7 +298,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteAwaitAsync(request)
                 );
             }

@@ -101,7 +101,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetRandomDisplayItemFuture(request)
                 );
                 yield return future;
@@ -133,7 +133,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetRandomDisplayItemAsync(request)
             );
             return result?.Item;
@@ -172,7 +172,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.RandomShowcaseBuyFuture(request)
                 );
                 yield return future;
@@ -234,7 +234,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.RandomShowcaseBuyAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

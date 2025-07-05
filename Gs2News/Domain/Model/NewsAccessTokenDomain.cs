@@ -95,7 +95,7 @@ namespace Gs2.Gs2News.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.WantGrantFuture(request)
                 );
                 yield return future;
@@ -134,7 +134,7 @@ namespace Gs2.Gs2News.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.WantGrantAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain(

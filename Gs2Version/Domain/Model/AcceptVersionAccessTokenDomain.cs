@@ -97,7 +97,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.AcceptFuture(request)
                 );
                 yield return future;
@@ -130,7 +130,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.AcceptAsync(request)
             );
             var domain = this;
@@ -153,7 +153,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.RejectFuture(request)
                 );
                 yield return future;
@@ -186,7 +186,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.RejectAsync(request)
             );
             var domain = this;
@@ -209,7 +209,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetAcceptVersionFuture(request)
                 );
                 yield return future;
@@ -240,7 +240,7 @@ namespace Gs2.Gs2Version.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetAcceptVersionAsync(request)
             );
             return result?.Item;
@@ -261,7 +261,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteAcceptVersionFuture(request)
                 );
                 yield return future;
@@ -297,7 +297,7 @@ namespace Gs2.Gs2Version.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteAcceptVersionAsync(request)
                 );
             }

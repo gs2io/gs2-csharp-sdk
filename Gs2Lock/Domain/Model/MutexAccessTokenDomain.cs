@@ -98,7 +98,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.LockFuture(request)
                 );
                 yield return future;
@@ -131,7 +131,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.LockAsync(request)
             );
             var domain = this;
@@ -154,7 +154,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UnlockFuture(request)
                 );
                 yield return future;
@@ -187,7 +187,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UnlockAsync(request)
             );
             var domain = this;
@@ -210,7 +210,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetMutexFuture(request)
                 );
                 yield return future;
@@ -241,7 +241,7 @@ namespace Gs2.Gs2Lock.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetMutexAsync(request)
             );
             return result?.Item;

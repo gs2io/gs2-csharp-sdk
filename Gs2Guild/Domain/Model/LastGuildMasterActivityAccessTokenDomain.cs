@@ -97,7 +97,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.GuildName,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetLastGuildMasterActivityFuture(request)
                 );
                 yield return future;
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.GuildName,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetLastGuildMasterActivityAsync(request)
             );
             return result?.Item;

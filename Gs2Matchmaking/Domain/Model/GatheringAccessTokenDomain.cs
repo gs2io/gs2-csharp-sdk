@@ -97,7 +97,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UpdateGatheringFuture(request)
                 );
                 yield return future;
@@ -130,7 +130,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UpdateGatheringAsync(request)
             );
             var domain = this;
@@ -153,7 +153,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.PingFuture(request)
                 );
                 yield return future;
@@ -186,7 +186,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.PingAsync(request)
             );
             var domain = this;
@@ -209,7 +209,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.CancelMatchmakingFuture(request)
                 );
                 yield return future;
@@ -242,7 +242,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.CancelMatchmakingAsync(request)
             );
             var domain = this;
@@ -265,7 +265,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.EarlyCompleteFuture(request)
                 );
                 yield return future;
@@ -298,7 +298,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.EarlyCompleteAsync(request)
             );
             var domain = this;

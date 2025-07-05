@@ -101,7 +101,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UpdateRoomFuture(request)
                 );
                 yield return future;
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UpdateRoomAsync(request)
             );
             var domain = this;
@@ -158,7 +158,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteRoomFuture(request)
                 );
                 yield return future;
@@ -194,7 +194,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var result = await request.InvokeAsync(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.DeleteRoomAsync(request)
                 );
             }
@@ -219,7 +219,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.PostFuture(request)
                 );
                 yield return future;
@@ -260,7 +260,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.PostAsync(request)
             );
             var domain = new Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain(

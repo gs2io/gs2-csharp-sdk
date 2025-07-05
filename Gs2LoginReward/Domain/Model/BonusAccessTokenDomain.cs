@@ -110,7 +110,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ReceiveFuture(request)
                 );
                 yield return future;
@@ -170,7 +170,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ReceiveAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
@@ -221,7 +221,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.MissedReceiveFuture(request)
                 );
                 yield return future;
@@ -281,7 +281,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.MissedReceiveAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(

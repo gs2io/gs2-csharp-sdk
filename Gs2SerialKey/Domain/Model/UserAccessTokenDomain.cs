@@ -95,7 +95,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyCodeFuture(request)
                 );
                 yield return future;
@@ -132,7 +132,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyCodeAsync(request)
             );
             var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain(

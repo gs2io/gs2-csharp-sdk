@@ -98,7 +98,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.ConsumeSimpleItemsFuture(request)
                 );
                 yield return future;
@@ -136,7 +136,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.ConsumeSimpleItemsAsync(request)
             );
             var domain = result?.Items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain(

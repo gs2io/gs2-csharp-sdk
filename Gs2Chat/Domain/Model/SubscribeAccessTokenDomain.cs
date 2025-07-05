@@ -97,7 +97,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.SubscribeFuture(request)
                 );
                 yield return future;
@@ -130,7 +130,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.SubscribeAsync(request)
             );
             var domain = this;
@@ -153,7 +153,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.GetSubscribeFuture(request)
                 );
                 yield return future;
@@ -184,7 +184,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.GetSubscribeAsync(request)
             );
             return result?.Item;
@@ -205,7 +205,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UpdateNotificationTypeFuture(request)
                 );
                 yield return future;
@@ -238,7 +238,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UpdateNotificationTypeAsync(request)
             );
             var domain = this;
@@ -261,7 +261,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.UnsubscribeFuture(request)
                 );
                 yield return future;
@@ -294,7 +294,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.UnsubscribeAsync(request)
             );
             var domain = this;

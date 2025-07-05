@@ -97,7 +97,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.IncrementPurchaseCountFuture(request)
                 );
                 yield return future;
@@ -136,7 +136,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.IncrementPurchaseCountAsync(request)
             );
             var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemAccessTokenDomain(

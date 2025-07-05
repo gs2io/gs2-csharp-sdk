@@ -95,7 +95,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.VerifyReceiptFuture(request)
                 );
                 yield return future;
@@ -132,7 +132,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.VerifyReceiptAsync(request)
             );
             var domain = new Gs2.Gs2Money2.Domain.Model.EventAccessTokenDomain(
@@ -159,7 +159,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.AllocateSubscriptionStatusFuture(request)
                 );
                 yield return future;
@@ -196,7 +196,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.AllocateSubscriptionStatusAsync(request)
             );
             var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusAccessTokenDomain(
@@ -223,7 +223,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    null,
+                    this.AccessToken?.TimeOffset,
                     () => this._client.TakeoverSubscriptionStatusFuture(request)
                 );
                 yield return future;
@@ -260,7 +260,7 @@ namespace Gs2.Gs2Money2.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                null,
+                this.AccessToken?.TimeOffset,
                 () => this._client.TakeoverSubscriptionStatusAsync(request)
             );
             var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusAccessTokenDomain(
