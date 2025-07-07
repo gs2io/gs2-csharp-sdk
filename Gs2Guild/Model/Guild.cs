@@ -670,7 +670,7 @@ namespace Gs2.Gs2Guild.Model
                 }
             }
             {
-                if (Members.Length > 10) {
+                if (Members.Length > 100) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("guild", "guild.guild.members.error.tooMany"),
                     });

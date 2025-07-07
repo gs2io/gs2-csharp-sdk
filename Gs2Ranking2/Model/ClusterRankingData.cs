@@ -101,7 +101,7 @@ namespace Gs2.Gs2Ranking2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<userId>.+):score",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<scorerUserId>.+):score",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -118,7 +118,7 @@ namespace Gs2.Gs2Ranking2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<userId>.+):score",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<scorerUserId>.+):score",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Ranking2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<userId>.+):score",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<scorerUserId>.+):score",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -152,7 +152,7 @@ namespace Gs2.Gs2Ranking2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _rankingNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<userId>.+):score",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<scorerUserId>.+):score",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -169,7 +169,7 @@ namespace Gs2.Gs2Ranking2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _clusterNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<userId>.+):score",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<scorerUserId>.+):score",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -186,7 +186,7 @@ namespace Gs2.Gs2Ranking2.Model
         }
 
         private static System.Text.RegularExpressions.Regex _seasonRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<userId>.+):score",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<scorerUserId>.+):score",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -202,21 +202,21 @@ namespace Gs2.Gs2Ranking2.Model
             return match.Groups["season"].Value;
         }
 
-        private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<userId>.+):score",
+        private static System.Text.RegularExpressions.Regex _scorerUserIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):ranking2:(?<namespaceName>.+):cluster:(?<rankingName>.+):ranking:cluster:(?<clusterName>.+):(?<season>.+):user:(?<scorerUserId>.+):score",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
-        public static string GetUserIdFromGrn(
+        public static string GetScorerUserIdFromGrn(
             string grn
         )
         {
-            var match = _userIdRegex.Match(grn);
-            if (!match.Success || !match.Groups["userId"].Success)
+            var match = _scorerUserIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["scorerUserId"].Success)
             {
                 return null;
             }
-            return match.Groups["userId"].Value;
+            return match.Groups["scorerUserId"].Value;
         }
 
 #if UNITY_2017_1_OR_NEWER
