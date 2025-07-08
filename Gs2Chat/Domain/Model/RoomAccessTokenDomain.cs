@@ -68,6 +68,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         public string UserId => this.AccessToken.UserId;
         public string RoomName { get; } = null!;
         public string Password { get; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public RoomAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,

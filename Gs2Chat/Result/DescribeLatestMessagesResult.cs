@@ -34,10 +34,16 @@ namespace Gs2.Gs2Chat.Result
 	public class DescribeLatestMessagesResult : IResult
 	{
         public Gs2.Gs2Chat.Model.Message[] Items { set; get; }
+        public string NextPageToken { set; get; }
         public ResultMetadata Metadata { set; get; }
 
         public DescribeLatestMessagesResult WithItems(Gs2.Gs2Chat.Model.Message[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public DescribeLatestMessagesResult WithNextPageToken(string nextPageToken) {
+            this.NextPageToken = nextPageToken;
             return this;
         }
 
@@ -58,6 +64,7 @@ namespace Gs2.Gs2Chat.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Chat.Model.Message.FromJson(v);
                 }).ToArray())
+                .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
@@ -74,6 +81,7 @@ namespace Gs2.Gs2Chat.Result
             }
             return new JsonData {
                 ["items"] = itemsJsonData,
+                ["nextPageToken"] = NextPageToken,
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -91,6 +99,10 @@ namespace Gs2.Gs2Chat.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (NextPageToken != null) {
+                writer.WritePropertyName("nextPageToken");
+                writer.Write(NextPageToken.ToString());
             }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");

@@ -3094,6 +3094,9 @@ namespace Gs2.Gs2Chat
                 if (request.Category != null) {
                     sessionRequest.AddQueryString("category", $"{request.Category}");
                 }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");
                 }
@@ -3229,6 +3232,9 @@ namespace Gs2.Gs2Chat
                 }
                 if (request.UserId != null) {
                     sessionRequest.AddQueryString("userId", $"{request.UserId}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
                 if (request.Limit != null) {
                     sessionRequest.AddQueryString("limit", $"{request.Limit}");

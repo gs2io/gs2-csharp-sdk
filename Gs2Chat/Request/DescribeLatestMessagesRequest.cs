@@ -41,6 +41,7 @@ namespace Gs2.Gs2Chat.Request
          public string Password { set; get; } = null!;
          public int? Category { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
         public DescribeLatestMessagesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -62,6 +63,10 @@ namespace Gs2.Gs2Chat.Request
             this.AccessToken = accessToken;
             return this;
         }
+        public DescribeLatestMessagesRequest WithPageToken(string pageToken) {
+            this.PageToken = pageToken;
+            return this;
+        }
         public DescribeLatestMessagesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;
@@ -81,6 +86,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)(data["category"].ToString().Contains(".") ? (int)double.Parse(data["category"].ToString()) : int.Parse(data["category"].ToString())))
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
 
@@ -92,6 +98,7 @@ namespace Gs2.Gs2Chat.Request
                 ["password"] = Password,
                 ["category"] = Category,
                 ["accessToken"] = AccessToken,
+                ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
         }
@@ -119,6 +126,10 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
             if (Limit != null) {
                 writer.WritePropertyName("limit");
                 writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
@@ -133,6 +144,7 @@ namespace Gs2.Gs2Chat.Request
             key += Password + ":";
             key += Category + ":";
             key += AccessToken + ":";
+            key += PageToken + ":";
             key += Limit + ":";
             return key;
         }

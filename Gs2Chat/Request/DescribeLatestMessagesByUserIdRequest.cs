@@ -41,6 +41,7 @@ namespace Gs2.Gs2Chat.Request
          public string Password { set; get; } = null!;
          public int? Category { set; get; } = null!;
          public string UserId { set; get; } = null!;
+         public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public DescribeLatestMessagesByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -61,6 +62,10 @@ namespace Gs2.Gs2Chat.Request
         }
         public DescribeLatestMessagesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public DescribeLatestMessagesByUserIdRequest WithPageToken(string pageToken) {
+            this.PageToken = pageToken;
             return this;
         }
         public DescribeLatestMessagesByUserIdRequest WithLimit(int? limit) {
@@ -86,6 +91,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)(data["category"].ToString().Contains(".") ? (int)double.Parse(data["category"].ToString()) : int.Parse(data["category"].ToString())))
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
@@ -98,6 +104,7 @@ namespace Gs2.Gs2Chat.Request
                 ["password"] = Password,
                 ["category"] = Category,
                 ["userId"] = UserId,
+                ["pageToken"] = PageToken,
                 ["limit"] = Limit,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
             if (Limit != null) {
                 writer.WritePropertyName("limit");
                 writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
@@ -144,6 +155,7 @@ namespace Gs2.Gs2Chat.Request
             key += Password + ":";
             key += Category + ":";
             key += UserId + ":";
+            key += PageToken + ":";
             key += Limit + ":";
             key += TimeOffsetToken + ":";
             return key;

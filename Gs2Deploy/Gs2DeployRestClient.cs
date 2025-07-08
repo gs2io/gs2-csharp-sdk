@@ -292,7 +292,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreCreateStackTask(
                         Session,
                         Factory,
@@ -440,7 +440,7 @@ namespace Gs2.Gs2Deploy
                 Request.CreateStackRequest request
         )
 		{
-            if (request.Mode == null && request.Template != null) {
+            if (request.Template != null) {
                 var res = await PreCreateStackAsync(
                     new PreCreateStackRequest()
                         .WithContextStack(request.ContextStack)
@@ -716,7 +716,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreValidateTask(
                         Session,
                         Factory,
@@ -854,7 +854,7 @@ namespace Gs2.Gs2Deploy
                 Request.ValidateRequest request
         )
 		{
-            if (request.Mode == null && request.Template != null) {
+            if (request.Template != null) {
                 var res = await PreValidateAsync(
                     new PreValidateRequest()
                         .WithContextStack(request.ContextStack)
@@ -1209,7 +1209,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreUpdateStackTask(
                         Session,
                         Factory,
@@ -1355,7 +1355,7 @@ namespace Gs2.Gs2Deploy
                 Request.UpdateStackRequest request
         )
 		{
-            if (request.Mode == null && request.Template != null) {
+            if (request.Template != null) {
                 var res = await PreUpdateStackAsync(
                     new PreUpdateStackRequest()
                         .WithContextStack(request.ContextStack)
@@ -1505,7 +1505,7 @@ namespace Gs2.Gs2Deploy
             {
             }
             public override IEnumerator Action() {
-                if (Request.Mode == null && Request.Template != null) {
+                if (Request.Template != null) {
                     var preTask = new PreChangeSetTask(
                         Session,
                         Factory,
@@ -1646,7 +1646,7 @@ namespace Gs2.Gs2Deploy
                 Request.ChangeSetRequest request
         )
 		{
-            if (request.Mode == null && request.Template != null) {
+            if (request.Template != null) {
                 var res = await PreChangeSetAsync(
                     new PreChangeSetRequest()
                         .WithContextStack(request.ContextStack)
