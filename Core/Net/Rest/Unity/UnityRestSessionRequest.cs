@@ -90,10 +90,6 @@ namespace Gs2.Core.Net
             }
 #pragma warning restore 0168
 
-            if (request.responseCode == 500) {
-                return await Invoke();
-            }
-
             var result = new RestResult(
                 (int) request.responseCode,
                 request.downloadHandler.text
@@ -137,11 +133,6 @@ namespace Gs2.Core.Net
                 request.certificateHandler = new DisabledCertificateHandler();
 
             yield return request.SendWebRequest();
-            if (request.responseCode == 500)
-            {
-                yield return Action();
-                yield break;
-            }
 
             OnComplete(new RestResult(
                 (int) request.responseCode,

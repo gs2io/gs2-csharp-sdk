@@ -200,7 +200,10 @@ namespace Gs2.Gs2Exchange.Model.Cache
                     awaitName
                 )
             );
-            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
                 return;
             }
             if (self?.Count == 0) {

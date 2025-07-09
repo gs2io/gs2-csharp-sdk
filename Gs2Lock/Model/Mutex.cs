@@ -39,6 +39,7 @@ namespace Gs2.Gs2Lock.Model
         public string PropertyId { set; get; }
         public string TransactionId { set; get; }
         public long? CreatedAt { set; get; }
+        public long? TtlAt { set; get; }
         public long? Revision { set; get; }
         public Mutex WithMutexId(string mutexId) {
             this.MutexId = mutexId;
@@ -58,6 +59,10 @@ namespace Gs2.Gs2Lock.Model
         }
         public Mutex WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Mutex WithTtlAt(long? ttlAt) {
+            this.TtlAt = ttlAt;
             return this;
         }
         public Mutex WithRevision(long? revision) {
@@ -164,6 +169,7 @@ namespace Gs2.Gs2Lock.Model
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithTtlAt(!data.Keys.Contains("ttlAt") || data["ttlAt"] == null ? null : (long?)(data["ttlAt"].ToString().Contains(".") ? (long)double.Parse(data["ttlAt"].ToString()) : long.Parse(data["ttlAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
@@ -175,6 +181,7 @@ namespace Gs2.Gs2Lock.Model
                 ["propertyId"] = PropertyId,
                 ["transactionId"] = TransactionId,
                 ["createdAt"] = CreatedAt,
+                ["ttlAt"] = TtlAt,
                 ["revision"] = Revision,
             };
         }
@@ -201,6 +208,10 @@ namespace Gs2.Gs2Lock.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
+            }
+            if (TtlAt != null) {
+                writer.WritePropertyName("ttlAt");
+                writer.Write((TtlAt.ToString().Contains(".") ? (long)double.Parse(TtlAt.ToString()) : long.Parse(TtlAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
@@ -252,6 +263,14 @@ namespace Gs2.Gs2Lock.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (TtlAt == null && TtlAt == other.TtlAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(TtlAt - other.TtlAt);
             }
             if (Revision == null && Revision == other.Revision)
             {
@@ -306,6 +325,18 @@ namespace Gs2.Gs2Lock.Model
                 }
             }
             {
+                if (TtlAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.ttlAt.error.invalid"),
+                    });
+                }
+                if (TtlAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.ttlAt.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (Revision < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("mutex", "lock.mutex.revision.error.invalid"),
@@ -326,6 +357,7 @@ namespace Gs2.Gs2Lock.Model
                 PropertyId = PropertyId,
                 TransactionId = TransactionId,
                 CreatedAt = CreatedAt,
+                TtlAt = TtlAt,
                 Revision = Revision,
             };
         }

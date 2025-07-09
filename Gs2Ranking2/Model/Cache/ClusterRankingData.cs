@@ -218,7 +218,10 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                     scorerUserId
                 )
             );
-            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
                 return;
             }
             cache.Put(

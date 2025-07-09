@@ -184,7 +184,7 @@ namespace Gs2.Core.Net
 #if UNITY_WEBGL && !UNITY_EDITOR
             this._session.OnClose += (_) =>
 #else
-            this._session.OnClose += (_, _) =>
+            this._session.OnClose += (_, e) =>
 #endif
             {
                 OnDisconnect?.Invoke();

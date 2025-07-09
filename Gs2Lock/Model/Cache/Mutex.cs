@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -213,7 +215,7 @@ namespace Gs2.Gs2Lock.Model.Cache
                     propertyId
                 ),
                 self,
-                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                ((self?.TtlAt ?? 0) == 0 ? null : self.TtlAt) ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
         }
 
