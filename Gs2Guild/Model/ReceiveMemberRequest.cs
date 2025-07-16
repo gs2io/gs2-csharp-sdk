@@ -37,6 +37,7 @@ namespace Gs2.Gs2Guild.Model
         public string UserId { set; get; }
         public string TargetGuildName { set; get; }
         public string Metadata { set; get; }
+        public long? CreatedAt { set; get; }
         public ReceiveMemberRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Guild.Model
         }
         public ReceiveMemberRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
+            return this;
+        }
+        public ReceiveMemberRequest WithCreatedAt(long? createdAt) {
+            this.CreatedAt = createdAt;
             return this;
         }
 
@@ -61,7 +66,8 @@ namespace Gs2.Gs2Guild.Model
             return new ReceiveMemberRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTargetGuildName(!data.Keys.Contains("targetGuildName") || data["targetGuildName"] == null ? null : data["targetGuildName"].ToString())
-                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString());
+                .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -70,6 +76,7 @@ namespace Gs2.Gs2Guild.Model
                 ["userId"] = UserId,
                 ["targetGuildName"] = TargetGuildName,
                 ["metadata"] = Metadata,
+                ["createdAt"] = CreatedAt,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Guild.Model
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
+            }
+            if (CreatedAt != null) {
+                writer.WritePropertyName("createdAt");
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -119,6 +130,14 @@ namespace Gs2.Gs2Guild.Model
             {
                 diff += Metadata.CompareTo(other.Metadata);
             }
+            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(CreatedAt - other.CreatedAt);
+            }
             return diff;
         }
 
@@ -144,6 +163,18 @@ namespace Gs2.Gs2Guild.Model
                     });
                 }
             }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveMemberRequest", "guild.receiveMemberRequest.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveMemberRequest", "guild.receiveMemberRequest.createdAt.error.invalid"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -151,6 +182,7 @@ namespace Gs2.Gs2Guild.Model
                 UserId = UserId,
                 TargetGuildName = TargetGuildName,
                 Metadata = Metadata,
+                CreatedAt = CreatedAt,
             };
         }
     }
