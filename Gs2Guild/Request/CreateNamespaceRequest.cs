@@ -47,6 +47,7 @@ namespace Gs2.Gs2Guild.Request
          public Gs2.Gs2Guild.Model.ScriptSetting CreateGuildScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting UpdateGuildScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting JoinGuildScript { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.ScriptSetting ReceiveJoinRequestScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting LeaveGuildScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting ChangeRoleScript { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting DeleteGuildScript { set; get; } = null!;
@@ -95,6 +96,10 @@ namespace Gs2.Gs2Guild.Request
             this.JoinGuildScript = joinGuildScript;
             return this;
         }
+        public CreateNamespaceRequest WithReceiveJoinRequestScript(Gs2.Gs2Guild.Model.ScriptSetting receiveJoinRequestScript) {
+            this.ReceiveJoinRequestScript = receiveJoinRequestScript;
+            return this;
+        }
         public CreateNamespaceRequest WithLeaveGuildScript(Gs2.Gs2Guild.Model.ScriptSetting leaveGuildScript) {
             this.LeaveGuildScript = leaveGuildScript;
             return this;
@@ -132,6 +137,7 @@ namespace Gs2.Gs2Guild.Request
                 .WithCreateGuildScript(!data.Keys.Contains("createGuildScript") || data["createGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["createGuildScript"]))
                 .WithUpdateGuildScript(!data.Keys.Contains("updateGuildScript") || data["updateGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["updateGuildScript"]))
                 .WithJoinGuildScript(!data.Keys.Contains("joinGuildScript") || data["joinGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["joinGuildScript"]))
+                .WithReceiveJoinRequestScript(!data.Keys.Contains("receiveJoinRequestScript") || data["receiveJoinRequestScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["receiveJoinRequestScript"]))
                 .WithLeaveGuildScript(!data.Keys.Contains("leaveGuildScript") || data["leaveGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["leaveGuildScript"]))
                 .WithChangeRoleScript(!data.Keys.Contains("changeRoleScript") || data["changeRoleScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["changeRoleScript"]))
                 .WithDeleteGuildScript(!data.Keys.Contains("deleteGuildScript") || data["deleteGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["deleteGuildScript"]))
@@ -152,6 +158,7 @@ namespace Gs2.Gs2Guild.Request
                 ["createGuildScript"] = CreateGuildScript?.ToJson(),
                 ["updateGuildScript"] = UpdateGuildScript?.ToJson(),
                 ["joinGuildScript"] = JoinGuildScript?.ToJson(),
+                ["receiveJoinRequestScript"] = ReceiveJoinRequestScript?.ToJson(),
                 ["leaveGuildScript"] = LeaveGuildScript?.ToJson(),
                 ["changeRoleScript"] = ChangeRoleScript?.ToJson(),
                 ["deleteGuildScript"] = DeleteGuildScript?.ToJson(),
@@ -197,6 +204,9 @@ namespace Gs2.Gs2Guild.Request
             if (JoinGuildScript != null) {
                 JoinGuildScript.WriteJson(writer);
             }
+            if (ReceiveJoinRequestScript != null) {
+                ReceiveJoinRequestScript.WriteJson(writer);
+            }
             if (LeaveGuildScript != null) {
                 LeaveGuildScript.WriteJson(writer);
             }
@@ -225,6 +235,7 @@ namespace Gs2.Gs2Guild.Request
             key += CreateGuildScript + ":";
             key += UpdateGuildScript + ":";
             key += JoinGuildScript + ":";
+            key += ReceiveJoinRequestScript + ":";
             key += LeaveGuildScript + ":";
             key += ChangeRoleScript + ":";
             key += DeleteGuildScript + ":";

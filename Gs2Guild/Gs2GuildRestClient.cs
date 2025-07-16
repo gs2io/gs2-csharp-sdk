@@ -245,6 +245,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("joinGuildScript");
                     request.JoinGuildScript.WriteJson(jsonWriter);
                 }
+                if (request.ReceiveJoinRequestScript != null)
+                {
+                    jsonWriter.WritePropertyName("receiveJoinRequestScript");
+                    request.ReceiveJoinRequestScript.WriteJson(jsonWriter);
+                }
                 if (request.LeaveGuildScript != null)
                 {
                     jsonWriter.WritePropertyName("leaveGuildScript");
@@ -636,6 +641,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("joinGuildScript");
                     request.JoinGuildScript.WriteJson(jsonWriter);
+                }
+                if (request.ReceiveJoinRequestScript != null)
+                {
+                    jsonWriter.WritePropertyName("receiveJoinRequestScript");
+                    request.ReceiveJoinRequestScript.WriteJson(jsonWriter);
                 }
                 if (request.LeaveGuildScript != null)
                 {
