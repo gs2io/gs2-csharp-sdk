@@ -5349,5 +5349,1405 @@ namespace Gs2.Gs2Chat
 			return await task.Invoke();
         }
 #endif
+
+
+        public class DescribeCategoryModelsTask : Gs2RestSessionTask<DescribeCategoryModelsRequest, DescribeCategoryModelsResult>
+        {
+            public DescribeCategoryModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCategoryModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeCategoryModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeCategoryModels(
+                Request.DescribeCategoryModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeCategoryModelsResult>> callback
+        )
+		{
+			var task = new DescribeCategoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeCategoryModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeCategoryModelsResult> DescribeCategoryModelsFuture(
+                Request.DescribeCategoryModelsRequest request
+        )
+		{
+			return new DescribeCategoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeCategoryModelsResult> DescribeCategoryModelsAsync(
+                Request.DescribeCategoryModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeCategoryModelsResult> result = null;
+			await DescribeCategoryModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeCategoryModelsTask DescribeCategoryModelsAsync(
+                Request.DescribeCategoryModelsRequest request
+        )
+		{
+			return new DescribeCategoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeCategoryModelsResult> DescribeCategoryModelsAsync(
+                Request.DescribeCategoryModelsRequest request
+        )
+		{
+			var task = new DescribeCategoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetCategoryModelTask : Gs2RestSessionTask<GetCategoryModelRequest, GetCategoryModelResult>
+        {
+            public GetCategoryModelTask(IGs2Session session, RestSessionRequestFactory factory, GetCategoryModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetCategoryModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/{category}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{category}",request.Category != null ? request.Category.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetCategoryModel(
+                Request.GetCategoryModelRequest request,
+                UnityAction<AsyncResult<Result.GetCategoryModelResult>> callback
+        )
+		{
+			var task = new GetCategoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCategoryModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetCategoryModelResult> GetCategoryModelFuture(
+                Request.GetCategoryModelRequest request
+        )
+		{
+			return new GetCategoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCategoryModelResult> GetCategoryModelAsync(
+                Request.GetCategoryModelRequest request
+        )
+		{
+            AsyncResult<Result.GetCategoryModelResult> result = null;
+			await GetCategoryModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCategoryModelTask GetCategoryModelAsync(
+                Request.GetCategoryModelRequest request
+        )
+		{
+			return new GetCategoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetCategoryModelResult> GetCategoryModelAsync(
+                Request.GetCategoryModelRequest request
+        )
+		{
+			var task = new GetCategoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeCategoryModelMastersTask : Gs2RestSessionTask<DescribeCategoryModelMastersRequest, DescribeCategoryModelMastersResult>
+        {
+            public DescribeCategoryModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeCategoryModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeCategoryModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeCategoryModelMasters(
+                Request.DescribeCategoryModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeCategoryModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeCategoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeCategoryModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeCategoryModelMastersResult> DescribeCategoryModelMastersFuture(
+                Request.DescribeCategoryModelMastersRequest request
+        )
+		{
+			return new DescribeCategoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeCategoryModelMastersResult> DescribeCategoryModelMastersAsync(
+                Request.DescribeCategoryModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeCategoryModelMastersResult> result = null;
+			await DescribeCategoryModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeCategoryModelMastersTask DescribeCategoryModelMastersAsync(
+                Request.DescribeCategoryModelMastersRequest request
+        )
+		{
+			return new DescribeCategoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeCategoryModelMastersResult> DescribeCategoryModelMastersAsync(
+                Request.DescribeCategoryModelMastersRequest request
+        )
+		{
+			var task = new DescribeCategoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateCategoryModelMasterTask : Gs2RestSessionTask<CreateCategoryModelMasterRequest, CreateCategoryModelMasterResult>
+        {
+            public CreateCategoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateCategoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateCategoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Category != null)
+                {
+                    jsonWriter.WritePropertyName("category");
+                    jsonWriter.Write(request.Category.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.RejectAccessTokenPost != null)
+                {
+                    jsonWriter.WritePropertyName("rejectAccessTokenPost");
+                    jsonWriter.Write(request.RejectAccessTokenPost);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateCategoryModelMaster(
+                Request.CreateCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new CreateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterFuture(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+			return new CreateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterAsync(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateCategoryModelMasterResult> result = null;
+			await CreateCategoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateCategoryModelMasterTask CreateCategoryModelMasterAsync(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+			return new CreateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterAsync(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+			var task = new CreateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetCategoryModelMasterTask : Gs2RestSessionTask<GetCategoryModelMasterRequest, GetCategoryModelMasterResult>
+        {
+            public GetCategoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCategoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetCategoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/{category}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{category}",request.Category != null ? request.Category.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetCategoryModelMaster(
+                Request.GetCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new GetCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetCategoryModelMasterResult> GetCategoryModelMasterFuture(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+			return new GetCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCategoryModelMasterResult> GetCategoryModelMasterAsync(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetCategoryModelMasterResult> result = null;
+			await GetCategoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCategoryModelMasterTask GetCategoryModelMasterAsync(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+			return new GetCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetCategoryModelMasterResult> GetCategoryModelMasterAsync(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+			var task = new GetCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateCategoryModelMasterTask : Gs2RestSessionTask<UpdateCategoryModelMasterRequest, UpdateCategoryModelMasterResult>
+        {
+            public UpdateCategoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCategoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateCategoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/{category}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{category}",request.Category != null ? request.Category.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.RejectAccessTokenPost != null)
+                {
+                    jsonWriter.WritePropertyName("rejectAccessTokenPost");
+                    jsonWriter.Write(request.RejectAccessTokenPost);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateCategoryModelMaster(
+                Request.UpdateCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterFuture(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+			return new UpdateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterAsync(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCategoryModelMasterResult> result = null;
+			await UpdateCategoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCategoryModelMasterTask UpdateCategoryModelMasterAsync(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+			return new UpdateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterAsync(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+			var task = new UpdateCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteCategoryModelMasterTask : Gs2RestSessionTask<DeleteCategoryModelMasterRequest, DeleteCategoryModelMasterResult>
+        {
+            public DeleteCategoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCategoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteCategoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/model/{category}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{category}",request.Category != null ? request.Category.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteCategoryModelMaster(
+                Request.DeleteCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterFuture(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+			return new DeleteCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterAsync(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteCategoryModelMasterResult> result = null;
+			await DeleteCategoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteCategoryModelMasterTask DeleteCategoryModelMasterAsync(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+			return new DeleteCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterAsync(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+			var task = new DeleteCategoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
+        {
+            public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ExportMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/export";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ExportMaster(
+                Request.ExportMasterRequest request,
+                UnityAction<AsyncResult<Result.ExportMasterResult>> callback
+        )
+		{
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+            AsyncResult<Result.ExportMasterResult> result = null;
+			await ExportMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ExportMasterTask ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			return new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ExportMasterResult> ExportMasterAsync(
+                Request.ExportMasterRequest request
+        )
+		{
+			var task = new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetCurrentModelMasterTask : Gs2RestSessionTask<GetCurrentModelMasterRequest, GetCurrentModelMasterResult>
+        {
+            public GetCurrentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetCurrentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetCurrentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetCurrentModelMaster(
+                Request.GetCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetCurrentModelMasterResult>> callback
+        )
+		{
+			var task = new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCurrentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetCurrentModelMasterResult> GetCurrentModelMasterFuture(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+			return new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCurrentModelMasterResult> GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetCurrentModelMasterResult> result = null;
+			await GetCurrentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetCurrentModelMasterTask GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+			return new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetCurrentModelMasterResult> GetCurrentModelMasterAsync(
+                Request.GetCurrentModelMasterRequest request
+        )
+		{
+			var task = new GetCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreUpdateCurrentModelMasterTask : Gs2RestSessionTask<PreUpdateCurrentModelMasterRequest, PreUpdateCurrentModelMasterResult>
+        {
+            public PreUpdateCurrentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, PreUpdateCurrentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreUpdateCurrentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentModelMaster(
+                Request.PreUpdateCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentModelMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentModelMasterResult> PreUpdateCurrentModelMasterFuture(
+                Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentModelMasterResult> PreUpdateCurrentModelMasterAsync(
+                Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.PreUpdateCurrentModelMasterResult> result = null;
+			await PreUpdateCurrentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public PreUpdateCurrentModelMasterTask PreUpdateCurrentModelMasterAsync(
+                Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentModelMasterResult> PreUpdateCurrentModelMasterAsync(
+                Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+			var task = new PreUpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateCurrentModelMasterTask : Gs2RestSessionTask<UpdateCurrentModelMasterRequest, UpdateCurrentModelMasterResult>
+        {
+            public UpdateCurrentModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+            public override IEnumerator Action() {
+                if (Request.Settings != null) {
+                    var preTask = new PreUpdateCurrentModelMasterTask(
+                        Session,
+                        Factory,
+                        new PreUpdateCurrentModelMasterRequest()
+                            .WithContextStack(Request.ContextStack)
+                            .WithNamespaceName(Request.NamespaceName)
+                    );
+                    yield return preTask;
+                    if (preTask.Error != null) {
+                        OnError(preTask.Error);
+                        yield break;
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    yield return request.SendWebRequest();
+                    request.Dispose();
+#endif
+                    Request.Mode = "preUpload";
+                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.Settings = null;
+                }
+                yield return base.Action();
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Mode != null)
+                {
+                    jsonWriter.WritePropertyName("mode");
+                    jsonWriter.Write(request.Mode);
+                }
+                if (request.Settings != null)
+                {
+                    jsonWriter.WritePropertyName("settings");
+                    jsonWriter.Write(request.Settings);
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateCurrentModelMaster(
+                Request.UpdateCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterFuture(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentModelMasterResult> result = null;
+			await UpdateCurrentModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentModelMasterTask UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateCurrentModelMasterResult> UpdateCurrentModelMasterAsync(
+                Request.UpdateCurrentModelMasterRequest request
+        )
+		{
+            if (request.Settings != null) {
+                var res = await PreUpdateCurrentModelMasterAsync(
+                    new PreUpdateCurrentModelMasterRequest()
+                        .WithContextStack(request.ContextStack)
+                        .WithNamespaceName(request.NamespaceName)
+                );
+                var req = new HttpRequestMessage(
+                    System.Net.Http.HttpMethod.Put,
+                    res.UploadUrl
+                );
+                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
+                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                await new HttpClient().SendAsync(req);
+
+                request.Mode = "preUpload";
+                request.UploadToken = res.UploadToken;
+                request.Settings = null;
+            }
+			var task = new UpdateCurrentModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateCurrentModelMasterFromGitHubTask : Gs2RestSessionTask<UpdateCurrentModelMasterFromGitHubRequest, UpdateCurrentModelMasterFromGitHubResult>
+        {
+            public UpdateCurrentModelMasterFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentModelMasterFromGitHubRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateCurrentModelMasterFromGitHubRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "chat")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/from_git_hub";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.CheckoutSetting != null)
+                {
+                    jsonWriter.WritePropertyName("checkoutSetting");
+                    request.CheckoutSetting.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateCurrentModelMasterFromGitHub(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request,
+                UnityAction<AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult>> callback
+        )
+		{
+			var task = new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubFuture(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+            AsyncResult<Result.UpdateCurrentModelMasterFromGitHubResult> result = null;
+			await UpdateCurrentModelMasterFromGitHub(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateCurrentModelMasterFromGitHubTask UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+			return new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateCurrentModelMasterFromGitHubResult> UpdateCurrentModelMasterFromGitHubAsync(
+                Request.UpdateCurrentModelMasterFromGitHubRequest request
+        )
+		{
+			var task = new UpdateCurrentModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

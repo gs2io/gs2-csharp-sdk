@@ -3267,5 +3267,668 @@ namespace Gs2.Gs2Chat
 			return await task.Invoke();
         }
 #endif
+
+
+        public class GetCategoryModelTask : Gs2WebSocketSessionTask<Request.GetCategoryModelRequest, Result.GetCategoryModelResult>
+        {
+	        public GetCategoryModelTask(IGs2Session session, Request.GetCategoryModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetCategoryModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Category != null)
+                {
+                    jsonWriter.WritePropertyName("category");
+                    jsonWriter.Write(request.Category.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "chat",
+                    "categoryModel",
+                    "getCategoryModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetCategoryModel(
+                Request.GetCategoryModelRequest request,
+                UnityAction<AsyncResult<Result.GetCategoryModelResult>> callback
+        )
+		{
+			var task = new GetCategoryModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCategoryModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetCategoryModelResult> GetCategoryModelFuture(
+                Request.GetCategoryModelRequest request
+        )
+		{
+			return new GetCategoryModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCategoryModelResult> GetCategoryModelAsync(
+            Request.GetCategoryModelRequest request
+        )
+		{
+		    var task = new GetCategoryModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCategoryModelTask GetCategoryModelAsync(
+                Request.GetCategoryModelRequest request
+        )
+		{
+			return new GetCategoryModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetCategoryModelResult> GetCategoryModelAsync(
+            Request.GetCategoryModelRequest request
+        )
+		{
+		    var task = new GetCategoryModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.CreateCategoryModelMasterRequest, Result.CreateCategoryModelMasterResult>
+        {
+	        public CreateCategoryModelMasterTask(IGs2Session session, Request.CreateCategoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateCategoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Category != null)
+                {
+                    jsonWriter.WritePropertyName("category");
+                    jsonWriter.Write(request.Category.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.RejectAccessTokenPost != null)
+                {
+                    jsonWriter.WritePropertyName("rejectAccessTokenPost");
+                    jsonWriter.Write(request.RejectAccessTokenPost.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "chat",
+                    "categoryModelMaster",
+                    "createCategoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateCategoryModelMaster(
+                Request.CreateCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new CreateCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterFuture(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+			return new CreateCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterAsync(
+            Request.CreateCategoryModelMasterRequest request
+        )
+		{
+		    var task = new CreateCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateCategoryModelMasterTask CreateCategoryModelMasterAsync(
+                Request.CreateCategoryModelMasterRequest request
+        )
+		{
+			return new CreateCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateCategoryModelMasterResult> CreateCategoryModelMasterAsync(
+            Request.CreateCategoryModelMasterRequest request
+        )
+		{
+		    var task = new CreateCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.GetCategoryModelMasterRequest, Result.GetCategoryModelMasterResult>
+        {
+	        public GetCategoryModelMasterTask(IGs2Session session, Request.GetCategoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetCategoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Category != null)
+                {
+                    jsonWriter.WritePropertyName("category");
+                    jsonWriter.Write(request.Category.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "chat",
+                    "categoryModelMaster",
+                    "getCategoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetCategoryModelMaster(
+                Request.GetCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new GetCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetCategoryModelMasterResult> GetCategoryModelMasterFuture(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+			return new GetCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCategoryModelMasterResult> GetCategoryModelMasterAsync(
+            Request.GetCategoryModelMasterRequest request
+        )
+		{
+		    var task = new GetCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCategoryModelMasterTask GetCategoryModelMasterAsync(
+                Request.GetCategoryModelMasterRequest request
+        )
+		{
+			return new GetCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetCategoryModelMasterResult> GetCategoryModelMasterAsync(
+            Request.GetCategoryModelMasterRequest request
+        )
+		{
+		    var task = new GetCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateCategoryModelMasterRequest, Result.UpdateCategoryModelMasterResult>
+        {
+	        public UpdateCategoryModelMasterTask(IGs2Session session, Request.UpdateCategoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateCategoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Category != null)
+                {
+                    jsonWriter.WritePropertyName("category");
+                    jsonWriter.Write(request.Category.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.RejectAccessTokenPost != null)
+                {
+                    jsonWriter.WritePropertyName("rejectAccessTokenPost");
+                    jsonWriter.Write(request.RejectAccessTokenPost.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "chat",
+                    "categoryModelMaster",
+                    "updateCategoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateCategoryModelMaster(
+                Request.UpdateCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterFuture(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+			return new UpdateCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterAsync(
+            Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateCategoryModelMasterTask UpdateCategoryModelMasterAsync(
+                Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+			return new UpdateCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateCategoryModelMasterResult> UpdateCategoryModelMasterAsync(
+            Request.UpdateCategoryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteCategoryModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteCategoryModelMasterRequest, Result.DeleteCategoryModelMasterResult>
+        {
+	        public DeleteCategoryModelMasterTask(IGs2Session session, Request.DeleteCategoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteCategoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Category != null)
+                {
+                    jsonWriter.WritePropertyName("category");
+                    jsonWriter.Write(request.Category.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "chat",
+                    "categoryModelMaster",
+                    "deleteCategoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteCategoryModelMaster(
+                Request.DeleteCategoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteCategoryModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteCategoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterFuture(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+			return new DeleteCategoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterAsync(
+            Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteCategoryModelMasterTask DeleteCategoryModelMasterAsync(
+                Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+			return new DeleteCategoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteCategoryModelMasterResult> DeleteCategoryModelMasterAsync(
+            Request.DeleteCategoryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteCategoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class PreUpdateCurrentModelMasterTask : Gs2WebSocketSessionTask<Request.PreUpdateCurrentModelMasterRequest, Result.PreUpdateCurrentModelMasterResult>
+        {
+	        public PreUpdateCurrentModelMasterTask(IGs2Session session, Request.PreUpdateCurrentModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.PreUpdateCurrentModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "chat",
+                    "currentModelMaster",
+                    "preUpdateCurrentModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreUpdateCurrentModelMaster(
+                Request.PreUpdateCurrentModelMasterRequest request,
+                UnityAction<AsyncResult<Result.PreUpdateCurrentModelMasterResult>> callback
+        )
+		{
+			var task = new PreUpdateCurrentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.PreUpdateCurrentModelMasterResult> PreUpdateCurrentModelMasterFuture(
+                Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.PreUpdateCurrentModelMasterResult> PreUpdateCurrentModelMasterAsync(
+            Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+		    var task = new PreUpdateCurrentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public PreUpdateCurrentModelMasterTask PreUpdateCurrentModelMasterAsync(
+                Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+			return new PreUpdateCurrentModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.PreUpdateCurrentModelMasterResult> PreUpdateCurrentModelMasterAsync(
+            Request.PreUpdateCurrentModelMasterRequest request
+        )
+		{
+		    var task = new PreUpdateCurrentModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

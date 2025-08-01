@@ -68,6 +68,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         public string Url { get; set; } = null!;
         public string UploadToken { get; set; } = null!;
         public string UploadUrl { get; set; } = null!;
+        public string NextPageToken { get; set; } = null!;
 
         public NamespaceDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -78,6 +79,232 @@ namespace Gs2.Gs2Chat.Domain.Model
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
+        }
+
+        public Gs2.Gs2Chat.Domain.Model.CurrentModelMasterDomain CurrentModelMaster(
+        ) {
+            return new Gs2.Gs2Chat.Domain.Model.CurrentModelMasterDomain(
+                this._gs2,
+                this.NamespaceName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Chat.Model.CategoryModel> CategoryModels(
+        )
+        {
+            return new DescribeCategoryModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.CategoryModel> CategoryModelsAsync(
+            #else
+        public DescribeCategoryModelsIterator CategoryModelsAsync(
+            #endif
+        )
+        {
+            return new DescribeCategoryModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeCategoryModels(
+            Action<Gs2.Gs2Chat.Model.CategoryModel[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.CategoryModel>(
+                (null as Gs2.Gs2Chat.Model.CategoryModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CategoryModelsAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCategoryModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Chat.Model.CategoryModel[]> callback
+        )
+        {
+            var items = await CategoryModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCategoryModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCategoryModels(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.CategoryModel>(
+                (null as Gs2.Gs2Chat.Model.CategoryModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateCategoryModels(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.CategoryModel>(
+                (null as Gs2.Gs2Chat.Model.CategoryModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                )
+            );
+        }
+
+        public Gs2.Gs2Chat.Domain.Model.CategoryModelDomain CategoryModel(
+            int? category
+        ) {
+            return new Gs2.Gs2Chat.Domain.Model.CategoryModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                category
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Chat.Model.CategoryModelMaster> CategoryModelMasters(
+        )
+        {
+            return new DescribeCategoryModelMastersIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.CategoryModelMaster> CategoryModelMastersAsync(
+            #else
+        public DescribeCategoryModelMastersIterator CategoryModelMastersAsync(
+            #endif
+        )
+        {
+            return new DescribeCategoryModelMastersIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeCategoryModelMasters(
+            Action<Gs2.Gs2Chat.Model.CategoryModelMaster[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.CategoryModelMaster>(
+                (null as Gs2.Gs2Chat.Model.CategoryModelMaster).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await CategoryModelMastersAsync(
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCategoryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Chat.Model.CategoryModelMaster[]> callback
+        )
+        {
+            var items = await CategoryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCategoryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCategoryModelMasters(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.CategoryModelMaster>(
+                (null as Gs2.Gs2Chat.Model.CategoryModelMaster).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateCategoryModelMasters(
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.CategoryModelMaster>(
+                (null as Gs2.Gs2Chat.Model.CategoryModelMaster).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                )
+            );
+        }
+
+        public Gs2.Gs2Chat.Domain.Model.CategoryModelMasterDomain CategoryModelMaster(
+            int? category
+        ) {
+            return new Gs2.Gs2Chat.Domain.Model.CategoryModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                category
+            );
         }
 
         public Gs2.Gs2Chat.Domain.Model.UserDomain User(

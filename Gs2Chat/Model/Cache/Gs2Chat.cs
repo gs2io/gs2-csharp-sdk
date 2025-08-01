@@ -368,6 +368,102 @@ namespace Gs2.Gs2Chat.Model.Cache
                         Request.UnsubscribeByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "describeCategoryModels":
+                    Result.DescribeCategoryModelsResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeCategoryModelsRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getCategoryModel":
+                    Result.GetCategoryModelResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetCategoryModelRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeCategoryModelMasters":
+                    Result.DescribeCategoryModelMastersResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeCategoryModelMastersRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "createCategoryModelMaster":
+                    Result.CreateCategoryModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.CreateCategoryModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getCategoryModelMaster":
+                    Result.GetCategoryModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetCategoryModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "updateCategoryModelMaster":
+                    Result.UpdateCategoryModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.UpdateCategoryModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "deleteCategoryModelMaster":
+                    Result.DeleteCategoryModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DeleteCategoryModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "exportMaster":
+                    Result.ExportMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.ExportMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getCurrentModelMaster":
+                    Result.GetCurrentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetCurrentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "preUpdateCurrentModelMaster":
+                    Result.PreUpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.PreUpdateCurrentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "updateCurrentModelMaster":
+                    Result.UpdateCurrentModelMasterResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.UpdateCurrentModelMasterRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "updateCurrentModelMasterFromGitHub":
+                    Result.UpdateCurrentModelMasterFromGitHubResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.UpdateCurrentModelMasterFromGitHubRequest.FromJson(requestPayload)
+                    );
+                    break;
             }
         }
     }
