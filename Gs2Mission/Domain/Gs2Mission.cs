@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -823,7 +825,7 @@ namespace Gs2.Gs2Mission.Domain
                 string payload
         ) {
             switch (action) {
-                case "CompleteNotification": {
+                case "Complete": {
                     var notification = CompleteNotification.FromJson(JsonMapper.ToObject(payload));
                     _gs2.Cache.Delete<Gs2.Gs2Mission.Model.Complete>(
                         (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
