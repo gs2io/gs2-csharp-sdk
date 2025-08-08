@@ -5291,11 +5291,6 @@ namespace Gs2.Gs2Ranking2
                     jsonWriter.WritePropertyName("sum");
                     jsonWriter.Write(request.Sum.ToString());
                 }
-                if (request.ScoreTtlDays != null)
-                {
-                    jsonWriter.WritePropertyName("scoreTtlDays");
-                    jsonWriter.Write(request.ScoreTtlDays.ToString());
-                }
                 if (request.OrderDirection != null)
                 {
                     jsonWriter.WritePropertyName("orderDirection");
@@ -5551,11 +5546,6 @@ namespace Gs2.Gs2Ranking2
                 {
                     jsonWriter.WritePropertyName("sum");
                     jsonWriter.Write(request.Sum.ToString());
-                }
-                if (request.ScoreTtlDays != null)
-                {
-                    jsonWriter.WritePropertyName("scoreTtlDays");
-                    jsonWriter.Write(request.ScoreTtlDays.ToString());
                 }
                 if (request.OrderDirection != null)
                 {

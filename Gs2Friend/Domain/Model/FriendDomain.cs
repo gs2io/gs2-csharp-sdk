@@ -101,6 +101,72 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class FriendDomain {
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> AddFriendFuture(
+            AddFriendByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    null,
+                    () => this._client.AddFriendByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Friend.Domain.Model.FriendUserDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.UserId,
+                    this.WithProfile,
+                    request.TargetUserId
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> AddFriendAsync(
+            #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> AddFriendAsync(
+            #endif
+            AddFriendByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.AddFriendByUserIdAsync(request)
+            );
+            var domain = new Gs2.Gs2Friend.Domain.Model.FriendUserDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.UserId,
+                this.WithProfile,
+                request.TargetUserId
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteFriendFuture(
             DeleteFriendByUserIdRequest request
         ) {
@@ -203,17 +269,28 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.Friend> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Friend.Model.Friend).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.WithProfile ?? default,
-                null
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.Friend>(
+                        (null as Gs2.Gs2Friend.Model.Friend).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            null
+                        ),
+                        (null as Gs2.Gs2Friend.Model.Friend).CacheKey(
+                            this.WithProfile
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Friend.Model.Friend).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.WithProfile,
+                    null
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 
@@ -246,7 +323,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.WithProfile ?? default,
+                this.WithProfile,
                 null
             );
         }
@@ -265,7 +342,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

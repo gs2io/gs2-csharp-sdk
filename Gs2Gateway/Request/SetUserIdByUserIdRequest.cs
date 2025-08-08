@@ -39,6 +39,7 @@ namespace Gs2.Gs2Gateway.Request
          public string NamespaceName { set; get; } = null!;
          public string UserId { set; get; } = null!;
          public bool? AllowConcurrentAccess { set; get; } = null!;
+         public bool? Force { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SetUserIdByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -51,6 +52,10 @@ namespace Gs2.Gs2Gateway.Request
         }
         public SetUserIdByUserIdRequest WithAllowConcurrentAccess(bool? allowConcurrentAccess) {
             this.AllowConcurrentAccess = allowConcurrentAccess;
+            return this;
+        }
+        public SetUserIdByUserIdRequest WithForce(bool? force) {
+            this.Force = force;
             return this;
         }
         public SetUserIdByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -75,6 +80,7 @@ namespace Gs2.Gs2Gateway.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()))
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -84,6 +90,7 @@ namespace Gs2.Gs2Gateway.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["allowConcurrentAccess"] = AllowConcurrentAccess,
+                ["force"] = Force,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -103,6 +110,10 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("allowConcurrentAccess");
                 writer.Write(bool.Parse(AllowConcurrentAccess.ToString()));
             }
+            if (Force != null) {
+                writer.WritePropertyName("force");
+                writer.Write(bool.Parse(Force.ToString()));
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -115,6 +126,7 @@ namespace Gs2.Gs2Gateway.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += AllowConcurrentAccess + ":";
+            key += Force + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

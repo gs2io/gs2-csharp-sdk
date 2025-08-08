@@ -44,7 +44,6 @@ namespace Gs2.Gs2Ranking2.Request
          public long? MinimumValue { set; get; } = null!;
          public long? MaximumValue { set; get; } = null!;
          public bool? Sum { set; get; } = null!;
-         public int? ScoreTtlDays { set; get; } = null!;
          public string OrderDirection { set; get; } = null!;
          public Gs2.Gs2Ranking2.Model.RankingReward[] RankingRewards { set; get; } = null!;
          public string RewardCalculationIndex { set; get; } = null!;
@@ -80,10 +79,6 @@ namespace Gs2.Gs2Ranking2.Request
         }
         public CreateClusterRankingModelMasterRequest WithSum(bool? sum) {
             this.Sum = sum;
-            return this;
-        }
-        public CreateClusterRankingModelMasterRequest WithScoreTtlDays(int? scoreTtlDays) {
-            this.ScoreTtlDays = scoreTtlDays;
             return this;
         }
         public CreateClusterRankingModelMasterRequest WithOrderDirection(string orderDirection) {
@@ -124,7 +119,6 @@ namespace Gs2.Gs2Ranking2.Request
                 .WithMinimumValue(!data.Keys.Contains("minimumValue") || data["minimumValue"] == null ? null : (long?)(data["minimumValue"].ToString().Contains(".") ? (long)double.Parse(data["minimumValue"].ToString()) : long.Parse(data["minimumValue"].ToString())))
                 .WithMaximumValue(!data.Keys.Contains("maximumValue") || data["maximumValue"] == null ? null : (long?)(data["maximumValue"].ToString().Contains(".") ? (long)double.Parse(data["maximumValue"].ToString()) : long.Parse(data["maximumValue"].ToString())))
                 .WithSum(!data.Keys.Contains("sum") || data["sum"] == null ? null : (bool?)bool.Parse(data["sum"].ToString()))
-                .WithScoreTtlDays(!data.Keys.Contains("scoreTtlDays") || data["scoreTtlDays"] == null ? null : (int?)(data["scoreTtlDays"].ToString().Contains(".") ? (int)double.Parse(data["scoreTtlDays"].ToString()) : int.Parse(data["scoreTtlDays"].ToString())))
                 .WithOrderDirection(!data.Keys.Contains("orderDirection") || data["orderDirection"] == null ? null : data["orderDirection"].ToString())
                 .WithRankingRewards(!data.Keys.Contains("rankingRewards") || data["rankingRewards"] == null || !data["rankingRewards"].IsArray ? null : data["rankingRewards"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking2.Model.RankingReward.FromJson(v);
@@ -154,7 +148,6 @@ namespace Gs2.Gs2Ranking2.Request
                 ["minimumValue"] = MinimumValue,
                 ["maximumValue"] = MaximumValue,
                 ["sum"] = Sum,
-                ["scoreTtlDays"] = ScoreTtlDays,
                 ["orderDirection"] = OrderDirection,
                 ["rankingRewards"] = rankingRewardsJsonData,
                 ["rewardCalculationIndex"] = RewardCalculationIndex,
@@ -198,10 +191,6 @@ namespace Gs2.Gs2Ranking2.Request
                 writer.WritePropertyName("sum");
                 writer.Write(bool.Parse(Sum.ToString()));
             }
-            if (ScoreTtlDays != null) {
-                writer.WritePropertyName("scoreTtlDays");
-                writer.Write((ScoreTtlDays.ToString().Contains(".") ? (int)double.Parse(ScoreTtlDays.ToString()) : int.Parse(ScoreTtlDays.ToString())));
-            }
             if (OrderDirection != null) {
                 writer.WritePropertyName("orderDirection");
                 writer.Write(OrderDirection.ToString());
@@ -242,7 +231,6 @@ namespace Gs2.Gs2Ranking2.Request
             key += MinimumValue + ":";
             key += MaximumValue + ":";
             key += Sum + ":";
-            key += ScoreTtlDays + ":";
             key += OrderDirection + ":";
             key += RankingRewards + ":";
             key += RewardCalculationIndex + ":";

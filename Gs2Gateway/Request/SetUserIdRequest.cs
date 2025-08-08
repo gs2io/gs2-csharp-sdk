@@ -39,6 +39,7 @@ namespace Gs2.Gs2Gateway.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public bool? AllowConcurrentAccess { set; get; } = null!;
+         public bool? Force { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SetUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -50,6 +51,10 @@ namespace Gs2.Gs2Gateway.Request
         }
         public SetUserIdRequest WithAllowConcurrentAccess(bool? allowConcurrentAccess) {
             this.AllowConcurrentAccess = allowConcurrentAccess;
+            return this;
+        }
+        public SetUserIdRequest WithForce(bool? force) {
+            this.Force = force;
             return this;
         }
 
@@ -69,7 +74,8 @@ namespace Gs2.Gs2Gateway.Request
             return new SetUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()));
+                .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()))
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Gateway.Request
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["allowConcurrentAccess"] = AllowConcurrentAccess,
+                ["force"] = Force,
             };
         }
 
@@ -96,6 +103,10 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("allowConcurrentAccess");
                 writer.Write(bool.Parse(AllowConcurrentAccess.ToString()));
             }
+            if (Force != null) {
+                writer.WritePropertyName("force");
+                writer.Write(bool.Parse(Force.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -104,6 +115,7 @@ namespace Gs2.Gs2Gateway.Request
             key += NamespaceName + ":";
             key += AccessToken + ":";
             key += AllowConcurrentAccess + ":";
+            key += Force + ":";
             return key;
         }
     }

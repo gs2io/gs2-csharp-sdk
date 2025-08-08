@@ -339,7 +339,7 @@ namespace Gs2.Gs2Inventory.Model
                 }
             }
             {
-                if (Metadata.Length > 128) {
+                if (Metadata.Length > 2048) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("inventoryModelMaster", "inventory.inventoryModelMaster.metadata.error.tooLong"),
                     });

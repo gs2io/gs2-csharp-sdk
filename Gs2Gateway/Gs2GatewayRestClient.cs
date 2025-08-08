@@ -1906,6 +1906,11 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("allowConcurrentAccess");
                     jsonWriter.Write(request.AllowConcurrentAccess.ToString());
                 }
+                if (request.Force != null)
+                {
+                    jsonWriter.WritePropertyName("force");
+                    jsonWriter.Write(request.Force.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2035,6 +2040,11 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("allowConcurrentAccess");
                     jsonWriter.Write(request.AllowConcurrentAccess.ToString());
+                }
+                if (request.Force != null)
+                {
+                    jsonWriter.WritePropertyName("force");
+                    jsonWriter.Write(request.Force.ToString());
                 }
                 if (request.ContextStack != null)
                 {
