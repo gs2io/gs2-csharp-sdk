@@ -38,6 +38,7 @@ namespace Gs2.Gs2Schedule.Result
         public long? ScheduleStartAt { set; get; }
         public long? ScheduleEndAt { set; get; }
         public Gs2.Gs2Schedule.Model.RepeatSchedule RepeatSchedule { set; get; }
+        public bool? IsGlobalSchedule { set; get; }
         public ResultMetadata Metadata { set; get; }
 
         public GetEventByUserIdResult WithItem(Gs2.Gs2Schedule.Model.Event item) {
@@ -65,6 +66,11 @@ namespace Gs2.Gs2Schedule.Result
             return this;
         }
 
+        public GetEventByUserIdResult WithIsGlobalSchedule(bool? isGlobalSchedule) {
+            this.IsGlobalSchedule = isGlobalSchedule;
+            return this;
+        }
+
         public GetEventByUserIdResult WithMetadata(ResultMetadata metadata) {
             this.Metadata = metadata;
             return this;
@@ -84,6 +90,7 @@ namespace Gs2.Gs2Schedule.Result
                 .WithScheduleStartAt(!data.Keys.Contains("scheduleStartAt") || data["scheduleStartAt"] == null ? null : (long?)(data["scheduleStartAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleStartAt"].ToString()) : long.Parse(data["scheduleStartAt"].ToString())))
                 .WithScheduleEndAt(!data.Keys.Contains("scheduleEndAt") || data["scheduleEndAt"] == null ? null : (long?)(data["scheduleEndAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleEndAt"].ToString()) : long.Parse(data["scheduleEndAt"].ToString())))
                 .WithRepeatSchedule(!data.Keys.Contains("repeatSchedule") || data["repeatSchedule"] == null ? null : Gs2.Gs2Schedule.Model.RepeatSchedule.FromJson(data["repeatSchedule"]))
+                .WithIsGlobalSchedule(!data.Keys.Contains("isGlobalSchedule") || data["isGlobalSchedule"] == null ? null : (bool?)bool.Parse(data["isGlobalSchedule"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
@@ -95,6 +102,7 @@ namespace Gs2.Gs2Schedule.Result
                 ["scheduleStartAt"] = ScheduleStartAt,
                 ["scheduleEndAt"] = ScheduleEndAt,
                 ["repeatSchedule"] = RepeatSchedule?.ToJson(),
+                ["isGlobalSchedule"] = IsGlobalSchedule,
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -119,6 +127,10 @@ namespace Gs2.Gs2Schedule.Result
             }
             if (RepeatSchedule != null) {
                 RepeatSchedule.WriteJson(writer);
+            }
+            if (IsGlobalSchedule != null) {
+                writer.WritePropertyName("isGlobalSchedule");
+                writer.Write(bool.Parse(IsGlobalSchedule.ToString()));
             }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");

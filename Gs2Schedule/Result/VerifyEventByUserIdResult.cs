@@ -33,7 +33,43 @@ namespace Gs2.Gs2Schedule.Result
 	[System.Serializable]
 	public class VerifyEventByUserIdResult : IResult
 	{
+        public Gs2.Gs2Schedule.Model.Event Item { set; get; }
+        public bool? InSchedule { set; get; }
+        public long? ScheduleStartAt { set; get; }
+        public long? ScheduleEndAt { set; get; }
+        public Gs2.Gs2Schedule.Model.RepeatSchedule RepeatSchedule { set; get; }
+        public bool? IsGlobalSchedule { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifyEventByUserIdResult WithItem(Gs2.Gs2Schedule.Model.Event item) {
+            this.Item = item;
+            return this;
+        }
+
+        public VerifyEventByUserIdResult WithInSchedule(bool? inSchedule) {
+            this.InSchedule = inSchedule;
+            return this;
+        }
+
+        public VerifyEventByUserIdResult WithScheduleStartAt(long? scheduleStartAt) {
+            this.ScheduleStartAt = scheduleStartAt;
+            return this;
+        }
+
+        public VerifyEventByUserIdResult WithScheduleEndAt(long? scheduleEndAt) {
+            this.ScheduleEndAt = scheduleEndAt;
+            return this;
+        }
+
+        public VerifyEventByUserIdResult WithRepeatSchedule(Gs2.Gs2Schedule.Model.RepeatSchedule repeatSchedule) {
+            this.RepeatSchedule = repeatSchedule;
+            return this;
+        }
+
+        public VerifyEventByUserIdResult WithIsGlobalSchedule(bool? isGlobalSchedule) {
+            this.IsGlobalSchedule = isGlobalSchedule;
+            return this;
+        }
 
         public VerifyEventByUserIdResult WithMetadata(ResultMetadata metadata) {
             this.Metadata = metadata;
@@ -49,12 +85,24 @@ namespace Gs2.Gs2Schedule.Result
                 return null;
             }
             return new VerifyEventByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Schedule.Model.Event.FromJson(data["item"]))
+                .WithInSchedule(!data.Keys.Contains("inSchedule") || data["inSchedule"] == null ? null : (bool?)bool.Parse(data["inSchedule"].ToString()))
+                .WithScheduleStartAt(!data.Keys.Contains("scheduleStartAt") || data["scheduleStartAt"] == null ? null : (long?)(data["scheduleStartAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleStartAt"].ToString()) : long.Parse(data["scheduleStartAt"].ToString())))
+                .WithScheduleEndAt(!data.Keys.Contains("scheduleEndAt") || data["scheduleEndAt"] == null ? null : (long?)(data["scheduleEndAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleEndAt"].ToString()) : long.Parse(data["scheduleEndAt"].ToString())))
+                .WithRepeatSchedule(!data.Keys.Contains("repeatSchedule") || data["repeatSchedule"] == null ? null : Gs2.Gs2Schedule.Model.RepeatSchedule.FromJson(data["repeatSchedule"]))
+                .WithIsGlobalSchedule(!data.Keys.Contains("isGlobalSchedule") || data["isGlobalSchedule"] == null ? null : (bool?)bool.Parse(data["isGlobalSchedule"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["inSchedule"] = InSchedule,
+                ["scheduleStartAt"] = ScheduleStartAt,
+                ["scheduleEndAt"] = ScheduleEndAt,
+                ["repeatSchedule"] = RepeatSchedule?.ToJson(),
+                ["isGlobalSchedule"] = IsGlobalSchedule,
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -62,6 +110,28 @@ namespace Gs2.Gs2Schedule.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (InSchedule != null) {
+                writer.WritePropertyName("inSchedule");
+                writer.Write(bool.Parse(InSchedule.ToString()));
+            }
+            if (ScheduleStartAt != null) {
+                writer.WritePropertyName("scheduleStartAt");
+                writer.Write((ScheduleStartAt.ToString().Contains(".") ? (long)double.Parse(ScheduleStartAt.ToString()) : long.Parse(ScheduleStartAt.ToString())));
+            }
+            if (ScheduleEndAt != null) {
+                writer.WritePropertyName("scheduleEndAt");
+                writer.Write((ScheduleEndAt.ToString().Contains(".") ? (long)double.Parse(ScheduleEndAt.ToString()) : long.Parse(ScheduleEndAt.ToString())));
+            }
+            if (RepeatSchedule != null) {
+                RepeatSchedule.WriteJson(writer);
+            }
+            if (IsGlobalSchedule != null) {
+                writer.WritePropertyName("isGlobalSchedule");
+                writer.Write(bool.Parse(IsGlobalSchedule.ToString()));
+            }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 Metadata.WriteJson(writer);

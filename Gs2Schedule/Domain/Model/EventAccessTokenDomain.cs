@@ -73,6 +73,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
         public bool? InSchedule { get; set; } = null!;
         public long? ScheduleStartAt { get; set; } = null!;
         public long? ScheduleEndAt { get; set; } = null!;
+        public bool? IsGlobalSchedule { get; set; } = null!;
 
         public EventAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -118,6 +119,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 InSchedule = result?.InSchedule;
                 ScheduleStartAt = result?.ScheduleStartAt;
                 ScheduleEndAt = result?.ScheduleEndAt;
+                IsGlobalSchedule = result?.IsGlobalSchedule;
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Schedule.Model.Event>(Impl);
@@ -147,6 +149,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             InSchedule = result?.InSchedule;
             ScheduleStartAt = result?.ScheduleStartAt;
             ScheduleEndAt = result?.ScheduleEndAt;
+            IsGlobalSchedule = result?.IsGlobalSchedule;
             return result?.Item;
         }
         #endif
@@ -175,6 +178,11 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+                domain.InSchedule = result?.InSchedule;
+                domain.ScheduleStartAt = result?.ScheduleStartAt;
+                domain.ScheduleEndAt = result?.ScheduleEndAt;
+                domain.IsGlobalSchedule = result?.IsGlobalSchedule;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain>(Impl);
@@ -201,6 +209,11 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 () => this._client.VerifyEventAsync(request)
             );
             var domain = this;
+            domain.InSchedule = result?.InSchedule;
+            domain.ScheduleStartAt = result?.ScheduleStartAt;
+            domain.ScheduleEndAt = result?.ScheduleEndAt;
+            domain.IsGlobalSchedule = result?.IsGlobalSchedule;
+
             return domain;
         }
         #endif
