@@ -38,6 +38,7 @@ namespace Gs2.Gs2Friend.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string UserId { set; get; } = null!;
+         public bool? WithProfile { set; get; } = null!;
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Friend.Request
         }
         public DescribeSendRequestsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public DescribeSendRequestsByUserIdRequest WithWithProfile(bool? withProfile) {
+            this.WithProfile = withProfile;
             return this;
         }
         public DescribeSendRequestsByUserIdRequest WithPageToken(string pageToken) {
@@ -73,6 +78,7 @@ namespace Gs2.Gs2Friend.Request
             return new DescribeSendRequestsByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithWithProfile(!data.Keys.Contains("withProfile") || data["withProfile"] == null ? null : (bool?)bool.Parse(data["withProfile"].ToString()))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
@@ -83,6 +89,7 @@ namespace Gs2.Gs2Friend.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["withProfile"] = WithProfile,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
                 ["timeOffsetToken"] = TimeOffsetToken,
@@ -99,6 +106,10 @@ namespace Gs2.Gs2Friend.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (WithProfile != null) {
+                writer.WritePropertyName("withProfile");
+                writer.Write(bool.Parse(WithProfile.ToString()));
             }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
@@ -119,6 +130,7 @@ namespace Gs2.Gs2Friend.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
+            key += WithProfile + ":";
             key += PageToken + ":";
             key += Limit + ":";
             key += TimeOffsetToken + ":";

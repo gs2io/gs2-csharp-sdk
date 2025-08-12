@@ -36,12 +36,17 @@ namespace Gs2.Gs2Friend.Model
 	{
         public string UserId { set; get; }
         public string TargetUserId { set; get; }
+        public string PublicProfile { set; get; }
         public FriendRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public FriendRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
+            return this;
+        }
+        public FriendRequest WithPublicProfile(string publicProfile) {
+            this.PublicProfile = publicProfile;
             return this;
         }
 
@@ -55,7 +60,8 @@ namespace Gs2.Gs2Friend.Model
             }
             return new FriendRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
+                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString())
+                .WithPublicProfile(!data.Keys.Contains("publicProfile") || data["publicProfile"] == null ? null : data["publicProfile"].ToString());
         }
 
         public JsonData ToJson()
@@ -63,6 +69,7 @@ namespace Gs2.Gs2Friend.Model
             return new JsonData {
                 ["userId"] = UserId,
                 ["targetUserId"] = TargetUserId,
+                ["publicProfile"] = PublicProfile,
             };
         }
 
@@ -76,6 +83,10 @@ namespace Gs2.Gs2Friend.Model
             if (TargetUserId != null) {
                 writer.WritePropertyName("targetUserId");
                 writer.Write(TargetUserId.ToString());
+            }
+            if (PublicProfile != null) {
+                writer.WritePropertyName("publicProfile");
+                writer.Write(PublicProfile.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -100,6 +111,14 @@ namespace Gs2.Gs2Friend.Model
             {
                 diff += TargetUserId.CompareTo(other.TargetUserId);
             }
+            if (PublicProfile == null && PublicProfile == other.PublicProfile)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += PublicProfile.CompareTo(other.PublicProfile);
+            }
             return diff;
         }
 
@@ -118,12 +137,20 @@ namespace Gs2.Gs2Friend.Model
                     });
                 }
             }
+            {
+                if (PublicProfile.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("friendRequest", "friend.friendRequest.publicProfile.error.tooLong"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
             return new FriendRequest {
                 UserId = UserId,
                 TargetUserId = TargetUserId,
+                PublicProfile = PublicProfile,
             };
         }
     }

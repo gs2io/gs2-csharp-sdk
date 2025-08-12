@@ -5101,6 +5101,9 @@ namespace Gs2.Gs2Friend
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
+                }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
@@ -5214,6 +5217,9 @@ namespace Gs2.Gs2Friend
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
                 }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
@@ -5329,6 +5335,9 @@ namespace Gs2.Gs2Friend
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
+                }
                 if (request.AccessToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
@@ -5437,6 +5446,9 @@ namespace Gs2.Gs2Friend
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
                 }
                 if (request.TimeOffsetToken != null)
                 {
@@ -6021,6 +6033,9 @@ namespace Gs2.Gs2Friend
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
+                }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
@@ -6134,6 +6149,9 @@ namespace Gs2.Gs2Friend
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
                 }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
@@ -6249,6 +6267,9 @@ namespace Gs2.Gs2Friend
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
+                }
                 if (request.AccessToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
@@ -6357,6 +6378,9 @@ namespace Gs2.Gs2Friend
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.WithProfile != null) {
+                    sessionRequest.AddQueryString("withProfile", $"{request.WithProfile}");
                 }
                 if (request.TimeOffsetToken != null)
                 {

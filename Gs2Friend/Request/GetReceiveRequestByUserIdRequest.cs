@@ -39,6 +39,7 @@ namespace Gs2.Gs2Friend.Request
          public string NamespaceName { set; get; } = null!;
          public string UserId { set; get; } = null!;
          public string FromUserId { set; get; } = null!;
+         public bool? WithProfile { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public GetReceiveRequestByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -50,6 +51,10 @@ namespace Gs2.Gs2Friend.Request
         }
         public GetReceiveRequestByUserIdRequest WithFromUserId(string fromUserId) {
             this.FromUserId = fromUserId;
+            return this;
+        }
+        public GetReceiveRequestByUserIdRequest WithWithProfile(bool? withProfile) {
+            this.WithProfile = withProfile;
             return this;
         }
         public GetReceiveRequestByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -69,6 +74,7 @@ namespace Gs2.Gs2Friend.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString())
+                .WithWithProfile(!data.Keys.Contains("withProfile") || data["withProfile"] == null ? null : (bool?)bool.Parse(data["withProfile"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Friend.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["fromUserId"] = FromUserId,
+                ["withProfile"] = WithProfile,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -97,6 +104,10 @@ namespace Gs2.Gs2Friend.Request
                 writer.WritePropertyName("fromUserId");
                 writer.Write(FromUserId.ToString());
             }
+            if (WithProfile != null) {
+                writer.WritePropertyName("withProfile");
+                writer.Write(bool.Parse(WithProfile.ToString()));
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -109,6 +120,7 @@ namespace Gs2.Gs2Friend.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += FromUserId + ":";
+            key += WithProfile + ":";
             key += TimeOffsetToken + ":";
             return key;
         }
