@@ -85,11 +85,6 @@ namespace Gs2.Gs2Lottery
                     jsonWriter.WritePropertyName("lotteryTriggerScriptId");
                     jsonWriter.Write(request.LotteryTriggerScriptId.ToString());
                 }
-                if (request.ChoicePrizeTableScriptId != null)
-                {
-                    jsonWriter.WritePropertyName("choicePrizeTableScriptId");
-                    jsonWriter.Write(request.ChoicePrizeTableScriptId.ToString());
-                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -428,11 +423,6 @@ namespace Gs2.Gs2Lottery
                 {
                     jsonWriter.WritePropertyName("lotteryTriggerScriptId");
                     jsonWriter.Write(request.LotteryTriggerScriptId.ToString());
-                }
-                if (request.ChoicePrizeTableScriptId != null)
-                {
-                    jsonWriter.WritePropertyName("choicePrizeTableScriptId");
-                    jsonWriter.Write(request.ChoicePrizeTableScriptId.ToString());
                 }
                 if (request.LogSetting != null)
                 {

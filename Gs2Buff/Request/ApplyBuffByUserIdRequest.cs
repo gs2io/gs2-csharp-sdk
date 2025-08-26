@@ -39,7 +39,6 @@ namespace Gs2.Gs2Buff.Request
          public string NamespaceName { set; get; } = null!;
          public string UserId { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public ApplyBuffByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -50,11 +49,6 @@ namespace Gs2.Gs2Buff.Request
         }
         public ApplyBuffByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public ApplyBuffByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

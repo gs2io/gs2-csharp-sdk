@@ -39,7 +39,6 @@ namespace Gs2.Gs2Idle.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public string CategoryName { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public PredictionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -50,11 +49,6 @@ namespace Gs2.Gs2Idle.Request
         }
         public PredictionRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
-            return this;
-        }
-
-        public PredictionRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -39,7 +39,6 @@ namespace Gs2.Gs2Lottery.Model
         public string Description { set; get; }
         public Gs2.Gs2Lottery.Model.TransactionSetting TransactionSetting { set; get; }
         public string LotteryTriggerScriptId { set; get; }
-        public string ChoicePrizeTableScriptId { set; get; }
         public Gs2.Gs2Lottery.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -66,10 +65,6 @@ namespace Gs2.Gs2Lottery.Model
         }
         public Namespace WithLotteryTriggerScriptId(string lotteryTriggerScriptId) {
             this.LotteryTriggerScriptId = lotteryTriggerScriptId;
-            return this;
-        }
-        public Namespace WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
-            this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Lottery.Model.LogSetting logSetting) {
@@ -164,7 +159,6 @@ namespace Gs2.Gs2Lottery.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Lottery.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithLotteryTriggerScriptId(!data.Keys.Contains("lotteryTriggerScriptId") || data["lotteryTriggerScriptId"] == null ? null : data["lotteryTriggerScriptId"].ToString())
-                .WithChoicePrizeTableScriptId(!data.Keys.Contains("choicePrizeTableScriptId") || data["choicePrizeTableScriptId"] == null ? null : data["choicePrizeTableScriptId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Lottery.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -181,7 +175,6 @@ namespace Gs2.Gs2Lottery.Model
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["lotteryTriggerScriptId"] = LotteryTriggerScriptId,
-                ["choicePrizeTableScriptId"] = ChoicePrizeTableScriptId,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -211,10 +204,6 @@ namespace Gs2.Gs2Lottery.Model
             if (LotteryTriggerScriptId != null) {
                 writer.WritePropertyName("lotteryTriggerScriptId");
                 writer.Write(LotteryTriggerScriptId.ToString());
-            }
-            if (ChoicePrizeTableScriptId != null) {
-                writer.WritePropertyName("choicePrizeTableScriptId");
-                writer.Write(ChoicePrizeTableScriptId.ToString());
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -286,14 +275,6 @@ namespace Gs2.Gs2Lottery.Model
             else
             {
                 diff += LotteryTriggerScriptId.CompareTo(other.LotteryTriggerScriptId);
-            }
-            if (ChoicePrizeTableScriptId == null && ChoicePrizeTableScriptId == other.ChoicePrizeTableScriptId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChoicePrizeTableScriptId.CompareTo(other.ChoicePrizeTableScriptId);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
@@ -378,13 +359,6 @@ namespace Gs2.Gs2Lottery.Model
                 }
             }
             {
-                if (ChoicePrizeTableScriptId.Length > 1024) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("namespace", "lottery.namespace.choicePrizeTableScriptId.error.tooLong"),
-                    });
-                }
-            }
-            {
             }
             {
                 if (CreatedAt < 0) {
@@ -431,7 +405,6 @@ namespace Gs2.Gs2Lottery.Model
                 Description = Description,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Lottery.Model.TransactionSetting,
                 LotteryTriggerScriptId = LotteryTriggerScriptId,
-                ChoicePrizeTableScriptId = ChoicePrizeTableScriptId,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Lottery.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

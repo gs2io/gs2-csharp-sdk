@@ -40,7 +40,6 @@ namespace Gs2.Gs2Account.Request
          public string AccessToken { set; get; } = null!;
          public int? Type { set; get; } = null!;
          public string UserIdentifier { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public FindPlatformIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -55,11 +54,6 @@ namespace Gs2.Gs2Account.Request
         }
         public FindPlatformIdRequest WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
-            return this;
-        }
-
-        public FindPlatformIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -225,6 +225,11 @@ namespace Gs2.Gs2Money2
                     jsonWriter.WritePropertyName("withdrawBalanceScript");
                     request.WithdrawBalanceScript.WriteJson(jsonWriter);
                 }
+                if (request.VerifyReceiptScript != null)
+                {
+                    jsonWriter.WritePropertyName("verifyReceiptScript");
+                    request.VerifyReceiptScript.WriteJson(jsonWriter);
+                }
                 if (request.SubscribeScript != null)
                 {
                     jsonWriter.WritePropertyName("subscribeScript");
@@ -601,6 +606,11 @@ namespace Gs2.Gs2Money2
                 {
                     jsonWriter.WritePropertyName("withdrawBalanceScript");
                     request.WithdrawBalanceScript.WriteJson(jsonWriter);
+                }
+                if (request.VerifyReceiptScript != null)
+                {
+                    jsonWriter.WritePropertyName("verifyReceiptScript");
+                    request.VerifyReceiptScript.WriteJson(jsonWriter);
                 }
                 if (request.SubscribeScript != null)
                 {

@@ -41,7 +41,6 @@ namespace Gs2.Gs2Distributor.Request
          public string Body { set; get; } = null!;
          public string Signature { set; get; } = null!;
          public string KeyId { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public FreezeMasterDataBySignedTimestampRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -60,11 +59,6 @@ namespace Gs2.Gs2Distributor.Request
         }
         public FreezeMasterDataBySignedTimestampRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
-            return this;
-        }
-
-        public FreezeMasterDataBySignedTimestampRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

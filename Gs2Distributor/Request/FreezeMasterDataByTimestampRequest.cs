@@ -39,7 +39,6 @@ namespace Gs2.Gs2Distributor.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public long? Timestamp { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public FreezeMasterDataByTimestampRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -50,11 +49,6 @@ namespace Gs2.Gs2Distributor.Request
         }
         public FreezeMasterDataByTimestampRequest WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
-            return this;
-        }
-
-        public FreezeMasterDataByTimestampRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

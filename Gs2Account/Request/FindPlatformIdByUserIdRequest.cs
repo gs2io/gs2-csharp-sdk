@@ -41,7 +41,6 @@ namespace Gs2.Gs2Account.Request
          public int? Type { set; get; } = null!;
          public string UserIdentifier { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public FindPlatformIdByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -60,11 +59,6 @@ namespace Gs2.Gs2Account.Request
         }
         public FindPlatformIdByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public FindPlatformIdByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

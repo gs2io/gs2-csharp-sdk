@@ -416,7 +416,7 @@ namespace Gs2.Gs2Datastore.Model
                 }
             }
             {
-                if (AllowUserIds.Length > 10000) {
+                if (AllowUserIds.Length > 100) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("dataObject", "datastore.dataObject.allowUserIds.error.tooMany"),
                     });

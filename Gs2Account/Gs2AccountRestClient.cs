@@ -5541,10 +5541,6 @@ namespace Gs2.Gs2Account
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.DryRun)
                 {
                     sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
@@ -5650,10 +5646,6 @@ namespace Gs2.Gs2Account
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.TimeOffsetToken != null)
                 {

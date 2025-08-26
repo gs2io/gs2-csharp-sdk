@@ -43,6 +43,7 @@ namespace Gs2.Gs2Money2.Request
          public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
          public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
          public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; } = null!;
+         public Gs2.Gs2Money2.Model.ScriptSetting VerifyReceiptScript { set; get; } = null!;
          public string SubscribeScript { set; get; } = null!;
          public string RenewScript { set; get; } = null!;
          public string UnsubscribeScript { set; get; } = null!;
@@ -75,6 +76,10 @@ namespace Gs2.Gs2Money2.Request
         }
         public CreateNamespaceRequest WithWithdrawBalanceScript(Gs2.Gs2Money2.Model.ScriptSetting withdrawBalanceScript) {
             this.WithdrawBalanceScript = withdrawBalanceScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithVerifyReceiptScript(Gs2.Gs2Money2.Model.ScriptSetting verifyReceiptScript) {
+            this.VerifyReceiptScript = verifyReceiptScript;
             return this;
         }
         public CreateNamespaceRequest WithSubscribeScript(string subscribeScript) {
@@ -118,6 +123,7 @@ namespace Gs2.Gs2Money2.Request
                 .WithPlatformSetting(!data.Keys.Contains("platformSetting") || data["platformSetting"] == null ? null : Gs2.Gs2Money2.Model.PlatformSetting.FromJson(data["platformSetting"]))
                 .WithDepositBalanceScript(!data.Keys.Contains("depositBalanceScript") || data["depositBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["depositBalanceScript"]))
                 .WithWithdrawBalanceScript(!data.Keys.Contains("withdrawBalanceScript") || data["withdrawBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["withdrawBalanceScript"]))
+                .WithVerifyReceiptScript(!data.Keys.Contains("verifyReceiptScript") || data["verifyReceiptScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["verifyReceiptScript"]))
                 .WithSubscribeScript(!data.Keys.Contains("subscribeScript") || data["subscribeScript"] == null ? null : data["subscribeScript"].ToString())
                 .WithRenewScript(!data.Keys.Contains("renewScript") || data["renewScript"] == null ? null : data["renewScript"].ToString())
                 .WithUnsubscribeScript(!data.Keys.Contains("unsubscribeScript") || data["unsubscribeScript"] == null ? null : data["unsubscribeScript"].ToString())
@@ -136,6 +142,7 @@ namespace Gs2.Gs2Money2.Request
                 ["platformSetting"] = PlatformSetting?.ToJson(),
                 ["depositBalanceScript"] = DepositBalanceScript?.ToJson(),
                 ["withdrawBalanceScript"] = WithdrawBalanceScript?.ToJson(),
+                ["verifyReceiptScript"] = VerifyReceiptScript?.ToJson(),
                 ["subscribeScript"] = SubscribeScript,
                 ["renewScript"] = RenewScript,
                 ["unsubscribeScript"] = UnsubscribeScript,
@@ -173,6 +180,9 @@ namespace Gs2.Gs2Money2.Request
             if (WithdrawBalanceScript != null) {
                 WithdrawBalanceScript.WriteJson(writer);
             }
+            if (VerifyReceiptScript != null) {
+                VerifyReceiptScript.WriteJson(writer);
+            }
             if (SubscribeScript != null) {
                 writer.WritePropertyName("subscribeScript");
                 writer.Write(SubscribeScript.ToString());
@@ -206,6 +216,7 @@ namespace Gs2.Gs2Money2.Request
             key += PlatformSetting + ":";
             key += DepositBalanceScript + ":";
             key += WithdrawBalanceScript + ":";
+            key += VerifyReceiptScript + ":";
             key += SubscribeScript + ":";
             key += RenewScript + ":";
             key += UnsubscribeScript + ":";

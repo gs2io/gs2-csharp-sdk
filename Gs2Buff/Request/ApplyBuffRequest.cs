@@ -38,18 +38,12 @@ namespace Gs2.Gs2Buff.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public ApplyBuffRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
         public ApplyBuffRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
-            return this;
-        }
-
-        public ApplyBuffRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

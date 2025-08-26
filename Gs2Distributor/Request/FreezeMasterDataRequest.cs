@@ -38,18 +38,12 @@ namespace Gs2.Gs2Distributor.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public FreezeMasterDataRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
         public FreezeMasterDataRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
-            return this;
-        }
-
-        public FreezeMasterDataRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

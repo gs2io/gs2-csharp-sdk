@@ -4659,11 +4659,6 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("xGs2AccessToken");
                     jsonWriter.Write(request.AccessToken);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
-                }
                 if (request.DryRun)
                 {
                     jsonWriter.WritePropertyName("xGs2DryRun");
@@ -4786,11 +4781,6 @@ namespace Gs2.Gs2Account
                 {
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
-                    jsonWriter.Write(request.DuplicationAvoider);
                 }
                 if (request.DryRun)
                 {

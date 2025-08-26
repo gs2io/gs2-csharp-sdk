@@ -285,7 +285,7 @@ namespace Gs2.Gs2Friend.Model
                 }
             }
             {
-                if (TargetUserIds.Length > 10000) {
+                if (TargetUserIds.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("blackList", "friend.blackList.targetUserIds.error.tooMany"),
                     });

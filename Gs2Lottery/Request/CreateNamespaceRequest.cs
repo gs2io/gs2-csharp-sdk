@@ -40,7 +40,6 @@ namespace Gs2.Gs2Lottery.Request
          public string Description { set; get; } = null!;
          public Gs2.Gs2Lottery.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public string LotteryTriggerScriptId { set; get; } = null!;
-         public string ChoicePrizeTableScriptId { set; get; } = null!;
          public Gs2.Gs2Lottery.Model.LogSetting LogSetting { set; get; } = null!;
         [Obsolete("This method is deprecated")]
          public string QueueNamespaceId { set; get; } = null!;
@@ -60,10 +59,6 @@ namespace Gs2.Gs2Lottery.Request
         }
         public CreateNamespaceRequest WithLotteryTriggerScriptId(string lotteryTriggerScriptId) {
             this.LotteryTriggerScriptId = lotteryTriggerScriptId;
-            return this;
-        }
-        public CreateNamespaceRequest WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
-            this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;
         }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Lottery.Model.LogSetting logSetting) {
@@ -94,7 +89,6 @@ namespace Gs2.Gs2Lottery.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Lottery.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithLotteryTriggerScriptId(!data.Keys.Contains("lotteryTriggerScriptId") || data["lotteryTriggerScriptId"] == null ? null : data["lotteryTriggerScriptId"].ToString())
-                .WithChoicePrizeTableScriptId(!data.Keys.Contains("choicePrizeTableScriptId") || data["choicePrizeTableScriptId"] == null ? null : data["choicePrizeTableScriptId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Lottery.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -105,7 +99,6 @@ namespace Gs2.Gs2Lottery.Request
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["lotteryTriggerScriptId"] = LotteryTriggerScriptId,
-                ["choicePrizeTableScriptId"] = ChoicePrizeTableScriptId,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -128,10 +121,6 @@ namespace Gs2.Gs2Lottery.Request
                 writer.WritePropertyName("lotteryTriggerScriptId");
                 writer.Write(LotteryTriggerScriptId.ToString());
             }
-            if (ChoicePrizeTableScriptId != null) {
-                writer.WritePropertyName("choicePrizeTableScriptId");
-                writer.Write(ChoicePrizeTableScriptId.ToString());
-            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -152,7 +141,6 @@ namespace Gs2.Gs2Lottery.Request
             key += Description + ":";
             key += TransactionSetting + ":";
             key += LotteryTriggerScriptId + ":";
-            key += ChoicePrizeTableScriptId + ":";
             key += LogSetting + ":";
             return key;
         }

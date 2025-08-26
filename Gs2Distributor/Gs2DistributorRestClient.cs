@@ -3867,10 +3867,6 @@ namespace Gs2.Gs2Distributor
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.DryRun)
                 {
                     sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
@@ -3988,10 +3984,6 @@ namespace Gs2.Gs2Distributor
                     sessionRequest.Body = body;
                 }
                 sessionRequest.AddHeader("Content-Type", "application/json");
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
@@ -4257,10 +4249,6 @@ namespace Gs2.Gs2Distributor
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
                 }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
                 if (request.DryRun)
                 {
                     sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
@@ -4385,10 +4373,6 @@ namespace Gs2.Gs2Distributor
                 if (request.AccessToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
                 if (request.DryRun)
                 {

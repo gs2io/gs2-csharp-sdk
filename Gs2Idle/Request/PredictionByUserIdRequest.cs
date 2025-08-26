@@ -40,7 +40,6 @@ namespace Gs2.Gs2Idle.Request
          public string UserId { set; get; } = null!;
          public string CategoryName { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
-        public string DuplicationAvoider { set; get; } = null!;
         public PredictionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -55,11 +54,6 @@ namespace Gs2.Gs2Idle.Request
         }
         public PredictionByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
-            return this;
-        }
-
-        public PredictionByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 
