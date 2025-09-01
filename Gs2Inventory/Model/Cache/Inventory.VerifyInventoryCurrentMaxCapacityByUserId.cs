@@ -46,6 +46,13 @@ namespace Gs2.Gs2Inventory.Model.Cache
             int? timeOffset,
             VerifyInventoryCurrentMaxCapacityByUserIdRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                self.Item.InventoryName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

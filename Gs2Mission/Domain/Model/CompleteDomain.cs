@@ -618,6 +618,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain>(Impl);
@@ -644,6 +645,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 () => this._client.VerifyCompleteByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

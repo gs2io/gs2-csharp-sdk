@@ -46,6 +46,26 @@ namespace Gs2.Gs2Inventory.Model.Cache
             int? timeOffset,
             VerifyItemSetRequest request
         ) {
+            foreach (var item in self.Items ?? Array.Empty<ItemSet>())
+            {
+                item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.InventoryName,
+                    item.ItemName,
+                    item.Name,
+                    timeOffset
+                );
+            }
+            self.Items?.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                request.InventoryName,
+                request.ItemName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

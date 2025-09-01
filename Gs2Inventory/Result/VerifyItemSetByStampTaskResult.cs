@@ -33,8 +33,14 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class VerifyItemSetByStampTaskResult : IResult
 	{
+        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; }
         public string NewContextStack { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifyItemSetByStampTaskResult WithItems(Gs2.Gs2Inventory.Model.ItemSet[] items) {
+            this.Items = items;
+            return this;
+        }
 
         public VerifyItemSetByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
@@ -55,13 +61,26 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new VerifyItemSetByStampTaskResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inventory.Model.ItemSet.FromJson(v);
+                }).ToArray())
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
+            JsonData itemsJsonData = null;
+            if (Items != null && Items.Length > 0)
+            {
+                itemsJsonData = new JsonData();
+                foreach (var item in Items)
+                {
+                    itemsJsonData.Add(item.ToJson());
+                }
+            }
             return new JsonData {
+                ["items"] = itemsJsonData,
                 ["newContextStack"] = NewContextStack,
                 ["metadata"] = Metadata?.ToJson(),
             };
@@ -70,6 +89,17 @@ namespace Gs2.Gs2Inventory.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Items != null) {
+                writer.WritePropertyName("items");
+                writer.WriteArrayStart();
+                foreach (var item in Items)
+                {
+                    if (item != null) {
+                        item.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());

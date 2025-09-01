@@ -33,7 +33,13 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class VerifyItemSetByUserIdResult : IResult
 	{
+        public Gs2.Gs2Inventory.Model.ItemSet[] Items { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifyItemSetByUserIdResult WithItems(Gs2.Gs2Inventory.Model.ItemSet[] items) {
+            this.Items = items;
+            return this;
+        }
 
         public VerifyItemSetByUserIdResult WithMetadata(ResultMetadata metadata) {
             this.Metadata = metadata;
@@ -49,12 +55,25 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new VerifyItemSetByUserIdResult()
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inventory.Model.ItemSet.FromJson(v);
+                }).ToArray())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
+            JsonData itemsJsonData = null;
+            if (Items != null && Items.Length > 0)
+            {
+                itemsJsonData = new JsonData();
+                foreach (var item in Items)
+                {
+                    itemsJsonData.Add(item.ToJson());
+                }
+            }
             return new JsonData {
+                ["items"] = itemsJsonData,
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -62,6 +81,17 @@ namespace Gs2.Gs2Inventory.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Items != null) {
+                writer.WritePropertyName("items");
+                writer.WriteArrayStart();
+                foreach (var item in Items)
+                {
+                    if (item != null) {
+                        item.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 Metadata.WriteJson(writer);

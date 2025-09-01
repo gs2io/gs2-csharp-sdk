@@ -46,6 +46,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
             int? timeOffset,
             VerifyBigItemByStampTaskRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                default,
+                userId,
+                default,
+                self.Item.ItemName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

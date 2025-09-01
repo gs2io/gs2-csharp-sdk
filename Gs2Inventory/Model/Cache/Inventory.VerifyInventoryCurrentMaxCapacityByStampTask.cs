@@ -46,6 +46,13 @@ namespace Gs2.Gs2Inventory.Model.Cache
             int? timeOffset,
             VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                default,
+                userId,
+                self.Item.InventoryName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

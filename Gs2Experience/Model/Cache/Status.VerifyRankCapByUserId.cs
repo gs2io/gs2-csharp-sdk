@@ -46,6 +46,14 @@ namespace Gs2.Gs2Experience.Model.Cache
             int? timeOffset,
             VerifyRankCapByUserIdRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                self.Item.ExperienceName,
+                self.Item.PropertyId,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

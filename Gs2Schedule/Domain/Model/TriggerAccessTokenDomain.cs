@@ -219,6 +219,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Schedule.Domain.Model.TriggerAccessTokenDomain>(Impl);
@@ -245,6 +246,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 () => this._client.VerifyTriggerAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

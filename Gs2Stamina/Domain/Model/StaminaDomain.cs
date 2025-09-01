@@ -729,6 +729,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
@@ -755,6 +756,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 () => this._client.VerifyStaminaValueByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif
@@ -783,6 +785,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
@@ -809,6 +812,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 () => this._client.VerifyStaminaMaxValueByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif
@@ -837,6 +841,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
@@ -863,6 +868,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 () => this._client.VerifyStaminaRecoverIntervalMinutesByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif
@@ -891,6 +897,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
@@ -917,6 +924,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 () => this._client.VerifyStaminaRecoverValueByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif
@@ -945,6 +953,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
@@ -971,6 +980,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 () => this._client.VerifyStaminaOverflowValueByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

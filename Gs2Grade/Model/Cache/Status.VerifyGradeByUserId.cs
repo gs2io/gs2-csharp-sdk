@@ -46,6 +46,14 @@ namespace Gs2.Gs2Grade.Model.Cache
             int? timeOffset,
             VerifyGradeByUserIdRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                self.Item.GradeName,
+                self.Item.PropertyId,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

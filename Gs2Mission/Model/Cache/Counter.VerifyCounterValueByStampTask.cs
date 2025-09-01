@@ -46,6 +46,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             int? timeOffset,
             VerifyCounterValueByStampTaskRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                default,
+                userId,
+                self.Item.Name,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

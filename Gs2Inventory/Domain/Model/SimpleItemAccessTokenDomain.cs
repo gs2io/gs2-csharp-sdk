@@ -229,6 +229,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain>(Impl);
@@ -256,6 +257,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 () => this._client.VerifySimpleItemAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

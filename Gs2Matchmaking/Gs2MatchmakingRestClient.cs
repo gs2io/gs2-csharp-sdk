@@ -6085,12 +6085,14 @@ namespace Gs2.Gs2Matchmaking
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{seasonName}", !string.IsNullOrEmpty(request.SeasonName) ? request.SeasonName.ToString() : "null");
                 url = url.Replace("{season}",request.Season != null ? request.Season.ToString() : "null");
-                url = url.Replace("{tier}",request.Tier != null ? request.Tier.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Tier != null) {
+                    sessionRequest.AddQueryString("tier", $"{request.Tier}");
                 }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");

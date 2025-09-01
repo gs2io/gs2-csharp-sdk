@@ -46,6 +46,13 @@ namespace Gs2.Gs2Guild.Model.Cache
             int? timeOffset,
             VerifyIncludeMemberRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                self.Item.GuildModelName,
+                request.GuildName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

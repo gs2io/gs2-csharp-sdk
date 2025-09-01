@@ -33,7 +33,13 @@ namespace Gs2.Gs2Guild.Result
 	[System.Serializable]
 	public class VerifyCurrentMaximumMemberCountByGuildNameResult : IResult
 	{
+        public Gs2.Gs2Guild.Model.Guild Item { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifyCurrentMaximumMemberCountByGuildNameResult WithItem(Gs2.Gs2Guild.Model.Guild item) {
+            this.Item = item;
+            return this;
+        }
 
         public VerifyCurrentMaximumMemberCountByGuildNameResult WithMetadata(ResultMetadata metadata) {
             this.Metadata = metadata;
@@ -49,12 +55,14 @@ namespace Gs2.Gs2Guild.Result
                 return null;
             }
             return new VerifyCurrentMaximumMemberCountByGuildNameResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Guild.Model.Guild.FromJson(data["item"]))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -62,6 +70,9 @@ namespace Gs2.Gs2Guild.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 Metadata.WriteJson(writer);

@@ -46,6 +46,16 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             int? timeOffset,
             VerifyIncludeParticipantByStampTaskRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                default,
+                userId,
+                self.Item.SeasonName,
+                self.Item.Season ?? default,
+                self.Item.Tier ?? default,
+                self.Item.Name,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -33,8 +33,14 @@ namespace Gs2.Gs2Grade.Result
 	[System.Serializable]
 	public class VerifyGradeByStampTaskResult : IResult
 	{
+        public Gs2.Gs2Grade.Model.Status Item { set; get; }
         public string NewContextStack { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifyGradeByStampTaskResult WithItem(Gs2.Gs2Grade.Model.Status item) {
+            this.Item = item;
+            return this;
+        }
 
         public VerifyGradeByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
@@ -55,6 +61,7 @@ namespace Gs2.Gs2Grade.Result
                 return null;
             }
             return new VerifyGradeByStampTaskResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Grade.Model.Status.FromJson(data["item"]))
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
@@ -62,6 +69,7 @@ namespace Gs2.Gs2Grade.Result
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
                 ["newContextStack"] = NewContextStack,
                 ["metadata"] = Metadata?.ToJson(),
             };
@@ -70,6 +78,9 @@ namespace Gs2.Gs2Grade.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());

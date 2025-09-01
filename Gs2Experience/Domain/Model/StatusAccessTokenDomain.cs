@@ -346,6 +346,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain>(Impl);
@@ -373,6 +374,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 () => this._client.VerifyRankAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif
@@ -402,6 +404,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain>(Impl);
@@ -429,6 +432,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 () => this._client.VerifyRankCapAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

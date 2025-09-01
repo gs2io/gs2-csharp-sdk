@@ -363,7 +363,7 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
-                if (WhiteListTargetIds.Length > 100) {
+                if (WhiteListTargetIds.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("distributorModelMaster", "distributor.distributorModelMaster.whiteListTargetIds.error.tooMany"),
                     });

@@ -33,7 +33,13 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class VerifySimpleItemResult : IResult
 	{
+        public Gs2.Gs2Inventory.Model.SimpleItem Item { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifySimpleItemResult WithItem(Gs2.Gs2Inventory.Model.SimpleItem item) {
+            this.Item = item;
+            return this;
+        }
 
         public VerifySimpleItemResult WithMetadata(ResultMetadata metadata) {
             this.Metadata = metadata;
@@ -49,12 +55,14 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new VerifySimpleItemResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.SimpleItem.FromJson(data["item"]))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -62,6 +70,9 @@ namespace Gs2.Gs2Inventory.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 Metadata.WriteJson(writer);

@@ -46,6 +46,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             int? timeOffset,
             VerifyStaminaMaxValueByUserIdRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                self.Item.StaminaName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

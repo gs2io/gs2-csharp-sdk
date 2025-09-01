@@ -346,6 +346,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain>(Impl);
@@ -373,6 +374,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 () => this._client.VerifyCounterByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

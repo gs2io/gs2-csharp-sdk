@@ -39,6 +39,7 @@ namespace Gs2.Gs2Friend.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public string TargetUserId { set; get; } = null!;
+         public bool? WithProfile { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SendRequestRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -50,6 +51,10 @@ namespace Gs2.Gs2Friend.Request
         }
         public SendRequestRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
+            return this;
+        }
+        public SendRequestRequest WithWithProfile(bool? withProfile) {
+            this.WithProfile = withProfile;
             return this;
         }
 
@@ -69,7 +74,8 @@ namespace Gs2.Gs2Friend.Request
             return new SendRequestRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
+                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString())
+                .WithWithProfile(!data.Keys.Contains("withProfile") || data["withProfile"] == null ? null : (bool?)bool.Parse(data["withProfile"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Friend.Request
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["targetUserId"] = TargetUserId,
+                ["withProfile"] = WithProfile,
             };
         }
 
@@ -96,6 +103,10 @@ namespace Gs2.Gs2Friend.Request
                 writer.WritePropertyName("targetUserId");
                 writer.Write(TargetUserId.ToString());
             }
+            if (WithProfile != null) {
+                writer.WritePropertyName("withProfile");
+                writer.Write(bool.Parse(WithProfile.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -104,6 +115,7 @@ namespace Gs2.Gs2Friend.Request
             key += NamespaceName + ":";
             key += AccessToken + ":";
             key += TargetUserId + ":";
+            key += WithProfile + ":";
             return key;
         }
     }

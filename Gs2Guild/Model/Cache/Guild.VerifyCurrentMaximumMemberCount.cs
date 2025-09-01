@@ -46,6 +46,13 @@ namespace Gs2.Gs2Guild.Model.Cache
             int? timeOffset,
             VerifyCurrentMaximumMemberCountRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                self.Item.GuildModelName,
+                self.Item.Name,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

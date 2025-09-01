@@ -46,6 +46,14 @@ namespace Gs2.Gs2Limit.Model.Cache
             int? timeOffset,
             VerifyCounterByUserIdRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                self.Item.LimitName,
+                request.CounterName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

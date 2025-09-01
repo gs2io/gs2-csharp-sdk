@@ -46,6 +46,13 @@ namespace Gs2.Gs2Mission.Model.Cache
             int? timeOffset,
             VerifyCompleteRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                self.Item.MissionGroupName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

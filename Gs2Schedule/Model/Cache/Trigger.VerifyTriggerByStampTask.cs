@@ -46,6 +46,13 @@ namespace Gs2.Gs2Schedule.Model.Cache
             int? timeOffset,
             VerifyTriggerByStampTaskRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                default,
+                userId,
+                self.Item.Name,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

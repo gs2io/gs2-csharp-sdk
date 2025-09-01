@@ -404,6 +404,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain>(Impl);
@@ -431,6 +432,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 () => this._client.VerifyBigItemByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

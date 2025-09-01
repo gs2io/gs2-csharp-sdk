@@ -33,8 +33,14 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class VerifyBigItemByStampTaskResult : IResult
 	{
+        public Gs2.Gs2Inventory.Model.BigItem Item { set; get; }
         public string NewContextStack { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifyBigItemByStampTaskResult WithItem(Gs2.Gs2Inventory.Model.BigItem item) {
+            this.Item = item;
+            return this;
+        }
 
         public VerifyBigItemByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
@@ -55,6 +61,7 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new VerifyBigItemByStampTaskResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.BigItem.FromJson(data["item"]))
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
@@ -62,6 +69,7 @@ namespace Gs2.Gs2Inventory.Result
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
                 ["newContextStack"] = NewContextStack,
                 ["metadata"] = Metadata?.ToJson(),
             };
@@ -70,6 +78,9 @@ namespace Gs2.Gs2Inventory.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());

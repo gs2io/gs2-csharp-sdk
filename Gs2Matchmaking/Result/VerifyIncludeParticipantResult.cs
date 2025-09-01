@@ -33,7 +33,13 @@ namespace Gs2.Gs2Matchmaking.Result
 	[System.Serializable]
 	public class VerifyIncludeParticipantResult : IResult
 	{
+        public Gs2.Gs2Matchmaking.Model.SeasonGathering Item { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public VerifyIncludeParticipantResult WithItem(Gs2.Gs2Matchmaking.Model.SeasonGathering item) {
+            this.Item = item;
+            return this;
+        }
 
         public VerifyIncludeParticipantResult WithMetadata(ResultMetadata metadata) {
             this.Metadata = metadata;
@@ -49,12 +55,14 @@ namespace Gs2.Gs2Matchmaking.Result
                 return null;
             }
             return new VerifyIncludeParticipantResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Matchmaking.Model.SeasonGathering.FromJson(data["item"]))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -62,6 +70,9 @@ namespace Gs2.Gs2Matchmaking.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 Metadata.WriteJson(writer);

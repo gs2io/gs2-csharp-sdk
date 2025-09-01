@@ -46,6 +46,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             int? timeOffset,
             VerifyStaminaOverflowValueByStampTaskRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                default,
+                userId,
+                self.Item.StaminaName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

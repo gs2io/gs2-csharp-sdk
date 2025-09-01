@@ -46,6 +46,13 @@ namespace Gs2.Gs2Stamina.Model.Cache
             int? timeOffset,
             VerifyStaminaRecoverIntervalMinutesRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                self.Item.StaminaName,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

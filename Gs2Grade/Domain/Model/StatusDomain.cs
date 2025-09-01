@@ -472,6 +472,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain>(Impl);
@@ -499,6 +500,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 () => this._client.VerifyGradeByUserIdAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif

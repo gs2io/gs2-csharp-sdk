@@ -287,6 +287,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Grade.Domain.Model.StatusAccessTokenDomain>(Impl);
@@ -314,6 +315,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 () => this._client.VerifyGradeAsync(request)
             );
             var domain = this;
+
             return domain;
         }
         #endif
