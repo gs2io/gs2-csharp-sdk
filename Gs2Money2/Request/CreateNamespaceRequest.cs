@@ -39,6 +39,7 @@ namespace Gs2.Gs2Money2.Request
          public string Name { set; get; } = null!;
          public string CurrencyUsagePriority { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Money2.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public bool? SharedFreeCurrency { set; get; } = null!;
          public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
          public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
@@ -60,6 +61,10 @@ namespace Gs2.Gs2Money2.Request
         }
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Money2.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithSharedFreeCurrency(bool? sharedFreeCurrency) {
@@ -119,6 +124,7 @@ namespace Gs2.Gs2Money2.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithCurrencyUsagePriority(!data.Keys.Contains("currencyUsagePriority") || data["currencyUsagePriority"] == null ? null : data["currencyUsagePriority"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Money2.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithSharedFreeCurrency(!data.Keys.Contains("sharedFreeCurrency") || data["sharedFreeCurrency"] == null ? null : (bool?)bool.Parse(data["sharedFreeCurrency"].ToString()))
                 .WithPlatformSetting(!data.Keys.Contains("platformSetting") || data["platformSetting"] == null ? null : Gs2.Gs2Money2.Model.PlatformSetting.FromJson(data["platformSetting"]))
                 .WithDepositBalanceScript(!data.Keys.Contains("depositBalanceScript") || data["depositBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["depositBalanceScript"]))
@@ -138,6 +144,7 @@ namespace Gs2.Gs2Money2.Request
                 ["name"] = Name,
                 ["currencyUsagePriority"] = CurrencyUsagePriority,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["sharedFreeCurrency"] = SharedFreeCurrency,
                 ["platformSetting"] = PlatformSetting?.ToJson(),
                 ["depositBalanceScript"] = DepositBalanceScript?.ToJson(),
@@ -166,6 +173,9 @@ namespace Gs2.Gs2Money2.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (SharedFreeCurrency != null) {
                 writer.WritePropertyName("sharedFreeCurrency");
@@ -212,6 +222,7 @@ namespace Gs2.Gs2Money2.Request
             key += Name + ":";
             key += CurrencyUsagePriority + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += SharedFreeCurrency + ":";
             key += PlatformSetting + ":";
             key += DepositBalanceScript + ":";

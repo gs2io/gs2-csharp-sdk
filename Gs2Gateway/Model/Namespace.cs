@@ -37,6 +37,7 @@ namespace Gs2.Gs2Gateway.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Gateway.Model.TransactionSetting TransactionSetting { set; get; }
         public string FirebaseSecret { set; get; }
         public Gs2.Gs2Gateway.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Gateway.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Gateway.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithFirebaseSecret(string firebaseSecret) {
@@ -138,6 +143,7 @@ namespace Gs2.Gs2Gateway.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Gateway.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithFirebaseSecret(!data.Keys.Contains("firebaseSecret") || data["firebaseSecret"] == null ? null : data["firebaseSecret"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Gateway.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
@@ -151,6 +157,7 @@ namespace Gs2.Gs2Gateway.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["firebaseSecret"] = FirebaseSecret,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
@@ -173,6 +180,10 @@ namespace Gs2.Gs2Gateway.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (FirebaseSecret != null) {
                 writer.WritePropertyName("firebaseSecret");
@@ -224,6 +235,14 @@ namespace Gs2.Gs2Gateway.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (FirebaseSecret == null && FirebaseSecret == other.FirebaseSecret)
             {
@@ -291,6 +310,8 @@ namespace Gs2.Gs2Gateway.Model
                 }
             }
             {
+            }
+            {
                 if (FirebaseSecret.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "gateway.namespace.firebaseSecret.error.tooLong"),
@@ -342,6 +363,7 @@ namespace Gs2.Gs2Gateway.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Gateway.Model.TransactionSetting,
                 FirebaseSecret = FirebaseSecret,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Gateway.Model.LogSetting,
                 CreatedAt = CreatedAt,

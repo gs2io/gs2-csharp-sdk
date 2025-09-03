@@ -90,6 +90,66 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this.JobName = jobName;
         }
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> DeleteFuture(
+            DeleteJobRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithJobName(this.JobName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    this.AccessToken?.TimeOffset,
+                    () => this._client.DeleteJobFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> DeleteAsync(
+            #else
+        public async Task<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> DeleteAsync(
+            #endif
+            DeleteJobRequest request
+        ) {
+            try {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithJobName(this.JobName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    this.AccessToken?.TimeOffset,
+                    () => this._client.DeleteJobAsync(request)
+                );
+            }
+            catch (NotFoundException e) {}
+            var domain = this;
+            return domain;
+        }
+        #endif
+
         public Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain JobResult(
             int? tryNumber = 0
         ) {
@@ -131,17 +191,28 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public async Task<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2JobQueue.Model.Job).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                this.UserId,
-                this.JobName,
-                this.AccessToken?.TimeOffset
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.Job>(
+                        (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
+                        ),
+                        (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
+                            this.JobName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2JobQueue.Model.Job).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.JobName,
+                    this.AccessToken?.TimeOffset
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
             }
-            return null;
         }
         #endif
 
@@ -193,7 +264,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

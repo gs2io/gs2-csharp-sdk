@@ -38,6 +38,7 @@ namespace Gs2.Gs2Schedule.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Schedule.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Schedule.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -45,6 +46,10 @@ namespace Gs2.Gs2Schedule.Request
         }
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Schedule.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Schedule.Model.LogSetting logSetting) {
@@ -63,6 +68,7 @@ namespace Gs2.Gs2Schedule.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Schedule.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Schedule.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -71,6 +77,7 @@ namespace Gs2.Gs2Schedule.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -86,6 +93,9 @@ namespace Gs2.Gs2Schedule.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -96,6 +106,7 @@ namespace Gs2.Gs2Schedule.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += LogSetting + ":";
             return key;
         }

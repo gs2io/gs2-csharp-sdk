@@ -38,6 +38,7 @@ namespace Gs2.Gs2Matchmaking.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Matchmaking.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public bool? EnableRating { set; get; } = null!;
          public string EnableDisconnectDetection { set; get; } = null!;
          public int? DisconnectDetectionTimeoutSeconds { set; get; } = null!;
@@ -62,6 +63,10 @@ namespace Gs2.Gs2Matchmaking.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Matchmaking.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithEnableRating(bool? enableRating) {
@@ -148,6 +153,7 @@ namespace Gs2.Gs2Matchmaking.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Matchmaking.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEnableRating(!data.Keys.Contains("enableRating") || data["enableRating"] == null ? null : (bool?)bool.Parse(data["enableRating"].ToString()))
                 .WithEnableDisconnectDetection(!data.Keys.Contains("enableDisconnectDetection") || data["enableDisconnectDetection"] == null ? null : data["enableDisconnectDetection"].ToString())
                 .WithDisconnectDetectionTimeoutSeconds(!data.Keys.Contains("disconnectDetectionTimeoutSeconds") || data["disconnectDetectionTimeoutSeconds"] == null ? null : (int?)(data["disconnectDetectionTimeoutSeconds"].ToString().Contains(".") ? (int)double.Parse(data["disconnectDetectionTimeoutSeconds"].ToString()) : int.Parse(data["disconnectDetectionTimeoutSeconds"].ToString())))
@@ -173,6 +179,7 @@ namespace Gs2.Gs2Matchmaking.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["enableRating"] = EnableRating,
                 ["enableDisconnectDetection"] = EnableDisconnectDetection,
                 ["disconnectDetectionTimeoutSeconds"] = DisconnectDetectionTimeoutSeconds,
@@ -204,6 +211,9 @@ namespace Gs2.Gs2Matchmaking.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (EnableRating != null) {
                 writer.WritePropertyName("enableRating");
@@ -278,6 +288,7 @@ namespace Gs2.Gs2Matchmaking.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += EnableRating + ":";
             key += EnableDisconnectDetection + ":";
             key += DisconnectDetectionTimeoutSeconds + ":";

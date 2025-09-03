@@ -75,6 +75,11 @@ namespace Gs2.Gs2JobQueue
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.EnableAutoRun != null)
                 {
                     jsonWriter.WritePropertyName("enableAutoRun");
@@ -408,6 +413,11 @@ namespace Gs2.Gs2JobQueue
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.EnableAutoRun != null)
                 {

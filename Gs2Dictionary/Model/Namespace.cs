@@ -37,6 +37,7 @@ namespace Gs2.Gs2Dictionary.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Dictionary.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Dictionary.Model.ScriptSetting EntryScript { set; get; }
         public string DuplicateEntryScript { set; get; }
         public Gs2.Gs2Dictionary.Model.LogSetting LogSetting { set; get; }
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Dictionary.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Dictionary.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithEntryScript(Gs2.Gs2Dictionary.Model.ScriptSetting entryScript) {
@@ -143,6 +148,7 @@ namespace Gs2.Gs2Dictionary.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Dictionary.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEntryScript(!data.Keys.Contains("entryScript") || data["entryScript"] == null ? null : Gs2.Gs2Dictionary.Model.ScriptSetting.FromJson(data["entryScript"]))
                 .WithDuplicateEntryScript(!data.Keys.Contains("duplicateEntryScript") || data["duplicateEntryScript"] == null ? null : data["duplicateEntryScript"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Dictionary.Model.LogSetting.FromJson(data["logSetting"]))
@@ -157,6 +163,7 @@ namespace Gs2.Gs2Dictionary.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["entryScript"] = EntryScript?.ToJson(),
                 ["duplicateEntryScript"] = DuplicateEntryScript,
                 ["logSetting"] = LogSetting?.ToJson(),
@@ -180,6 +187,10 @@ namespace Gs2.Gs2Dictionary.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (EntryScript != null) {
                 writer.WritePropertyName("entryScript");
@@ -235,6 +246,14 @@ namespace Gs2.Gs2Dictionary.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (EntryScript == null && EntryScript == other.EntryScript)
             {
@@ -312,6 +331,8 @@ namespace Gs2.Gs2Dictionary.Model
             {
             }
             {
+            }
+            {
                 if (DuplicateEntryScript.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "dictionary.namespace.duplicateEntryScript.error.tooLong"),
@@ -363,6 +384,7 @@ namespace Gs2.Gs2Dictionary.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Dictionary.Model.TransactionSetting,
                 EntryScript = EntryScript?.Clone() as Gs2.Gs2Dictionary.Model.ScriptSetting,
                 DuplicateEntryScript = DuplicateEntryScript,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Dictionary.Model.LogSetting,

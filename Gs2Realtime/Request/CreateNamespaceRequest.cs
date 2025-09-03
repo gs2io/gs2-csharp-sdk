@@ -38,6 +38,7 @@ namespace Gs2.Gs2Realtime.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Realtime.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public string ServerType { set; get; } = null!;
          public string ServerSpec { set; get; } = null!;
          public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; } = null!;
@@ -48,6 +49,10 @@ namespace Gs2.Gs2Realtime.Request
         }
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Realtime.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithServerType(string serverType) {
@@ -78,6 +83,7 @@ namespace Gs2.Gs2Realtime.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Realtime.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithServerType(!data.Keys.Contains("serverType") || data["serverType"] == null ? null : data["serverType"].ToString())
                 .WithServerSpec(!data.Keys.Contains("serverSpec") || data["serverSpec"] == null ? null : data["serverSpec"].ToString())
                 .WithCreateNotification(!data.Keys.Contains("createNotification") || data["createNotification"] == null ? null : Gs2.Gs2Realtime.Model.NotificationSetting.FromJson(data["createNotification"]))
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Realtime.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["serverType"] = ServerType,
                 ["serverSpec"] = ServerSpec,
                 ["createNotification"] = CreateNotification?.ToJson(),
@@ -106,6 +113,9 @@ namespace Gs2.Gs2Realtime.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (ServerType != null) {
                 writer.WritePropertyName("serverType");
@@ -128,6 +138,7 @@ namespace Gs2.Gs2Realtime.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += ServerType + ":";
             key += ServerSpec + ":";
             key += CreateNotification + ":";

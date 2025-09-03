@@ -38,6 +38,7 @@ namespace Gs2.Gs2AdReward.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; } = null!;
@@ -51,6 +52,10 @@ namespace Gs2.Gs2AdReward.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2AdReward.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithAdmob(Gs2.Gs2AdReward.Model.AdMob admob) {
@@ -93,6 +98,7 @@ namespace Gs2.Gs2AdReward.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2AdReward.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAdmob(!data.Keys.Contains("admob") || data["admob"] == null ? null : Gs2.Gs2AdReward.Model.AdMob.FromJson(data["admob"]))
                 .WithUnityAd(!data.Keys.Contains("unityAd") || data["unityAd"] == null ? null : Gs2.Gs2AdReward.Model.UnityAd.FromJson(data["unityAd"]))
                 .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? null : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
@@ -118,6 +124,7 @@ namespace Gs2.Gs2AdReward.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["admob"] = Admob?.ToJson(),
                 ["unityAd"] = UnityAd?.ToJson(),
                 ["appLovinMaxes"] = appLovinMaxesJsonData,
@@ -138,6 +145,9 @@ namespace Gs2.Gs2AdReward.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (Admob != null) {
                 Admob.WriteJson(writer);
@@ -175,6 +185,7 @@ namespace Gs2.Gs2AdReward.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += Admob + ":";
             key += UnityAd + ":";
             key += AppLovinMaxes + ":";

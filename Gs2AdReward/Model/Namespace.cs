@@ -37,6 +37,7 @@ namespace Gs2.Gs2AdReward.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2AdReward.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
         public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
         public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; }
@@ -57,6 +58,10 @@ namespace Gs2.Gs2AdReward.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2AdReward.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithAdmob(Gs2.Gs2AdReward.Model.AdMob admob) {
@@ -163,6 +168,7 @@ namespace Gs2.Gs2AdReward.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2AdReward.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAdmob(!data.Keys.Contains("admob") || data["admob"] == null ? null : Gs2.Gs2AdReward.Model.AdMob.FromJson(data["admob"]))
                 .WithUnityAd(!data.Keys.Contains("unityAd") || data["unityAd"] == null ? null : Gs2.Gs2AdReward.Model.UnityAd.FromJson(data["unityAd"]))
                 .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? null : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
@@ -192,6 +198,7 @@ namespace Gs2.Gs2AdReward.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["admob"] = Admob?.ToJson(),
                 ["unityAd"] = UnityAd?.ToJson(),
                 ["appLovinMaxes"] = appLovinMaxesJsonData,
@@ -219,6 +226,10 @@ namespace Gs2.Gs2AdReward.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (Admob != null) {
                 writer.WritePropertyName("admob");
@@ -297,6 +308,14 @@ namespace Gs2.Gs2AdReward.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (Admob == null && Admob == other.Admob)
             {
@@ -412,6 +431,8 @@ namespace Gs2.Gs2AdReward.Model
             {
             }
             {
+            }
+            {
                 if (AppLovinMaxes.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "adReward.namespace.appLovinMaxes.error.tooMany"),
@@ -469,6 +490,7 @@ namespace Gs2.Gs2AdReward.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2AdReward.Model.TransactionSetting,
                 Admob = Admob?.Clone() as Gs2.Gs2AdReward.Model.AdMob,
                 UnityAd = UnityAd?.Clone() as Gs2.Gs2AdReward.Model.UnityAd,
                 AppLovinMaxes = AppLovinMaxes?.Clone() as Gs2.Gs2AdReward.Model.AppLovinMax[],

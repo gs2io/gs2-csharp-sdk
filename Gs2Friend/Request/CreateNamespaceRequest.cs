@@ -38,6 +38,7 @@ namespace Gs2.Gs2Friend.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Friend.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Friend.Model.ScriptSetting FollowScript { set; get; } = null!;
          public Gs2.Gs2Friend.Model.ScriptSetting UnfollowScript { set; get; } = null!;
          public Gs2.Gs2Friend.Model.ScriptSetting SendRequestScript { set; get; } = null!;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Friend.Request
         }
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Friend.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithFollowScript(Gs2.Gs2Friend.Model.ScriptSetting followScript) {
@@ -133,6 +138,7 @@ namespace Gs2.Gs2Friend.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Friend.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithFollowScript(!data.Keys.Contains("followScript") || data["followScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["followScript"]))
                 .WithUnfollowScript(!data.Keys.Contains("unfollowScript") || data["unfollowScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["unfollowScript"]))
                 .WithSendRequestScript(!data.Keys.Contains("sendRequestScript") || data["sendRequestScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["sendRequestScript"]))
@@ -155,6 +161,7 @@ namespace Gs2.Gs2Friend.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["followScript"] = FollowScript?.ToJson(),
                 ["unfollowScript"] = UnfollowScript?.ToJson(),
                 ["sendRequestScript"] = SendRequestScript?.ToJson(),
@@ -183,6 +190,9 @@ namespace Gs2.Gs2Friend.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (FollowScript != null) {
                 FollowScript.WriteJson(writer);
@@ -236,6 +246,7 @@ namespace Gs2.Gs2Friend.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += FollowScript + ":";
             key += UnfollowScript + ":";
             key += SendRequestScript + ":";

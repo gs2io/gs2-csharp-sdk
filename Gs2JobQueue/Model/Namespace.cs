@@ -37,6 +37,7 @@ namespace Gs2.Gs2JobQueue.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2JobQueue.Model.TransactionSetting TransactionSetting { set; get; }
         public bool? EnableAutoRun { set; get; }
         public Gs2.Gs2JobQueue.Model.NotificationSetting RunNotification { set; get; }
         public Gs2.Gs2JobQueue.Model.NotificationSetting PushNotification { set; get; }
@@ -54,6 +55,10 @@ namespace Gs2.Gs2JobQueue.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2JobQueue.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithEnableAutoRun(bool? enableAutoRun) {
@@ -148,6 +153,7 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2JobQueue.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : (bool?)bool.Parse(data["enableAutoRun"].ToString()))
                 .WithRunNotification(!data.Keys.Contains("runNotification") || data["runNotification"] == null ? null : Gs2.Gs2JobQueue.Model.NotificationSetting.FromJson(data["runNotification"]))
                 .WithPushNotification(!data.Keys.Contains("pushNotification") || data["pushNotification"] == null ? null : Gs2.Gs2JobQueue.Model.NotificationSetting.FromJson(data["pushNotification"]))
@@ -163,6 +169,7 @@ namespace Gs2.Gs2JobQueue.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["enableAutoRun"] = EnableAutoRun,
                 ["runNotification"] = RunNotification?.ToJson(),
                 ["pushNotification"] = PushNotification?.ToJson(),
@@ -187,6 +194,10 @@ namespace Gs2.Gs2JobQueue.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (EnableAutoRun != null) {
                 writer.WritePropertyName("enableAutoRun");
@@ -246,6 +257,14 @@ namespace Gs2.Gs2JobQueue.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (EnableAutoRun == null && EnableAutoRun == other.EnableAutoRun)
             {
@@ -337,6 +356,8 @@ namespace Gs2.Gs2JobQueue.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "jobQueue.namespace.createdAt.error.invalid"),
@@ -379,6 +400,7 @@ namespace Gs2.Gs2JobQueue.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2JobQueue.Model.TransactionSetting,
                 EnableAutoRun = EnableAutoRun,
                 RunNotification = RunNotification?.Clone() as Gs2.Gs2JobQueue.Model.NotificationSetting,
                 PushNotification = PushNotification?.Clone() as Gs2.Gs2JobQueue.Model.NotificationSetting,

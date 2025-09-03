@@ -37,6 +37,7 @@ namespace Gs2.Gs2Money.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Money.Model.TransactionSetting TransactionSetting { set; get; }
         public string Priority { set; get; }
         public bool? ShareFree { set; get; }
         public string Currency { set; get; }
@@ -61,6 +62,10 @@ namespace Gs2.Gs2Money.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Money.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithPriority(string priority) {
@@ -183,6 +188,7 @@ namespace Gs2.Gs2Money.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Money.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithPriority(!data.Keys.Contains("priority") || data["priority"] == null ? null : data["priority"].ToString())
                 .WithShareFree(!data.Keys.Contains("shareFree") || data["shareFree"] == null ? null : (bool?)bool.Parse(data["shareFree"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
@@ -205,6 +211,7 @@ namespace Gs2.Gs2Money.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["priority"] = Priority,
                 ["shareFree"] = ShareFree,
                 ["currency"] = Currency,
@@ -236,6 +243,10 @@ namespace Gs2.Gs2Money.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (Priority != null) {
                 writer.WritePropertyName("priority");
@@ -323,6 +334,14 @@ namespace Gs2.Gs2Money.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (Priority == null && Priority == other.Priority)
             {
@@ -462,6 +481,8 @@ namespace Gs2.Gs2Money.Model
                 }
             }
             {
+            }
+            {
                 switch (Priority) {
                     case "free":
                     case "paid":
@@ -565,6 +586,7 @@ namespace Gs2.Gs2Money.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Money.Model.TransactionSetting,
                 Priority = Priority,
                 ShareFree = ShareFree,
                 Currency = Currency,

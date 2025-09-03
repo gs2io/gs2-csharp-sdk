@@ -200,6 +200,11 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.EnableRating != null)
                 {
                     jsonWriter.WritePropertyName("enableRating");
@@ -616,6 +621,11 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.EnableRating != null)
                 {

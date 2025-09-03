@@ -37,6 +37,7 @@ namespace Gs2.Gs2Ranking.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Ranking.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Ranking.Model.CalculatedAt[] LastCalculatedAts { set; get; }
         public Gs2.Gs2Ranking.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Ranking.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Ranking.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithLastCalculatedAts(Gs2.Gs2Ranking.Model.CalculatedAt[] lastCalculatedAts) {
@@ -138,6 +143,7 @@ namespace Gs2.Gs2Ranking.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Ranking.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithLastCalculatedAts(!data.Keys.Contains("lastCalculatedAts") || data["lastCalculatedAts"] == null || !data["lastCalculatedAts"].IsArray ? null : data["lastCalculatedAts"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking.Model.CalculatedAt.FromJson(v);
                 }).ToArray())
@@ -162,6 +168,7 @@ namespace Gs2.Gs2Ranking.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["lastCalculatedAts"] = lastCalculatedAtsJsonData,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
@@ -184,6 +191,10 @@ namespace Gs2.Gs2Ranking.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (LastCalculatedAts != null) {
                 writer.WritePropertyName("lastCalculatedAts");
@@ -242,6 +253,14 @@ namespace Gs2.Gs2Ranking.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (LastCalculatedAts == null && LastCalculatedAts == other.LastCalculatedAts)
             {
@@ -313,6 +332,8 @@ namespace Gs2.Gs2Ranking.Model
                 }
             }
             {
+            }
+            {
                 if (LastCalculatedAts.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "ranking.namespace.lastCalculatedAts.error.tooMany"),
@@ -364,6 +385,7 @@ namespace Gs2.Gs2Ranking.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Ranking.Model.TransactionSetting,
                 LastCalculatedAts = LastCalculatedAts?.Clone() as Gs2.Gs2Ranking.Model.CalculatedAt[],
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Ranking.Model.LogSetting,
                 CreatedAt = CreatedAt,

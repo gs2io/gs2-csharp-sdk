@@ -200,6 +200,11 @@ namespace Gs2.Gs2Distributor
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.AssumeUserId != null)
                 {
                     jsonWriter.WritePropertyName("assumeUserId");
@@ -546,6 +551,11 @@ namespace Gs2.Gs2Distributor
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.AssumeUserId != null)
                 {

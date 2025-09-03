@@ -75,6 +75,11 @@ namespace Gs2.Gs2Stamina
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.OverflowTriggerScript != null)
                 {
                     jsonWriter.WritePropertyName("overflowTriggerScript");
@@ -398,6 +403,11 @@ namespace Gs2.Gs2Stamina
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.OverflowTriggerScript != null)
                 {

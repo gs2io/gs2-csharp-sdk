@@ -37,16 +37,25 @@ namespace Gs2.Gs2AdReward.Request
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
          public string Name { set; get; } = null!;
+         public string Description { set; get; } = null!;
+         public Gs2.Gs2AdReward.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.AppLovinMax[] AppLovinMaxes { set; get; } = null!;
-         public string Description { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.ScriptSetting AcquirePointScript { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.ScriptSetting ConsumePointScript { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; } = null!;
          public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
+            return this;
+        }
+        public CreateNamespaceRequest WithDescription(string description) {
+            this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2AdReward.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithAdmob(Gs2.Gs2AdReward.Model.AdMob admob) {
@@ -59,10 +68,6 @@ namespace Gs2.Gs2AdReward.Request
         }
         public CreateNamespaceRequest WithAppLovinMaxes(Gs2.Gs2AdReward.Model.AppLovinMax[] appLovinMaxes) {
             this.AppLovinMaxes = appLovinMaxes;
-            return this;
-        }
-        public CreateNamespaceRequest WithDescription(string description) {
-            this.Description = description;
             return this;
         }
         public CreateNamespaceRequest WithAcquirePointScript(Gs2.Gs2AdReward.Model.ScriptSetting acquirePointScript) {
@@ -92,12 +97,13 @@ namespace Gs2.Gs2AdReward.Request
             }
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2AdReward.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAdmob(!data.Keys.Contains("admob") || data["admob"] == null ? null : Gs2.Gs2AdReward.Model.AdMob.FromJson(data["admob"]))
                 .WithUnityAd(!data.Keys.Contains("unityAd") || data["unityAd"] == null ? null : Gs2.Gs2AdReward.Model.UnityAd.FromJson(data["unityAd"]))
                 .WithAppLovinMaxes(!data.Keys.Contains("appLovinMaxes") || data["appLovinMaxes"] == null || !data["appLovinMaxes"].IsArray ? null : data["appLovinMaxes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2AdReward.Model.AppLovinMax.FromJson(v);
                 }).ToArray())
-                .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithAcquirePointScript(!data.Keys.Contains("acquirePointScript") || data["acquirePointScript"] == null ? null : Gs2.Gs2AdReward.Model.ScriptSetting.FromJson(data["acquirePointScript"]))
                 .WithConsumePointScript(!data.Keys.Contains("consumePointScript") || data["consumePointScript"] == null ? null : Gs2.Gs2AdReward.Model.ScriptSetting.FromJson(data["consumePointScript"]))
                 .WithChangePointNotification(!data.Keys.Contains("changePointNotification") || data["changePointNotification"] == null ? null : Gs2.Gs2AdReward.Model.NotificationSetting.FromJson(data["changePointNotification"]))
@@ -117,10 +123,11 @@ namespace Gs2.Gs2AdReward.Request
             }
             return new JsonData {
                 ["name"] = Name,
+                ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["admob"] = Admob?.ToJson(),
                 ["unityAd"] = UnityAd?.ToJson(),
                 ["appLovinMaxes"] = appLovinMaxesJsonData,
-                ["description"] = Description,
                 ["acquirePointScript"] = AcquirePointScript?.ToJson(),
                 ["consumePointScript"] = ConsumePointScript?.ToJson(),
                 ["changePointNotification"] = ChangePointNotification?.ToJson(),
@@ -134,6 +141,13 @@ namespace Gs2.Gs2AdReward.Request
             if (Name != null) {
                 writer.WritePropertyName("name");
                 writer.Write(Name.ToString());
+            }
+            if (Description != null) {
+                writer.WritePropertyName("description");
+                writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (Admob != null) {
                 Admob.WriteJson(writer);
@@ -151,10 +165,6 @@ namespace Gs2.Gs2AdReward.Request
                     }
                 }
                 writer.WriteArrayEnd();
-            }
-            if (Description != null) {
-                writer.WritePropertyName("description");
-                writer.Write(Description.ToString());
             }
             if (AcquirePointScript != null) {
                 AcquirePointScript.WriteJson(writer);
@@ -174,10 +184,11 @@ namespace Gs2.Gs2AdReward.Request
         public override string UniqueKey() {
             var key = "";
             key += Name + ":";
+            key += Description + ":";
+            key += TransactionSetting + ":";
             key += Admob + ":";
             key += UnityAd + ":";
             key += AppLovinMaxes + ":";
-            key += Description + ":";
             key += AcquirePointScript + ":";
             key += ConsumePointScript + ":";
             key += ChangePointNotification + ":";

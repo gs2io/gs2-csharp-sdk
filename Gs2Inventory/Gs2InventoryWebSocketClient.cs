@@ -75,6 +75,11 @@ namespace Gs2.Gs2Inventory
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.AcquireScript != null)
                 {
                     jsonWriter.WritePropertyName("acquireScript");
@@ -428,6 +433,11 @@ namespace Gs2.Gs2Inventory
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.AcquireScript != null)
                 {

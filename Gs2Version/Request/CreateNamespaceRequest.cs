@@ -38,6 +38,7 @@ namespace Gs2.Gs2Version.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Version.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public string AssumeUserId { set; get; } = null!;
          public Gs2.Gs2Version.Model.ScriptSetting AcceptVersionScript { set; get; } = null!;
          public string CheckVersionTriggerScriptId { set; get; } = null!;
@@ -48,6 +49,10 @@ namespace Gs2.Gs2Version.Request
         }
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Version.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithAssumeUserId(string assumeUserId) {
@@ -78,6 +83,7 @@ namespace Gs2.Gs2Version.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Version.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
                 .WithAcceptVersionScript(!data.Keys.Contains("acceptVersionScript") || data["acceptVersionScript"] == null ? null : Gs2.Gs2Version.Model.ScriptSetting.FromJson(data["acceptVersionScript"]))
                 .WithCheckVersionTriggerScriptId(!data.Keys.Contains("checkVersionTriggerScriptId") || data["checkVersionTriggerScriptId"] == null ? null : data["checkVersionTriggerScriptId"].ToString())
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Version.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["assumeUserId"] = AssumeUserId,
                 ["acceptVersionScript"] = AcceptVersionScript?.ToJson(),
                 ["checkVersionTriggerScriptId"] = CheckVersionTriggerScriptId,
@@ -106,6 +113,9 @@ namespace Gs2.Gs2Version.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (AssumeUserId != null) {
                 writer.WritePropertyName("assumeUserId");
@@ -128,6 +138,7 @@ namespace Gs2.Gs2Version.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += AssumeUserId + ":";
             key += AcceptVersionScript + ":";
             key += CheckVersionTriggerScriptId + ":";

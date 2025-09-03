@@ -37,6 +37,7 @@ namespace Gs2.Gs2Friend.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Friend.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Friend.Model.ScriptSetting FollowScript { set; get; }
         public Gs2.Gs2Friend.Model.ScriptSetting UnfollowScript { set; get; }
         public Gs2.Gs2Friend.Model.ScriptSetting SendRequestScript { set; get; }
@@ -65,6 +66,10 @@ namespace Gs2.Gs2Friend.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Friend.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithFollowScript(Gs2.Gs2Friend.Model.ScriptSetting followScript) {
@@ -203,6 +208,7 @@ namespace Gs2.Gs2Friend.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Friend.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithFollowScript(!data.Keys.Contains("followScript") || data["followScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["followScript"]))
                 .WithUnfollowScript(!data.Keys.Contains("unfollowScript") || data["unfollowScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["unfollowScript"]))
                 .WithSendRequestScript(!data.Keys.Contains("sendRequestScript") || data["sendRequestScript"] == null ? null : Gs2.Gs2Friend.Model.ScriptSetting.FromJson(data["sendRequestScript"]))
@@ -229,6 +235,7 @@ namespace Gs2.Gs2Friend.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["followScript"] = FollowScript?.ToJson(),
                 ["unfollowScript"] = UnfollowScript?.ToJson(),
                 ["sendRequestScript"] = SendRequestScript?.ToJson(),
@@ -264,6 +271,10 @@ namespace Gs2.Gs2Friend.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (FollowScript != null) {
                 writer.WritePropertyName("followScript");
@@ -367,6 +378,14 @@ namespace Gs2.Gs2Friend.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (FollowScript == null && FollowScript == other.FollowScript)
             {
@@ -568,6 +587,8 @@ namespace Gs2.Gs2Friend.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "friend.namespace.createdAt.error.invalid"),
@@ -610,6 +631,7 @@ namespace Gs2.Gs2Friend.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Friend.Model.TransactionSetting,
                 FollowScript = FollowScript?.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
                 UnfollowScript = UnfollowScript?.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
                 SendRequestScript = SendRequestScript?.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,

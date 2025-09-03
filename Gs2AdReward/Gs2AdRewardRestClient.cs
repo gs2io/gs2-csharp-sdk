@@ -195,6 +195,16 @@ namespace Gs2.Gs2AdReward
                     jsonWriter.WritePropertyName("name");
                     jsonWriter.Write(request.Name);
                 }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.Admob != null)
                 {
                     jsonWriter.WritePropertyName("admob");
@@ -218,11 +228,6 @@ namespace Gs2.Gs2AdReward
                         }
                     }
                     jsonWriter.WriteArrayEnd();
-                }
-                if (request.Description != null)
-                {
-                    jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(request.Description);
                 }
                 if (request.AcquirePointScript != null)
                 {
@@ -570,6 +575,11 @@ namespace Gs2.Gs2AdReward
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.Admob != null)
                 {

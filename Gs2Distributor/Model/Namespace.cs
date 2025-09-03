@@ -37,6 +37,7 @@ namespace Gs2.Gs2Distributor.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Distributor.Model.TransactionSetting TransactionSetting { set; get; }
         public string AssumeUserId { set; get; }
         public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunStampSheetNotification { set; get; }
         public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunTransactionNotification { set; get; }
@@ -54,6 +55,10 @@ namespace Gs2.Gs2Distributor.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Distributor.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithAssumeUserId(string assumeUserId) {
@@ -148,6 +153,7 @@ namespace Gs2.Gs2Distributor.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Distributor.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
                 .WithAutoRunStampSheetNotification(!data.Keys.Contains("autoRunStampSheetNotification") || data["autoRunStampSheetNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunStampSheetNotification"]))
                 .WithAutoRunTransactionNotification(!data.Keys.Contains("autoRunTransactionNotification") || data["autoRunTransactionNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunTransactionNotification"]))
@@ -163,6 +169,7 @@ namespace Gs2.Gs2Distributor.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["assumeUserId"] = AssumeUserId,
                 ["autoRunStampSheetNotification"] = AutoRunStampSheetNotification?.ToJson(),
                 ["autoRunTransactionNotification"] = AutoRunTransactionNotification?.ToJson(),
@@ -187,6 +194,10 @@ namespace Gs2.Gs2Distributor.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (AssumeUserId != null) {
                 writer.WritePropertyName("assumeUserId");
@@ -246,6 +257,14 @@ namespace Gs2.Gs2Distributor.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (AssumeUserId == null && AssumeUserId == other.AssumeUserId)
             {
@@ -329,6 +348,8 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
+            }
+            {
                 if (AssumeUserId.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "distributor.namespace.assumeUserId.error.tooLong"),
@@ -384,6 +405,7 @@ namespace Gs2.Gs2Distributor.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Distributor.Model.TransactionSetting,
                 AssumeUserId = AssumeUserId,
                 AutoRunStampSheetNotification = AutoRunStampSheetNotification?.Clone() as Gs2.Gs2Distributor.Model.NotificationSetting,
                 AutoRunTransactionNotification = AutoRunTransactionNotification?.Clone() as Gs2.Gs2Distributor.Model.NotificationSetting,

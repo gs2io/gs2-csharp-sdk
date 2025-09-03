@@ -37,6 +37,7 @@ namespace Gs2.Gs2Account.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Account.Model.TransactionSetting TransactionSetting { set; get; }
         public bool? ChangePasswordIfTakeOver { set; get; }
         public bool? DifferentUserIdForLoginAndDataRetention { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting CreateAccountScript { set; get; }
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Account.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Account.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithChangePasswordIfTakeOver(bool? changePasswordIfTakeOver) {
@@ -173,6 +178,7 @@ namespace Gs2.Gs2Account.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Account.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithChangePasswordIfTakeOver(!data.Keys.Contains("changePasswordIfTakeOver") || data["changePasswordIfTakeOver"] == null ? null : (bool?)bool.Parse(data["changePasswordIfTakeOver"].ToString()))
                 .WithDifferentUserIdForLoginAndDataRetention(!data.Keys.Contains("differentUserIdForLoginAndDataRetention") || data["differentUserIdForLoginAndDataRetention"] == null ? null : (bool?)bool.Parse(data["differentUserIdForLoginAndDataRetention"].ToString()))
                 .WithCreateAccountScript(!data.Keys.Contains("createAccountScript") || data["createAccountScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createAccountScript"]))
@@ -193,6 +199,7 @@ namespace Gs2.Gs2Account.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["changePasswordIfTakeOver"] = ChangePasswordIfTakeOver,
                 ["differentUserIdForLoginAndDataRetention"] = DifferentUserIdForLoginAndDataRetention,
                 ["createAccountScript"] = CreateAccountScript?.ToJson(),
@@ -222,6 +229,10 @@ namespace Gs2.Gs2Account.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (ChangePasswordIfTakeOver != null) {
                 writer.WritePropertyName("changePasswordIfTakeOver");
@@ -301,6 +312,14 @@ namespace Gs2.Gs2Account.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (ChangePasswordIfTakeOver == null && ChangePasswordIfTakeOver == other.ChangePasswordIfTakeOver)
             {
@@ -442,6 +461,8 @@ namespace Gs2.Gs2Account.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "account.namespace.createdAt.error.invalid"),
@@ -484,6 +505,7 @@ namespace Gs2.Gs2Account.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Account.Model.TransactionSetting,
                 ChangePasswordIfTakeOver = ChangePasswordIfTakeOver,
                 DifferentUserIdForLoginAndDataRetention = DifferentUserIdForLoginAndDataRetention,
                 CreateAccountScript = CreateAccountScript?.Clone() as Gs2.Gs2Account.Model.ScriptSetting,

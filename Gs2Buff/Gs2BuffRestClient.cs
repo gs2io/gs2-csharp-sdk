@@ -200,6 +200,11 @@ namespace Gs2.Gs2Buff
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.ApplyBuffScript != null)
                 {
                     jsonWriter.WritePropertyName("applyBuffScript");
@@ -536,6 +541,11 @@ namespace Gs2.Gs2Buff
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.ApplyBuffScript != null)
                 {

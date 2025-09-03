@@ -37,6 +37,7 @@ namespace Gs2.Gs2Chat.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Chat.Model.TransactionSetting TransactionSetting { set; get; }
         public bool? AllowCreateRoom { set; get; }
         public int? MessageLifeTimeDays { set; get; }
         public Gs2.Gs2Chat.Model.ScriptSetting PostMessageScript { set; get; }
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Chat.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Chat.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithAllowCreateRoom(bool? allowCreateRoom) {
@@ -173,6 +178,7 @@ namespace Gs2.Gs2Chat.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Chat.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAllowCreateRoom(!data.Keys.Contains("allowCreateRoom") || data["allowCreateRoom"] == null ? null : (bool?)bool.Parse(data["allowCreateRoom"].ToString()))
                 .WithMessageLifeTimeDays(!data.Keys.Contains("messageLifeTimeDays") || data["messageLifeTimeDays"] == null ? null : (int?)(data["messageLifeTimeDays"].ToString().Contains(".") ? (int)double.Parse(data["messageLifeTimeDays"].ToString()) : int.Parse(data["messageLifeTimeDays"].ToString())))
                 .WithPostMessageScript(!data.Keys.Contains("postMessageScript") || data["postMessageScript"] == null ? null : Gs2.Gs2Chat.Model.ScriptSetting.FromJson(data["postMessageScript"]))
@@ -193,6 +199,7 @@ namespace Gs2.Gs2Chat.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["allowCreateRoom"] = AllowCreateRoom,
                 ["messageLifeTimeDays"] = MessageLifeTimeDays,
                 ["postMessageScript"] = PostMessageScript?.ToJson(),
@@ -222,6 +229,10 @@ namespace Gs2.Gs2Chat.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (AllowCreateRoom != null) {
                 writer.WritePropertyName("allowCreateRoom");
@@ -301,6 +312,14 @@ namespace Gs2.Gs2Chat.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (AllowCreateRoom == null && AllowCreateRoom == other.AllowCreateRoom)
             {
@@ -426,6 +445,8 @@ namespace Gs2.Gs2Chat.Model
             {
             }
             {
+            }
+            {
                 if (MessageLifeTimeDays < 1) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "chat.namespace.messageLifeTimeDays.error.invalid"),
@@ -494,6 +515,7 @@ namespace Gs2.Gs2Chat.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Chat.Model.TransactionSetting,
                 AllowCreateRoom = AllowCreateRoom,
                 MessageLifeTimeDays = MessageLifeTimeDays,
                 PostMessageScript = PostMessageScript?.Clone() as Gs2.Gs2Chat.Model.ScriptSetting,

@@ -200,6 +200,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.ChangeNotification != null)
                 {
                     jsonWriter.WritePropertyName("changeNotification");
@@ -596,6 +601,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.ChangeNotification != null)
                 {

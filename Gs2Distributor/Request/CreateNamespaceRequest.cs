@@ -38,6 +38,7 @@ namespace Gs2.Gs2Distributor.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Distributor.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public string AssumeUserId { set; get; } = null!;
          public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunStampSheetNotification { set; get; } = null!;
          public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunTransactionNotification { set; get; } = null!;
@@ -48,6 +49,10 @@ namespace Gs2.Gs2Distributor.Request
         }
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Distributor.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithAssumeUserId(string assumeUserId) {
@@ -78,6 +83,7 @@ namespace Gs2.Gs2Distributor.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Distributor.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAssumeUserId(!data.Keys.Contains("assumeUserId") || data["assumeUserId"] == null ? null : data["assumeUserId"].ToString())
                 .WithAutoRunStampSheetNotification(!data.Keys.Contains("autoRunStampSheetNotification") || data["autoRunStampSheetNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunStampSheetNotification"]))
                 .WithAutoRunTransactionNotification(!data.Keys.Contains("autoRunTransactionNotification") || data["autoRunTransactionNotification"] == null ? null : Gs2.Gs2Distributor.Model.NotificationSetting.FromJson(data["autoRunTransactionNotification"]))
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Distributor.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["assumeUserId"] = AssumeUserId,
                 ["autoRunStampSheetNotification"] = AutoRunStampSheetNotification?.ToJson(),
                 ["autoRunTransactionNotification"] = AutoRunTransactionNotification?.ToJson(),
@@ -106,6 +113,9 @@ namespace Gs2.Gs2Distributor.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (AssumeUserId != null) {
                 writer.WritePropertyName("assumeUserId");
@@ -127,6 +137,7 @@ namespace Gs2.Gs2Distributor.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += AssumeUserId + ":";
             key += AutoRunStampSheetNotification + ":";
             key += AutoRunTransactionNotification + ":";

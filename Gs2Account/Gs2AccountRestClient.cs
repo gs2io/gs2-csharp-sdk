@@ -200,6 +200,11 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.ChangePasswordIfTakeOver != null)
                 {
                     jsonWriter.WritePropertyName("changePasswordIfTakeOver");
@@ -571,6 +576,11 @@ namespace Gs2.Gs2Account
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.ChangePasswordIfTakeOver != null)
                 {

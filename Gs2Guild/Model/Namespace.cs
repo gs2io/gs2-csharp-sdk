@@ -37,6 +37,7 @@ namespace Gs2.Gs2Guild.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2Guild.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Guild.Model.NotificationSetting ChangeNotification { set; get; }
         public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; }
         public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; }
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Guild.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2Guild.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithChangeNotification(Gs2.Gs2Guild.Model.NotificationSetting changeNotification) {
@@ -198,6 +203,7 @@ namespace Gs2.Gs2Guild.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Guild.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithChangeNotification(!data.Keys.Contains("changeNotification") || data["changeNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeNotification"]))
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["leaveNotification"]))
@@ -223,6 +229,7 @@ namespace Gs2.Gs2Guild.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["changeNotification"] = ChangeNotification?.ToJson(),
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
@@ -257,6 +264,10 @@ namespace Gs2.Gs2Guild.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (ChangeNotification != null) {
                 writer.WritePropertyName("changeNotification");
@@ -356,6 +367,14 @@ namespace Gs2.Gs2Guild.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (ChangeNotification == null && ChangeNotification == other.ChangeNotification)
             {
@@ -547,6 +566,8 @@ namespace Gs2.Gs2Guild.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "guild.namespace.createdAt.error.invalid"),
@@ -589,6 +610,7 @@ namespace Gs2.Gs2Guild.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Guild.Model.TransactionSetting,
                 ChangeNotification = ChangeNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,
                 JoinNotification = JoinNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,
                 LeaveNotification = LeaveNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,

@@ -75,6 +75,11 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.FirebaseSecret != null)
                 {
                     jsonWriter.WritePropertyName("firebaseSecret");
@@ -398,6 +403,11 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.FirebaseSecret != null)
                 {

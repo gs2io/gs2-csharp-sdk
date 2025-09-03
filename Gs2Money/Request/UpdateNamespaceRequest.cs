@@ -38,6 +38,7 @@ namespace Gs2.Gs2Money.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Money.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public string Priority { set; get; } = null!;
          public string AppleKey { set; get; } = null!;
          public string GoogleKey { set; get; } = null!;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Money.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Money.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithPriority(string priority) {
@@ -98,6 +103,7 @@ namespace Gs2.Gs2Money.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Money.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithPriority(!data.Keys.Contains("priority") || data["priority"] == null ? null : data["priority"].ToString())
                 .WithAppleKey(!data.Keys.Contains("appleKey") || data["appleKey"] == null ? null : data["appleKey"].ToString())
                 .WithGoogleKey(!data.Keys.Contains("googleKey") || data["googleKey"] == null ? null : data["googleKey"].ToString())
@@ -113,6 +119,7 @@ namespace Gs2.Gs2Money.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["priority"] = Priority,
                 ["appleKey"] = AppleKey,
                 ["googleKey"] = GoogleKey,
@@ -134,6 +141,9 @@ namespace Gs2.Gs2Money.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (Priority != null) {
                 writer.WritePropertyName("priority");
@@ -170,6 +180,7 @@ namespace Gs2.Gs2Money.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += Priority + ":";
             key += AppleKey + ":";
             key += GoogleKey + ":";

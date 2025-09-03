@@ -39,6 +39,7 @@ namespace Gs2.Gs2Money2.Request
          public string NamespaceName { set; get; } = null!;
          public string CurrencyUsagePriority { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Money2.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Money2.Model.PlatformSetting PlatformSetting { set; get; } = null!;
          public Gs2.Gs2Money2.Model.ScriptSetting DepositBalanceScript { set; get; } = null!;
          public Gs2.Gs2Money2.Model.ScriptSetting WithdrawBalanceScript { set; get; } = null!;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Money2.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Money2.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithPlatformSetting(Gs2.Gs2Money2.Model.PlatformSetting platformSetting) {
@@ -114,6 +119,7 @@ namespace Gs2.Gs2Money2.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithCurrencyUsagePriority(!data.Keys.Contains("currencyUsagePriority") || data["currencyUsagePriority"] == null ? null : data["currencyUsagePriority"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Money2.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithPlatformSetting(!data.Keys.Contains("platformSetting") || data["platformSetting"] == null ? null : Gs2.Gs2Money2.Model.PlatformSetting.FromJson(data["platformSetting"]))
                 .WithDepositBalanceScript(!data.Keys.Contains("depositBalanceScript") || data["depositBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["depositBalanceScript"]))
                 .WithWithdrawBalanceScript(!data.Keys.Contains("withdrawBalanceScript") || data["withdrawBalanceScript"] == null ? null : Gs2.Gs2Money2.Model.ScriptSetting.FromJson(data["withdrawBalanceScript"]))
@@ -132,6 +138,7 @@ namespace Gs2.Gs2Money2.Request
                 ["namespaceName"] = NamespaceName,
                 ["currencyUsagePriority"] = CurrencyUsagePriority,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["platformSetting"] = PlatformSetting?.ToJson(),
                 ["depositBalanceScript"] = DepositBalanceScript?.ToJson(),
                 ["withdrawBalanceScript"] = WithdrawBalanceScript?.ToJson(),
@@ -159,6 +166,9 @@ namespace Gs2.Gs2Money2.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (PlatformSetting != null) {
                 PlatformSetting.WriteJson(writer);
@@ -201,6 +211,7 @@ namespace Gs2.Gs2Money2.Request
             key += NamespaceName + ":";
             key += CurrencyUsagePriority + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += PlatformSetting + ":";
             key += DepositBalanceScript + ":";
             key += WithdrawBalanceScript + ":";

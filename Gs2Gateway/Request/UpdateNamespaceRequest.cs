@@ -38,6 +38,7 @@ namespace Gs2.Gs2Gateway.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Gateway.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public string FirebaseSecret { set; get; } = null!;
          public Gs2.Gs2Gateway.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Gateway.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Gateway.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithFirebaseSecret(string firebaseSecret) {
@@ -68,6 +73,7 @@ namespace Gs2.Gs2Gateway.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Gateway.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithFirebaseSecret(!data.Keys.Contains("firebaseSecret") || data["firebaseSecret"] == null ? null : data["firebaseSecret"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Gateway.Model.LogSetting.FromJson(data["logSetting"]));
         }
@@ -77,6 +83,7 @@ namespace Gs2.Gs2Gateway.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["firebaseSecret"] = FirebaseSecret,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
@@ -93,6 +100,9 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
             if (FirebaseSecret != null) {
                 writer.WritePropertyName("firebaseSecret");
                 writer.Write(FirebaseSecret.ToString());
@@ -107,6 +117,7 @@ namespace Gs2.Gs2Gateway.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += FirebaseSecret + ":";
             key += LogSetting + ":";
             return key;

@@ -38,6 +38,7 @@ namespace Gs2.Gs2Stamina.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Stamina.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public string OverflowTriggerScript { set; get; } = null!;
          public Gs2.Gs2Stamina.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Stamina.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Stamina.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithOverflowTriggerScript(string overflowTriggerScript) {
@@ -68,6 +73,7 @@ namespace Gs2.Gs2Stamina.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Stamina.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithOverflowTriggerScript(!data.Keys.Contains("overflowTriggerScript") || data["overflowTriggerScript"] == null ? null : data["overflowTriggerScript"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Stamina.Model.LogSetting.FromJson(data["logSetting"]));
         }
@@ -77,6 +83,7 @@ namespace Gs2.Gs2Stamina.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["overflowTriggerScript"] = OverflowTriggerScript,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
@@ -93,6 +100,9 @@ namespace Gs2.Gs2Stamina.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
             if (OverflowTriggerScript != null) {
                 writer.WritePropertyName("overflowTriggerScript");
                 writer.Write(OverflowTriggerScript.ToString());
@@ -107,6 +117,7 @@ namespace Gs2.Gs2Stamina.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += OverflowTriggerScript + ":";
             key += LogSetting + ":";
             return key;

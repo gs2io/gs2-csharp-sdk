@@ -38,6 +38,7 @@ namespace Gs2.Gs2Dictionary.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Dictionary.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Dictionary.Model.ScriptSetting EntryScript { set; get; } = null!;
          public string DuplicateEntryScript { set; get; } = null!;
          public Gs2.Gs2Dictionary.Model.LogSetting LogSetting { set; get; } = null!;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Dictionary.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Dictionary.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithEntryScript(Gs2.Gs2Dictionary.Model.ScriptSetting entryScript) {
@@ -73,6 +78,7 @@ namespace Gs2.Gs2Dictionary.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Dictionary.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEntryScript(!data.Keys.Contains("entryScript") || data["entryScript"] == null ? null : Gs2.Gs2Dictionary.Model.ScriptSetting.FromJson(data["entryScript"]))
                 .WithDuplicateEntryScript(!data.Keys.Contains("duplicateEntryScript") || data["duplicateEntryScript"] == null ? null : data["duplicateEntryScript"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Dictionary.Model.LogSetting.FromJson(data["logSetting"]));
@@ -83,6 +89,7 @@ namespace Gs2.Gs2Dictionary.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["entryScript"] = EntryScript?.ToJson(),
                 ["duplicateEntryScript"] = DuplicateEntryScript,
                 ["logSetting"] = LogSetting?.ToJson(),
@@ -99,6 +106,9 @@ namespace Gs2.Gs2Dictionary.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (EntryScript != null) {
                 EntryScript.WriteJson(writer);
@@ -117,6 +127,7 @@ namespace Gs2.Gs2Dictionary.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += EntryScript + ":";
             key += DuplicateEntryScript + ":";
             key += LogSetting + ":";

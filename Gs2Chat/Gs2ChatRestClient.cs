@@ -200,6 +200,11 @@ namespace Gs2.Gs2Chat
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.AllowCreateRoom != null)
                 {
                     jsonWriter.WritePropertyName("allowCreateRoom");
@@ -571,6 +576,11 @@ namespace Gs2.Gs2Chat
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.AllowCreateRoom != null)
                 {

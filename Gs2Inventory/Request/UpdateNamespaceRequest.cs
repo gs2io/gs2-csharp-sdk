@@ -38,6 +38,7 @@ namespace Gs2.Gs2Inventory.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Inventory.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; } = null!;
          public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; } = null!;
          public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; } = null!;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Inventory.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Inventory.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting acquireScript) {
@@ -98,6 +103,7 @@ namespace Gs2.Gs2Inventory.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Inventory.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithAcquireScript(!data.Keys.Contains("acquireScript") || data["acquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["acquireScript"]))
                 .WithOverflowScript(!data.Keys.Contains("overflowScript") || data["overflowScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["overflowScript"]))
                 .WithConsumeScript(!data.Keys.Contains("consumeScript") || data["consumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["consumeScript"]))
@@ -113,6 +119,7 @@ namespace Gs2.Gs2Inventory.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["acquireScript"] = AcquireScript?.ToJson(),
                 ["overflowScript"] = OverflowScript?.ToJson(),
                 ["consumeScript"] = ConsumeScript?.ToJson(),
@@ -134,6 +141,9 @@ namespace Gs2.Gs2Inventory.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (AcquireScript != null) {
                 AcquireScript.WriteJson(writer);
@@ -166,6 +176,7 @@ namespace Gs2.Gs2Inventory.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += AcquireScript + ":";
             key += OverflowScript + ":";
             key += ConsumeScript + ":";

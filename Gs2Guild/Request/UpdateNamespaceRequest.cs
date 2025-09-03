@@ -38,6 +38,7 @@ namespace Gs2.Gs2Guild.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting ChangeNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; } = null!;
@@ -58,6 +59,10 @@ namespace Gs2.Gs2Guild.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Guild.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithChangeNotification(Gs2.Gs2Guild.Model.NotificationSetting changeNotification) {
@@ -128,6 +133,7 @@ namespace Gs2.Gs2Guild.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Guild.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithChangeNotification(!data.Keys.Contains("changeNotification") || data["changeNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeNotification"]))
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["leaveNotification"]))
@@ -149,6 +155,7 @@ namespace Gs2.Gs2Guild.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["changeNotification"] = ChangeNotification?.ToJson(),
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
@@ -176,6 +183,9 @@ namespace Gs2.Gs2Guild.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (ChangeNotification != null) {
                 ChangeNotification.WriteJson(writer);
@@ -226,6 +236,7 @@ namespace Gs2.Gs2Guild.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += ChangeNotification + ":";
             key += JoinNotification + ":";
             key += LeaveNotification + ":";

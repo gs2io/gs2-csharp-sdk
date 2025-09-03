@@ -38,6 +38,7 @@ namespace Gs2.Gs2Account.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+         public Gs2.Gs2Account.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public bool? ChangePasswordIfTakeOver { set; get; } = null!;
          public Gs2.Gs2Account.Model.ScriptSetting CreateAccountScript { set; get; } = null!;
          public Gs2.Gs2Account.Model.ScriptSetting AuthenticationScript { set; get; } = null!;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Account.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Account.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithChangePasswordIfTakeOver(bool? changePasswordIfTakeOver) {
@@ -98,6 +103,7 @@ namespace Gs2.Gs2Account.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Account.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithChangePasswordIfTakeOver(!data.Keys.Contains("changePasswordIfTakeOver") || data["changePasswordIfTakeOver"] == null ? null : (bool?)bool.Parse(data["changePasswordIfTakeOver"].ToString()))
                 .WithCreateAccountScript(!data.Keys.Contains("createAccountScript") || data["createAccountScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createAccountScript"]))
                 .WithAuthenticationScript(!data.Keys.Contains("authenticationScript") || data["authenticationScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["authenticationScript"]))
@@ -113,6 +119,7 @@ namespace Gs2.Gs2Account.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["changePasswordIfTakeOver"] = ChangePasswordIfTakeOver,
                 ["createAccountScript"] = CreateAccountScript?.ToJson(),
                 ["authenticationScript"] = AuthenticationScript?.ToJson(),
@@ -134,6 +141,9 @@ namespace Gs2.Gs2Account.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (ChangePasswordIfTakeOver != null) {
                 writer.WritePropertyName("changePasswordIfTakeOver");
@@ -167,6 +177,7 @@ namespace Gs2.Gs2Account.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += ChangePasswordIfTakeOver + ":";
             key += CreateAccountScript + ":";
             key += AuthenticationScript + ":";
