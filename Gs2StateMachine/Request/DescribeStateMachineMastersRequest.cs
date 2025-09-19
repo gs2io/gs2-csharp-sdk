@@ -37,15 +37,10 @@ namespace Gs2.Gs2StateMachine.Request
 	public class DescribeStateMachineMastersRequest : Gs2Request<DescribeStateMachineMastersRequest>
 	{
          public string NamespaceName { set; get; } = null!;
-         public string NamePrefix { set; get; } = null!;
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
         public DescribeStateMachineMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
-            return this;
-        }
-        public DescribeStateMachineMastersRequest WithNamePrefix(string namePrefix) {
-            this.NamePrefix = namePrefix;
             return this;
         }
         public DescribeStateMachineMastersRequest WithPageToken(string pageToken) {
@@ -67,7 +62,6 @@ namespace Gs2.Gs2StateMachine.Request
             }
             return new DescribeStateMachineMastersRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithNamePrefix(!data.Keys.Contains("namePrefix") || data["namePrefix"] == null ? null : data["namePrefix"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
@@ -76,7 +70,6 @@ namespace Gs2.Gs2StateMachine.Request
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["namePrefix"] = NamePrefix,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
@@ -88,10 +81,6 @@ namespace Gs2.Gs2StateMachine.Request
             if (NamespaceName != null) {
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
-            }
-            if (NamePrefix != null) {
-                writer.WritePropertyName("namePrefix");
-                writer.Write(NamePrefix.ToString());
             }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
@@ -107,7 +96,6 @@ namespace Gs2.Gs2StateMachine.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += NamePrefix + ":";
             key += PageToken + ":";
             key += Limit + ":";
             return key;
