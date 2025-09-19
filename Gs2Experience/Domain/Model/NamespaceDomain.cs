@@ -219,12 +219,14 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Experience.Model.ThresholdMaster> ThresholdMasters(
+            string namePrefix = null
         )
         {
             return new DescribeThresholdMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -235,12 +237,14 @@ namespace Gs2.Gs2Experience.Domain.Model
             #else
         public DescribeThresholdMastersIterator ThresholdMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeThresholdMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -250,7 +254,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
         public ulong SubscribeThresholdMasters(
-            Action<Gs2.Gs2Experience.Model.ThresholdMaster[]> callback
+            Action<Gs2.Gs2Experience.Model.ThresholdMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
@@ -266,6 +271,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await ThresholdMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -280,13 +286,16 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeThresholdMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Experience.Model.ThresholdMaster[]> callback
+            Action<Gs2.Gs2Experience.Model.ThresholdMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await ThresholdMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeThresholdMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
         public void UnsubscribeThresholdMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
@@ -307,6 +317,7 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
 
         public void InvalidateThresholdMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Experience.Model.ThresholdMaster>(
@@ -328,12 +339,14 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Experience.Model.ExperienceModelMaster> ExperienceModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeExperienceModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -344,12 +357,14 @@ namespace Gs2.Gs2Experience.Domain.Model
             #else
         public DescribeExperienceModelMastersIterator ExperienceModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeExperienceModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -359,7 +374,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
         public ulong SubscribeExperienceModelMasters(
-            Action<Gs2.Gs2Experience.Model.ExperienceModelMaster[]> callback
+            Action<Gs2.Gs2Experience.Model.ExperienceModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
@@ -375,6 +391,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await ExperienceModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -389,13 +406,16 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeExperienceModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Experience.Model.ExperienceModelMaster[]> callback
+            Action<Gs2.Gs2Experience.Model.ExperienceModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await ExperienceModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeExperienceModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -403,7 +423,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
         public void UnsubscribeExperienceModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
@@ -416,6 +437,7 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
 
         public void InvalidateExperienceModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Experience.Model.ExperienceModelMaster>(

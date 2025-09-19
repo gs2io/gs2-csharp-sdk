@@ -219,12 +219,14 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2SerialKey.Model.CampaignModelMaster> CampaignModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeCampaignModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -235,12 +237,14 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             #else
         public DescribeCampaignModelMastersIterator CampaignModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeCampaignModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -250,7 +254,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
         public ulong SubscribeCampaignModelMasters(
-            Action<Gs2.Gs2SerialKey.Model.CampaignModelMaster[]> callback
+            Action<Gs2.Gs2SerialKey.Model.CampaignModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
@@ -266,6 +271,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await CampaignModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -280,13 +286,16 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeCampaignModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2SerialKey.Model.CampaignModelMaster[]> callback
+            Action<Gs2.Gs2SerialKey.Model.CampaignModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await CampaignModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeCampaignModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -294,7 +303,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
         public void UnsubscribeCampaignModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
@@ -307,6 +317,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         }
 
         public void InvalidateCampaignModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(

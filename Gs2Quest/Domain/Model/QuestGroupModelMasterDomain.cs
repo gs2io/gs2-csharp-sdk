@@ -81,13 +81,15 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Quest.Model.QuestModelMaster> QuestModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeQuestModelMastersIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.QuestGroupName
+                this.QuestGroupName,
+                namePrefix
             );
         }
         #endif
@@ -98,13 +100,15 @@ namespace Gs2.Gs2Quest.Domain.Model
             #else
         public DescribeQuestModelMastersIterator QuestModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeQuestModelMastersIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.QuestGroupName
+                this.QuestGroupName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -114,7 +118,8 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
 
         public ulong SubscribeQuestModelMasters(
-            Action<Gs2.Gs2Quest.Model.QuestModelMaster[]> callback
+            Action<Gs2.Gs2Quest.Model.QuestModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.QuestModelMaster>(
@@ -131,6 +136,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await QuestModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -145,13 +151,16 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeQuestModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Quest.Model.QuestModelMaster[]> callback
+            Action<Gs2.Gs2Quest.Model.QuestModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await QuestModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeQuestModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -159,7 +168,8 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
 
         public void UnsubscribeQuestModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.QuestModelMaster>(
@@ -173,6 +183,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
 
         public void InvalidateQuestModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.QuestModelMaster>(

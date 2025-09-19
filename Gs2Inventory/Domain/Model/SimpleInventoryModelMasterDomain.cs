@@ -81,13 +81,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> SimpleItemModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeSimpleItemModelMastersIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.InventoryName
+                this.InventoryName,
+                namePrefix
             );
         }
         #endif
@@ -98,13 +100,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             #else
         public DescribeSimpleItemModelMastersIterator SimpleItemModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeSimpleItemModelMastersIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.InventoryName
+                this.InventoryName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -114,7 +118,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
         public ulong SubscribeSimpleItemModelMasters(
-            Action<Gs2.Gs2Inventory.Model.SimpleItemModelMaster[]> callback
+            Action<Gs2.Gs2Inventory.Model.SimpleItemModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
@@ -131,6 +136,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await SimpleItemModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -145,13 +151,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSimpleItemModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Inventory.Model.SimpleItemModelMaster[]> callback
+            Action<Gs2.Gs2Inventory.Model.SimpleItemModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await SimpleItemModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeSimpleItemModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -159,7 +168,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
         public void UnsubscribeSimpleItemModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
@@ -173,6 +183,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         public void InvalidateSimpleItemModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(

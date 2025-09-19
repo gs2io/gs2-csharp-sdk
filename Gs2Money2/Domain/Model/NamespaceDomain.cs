@@ -608,12 +608,14 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Money2.Model.StoreContentModelMaster> StoreContentModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeStoreContentModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -624,12 +626,14 @@ namespace Gs2.Gs2Money2.Domain.Model
             #else
         public DescribeStoreContentModelMastersIterator StoreContentModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeStoreContentModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -639,7 +643,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         #endif
 
         public ulong SubscribeStoreContentModelMasters(
-            Action<Gs2.Gs2Money2.Model.StoreContentModelMaster[]> callback
+            Action<Gs2.Gs2Money2.Model.StoreContentModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.StoreContentModelMaster>(
@@ -655,6 +660,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await StoreContentModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -669,13 +675,16 @@ namespace Gs2.Gs2Money2.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStoreContentModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Money2.Model.StoreContentModelMaster[]> callback
+            Action<Gs2.Gs2Money2.Model.StoreContentModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await StoreContentModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeStoreContentModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -683,7 +692,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         #endif
 
         public void UnsubscribeStoreContentModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.StoreContentModelMaster>(
@@ -696,6 +706,7 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
 
         public void InvalidateStoreContentModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.StoreContentModelMaster>(
@@ -826,12 +837,14 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster> StoreSubscriptionContentModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeStoreSubscriptionContentModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -842,12 +855,14 @@ namespace Gs2.Gs2Money2.Domain.Model
             #else
         public DescribeStoreSubscriptionContentModelMastersIterator StoreSubscriptionContentModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeStoreSubscriptionContentModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -857,7 +872,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         #endif
 
         public ulong SubscribeStoreSubscriptionContentModelMasters(
-            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster[]> callback
+            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>(
@@ -873,6 +889,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await StoreSubscriptionContentModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -887,13 +904,16 @@ namespace Gs2.Gs2Money2.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStoreSubscriptionContentModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster[]> callback
+            Action<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await StoreSubscriptionContentModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeStoreSubscriptionContentModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -901,7 +921,8 @@ namespace Gs2.Gs2Money2.Domain.Model
         #endif
 
         public void UnsubscribeStoreSubscriptionContentModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>(
@@ -914,6 +935,7 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
 
         public void InvalidateStoreSubscriptionContentModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>(

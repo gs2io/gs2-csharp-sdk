@@ -69,6 +69,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
         public string NamespaceName { get; }
+        public string RoomNamePrefix { get; }
         public string UserId { get; }
         public string TimeOffsetToken { get; }
         private string _pageToken;
@@ -83,11 +84,13 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             Gs2ChatRestClient client,
             string namespaceName,
             string userId,
+            string roomNamePrefix = null,
             string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
+            this.RoomNamePrefix = roomNamePrefix;
             this.UserId = userId;
             this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
@@ -117,6 +120,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     out var list
             )) {
                 this._result = list
+                    .Where(item => this.RoomNamePrefix == null || item.RoomName.StartsWith(this.RoomNamePrefix))
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -145,6 +149,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
+                    .Where(item => this.RoomNamePrefix == null || item.RoomName.StartsWith(this.RoomNamePrefix))
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;

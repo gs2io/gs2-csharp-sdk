@@ -199,12 +199,14 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> BalanceParameterModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeBalanceParameterModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -215,12 +217,14 @@ namespace Gs2.Gs2Enchant.Domain.Model
             #else
         public DescribeBalanceParameterModelMastersIterator BalanceParameterModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeBalanceParameterModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -230,7 +234,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         public ulong SubscribeBalanceParameterModelMasters(
-            Action<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster[]> callback
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
@@ -246,6 +251,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await BalanceParameterModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -260,13 +266,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeBalanceParameterModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster[]> callback
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await BalanceParameterModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeBalanceParameterModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         public void UnsubscribeBalanceParameterModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
@@ -287,6 +297,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
 
         public void InvalidateBalanceParameterModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(

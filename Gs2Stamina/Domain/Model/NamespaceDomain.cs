@@ -328,12 +328,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster> RecoverIntervalTableMasters(
+            string namePrefix = null
         )
         {
             return new DescribeRecoverIntervalTableMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -344,12 +346,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
             #else
         public DescribeRecoverIntervalTableMastersIterator RecoverIntervalTableMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeRecoverIntervalTableMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -359,7 +363,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         public ulong SubscribeRecoverIntervalTableMasters(
-            Action<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster[]> callback
+            Action<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
@@ -375,6 +380,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await RecoverIntervalTableMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -389,13 +395,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeRecoverIntervalTableMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster[]> callback
+            Action<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await RecoverIntervalTableMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeRecoverIntervalTableMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -403,7 +412,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         public void UnsubscribeRecoverIntervalTableMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
@@ -416,6 +426,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
 
         public void InvalidateRecoverIntervalTableMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
@@ -437,12 +448,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Stamina.Model.RecoverValueTableMaster> RecoverValueTableMasters(
+            string namePrefix = null
         )
         {
             return new DescribeRecoverValueTableMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -453,12 +466,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
             #else
         public DescribeRecoverValueTableMastersIterator RecoverValueTableMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeRecoverValueTableMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -468,7 +483,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         public ulong SubscribeRecoverValueTableMasters(
-            Action<Gs2.Gs2Stamina.Model.RecoverValueTableMaster[]> callback
+            Action<Gs2.Gs2Stamina.Model.RecoverValueTableMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
@@ -484,6 +500,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await RecoverValueTableMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -498,13 +515,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeRecoverValueTableMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Stamina.Model.RecoverValueTableMaster[]> callback
+            Action<Gs2.Gs2Stamina.Model.RecoverValueTableMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await RecoverValueTableMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeRecoverValueTableMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -512,7 +532,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         public void UnsubscribeRecoverValueTableMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
@@ -525,6 +546,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
 
         public void InvalidateRecoverValueTableMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
@@ -546,12 +568,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Stamina.Model.StaminaModelMaster> StaminaModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeStaminaModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -562,12 +586,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
             #else
         public DescribeStaminaModelMastersIterator StaminaModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeStaminaModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -577,7 +603,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         public ulong SubscribeStaminaModelMasters(
-            Action<Gs2.Gs2Stamina.Model.StaminaModelMaster[]> callback
+            Action<Gs2.Gs2Stamina.Model.StaminaModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
@@ -593,6 +620,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await StaminaModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -607,13 +635,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStaminaModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Stamina.Model.StaminaModelMaster[]> callback
+            Action<Gs2.Gs2Stamina.Model.StaminaModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await StaminaModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeStaminaModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -621,7 +652,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         public void UnsubscribeStaminaModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
@@ -634,6 +666,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
 
         public void InvalidateStaminaModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Stamina.Model.StaminaModelMaster>(

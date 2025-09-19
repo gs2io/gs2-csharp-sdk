@@ -328,12 +328,14 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModelMaster> PropertyFormModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribePropertyFormModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -344,12 +346,14 @@ namespace Gs2.Gs2Formation.Domain.Model
             #else
         public DescribePropertyFormModelMastersIterator PropertyFormModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribePropertyFormModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -359,7 +363,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         public ulong SubscribePropertyFormModelMasters(
-            Action<Gs2.Gs2Formation.Model.PropertyFormModelMaster[]> callback
+            Action<Gs2.Gs2Formation.Model.PropertyFormModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
@@ -375,6 +380,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await PropertyFormModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -389,13 +395,16 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribePropertyFormModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Formation.Model.PropertyFormModelMaster[]> callback
+            Action<Gs2.Gs2Formation.Model.PropertyFormModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await PropertyFormModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribePropertyFormModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -403,7 +412,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         public void UnsubscribePropertyFormModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
@@ -416,6 +426,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
 
         public void InvalidatePropertyFormModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
@@ -437,12 +448,14 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Formation.Model.FormModelMaster> FormModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeFormModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -453,12 +466,14 @@ namespace Gs2.Gs2Formation.Domain.Model
             #else
         public DescribeFormModelMastersIterator FormModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeFormModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -468,7 +483,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         public ulong SubscribeFormModelMasters(
-            Action<Gs2.Gs2Formation.Model.FormModelMaster[]> callback
+            Action<Gs2.Gs2Formation.Model.FormModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
@@ -484,6 +500,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await FormModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -498,13 +515,16 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeFormModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Formation.Model.FormModelMaster[]> callback
+            Action<Gs2.Gs2Formation.Model.FormModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await FormModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeFormModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -512,7 +532,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         public void UnsubscribeFormModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
@@ -525,6 +546,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
 
         public void InvalidateFormModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.FormModelMaster>(
@@ -546,12 +568,14 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Formation.Model.MoldModelMaster> MoldModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeMoldModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -562,12 +586,14 @@ namespace Gs2.Gs2Formation.Domain.Model
             #else
         public DescribeMoldModelMastersIterator MoldModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeMoldModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -577,7 +603,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         public ulong SubscribeMoldModelMasters(
-            Action<Gs2.Gs2Formation.Model.MoldModelMaster[]> callback
+            Action<Gs2.Gs2Formation.Model.MoldModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
@@ -593,6 +620,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await MoldModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -607,13 +635,16 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMoldModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Formation.Model.MoldModelMaster[]> callback
+            Action<Gs2.Gs2Formation.Model.MoldModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await MoldModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeMoldModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -621,7 +652,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         public void UnsubscribeMoldModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
@@ -634,6 +666,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
 
         public void InvalidateMoldModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Formation.Model.MoldModelMaster>(

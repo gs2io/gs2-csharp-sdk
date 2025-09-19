@@ -36,8 +36,13 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DescribeNamespacesRequest : Gs2Request<DescribeNamespacesRequest>
 	{
+         public string NamePrefix { set; get; } = null!;
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
+        public DescribeNamespacesRequest WithNamePrefix(string namePrefix) {
+            this.NamePrefix = namePrefix;
+            return this;
+        }
         public DescribeNamespacesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
@@ -56,6 +61,7 @@ namespace Gs2.Gs2Enhance.Request
                 return null;
             }
             return new DescribeNamespacesRequest()
+                .WithNamePrefix(!data.Keys.Contains("namePrefix") || data["namePrefix"] == null ? null : data["namePrefix"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
@@ -63,6 +69,7 @@ namespace Gs2.Gs2Enhance.Request
         public override JsonData ToJson()
         {
             return new JsonData {
+                ["namePrefix"] = NamePrefix,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
@@ -71,6 +78,10 @@ namespace Gs2.Gs2Enhance.Request
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (NamePrefix != null) {
+                writer.WritePropertyName("namePrefix");
+                writer.Write(NamePrefix.ToString());
+            }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
                 writer.Write(PageToken.ToString());
@@ -84,6 +95,7 @@ namespace Gs2.Gs2Enhance.Request
 
         public override string UniqueKey() {
             var key = "";
+            key += NamePrefix + ":";
             key += PageToken + ":";
             key += Limit + ":";
             return key;

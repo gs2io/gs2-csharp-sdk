@@ -69,6 +69,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
         public string NamespaceName { get; }
+        public string NamePrefix { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -79,11 +80,13 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
         public DescribeSubscribeRankingModelMastersIterator(
             Gs2.Core.Domain.Gs2 gs2,
             Gs2Ranking2RestClient client,
-            string namespaceName
+            string namespaceName,
+            string namePrefix = null
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
+            this.NamePrefix = namePrefix;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster[]{};
@@ -110,6 +113,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                     out var list
             )) {
                 this._result = list
+                    .Where(item => this.NamePrefix == null || item.Name.StartsWith(this.NamePrefix))
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -137,6 +141,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
+                    .Where(item => this.NamePrefix == null || item.Name.StartsWith(this.NamePrefix))
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;

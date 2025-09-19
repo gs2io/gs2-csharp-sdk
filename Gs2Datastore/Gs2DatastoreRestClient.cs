@@ -83,6 +83,9 @@ namespace Gs2.Gs2Datastore
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.NamePrefix != null) {
+                    sessionRequest.AddQueryString("namePrefix", $"{request.NamePrefix}");
+                }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }

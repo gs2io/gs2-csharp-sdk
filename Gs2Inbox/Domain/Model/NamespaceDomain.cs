@@ -219,12 +219,14 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Inbox.Model.GlobalMessageMaster> GlobalMessageMasters(
+            string namePrefix = null
         )
         {
             return new DescribeGlobalMessageMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -235,12 +237,14 @@ namespace Gs2.Gs2Inbox.Domain.Model
             #else
         public DescribeGlobalMessageMastersIterator GlobalMessageMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeGlobalMessageMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -250,7 +254,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
 
         public ulong SubscribeGlobalMessageMasters(
-            Action<Gs2.Gs2Inbox.Model.GlobalMessageMaster[]> callback
+            Action<Gs2.Gs2Inbox.Model.GlobalMessageMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
@@ -266,6 +271,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await GlobalMessageMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -280,13 +286,16 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeGlobalMessageMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Inbox.Model.GlobalMessageMaster[]> callback
+            Action<Gs2.Gs2Inbox.Model.GlobalMessageMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await GlobalMessageMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeGlobalMessageMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -294,7 +303,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
 
         public void UnsubscribeGlobalMessageMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
@@ -307,6 +317,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
 
         public void InvalidateGlobalMessageMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(

@@ -4034,11 +4034,6 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("namespaceName");
                     jsonWriter.Write(request.NamespaceName.ToString());
                 }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("accessToken");
-                    jsonWriter.Write(request.AccessToken.ToString());
-                }
                 if (request.Type != null)
                 {
                     jsonWriter.WritePropertyName("type");
@@ -4048,11 +4043,6 @@ namespace Gs2.Gs2Account
                 {
                     jsonWriter.WritePropertyName("contextStack");
                     jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.AccessToken != null)
-                {
-                    jsonWriter.WritePropertyName("xGs2AccessToken");
-                    jsonWriter.Write(request.AccessToken);
                 }
                 if (request.DryRun)
                 {

@@ -38,6 +38,7 @@ namespace Gs2.Gs2Inventory.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string InventoryName { set; get; } = null!;
+         public string NamePrefix { set; get; } = null!;
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
         public DescribeBigItemModelMastersRequest WithNamespaceName(string namespaceName) {
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Inventory.Request
         }
         public DescribeBigItemModelMastersRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
+            return this;
+        }
+        public DescribeBigItemModelMastersRequest WithNamePrefix(string namePrefix) {
+            this.NamePrefix = namePrefix;
             return this;
         }
         public DescribeBigItemModelMastersRequest WithPageToken(string pageToken) {
@@ -68,6 +73,7 @@ namespace Gs2.Gs2Inventory.Request
             return new DescribeBigItemModelMastersRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
+                .WithNamePrefix(!data.Keys.Contains("namePrefix") || data["namePrefix"] == null ? null : data["namePrefix"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
@@ -77,6 +83,7 @@ namespace Gs2.Gs2Inventory.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["inventoryName"] = InventoryName,
+                ["namePrefix"] = NamePrefix,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("inventoryName");
                 writer.Write(InventoryName.ToString());
             }
+            if (NamePrefix != null) {
+                writer.WritePropertyName("namePrefix");
+                writer.Write(NamePrefix.ToString());
+            }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
                 writer.Write(PageToken.ToString());
@@ -108,6 +119,7 @@ namespace Gs2.Gs2Inventory.Request
             var key = "";
             key += NamespaceName + ":";
             key += InventoryName + ":";
+            key += NamePrefix + ":";
             key += PageToken + ":";
             key += Limit + ":";
             return key;

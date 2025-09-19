@@ -37,12 +37,17 @@ namespace Gs2.Gs2Chat.Request
 	public class DescribeSubscribesByUserIdRequest : Gs2Request<DescribeSubscribesByUserIdRequest>
 	{
          public string NamespaceName { set; get; } = null!;
+         public string NamePrefix { set; get; } = null!;
          public string UserId { set; get; } = null!;
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public DescribeSubscribesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public DescribeSubscribesByUserIdRequest WithNamePrefix(string namePrefix) {
+            this.NamePrefix = namePrefix;
             return this;
         }
         public DescribeSubscribesByUserIdRequest WithUserId(string userId) {
@@ -72,6 +77,7 @@ namespace Gs2.Gs2Chat.Request
             }
             return new DescribeSubscribesByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithNamePrefix(!data.Keys.Contains("namePrefix") || data["namePrefix"] == null ? null : data["namePrefix"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Chat.Request
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
+                ["namePrefix"] = NamePrefix,
                 ["userId"] = UserId,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
@@ -95,6 +102,10 @@ namespace Gs2.Gs2Chat.Request
             if (NamespaceName != null) {
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
+            }
+            if (NamePrefix != null) {
+                writer.WritePropertyName("namePrefix");
+                writer.Write(NamePrefix.ToString());
             }
             if (UserId != null) {
                 writer.WritePropertyName("userId");
@@ -118,6 +129,7 @@ namespace Gs2.Gs2Chat.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
+            key += NamePrefix + ":";
             key += UserId + ":";
             key += PageToken + ":";
             key += Limit + ":";

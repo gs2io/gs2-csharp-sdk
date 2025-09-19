@@ -90,12 +90,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Showcase.Model.SalesItemMaster> SalesItemMasters(
+            string namePrefix = null
         )
         {
             return new DescribeSalesItemMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -106,12 +108,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #else
         public DescribeSalesItemMastersIterator SalesItemMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeSalesItemMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -121,7 +125,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public ulong SubscribeSalesItemMasters(
-            Action<Gs2.Gs2Showcase.Model.SalesItemMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.SalesItemMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
@@ -137,6 +142,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await SalesItemMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -151,13 +157,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSalesItemMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Showcase.Model.SalesItemMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.SalesItemMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await SalesItemMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeSalesItemMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -165,7 +174,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public void UnsubscribeSalesItemMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
@@ -178,6 +188,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
 
         public void InvalidateSalesItemMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.SalesItemMaster>(
@@ -199,12 +210,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Showcase.Model.SalesItemGroupMaster> SalesItemGroupMasters(
+            string namePrefix = null
         )
         {
             return new DescribeSalesItemGroupMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -215,12 +228,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #else
         public DescribeSalesItemGroupMastersIterator SalesItemGroupMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeSalesItemGroupMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -230,7 +245,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public ulong SubscribeSalesItemGroupMasters(
-            Action<Gs2.Gs2Showcase.Model.SalesItemGroupMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.SalesItemGroupMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
@@ -246,6 +262,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await SalesItemGroupMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -260,13 +277,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSalesItemGroupMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Showcase.Model.SalesItemGroupMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.SalesItemGroupMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await SalesItemGroupMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeSalesItemGroupMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -274,7 +294,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public void UnsubscribeSalesItemGroupMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
@@ -287,6 +308,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
 
         public void InvalidateSalesItemGroupMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
@@ -328,12 +350,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Showcase.Model.ShowcaseMaster> ShowcaseMasters(
+            string namePrefix = null
         )
         {
             return new DescribeShowcaseMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -344,12 +368,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #else
         public DescribeShowcaseMastersIterator ShowcaseMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeShowcaseMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -359,7 +385,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public ulong SubscribeShowcaseMasters(
-            Action<Gs2.Gs2Showcase.Model.ShowcaseMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.ShowcaseMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
@@ -375,6 +402,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await ShowcaseMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -389,13 +417,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeShowcaseMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Showcase.Model.ShowcaseMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.ShowcaseMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await ShowcaseMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeShowcaseMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -403,7 +434,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public void UnsubscribeShowcaseMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
@@ -416,6 +448,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
 
         public void InvalidateShowcaseMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
@@ -437,12 +470,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMasters(
+            string namePrefix = null
         )
         {
             return new DescribeRandomShowcaseMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -453,12 +488,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #else
         public DescribeRandomShowcaseMastersIterator RandomShowcaseMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeRandomShowcaseMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -468,7 +505,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public ulong SubscribeRandomShowcaseMasters(
-            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
@@ -484,6 +522,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await RandomShowcaseMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -498,13 +537,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeRandomShowcaseMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
+            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await RandomShowcaseMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeRandomShowcaseMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -512,7 +554,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         public void UnsubscribeRandomShowcaseMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
@@ -525,6 +568,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
 
         public void InvalidateRandomShowcaseMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(

@@ -82,12 +82,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Exchange.Model.RateModelMaster> RateModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeRateModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -98,12 +100,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
             #else
         public DescribeRateModelMastersIterator RateModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeRateModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -113,7 +117,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         public ulong SubscribeRateModelMasters(
-            Action<Gs2.Gs2Exchange.Model.RateModelMaster[]> callback
+            Action<Gs2.Gs2Exchange.Model.RateModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
@@ -129,6 +134,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await RateModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -143,13 +149,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeRateModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Exchange.Model.RateModelMaster[]> callback
+            Action<Gs2.Gs2Exchange.Model.RateModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await RateModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeRateModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -157,7 +166,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         public void UnsubscribeRateModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
@@ -170,6 +180,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
 
         public void InvalidateRateModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Exchange.Model.RateModelMaster>(
@@ -437,12 +448,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> IncrementalRateModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeIncrementalRateModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -453,12 +466,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
             #else
         public DescribeIncrementalRateModelMastersIterator IncrementalRateModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeIncrementalRateModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -468,7 +483,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         public ulong SubscribeIncrementalRateModelMasters(
-            Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster[]> callback
+            Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
@@ -484,6 +500,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await IncrementalRateModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -498,13 +515,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeIncrementalRateModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster[]> callback
+            Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await IncrementalRateModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeIncrementalRateModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -512,7 +532,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         public void UnsubscribeIncrementalRateModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
@@ -525,6 +546,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
 
         public void InvalidateIncrementalRateModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(

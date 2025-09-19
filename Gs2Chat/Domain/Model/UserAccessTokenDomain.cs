@@ -161,13 +161,15 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
+            string roomNamePrefix = null
         )
         {
             return new DescribeSubscribesIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.AccessToken
+                this.AccessToken,
+                roomNamePrefix
             );
         }
         #endif
@@ -178,13 +180,15 @@ namespace Gs2.Gs2Chat.Domain.Model
             #else
         public DescribeSubscribesIterator SubscribesAsync(
             #endif
+            string roomNamePrefix = null
         )
         {
             return new DescribeSubscribesIterator(
                 this._gs2,
                 this._client,
                 this.NamespaceName,
-                this.AccessToken
+                this.AccessToken,
+                roomNamePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -194,7 +198,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public ulong SubscribeSubscribes(
-            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback
+            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
+            string roomNamePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
@@ -211,6 +216,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await SubscribesAsync(
+                                roomNamePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -225,13 +231,16 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscribesWithInitialCallAsync(
-            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback
+            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
+            string roomNamePrefix = null
         )
         {
             var items = await SubscribesAsync(
+                roomNamePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeSubscribes(
-                callback
+                callback,
+                roomNamePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -239,7 +248,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public void UnsubscribeSubscribes(
-            ulong callbackId
+            ulong callbackId,
+            string roomNamePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
@@ -253,6 +263,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
 
         public void InvalidateSubscribes(
+            string roomNamePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Subscribe>(

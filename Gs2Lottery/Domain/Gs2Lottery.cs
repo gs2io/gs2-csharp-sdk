@@ -445,11 +445,13 @@ namespace Gs2.Gs2Lottery.Domain
         #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Lottery.Model.Namespace> Namespaces(
+            string namePrefix = null
         )
         {
             return new DescribeNamespacesIterator(
                 this._gs2,
-                this._client
+                this._client,
+                namePrefix
             );
         }
         #endif
@@ -460,11 +462,13 @@ namespace Gs2.Gs2Lottery.Domain
             #else
         public DescribeNamespacesIterator NamespacesAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeNamespacesIterator(
                 this._gs2,
-                this._client
+                this._client,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -474,7 +478,8 @@ namespace Gs2.Gs2Lottery.Domain
         #endif
 
         public ulong SubscribeNamespaces(
-            Action<Gs2.Gs2Lottery.Model.Namespace[]> callback
+            Action<Gs2.Gs2Lottery.Model.Namespace[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.Namespace>(
@@ -489,6 +494,7 @@ namespace Gs2.Gs2Lottery.Domain
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await NamespacesAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -503,13 +509,16 @@ namespace Gs2.Gs2Lottery.Domain
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeNamespacesWithInitialCallAsync(
-            Action<Gs2.Gs2Lottery.Model.Namespace[]> callback
+            Action<Gs2.Gs2Lottery.Model.Namespace[]> callback,
+            string namePrefix = null
         )
         {
             var items = await NamespacesAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeNamespaces(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -517,7 +526,8 @@ namespace Gs2.Gs2Lottery.Domain
         #endif
 
         public void UnsubscribeNamespaces(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.Namespace>(
@@ -529,6 +539,7 @@ namespace Gs2.Gs2Lottery.Domain
         }
 
         public void InvalidateNamespaces(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.Namespace>(

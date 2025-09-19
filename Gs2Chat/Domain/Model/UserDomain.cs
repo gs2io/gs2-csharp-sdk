@@ -81,12 +81,14 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Chat.Model.Room> Rooms(
+            string namePrefix = null
         )
         {
             return new DescribeRoomsIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -97,12 +99,14 @@ namespace Gs2.Gs2Chat.Domain.Model
             #else
         public DescribeRoomsIterator RoomsAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeRoomsIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -112,7 +116,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public ulong SubscribeRooms(
-            Action<Gs2.Gs2Chat.Model.Room[]> callback
+            Action<Gs2.Gs2Chat.Model.Room[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Room>(
@@ -129,6 +134,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await RoomsAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -143,13 +149,16 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeRoomsWithInitialCallAsync(
-            Action<Gs2.Gs2Chat.Model.Room[]> callback
+            Action<Gs2.Gs2Chat.Model.Room[]> callback,
+            string namePrefix = null
         )
         {
             var items = await RoomsAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeRooms(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -157,7 +166,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public void UnsubscribeRooms(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Room>(
@@ -171,6 +181,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
 
         public void InvalidateRooms(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Room>(
@@ -196,6 +207,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
+            string roomNamePrefix = null,
             string timeOffsetToken = null
         )
         {
@@ -204,6 +216,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
+                roomNamePrefix,
                 timeOffsetToken
             );
         }
@@ -215,6 +228,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             #else
         public DescribeSubscribesByUserIdIterator SubscribesAsync(
             #endif
+            string roomNamePrefix = null,
             string timeOffsetToken = null
         )
         {
@@ -223,6 +237,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
+                roomNamePrefix,
                 timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -233,7 +248,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public ulong SubscribeSubscribes(
-            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback
+            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
+            string roomNamePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
@@ -250,6 +266,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await SubscribesAsync(
+                                roomNamePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -264,13 +281,16 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscribesWithInitialCallAsync(
-            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback
+            Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
+            string roomNamePrefix = null
         )
         {
             var items = await SubscribesAsync(
+                roomNamePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeSubscribes(
-                callback
+                callback,
+                roomNamePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -278,7 +298,8 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
         public void UnsubscribeSubscribes(
-            ulong callbackId
+            ulong callbackId,
+            string roomNamePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
@@ -292,6 +313,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
 
         public void InvalidateSubscribes(
+            string roomNamePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Chat.Model.Subscribe>(

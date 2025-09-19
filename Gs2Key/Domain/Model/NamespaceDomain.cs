@@ -79,12 +79,14 @@ namespace Gs2.Gs2Key.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Key.Model.Key> Keys(
+            string namePrefix = null
         )
         {
             return new DescribeKeysIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -95,12 +97,14 @@ namespace Gs2.Gs2Key.Domain.Model
             #else
         public DescribeKeysIterator KeysAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeKeysIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -110,7 +114,8 @@ namespace Gs2.Gs2Key.Domain.Model
         #endif
 
         public ulong SubscribeKeys(
-            Action<Gs2.Gs2Key.Model.Key[]> callback
+            Action<Gs2.Gs2Key.Model.Key[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Key.Model.Key>(
@@ -126,6 +131,7 @@ namespace Gs2.Gs2Key.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await KeysAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -140,13 +146,16 @@ namespace Gs2.Gs2Key.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeKeysWithInitialCallAsync(
-            Action<Gs2.Gs2Key.Model.Key[]> callback
+            Action<Gs2.Gs2Key.Model.Key[]> callback,
+            string namePrefix = null
         )
         {
             var items = await KeysAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeKeys(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -154,7 +163,8 @@ namespace Gs2.Gs2Key.Domain.Model
         #endif
 
         public void UnsubscribeKeys(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Key.Model.Key>(
@@ -167,6 +177,7 @@ namespace Gs2.Gs2Key.Domain.Model
         }
 
         public void InvalidateKeys(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Key.Model.Key>(

@@ -38,6 +38,7 @@ namespace Gs2.Gs2Quest.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string QuestGroupName { set; get; } = null!;
+         public string NamePrefix { set; get; } = null!;
          public string PageToken { set; get; } = null!;
          public int? Limit { set; get; } = null!;
         public DescribeQuestModelMastersRequest WithNamespaceName(string namespaceName) {
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Quest.Request
         }
         public DescribeQuestModelMastersRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
+            return this;
+        }
+        public DescribeQuestModelMastersRequest WithNamePrefix(string namePrefix) {
+            this.NamePrefix = namePrefix;
             return this;
         }
         public DescribeQuestModelMastersRequest WithPageToken(string pageToken) {
@@ -68,6 +73,7 @@ namespace Gs2.Gs2Quest.Request
             return new DescribeQuestModelMastersRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithQuestGroupName(!data.Keys.Contains("questGroupName") || data["questGroupName"] == null ? null : data["questGroupName"].ToString())
+                .WithNamePrefix(!data.Keys.Contains("namePrefix") || data["namePrefix"] == null ? null : data["namePrefix"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
@@ -77,6 +83,7 @@ namespace Gs2.Gs2Quest.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["questGroupName"] = QuestGroupName,
+                ["namePrefix"] = NamePrefix,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Quest.Request
                 writer.WritePropertyName("questGroupName");
                 writer.Write(QuestGroupName.ToString());
             }
+            if (NamePrefix != null) {
+                writer.WritePropertyName("namePrefix");
+                writer.Write(NamePrefix.ToString());
+            }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
                 writer.Write(PageToken.ToString());
@@ -108,6 +119,7 @@ namespace Gs2.Gs2Quest.Request
             var key = "";
             key += NamespaceName + ":";
             key += QuestGroupName + ":";
+            key += NamePrefix + ":";
             key += PageToken + ":";
             key += Limit + ":";
             return key;

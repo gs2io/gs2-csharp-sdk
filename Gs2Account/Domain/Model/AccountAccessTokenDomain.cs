@@ -88,10 +88,10 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain> GetAuthorizationUrlFuture(
-            GetAuthorizationUrlRequest request
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteTakeOverFuture(
+            DeleteTakeOverRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> self)
             {
                 request = request
                     .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
@@ -101,29 +101,36 @@ namespace Gs2.Gs2Account.Domain.Model
                     _gs2.Cache,
                     this.UserId,
                     this.AccessToken?.TimeOffset,
-                    () => this._client.GetAuthorizationUrlFuture(request)
+                    () => this._client.DeleteTakeOverFuture(request)
                 );
                 yield return future;
                 if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
                 }
                 var result = future.Result;
-                var domain = this;
-                this.AuthorizationUrl = domain.AuthorizationUrl = result?.AuthorizationUrl;
+                var domain = new Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.AccessToken,
+                    result?.Item?.Type
+                );
+
                 self.OnComplete(domain);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain> GetAuthorizationUrlAsync(
+        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteTakeOverAsync(
             #else
-        public async Task<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain> GetAuthorizationUrlAsync(
+        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteTakeOverAsync(
             #endif
-            GetAuthorizationUrlRequest request
+            DeleteTakeOverRequest request
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
@@ -133,10 +140,14 @@ namespace Gs2.Gs2Account.Domain.Model
                 _gs2.Cache,
                 this.UserId,
                 this.AccessToken?.TimeOffset,
-                () => this._client.GetAuthorizationUrlAsync(request)
+                () => this._client.DeleteTakeOverAsync(request)
             );
-            var domain = this;
-            this.AuthorizationUrl = domain.AuthorizationUrl = result?.AuthorizationUrl;
+            var domain = new Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                result?.Item?.Type
+            );
             return domain;
         }
         #endif

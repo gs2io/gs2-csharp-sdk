@@ -199,12 +199,14 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2SkillTree.Model.NodeModelMaster> NodeModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeNodeModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -215,12 +217,14 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             #else
         public DescribeNodeModelMastersIterator NodeModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeNodeModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -230,7 +234,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
 
         public ulong SubscribeNodeModelMasters(
-            Action<Gs2.Gs2SkillTree.Model.NodeModelMaster[]> callback
+            Action<Gs2.Gs2SkillTree.Model.NodeModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
@@ -246,6 +251,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await NodeModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -260,13 +266,16 @@ namespace Gs2.Gs2SkillTree.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeNodeModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2SkillTree.Model.NodeModelMaster[]> callback
+            Action<Gs2.Gs2SkillTree.Model.NodeModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await NodeModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeNodeModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -274,7 +283,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
 
         public void UnsubscribeNodeModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
@@ -287,6 +297,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         }
 
         public void InvalidateNodeModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2SkillTree.Model.NodeModelMaster>(

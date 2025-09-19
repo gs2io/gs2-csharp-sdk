@@ -318,11 +318,13 @@ namespace Gs2.Gs2Deploy.Domain
         #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Deploy.Model.Stack> Stacks(
+            string namePrefix = null
         )
         {
             return new DescribeStacksIterator(
                 this._gs2,
-                this._client
+                this._client,
+                namePrefix
             );
         }
         #endif
@@ -333,11 +335,13 @@ namespace Gs2.Gs2Deploy.Domain
             #else
         public DescribeStacksIterator StacksAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeStacksIterator(
                 this._gs2,
-                this._client
+                this._client,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -347,7 +351,8 @@ namespace Gs2.Gs2Deploy.Domain
         #endif
 
         public ulong SubscribeStacks(
-            Action<Gs2.Gs2Deploy.Model.Stack[]> callback
+            Action<Gs2.Gs2Deploy.Model.Stack[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Stack>(
@@ -362,6 +367,7 @@ namespace Gs2.Gs2Deploy.Domain
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await StacksAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -376,13 +382,16 @@ namespace Gs2.Gs2Deploy.Domain
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStacksWithInitialCallAsync(
-            Action<Gs2.Gs2Deploy.Model.Stack[]> callback
+            Action<Gs2.Gs2Deploy.Model.Stack[]> callback,
+            string namePrefix = null
         )
         {
             var items = await StacksAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeStacks(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -390,7 +399,8 @@ namespace Gs2.Gs2Deploy.Domain
         #endif
 
         public void UnsubscribeStacks(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Deploy.Model.Stack>(
@@ -402,6 +412,7 @@ namespace Gs2.Gs2Deploy.Domain
         }
 
         public void InvalidateStacks(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Deploy.Model.Stack>(

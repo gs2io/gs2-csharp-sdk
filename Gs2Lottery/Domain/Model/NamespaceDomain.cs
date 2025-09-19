@@ -328,12 +328,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Lottery.Model.PrizeTableMaster> PrizeTableMasters(
+            string namePrefix = null
         )
         {
             return new DescribePrizeTableMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -344,12 +346,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #else
         public DescribePrizeTableMastersIterator PrizeTableMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribePrizeTableMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -359,7 +363,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
 
         public ulong SubscribePrizeTableMasters(
-            Action<Gs2.Gs2Lottery.Model.PrizeTableMaster[]> callback
+            Action<Gs2.Gs2Lottery.Model.PrizeTableMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
@@ -375,6 +380,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await PrizeTableMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -389,13 +395,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribePrizeTableMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Lottery.Model.PrizeTableMaster[]> callback
+            Action<Gs2.Gs2Lottery.Model.PrizeTableMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await PrizeTableMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribePrizeTableMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -403,7 +412,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
 
         public void UnsubscribePrizeTableMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
@@ -416,6 +426,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
 
         public void InvalidatePrizeTableMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
@@ -437,12 +448,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Lottery.Model.LotteryModelMaster> LotteryModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeLotteryModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -453,12 +466,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #else
         public DescribeLotteryModelMastersIterator LotteryModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeLotteryModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -468,7 +483,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
 
         public ulong SubscribeLotteryModelMasters(
-            Action<Gs2.Gs2Lottery.Model.LotteryModelMaster[]> callback
+            Action<Gs2.Gs2Lottery.Model.LotteryModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
@@ -484,6 +500,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await LotteryModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -498,13 +515,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeLotteryModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Lottery.Model.LotteryModelMaster[]> callback
+            Action<Gs2.Gs2Lottery.Model.LotteryModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await LotteryModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeLotteryModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -512,7 +532,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
 
         public void UnsubscribeLotteryModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
@@ -525,6 +546,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
 
         public void InvalidateLotteryModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.LotteryModelMaster>(

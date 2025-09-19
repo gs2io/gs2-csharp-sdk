@@ -70,6 +70,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         private readonly Gs2InventoryRestClient _client;
         public string NamespaceName { get; }
         public string InventoryName { get; }
+        public string NamePrefix { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -81,12 +82,14 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             Gs2.Core.Domain.Gs2 gs2,
             Gs2InventoryRestClient client,
             string namespaceName,
-            string inventoryName
+            string inventoryName,
+            string namePrefix = null
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.InventoryName = inventoryName;
+            this.NamePrefix = namePrefix;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Inventory.Model.SimpleItemModelMaster[]{};
@@ -114,6 +117,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     out var list
             )) {
                 this._result = list
+                    .Where(item => this.NamePrefix == null || item.Name.StartsWith(this.NamePrefix))
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -142,6 +146,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
+                    .Where(item => this.NamePrefix == null || item.Name.StartsWith(this.NamePrefix))
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;

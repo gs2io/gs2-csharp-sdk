@@ -37,14 +37,9 @@ namespace Gs2.Gs2Account.Request
 	public class GetAuthorizationUrlRequest : Gs2Request<GetAuthorizationUrlRequest>
 	{
          public string NamespaceName { set; get; } = null!;
-         public string AccessToken { set; get; } = null!;
          public int? Type { set; get; } = null!;
         public GetAuthorizationUrlRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
-            return this;
-        }
-        public GetAuthorizationUrlRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
             return this;
         }
         public GetAuthorizationUrlRequest WithType(int? type) {
@@ -62,7 +57,6 @@ namespace Gs2.Gs2Account.Request
             }
             return new GetAuthorizationUrlRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())));
         }
 
@@ -70,7 +64,6 @@ namespace Gs2.Gs2Account.Request
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["accessToken"] = AccessToken,
                 ["type"] = Type,
             };
         }
@@ -82,10 +75,6 @@ namespace Gs2.Gs2Account.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
-            }
             if (Type != null) {
                 writer.WritePropertyName("type");
                 writer.Write((Type.ToString().Contains(".") ? (int)double.Parse(Type.ToString()) : int.Parse(Type.ToString())));
@@ -96,7 +85,6 @@ namespace Gs2.Gs2Account.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += AccessToken + ":";
             key += Type + ":";
             return key;
         }

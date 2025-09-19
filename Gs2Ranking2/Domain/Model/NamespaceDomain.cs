@@ -199,12 +199,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster> GlobalRankingModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeGlobalRankingModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -215,12 +217,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             #else
         public DescribeGlobalRankingModelMastersIterator GlobalRankingModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeGlobalRankingModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -230,7 +234,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #endif
 
         public ulong SubscribeGlobalRankingModelMasters(
-            Action<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster[]> callback
+            Action<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster>(
@@ -246,6 +251,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await GlobalRankingModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -260,13 +266,16 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeGlobalRankingModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster[]> callback
+            Action<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await GlobalRankingModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeGlobalRankingModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -274,7 +283,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #endif
 
         public void UnsubscribeGlobalRankingModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster>(
@@ -287,6 +297,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public void InvalidateGlobalRankingModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.GlobalRankingModelMaster>(
@@ -437,12 +448,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster> SubscribeRankingModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeSubscribeRankingModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -453,12 +466,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             #else
         public DescribeSubscribeRankingModelMastersIterator SubscribeRankingModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeSubscribeRankingModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -468,7 +483,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #endif
 
         public ulong SubscribeSubscribeRankingModelMasters(
-            Action<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster[]> callback
+            Action<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster>(
@@ -484,6 +500,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await SubscribeRankingModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -498,13 +515,16 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscribeRankingModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster[]> callback
+            Action<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await SubscribeRankingModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeSubscribeRankingModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -512,7 +532,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #endif
 
         public void UnsubscribeSubscribeRankingModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster>(
@@ -525,6 +546,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public void InvalidateSubscribeRankingModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.SubscribeRankingModelMaster>(
@@ -655,12 +677,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster> ClusterRankingModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeClusterRankingModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -671,12 +695,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             #else
         public DescribeClusterRankingModelMastersIterator ClusterRankingModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeClusterRankingModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -686,7 +712,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #endif
 
         public ulong SubscribeClusterRankingModelMasters(
-            Action<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster[]> callback
+            Action<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster>(
@@ -702,6 +729,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await ClusterRankingModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -716,13 +744,16 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeClusterRankingModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster[]> callback
+            Action<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await ClusterRankingModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeClusterRankingModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -730,7 +761,8 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #endif
 
         public void UnsubscribeClusterRankingModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster>(
@@ -743,6 +775,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         public void InvalidateClusterRankingModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster>(

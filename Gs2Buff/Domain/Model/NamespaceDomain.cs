@@ -90,12 +90,14 @@ namespace Gs2.Gs2Buff.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Buff.Model.BuffEntryModelMaster> BuffEntryModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeBuffEntryModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -106,12 +108,14 @@ namespace Gs2.Gs2Buff.Domain.Model
             #else
         public DescribeBuffEntryModelMastersIterator BuffEntryModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeBuffEntryModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -121,7 +125,8 @@ namespace Gs2.Gs2Buff.Domain.Model
         #endif
 
         public ulong SubscribeBuffEntryModelMasters(
-            Action<Gs2.Gs2Buff.Model.BuffEntryModelMaster[]> callback
+            Action<Gs2.Gs2Buff.Model.BuffEntryModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Buff.Model.BuffEntryModelMaster>(
@@ -137,6 +142,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await BuffEntryModelMastersAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -151,13 +157,16 @@ namespace Gs2.Gs2Buff.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeBuffEntryModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Buff.Model.BuffEntryModelMaster[]> callback
+            Action<Gs2.Gs2Buff.Model.BuffEntryModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await BuffEntryModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeBuffEntryModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -165,7 +174,8 @@ namespace Gs2.Gs2Buff.Domain.Model
         #endif
 
         public void UnsubscribeBuffEntryModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Buff.Model.BuffEntryModelMaster>(
@@ -178,6 +188,7 @@ namespace Gs2.Gs2Buff.Domain.Model
         }
 
         public void InvalidateBuffEntryModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Buff.Model.BuffEntryModelMaster>(

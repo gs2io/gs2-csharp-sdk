@@ -69,6 +69,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
         public string NamespaceName { get; }
+        public string NamePrefix { get; }
         public string MissionGroupName { get; }
         private string _pageToken;
         private bool _isCacheChecked;
@@ -81,11 +82,13 @@ namespace Gs2.Gs2Mission.Domain.Iterator
             Gs2.Core.Domain.Gs2 gs2,
             Gs2MissionRestClient client,
             string namespaceName,
-            string missionGroupName
+            string missionGroupName,
+            string namePrefix = null
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
+            this.NamePrefix = namePrefix;
             this.MissionGroupName = missionGroupName;
             this._pageToken = null;
             this._last = false;
@@ -114,6 +117,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                     out var list
             )) {
                 this._result = list
+                    .Where(item => this.NamePrefix == null || item.Name.StartsWith(this.NamePrefix))
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -142,6 +146,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
+                    .Where(item => this.NamePrefix == null || item.Name.StartsWith(this.NamePrefix))
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;

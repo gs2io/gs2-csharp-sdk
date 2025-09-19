@@ -83,6 +83,9 @@ namespace Gs2.Gs2Matchmaking
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.NamePrefix != null) {
+                    sessionRequest.AddQueryString("namePrefix", $"{request.NamePrefix}");
+                }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
@@ -3867,6 +3870,9 @@ namespace Gs2.Gs2Matchmaking
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.NamePrefix != null) {
+                    sessionRequest.AddQueryString("namePrefix", $"{request.NamePrefix}");
+                }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
@@ -5493,6 +5499,9 @@ namespace Gs2.Gs2Matchmaking
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.NamePrefix != null) {
+                    sessionRequest.AddQueryString("namePrefix", $"{request.NamePrefix}");
                 }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
