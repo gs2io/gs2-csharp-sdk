@@ -31,8 +31,13 @@ namespace Gs2.Core.Model
 #endif
 	public class ResultMetadata : IComparable
 	{
+        public string RequestId { set; get; } = null!;
         public string Uncommitted { set; get; } = null!;
         public Gs2.Core.Model.ScriptTransactionResult[] ScriptTransactionResults { set; get; } = null!;
+        public ResultMetadata WithRequestId(string requestId) {
+            this.RequestId = requestId;
+            return this;
+        }
         public ResultMetadata WithUncommitted(string uncommitted) {
             this.Uncommitted = uncommitted;
             return this;
@@ -51,6 +56,7 @@ namespace Gs2.Core.Model
                 return null;
             }
             return new ResultMetadata()
+                .WithRequestId(!data.Keys.Contains("requestId") || data["requestId"] == null ? null : data["requestId"].ToString())
                 .WithUncommitted(!data.Keys.Contains("uncommitted") || data["uncommitted"] == null ? null : data["uncommitted"].ToString())
                 .WithScriptTransactionResults(!data.Keys.Contains("scriptTransactionResults") || data["scriptTransactionResults"] == null || !data["scriptTransactionResults"].IsArray ? new Gs2.Core.Model.ScriptTransactionResult[]{} : data["scriptTransactionResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ScriptTransactionResult.FromJson(v);
@@ -69,6 +75,7 @@ namespace Gs2.Core.Model
                 }
             }
             return new JsonData {
+                ["requestId"] = RequestId,
                 ["uncommitted"] = Uncommitted,
                 ["scriptTransactionResults"] = scriptTransactionResultsJsonData,
             };
@@ -77,6 +84,10 @@ namespace Gs2.Core.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (RequestId != null) {
+                writer.WritePropertyName("requestId");
+                writer.Write(RequestId);
+            }
             if (Uncommitted != null) {
                 writer.WritePropertyName("uncommitted");
                 writer.Write(Uncommitted);
@@ -99,6 +110,14 @@ namespace Gs2.Core.Model
         {
             var other = obj as ResultMetadata;
             var diff = 0;
+            if (RequestId == null && RequestId == other.RequestId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RequestId.CompareTo(other.RequestId);
+            }
             if (Uncommitted == null && Uncommitted == other.Uncommitted)
             {
                 // null and null
@@ -129,6 +148,7 @@ namespace Gs2.Core.Model
 
         public object Clone() {
             return new ResultMetadata {
+                RequestId = RequestId.Clone() as string,
                 Uncommitted = Uncommitted.Clone() as string,
                 ScriptTransactionResults = ScriptTransactionResults?.Clone() as Gs2.Core.Model.ScriptTransactionResult[],
             };

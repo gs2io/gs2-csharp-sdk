@@ -138,7 +138,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await GuildModelsAsync().ToArrayAsync());
+                            callback.Invoke(await GuildModelsAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -200,12 +201,14 @@ namespace Gs2.Gs2Guild.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Guild.Model.GuildModelMaster> GuildModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeGuildModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -216,12 +219,14 @@ namespace Gs2.Gs2Guild.Domain.Model
             #else
         public DescribeGuildModelMastersIterator GuildModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeGuildModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -231,7 +236,8 @@ namespace Gs2.Gs2Guild.Domain.Model
         #endif
 
         public ulong SubscribeGuildModelMasters(
-            Action<Gs2.Gs2Guild.Model.GuildModelMaster[]> callback
+            Action<Gs2.Gs2Guild.Model.GuildModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.GuildModelMaster>(
@@ -246,7 +252,9 @@ namespace Gs2.Gs2Guild.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await GuildModelMastersAsync().ToArrayAsync());
+                            callback.Invoke(await GuildModelMastersAsync(
+                                namePrefix
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -260,13 +268,16 @@ namespace Gs2.Gs2Guild.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeGuildModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Guild.Model.GuildModelMaster[]> callback
+            Action<Gs2.Gs2Guild.Model.GuildModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await GuildModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeGuildModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -274,7 +285,8 @@ namespace Gs2.Gs2Guild.Domain.Model
         #endif
 
         public void UnsubscribeGuildModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Guild.Model.GuildModelMaster>(
@@ -287,6 +299,7 @@ namespace Gs2.Gs2Guild.Domain.Model
         }
 
         public void InvalidateGuildModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.GuildModelMaster>(
@@ -318,6 +331,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             int[] attributes5 = null,
             string[] joinPolicies = null,
             bool? includeFullMembersGuild = null,
+            string orderBy = null,
             string timeOffsetToken = null
         )
         {
@@ -335,6 +349,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 attributes5,
                 joinPolicies,
                 includeFullMembersGuild,
+                orderBy,
                 timeOffsetToken
             );
         }
@@ -356,6 +371,7 @@ namespace Gs2.Gs2Guild.Domain.Model
             int[] attributes5 = null,
             string[] joinPolicies = null,
             bool? includeFullMembersGuild = null,
+            string orderBy = null,
             string timeOffsetToken = null
         )
         {
@@ -373,6 +389,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 attributes5,
                 joinPolicies,
                 includeFullMembersGuild,
+                orderBy,
                 timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
@@ -393,7 +410,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             int[] attributes4 = null,
             int[] attributes5 = null,
             string[] joinPolicies = null,
-            bool? includeFullMembersGuild = null
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.Guild>(
@@ -418,7 +436,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                                 attributes4,
                                 attributes5,
                                 joinPolicies,
-                                includeFullMembersGuild
+                                includeFullMembersGuild,
+                                orderBy
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -443,7 +462,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             int[] attributes4 = null,
             int[] attributes5 = null,
             string[] joinPolicies = null,
-            bool? includeFullMembersGuild = null
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
         )
         {
             var items = await SearchGuildsAsync(
@@ -456,7 +476,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 attributes4,
                 attributes5,
                 joinPolicies,
-                includeFullMembersGuild
+                includeFullMembersGuild,
+                orderBy
             ).ToArrayAsync();
             var callbackId = SubscribeSearchGuilds(
                 callback,
@@ -469,7 +490,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 attributes4,
                 attributes5,
                 joinPolicies,
-                includeFullMembersGuild
+                includeFullMembersGuild,
+                orderBy
             );
             callback.Invoke(items);
             return callbackId;
@@ -487,7 +509,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             int[] attributes4 = null,
             int[] attributes5 = null,
             string[] joinPolicies = null,
-            bool? includeFullMembersGuild = null
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Guild.Model.Guild>(
@@ -540,7 +563,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 accessToken
             );
         }
-
+        
         public Gs2.Gs2Guild.Domain.Model.GuildDomain Guild(
             string guildModelName,
             string guildName
@@ -880,22 +903,31 @@ namespace Gs2.Gs2Guild.Domain.Model
         public async Task<Gs2.Gs2Guild.Model.Namespace> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Guild.Model.Namespace).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.Namespace>(
+                        (null as Gs2.Gs2Guild.Model.Namespace).CacheParentKey(
+                            null
+                        ),
+                        (null as Gs2.Gs2Guild.Model.Namespace).CacheKey(
+                            this.NamespaceName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Guild.Model.Namespace).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Guild.Model.Namespace).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null,
+                    () => this.GetAsync(
+                        new GetNamespaceRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Guild.Model.Namespace).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null,
-                () => this.GetAsync(
-                    new GetNamespaceRequest()
-                )
-            );
         }
         #endif
 
@@ -943,7 +975,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

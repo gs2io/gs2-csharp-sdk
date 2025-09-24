@@ -76,6 +76,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public string[] TaskResults { get; set; } = null!;
         public int? SheetResultCode { get; set; } = null!;
         public string SheetResult { get; set; } = null!;
+        public Gs2.Gs2Distributor.Model.BatchResultPayload[] Results { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
         public string NewContextStack { get; set; } = null!;
 
@@ -145,7 +146,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await DistributorModelsAsync().ToArrayAsync());
+                            callback.Invoke(await DistributorModelsAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -215,12 +217,14 @@ namespace Gs2.Gs2Distributor.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Distributor.Model.DistributorModelMaster> DistributorModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeDistributorModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -231,12 +235,14 @@ namespace Gs2.Gs2Distributor.Domain.Model
             #else
         public DescribeDistributorModelMastersIterator DistributorModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeDistributorModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -246,7 +252,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #endif
 
         public ulong SubscribeDistributorModelMasters(
-            Action<Gs2.Gs2Distributor.Model.DistributorModelMaster[]> callback
+            Action<Gs2.Gs2Distributor.Model.DistributorModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
@@ -261,7 +268,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await DistributorModelMastersAsync().ToArrayAsync());
+                            callback.Invoke(await DistributorModelMastersAsync(
+                                namePrefix
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -275,13 +284,16 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeDistributorModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Distributor.Model.DistributorModelMaster[]> callback
+            Action<Gs2.Gs2Distributor.Model.DistributorModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await DistributorModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeDistributorModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -289,7 +301,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #endif
 
         public void UnsubscribeDistributorModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
@@ -302,6 +315,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
         }
 
         public void InvalidateDistributorModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
@@ -631,6 +645,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 }
                 var result = future.Result;
                 var domain = this;
+                this.Results = domain.Results = result?.Results;
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain>(Impl);
@@ -652,6 +667,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 () => this._client.BatchExecuteApiAsync(request)
             );
             var domain = this;
+            this.Results = domain.Results = result?.Results;
             return domain;
         }
         #endif
@@ -760,22 +776,31 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public async Task<Gs2.Gs2Distributor.Model.Namespace> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Distributor.Model.Namespace).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.Namespace>(
+                        (null as Gs2.Gs2Distributor.Model.Namespace).CacheParentKey(
+                            null
+                        ),
+                        (null as Gs2.Gs2Distributor.Model.Namespace).CacheKey(
+                            this.NamespaceName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Distributor.Model.Namespace).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Distributor.Model.Namespace).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null,
+                    () => this.GetAsync(
+                        new GetNamespaceRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Distributor.Model.Namespace).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null,
-                () => this.GetAsync(
-                    new GetNamespaceRequest()
-                )
-            );
         }
         #endif
 
@@ -823,7 +848,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

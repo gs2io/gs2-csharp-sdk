@@ -14,6 +14,8 @@
  * permissions and limitations under the License.
  *
  * deny overwrite
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -88,12 +90,14 @@ namespace Gs2.Gs2Script.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Script.Model.Script> Scripts(
+            string namePrefix = null
         )
         {
             return new DescribeScriptsIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -104,12 +108,14 @@ namespace Gs2.Gs2Script.Domain.Model
             #else
         public DescribeScriptsIterator ScriptsAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeScriptsIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -119,7 +125,8 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         public ulong SubscribeScripts(
-            Action<Gs2.Gs2Script.Model.Script[]> callback
+            Action<Gs2.Gs2Script.Model.Script[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Script.Model.Script>(
@@ -135,6 +142,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         try {
                             await UniTask.SwitchToMainThread();
                             callback.Invoke(await ScriptsAsync(
+                                namePrefix
                             ).ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -149,13 +157,16 @@ namespace Gs2.Gs2Script.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeScriptsWithInitialCallAsync(
-            Action<Gs2.Gs2Script.Model.Script[]> callback
+            Action<Gs2.Gs2Script.Model.Script[]> callback,
+            string namePrefix = null
         )
         {
             var items = await ScriptsAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeScripts(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -163,7 +174,8 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         public void UnsubscribeScripts(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Script.Model.Script>(
@@ -176,6 +188,7 @@ namespace Gs2.Gs2Script.Domain.Model
         }
 
         public void InvalidateScripts(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Script.Model.Script>(
@@ -590,6 +603,8 @@ namespace Gs2.Gs2Script.Domain.Model
         ) {
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
             {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     null,
@@ -623,6 +638,8 @@ namespace Gs2.Gs2Script.Domain.Model
             #endif
             DebugInvokeRequest request
         ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
@@ -684,22 +701,31 @@ namespace Gs2.Gs2Script.Domain.Model
         public async Task<Gs2.Gs2Script.Model.Namespace> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Script.Model.Namespace).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Script.Model.Namespace>(
+                        (null as Gs2.Gs2Script.Model.Namespace).CacheParentKey(
+                            null
+                        ),
+                        (null as Gs2.Gs2Script.Model.Namespace).CacheKey(
+                            this.NamespaceName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Script.Model.Namespace).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Script.Model.Namespace).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null,
+                    () => this.GetAsync(
+                        new GetNamespaceRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Script.Model.Namespace).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null,
-                () => this.GetAsync(
-                    new GetNamespaceRequest()
-                )
-            );
         }
         #endif
 

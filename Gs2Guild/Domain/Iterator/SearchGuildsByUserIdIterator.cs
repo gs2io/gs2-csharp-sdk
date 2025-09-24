@@ -81,6 +81,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         public int[] Attributes5 { get; }
         public string[] JoinPolicies { get; }
         public bool? IncludeFullMembersGuild { get; }
+        public string OrderBy { get; }
         public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
@@ -103,6 +104,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
             int[] attributes5 = null,
             string[] joinPolicies = null,
             bool? includeFullMembersGuild = null,
+            string orderBy = null,
             string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
@@ -118,6 +120,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
             this.Attributes5 = attributes5;
             this.JoinPolicies = joinPolicies;
             this.IncludeFullMembersGuild = includeFullMembersGuild;
+            this.OrderBy = orderBy;
             this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
@@ -163,6 +166,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     .WithAttributes5(this.Attributes5)
                     .WithJoinPolicies(this.JoinPolicies)
                     .WithIncludeFullMembersGuild(this.IncludeFullMembersGuild)
+                    .WithOrderBy(this.OrderBy)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

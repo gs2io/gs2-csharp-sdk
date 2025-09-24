@@ -35,12 +35,22 @@ namespace Gs2.Core.Model
 			set { message = value; }
 			get { return message; }
 		}
+		
+		// ReSharper disable once InconsistentNaming
+		public ResultMetadata metadata;
+		
+		public ResultMetadata Metadata
+		{
+			set { metadata = value; }
+			get { return metadata; }
+		}
 
 		public static GeneralError FromJson(JsonData data)
 		{
 			return new GeneralError
 			{
 				message = data.Keys.Contains("message") ? (string)data["message"] : null,
+				metadata = data.Keys.Contains("metadata") && data["metadata"] != null ? ResultMetadata.FromJson(data["metadata"]) : null,
 			};
 		}
 	}

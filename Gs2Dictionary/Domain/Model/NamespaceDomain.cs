@@ -138,7 +138,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await EntryModelsAsync().ToArrayAsync());
+                            callback.Invoke(await EntryModelsAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -220,12 +221,14 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Dictionary.Model.EntryModelMaster> EntryModelMasters(
+            string namePrefix = null
         )
         {
             return new DescribeEntryModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             );
         }
         #endif
@@ -236,12 +239,14 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #else
         public DescribeEntryModelMastersIterator EntryModelMastersAsync(
             #endif
+            string namePrefix = null
         )
         {
             return new DescribeEntryModelMastersIterator(
                 this._gs2,
                 this._client,
-                this.NamespaceName
+                this.NamespaceName,
+                namePrefix
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -251,7 +256,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
 
         public ulong SubscribeEntryModelMasters(
-            Action<Gs2.Gs2Dictionary.Model.EntryModelMaster[]> callback
+            Action<Gs2.Gs2Dictionary.Model.EntryModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
@@ -266,7 +272,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await EntryModelMastersAsync().ToArrayAsync());
+                            callback.Invoke(await EntryModelMastersAsync(
+                                namePrefix
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -280,13 +288,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeEntryModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Dictionary.Model.EntryModelMaster[]> callback
+            Action<Gs2.Gs2Dictionary.Model.EntryModelMaster[]> callback,
+            string namePrefix = null
         )
         {
             var items = await EntryModelMastersAsync(
+                namePrefix
             ).ToArrayAsync();
             var callbackId = SubscribeEntryModelMasters(
-                callback
+                callback,
+                namePrefix
             );
             callback.Invoke(items);
             return callbackId;
@@ -294,7 +305,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
 
         public void UnsubscribeEntryModelMasters(
-            ulong callbackId
+            ulong callbackId,
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
@@ -307,6 +319,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
 
         public void InvalidateEntryModelMasters(
+            string namePrefix = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
@@ -815,22 +828,31 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public async Task<Gs2.Gs2Dictionary.Model.Namespace> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Dictionary.Model.Namespace).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.Namespace>(
+                        (null as Gs2.Gs2Dictionary.Model.Namespace).CacheParentKey(
+                            null
+                        ),
+                        (null as Gs2.Gs2Dictionary.Model.Namespace).CacheKey(
+                            this.NamespaceName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Dictionary.Model.Namespace).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Dictionary.Model.Namespace).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null,
+                    () => this.GetAsync(
+                        new GetNamespaceRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Dictionary.Model.Namespace).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null,
-                () => this.GetAsync(
-                    new GetNamespaceRequest()
-                )
-            );
         }
         #endif
 
@@ -878,7 +900,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

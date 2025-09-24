@@ -45,6 +45,15 @@ namespace Gs2.Core.Exception
 			get { return errors; }
 			set { errors = value; }
 		}
+
+		// ReSharper disable once InconsistentNaming
+		public ResultMetadata metadata;
+
+		public ResultMetadata Metadata
+		{
+			get { return metadata; }
+			set { metadata = value; }
+		}
 		
 		public abstract int StatusCode { get; }
 		

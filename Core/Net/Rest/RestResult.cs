@@ -20,6 +20,10 @@ namespace Gs2.Core.Net
                 var error = GeneralError.FromJson(JsonMapper.ToObject(body));
                 var errorMessage = error != null ? error.Message : body;
                 Error = Gs2Exception.ExtractError(errorMessage, statusCode);
+                if (Error != null)
+                {
+                    Error.Metadata = error?.Metadata;
+                }
             }
 
             StatusCode = statusCode;
