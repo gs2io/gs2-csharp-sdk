@@ -36,6 +36,7 @@ namespace Gs2.Gs2SeasonRating.Model
 	{
         public bool? EnableAtomicCommit { set; get; }
         public bool? TransactionUseDistributor { set; get; }
+        public bool? CommitScriptResultInUseDistributor { set; get; }
         public bool? AcquireActionUseJobQueue { set; get; }
         public string DistributorNamespaceId { set; get; }
         public string QueueNamespaceId { set; get; }
@@ -45,6 +46,10 @@ namespace Gs2.Gs2SeasonRating.Model
         }
         public TransactionSetting WithTransactionUseDistributor(bool? transactionUseDistributor) {
             this.TransactionUseDistributor = transactionUseDistributor;
+            return this;
+        }
+        public TransactionSetting WithCommitScriptResultInUseDistributor(bool? commitScriptResultInUseDistributor) {
+            this.CommitScriptResultInUseDistributor = commitScriptResultInUseDistributor;
             return this;
         }
         public TransactionSetting WithAcquireActionUseJobQueue(bool? acquireActionUseJobQueue) {
@@ -71,6 +76,7 @@ namespace Gs2.Gs2SeasonRating.Model
             return new TransactionSetting()
                 .WithEnableAtomicCommit(!data.Keys.Contains("enableAtomicCommit") || data["enableAtomicCommit"] == null ? null : (bool?)bool.Parse(data["enableAtomicCommit"].ToString()))
                 .WithTransactionUseDistributor(!data.Keys.Contains("transactionUseDistributor") || data["transactionUseDistributor"] == null ? null : (bool?)bool.Parse(data["transactionUseDistributor"].ToString()))
+                .WithCommitScriptResultInUseDistributor(!data.Keys.Contains("commitScriptResultInUseDistributor") || data["commitScriptResultInUseDistributor"] == null ? null : (bool?)bool.Parse(data["commitScriptResultInUseDistributor"].ToString()))
                 .WithAcquireActionUseJobQueue(!data.Keys.Contains("acquireActionUseJobQueue") || data["acquireActionUseJobQueue"] == null ? null : (bool?)bool.Parse(data["acquireActionUseJobQueue"].ToString()))
                 .WithDistributorNamespaceId(!data.Keys.Contains("distributorNamespaceId") || data["distributorNamespaceId"] == null ? null : data["distributorNamespaceId"].ToString())
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString());
@@ -81,6 +87,7 @@ namespace Gs2.Gs2SeasonRating.Model
             return new JsonData {
                 ["enableAtomicCommit"] = EnableAtomicCommit,
                 ["transactionUseDistributor"] = TransactionUseDistributor,
+                ["commitScriptResultInUseDistributor"] = CommitScriptResultInUseDistributor,
                 ["acquireActionUseJobQueue"] = AcquireActionUseJobQueue,
                 ["distributorNamespaceId"] = DistributorNamespaceId,
                 ["queueNamespaceId"] = QueueNamespaceId,
@@ -97,6 +104,10 @@ namespace Gs2.Gs2SeasonRating.Model
             if (TransactionUseDistributor != null) {
                 writer.WritePropertyName("transactionUseDistributor");
                 writer.Write(bool.Parse(TransactionUseDistributor.ToString()));
+            }
+            if (CommitScriptResultInUseDistributor != null) {
+                writer.WritePropertyName("commitScriptResultInUseDistributor");
+                writer.Write(bool.Parse(CommitScriptResultInUseDistributor.ToString()));
             }
             if (AcquireActionUseJobQueue != null) {
                 writer.WritePropertyName("acquireActionUseJobQueue");
@@ -133,6 +144,14 @@ namespace Gs2.Gs2SeasonRating.Model
             {
                 diff += TransactionUseDistributor == other.TransactionUseDistributor ? 0 : 1;
             }
+            if (CommitScriptResultInUseDistributor == null && CommitScriptResultInUseDistributor == other.CommitScriptResultInUseDistributor)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += CommitScriptResultInUseDistributor == other.CommitScriptResultInUseDistributor ? 0 : 1;
+            }
             if (AcquireActionUseJobQueue == null && AcquireActionUseJobQueue == other.AcquireActionUseJobQueue)
             {
                 // null and null
@@ -165,6 +184,8 @@ namespace Gs2.Gs2SeasonRating.Model
             }
             if (EnableAtomicCommit == true) {
             }
+            if (TransactionUseDistributor == true) {
+            }
             if (EnableAtomicCommit == true) {
             }
             {
@@ -187,6 +208,7 @@ namespace Gs2.Gs2SeasonRating.Model
             return new TransactionSetting {
                 EnableAtomicCommit = EnableAtomicCommit,
                 TransactionUseDistributor = TransactionUseDistributor,
+                CommitScriptResultInUseDistributor = CommitScriptResultInUseDistributor,
                 AcquireActionUseJobQueue = AcquireActionUseJobQueue,
                 DistributorNamespaceId = DistributorNamespaceId,
                 QueueNamespaceId = QueueNamespaceId,
