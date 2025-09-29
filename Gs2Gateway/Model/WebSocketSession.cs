@@ -38,6 +38,7 @@ namespace Gs2.Gs2Gateway.Model
         public string ConnectionId { set; get; }
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+        public string SessionId { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
@@ -55,6 +56,10 @@ namespace Gs2.Gs2Gateway.Model
         }
         public WebSocketSession WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public WebSocketSession WithSessionId(string sessionId) {
+            this.SessionId = sessionId;
             return this;
         }
         public WebSocketSession WithCreatedAt(long? createdAt) {
@@ -168,6 +173,7 @@ namespace Gs2.Gs2Gateway.Model
                 .WithConnectionId(!data.Keys.Contains("connectionId") || data["connectionId"] == null ? null : data["connectionId"].ToString())
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithSessionId(!data.Keys.Contains("sessionId") || data["sessionId"] == null ? null : data["sessionId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -180,6 +186,7 @@ namespace Gs2.Gs2Gateway.Model
                 ["connectionId"] = ConnectionId,
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["sessionId"] = SessionId,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -204,6 +211,10 @@ namespace Gs2.Gs2Gateway.Model
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (SessionId != null) {
+                writer.WritePropertyName("sessionId");
+                writer.Write(SessionId.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -255,6 +266,14 @@ namespace Gs2.Gs2Gateway.Model
             else
             {
                 diff += UserId.CompareTo(other.UserId);
+            }
+            if (SessionId == null && SessionId == other.SessionId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SessionId.CompareTo(other.SessionId);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -313,6 +332,13 @@ namespace Gs2.Gs2Gateway.Model
                 }
             }
             {
+                if (SessionId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("webSocketSession", "gateway.webSocketSession.sessionId.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("webSocketSession", "gateway.webSocketSession.createdAt.error.invalid"),
@@ -356,6 +382,7 @@ namespace Gs2.Gs2Gateway.Model
                 ConnectionId = ConnectionId,
                 NamespaceName = NamespaceName,
                 UserId = UserId,
+                SessionId = SessionId,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

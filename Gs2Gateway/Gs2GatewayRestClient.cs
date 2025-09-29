@@ -1919,6 +1919,11 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("allowConcurrentAccess");
                     jsonWriter.Write(request.AllowConcurrentAccess.ToString());
                 }
+                if (request.SessionId != null)
+                {
+                    jsonWriter.WritePropertyName("sessionId");
+                    jsonWriter.Write(request.SessionId);
+                }
                 if (request.Force != null)
                 {
                     jsonWriter.WritePropertyName("force");
@@ -2053,6 +2058,11 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("allowConcurrentAccess");
                     jsonWriter.Write(request.AllowConcurrentAccess.ToString());
+                }
+                if (request.SessionId != null)
+                {
+                    jsonWriter.WritePropertyName("sessionId");
+                    jsonWriter.Write(request.SessionId);
                 }
                 if (request.Force != null)
                 {

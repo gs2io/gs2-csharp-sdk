@@ -39,6 +39,7 @@ namespace Gs2.Gs2Gateway.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public bool? AllowConcurrentAccess { set; get; } = null!;
+         public string SessionId { set; get; } = null!;
          public bool? Force { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SetUserIdRequest WithNamespaceName(string namespaceName) {
@@ -51,6 +52,10 @@ namespace Gs2.Gs2Gateway.Request
         }
         public SetUserIdRequest WithAllowConcurrentAccess(bool? allowConcurrentAccess) {
             this.AllowConcurrentAccess = allowConcurrentAccess;
+            return this;
+        }
+        public SetUserIdRequest WithSessionId(string sessionId) {
+            this.SessionId = sessionId;
             return this;
         }
         public SetUserIdRequest WithForce(bool? force) {
@@ -75,6 +80,7 @@ namespace Gs2.Gs2Gateway.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()))
+                .WithSessionId(!data.Keys.Contains("sessionId") || data["sessionId"] == null ? null : data["sessionId"].ToString())
                 .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()));
         }
 
@@ -84,6 +90,7 @@ namespace Gs2.Gs2Gateway.Request
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["allowConcurrentAccess"] = AllowConcurrentAccess,
+                ["sessionId"] = SessionId,
                 ["force"] = Force,
             };
         }
@@ -103,6 +110,10 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("allowConcurrentAccess");
                 writer.Write(bool.Parse(AllowConcurrentAccess.ToString()));
             }
+            if (SessionId != null) {
+                writer.WritePropertyName("sessionId");
+                writer.Write(SessionId.ToString());
+            }
             if (Force != null) {
                 writer.WritePropertyName("force");
                 writer.Write(bool.Parse(Force.ToString()));
@@ -115,6 +126,7 @@ namespace Gs2.Gs2Gateway.Request
             key += NamespaceName + ":";
             key += AccessToken + ":";
             key += AllowConcurrentAccess + ":";
+            key += SessionId + ":";
             key += Force + ":";
             return key;
         }
