@@ -15,19 +15,27 @@ namespace Gs2.Core.Net
 
         public RestResult(int statusCode, string body)
         {
-            if (statusCode != 200)
-            {
-                var error = GeneralError.FromJson(JsonMapper.ToObject(body));
-                var errorMessage = error != null ? error.Message : body;
-                Error = Gs2Exception.ExtractError(errorMessage, statusCode);
-                if (Error != null)
-                {
-                    Error.Metadata = error?.Metadata;
+            try {
+                if (statusCode != 200) {
+                    var error = GeneralError.FromJson(JsonMapper.ToObject(body));
+                    var errorMessage = error != null ? error.Message : body;
+                    Error = Gs2Exception.ExtractError(errorMessage, statusCode);
+                    if (Error != null) {
+                        Error.Metadata = error?.Metadata;
+                    }
                 }
-            }
 
-            StatusCode = statusCode;
-            Body = JsonMapper.ToObject(body);
+                StatusCode = statusCode;
+                Body = JsonMapper.ToObject(body);
+            }
+            catch (JsonException e) {
+                throw new UnknownException(new [] {
+                    new RequestError(
+                        "client",
+                        "core.network.result.error.parse.failed"
+                    )
+                }, e);
+            }
         }
     }
 }

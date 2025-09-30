@@ -26,9 +26,21 @@ namespace Gs2.Core.Exception
 		{
 
 		}
+
+		// ReSharper disable once InconsistentNaming
+		public UnknownException(string message, System.Exception innerException) : base(message, innerException)
+		{
+
+		}
 		
 		// ReSharper disable once InconsistentNaming
 		public UnknownException(RequestError[] errors) : base(errors: errors)
+		{
+			
+		}
+
+		// ReSharper disable once InconsistentNaming
+		public UnknownException(RequestError[] errors, System.Exception innerException) : base(errors: errors, innerException)
 		{
 			
 		}

@@ -32,8 +32,20 @@ namespace Gs2.Core.Exception
 			}
 		}
 		
+		protected Gs2Exception(string message, System.Exception innerException) : base(message, innerException) {
+			try {
+				errors = JsonMapper.ToObject<RequestError[]> (message);
+			} catch (System.Exception) {
+				errors = new RequestError[]{};
+			}
+		}
+
 		protected Gs2Exception(RequestError[] errors) : base(string.Join(", ", errors.Select(v => v.ToString()).ToArray()))
 		{
+			this.errors = errors;
+		}
+
+		protected Gs2Exception(RequestError[] errors, System.Exception innerException) : base(string.Join(", ", errors.Select(v => v.ToString()).ToArray()), innerException) {
 			this.errors = errors;
 		}
 
