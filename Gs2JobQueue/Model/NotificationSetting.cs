@@ -37,6 +37,7 @@ namespace Gs2.Gs2JobQueue.Model
         public string GatewayNamespaceId { set; get; }
         public bool? EnableTransferMobileNotification { set; get; }
         public string Sound { set; get; }
+        public string Enable { set; get; }
         public NotificationSetting WithGatewayNamespaceId(string gatewayNamespaceId) {
             this.GatewayNamespaceId = gatewayNamespaceId;
             return this;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2JobQueue.Model
         }
         public NotificationSetting WithSound(string sound) {
             this.Sound = sound;
+            return this;
+        }
+        public NotificationSetting WithEnable(string enable) {
+            this.Enable = enable;
             return this;
         }
 
@@ -61,7 +66,8 @@ namespace Gs2.Gs2JobQueue.Model
             return new NotificationSetting()
                 .WithGatewayNamespaceId(!data.Keys.Contains("gatewayNamespaceId") || data["gatewayNamespaceId"] == null ? null : data["gatewayNamespaceId"].ToString())
                 .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobileNotification"].ToString()))
-                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString());
+                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString())
+                .WithEnable(!data.Keys.Contains("enable") || data["enable"] == null ? null : data["enable"].ToString());
         }
 
         public JsonData ToJson()
@@ -70,6 +76,7 @@ namespace Gs2.Gs2JobQueue.Model
                 ["gatewayNamespaceId"] = GatewayNamespaceId,
                 ["enableTransferMobileNotification"] = EnableTransferMobileNotification,
                 ["sound"] = Sound,
+                ["enable"] = Enable,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2JobQueue.Model
             if (Sound != null) {
                 writer.WritePropertyName("sound");
                 writer.Write(Sound.ToString());
+            }
+            if (Enable != null) {
+                writer.WritePropertyName("enable");
+                writer.Write(Enable.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -119,6 +130,14 @@ namespace Gs2.Gs2JobQueue.Model
             {
                 diff += Sound.CompareTo(other.Sound);
             }
+            if (Enable == null && Enable == other.Enable)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Enable.CompareTo(other.Enable);
+            }
             return diff;
         }
 
@@ -139,6 +158,17 @@ namespace Gs2.Gs2JobQueue.Model
                     });
                 }
             }
+            {
+                switch (Enable) {
+                    case "Enabled":
+                    case "Disabled":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("notificationSetting", "jobQueue.notificationSetting.enable.error.invalid"),
+                        });
+                }
+            }
         }
 
         public object Clone() {
@@ -146,6 +176,7 @@ namespace Gs2.Gs2JobQueue.Model
                 GatewayNamespaceId = GatewayNamespaceId,
                 EnableTransferMobileNotification = EnableTransferMobileNotification,
                 Sound = Sound,
+                Enable = Enable,
             };
         }
     }
