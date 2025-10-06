@@ -228,6 +228,11 @@ namespace Gs2.Gs2Guild
                     jsonWriter.WritePropertyName("changeMemberNotification");
                     request.ChangeMemberNotification.WriteJson(jsonWriter);
                 }
+                if (request.ChangeMemberNotificationIgnoreChangeMetadata != null)
+                {
+                    jsonWriter.WritePropertyName("changeMemberNotificationIgnoreChangeMetadata");
+                    jsonWriter.Write(request.ChangeMemberNotificationIgnoreChangeMetadata.ToString());
+                }
                 if (request.ReceiveRequestNotification != null)
                 {
                     jsonWriter.WritePropertyName("receiveRequestNotification");
@@ -629,6 +634,11 @@ namespace Gs2.Gs2Guild
                 {
                     jsonWriter.WritePropertyName("changeMemberNotification");
                     request.ChangeMemberNotification.WriteJson(jsonWriter);
+                }
+                if (request.ChangeMemberNotificationIgnoreChangeMetadata != null)
+                {
+                    jsonWriter.WritePropertyName("changeMemberNotificationIgnoreChangeMetadata");
+                    jsonWriter.Write(request.ChangeMemberNotificationIgnoreChangeMetadata.ToString());
                 }
                 if (request.ReceiveRequestNotification != null)
                 {

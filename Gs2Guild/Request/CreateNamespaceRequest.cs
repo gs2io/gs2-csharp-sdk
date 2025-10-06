@@ -43,6 +43,7 @@ namespace Gs2.Gs2Guild.Request
          public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting ChangeMemberNotification { set; get; } = null!;
+         public bool? ChangeMemberNotificationIgnoreChangeMetadata { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting ReceiveRequestNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting RemoveRequestNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.ScriptSetting CreateGuildScript { set; get; } = null!;
@@ -79,6 +80,10 @@ namespace Gs2.Gs2Guild.Request
         }
         public CreateNamespaceRequest WithChangeMemberNotification(Gs2.Gs2Guild.Model.NotificationSetting changeMemberNotification) {
             this.ChangeMemberNotification = changeMemberNotification;
+            return this;
+        }
+        public CreateNamespaceRequest WithChangeMemberNotificationIgnoreChangeMetadata(bool? changeMemberNotificationIgnoreChangeMetadata) {
+            this.ChangeMemberNotificationIgnoreChangeMetadata = changeMemberNotificationIgnoreChangeMetadata;
             return this;
         }
         public CreateNamespaceRequest WithReceiveRequestNotification(Gs2.Gs2Guild.Model.NotificationSetting receiveRequestNotification) {
@@ -138,6 +143,7 @@ namespace Gs2.Gs2Guild.Request
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["leaveNotification"]))
                 .WithChangeMemberNotification(!data.Keys.Contains("changeMemberNotification") || data["changeMemberNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeMemberNotification"]))
+                .WithChangeMemberNotificationIgnoreChangeMetadata(!data.Keys.Contains("changeMemberNotificationIgnoreChangeMetadata") || data["changeMemberNotificationIgnoreChangeMetadata"] == null ? null : (bool?)bool.Parse(data["changeMemberNotificationIgnoreChangeMetadata"].ToString()))
                 .WithReceiveRequestNotification(!data.Keys.Contains("receiveRequestNotification") || data["receiveRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["receiveRequestNotification"]))
                 .WithRemoveRequestNotification(!data.Keys.Contains("removeRequestNotification") || data["removeRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["removeRequestNotification"]))
                 .WithCreateGuildScript(!data.Keys.Contains("createGuildScript") || data["createGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["createGuildScript"]))
@@ -160,6 +166,7 @@ namespace Gs2.Gs2Guild.Request
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
                 ["changeMemberNotification"] = ChangeMemberNotification?.ToJson(),
+                ["changeMemberNotificationIgnoreChangeMetadata"] = ChangeMemberNotificationIgnoreChangeMetadata,
                 ["receiveRequestNotification"] = ReceiveRequestNotification?.ToJson(),
                 ["removeRequestNotification"] = RemoveRequestNotification?.ToJson(),
                 ["createGuildScript"] = CreateGuildScript?.ToJson(),
@@ -198,6 +205,10 @@ namespace Gs2.Gs2Guild.Request
             }
             if (ChangeMemberNotification != null) {
                 ChangeMemberNotification.WriteJson(writer);
+            }
+            if (ChangeMemberNotificationIgnoreChangeMetadata != null) {
+                writer.WritePropertyName("changeMemberNotificationIgnoreChangeMetadata");
+                writer.Write(bool.Parse(ChangeMemberNotificationIgnoreChangeMetadata.ToString()));
             }
             if (ReceiveRequestNotification != null) {
                 ReceiveRequestNotification.WriteJson(writer);
@@ -241,6 +252,7 @@ namespace Gs2.Gs2Guild.Request
             key += JoinNotification + ":";
             key += LeaveNotification + ":";
             key += ChangeMemberNotification + ":";
+            key += ChangeMemberNotificationIgnoreChangeMetadata + ":";
             key += ReceiveRequestNotification + ":";
             key += RemoveRequestNotification + ":";
             key += CreateGuildScript + ":";

@@ -42,6 +42,7 @@ namespace Gs2.Gs2Guild.Model
         public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; }
         public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; }
         public Gs2.Gs2Guild.Model.NotificationSetting ChangeMemberNotification { set; get; }
+        public bool? ChangeMemberNotificationIgnoreChangeMetadata { set; get; }
         public Gs2.Gs2Guild.Model.NotificationSetting ReceiveRequestNotification { set; get; }
         public Gs2.Gs2Guild.Model.NotificationSetting RemoveRequestNotification { set; get; }
         public Gs2.Gs2Guild.Model.ScriptSetting CreateGuildScript { set; get; }
@@ -85,6 +86,10 @@ namespace Gs2.Gs2Guild.Model
         }
         public Namespace WithChangeMemberNotification(Gs2.Gs2Guild.Model.NotificationSetting changeMemberNotification) {
             this.ChangeMemberNotification = changeMemberNotification;
+            return this;
+        }
+        public Namespace WithChangeMemberNotificationIgnoreChangeMetadata(bool? changeMemberNotificationIgnoreChangeMetadata) {
+            this.ChangeMemberNotificationIgnoreChangeMetadata = changeMemberNotificationIgnoreChangeMetadata;
             return this;
         }
         public Namespace WithReceiveRequestNotification(Gs2.Gs2Guild.Model.NotificationSetting receiveRequestNotification) {
@@ -208,6 +213,7 @@ namespace Gs2.Gs2Guild.Model
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["leaveNotification"]))
                 .WithChangeMemberNotification(!data.Keys.Contains("changeMemberNotification") || data["changeMemberNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeMemberNotification"]))
+                .WithChangeMemberNotificationIgnoreChangeMetadata(!data.Keys.Contains("changeMemberNotificationIgnoreChangeMetadata") || data["changeMemberNotificationIgnoreChangeMetadata"] == null ? null : (bool?)bool.Parse(data["changeMemberNotificationIgnoreChangeMetadata"].ToString()))
                 .WithReceiveRequestNotification(!data.Keys.Contains("receiveRequestNotification") || data["receiveRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["receiveRequestNotification"]))
                 .WithRemoveRequestNotification(!data.Keys.Contains("removeRequestNotification") || data["removeRequestNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["removeRequestNotification"]))
                 .WithCreateGuildScript(!data.Keys.Contains("createGuildScript") || data["createGuildScript"] == null ? null : Gs2.Gs2Guild.Model.ScriptSetting.FromJson(data["createGuildScript"]))
@@ -234,6 +240,7 @@ namespace Gs2.Gs2Guild.Model
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
                 ["changeMemberNotification"] = ChangeMemberNotification?.ToJson(),
+                ["changeMemberNotificationIgnoreChangeMetadata"] = ChangeMemberNotificationIgnoreChangeMetadata,
                 ["receiveRequestNotification"] = ReceiveRequestNotification?.ToJson(),
                 ["removeRequestNotification"] = RemoveRequestNotification?.ToJson(),
                 ["createGuildScript"] = CreateGuildScript?.ToJson(),
@@ -284,6 +291,10 @@ namespace Gs2.Gs2Guild.Model
             if (ChangeMemberNotification != null) {
                 writer.WritePropertyName("changeMemberNotification");
                 ChangeMemberNotification.WriteJson(writer);
+            }
+            if (ChangeMemberNotificationIgnoreChangeMetadata != null) {
+                writer.WritePropertyName("changeMemberNotificationIgnoreChangeMetadata");
+                writer.Write(bool.Parse(ChangeMemberNotificationIgnoreChangeMetadata.ToString()));
             }
             if (ReceiveRequestNotification != null) {
                 writer.WritePropertyName("receiveRequestNotification");
@@ -407,6 +418,14 @@ namespace Gs2.Gs2Guild.Model
             else
             {
                 diff += ChangeMemberNotification.CompareTo(other.ChangeMemberNotification);
+            }
+            if (ChangeMemberNotificationIgnoreChangeMetadata == null && ChangeMemberNotificationIgnoreChangeMetadata == other.ChangeMemberNotificationIgnoreChangeMetadata)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ChangeMemberNotificationIgnoreChangeMetadata == other.ChangeMemberNotificationIgnoreChangeMetadata ? 0 : 1;
             }
             if (ReceiveRequestNotification == null && ReceiveRequestNotification == other.ReceiveRequestNotification)
             {
@@ -568,6 +587,8 @@ namespace Gs2.Gs2Guild.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "guild.namespace.createdAt.error.invalid"),
@@ -615,6 +636,7 @@ namespace Gs2.Gs2Guild.Model
                 JoinNotification = JoinNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,
                 LeaveNotification = LeaveNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,
                 ChangeMemberNotification = ChangeMemberNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,
+                ChangeMemberNotificationIgnoreChangeMetadata = ChangeMemberNotificationIgnoreChangeMetadata,
                 ReceiveRequestNotification = ReceiveRequestNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,
                 RemoveRequestNotification = RemoveRequestNotification?.Clone() as Gs2.Gs2Guild.Model.NotificationSetting,
                 CreateGuildScript = CreateGuildScript?.Clone() as Gs2.Gs2Guild.Model.ScriptSetting,
