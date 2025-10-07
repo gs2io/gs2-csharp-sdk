@@ -263,6 +263,8 @@ namespace Gs2.Core.Net
                         var begin = DateTime.Now;
                         while (this.State == State.Opening) {
                             if ((DateTime.Now - begin).Seconds > 10) {
+                                this._session?.Close();
+                                this.State = State.Closed;
                                 result.OnError(
                                     new RequestTimeoutException(Array.Empty<RequestError>())
                                 );
@@ -275,6 +277,8 @@ namespace Gs2.Core.Net
                         }
                         while (this.State == State.LoggingIn) {
                             if ((DateTime.Now - begin).Seconds > 10) {
+                                this._session?.Close();
+                                this.State = State.Closed;
                                 result.OnError(
                                     new RequestTimeoutException(Array.Empty<RequestError>())
                                 );
@@ -295,6 +299,8 @@ namespace Gs2.Core.Net
     #endif
                         {
                             if ((DateTime.Now - begin).Seconds > 10) {
+                                this._session?.Close();
+                                this.State = State.Closed;
                                 result.OnError(
                                     new RequestTimeoutException(Array.Empty<RequestError>())
                                 );
@@ -344,10 +350,14 @@ namespace Gs2.Core.Net
                     while (this.State != State.Available)
                     {
                         if (error != null) {
+                            this._session?.Close();
+                            this.State = State.Closed;
                             throw error;
                         }
                         if ((DateTime.Now - begin).Seconds > 10)
                         {
+                            this._session?.Close();
+                            this.State = State.Closed;
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
@@ -363,10 +373,14 @@ namespace Gs2.Core.Net
     #endif
                     {
                         if (error != null) {
+                            this._session?.Close();
+                            this.State = State.Closed;
                             throw error;
                         }
                         if ((DateTime.Now - begin).Seconds > 10)
                         {
+                            this._session?.Close();
+                            this.State = State.Closed;
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
