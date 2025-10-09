@@ -24,6 +24,8 @@ namespace Gs2.Core.Net
     public partial class Gs2RestSession : IGs2Session 
     {
         public static string EndpointHost = "https://{service}.{region}.gen2.gs2io.com";
+        public static int OpenTimeoutSec = 10;
+        public static int CloseTimeoutSec = 3;
 
         // ReSharper disable once MemberCanBePrivate.Global
         public State State;
@@ -217,7 +219,7 @@ namespace Gs2.Core.Net
                 if (this.State == State.Opening || this.State == State.LoggingIn) {
                     var begin = DateTime.Now;
                     while (this.State != State.Available) {
-                        if ((DateTime.Now - begin).Seconds > 10) {
+                        if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                             result.OnError(
                                 new RequestTimeoutException(Array.Empty<RequestError>())
                             );
@@ -257,7 +259,7 @@ namespace Gs2.Core.Net
             if (this.State == State.Opening || this.State == State.LoggingIn) {
                 var begin = DateTime.Now;
                 while (this.State != State.Available) {
-                    if ((DateTime.Now - begin).Seconds > 10) {
+                    if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                         throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
@@ -295,7 +297,7 @@ namespace Gs2.Core.Net
                     {
                         var begin = DateTime.Now;
                         while (this._inflightRequest.Count > 0) {
-                            if ((DateTime.Now - begin).Seconds > 3) {
+                            if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
                                 this._inflightRequest.Clear();
                                 break;
                             }
@@ -335,7 +337,7 @@ namespace Gs2.Core.Net
                 {
                     var begin = DateTime.Now;
                     while (this._inflightRequest.Count > 0) {
-                        if ((DateTime.Now - begin).Seconds > 3) {
+                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
                             this._inflightRequest.Clear();
                             break;
                         }

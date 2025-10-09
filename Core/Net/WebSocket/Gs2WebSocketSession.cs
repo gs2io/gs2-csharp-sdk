@@ -31,6 +31,8 @@ namespace Gs2.Core.Net
     public partial class Gs2WebSocketSession : IGs2Session
     {
         public static string EndpointHost = "wss://gateway-ws.{region}.gen2.gs2io.com";
+        public static int OpenTimeoutSec = 10;
+        public static int CloseTimeoutSec = 3;
 
         public delegate void NotificationHandler(NotificationMessage message);
         public event NotificationHandler OnNotificationMessage;
@@ -262,7 +264,7 @@ namespace Gs2.Core.Net
                     {
                         var begin = DateTime.Now;
                         while (this.State == State.Opening) {
-                            if ((DateTime.Now - begin).Seconds > 10) {
+                            if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                                 this._session?.Close();
                                 this.State = State.Closed;
                                 result.OnError(
@@ -276,7 +278,7 @@ namespace Gs2.Core.Net
 #endif
                         }
                         while (this.State == State.LoggingIn) {
-                            if ((DateTime.Now - begin).Seconds > 10) {
+                            if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                                 this._session?.Close();
                                 this.State = State.Closed;
                                 result.OnError(
@@ -298,7 +300,7 @@ namespace Gs2.Core.Net
                         while (this._session.ReadyState != WebSocketState.Open)
     #endif
                         {
-                            if ((DateTime.Now - begin).Seconds > 10) {
+                            if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                                 this._session?.Close();
                                 this.State = State.Closed;
                                 result.OnError(
@@ -354,7 +356,7 @@ namespace Gs2.Core.Net
                             this.State = State.Closed;
                             throw error;
                         }
-                        if ((DateTime.Now - begin).Seconds > 10)
+                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec)
                         {
                             this._session?.Close();
                             this.State = State.Closed;
@@ -377,7 +379,7 @@ namespace Gs2.Core.Net
                             this.State = State.Closed;
                             throw error;
                         }
-                        if ((DateTime.Now - begin).Seconds > 10)
+                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec)
                         {
                             this._session?.Close();
                             this.State = State.Closed;
@@ -423,7 +425,7 @@ namespace Gs2.Core.Net
                 if (this.State == State.Opening || this.State == State.LoggingIn) {
                     var begin = DateTime.Now;
                     while (this.State != State.Available) {
-                        if ((DateTime.Now - begin).Seconds > 10) {
+                        if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
@@ -453,7 +455,7 @@ namespace Gs2.Core.Net
             if (this.State == State.Opening || this.State == State.LoggingIn) {
                 var begin = DateTime.Now;
                 while (this.State != State.Available) {
-                    if ((DateTime.Now - begin).Seconds > 10) {
+                    if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                         throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
@@ -492,7 +494,7 @@ namespace Gs2.Core.Net
                     {
                         var begin = DateTime.Now;
                         while (this._inflightRequest.Count > 0) {
-                            if ((DateTime.Now - begin).Seconds > 3) {
+                            if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
                                 this._inflightRequest.Clear();
                                 break;
                             }
@@ -515,7 +517,7 @@ namespace Gs2.Core.Net
                         while (this._session.ReadyState != WebSocketState.Closed)
 #endif
                         {
-                            if ((DateTime.Now - begin).Seconds > 3) {
+                            if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
                                 this._inflightRequest.Clear();
                                 break;
                             }
@@ -554,7 +556,7 @@ namespace Gs2.Core.Net
                 {
                     var begin = DateTime.Now;
                     while (this._inflightRequest.Count > 0) {
-                        if ((DateTime.Now - begin).Seconds > 3) {
+                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
                             this._inflightRequest.Clear();
                             break;
                         }
@@ -576,7 +578,7 @@ namespace Gs2.Core.Net
                     while (this._session.ReadyState != WebSocketState.Closed)
 #endif
                     {
-                        if ((DateTime.Now - begin).Seconds > 3) {
+                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
                             this._inflightRequest.Clear();
                             break;
                         }
