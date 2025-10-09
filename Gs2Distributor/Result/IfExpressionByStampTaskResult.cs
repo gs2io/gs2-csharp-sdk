@@ -33,8 +33,20 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class IfExpressionByStampTaskResult : IResult
 	{
+        public Gs2.Gs2Distributor.Model.TransactionResult Item { set; get; }
+        public bool? ExpressionResult { set; get; }
         public string NewContextStack { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public IfExpressionByStampTaskResult WithItem(Gs2.Gs2Distributor.Model.TransactionResult item) {
+            this.Item = item;
+            return this;
+        }
+
+        public IfExpressionByStampTaskResult WithExpressionResult(bool? expressionResult) {
+            this.ExpressionResult = expressionResult;
+            return this;
+        }
 
         public IfExpressionByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
@@ -55,6 +67,8 @@ namespace Gs2.Gs2Distributor.Result
                 return null;
             }
             return new IfExpressionByStampTaskResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Distributor.Model.TransactionResult.FromJson(data["item"]))
+                .WithExpressionResult(!data.Keys.Contains("expressionResult") || data["expressionResult"] == null ? null : (bool?)bool.Parse(data["expressionResult"].ToString()))
                 .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
@@ -62,6 +76,8 @@ namespace Gs2.Gs2Distributor.Result
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["expressionResult"] = ExpressionResult,
                 ["newContextStack"] = NewContextStack,
                 ["metadata"] = Metadata?.ToJson(),
             };
@@ -70,6 +86,13 @@ namespace Gs2.Gs2Distributor.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (ExpressionResult != null) {
+                writer.WritePropertyName("expressionResult");
+                writer.Write(bool.Parse(ExpressionResult.ToString()));
+            }
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());

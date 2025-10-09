@@ -33,7 +33,19 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class IfExpressionByUserIdResult : IResult
 	{
+        public Gs2.Gs2Distributor.Model.TransactionResult Item { set; get; }
+        public bool? ExpressionResult { set; get; }
         public ResultMetadata Metadata { set; get; }
+
+        public IfExpressionByUserIdResult WithItem(Gs2.Gs2Distributor.Model.TransactionResult item) {
+            this.Item = item;
+            return this;
+        }
+
+        public IfExpressionByUserIdResult WithExpressionResult(bool? expressionResult) {
+            this.ExpressionResult = expressionResult;
+            return this;
+        }
 
         public IfExpressionByUserIdResult WithMetadata(ResultMetadata metadata) {
             this.Metadata = metadata;
@@ -49,12 +61,16 @@ namespace Gs2.Gs2Distributor.Result
                 return null;
             }
             return new IfExpressionByUserIdResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Distributor.Model.TransactionResult.FromJson(data["item"]))
+                .WithExpressionResult(!data.Keys.Contains("expressionResult") || data["expressionResult"] == null ? null : (bool?)bool.Parse(data["expressionResult"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
+                ["expressionResult"] = ExpressionResult,
                 ["metadata"] = Metadata?.ToJson(),
             };
         }
@@ -62,6 +78,13 @@ namespace Gs2.Gs2Distributor.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
+            if (ExpressionResult != null) {
+                writer.WritePropertyName("expressionResult");
+                writer.Write(bool.Parse(ExpressionResult.ToString()));
+            }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
                 Metadata.WriteJson(writer);

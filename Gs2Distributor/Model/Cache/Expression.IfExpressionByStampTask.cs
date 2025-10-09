@@ -46,6 +46,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
             int? timeOffset,
             IfExpressionByStampTaskRequest request
         ) {
+            self.Item?.PutCache(
+                cache,
+                default,
+                userId,
+                self.Item.TransactionId,
+                timeOffset
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -64,6 +64,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
         public string NamespaceName { get; } = null!;
+        public bool? ExpressionResult { get; set; } = null!;
 
         public ExpressionDomain(
             Gs2.Core.Domain.Gs2 gs2,
