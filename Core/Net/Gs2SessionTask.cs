@@ -116,7 +116,7 @@ namespace Gs2.Core.Net
             this.Session.Send(request);
 #endif
 #else
-            var task = this.Session.SendAsync(request);
+            await this.Session.SendAsync(request);
 #endif
             var begin = DateTime.Now;
             while (!this.Session.IsCompleted(request))

@@ -37,7 +37,7 @@ namespace Gs2.Core.Net
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={HttpUtility.UrlEncode(item.Value)}").ToArray());
             var contentType = Headers.Where(item => item.Key.ToLower() == "content-type").Select(item => item.Value).FirstOrDefault();
-            var request = new HttpRequestMessage(
+            using　var request = new HttpRequestMessage(
                 Method.Transform(),
                 uri
             );
@@ -63,22 +63,40 @@ namespace Gs2.Core.Net
                 request.Content = new StringContent(Body, Encoding.UTF8, contentType);
             }
 
-            var response = await new HttpClient().SendAsync(request);
-
-            if ((int) response.StatusCode == 500)
+            try
             {
-                return await Invoke();
+                using var response = await new HttpClient().SendAsync(request);
+
+                var result = new RestResult(
+                    (int) response.StatusCode,
+                    await response.Content.ReadAsStringAsync()
+                );
+                OnComplete(result);
+                return Result;
+
             }
-
-            var result = new RestResult(
-                (int) response.StatusCode,
-                await response.Content.ReadAsStringAsync()
-            );
-            OnComplete(result);
-
-            request.Dispose();
-
-            return Result;
+            catch (OperationCanceledException e)
+            {
+                var result = new RestResult(
+                    0, // NoInternetConnectionException
+                    "",
+                    0,
+                    e.Message
+                );
+                OnComplete(result);
+                return Result;
+            }
+            catch (HttpRequestException e)
+            {
+                var result = new RestResult(
+                    0, // NoInternetConnectionException
+                    "",
+                    0,
+                    e.Message
+                );
+                OnComplete(result);
+                return Result;
+            }
         }
 
         public override IEnumerator Action()

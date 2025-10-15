@@ -90,11 +90,29 @@ namespace Gs2.Core.Net
             }
 #pragma warning restore 0168
 
-            var result = new RestResult(
-                (int) request.responseCode,
-                request.downloadHandler.text
-            );
-            OnComplete(result);
+            RestResult result = null;
+            switch (request.result)
+            {
+                case UnityWebRequest.Result.Success:
+                case UnityWebRequest.Result.ProtocolError:
+                    result = new RestResult(
+                        (int) request.responseCode,
+                        request.downloadHandler?.text
+                    );
+                    OnComplete(result);
+                    break;
+                
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    result = new RestResult(
+                        (int) request.responseCode,
+                        null,
+                        (int) request.result,
+                        request.error
+                    );
+                    OnComplete(result);
+                    break;
+            }
 
             // ReSharper disable once DisposeOnUsingVariable
             request.Dispose();
@@ -134,10 +152,26 @@ namespace Gs2.Core.Net
 
             yield return request.SendWebRequest();
 
-            OnComplete(new RestResult(
-                (int) request.responseCode,
-                request.downloadHandler.text
-            ));
+            switch (request.result)
+            {
+                case UnityWebRequest.Result.Success:
+                case UnityWebRequest.Result.ProtocolError:
+                    OnComplete(new RestResult(
+                        (int) request.responseCode,
+                        request.downloadHandler.text
+                    ));
+                    break;
+                
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    OnComplete(new RestResult(
+                        (int) request.responseCode,
+                        null,
+                        (int) request.result,
+                        request.error
+                    ));
+                    break;
+            }
 
             // ReSharper disable once DisposeOnUsingVariable
             request.Dispose();

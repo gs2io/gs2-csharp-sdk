@@ -69,7 +69,7 @@ namespace Gs2.Core.Net
         {
             switch (statusCode)
             {
-                case 0:    // インターネット非接続のときに UnityWebRequest のステータスコードは 0 になる
+                case 0:
                     return new NoInternetConnectionException(message);
                 case 200:
                     return null;
