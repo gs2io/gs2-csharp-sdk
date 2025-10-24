@@ -39,6 +39,7 @@ namespace Gs2.Gs2Limit.Request
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
          public Gs2.Gs2Limit.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Limit.Model.ScriptSetting CountUpScript { set; get; } = null!;
          public Gs2.Gs2Limit.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -50,6 +51,10 @@ namespace Gs2.Gs2Limit.Request
         }
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Limit.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithCountUpScript(Gs2.Gs2Limit.Model.ScriptSetting countUpScript) {
+            this.CountUpScript = countUpScript;
             return this;
         }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Limit.Model.LogSetting logSetting) {
@@ -69,6 +74,7 @@ namespace Gs2.Gs2Limit.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Limit.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithCountUpScript(!data.Keys.Contains("countUpScript") || data["countUpScript"] == null ? null : Gs2.Gs2Limit.Model.ScriptSetting.FromJson(data["countUpScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Limit.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Limit.Request
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["countUpScript"] = CountUpScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -96,6 +103,9 @@ namespace Gs2.Gs2Limit.Request
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
             }
+            if (CountUpScript != null) {
+                CountUpScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -107,6 +117,7 @@ namespace Gs2.Gs2Limit.Request
             key += NamespaceName + ":";
             key += Description + ":";
             key += TransactionSetting + ":";
+            key += CountUpScript + ":";
             key += LogSetting + ":";
             return key;
         }

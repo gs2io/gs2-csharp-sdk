@@ -208,6 +208,11 @@ namespace Gs2.Gs2Limit
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
                 }
+                if (request.CountUpScript != null)
+                {
+                    jsonWriter.WritePropertyName("countUpScript");
+                    request.CountUpScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -544,6 +549,11 @@ namespace Gs2.Gs2Limit
                 {
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
+                }
+                if (request.CountUpScript != null)
+                {
+                    jsonWriter.WritePropertyName("countUpScript");
+                    request.CountUpScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

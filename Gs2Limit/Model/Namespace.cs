@@ -38,6 +38,7 @@ namespace Gs2.Gs2Limit.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Limit.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Limit.Model.ScriptSetting CountUpScript { set; get; }
         public Gs2.Gs2Limit.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -56,6 +57,10 @@ namespace Gs2.Gs2Limit.Model
         }
         public Namespace WithTransactionSetting(Gs2.Gs2Limit.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithCountUpScript(Gs2.Gs2Limit.Model.ScriptSetting countUpScript) {
+            this.CountUpScript = countUpScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Limit.Model.LogSetting logSetting) {
@@ -139,6 +144,7 @@ namespace Gs2.Gs2Limit.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Limit.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithCountUpScript(!data.Keys.Contains("countUpScript") || data["countUpScript"] == null ? null : Gs2.Gs2Limit.Model.ScriptSetting.FromJson(data["countUpScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Limit.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -152,6 +158,7 @@ namespace Gs2.Gs2Limit.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["countUpScript"] = CountUpScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -177,6 +184,10 @@ namespace Gs2.Gs2Limit.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (CountUpScript != null) {
+                writer.WritePropertyName("countUpScript");
+                CountUpScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -232,6 +243,14 @@ namespace Gs2.Gs2Limit.Model
             else
             {
                 diff += TransactionSetting.CompareTo(other.TransactionSetting);
+            }
+            if (CountUpScript == null && CountUpScript == other.CountUpScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += CountUpScript.CompareTo(other.CountUpScript);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
@@ -295,6 +314,8 @@ namespace Gs2.Gs2Limit.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "limit.namespace.createdAt.error.invalid"),
@@ -338,6 +359,7 @@ namespace Gs2.Gs2Limit.Model
                 Name = Name,
                 Description = Description,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Limit.Model.TransactionSetting,
+                CountUpScript = CountUpScript?.Clone() as Gs2.Gs2Limit.Model.ScriptSetting,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Limit.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
