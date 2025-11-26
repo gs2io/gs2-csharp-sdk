@@ -368,7 +368,7 @@ namespace Gs2.Gs2Schedule.Model
                         new RequestError("repeatSetting", "schedule.repeatSetting.activeDays.error.invalid"),
                     });
                 }
-                if (ActiveDays > 2147483646.0) {
+                if (ActiveDays > 2147483646) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("repeatSetting", "schedule.repeatSetting.activeDays.error.invalid"),
                     });
@@ -380,7 +380,7 @@ namespace Gs2.Gs2Schedule.Model
                         new RequestError("repeatSetting", "schedule.repeatSetting.inactiveDays.error.invalid"),
                     });
                 }
-                if (InactiveDays > 2147483646.0) {
+                if (InactiveDays > 2147483646) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("repeatSetting", "schedule.repeatSetting.inactiveDays.error.invalid"),
                     });

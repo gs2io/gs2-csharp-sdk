@@ -422,12 +422,12 @@ namespace Gs2.Gs2SkillTree.Model
                 }
             }
             {
-                if (RestrainReturnRate < 0) {
+                if (RestrainReturnRate < 0.0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("nodeModel", "skillTree.nodeModel.restrainReturnRate.error.invalid"),
                     });
                 }
-                if (RestrainReturnRate > 1) {
+                if (RestrainReturnRate > 1.0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("nodeModel", "skillTree.nodeModel.restrainReturnRate.error.invalid"),
                     });
