@@ -5656,6 +5656,9 @@ namespace Gs2.Gs2Account
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.DontResolveDataOwner != null) {
+                    sessionRequest.AddQueryString("dontResolveDataOwner", $"{request.DontResolveDataOwner}");
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);

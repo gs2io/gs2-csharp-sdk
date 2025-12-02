@@ -4772,6 +4772,11 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("userIdentifier");
                     jsonWriter.Write(request.UserIdentifier.ToString());
                 }
+                if (request.DontResolveDataOwner != null)
+                {
+                    jsonWriter.WritePropertyName("dontResolveDataOwner");
+                    jsonWriter.Write(request.DontResolveDataOwner.ToString());
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     jsonWriter.WritePropertyName("timeOffsetToken");

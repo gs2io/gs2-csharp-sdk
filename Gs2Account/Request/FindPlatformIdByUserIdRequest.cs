@@ -40,6 +40,7 @@ namespace Gs2.Gs2Account.Request
          public string UserId { set; get; } = null!;
          public int? Type { set; get; } = null!;
          public string UserIdentifier { set; get; } = null!;
+         public bool? DontResolveDataOwner { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public FindPlatformIdByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -55,6 +56,10 @@ namespace Gs2.Gs2Account.Request
         }
         public FindPlatformIdByUserIdRequest WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
+            return this;
+        }
+        public FindPlatformIdByUserIdRequest WithDontResolveDataOwner(bool? dontResolveDataOwner) {
+            this.DontResolveDataOwner = dontResolveDataOwner;
             return this;
         }
         public FindPlatformIdByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -75,6 +80,7 @@ namespace Gs2.Gs2Account.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
                 .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString())
+                .WithDontResolveDataOwner(!data.Keys.Contains("dontResolveDataOwner") || data["dontResolveDataOwner"] == null ? null : (bool?)bool.Parse(data["dontResolveDataOwner"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -85,6 +91,7 @@ namespace Gs2.Gs2Account.Request
                 ["userId"] = UserId,
                 ["type"] = Type,
                 ["userIdentifier"] = UserIdentifier,
+                ["dontResolveDataOwner"] = DontResolveDataOwner,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -108,6 +115,10 @@ namespace Gs2.Gs2Account.Request
                 writer.WritePropertyName("userIdentifier");
                 writer.Write(UserIdentifier.ToString());
             }
+            if (DontResolveDataOwner != null) {
+                writer.WritePropertyName("dontResolveDataOwner");
+                writer.Write(bool.Parse(DontResolveDataOwner.ToString()));
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -121,6 +132,7 @@ namespace Gs2.Gs2Account.Request
             key += UserId + ":";
             key += Type + ":";
             key += UserIdentifier + ":";
+            key += DontResolveDataOwner + ":";
             key += TimeOffsetToken + ":";
             return key;
         }
