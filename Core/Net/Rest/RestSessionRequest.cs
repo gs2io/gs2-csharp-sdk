@@ -14,6 +14,8 @@ namespace Gs2.Core.Net
         public readonly Dictionary<string, string> Headers = new Dictionary<string, string>();
         public readonly Dictionary<string, string> QueryStrings = new Dictionary<string, string>();
         public string Body { get; set; }
+        public bool EnableRequestCompression { get; set; } = true;
+        public bool EnableResponseDecompression { get; set; } = true;
 
         public void AddHeader(string key, string value)
         {

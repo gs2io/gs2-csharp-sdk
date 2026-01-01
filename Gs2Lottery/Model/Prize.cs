@@ -257,7 +257,7 @@ namespace Gs2.Gs2Lottery.Model
                         new RequestError("prize", "lottery.prize.drawnLimit.error.invalid"),
                     });
                 }
-                if (DrawnLimit > 100000) {
+                if (DrawnLimit > 1000000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("prize", "lottery.prize.drawnLimit.error.invalid"),
                     });

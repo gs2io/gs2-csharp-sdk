@@ -44,9 +44,11 @@ namespace Gs2.Core.Net
         public string OwnerId { get; private set; }
 
         private readonly bool _checkCertificateRevocation;
-        
+        public bool EnableRequestCompression { get; set; } = true;
+        public bool EnableResponseDecompression { get; set; } = true;
+
         public Gs2RestSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : this(basicGs2Credential, region.DisplayName(), checkCertificateRevocation) {
-            
+
         }
 
         public Gs2RestSession(IGs2Credential basicGs2Credential, string region, bool checkCertificateRevocation = true)
@@ -57,6 +59,28 @@ namespace Gs2.Core.Net
             this._checkCertificateRevocation = checkCertificateRevocation;
             this.State = State.Idle;
         }
+
+#if UNITY_2017_1_OR_NEWER
+        public RestSessionRequestFactory CreateRestSessionRequestFactory(UnityEngine.Networking.CertificateHandler certificateHandler = null)
+        {
+            return new RestSessionRequestFactory(
+                () => certificateHandler != null
+                    ? new UnityRestSessionRequest(certificateHandler)
+                    : new UnityRestSessionRequest(_checkCertificateRevocation),
+                EnableRequestCompression,
+                EnableResponseDecompression
+            );
+        }
+#else
+        public RestSessionRequestFactory CreateRestSessionRequestFactory()
+        {
+            return new RestSessionRequestFactory(
+                () => new DotNetRestSessionRequest(),
+                EnableRequestCompression,
+                EnableResponseDecompression
+            );
+        }
+#endif
 
         // Open
         
@@ -98,11 +122,7 @@ namespace Gs2.Core.Net
                     } else {
                         var task = new RestOpenTask(
                             this,
-#if UNITY_2017_1_OR_NEWER
-                            new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
-#else
-                            new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-#endif
+                            CreateRestSessionRequestFactory(),
                             new LoginRequest {
                                 ClientId = Credential.ClientId,
                                 ClientSecret = Credential.ClientSecret,
@@ -163,11 +183,7 @@ namespace Gs2.Core.Net
                 this.State = State.Opening;
                 var task = new RestOpenTask(
                     this,
-    #if UNITY_2017_1_OR_NEWER
-                    new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
-    #else
-                    new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-    #endif
+                    CreateRestSessionRequestFactory(),
                     new LoginRequest {
                         ClientId = Credential.ClientId,
                         ClientSecret = Credential.ClientSecret,

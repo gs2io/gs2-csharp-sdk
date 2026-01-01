@@ -1,8 +1,11 @@
 ﻿#if !UNITY_2017_1_OR_NEWER
 using System;
 using System.Collections;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -30,14 +33,32 @@ namespace Gs2.Core.Net
     
     public class DotNetRestSessionRequest : RestSessionRequestFuture
     {
+        private static byte[] Compress(byte[] data)
+        {
+            using var output = new MemoryStream();
+            using (var gzip = new GZipStream(output, CompressionMode.Compress))
+            {
+                gzip.Write(data, 0, data.Length);
+            }
+            return output.ToArray();
+        }
+
+        private static string Decompress(byte[] data)
+        {
+            using var input = new MemoryStream(data);
+            using var gzip = new GZipStream(input, CompressionMode.Decompress);
+            using var reader = new StreamReader(gzip, Encoding.UTF8);
+            return reader.ReadToEnd();
+        }
+
         public override async Task<RestResult> Invoke()
         {
-            var uri = QueryStrings.Count == 0 ? 
-                Url : 
+            var uri = QueryStrings.Count == 0 ?
+                Url :
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={HttpUtility.UrlEncode(item.Value)}").ToArray());
             var contentType = Headers.Where(item => item.Key.ToLower() == "content-type").Select(item => item.Value).FirstOrDefault();
-            using　var request = new HttpRequestMessage(
+            using var request = new HttpRequestMessage(
                 Method.Transform(),
                 uri
             );
@@ -58,18 +79,47 @@ namespace Gs2.Core.Net
                 }
             }
 
+            if (EnableResponseDecompression)
+            {
+                request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            }
+
             if (Method == HttpMethod.Post || Method == HttpMethod.Put)
             {
-                request.Content = new StringContent(Body, Encoding.UTF8, contentType);
+                var bodyBytes = Encoding.UTF8.GetBytes(Body);
+                if (EnableRequestCompression)
+                {
+                    bodyBytes = Compress(bodyBytes);
+                    var content = new ByteArrayContent(bodyBytes);
+                    content.Headers.ContentType = new MediaTypeHeaderValue(contentType ?? "application/json");
+                    content.Headers.ContentEncoding.Add("gzip");
+                    request.Content = content;
+                }
+                else
+                {
+                    request.Content = new StringContent(Body, Encoding.UTF8, contentType);
+                }
             }
 
             try
             {
-                using var response = await new HttpClient().SendAsync(request);
+                using var httpClient = new HttpClient();
+                using var response = await httpClient.SendAsync(request);
+
+                string responseBody;
+                if (EnableResponseDecompression && response.Content.Headers.ContentEncoding.Contains("gzip"))
+                {
+                    var responseBytes = await response.Content.ReadAsByteArrayAsync();
+                    responseBody = Decompress(responseBytes);
+                }
+                else
+                {
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
 
                 var result = new RestResult(
                     (int) response.StatusCode,
-                    await response.Content.ReadAsStringAsync()
+                    responseBody
                 );
                 OnComplete(result);
                 return Result;
@@ -86,7 +136,7 @@ namespace Gs2.Core.Net
                 OnComplete(result);
                 return Result;
             }
-            catch (HttpRequestException e)
+            catch (System.Net.Http.HttpRequestException e)
             {
                 var result = new RestResult(
                     0, // NoInternetConnectionException

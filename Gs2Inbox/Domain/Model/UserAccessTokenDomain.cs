@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -214,6 +216,11 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
+                if (result.Items.Sum(v => v.ReadAcquireActions.Length) == 0)
+                {
+                    self.OnComplete(null);
+                    yield break;
+                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -268,6 +275,10 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 this.AccessToken?.TimeOffset,
                 () => this._client.BatchReadMessagesAsync(request)
             );
+            if (result.Items.Sum(v => v.ReadAcquireActions.Length) == 0)
+            {
+                return null;
+            }
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,

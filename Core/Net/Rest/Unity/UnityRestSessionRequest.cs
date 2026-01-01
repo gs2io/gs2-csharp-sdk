@@ -1,6 +1,8 @@
-﻿#if UNITY_2017_1_OR_NEWER
+#if UNITY_2017_1_OR_NEWER
 using System;
 using System.Collections;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,23 +44,33 @@ namespace Gs2.Core.Net
         public UnityRestSessionRequest()
         {
         }
-        
+
         public UnityRestSessionRequest(bool checkCertificateRevocation = true)
         {
             this._checkCertificateRevocation = checkCertificateRevocation;
         }
-        
+
         public UnityRestSessionRequest(CertificateHandler certificateHandler = null)
         {
             this._certificateHandler = certificateHandler;
             this._checkCertificateRevocation = true;
         }
-        
+
+        private static byte[] Compress(byte[] data)
+        {
+            using var output = new MemoryStream();
+            using (var gzip = new GZipStream(output, CompressionMode.Compress))
+            {
+                gzip.Write(data, 0, data.Length);
+            }
+            return output.ToArray();
+        }
+
         public override async Task<RestResult> Invoke()
         {
 #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-            var uri = QueryStrings.Count == 0 ? 
-                Url : 
+            var uri = QueryStrings.Count == 0 ?
+                Url :
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
             using var request = new UnityWebRequest(
@@ -72,9 +84,20 @@ namespace Gs2.Core.Net
 
             request.SetRequestHeader("Content-Type", "application/json");
 
+            if (EnableResponseDecompression)
+            {
+                request.SetRequestHeader("Accept-Encoding", "gzip");
+            }
+
             if (Method == HttpMethod.Post || Method == HttpMethod.Put)
             {
-                request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
+                var bodyBytes = Encoding.UTF8.GetBytes(Body);
+                if (EnableRequestCompression)
+                {
+                    bodyBytes = Compress(bodyBytes);
+                    request.SetRequestHeader("Content-Encoding", "gzip");
+                }
+                request.uploadHandler = new UploadHandlerRaw(bodyBytes);
             }
 
             if (this._certificateHandler != null)
@@ -101,7 +124,7 @@ namespace Gs2.Core.Net
                     );
                     OnComplete(result);
                     break;
-                
+
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     result = new RestResult(
@@ -124,9 +147,9 @@ namespace Gs2.Core.Net
         }
 
         public override IEnumerator Action() {
-            
-            var uri = QueryStrings.Count == 0 ? 
-                Url : 
+
+            var uri = QueryStrings.Count == 0 ?
+                Url :
                 Url + '?' + string.Join("&", QueryStrings.Select(
                     item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
             using var request = new UnityWebRequest(
@@ -140,9 +163,20 @@ namespace Gs2.Core.Net
 
             request.SetRequestHeader("Content-Type", "application/json");
 
+            if (EnableResponseDecompression)
+            {
+                request.SetRequestHeader("Accept-Encoding", "gzip");
+            }
+
             if (Method == HttpMethod.Post || Method == HttpMethod.Put)
             {
-                request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(Body));
+                var bodyBytes = Encoding.UTF8.GetBytes(Body);
+                if (EnableRequestCompression)
+                {
+                    bodyBytes = Compress(bodyBytes);
+                    request.SetRequestHeader("Content-Encoding", "gzip");
+                }
+                request.uploadHandler = new UploadHandlerRaw(bodyBytes);
             }
 
             if (this._certificateHandler != null)
@@ -158,10 +192,10 @@ namespace Gs2.Core.Net
                 case UnityWebRequest.Result.ProtocolError:
                     OnComplete(new RestResult(
                         (int) request.responseCode,
-                        request.downloadHandler.text
+                        request.downloadHandler?.text
                     ));
                     break;
-                
+
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
                     OnComplete(new RestResult(
