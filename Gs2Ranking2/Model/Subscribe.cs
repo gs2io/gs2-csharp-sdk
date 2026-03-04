@@ -369,7 +369,7 @@ namespace Gs2.Gs2Ranking2.Model
                 }
             }
             {
-                if (TargetUserIds.Length > 100) {
+                if (TargetUserIds.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("subscribe", "ranking2.subscribe.targetUserIds.error.tooMany"),
                     });
