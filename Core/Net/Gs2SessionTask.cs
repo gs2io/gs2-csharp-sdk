@@ -10,6 +10,9 @@ using Gs2.Gs2Distributor.Result;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using UnityEngine;
 #endif
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 
 namespace Gs2.Core.Net
 {
@@ -92,7 +95,11 @@ namespace Gs2.Core.Net
             }
         }
 
+#if GS2_ENABLE_UNITASK
+        public override async UniTask<TResult> Invoke()
+#else
         public override async Task<TResult> Invoke()
+#endif
         {
             var request = CreateRequest(Request);
             request.TaskId = TaskId;
@@ -129,7 +136,11 @@ namespace Gs2.Core.Net
                 {
                     throw new UserCancelException(Array.Empty<RequestError>());
                 }
+#if GS2_ENABLE_UNITASK
+                await UniTask.Delay(5);
+#else
                 await Task.Delay(5);
+#endif
             }
             var response = this.Session.MarkRead(request);
             

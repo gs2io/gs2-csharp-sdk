@@ -254,9 +254,10 @@ namespace Gs2.Core.Net
                 while (!this._semaphore.Wait(0)) {
                     yield return null;
                 }
+                Gs2Exception caughtError = null;
                 void HandleError(Gs2Exception error)
                 {
-                    result.OnError(error);
+                    caughtError = error;
                 }
                 OnError += HandleError;
                 try {
@@ -264,6 +265,12 @@ namespace Gs2.Core.Net
                     {
                         var begin = DateTime.Now;
                         while (this.State == State.Opening) {
+                            if (caughtError != null) {
+                                this._session?.Close();
+                                this.State = State.Closed;
+                                result.OnError(caughtError);
+                                yield break;
+                            }
                             if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                                 this._session?.Close();
                                 this.State = State.Closed;
@@ -278,6 +285,12 @@ namespace Gs2.Core.Net
 #endif
                         }
                         while (this.State == State.LoggingIn) {
+                            if (caughtError != null) {
+                                this._session?.Close();
+                                this.State = State.Closed;
+                                result.OnError(caughtError);
+                                yield break;
+                            }
                             if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                                 this._session?.Close();
                                 this.State = State.Closed;
@@ -300,6 +313,12 @@ namespace Gs2.Core.Net
                         while (this._session.ReadyState != WebSocketState.Open)
     #endif
                         {
+                            if (caughtError != null) {
+                                this._session?.Close();
+                                this.State = State.Closed;
+                                result.OnError(caughtError);
+                                yield break;
+                            }
                             if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
                                 this._session?.Close();
                                 this.State = State.Closed;
@@ -363,7 +382,11 @@ namespace Gs2.Core.Net
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
+    #if UNITY_2017_1_OR_NEWER
+                        await UniTask.Delay(TimeSpan.FromMilliseconds(50));
+    #else
                         await Task.Delay(TimeSpan.FromMilliseconds(50));
+    #endif
                     }
                 }
                 {
@@ -386,7 +409,11 @@ namespace Gs2.Core.Net
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
+    #if UNITY_2017_1_OR_NEWER
+                        await UniTask.Delay(TimeSpan.FromMilliseconds(50));
+    #else
                         await Task.Delay(TimeSpan.FromMilliseconds(50));
+    #endif
                     }
                 }
 
@@ -459,7 +486,11 @@ namespace Gs2.Core.Net
                         throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
+    #if UNITY_2017_1_OR_NEWER
+                    await UniTask.Delay(TimeSpan.FromMilliseconds(50));
+    #else
                     await Task.Delay(TimeSpan.FromMilliseconds(50));
+    #endif
                 }
             }
 
@@ -561,7 +592,11 @@ namespace Gs2.Core.Net
                             break;
                         }
 
+    #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                        await UniTask.Delay(TimeSpan.FromMilliseconds(50));
+    #else
                         await Task.Delay(TimeSpan.FromMilliseconds(50));
+    #endif
                     }
                 }
 
@@ -583,7 +618,11 @@ namespace Gs2.Core.Net
                             break;
                         }
 
+    #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                        await UniTask.Delay(TimeSpan.FromMilliseconds(50));
+    #else
                         await Task.Delay(TimeSpan.FromMilliseconds(50));
+    #endif
                     }
                 }
 

@@ -279,7 +279,11 @@ namespace Gs2.Core.Net
                         throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
+    #if UNITY_2017_1_OR_NEWER
+                    await UniTask.Delay(TimeSpan.FromMilliseconds(50));
+    #else
                     await Task.Delay(TimeSpan.FromMilliseconds(50));
+    #endif
                 }
             }
 
@@ -358,7 +362,11 @@ namespace Gs2.Core.Net
                             break;
                         }
 
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                        await UniTask.Delay(TimeSpan.FromMilliseconds(50));
+#else
                         await Task.Delay(TimeSpan.FromMilliseconds(50));
+#endif
                     }
                 }
 

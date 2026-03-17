@@ -3,6 +3,9 @@ using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+#endif
 
 namespace Gs2.Core.Net
 {
@@ -25,7 +28,11 @@ namespace Gs2.Core.Net
 
         public abstract IEnumerator Action();
 
+#if GS2_ENABLE_UNITASK
+        public abstract UniTask<TResult> Invoke();
+#else
         public abstract Task<TResult> Invoke();
+#endif
 
         public bool MoveNext()
         {

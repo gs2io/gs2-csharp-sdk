@@ -288,7 +288,7 @@ namespace Gs2.Gs2Realtime.Domain
                 string payload
         ) {
             switch (action) {
-                case "CreateNotification": {
+                case "Create": {
     #if UNITY_2017_1_OR_NEWER
                     onCreateNotification.Invoke(CreateNotification.FromJson(JsonMapper.ToObject(payload)));
     #endif
