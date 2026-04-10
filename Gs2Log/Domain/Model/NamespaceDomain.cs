@@ -2272,7 +2272,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 begin,
                 end,
                 longTerm,
-                timeOffsetToken
+                timeOffsetToken,
+                totalCount => this.TotalCount = totalCount
             );
         }
         #endif
@@ -2300,7 +2301,8 @@ namespace Gs2.Gs2Log.Domain.Model
                 begin,
                 end,
                 longTerm,
-                timeOffsetToken
+                timeOffsetToken,
+                totalCount => this.TotalCount = totalCount
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

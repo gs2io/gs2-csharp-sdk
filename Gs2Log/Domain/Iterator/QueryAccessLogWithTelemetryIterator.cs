@@ -157,7 +157,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items
+                this._result = (r.Items ?? Array.Empty<Gs2.Gs2Log.Model.AccessLogWithTelemetry>())
                     .Where(item => this.UserId == null || item.UserId == this.UserId)
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)

@@ -70,6 +70,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
     #endif
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
+        private readonly Action<long?> _onTotalCount;
         public string NamespaceName { get; }
         public string UserId { get; }
         public Gs2.Gs2Log.Model.InGameLogTag[] Tags { get; }
@@ -93,10 +94,12 @@ namespace Gs2.Gs2Log.Domain.Iterator
             long? begin = null,
             long? end = null,
             bool? longTerm = null,
-            string timeOffsetToken = null
+            string timeOffsetToken = null,
+            Action<long?> onTotalCount = null
         ) {
             this._gs2 = gs2;
             this._client = client;
+            this._onTotalCount = onTotalCount;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.Tags = tags;
@@ -130,7 +133,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this.Tags == null || item.Tags == this.Tags)
+                    .Where(item => this.Tags == null || (item.Tags != null && this.Tags.All(t => item.Tags.Any(it => it.Key == t.Key && it.Value == t.Value))))
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)
                     .ToArray();
@@ -147,6 +150,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                         .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
                         .WithUserId(this.UserId)
+                        .WithTags(this.Tags)
                         .WithBegin(this.Begin)
                         .WithEnd(this.End)
                         .WithLongTerm(this.LongTerm)
@@ -162,30 +166,33 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items
-                    .Where(item => this.Tags == null || item.Tags == this.Tags)
+                this._result = (r.Items ?? Array.Empty<Gs2.Gs2Log.Model.InGameLog>())
+                    .Where(item => this.Tags == null || (item.Tags != null && this.Tags.All(t => item.Tags.Any(it => it.Key == t.Key && it.Value == t.Value))))
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in r.Items) {
-                    item.PutCache(
-                        this._gs2.Cache,
-                        NamespaceName,
-                        UserId ?? default,
-                        item.RequestId,
-                        null
-                    );
-                }
-
-                if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.InGameLog>(
-                        (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                this._onTotalCount?.Invoke(r.TotalCount);
+                if (UserId != null) {
+                    foreach (var item in r.Items ?? Array.Empty<Gs2.Gs2Log.Model.InGameLog>()) {
+                        item.PutCache(
+                            this._gs2.Cache,
                             NamespaceName,
+                            UserId,
+                            item.RequestId,
                             null
-                        )
-                    );
+                        );
+                    }
+
+                    if (this._last) {
+                        this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.InGameLog>(
+                            (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                                NamespaceName,
+                                null
+                            )
+                        );
+                    }
                 }
             }
         }

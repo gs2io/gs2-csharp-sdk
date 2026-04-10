@@ -169,7 +169,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items
+                this._result = (r.Items ?? Array.Empty<Gs2.Gs2Log.Model.IssueStampSheetLog>())
                     .Where(item => this.Service == null || item.Service == this.Service)
                     .Where(item => this.Method == null || item.Method == this.Method)
                     .Where(item => this.UserId == null || item.UserId == this.UserId)
