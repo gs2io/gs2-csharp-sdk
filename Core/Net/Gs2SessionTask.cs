@@ -71,6 +71,8 @@ namespace Gs2.Core.Net
 
 #if UNITY_WEBGL && !UNITY_EDITOR
                 yield return new WaitForSeconds(0.005f);
+#else
+                yield return null;
 #endif
             }
             

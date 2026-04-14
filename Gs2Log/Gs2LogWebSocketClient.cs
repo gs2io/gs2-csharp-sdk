@@ -1082,5 +1082,467 @@ namespace Gs2.Gs2Log
 			return await task.Invoke();
         }
 #endif
+
+
+        public class CreateFacetModelTask : Gs2WebSocketSessionTask<Request.CreateFacetModelRequest, Result.CreateFacetModelResult>
+        {
+	        public CreateFacetModelTask(IGs2Session session, Request.CreateFacetModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateFacetModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Field != null)
+                {
+                    jsonWriter.WritePropertyName("field");
+                    jsonWriter.Write(request.Field.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.DisplayName != null)
+                {
+                    jsonWriter.WritePropertyName("displayName");
+                    jsonWriter.Write(request.DisplayName.ToString());
+                }
+                if (request.Order != null)
+                {
+                    jsonWriter.WritePropertyName("order");
+                    jsonWriter.Write(request.Order.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "log",
+                    "facetModel",
+                    "createFacetModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateFacetModel(
+                Request.CreateFacetModelRequest request,
+                UnityAction<AsyncResult<Result.CreateFacetModelResult>> callback
+        )
+		{
+			var task = new CreateFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateFacetModelResult> CreateFacetModelFuture(
+                Request.CreateFacetModelRequest request
+        )
+		{
+			return new CreateFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateFacetModelResult> CreateFacetModelAsync(
+            Request.CreateFacetModelRequest request
+        )
+		{
+		    var task = new CreateFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateFacetModelTask CreateFacetModelAsync(
+                Request.CreateFacetModelRequest request
+        )
+		{
+			return new CreateFacetModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateFacetModelResult> CreateFacetModelAsync(
+            Request.CreateFacetModelRequest request
+        )
+		{
+		    var task = new CreateFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetFacetModelTask : Gs2WebSocketSessionTask<Request.GetFacetModelRequest, Result.GetFacetModelResult>
+        {
+	        public GetFacetModelTask(IGs2Session session, Request.GetFacetModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetFacetModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Field != null)
+                {
+                    jsonWriter.WritePropertyName("field");
+                    jsonWriter.Write(request.Field.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "log",
+                    "facetModel",
+                    "getFacetModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetFacetModel(
+                Request.GetFacetModelRequest request,
+                UnityAction<AsyncResult<Result.GetFacetModelResult>> callback
+        )
+		{
+			var task = new GetFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetFacetModelResult> GetFacetModelFuture(
+                Request.GetFacetModelRequest request
+        )
+		{
+			return new GetFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetFacetModelResult> GetFacetModelAsync(
+            Request.GetFacetModelRequest request
+        )
+		{
+		    var task = new GetFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetFacetModelTask GetFacetModelAsync(
+                Request.GetFacetModelRequest request
+        )
+		{
+			return new GetFacetModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetFacetModelResult> GetFacetModelAsync(
+            Request.GetFacetModelRequest request
+        )
+		{
+		    var task = new GetFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateFacetModelTask : Gs2WebSocketSessionTask<Request.UpdateFacetModelRequest, Result.UpdateFacetModelResult>
+        {
+	        public UpdateFacetModelTask(IGs2Session session, Request.UpdateFacetModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateFacetModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Field != null)
+                {
+                    jsonWriter.WritePropertyName("field");
+                    jsonWriter.Write(request.Field.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.DisplayName != null)
+                {
+                    jsonWriter.WritePropertyName("displayName");
+                    jsonWriter.Write(request.DisplayName.ToString());
+                }
+                if (request.Order != null)
+                {
+                    jsonWriter.WritePropertyName("order");
+                    jsonWriter.Write(request.Order.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "log",
+                    "facetModel",
+                    "updateFacetModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateFacetModel(
+                Request.UpdateFacetModelRequest request,
+                UnityAction<AsyncResult<Result.UpdateFacetModelResult>> callback
+        )
+		{
+			var task = new UpdateFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateFacetModelResult> UpdateFacetModelFuture(
+                Request.UpdateFacetModelRequest request
+        )
+		{
+			return new UpdateFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateFacetModelResult> UpdateFacetModelAsync(
+            Request.UpdateFacetModelRequest request
+        )
+		{
+		    var task = new UpdateFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateFacetModelTask UpdateFacetModelAsync(
+                Request.UpdateFacetModelRequest request
+        )
+		{
+			return new UpdateFacetModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateFacetModelResult> UpdateFacetModelAsync(
+            Request.UpdateFacetModelRequest request
+        )
+		{
+		    var task = new UpdateFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteFacetModelTask : Gs2WebSocketSessionTask<Request.DeleteFacetModelRequest, Result.DeleteFacetModelResult>
+        {
+	        public DeleteFacetModelTask(IGs2Session session, Request.DeleteFacetModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteFacetModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Field != null)
+                {
+                    jsonWriter.WritePropertyName("field");
+                    jsonWriter.Write(request.Field.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "log",
+                    "facetModel",
+                    "deleteFacetModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteFacetModel(
+                Request.DeleteFacetModelRequest request,
+                UnityAction<AsyncResult<Result.DeleteFacetModelResult>> callback
+        )
+		{
+			var task = new DeleteFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteFacetModelResult> DeleteFacetModelFuture(
+                Request.DeleteFacetModelRequest request
+        )
+		{
+			return new DeleteFacetModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteFacetModelResult> DeleteFacetModelAsync(
+            Request.DeleteFacetModelRequest request
+        )
+		{
+		    var task = new DeleteFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteFacetModelTask DeleteFacetModelAsync(
+                Request.DeleteFacetModelRequest request
+        )
+		{
+			return new DeleteFacetModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteFacetModelResult> DeleteFacetModelAsync(
+            Request.DeleteFacetModelRequest request
+        )
+		{
+		    var task = new DeleteFacetModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

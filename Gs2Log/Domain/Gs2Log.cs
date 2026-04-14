@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -225,6 +227,333 @@ namespace Gs2.Gs2Log.Domain
             return new Gs2.Gs2Log.Domain.Model.NamespaceDomain(
                 this._gs2,
                 namespaceName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.LogEntry> Log(
+            string namespaceName,
+            long? begin = null,
+            long? end = null,
+            string query = null
+        )
+        {
+            return new QueryLogIterator(
+                this._gs2,
+                this._client,
+                namespaceName,
+                begin,
+                end,
+                query
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.LogEntry> LogAsync(
+            #else
+        public QueryLogIterator LogAsync(
+            #endif
+            string namespaceName,
+            long? begin = null,
+            long? end = null,
+            string query = null
+        )
+        {
+            return new QueryLogIterator(
+                this._gs2,
+                this._client,
+                namespaceName,
+                begin,
+                end,
+                query
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeLog(
+            Action<Gs2.Gs2Log.Model.LogEntry[]> callback,
+            string namespaceName,
+            long? begin = null,
+            long? end = null,
+            string query = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.LogEntry>(
+                (null as Gs2.Gs2Log.Model.LogEntry).CacheParentKey(
+                    null
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LogAsync(
+                                namespaceName,
+                                begin,
+                                end,
+                                query
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeLogWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.LogEntry[]> callback,
+            string namespaceName,
+            long? begin = null,
+            long? end = null,
+            string query = null
+        )
+        {
+            var items = await LogAsync(
+                namespaceName,
+                begin,
+                end,
+                query
+            ).ToArrayAsync();
+            var callbackId = SubscribeLog(
+                callback,
+                namespaceName,
+                begin,
+                end,
+                query
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeLog(
+            ulong callbackId,
+            string namespaceName,
+            long? begin = null,
+            long? end = null,
+            string query = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.LogEntry>(
+                (null as Gs2.Gs2Log.Model.LogEntry).CacheParentKey(
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateLog(
+            string namespaceName,
+            long? begin = null,
+            long? end = null,
+            string query = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.LogEntry>(
+                (null as Gs2.Gs2Log.Model.LogEntry).CacheParentKey(
+                    null
+                )
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.TimeseriesPoint> Timeseries(
+            string namespaceName,
+            Gs2.Gs2Log.Model.AggregationConfig aggregation,
+            long? begin = null,
+            long? end = null,
+            string query = null,
+            string[] groupBy = null,
+            int? interval = null,
+            int? seriesLimit = null
+        )
+        {
+            return new QueryTimeseriesIterator(
+                this._gs2,
+                this._client,
+                namespaceName,
+                aggregation,
+                begin,
+                end,
+                query,
+                groupBy,
+                interval,
+                seriesLimit
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.TimeseriesPoint> TimeseriesAsync(
+            #else
+        public QueryTimeseriesIterator TimeseriesAsync(
+            #endif
+            string namespaceName,
+            Gs2.Gs2Log.Model.AggregationConfig aggregation,
+            long? begin = null,
+            long? end = null,
+            string query = null,
+            string[] groupBy = null,
+            int? interval = null,
+            int? seriesLimit = null
+        )
+        {
+            return new QueryTimeseriesIterator(
+                this._gs2,
+                this._client,
+                namespaceName,
+                aggregation,
+                begin,
+                end,
+                query,
+                groupBy,
+                interval,
+                seriesLimit
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeTimeseries(
+            Action<Gs2.Gs2Log.Model.TimeseriesPoint[]> callback,
+            string namespaceName,
+            Gs2.Gs2Log.Model.AggregationConfig aggregation,
+            long? begin = null,
+            long? end = null,
+            string query = null,
+            string[] groupBy = null,
+            int? interval = null,
+            int? seriesLimit = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.TimeseriesPoint>(
+                (null as Gs2.Gs2Log.Model.TimeseriesPoint).CacheParentKey(
+                    null
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await TimeseriesAsync(
+                                namespaceName,
+                                aggregation,
+                                begin,
+                                end,
+                                query,
+                                groupBy,
+                                interval,
+                                seriesLimit
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeTimeseriesWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.TimeseriesPoint[]> callback,
+            string namespaceName,
+            Gs2.Gs2Log.Model.AggregationConfig aggregation,
+            long? begin = null,
+            long? end = null,
+            string query = null,
+            string[] groupBy = null,
+            int? interval = null,
+            int? seriesLimit = null
+        )
+        {
+            var items = await TimeseriesAsync(
+                namespaceName,
+                aggregation,
+                begin,
+                end,
+                query,
+                groupBy,
+                interval,
+                seriesLimit
+            ).ToArrayAsync();
+            var callbackId = SubscribeTimeseries(
+                callback,
+                namespaceName,
+                aggregation,
+                begin,
+                end,
+                query,
+                groupBy,
+                interval,
+                seriesLimit
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeTimeseries(
+            ulong callbackId,
+            string namespaceName,
+            Gs2.Gs2Log.Model.AggregationConfig aggregation,
+            long? begin = null,
+            long? end = null,
+            string query = null,
+            string[] groupBy = null,
+            int? interval = null,
+            int? seriesLimit = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.TimeseriesPoint>(
+                (null as Gs2.Gs2Log.Model.TimeseriesPoint).CacheParentKey(
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateTimeseries(
+            string namespaceName,
+            Gs2.Gs2Log.Model.AggregationConfig aggregation,
+            long? begin = null,
+            long? end = null,
+            string query = null,
+            string[] groupBy = null,
+            int? interval = null,
+            int? seriesLimit = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.TimeseriesPoint>(
+                (null as Gs2.Gs2Log.Model.TimeseriesPoint).CacheParentKey(
+                    null
+                )
+            );
+        }
+
+        public Gs2.Gs2Log.Domain.Model.LogEntryDomain LogEntry(
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.LogEntryDomain(
+                this._gs2
             );
         }
 

@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -148,6 +150,10 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 var request = new Gs2.Gs2Log.Request.QueryExecuteStampSheetLogRequest()
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
+                    .WithService(this.Service)
+                    .WithMethod(this.Method)
+                    .WithUserId(this.UserId)
+                    .WithAction(this.Action)
                     .WithBegin(this.Begin)
                     .WithEnd(this.End)
                     .WithLongTerm(this.LongTerm)
@@ -169,7 +175,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = (r.Items ?? Array.Empty<Gs2.Gs2Log.Model.ExecuteStampSheetLog>())
+                this._result = r.Items
                     .Where(item => this.Service == null || item.Service == this.Service)
                     .Where(item => this.Method == null || item.Method == this.Method)
                     .Where(item => this.UserId == null || item.UserId == this.UserId)

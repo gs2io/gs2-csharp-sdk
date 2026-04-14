@@ -216,6 +216,158 @@ namespace Gs2.Gs2Log.Model.Cache
                         Request.DeleteInsightRequest.FromJson(requestPayload)
                     );
                     break;
+                case "describeFacetModels":
+                    Result.DescribeFacetModelsResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeFacetModelsRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "createFacetModel":
+                    Result.CreateFacetModelResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.CreateFacetModelRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getFacetModel":
+                    Result.GetFacetModelResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetFacetModelRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "updateFacetModel":
+                    Result.UpdateFacetModelResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.UpdateFacetModelRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "deleteFacetModel":
+                    Result.DeleteFacetModelResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DeleteFacetModelRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeDashboards":
+                    Result.DescribeDashboardsResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeDashboardsRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "createDashboard":
+                    Result.CreateDashboardResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.CreateDashboardRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getDashboard":
+                    Result.GetDashboardResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetDashboardRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "updateDashboard":
+                    Result.UpdateDashboardResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.UpdateDashboardRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "duplicateDashboard":
+                    Result.DuplicateDashboardResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DuplicateDashboardRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "deleteDashboard":
+                    Result.DeleteDashboardResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DeleteDashboardRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "queryLog":
+                    Result.QueryLogResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.QueryLogRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getLog":
+                    Result.GetLogResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetLogRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "queryFacets":
+                    Result.QueryFacetsResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.QueryFacetsRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "queryTimeseries":
+                    Result.QueryTimeseriesResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.QueryTimeseriesRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "getTrace":
+                    Result.GetTraceResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetTraceRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "queryMetricsTimeseries":
+                    Result.QueryMetricsTimeseriesResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.QueryMetricsTimeseriesRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeMetrics":
+                    Result.DescribeMetricsResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeMetricsRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeLabelValues":
+                    Result.DescribeLabelValuesResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeLabelValuesRequest.FromJson(requestPayload)
+                    );
+                    break;
             }
         }
     }

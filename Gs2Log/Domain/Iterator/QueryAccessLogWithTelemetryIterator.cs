@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -136,6 +138,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 var request = new Gs2.Gs2Log.Request.QueryAccessLogWithTelemetryRequest()
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
                     .WithBegin(this.Begin)
                     .WithEnd(this.End)
                     .WithLongTerm(this.LongTerm)
@@ -157,7 +160,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = (r.Items ?? Array.Empty<Gs2.Gs2Log.Model.AccessLogWithTelemetry>())
+                this._result = r.Items
                     .Where(item => this.UserId == null || item.UserId == this.UserId)
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)

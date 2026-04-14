@@ -2982,5 +2982,2342 @@ namespace Gs2.Gs2Log
 			return await task.Invoke();
         }
 #endif
+
+
+        public class DescribeFacetModelsTask : Gs2RestSessionTask<DescribeFacetModelsRequest, DescribeFacetModelsResult>
+        {
+            public DescribeFacetModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeFacetModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeFacetModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/facet";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.NamePrefix != null) {
+                    sessionRequest.AddQueryString("namePrefix", $"{request.NamePrefix}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeFacetModels(
+                Request.DescribeFacetModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeFacetModelsResult>> callback
+        )
+		{
+			var task = new DescribeFacetModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeFacetModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeFacetModelsResult> DescribeFacetModelsFuture(
+                Request.DescribeFacetModelsRequest request
+        )
+		{
+			return new DescribeFacetModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeFacetModelsResult> DescribeFacetModelsAsync(
+                Request.DescribeFacetModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeFacetModelsResult> result = null;
+			await DescribeFacetModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeFacetModelsTask DescribeFacetModelsAsync(
+                Request.DescribeFacetModelsRequest request
+        )
+		{
+			return new DescribeFacetModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeFacetModelsResult> DescribeFacetModelsAsync(
+                Request.DescribeFacetModelsRequest request
+        )
+		{
+			var task = new DescribeFacetModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateFacetModelTask : Gs2RestSessionTask<CreateFacetModelRequest, CreateFacetModelResult>
+        {
+            public CreateFacetModelTask(IGs2Session session, RestSessionRequestFactory factory, CreateFacetModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateFacetModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/facet";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Field != null)
+                {
+                    jsonWriter.WritePropertyName("field");
+                    jsonWriter.Write(request.Field);
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type);
+                }
+                if (request.DisplayName != null)
+                {
+                    jsonWriter.WritePropertyName("displayName");
+                    jsonWriter.Write(request.DisplayName);
+                }
+                if (request.Order != null)
+                {
+                    jsonWriter.WritePropertyName("order");
+                    jsonWriter.Write(request.Order.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateFacetModel(
+                Request.CreateFacetModelRequest request,
+                UnityAction<AsyncResult<Result.CreateFacetModelResult>> callback
+        )
+		{
+			var task = new CreateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateFacetModelResult> CreateFacetModelFuture(
+                Request.CreateFacetModelRequest request
+        )
+		{
+			return new CreateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateFacetModelResult> CreateFacetModelAsync(
+                Request.CreateFacetModelRequest request
+        )
+		{
+            AsyncResult<Result.CreateFacetModelResult> result = null;
+			await CreateFacetModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateFacetModelTask CreateFacetModelAsync(
+                Request.CreateFacetModelRequest request
+        )
+		{
+			return new CreateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateFacetModelResult> CreateFacetModelAsync(
+                Request.CreateFacetModelRequest request
+        )
+		{
+			var task = new CreateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetFacetModelTask : Gs2RestSessionTask<GetFacetModelRequest, GetFacetModelResult>
+        {
+            public GetFacetModelTask(IGs2Session session, RestSessionRequestFactory factory, GetFacetModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetFacetModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/facet/{field}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{field}", !string.IsNullOrEmpty(request.Field) ? request.Field.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetFacetModel(
+                Request.GetFacetModelRequest request,
+                UnityAction<AsyncResult<Result.GetFacetModelResult>> callback
+        )
+		{
+			var task = new GetFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetFacetModelResult> GetFacetModelFuture(
+                Request.GetFacetModelRequest request
+        )
+		{
+			return new GetFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetFacetModelResult> GetFacetModelAsync(
+                Request.GetFacetModelRequest request
+        )
+		{
+            AsyncResult<Result.GetFacetModelResult> result = null;
+			await GetFacetModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetFacetModelTask GetFacetModelAsync(
+                Request.GetFacetModelRequest request
+        )
+		{
+			return new GetFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetFacetModelResult> GetFacetModelAsync(
+                Request.GetFacetModelRequest request
+        )
+		{
+			var task = new GetFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateFacetModelTask : Gs2RestSessionTask<UpdateFacetModelRequest, UpdateFacetModelResult>
+        {
+            public UpdateFacetModelTask(IGs2Session session, RestSessionRequestFactory factory, UpdateFacetModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateFacetModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/facet/{field}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{field}", !string.IsNullOrEmpty(request.Field) ? request.Field.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type);
+                }
+                if (request.DisplayName != null)
+                {
+                    jsonWriter.WritePropertyName("displayName");
+                    jsonWriter.Write(request.DisplayName);
+                }
+                if (request.Order != null)
+                {
+                    jsonWriter.WritePropertyName("order");
+                    jsonWriter.Write(request.Order.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateFacetModel(
+                Request.UpdateFacetModelRequest request,
+                UnityAction<AsyncResult<Result.UpdateFacetModelResult>> callback
+        )
+		{
+			var task = new UpdateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateFacetModelResult> UpdateFacetModelFuture(
+                Request.UpdateFacetModelRequest request
+        )
+		{
+			return new UpdateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateFacetModelResult> UpdateFacetModelAsync(
+                Request.UpdateFacetModelRequest request
+        )
+		{
+            AsyncResult<Result.UpdateFacetModelResult> result = null;
+			await UpdateFacetModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateFacetModelTask UpdateFacetModelAsync(
+                Request.UpdateFacetModelRequest request
+        )
+		{
+			return new UpdateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateFacetModelResult> UpdateFacetModelAsync(
+                Request.UpdateFacetModelRequest request
+        )
+		{
+			var task = new UpdateFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteFacetModelTask : Gs2RestSessionTask<DeleteFacetModelRequest, DeleteFacetModelResult>
+        {
+            public DeleteFacetModelTask(IGs2Session session, RestSessionRequestFactory factory, DeleteFacetModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteFacetModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/facet/{field}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{field}", !string.IsNullOrEmpty(request.Field) ? request.Field.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteFacetModel(
+                Request.DeleteFacetModelRequest request,
+                UnityAction<AsyncResult<Result.DeleteFacetModelResult>> callback
+        )
+		{
+			var task = new DeleteFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteFacetModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteFacetModelResult> DeleteFacetModelFuture(
+                Request.DeleteFacetModelRequest request
+        )
+		{
+			return new DeleteFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteFacetModelResult> DeleteFacetModelAsync(
+                Request.DeleteFacetModelRequest request
+        )
+		{
+            AsyncResult<Result.DeleteFacetModelResult> result = null;
+			await DeleteFacetModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteFacetModelTask DeleteFacetModelAsync(
+                Request.DeleteFacetModelRequest request
+        )
+		{
+			return new DeleteFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteFacetModelResult> DeleteFacetModelAsync(
+                Request.DeleteFacetModelRequest request
+        )
+		{
+			var task = new DeleteFacetModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeDashboardsTask : Gs2RestSessionTask<DescribeDashboardsRequest, DescribeDashboardsResult>
+        {
+            public DescribeDashboardsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDashboardsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeDashboardsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/dashboard";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.NamePrefix != null) {
+                    sessionRequest.AddQueryString("namePrefix", $"{request.NamePrefix}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeDashboards(
+                Request.DescribeDashboardsRequest request,
+                UnityAction<AsyncResult<Result.DescribeDashboardsResult>> callback
+        )
+		{
+			var task = new DescribeDashboardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeDashboardsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeDashboardsResult> DescribeDashboardsFuture(
+                Request.DescribeDashboardsRequest request
+        )
+		{
+			return new DescribeDashboardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeDashboardsResult> DescribeDashboardsAsync(
+                Request.DescribeDashboardsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeDashboardsResult> result = null;
+			await DescribeDashboards(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeDashboardsTask DescribeDashboardsAsync(
+                Request.DescribeDashboardsRequest request
+        )
+		{
+			return new DescribeDashboardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeDashboardsResult> DescribeDashboardsAsync(
+                Request.DescribeDashboardsRequest request
+        )
+		{
+			var task = new DescribeDashboardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateDashboardTask : Gs2RestSessionTask<CreateDashboardRequest, CreateDashboardResult>
+        {
+            public CreateDashboardTask(IGs2Session session, RestSessionRequestFactory factory, CreateDashboardRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateDashboardRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/dashboard";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.DisplayName != null)
+                {
+                    jsonWriter.WritePropertyName("displayName");
+                    jsonWriter.Write(request.DisplayName);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateDashboard(
+                Request.CreateDashboardRequest request,
+                UnityAction<AsyncResult<Result.CreateDashboardResult>> callback
+        )
+		{
+			var task = new CreateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateDashboardResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateDashboardResult> CreateDashboardFuture(
+                Request.CreateDashboardRequest request
+        )
+		{
+			return new CreateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateDashboardResult> CreateDashboardAsync(
+                Request.CreateDashboardRequest request
+        )
+		{
+            AsyncResult<Result.CreateDashboardResult> result = null;
+			await CreateDashboard(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateDashboardTask CreateDashboardAsync(
+                Request.CreateDashboardRequest request
+        )
+		{
+			return new CreateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateDashboardResult> CreateDashboardAsync(
+                Request.CreateDashboardRequest request
+        )
+		{
+			var task = new CreateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetDashboardTask : Gs2RestSessionTask<GetDashboardRequest, GetDashboardResult>
+        {
+            public GetDashboardTask(IGs2Session session, RestSessionRequestFactory factory, GetDashboardRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetDashboardRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/dashboard/{dashboardName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{dashboardName}", !string.IsNullOrEmpty(request.DashboardName) ? request.DashboardName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetDashboard(
+                Request.GetDashboardRequest request,
+                UnityAction<AsyncResult<Result.GetDashboardResult>> callback
+        )
+		{
+			var task = new GetDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetDashboardResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetDashboardResult> GetDashboardFuture(
+                Request.GetDashboardRequest request
+        )
+		{
+			return new GetDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDashboardResult> GetDashboardAsync(
+                Request.GetDashboardRequest request
+        )
+		{
+            AsyncResult<Result.GetDashboardResult> result = null;
+			await GetDashboard(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetDashboardTask GetDashboardAsync(
+                Request.GetDashboardRequest request
+        )
+		{
+			return new GetDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetDashboardResult> GetDashboardAsync(
+                Request.GetDashboardRequest request
+        )
+		{
+			var task = new GetDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateDashboardTask : Gs2RestSessionTask<UpdateDashboardRequest, UpdateDashboardResult>
+        {
+            public UpdateDashboardTask(IGs2Session session, RestSessionRequestFactory factory, UpdateDashboardRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateDashboardRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/dashboard/{dashboardName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{dashboardName}", !string.IsNullOrEmpty(request.DashboardName) ? request.DashboardName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.DisplayName != null)
+                {
+                    jsonWriter.WritePropertyName("displayName");
+                    jsonWriter.Write(request.DisplayName);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Payload != null)
+                {
+                    jsonWriter.WritePropertyName("payload");
+                    jsonWriter.Write(request.Payload);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateDashboard(
+                Request.UpdateDashboardRequest request,
+                UnityAction<AsyncResult<Result.UpdateDashboardResult>> callback
+        )
+		{
+			var task = new UpdateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateDashboardResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateDashboardResult> UpdateDashboardFuture(
+                Request.UpdateDashboardRequest request
+        )
+		{
+			return new UpdateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateDashboardResult> UpdateDashboardAsync(
+                Request.UpdateDashboardRequest request
+        )
+		{
+            AsyncResult<Result.UpdateDashboardResult> result = null;
+			await UpdateDashboard(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateDashboardTask UpdateDashboardAsync(
+                Request.UpdateDashboardRequest request
+        )
+		{
+			return new UpdateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateDashboardResult> UpdateDashboardAsync(
+                Request.UpdateDashboardRequest request
+        )
+		{
+			var task = new UpdateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DuplicateDashboardTask : Gs2RestSessionTask<DuplicateDashboardRequest, DuplicateDashboardResult>
+        {
+            public DuplicateDashboardTask(IGs2Session session, RestSessionRequestFactory factory, DuplicateDashboardRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DuplicateDashboardRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/dashboard/{dashboardName}/copy";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{dashboardName}", !string.IsNullOrEmpty(request.DashboardName) ? request.DashboardName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DuplicateDashboard(
+                Request.DuplicateDashboardRequest request,
+                UnityAction<AsyncResult<Result.DuplicateDashboardResult>> callback
+        )
+		{
+			var task = new DuplicateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DuplicateDashboardResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DuplicateDashboardResult> DuplicateDashboardFuture(
+                Request.DuplicateDashboardRequest request
+        )
+		{
+			return new DuplicateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DuplicateDashboardResult> DuplicateDashboardAsync(
+                Request.DuplicateDashboardRequest request
+        )
+		{
+            AsyncResult<Result.DuplicateDashboardResult> result = null;
+			await DuplicateDashboard(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DuplicateDashboardTask DuplicateDashboardAsync(
+                Request.DuplicateDashboardRequest request
+        )
+		{
+			return new DuplicateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DuplicateDashboardResult> DuplicateDashboardAsync(
+                Request.DuplicateDashboardRequest request
+        )
+		{
+			var task = new DuplicateDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteDashboardTask : Gs2RestSessionTask<DeleteDashboardRequest, DeleteDashboardResult>
+        {
+            public DeleteDashboardTask(IGs2Session session, RestSessionRequestFactory factory, DeleteDashboardRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteDashboardRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/dashboard/{dashboardName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{dashboardName}", !string.IsNullOrEmpty(request.DashboardName) ? request.DashboardName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteDashboard(
+                Request.DeleteDashboardRequest request,
+                UnityAction<AsyncResult<Result.DeleteDashboardResult>> callback
+        )
+		{
+			var task = new DeleteDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteDashboardResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteDashboardResult> DeleteDashboardFuture(
+                Request.DeleteDashboardRequest request
+        )
+		{
+			return new DeleteDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteDashboardResult> DeleteDashboardAsync(
+                Request.DeleteDashboardRequest request
+        )
+		{
+            AsyncResult<Result.DeleteDashboardResult> result = null;
+			await DeleteDashboard(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteDashboardTask DeleteDashboardAsync(
+                Request.DeleteDashboardRequest request
+        )
+		{
+			return new DeleteDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteDashboardResult> DeleteDashboardAsync(
+                Request.DeleteDashboardRequest request
+        )
+		{
+			var task = new DeleteDashboardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class QueryLogTask : Gs2RestSessionTask<QueryLogRequest, QueryLogResult>
+        {
+            public QueryLogTask(IGs2Session session, RestSessionRequestFactory factory, QueryLogRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(QueryLogRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/log/v2/query";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Begin != null)
+                {
+                    jsonWriter.WritePropertyName("begin");
+                    jsonWriter.Write(request.Begin.ToString());
+                }
+                if (request.End != null)
+                {
+                    jsonWriter.WritePropertyName("end");
+                    jsonWriter.Write(request.End.ToString());
+                }
+                if (request.Query != null)
+                {
+                    jsonWriter.WritePropertyName("query");
+                    jsonWriter.Write(request.Query);
+                }
+                if (request.PageToken != null)
+                {
+                    jsonWriter.WritePropertyName("pageToken");
+                    jsonWriter.Write(request.PageToken);
+                }
+                if (request.Limit != null)
+                {
+                    jsonWriter.WritePropertyName("limit");
+                    jsonWriter.Write(request.Limit.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator QueryLog(
+                Request.QueryLogRequest request,
+                UnityAction<AsyncResult<Result.QueryLogResult>> callback
+        )
+		{
+			var task = new QueryLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.QueryLogResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.QueryLogResult> QueryLogFuture(
+                Request.QueryLogRequest request
+        )
+		{
+			return new QueryLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryLogResult> QueryLogAsync(
+                Request.QueryLogRequest request
+        )
+		{
+            AsyncResult<Result.QueryLogResult> result = null;
+			await QueryLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryLogTask QueryLogAsync(
+                Request.QueryLogRequest request
+        )
+		{
+			return new QueryLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.QueryLogResult> QueryLogAsync(
+                Request.QueryLogRequest request
+        )
+		{
+			var task = new QueryLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetLogTask : Gs2RestSessionTask<GetLogRequest, GetLogResult>
+        {
+            public GetLogTask(IGs2Session session, RestSessionRequestFactory factory, GetLogRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetLogRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/log/v2/query/{logRequestId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{logRequestId}", !string.IsNullOrEmpty(request.LogRequestId) ? request.LogRequestId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Begin != null) {
+                    sessionRequest.AddQueryString("begin", $"{request.Begin}");
+                }
+                if (request.End != null) {
+                    sessionRequest.AddQueryString("end", $"{request.End}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetLog(
+                Request.GetLogRequest request,
+                UnityAction<AsyncResult<Result.GetLogResult>> callback
+        )
+		{
+			var task = new GetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetLogResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetLogResult> GetLogFuture(
+                Request.GetLogRequest request
+        )
+		{
+			return new GetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetLogResult> GetLogAsync(
+                Request.GetLogRequest request
+        )
+		{
+            AsyncResult<Result.GetLogResult> result = null;
+			await GetLog(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetLogTask GetLogAsync(
+                Request.GetLogRequest request
+        )
+		{
+			return new GetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetLogResult> GetLogAsync(
+                Request.GetLogRequest request
+        )
+		{
+			var task = new GetLogTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class QueryFacetsTask : Gs2RestSessionTask<QueryFacetsRequest, QueryFacetsResult>
+        {
+            public QueryFacetsTask(IGs2Session session, RestSessionRequestFactory factory, QueryFacetsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(QueryFacetsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/log/v2/query/facet";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Begin != null)
+                {
+                    jsonWriter.WritePropertyName("begin");
+                    jsonWriter.Write(request.Begin.ToString());
+                }
+                if (request.End != null)
+                {
+                    jsonWriter.WritePropertyName("end");
+                    jsonWriter.Write(request.End.ToString());
+                }
+                if (request.Query != null)
+                {
+                    jsonWriter.WritePropertyName("query");
+                    jsonWriter.Write(request.Query);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator QueryFacets(
+                Request.QueryFacetsRequest request,
+                UnityAction<AsyncResult<Result.QueryFacetsResult>> callback
+        )
+		{
+			var task = new QueryFacetsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.QueryFacetsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.QueryFacetsResult> QueryFacetsFuture(
+                Request.QueryFacetsRequest request
+        )
+		{
+			return new QueryFacetsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryFacetsResult> QueryFacetsAsync(
+                Request.QueryFacetsRequest request
+        )
+		{
+            AsyncResult<Result.QueryFacetsResult> result = null;
+			await QueryFacets(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryFacetsTask QueryFacetsAsync(
+                Request.QueryFacetsRequest request
+        )
+		{
+			return new QueryFacetsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.QueryFacetsResult> QueryFacetsAsync(
+                Request.QueryFacetsRequest request
+        )
+		{
+			var task = new QueryFacetsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class QueryTimeseriesTask : Gs2RestSessionTask<QueryTimeseriesRequest, QueryTimeseriesResult>
+        {
+            public QueryTimeseriesTask(IGs2Session session, RestSessionRequestFactory factory, QueryTimeseriesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(QueryTimeseriesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/log/v2/timeseries";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Begin != null)
+                {
+                    jsonWriter.WritePropertyName("begin");
+                    jsonWriter.Write(request.Begin.ToString());
+                }
+                if (request.End != null)
+                {
+                    jsonWriter.WritePropertyName("end");
+                    jsonWriter.Write(request.End.ToString());
+                }
+                if (request.Query != null)
+                {
+                    jsonWriter.WritePropertyName("query");
+                    jsonWriter.Write(request.Query);
+                }
+                if (request.GroupBy != null)
+                {
+                    jsonWriter.WritePropertyName("groupBy");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GroupBy)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Aggregation != null)
+                {
+                    jsonWriter.WritePropertyName("aggregation");
+                    request.Aggregation.WriteJson(jsonWriter);
+                }
+                if (request.Interval != null)
+                {
+                    jsonWriter.WritePropertyName("interval");
+                    jsonWriter.Write(request.Interval.ToString());
+                }
+                if (request.SeriesLimit != null)
+                {
+                    jsonWriter.WritePropertyName("seriesLimit");
+                    jsonWriter.Write(request.SeriesLimit.ToString());
+                }
+                if (request.PageToken != null)
+                {
+                    jsonWriter.WritePropertyName("pageToken");
+                    jsonWriter.Write(request.PageToken);
+                }
+                if (request.Limit != null)
+                {
+                    jsonWriter.WritePropertyName("limit");
+                    jsonWriter.Write(request.Limit.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator QueryTimeseries(
+                Request.QueryTimeseriesRequest request,
+                UnityAction<AsyncResult<Result.QueryTimeseriesResult>> callback
+        )
+		{
+			var task = new QueryTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.QueryTimeseriesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.QueryTimeseriesResult> QueryTimeseriesFuture(
+                Request.QueryTimeseriesRequest request
+        )
+		{
+			return new QueryTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryTimeseriesResult> QueryTimeseriesAsync(
+                Request.QueryTimeseriesRequest request
+        )
+		{
+            AsyncResult<Result.QueryTimeseriesResult> result = null;
+			await QueryTimeseries(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryTimeseriesTask QueryTimeseriesAsync(
+                Request.QueryTimeseriesRequest request
+        )
+		{
+			return new QueryTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.QueryTimeseriesResult> QueryTimeseriesAsync(
+                Request.QueryTimeseriesRequest request
+        )
+		{
+			var task = new QueryTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetTraceTask : Gs2RestSessionTask<GetTraceRequest, GetTraceResult>
+        {
+            public GetTraceTask(IGs2Session session, RestSessionRequestFactory factory, GetTraceRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetTraceRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/log/v2/trace/{traceId}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{traceId}", !string.IsNullOrEmpty(request.TraceId) ? request.TraceId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Begin != null) {
+                    sessionRequest.AddQueryString("begin", $"{request.Begin}");
+                }
+                if (request.End != null) {
+                    sessionRequest.AddQueryString("end", $"{request.End}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetTrace(
+                Request.GetTraceRequest request,
+                UnityAction<AsyncResult<Result.GetTraceResult>> callback
+        )
+		{
+			var task = new GetTraceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetTraceResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetTraceResult> GetTraceFuture(
+                Request.GetTraceRequest request
+        )
+		{
+			return new GetTraceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetTraceResult> GetTraceAsync(
+                Request.GetTraceRequest request
+        )
+		{
+            AsyncResult<Result.GetTraceResult> result = null;
+			await GetTrace(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetTraceTask GetTraceAsync(
+                Request.GetTraceRequest request
+        )
+		{
+			return new GetTraceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetTraceResult> GetTraceAsync(
+                Request.GetTraceRequest request
+        )
+		{
+			var task = new GetTraceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class QueryMetricsTimeseriesTask : Gs2RestSessionTask<QueryMetricsTimeseriesRequest, QueryMetricsTimeseriesResult>
+        {
+            public QueryMetricsTimeseriesTask(IGs2Session session, RestSessionRequestFactory factory, QueryMetricsTimeseriesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(QueryMetricsTimeseriesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/metrics/timeseries";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Begin != null)
+                {
+                    jsonWriter.WritePropertyName("begin");
+                    jsonWriter.Write(request.Begin.ToString());
+                }
+                if (request.End != null)
+                {
+                    jsonWriter.WritePropertyName("end");
+                    jsonWriter.Write(request.End.ToString());
+                }
+                if (request.Query != null)
+                {
+                    jsonWriter.WritePropertyName("query");
+                    jsonWriter.Write(request.Query);
+                }
+                if (request.GroupBy != null)
+                {
+                    jsonWriter.WritePropertyName("groupBy");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GroupBy)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Aggregations != null)
+                {
+                    jsonWriter.WritePropertyName("aggregations");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Aggregations)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Interval != null)
+                {
+                    jsonWriter.WritePropertyName("interval");
+                    jsonWriter.Write(request.Interval.ToString());
+                }
+                if (request.SeriesLimit != null)
+                {
+                    jsonWriter.WritePropertyName("seriesLimit");
+                    jsonWriter.Write(request.SeriesLimit.ToString());
+                }
+                if (request.OrderKey != null)
+                {
+                    jsonWriter.WritePropertyName("orderKey");
+                    jsonWriter.Write(request.OrderKey);
+                }
+                if (request.OrderBy != null)
+                {
+                    jsonWriter.WritePropertyName("orderBy");
+                    jsonWriter.Write(request.OrderBy);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator QueryMetricsTimeseries(
+                Request.QueryMetricsTimeseriesRequest request,
+                UnityAction<AsyncResult<Result.QueryMetricsTimeseriesResult>> callback
+        )
+		{
+			var task = new QueryMetricsTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.QueryMetricsTimeseriesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.QueryMetricsTimeseriesResult> QueryMetricsTimeseriesFuture(
+                Request.QueryMetricsTimeseriesRequest request
+        )
+		{
+			return new QueryMetricsTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryMetricsTimeseriesResult> QueryMetricsTimeseriesAsync(
+                Request.QueryMetricsTimeseriesRequest request
+        )
+		{
+            AsyncResult<Result.QueryMetricsTimeseriesResult> result = null;
+			await QueryMetricsTimeseries(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryMetricsTimeseriesTask QueryMetricsTimeseriesAsync(
+                Request.QueryMetricsTimeseriesRequest request
+        )
+		{
+			return new QueryMetricsTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.QueryMetricsTimeseriesResult> QueryMetricsTimeseriesAsync(
+                Request.QueryMetricsTimeseriesRequest request
+        )
+		{
+			var task = new QueryMetricsTimeseriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeMetricsTask : Gs2RestSessionTask<DescribeMetricsRequest, DescribeMetricsResult>
+        {
+            public DescribeMetricsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeMetricsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeMetricsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/metrics";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.NamePrefix != null) {
+                    sessionRequest.AddQueryString("namePrefix", $"{request.NamePrefix}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeMetrics(
+                Request.DescribeMetricsRequest request,
+                UnityAction<AsyncResult<Result.DescribeMetricsResult>> callback
+        )
+		{
+			var task = new DescribeMetricsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeMetricsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeMetricsResult> DescribeMetricsFuture(
+                Request.DescribeMetricsRequest request
+        )
+		{
+			return new DescribeMetricsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeMetricsResult> DescribeMetricsAsync(
+                Request.DescribeMetricsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeMetricsResult> result = null;
+			await DescribeMetrics(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeMetricsTask DescribeMetricsAsync(
+                Request.DescribeMetricsRequest request
+        )
+		{
+			return new DescribeMetricsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeMetricsResult> DescribeMetricsAsync(
+                Request.DescribeMetricsRequest request
+        )
+		{
+			var task = new DescribeMetricsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeLabelValuesTask : Gs2RestSessionTask<DescribeLabelValuesRequest, DescribeLabelValuesResult>
+        {
+            public DescribeLabelValuesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLabelValuesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeLabelValuesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/model/metrics/{metricName}/label";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{metricName}", !string.IsNullOrEmpty(request.MetricName) ? request.MetricName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.LabelNamePrefix != null) {
+                    sessionRequest.AddQueryString("labelNamePrefix", $"{request.LabelNamePrefix}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeLabelValues(
+                Request.DescribeLabelValuesRequest request,
+                UnityAction<AsyncResult<Result.DescribeLabelValuesResult>> callback
+        )
+		{
+			var task = new DescribeLabelValuesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeLabelValuesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeLabelValuesResult> DescribeLabelValuesFuture(
+                Request.DescribeLabelValuesRequest request
+        )
+		{
+			return new DescribeLabelValuesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeLabelValuesResult> DescribeLabelValuesAsync(
+                Request.DescribeLabelValuesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeLabelValuesResult> result = null;
+			await DescribeLabelValues(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeLabelValuesTask DescribeLabelValuesAsync(
+                Request.DescribeLabelValuesRequest request
+        )
+		{
+			return new DescribeLabelValuesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeLabelValuesResult> DescribeLabelValuesAsync(
+                Request.DescribeLabelValuesRequest request
+        )
+		{
+			var task = new DescribeLabelValuesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }
