@@ -1568,7 +1568,8 @@ namespace Gs2.Gs2Log.Domain.Model
                     async UniTask Impl() {
                         try {
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await InsightsAsync().ToArrayAsync());
+                            callback.Invoke(await InsightsAsync(
+                            ).ToArrayAsync());
                         }
                         catch (System.Exception) {
                             // ignored
@@ -1801,6 +1802,484 @@ namespace Gs2.Gs2Log.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 accessToken
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.FacetModel> FacetModels(
+            string namePrefix = null
+        )
+        {
+            return new DescribeFacetModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                namePrefix
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.FacetModel> FacetModelsAsync(
+            #else
+        public DescribeFacetModelsIterator FacetModelsAsync(
+            #endif
+            string namePrefix = null
+        )
+        {
+            return new DescribeFacetModelsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                namePrefix
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeFacetModels(
+            Action<Gs2.Gs2Log.Model.FacetModel[]> callback,
+            string namePrefix = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.FacetModel>(
+                (null as Gs2.Gs2Log.Model.FacetModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await FacetModelsAsync(
+                                namePrefix
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeFacetModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.FacetModel[]> callback,
+            string namePrefix = null
+        )
+        {
+            var items = await FacetModelsAsync(
+                namePrefix
+            ).ToArrayAsync();
+            var callbackId = SubscribeFacetModels(
+                callback,
+                namePrefix
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeFacetModels(
+            ulong callbackId,
+            string namePrefix = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.FacetModel>(
+                (null as Gs2.Gs2Log.Model.FacetModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateFacetModels(
+            string namePrefix = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.FacetModel>(
+                (null as Gs2.Gs2Log.Model.FacetModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                )
+            );
+        }
+
+        public Gs2.Gs2Log.Domain.Model.FacetModelDomain FacetModel(
+            string field
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.FacetModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                field
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.Dashboard> Dashboards(
+            string namePrefix = null
+        )
+        {
+            return new DescribeDashboardsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                namePrefix
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Dashboard> DashboardsAsync(
+            #else
+        public DescribeDashboardsIterator DashboardsAsync(
+            #endif
+            string namePrefix = null
+        )
+        {
+            return new DescribeDashboardsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                namePrefix
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeDashboards(
+            Action<Gs2.Gs2Log.Model.Dashboard[]> callback,
+            string namePrefix = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.Dashboard>(
+                (null as Gs2.Gs2Log.Model.Dashboard).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await DashboardsAsync(
+                                namePrefix
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeDashboardsWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.Dashboard[]> callback,
+            string namePrefix = null
+        )
+        {
+            var items = await DashboardsAsync(
+                namePrefix
+            ).ToArrayAsync();
+            var callbackId = SubscribeDashboards(
+                callback,
+                namePrefix
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeDashboards(
+            ulong callbackId,
+            string namePrefix = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.Dashboard>(
+                (null as Gs2.Gs2Log.Model.Dashboard).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateDashboards(
+            string namePrefix = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.Dashboard>(
+                (null as Gs2.Gs2Log.Model.Dashboard).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                )
+            );
+        }
+
+        public Gs2.Gs2Log.Domain.Model.DashboardDomain Dashboard(
+            string dashboardName
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.DashboardDomain(
+                this._gs2,
+                this.NamespaceName,
+                dashboardName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.MetricModel> Metrics(
+            string namePrefix = null
+        )
+        {
+            return new DescribeMetricsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                namePrefix
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.MetricModel> MetricsAsync(
+            #else
+        public DescribeMetricsIterator MetricsAsync(
+            #endif
+            string namePrefix = null
+        )
+        {
+            return new DescribeMetricsIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                namePrefix
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeMetrics(
+            Action<Gs2.Gs2Log.Model.MetricModel[]> callback,
+            string namePrefix = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.MetricModel>(
+                (null as Gs2.Gs2Log.Model.MetricModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await MetricsAsync(
+                                namePrefix
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMetricsWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.MetricModel[]> callback,
+            string namePrefix = null
+        )
+        {
+            var items = await MetricsAsync(
+                namePrefix
+            ).ToArrayAsync();
+            var callbackId = SubscribeMetrics(
+                callback,
+                namePrefix
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMetrics(
+            ulong callbackId,
+            string namePrefix = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.MetricModel>(
+                (null as Gs2.Gs2Log.Model.MetricModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateMetrics(
+            string namePrefix = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.MetricModel>(
+                (null as Gs2.Gs2Log.Model.MetricModel).CacheParentKey(
+                    this.NamespaceName,
+                    null
+                )
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.Label> LabelValues(
+            string metricName,
+            string labelNamePrefix = null
+        )
+        {
+            return new DescribeLabelValuesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                metricName,
+                labelNamePrefix
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Label> LabelValuesAsync(
+            #else
+        public DescribeLabelValuesIterator LabelValuesAsync(
+            #endif
+            string metricName,
+            string labelNamePrefix = null
+        )
+        {
+            return new DescribeLabelValuesIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                metricName,
+                labelNamePrefix
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeLabelValues(
+            Action<Gs2.Gs2Log.Model.Label[]> callback,
+            string metricName,
+            string labelNamePrefix = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.Label>(
+                (null as Gs2.Gs2Log.Model.Label).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback,
+                () =>
+                {
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+                        try {
+                            await UniTask.SwitchToMainThread();
+                            callback.Invoke(await LabelValuesAsync(
+                                metricName,
+                                labelNamePrefix
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+        #endif
+                }
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeLabelValuesWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.Label[]> callback,
+            string metricName,
+            string labelNamePrefix = null
+        )
+        {
+            var items = await LabelValuesAsync(
+                metricName,
+                labelNamePrefix
+            ).ToArrayAsync();
+            var callbackId = SubscribeLabelValues(
+                callback,
+                metricName,
+                labelNamePrefix
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeLabelValues(
+            ulong callbackId,
+            string metricName,
+            string labelNamePrefix = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.Label>(
+                (null as Gs2.Gs2Log.Model.Label).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateLabelValues(
+            string metricName,
+            string labelNamePrefix = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.Label>(
+                (null as Gs2.Gs2Log.Model.Label).CacheParentKey(
+                    this.NamespaceName
+                )
+            );
+        }
+
+        public Gs2.Gs2Log.Domain.Model.MetricModelDomain MetricModel(
+            string name
+        ) {
+            return new Gs2.Gs2Log.Domain.Model.MetricModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                name
             );
         }
 
@@ -2076,6 +2555,120 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Log.Domain.Model.DashboardDomain> CreateDashboardFuture(
+            CreateDashboardRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.DashboardDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    null,
+                    () => this._client.CreateDashboardFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Log.Domain.Model.DashboardDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.DashboardDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Log.Domain.Model.DashboardDomain> CreateDashboardAsync(
+            #else
+        public async Task<Gs2.Gs2Log.Domain.Model.DashboardDomain> CreateDashboardAsync(
+            #endif
+            CreateDashboardRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                null,
+                () => this._client.CreateDashboardAsync(request)
+            );
+            var domain = new Gs2.Gs2Log.Domain.Model.DashboardDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> MetricsTimeseriesFuture(
+            QueryMetricsTimeseriesRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    null,
+                    () => this._client.QueryMetricsTimeseriesFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain(
+                    this._gs2
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain>();
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> MetricsTimeseriesAsync(
+            #else
+        public async Task<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> MetricsTimeseriesAsync(
+            #endif
+            QueryMetricsTimeseriesRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                null,
+                () => this._client.QueryMetricsTimeseriesAsync(request)
+            );
+            var domain = result?.Items?.Select(v => new Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain(
+                this._gs2
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain>();
+            return domain;
+        }
+        #endif
+
     }
 
     public partial class NamespaceDomain {
@@ -2120,22 +2713,31 @@ namespace Gs2.Gs2Log.Domain.Model
         public async Task<Gs2.Gs2Log.Model.Namespace> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2Log.Model.Namespace).GetCache(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null
-            );
-            if (find) {
-                return value;
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.Namespace>(
+                        (null as Gs2.Gs2Log.Model.Namespace).CacheParentKey(
+                            null
+                        ),
+                        (null as Gs2.Gs2Log.Model.Namespace).CacheKey(
+                            this.NamespaceName
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Log.Model.Namespace).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null
+                );
+                if (find) {
+                    return value;
+                }
+                return await (null as Gs2.Gs2Log.Model.Namespace).FetchAsync(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    null,
+                    () => this.GetAsync(
+                        new GetNamespaceRequest()
+                    )
+                );
             }
-            return await (null as Gs2.Gs2Log.Model.Namespace).FetchAsync(
-                this._gs2.Cache,
-                this.NamespaceName,
-                null,
-                () => this.GetAsync(
-                    new GetNamespaceRequest()
-                )
-            );
         }
         #endif
 
@@ -2183,7 +2785,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else

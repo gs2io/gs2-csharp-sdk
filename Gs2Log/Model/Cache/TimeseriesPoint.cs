@@ -20,6 +20,7 @@
 
 using System;
 using Gs2.Core.Domain;
+using Gs2.Core.Net;
 using Gs2.Core.Util;
 
 namespace Gs2.Gs2Log.Model.Cache
@@ -42,6 +43,50 @@ namespace Gs2.Gs2Log.Model.Cache
             this TimeseriesPoint self
         ) {
             return "Singleton";
+        }
+
+        public static Tuple<TimeseriesPoint, bool> GetCache(
+            this TimeseriesPoint self,
+            CacheDatabase cache,
+            string namespaceName
+        ) {
+            return cache.Get<TimeseriesPoint>(
+                self.CacheParentKey(
+                    namespaceName
+                ),
+                self.CacheKey(
+                )
+            );
+        }
+
+        public static void PutCache(
+            this TimeseriesPoint self,
+            CacheDatabase cache,
+            string namespaceName
+        ) {
+            cache.Put(
+                self.CacheParentKey(
+                    namespaceName
+                ),
+                self.CacheKey(
+                ),
+                self,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
+        }
+
+        public static void DeleteCache(
+            this TimeseriesPoint self,
+            CacheDatabase cache,
+            string namespaceName
+        ) {
+            cache.Delete<TimeseriesPoint>(
+                self.CacheParentKey(
+                    namespaceName
+                ),
+                self.CacheKey(
+                )
+            );
         }
     }
 }
