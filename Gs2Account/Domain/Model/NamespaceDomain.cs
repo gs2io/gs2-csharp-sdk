@@ -70,6 +70,7 @@ namespace Gs2.Gs2Account.Domain.Model
         public string Url { get; set; } = null!;
         public string UploadToken { get; set; } = null!;
         public string UploadUrl { get; set; } = null!;
+        public string AuthorizationUrl { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
         public NamespaceDomain(
@@ -820,6 +821,58 @@ namespace Gs2.Gs2Account.Domain.Model
         }
         #endif
 
+#if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.NamespaceDomain> GetAuthorizationUrlFuture(
+            GetAuthorizationUrlRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.NamespaceDomain> self)
+            {
+                request = request
+                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    null,
+                    () => this._client.GetAuthorizationUrlFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.AuthorizationUrl = domain.AuthorizationUrl = result?.AuthorizationUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.NamespaceDomain>(Impl);
+        }
+#endif
+
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+#if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Account.Domain.Model.NamespaceDomain> GetAuthorizationUrlAsync(
+#else
+        public async Task<Gs2.Gs2Account.Domain.Model.NamespaceDomain> GetAuthorizationUrlAsync(
+#endif
+            GetAuthorizationUrlRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                null,
+                () => this._client.GetAuthorizationUrlAsync(request)
+            );
+            var domain = this;
+            this.AuthorizationUrl = domain.AuthorizationUrl = result?.AuthorizationUrl;
+            return domain;
+        }
+#endif
+        
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> DeletePlatformIdByUserIdentifierFuture(
             DeletePlatformIdByUserIdentifierRequest request

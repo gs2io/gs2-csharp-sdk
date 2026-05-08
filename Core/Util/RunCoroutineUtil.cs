@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Gs2.Core.Util
 {
-	public class RunCoroutineUtil
+	public class RunCoroutineUtil : IEnumerator
 	{
 		private List<Runner> _runners;
 
@@ -136,6 +136,10 @@ namespace Gs2.Core.Util
 		{
 			return new RunCoroutineUtil(e).Run(seconds);
 		}
+
+		public bool MoveNext() => !Step();
+		public void Reset() => throw new NotImplementedException();
+		public object Current => null;
 	}
 }
 
